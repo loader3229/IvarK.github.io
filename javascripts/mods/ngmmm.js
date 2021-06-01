@@ -82,7 +82,7 @@ function getInitPostC3Power(){
 		let mult = 30
 		if ((inNC(14) && tmp.mod.ngmX == 3) || player.currentChallenge == "postcngm3_3") mult = 20
 		else if (hasGalUpg(14)) mult = 32
-		if (inNC(6, 1)) mult *= Math.min(player.galaxies / 30, 1)
+		if (inNC(6, 2)) mult *= Math.min(player.galaxies / 30, 1)
 		let ic3PowerTB = player.tickspeedBoosts * mult
 		let softCapStart = 1024
 		let frac = 8

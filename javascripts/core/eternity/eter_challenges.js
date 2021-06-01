@@ -286,8 +286,8 @@ function getEC12Mult() {
 function getEC12TimeLimit() {
 	//In the multiple of 0.1 seconds
 	let r = 10 - 2 * ECComps("eterc12")
-	if (tmp.ngex) r *= 3.75
-	if (tmp.ngmX && ECComps("eterc12") > 3) r += 1.5 // add 0.15 seconds to try to make 12x5 in NG-- possible
+	if (tmp.ngmX >= 2 && ECComps("eterc12") >= 4) r += 1.5 // add 0.15 seconds to try to make 12x5 in NG-- possible
+	if (tmp.ngex) r *= 0.9
 	return Math.max(r, 1)
 }
 

@@ -397,7 +397,7 @@ function updateNewPlayer(mode) {
 			nguep: tmp.mod.nguepV !== undefined,
 			ngmu: tmp.mod.newGameMult === 1,
 			ngumu: tmp.mod.ngumuV !== undefined,
-			ngex: tmp.mod.ngexV !== undefined,
+			ngex: tmp.ngex !== undefined,
 			aau: tmp.mod.aau !== undefined,
 			ls: tmp.mod.ls !== undefined,
 			ngc: tmp.ngC,
@@ -1057,6 +1057,7 @@ function doNGPlusThreeNewPlayer(){
 	player.dilation.bestTP = 0
 	player.old = true
 	tmp.qu.autoOptions = {}
+	tmp.qu.qc = QCs.setup()
 	tmp.qu.replicants = getBrandNewReplicantsData()
 	tmp.qu.emperorDimensions = {}
 	for (d = 1; d < 9; d++) tmp.qu.emperorDimensions[d] = {workers: 0, progress: 0, perm: 0}
@@ -1148,8 +1149,7 @@ function doNGPlusFourPlayer(){
 	player.quantum.times = 1
 	player.quantum.best = 10
 	for (var d = 7; d < 14; d++) player.masterystudies.push("d"+d)
-	for (var c = 1; c < 9; c++) player.quantum.challenges[c] = 2
-	player.quantum.pairedChallenges.completed = 4
+	QCs.save.comps = QCs.data.max
 	player.quantum.nanofield.rewards = 19
 	player.quantum.reachedInfQK = true
 	player.quantum.tod.r.spin = 1e25
@@ -1988,7 +1988,7 @@ var modSubNames = {
 	nguep: ["Linear' (↑⁰')", "Exponential' (↑')"/*, "Tetrational' (↑↑')"*/],
 	ngmu: ["OFF", "ON", /*"NG**", "NG***"*/], //NG** won't be made.
 	ngumu: ["OFF", "ON", /*"NGUd**'", "NGUd***'"*/], //Same goes to NGUd**'.
-	ngex: ["OFF", "ON", "DEATH MODE 💀"] // modes that aren't even made yet
+	ngex: ["OFF", "ON", /*"DEATH MODE 💀"*/] // modes that aren't even made yet
 }
 function toggle_mod(id) {
 	if (id == "rs" && !modes.rs) {
@@ -2010,6 +2010,9 @@ function toggle_mod(id) {
 	else if (id == "arrows" && subMode == 2 && modes.rs) subMode = 0
 	modes[id] = subMode
 
+	//Setup notifications
+	var notifyExpert = id == "ngpp" || id == "ngex"
+
 	// Update displays
 	getEl(id + "Btn").textContent = `${modFullNames[id]}: ${hasSubMod?modSubNames[id][subMode] : subMode ? "ON" : "OFF"}`
 	if (id == "ngex" && subMode) {
@@ -2020,10 +2023,6 @@ function toggle_mod(id) {
 		getEl("aauBtn").textContent = "AAU: OFF"
 		getEl("lsBtn").textContent = "Light Speed: OFF"
 	}
-	/*if ((id=="ngp"||id=="aau"||id=="ls"||((id=="ngpp"||(id=="ngud"&&subMode>1))&&!metaSave.ngp3ex))&&subMode) {
-		modes.ngex=0
-		getEl("ngexBtn").textContent = "Expert Mode: OFF"
-	}*/
 	if ((id == "ngpp" || id=="ngud") && subMode && (modes.rs != 0 && modes.rs != 3)) {
 		//if (!modes.ngp && !modes.ngex) toggle_mod("ngp")
 		modes.rs = 0
@@ -2044,6 +2043,7 @@ function toggle_mod(id) {
 		(id=="ngex" && modes.ngpp == 1 && metaSave.ngp3ex)
 	)) {
 		modes.ngpp = 2
+		notifyExpert = true
 		getEl("ngppBtn").textContent = "NG++: NG+++"
 	}
 	if (id=="ngex"&&!metaSave.ngp3ex&&subMode) {
@@ -2077,18 +2077,16 @@ function toggle_mod(id) {
 		getEl("nguepBtn").textContent = "NGUd↑': Linear' (↑⁰')"
 		getEl("ngumuBtn").textContent = "NGUd*': OFF"
 	}
-	if ((id == "ngumu" || id == "nguep") && !(modes.ngud>1) && subMode) {
-		modes.ngud=1
+	if ((id == "ngumu" || id == "nguep") && !(modes.ngud >= 2) && subMode) {
+		modes.ngud = 1
 		toggle_mod("ngud")
 	}
 
-	/*
-	var ngp3ex = modes.ngex && modes.ngpp
+	var ngp3ex = modes.ngex && modes.ngpp == 2
 	if (modes.ngp3ex != ngp3ex) {
-		if (ngp3ex) $.notify("A space crystal begins to collide with reality...")
+		if (notifyExpert && ngp3ex) $.notify("A space crystal begins to collide with reality...")
 		modes.ngp3ex = ngp3ex
 	}
-	*/
 
 	/* 
 	this function is a MESS someone needs to clean it up
@@ -2326,7 +2324,6 @@ function onNotationChange() {
 		updateQuantumWorth("notation")
 		updateBankedEter()
 		QCs.updateDisp()
-		updateBestPC68Display()
 		updateMasteryStudyTextDisplay()
 		updateReplicants("notation")
 		updateTODStuff()
@@ -2840,7 +2837,7 @@ function updateAutobuyers() {
 	} else {
 		getEl("postinftable").style.display = "none"
 		getEl("breaktable").style.display = "none"
-		getEl("abletobreak").textContent = "You need to " + (tmp.mod.ngexV ? "complete all Normal Challenges" : "get Automated Big Crunch interval to 0.1") + " to be able to break infinity"
+		getEl("abletobreak").textContent = "You need to get Automated Big Crunch interval to 0.1 to be able to break infinity"
 		getEl("abletobreak").style.display = "block"
 		getEl("break").style.display = "none"
 		getEl("break").textContent = "BREAK INFINITY"
@@ -4441,7 +4438,7 @@ function bigCrunchButtonUpdating(){
 	getEl("postInfinityButton").style.display = 'none'
 	if (tmp.ri) {
 		getEl("bigcrunch").style.display = 'inline-block';
-		if (player.bestInfinityTime > 600 || player.currentChallenge != "" || (inNGM(4) && player.galacticSacrifice.chall > 0)) {
+		if ((player.bestInfinityTime > 600 && player.bestEternityTime > 600) || (!player.options.retryChallenge && (player.currentChallenge != "" || (inNGM(4) && player.galacticSacrifice.chall > 0)))) {
 			isEmptiness = true
 			showTab('emptiness')
 			ph.updateDisplay()
@@ -5631,9 +5628,6 @@ function initGame() {
 		getEl("loading").style.display = "none"
 	},1000)
 	clearInterval(stuckTimeout)
-
-	//Check for Expert Mode
-	checkForExpertMode()
 
 	//Check for Test Server
 	checkCorrectBeta()

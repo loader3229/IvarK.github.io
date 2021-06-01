@@ -570,7 +570,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.totalBoughtDims = resetTotalBought()
 	player.sacrificed = new Decimal(0)
-	player.currentChallenge =  ""
+	player.currentChallenge = ""
 	player.setsUnlocked = 0
 	player.infinitied = 0
 	player.infinitiedBank = 0

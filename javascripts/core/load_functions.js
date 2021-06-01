@@ -1783,14 +1783,14 @@ function setDisplaysStuff1(){
 function setChallengeDisplay(){
         var showMoreBreak = inNGM(2) ? "" : "none"
         for (i=1;i<5;i++) getEl("postinfi0"+i).parentElement.style.display=showMoreBreak
-        getEl("d1AutoChallengeDesc").textContent=(tmp.mod.ngmX>3?"Galactic Sacrifice":"Big Crunch")+" for the first time."
-        getEl("d5AutoChallengeDesc").textContent=tmp.mod.ngexV?"Each Dimension Boost reduces your tickspeed reduction by 0.1% additively, but galaxies are 50% stronger.":inNGM(2)?"Tickspeed upgrades"+(player.tickspeedBoosts==undefined?"":" and Tickspeed Boosts")+(tmp.mod.ngmX>3?" are weaker":" start out useless")+", but galaxies make them stronger.":"Tickspeed starts at 7%."
+        getEl("d1AutoChallengeDesc").textContent=(tmp.mod.ngmX>=4?"Galactic Sacrifice":"Big Crunch")+" for the first time."
+        getEl("d5AutoChallengeDesc").textContent=tmp.ngex?"Each Dimension Boost reduces your tickspeed reduction by 0.1% additively, but galaxies are 50% stronger.":inNGM(2)?"Tickspeed upgrades"+(player.tickspeedBoosts==undefined?"":" and Tickspeed Boosts")+(tmp.mod.ngmX>=4?" are weaker":" start out useless")+", but galaxies make them stronger.":"Tickspeed starts at 7%."
         getEl("tbAutoChallengeDesc").textContent=player.tickspeedBoosts==undefined?"Whenever you buy 10 of a dimension or tickspeed, everything else of equal cost will increase to its next cost step.":"You can't get Tickspeed Boosts and Antimatter Galaxies are 25% weaker."
         getEl("autoDBChallengeDesc").textContent="There are only 6 dimensions, with Dimension Boost"+(player.tickspeedBoosts==undefined?"":", Tickspeed Boost,")+" and Antimatter Galaxy costs modified."
         getEl("autoCrunchChallengeDesc").textContent="Each Normal Dimension produces the Dimension 2 tiers before it; First Dimensions produce reduced antimatter. "+(inNGM(2)?"Galaxies are far more powerful.":"")
         getEl("autoDSChallengeDesc").textContent=player.tickspeedBoosts==undefined?"Per-ten multiplier is always 1x, but the product of dimensions bought multiplies all dimensions.":"The product of amount is used instead of the product of bought."
-        getEl("autoGSChallengeDesc").textContent=tmp.mod.ngmX>3?"You can hold up to 10 total Dimension Boosts, Time Dimension Boosts, Tickspeed Boosts, and Galaxies.":(tmp.mod.ngmX>2?"All galaxy upgrades from the third column are disabled and Tickspeed Boosts give 20 free tickspeed purchases each instead.":"You can only get 308 tickspeed upgrades. This count does not reset on resets.")
-        getEl("autoTBChallengeDesc").textContent=tmp.mod.ngmX>3?"Dimension Boosts and Time Dimension Boosts divide Tickspeed Multiplier instead.":"Dimension Boosts and Galaxies only boost Galaxy point gain and Tickspeed Boosts are nerfed, but Galaxy points boost Tickspeed Boosts."
+        getEl("autoGSChallengeDesc").textContent=tmp.mod.ngmX>=4?"You can hold up to 10 total Dimension Boosts, Time Dimension Boosts, Tickspeed Boosts, and Galaxies.":(tmp.mod.ngmX>2?"All galaxy upgrades from the third column are disabled and Tickspeed Boosts give 20 free tickspeed purchases each instead.":"You can only get 308 tickspeed upgrades. This count does not reset on resets.")
+        getEl("autoTBChallengeDesc").textContent=tmp.mod.ngmX>=4?"Dimension Boosts and Time Dimension Boosts divide Tickspeed Multiplier instead.":"Dimension Boosts and Galaxies only boost Galaxy point gain and Tickspeed Boosts are nerfed, but Galaxy points boost Tickspeed Boosts."
         getEl("infPowEffectPowerDiv").innerHTML = inNGM(2) || tmp.ngC ? "which is raised to the power of <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, and then t" : "which is t"
         getEl("ngmmchalls").style.display=inNGM(2)?"":"none"
         getEl("ngmmmchalls").style.display=player.tickspeedBoosts==undefined?"none":""
@@ -1995,7 +1995,7 @@ function updateNGModeMessage(){
 	let condensed = player.condensed !== undefined
 
 	ngModeMessages=[]
-	if (tmp.mod.ngexV) ngModeMessages.push("Welcome to Expert Mode! This is a more difficult version of Antimatter Dimensions. Please note that this mod is in beta and may be unfinished. If you experience unbalancing, report it to #other_modifications in the Discord server. Good luck!")
+	if (tmp.ngex) ngModeMessages.push("Welcome to Expert Mode! This is a more difficult version of Antimatter Dimensions. Please note that this mod is in beta and may be unfinished. If you experience unbalancing, report it to #other_modifications in the Discord server. Good luck!")
 	if (tmp.mod.newGameMult) ngModeMessages.push("Welcome to NG Multiplied, made by Despacit and Soul147! This mode adds many buffs which may break the game, similar to NG^.")
 	if (tmp.mod.newGameExpVersion) ngModeMessages.push("Welcome to NG^, made by Naruyoko! This mode adds many buffs to features that can end up unbalancing the game significantly.")
 	if (condensed) {

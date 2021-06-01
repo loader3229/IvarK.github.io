@@ -64,9 +64,7 @@ function getGalaxyRequirement(offset = 0, display) {
 	let amount = 80 + base
 	let scaling = 0
 	if (inNGM(2)) amount -= (hasGalUpg(22) && tmp.grd.gals >= 1) ? 80 : 60
-	else if (inNC(6, 1) && tmp.mod.ngexV != undefined && tmp.grd.gals < 2) amount -= tmp.grd.gals == 1 ? 40 : 50
 	if (tmp.mod.ngmX > 3) amount -= 10
-	if (inNC(6, 1) && tmp.mod.ngexV != undefined && tmp.grd.gals >= 2) amount -= 2 * mult
 	if (inNC(4) || inNGM(5)) amount = player.tickspeedBoosts == undefined ? 99 + base : amount + (inNGM(4) ? 20 : -30)
 	if (tmp.be) {
 		amount *= 50
@@ -122,7 +120,6 @@ function getGalaxyRequirement(offset = 0, display) {
 }
 
 function getGalaxyReqMultiplier() {
-	if (inNC(6, 1) && tmp.mod.ngexV != undefined && tmp.grd.gals <= 2) return 0
 	if (player.currentChallenge == "postcngmm_1") return 60
 	let ret = 60
 	if (inNGM(2)) {

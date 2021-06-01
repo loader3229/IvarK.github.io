@@ -1,5 +1,4 @@
 function canBreakInfinity() {
-	if (tmp.mod.ngexV) return player.challenges.length == getTotalNormalChallenges() + 1
 	return player.autobuyers[11] % 1 != 0 && player.autobuyers[11].interval <= 100
 }
 

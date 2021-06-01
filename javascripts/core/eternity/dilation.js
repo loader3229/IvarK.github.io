@@ -1,5 +1,35 @@
-function hasDilationUpg(x) {
-	return tmp.eterUnl && player.dilation.upgrades.includes(x)
+let dsStudyCosts = {
+	1: () => tmp.ngC ? 3e3 : tmp.ngp3 ? 4e3 : 5e3,
+	2: () => 1e5,
+	3: () => 1e6,
+	4: () => 1e7,
+	5: () => 1e8,
+
+	// Meta
+	6: () => getMetaUnlCost()
+}
+
+function buyDilationStudy(name) {
+	let cost = dsStudyCosts[name]
+	if (player.timestudy.theorem >= cost && !player.dilation.studies.includes(name) && (player.dilation.studies.includes(name - 1) || name < 2)) {
+		if (name == 1) {
+			if (ECComps("eterc11") + ECComps("eterc12") < 10 || getTotalTT(player) < getDilationTotalTTReq()) return
+			showEternityTab("dilation")
+			ls.reset()
+			if (player.eternityUpgrades.length < 1) giveAchievement("Work harder.")
+			if (player.blackhole != undefined) updateEternityUpgrades()
+		} else if (name > 5) {
+			giveAchievement("I'm so meta")
+			showTab("dimensions")
+			showDimTab("metadimensions")
+			updateDilationUpgradeCosts()
+		}
+		player.dilation.studies.push(name)
+		player.timestudy.theorem -= cost
+		getEl("dilstudy"+name).className = "dilationupgbought"
+		updateTimeStudyButtons(true)
+		drawStudyTree()
+	}
 }
 
 function hasDilationStudy(x) {
@@ -92,6 +122,10 @@ function getDilPower() {
 	if (player.dilation.rebuyables[6] && tmp.ngC) ret = ret.times(Decimal.pow(getDil6Base(), getDilUpgPower(6)))
 	if (player.dilation.upgrades.includes("ngpp2") && tmp.ngC) ret = ret.times(Decimal.mul(nA(getEternitied(), 1), player.dilation.dilatedTime.plus(1).sqrt()).log10()+1)
 	return ret
+}
+
+function hasDilationUpg(x) {
+	return tmp.eterUnl && player.dilation.upgrades.includes(x)
 }
 
 function getDilUpgPower(x) {
@@ -457,7 +491,6 @@ function getTTProduction() {
 	if (tmp.quUnl) tp = tp.times(colorBoosts.b)
 
 	let r = getTTGenPart(tp)
-	if (tmp.ngex) r *= .8
 	r /= (hasAch("ng3p51") ? 200 : 2e4)
 
 	r *= ls.mult("tt")
@@ -634,7 +667,7 @@ function updateDilationDisplay() {
 }
 
 function getDilationTotalTTReq() {
-	return tmp.ngC ? 13500 : (tmp.ngex ? 12950 : 13000)
+	return tmp.ngC ? 13500 : 13000
 }
 
 function getDil26Mult() {

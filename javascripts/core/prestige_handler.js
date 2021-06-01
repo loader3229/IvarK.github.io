@@ -134,7 +134,7 @@ let Prestiges = {
 			return player.pSac.times >= 1
 		},
 		accelerate() {
-			return true
+			return ph.did("galaxy")
 		},
 		galaxy() {
 			return player.galacticSacrifice.times >= 1
@@ -146,7 +146,7 @@ let Prestiges = {
 			return player.eternities >= 1
 		},
 		interreality() {
-			return true
+			return ph.did("singularity") || ph.did("quantum")
 		},
 		singularity() {
 			return ngSg.save.times >= 1

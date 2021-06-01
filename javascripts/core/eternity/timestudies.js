@@ -122,28 +122,6 @@ function buyTimeStudy(name, quickBuy) {
 	}
 }
 
-function buyDilationStudy(name, cost) {
-	if (player.timestudy.theorem >= cost && !player.dilation.studies.includes(name) && (player.dilation.studies.includes(name - 1) || name < 2)) {
-		if (name == 1) {
-			if (ECComps("eterc11") + ECComps("eterc12") < 10 || getTotalTT(player) < getDilationTotalTTReq()) return
-			showEternityTab("dilation")
-			ls.reset()
-			if (player.eternityUpgrades.length < 1) giveAchievement("Work harder.")
-			if (player.blackhole != undefined) updateEternityUpgrades()
-		} else if (name > 5) {
-			giveAchievement("I'm so meta")
-			showTab("dimensions")
-			showDimTab("metadimensions")
-			updateDilationUpgradeCosts()
-		}
-		player.dilation.studies.push(name)
-		player.timestudy.theorem -= cost
-		getEl("dilstudy"+name).className = "dilationupgbought"
-		updateTimeStudyButtons(true)
-		drawStudyTree()
-	}
-}
-
 function hasRow(row) {
 	for (let i = 0; i < player.timestudy.studies.length; i++) {
 		if (Math.floor(player.timestudy.studies[i]/10) == row) return true
@@ -336,17 +314,6 @@ let studyCosts = { // vanilla study costs
 	172: 10,	173: 25,
 	194: 450,	195: 375,	196: 375,	197: 500,
 	202: 200,	203: 200
-}
-
-let dsStudyCosts = {
-	1: () => tmp.ngC ? 3e3 : tmp.ngp3 ? 4e3 : 5e3,
-	2: () => 1e5,
-	3: () => 1e6,
-	4: () => 1e7,
-	5: () => 1e8,
-
-	// Meta
-	6: () => getMetaUnlCost()
 }
 
 function setupTimeStudies() {
@@ -953,8 +920,8 @@ let tsMults = {
 	},
 	62() {
 		let r = tmp.mod.newGameExpVersion ? 4 : 3
-		if (tmp.ngex) r--
-		if (tmp.ngC) r/=2
+		if (tmp.ngex) r -= 0.5
+		if (tmp.ngC) r /= 2
 		return r
 	},
 	83() {
@@ -973,7 +940,7 @@ let tsMults = {
 		return Math.min(Math.pow(r, 0.005), 1.1)
 	},
 	213() {
-		return tmp.ngC ? 2 : (tmp.ngex ? 10 : 20)
+		return tmp.ngC ? 2 : tmp.ngex ? 15 : 20
 	},
 	222() {
 		return inNGM(2) ? 0.5 : 2

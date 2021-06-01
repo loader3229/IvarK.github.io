@@ -3,7 +3,7 @@ function inNGM(x) {
 }
 
 function getGSAmount(offset=0) { 
-	if (isEmptiness) return new Decimal(0)
+	if (tmp.ri) return new Decimal(0)
 	let galaxies = getGSGalaxies() + offset
 	let y = getGSGalaxyExp(galaxies)
 	let z = getGSDimboostExp(galaxies)

@@ -53,7 +53,6 @@ function calcNGM2atleastTDPreVPostDilMultiplier(tier){
 	if (ETER_UPGS.has(4)) ret2 = ret2.times(ETER_UPGS[4].mult())
 	if (ETER_UPGS.has(5)) ret2 = ret2.times(ETER_UPGS[5].mult())
 	if (ETER_UPGS.has(6)) ret2 = ret2.times(ETER_UPGS[6].mult())
-	if (tmp.ngex) ret2 = ret2.div(10 / tier)
 	return ret2
 }
 
@@ -119,7 +118,6 @@ function getTimeDimensionProduction(tier) {
   	if (tmp.mod.ngmX>3&&(inNC(2)||player.currentChallenge=="postc1"||player.pSac!=undefined)) ret = ret.times(player.chall2Pow)
   	if (player.currentEternityChall == "eterc7") ret = dilates(ret.div(tmp.ngC ? 1 : player.tickspeed.div(1000)))
   	if (tmp.mod.ngmX>3&&(tier>1||!hasAch("r12"))) ret = ret.div(100)
-  	if (tmp.mod.ngexV) ret = ret.div(10 / tier)
   	if (player.currentEternityChall == "eterc1") return new Decimal(0)
   	return ret
 }

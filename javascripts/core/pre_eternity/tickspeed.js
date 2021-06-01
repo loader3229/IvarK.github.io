@@ -3,7 +3,7 @@ function getTickspeedMultiplier() {
 	let x = new Decimal(getGalaxyTickSpeedMultiplier())
 	if (tmp.be && tmp.qu.breakEternity.upgrades.includes(5)) x = x.div(getBreakUpgMult(5))
 	if (tmp.ngC && player.timestudy.studies.includes(25)) x = x.div(tsMults[25]())
-	if (inNC(6, 2)) x = x.add(getTotalDBs() * 1e-3)
+	if (inNC(6, 3)) x = x.add(getTotalDBs() * 1e-3)
 	return x.min(1)
 }
 
@@ -28,7 +28,7 @@ function getGalaxyPower(ng, bi, noDil) {
 
 function getGalaxyEff(bi) {
 	let eff = 1
-	if (inNC(6, 2)) eff *= 1.5
+	if (inNC(6, 3)) eff *= 1.5
 	if (inNGM(2)) if (hasGalUpg(22)) eff *= tmp.mod.ngmX>3?2:5;
 	if (player.infinityUpgrades.includes("galaxyBoost")) eff *= tmp.ngC ? 4 : 2;
 	if (player.infinityUpgrades.includes("postGalaxy")) eff *= getPostGalaxyEff();
@@ -62,7 +62,6 @@ function getGalaxyEff(bi) {
 
 function getPostGalaxyEff() {
 	let ret = player.tickspeedBoosts != undefined ? 1.1 : inNGM(2) ? 1.7 : 1.5
-	if (tmp.mod.ngexV && !player.challenges.includes("postc5")) ret -= 0.05
 	return ret
 }
 
@@ -121,9 +120,11 @@ function getGalaxyTickSpeedMultiplier() {
 	let galaxies = getGalaxyPower(g, !inRS) * getGalaxyEff(true)
 	let baseMultiplier = 0.8
 	let linearGalaxies = 2
-	if (inNC(6, 1) && tmp.mod.ngexV) linearGalaxies += 2
+	if (inNC(6, 1)) {
+		baseMultiplier = 0.83
+		linearGalaxies += 2
+	}
 	let useLinear = g + player.replicanti.galaxies + player.dilation.freeGalaxies <= linearGalaxies
-	if (inNC(6, 1) || player.currentChallenge == "postc1" || player.pSac != undefined) baseMultiplier = 0.83
 	if (inRS) {
 		linearGalaxies = Math.min(galaxies, linearGalaxies + 3)
 		useLinear = true
@@ -133,7 +134,7 @@ function getGalaxyTickSpeedMultiplier() {
 		baseMultiplier = 0.9;
 		if (inRS && galaxies == 0) baseMultiplier = 0.89
 		else if (g == 0) baseMultiplier = 0.89
-		if (inNC(6, 1) || player.currentChallenge == "postc1" || player.pSac != undefined) baseMultiplier = 0.93
+		if (inNC(6, 1)) baseMultiplier = 0.93
 		if (inRS) {
 			baseMultiplier -= linearGalaxies * 0.02
 		} else {

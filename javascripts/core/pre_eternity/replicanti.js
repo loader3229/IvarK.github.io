@@ -261,7 +261,6 @@ function getReplicantiBaseInterval(speed) {
 function getReplicantiIntervalMult() {
 	let interval = 1
 	if (tmp.ngC) interval /= 20
-	if (tmp.mod.ngexV) interval *= .8
 
 	if (hasTimeStudy(62)) interval /= tsMults[62]()
 	if (hasTimeStudy(213)) interval /= tsMults[213]()

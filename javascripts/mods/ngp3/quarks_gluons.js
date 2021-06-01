@@ -385,7 +385,11 @@ let enB = {
 	},
 	mastered(type, x) {
 		let data = this[type]
-		return data.amt() >= data[x].masReq
+		return data.amt() >= this.getMastered(type, x)
+	},
+	getMastered(type, x) {
+		let data = this[type]
+		return (tmp.ngex && data[x].masReqExpert) || data[x].masReq
 	},
 
 	choose(x) {
@@ -463,6 +467,7 @@ let enB = {
 		1: {
 			req: 1,
 			masReq: 4,
+			masReqExpert: 5,
 			type: "r",
 			activeReq: () => !QCs.in(2),
 
@@ -476,6 +481,7 @@ let enB = {
 		2: {
 			req: 3,
 			masReq: 7,
+			masReqExpert: 9,
 			type: "g",
 			activeReq: () => !QCs.in(2),
 
@@ -489,6 +495,7 @@ let enB = {
 		3: {
 			req: 6,
 			masReq: 8,
+			masReqExpert: 9,
 			type: "r",
 			activeReq: () => !QCs.in(2),
 
@@ -676,6 +683,7 @@ let enB = {
 		2: {
 			req: 1,
 			masReq: 5,
+			masReqExpert: 6,
 
 			chargeReq: 200,
 			activeReq() {
@@ -697,6 +705,7 @@ let enB = {
 		3: {
 			req: 1,
 			masReq: 3,
+			masReqExpert: 5,
 
 			chargeReq: 350,
 			activeReq() {
@@ -927,7 +936,7 @@ let enB = {
 				el.parentElement.className = !active ? "red" : mastered ? "yellow" : "green"
 				el.textContent = (active ? "" : "Inactive ") + (mastered ? "Mastered " : "") + " " + typeData.name + " Boost #" + e
 
-				getEl("enB_" + type + e + "_type").innerHTML = (mastered ? "(formerly " : "(") + typeData[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : " - Get " + getFullExpansion(typeData[e].masReq) + " " + typeData.name + " Boosters to master)") + (typeData[e].activeDispReq ? "<br>Requirement: " + typeData[e].activeDispReq() : "")
+				getEl("enB_" + type + e + "_type").innerHTML = (mastered ? "(formerly " : "(") + typeData[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : " - Get " + getFullExpansion(enB.getMastered(type, e)) + " " + typeData.name + " Boosters to master)") + (typeData[e].activeDispReq ? "<br>Requirement: " + typeData[e].activeDispReq() : "")
 			}
 		}
 	},

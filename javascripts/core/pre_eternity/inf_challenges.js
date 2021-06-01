@@ -73,9 +73,12 @@ function startNormalChallenge(x) {
 
 function inNC(x, n) {
 	if (x == 6) {
-		if (n == 1 && tmp.mod.ngexV && (player.currentChallenge == "" || player.currentChallenge.indexOf("postc") == 0) && player.currentChallenge != "postc1") return true
-		if (n == 1 && tmp.mod.ngexV && player.currentChallenge == "challenge6") return false
-		if (n == 2 && !tmp.mod.ngexV) return false
+		let on = player.currentChallenge == "challenge6" || player.currentChallenge == "postc1"
+		if (!on) return false
+
+		if (n == 1) return !tmp.ngex && tmp.ngmX < 2
+		if (n == 2) return !tmp.ngex && tmp.ngmX >= 2
+		if (n == 3) return tmp.ngex
 	}
 	if (x == 0) return player.currentChallenge == "" && (!(tmp.mod.ngmX > 3) || !player.galacticSacrifice.chall) && inPxC(0)
 	return player.currentChallenge == "challenge" + x || (tmp.mod.ngmX > 3 && player.galacticSacrifice.chall == x) || inPxC(x)
@@ -108,7 +111,7 @@ function updateNCVisuals() {
 	if (inNC(14) && tmp.mod.ngmX > 3) getEl("c14Resets").style.display = "block"
 	else getEl("c14Resets").style.display = "none"
 
-	if (inNC(6, 2) || inNC(9) || inNC(12) || ((inNC(5) || inNC(14) || chall == "postc4" || chall == "postc5") && tmp.ngmX < 3) || chall == "postc1" || chall == "postc6" || chall == "postc8") getEl("quickReset").style.display = "inline-block"
+	if (inNC(6, 3) || inNC(9) || inNC(12) || ((inNC(5) || inNC(14) || chall == "postc4" || chall == "postc5") && tmp.ngmX < 3) || chall == "postc1" || chall == "postc6" || chall == "postc8") getEl("quickReset").style.display = "inline-block"
 	else getEl("quickReset").style.display = "none"
 }
 
@@ -404,7 +407,7 @@ function getIC3Base() {
 	let g = initialGalaxies()
 	perGalaxy *= getGalaxyEff()
 	let ret = getGalaxyPower(g) * perGalaxy + 1.05
-	if (inNC(6, 1) || player.currentChallenge == "postc1") ret -= tmp.mod.ngmX > 3 ? 0.02 : 0.05
+	if (inNC(6, 2)) ret -= tmp.mod.ngmX >= 3 ? 0.02 : 0.05
 	else if (tmp.mod.ngmX == 3) ret -= 0.03
 	if (hasPU(23)) ret += puMults[23]()
 	if (tmp.be && ret > 1e8) ret = Math.pow(Math.log10(ret) + 2, 8)

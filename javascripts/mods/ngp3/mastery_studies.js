@@ -2,28 +2,46 @@ var masteryStudies = {
 	initCosts: {
 		time: {
 			//Eternity
-			241: 1e68, 251: 2e70, 252: 2e70, 253: 2e70, 261: 1e70, 262: 1e70, 263: 1e70, 264: 1e70, 265: 1e70, 266: 1e70,
+			241: 1e68,
+			251: 2e70, 252: 2e70, 253: 2e70,
+			261: 1e70, 262: 1e70, 263: 1e70, 264: 1e70, 265: 1e70, 266: 1e70,
 
 			//Quantum
 			271: 3.90625e71,
 			281: 2e74, 282: 2e73, 283: 2e73, 284: 2e74,
 			291: 1/0, 292: 4e74, 293: 2e74, 294: 4e74, 295: 1/0,
 			302: 1/0, 303: 1/0,
+
+			//Expert Mode
+			ex_241: 2e68,
+			ex_271: 1e68
 		},
-		ec: {13: 1e71, 14: 1e71},
+		ec: {
+			13: 1e71, 14: 1e71,
+
+			//Expert Mode
+			ex_13: 5e70, ex_14: 5e70
+		},
 		dil: {7: 1e74, 8: 3e76, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
 	costs: {
 		time: {},
-		time_mults: {
+		mults: {
 			//Eternity
-			241: 1, 251: 2, 252: 2, 253: 2, 261: 2, 262: 2, 263: 2, 264: 2, 265: 2, 266: 2,
+			t241: 1,
+			t251: 2, t252: 2, t253: 2,
+			t261: 2, t262: 2, t263: 2, t264: 2, t265: 2, t266: 2,
 
 			//Quantum
-			271: 1 / 128,
-			281: 5, 282: 3, 283: 3, 284: 5,
-			291: 1 / 2, 292: 12, 293: 1, 294: 12, 295: 1 / 2,
-			302: 1 / 3, 303: 1 / 3},
+			t271: 1 / 128,
+			t281: 5, t282: 3, t283: 3, t284: 5,
+			t291: 1 / 2, t292: 12, t293: 1, t294: 12, t295: 1 / 2,
+			t302: 1 / 3, t303: 1 / 3,
+
+			//Expert Mode
+			t251_ex: 2.5, t252_ex: 2.5, t253_ex: 2.5,
+			t271_ex: 1 / 250,
+			t282_ex: 5, t283_ex: 5},
 		ec: {},
 		dil: {}
 	},
@@ -52,7 +70,7 @@ var masteryStudies = {
 			return hasAch("ng3p16") || player.dilation.dilatedTime.gte(1e100)
 		},
 		272() {
-			return masteryStudies.bought >= 10
+			return masteryStudies.bought >= (tmp.ngex ? 9 : 10)
 		},
 		d7() {
 			return tmp.qu.quarkEnergy >= 2.75
@@ -84,7 +102,7 @@ var masteryStudies = {
 			return hasAch("ng3p16") ? undefined : shorten(1e100) + " dilated time"
 		},
 		272() {
-			return "10 bought mastery studies"
+			return (tmp.ngex ? 9 : 10) + " bought mastery studies"
 		},
 		d7() {
 			return "2.75 quantum energy"
@@ -331,7 +349,7 @@ function updateMasteryStudyCosts() {
 		if (t) {
 			setMasteryStudyCost(t, "t")
 			masteryStudies.ttSpent += masteryStudies.costs.time[t] < 1/0 ? masteryStudies.costs.time[t] : 0
-			masteryStudies.costMult *= getMasteryStudyCostMult(t)
+			masteryStudies.costMult *= getMasteryStudyCostMult("t" + t)
 			masteryStudies.latestBoughtRow = Math.max(masteryStudies.latestBoughtRow,Math.floor(t/10))
 			masteryStudies.bought++
 		}
@@ -450,12 +468,20 @@ function addSpentableMasteryStudies(x) {
 
 function setMasteryStudyCost(id,type) {
 	let d = masteryStudies.initCosts
-	let type2 = masteryStudies.types[type]
-	masteryStudies.costs[type2][id] = (d[type2][id] || 0) * (type == "d" ? 1 : masteryStudies.costMult)
+	let t = masteryStudies.types[type]
+	let f = d[t]
+	let r = f[id] || 0
+	if (tmp.ngex) r = f["ex_" + id] || r
+
+	masteryStudies.costs[t][id] = r * (type == "d" ? 1 : masteryStudies.costMult)
 }
 
 function getMasteryStudyCostMult(id) {
-	return masteryStudies.costs.time_mults[id] || 1
+	let d = masteryStudies.costs.mults
+	let r = d[id] || 1
+	if (tmp.ngex) r = d[id + "_ex"] || r
+
+	return r
 }
 
 function buyingD7Changes() {
@@ -524,7 +550,7 @@ function buyMasteryStudy(type, id, quick=false) {
 	if (type == "t") {
 		addSpentableMasteryStudies(id)
 		if (quick) {
-			masteryStudies.costMult *= getMasteryStudyCostMult(id)
+			masteryStudies.costMult *= getMasteryStudyCostMult("t" + id)
 			masteryStudies.latestBoughtRow = Math.max(masteryStudies.latestBoughtRow, Math.floor(id / 10))
 		}
 		if (id == 241) bumpInfMult()
@@ -671,7 +697,7 @@ function drawMasteryBranch(id1, id2) {
 			var start = getEl(id2).getBoundingClientRect();
 			var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
 			var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
-			var mult = getMasteryStudyCostMult(id2.split("study")[1])
+			var mult = getMasteryStudyCostMult("t" + id2.split("study")[1])
 			var msg = "MS" + (id2.split("study")[1] - 230) + " (" + (mult >= 1e3 ? shorten(mult) : mult.toFixed(2 - Math.floor(Math.log10(mult)))) + "x)"
 			msctx.fillStyle = 'white';
 			msctx.strokeStyle = 'black';
