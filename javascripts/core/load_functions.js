@@ -1767,7 +1767,7 @@ function setDisplaysStuff1(){
 	for (let u = 1; u <= 4; u++) {
 		let benefits = [(u + 4) + "th Dimension unlocked"]
 		if (inNGM(3)) benefits.push((u * 5) + " Tickspeed Boosts")
-		if (u == 4) benefits.push("a Antimatter Galaxy")
+		if (u == 4) benefits.push("an Antimatter Galaxy")
 		getEl("infi4" + u + "desc").textContent = "Start with " +
 		wordizeList(benefits) + "."
 	}
