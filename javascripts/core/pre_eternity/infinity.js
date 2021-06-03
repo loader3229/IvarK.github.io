@@ -159,7 +159,7 @@ function getInfinitiedGain() {
 	let infGain = 1
 	if (player.thisInfinityTime > (qMs.tmp.amt >= 22 ? 10 : 50) && hasAch("r87")) infGain = 250
 	if (hasTS(32)) infGain *= tsMults[32]()
-	if (hasAch("ng3p12")) infGain *= 100
+	if (tmp.ngp3 && hasAch("ngpp18")) infGain *= 100
 	if (hasAch("r133") && player.meta) infGain = nM(player.dilation.dilatedTime.pow(.25).max(1), infGain)
 	return nA(infGain, hasAch("r87") && inNGM(2) ? 249 : 0)
 }
@@ -300,6 +300,7 @@ function bigCrunch(autoed) {
 	if ((player.break && player.currentChallenge == "") || player.infinityUpgradesRespecced != undefined) add = gainedInfinityPoints()
 	else if (hasTS(51)) add = add.times(1e15)
 	player.infinityPoints = player.infinityPoints.plus(add)
+	if (player.infinityPoints.lt(1e16)) player.infinityPoints = player.infinityPoints.round()
 	var array = [player.thisInfinityTime, add]
 	if (player.currentChallenge != "") array.push(player.currentChallenge)
 	addTime(array)

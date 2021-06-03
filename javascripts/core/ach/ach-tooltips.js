@@ -314,12 +314,17 @@ function setR14Tooltip() {
 	if (tmp.mod.nguspV != undefined) onlywarReward.push("you can auto-buy Dilation upgrades every second if you have at least " + shortenMoney(new Decimal('1e40000')) + " EP")
 	onlywarReward = wordizeList(onlywarReward, true)
 
+	let harmonyReward = [] // for the achievement "In the grim darkness of the far endgame"
+	if (player.exdilation === undefined) harmonyReward.push("Galaxies are 0.1% stronger")
+	if (tmp.ngp3) harmonyReward.push("you gain 100x more Infinities and Eternities")
+	harmonyReward = wordizeList(harmonyReward, true)
+
 	//ACHIEVEMENT ROW 14 (NG++)
 	onlywar.setAttribute('ach-tooltip', "Reach " + shortenMoney(new Decimal('1e40000')) + " EP." + (onlywarReward != "" ? " Reward: " + onlywarReward + "." : ""))
 	thecap.setAttribute('ach-tooltip', "Get " + shortenDimensions(1e12)+" Eternities. Reward: Eternity Upgrade 2 " + (tmp.ngp3 ? "and TS231 use" : "uses") + " a better formula.")
 	metamax.setAttribute('ach-tooltip', "Get 10 Meta-Dimension Boosts. Reward: Meta-dimension boosts are " + (tmp.ngp3 ? 5 : 1) + "% stronger.")
 	neverenough.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal(tmp.ngp3 ? "1e75000" : "1e100000")) + " replicanti. Reward: " + (tmp.ngp3 || tmp.mod.newGamePlusVersion ? "Replicated galaxies no longer reset the replicanti amount." : "You can always buy max RGs."))
-	harmony.setAttribute('ach-tooltip', player.meta ? "Have at least 700 normal, replicanti, and free dilated galaxies. Reward: Galaxies are 0.1% stronger." : "Get the same amount (at least 300) of normal, replicanti, and Tachyonic Galaxies.")
+	harmony.setAttribute('ach-tooltip', (player.meta ? "Have at least 700 normal, replicanti, and free dilated galaxies." : "Get the same amount (at least 300) of normal, replicanti, and Tachyonic Galaxies.") + (harmonyReward != "" ? " Reward: " + harmonyReward + "." : ""))
 }
 
 function setR15Tooltip() {

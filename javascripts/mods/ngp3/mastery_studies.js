@@ -545,7 +545,6 @@ function buyMasteryStudy(type, id, quick=false) {
 		player.eternityChallUnlocked = id
 		player.etercreq = id
 		updateEternityChallenges()
-		delete tmp.qu.autoECN
 	} else player.masterystudies.push(type + id)
 	if (type == "t") {
 		addSpentableMasteryStudies(id)

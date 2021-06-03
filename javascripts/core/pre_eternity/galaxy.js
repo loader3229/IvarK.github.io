@@ -12,7 +12,6 @@ function galaxyReset(bulk) {
 
 	doGalaxyResetStuff()
 
-
 	skipResets()
 
 	if (player.options.notation == "Emojis") player.spreadingCancer += bulk

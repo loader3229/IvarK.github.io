@@ -102,7 +102,6 @@ function unlockEChall(idx) {
 			updateTimeStudyButtons(true)
 			player.etercreq = idx
 		}
-		if (tmp.ngp3) delete tmp.qu.autoECN
 	}
 	updateEternityChallenges()
 }
@@ -249,12 +248,10 @@ function updateEternityChallenges() {
 		getEl(property).className=onchallenge?"onchallengebtn":"challengesbtn"
 	}
 	getEl("eterctabbtn").parentElement.style.display = ph.shown("eternity") && !locked ? "" : "none"
-	getEl("autoEC").style.display = ph.did("quantum") ? "inline-block" : "none"
-	if (tmp.quUnl) getEl("autoEC").className = tmp.qu.autoEC ? "timestudybought" : "storebtn"
 }
 
 function startEternityChallenge(n) {
-	if (player.currentEternityChall == "eterc"+n || parseInt(n) != player.eternityChallUnlocked) return
+	if (player.currentEternityChall == "eterc" + n || parseInt(n) != player.eternityChallUnlocked) return
 	if (player.options.challConf) if (!confirm("You will start over with just your time studies, eternity upgrades and achievements. You need to reach a set IP goal with special conditions.")) return
 	if (ph.did("ghostify") && name == "eterc10") player.ghostify.under = false
 	let oldStat = getEternitied()
@@ -370,12 +367,12 @@ function doCheckECCompletionStuff() {
 
 		//Special
 		if (qMs.tmp.amt >= 1) {
+			player.etercreq = 0
 			if (ecNum > 12) {
 				getEl("ec" + ecNum + "Req").style.display = "block"
 				masteryStudies.ecReqsStored[ecNum] = masteryStudies.ecReqs[ecNum]()
 				updateMasteryStudyTextDisplay()
 			}
-			player.etercreq = 0
 			resetEternityChallUnlocks()
 		} else forceRespec = true
 

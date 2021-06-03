@@ -239,7 +239,7 @@ function updateChallengeTimes() {
 	//Normal Challenges
 	var counter = 0
 	var totalTime = 0
-	for (let c = 2; c <= getTotalNormalChallenges(); c++) {
+	for (let c = 2; c <= getTotalNormalChallenges() + 1; c++) {
 		var completed = player.challenges.includes("challenge" + c) && player.challengeTimes[c - 2] < 60 * 60 * 24 * 31 * 10
 		if (completed) {
 			counter++

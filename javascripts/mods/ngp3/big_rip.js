@@ -194,7 +194,6 @@ function breakEternity() {
 	if (!player.dilation.active && isSmartPeakActivated) {
 		EPminpeakType = 'normal'
 		EPminpeak = new Decimal(0)
-		player.peakSpent = 0
 	}
 }
 

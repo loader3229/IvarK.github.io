@@ -446,3 +446,10 @@ getEl("postinfi81").onclick = function() {
 getEl("postinfi82").onclick = function() {
     buyInfinityUpgrade("postinfi82", 1e36);
 }
+
+//Restructured
+function getDil6Base() {
+	if (!tmp.ngC) return 1;
+	let base = Math.sqrt(player.dilation.dilatedTime.plus(1).log10()+1)
+	return base;
+}

@@ -1030,7 +1030,6 @@ function doNGPlusThreeNewPlayer(){
 	player.respecMastery = false
 	player.dbPower = 1
 	player.dilation.times = 0
-	player.peakSpent = 0
 	player.masterystudies = []
 	tmp.qu.reached = false
 	player.options.animations.quarks = true
@@ -1724,8 +1723,8 @@ getEl("infiMult").onclick = function() {
 }
 
 function playerInfinityUpgradesOnEternity() {
-	if (getEternitied() > 19 || hasAch("ng3p51")) return
-	else if (getEternitied() > 3) {
+	if (getEternitied() >= 20 || hasAch("ng3p51")) return
+	else if (getEternitied() >= 4) {
 		var filter = ["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2", "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "skipReset3", "passiveGen", "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy"]
 		var newUpgrades = []
 		for (u = 0; u < player.infinityUpgrades.length; u++) if (filter.includes(player.infinityUpgrades[u])) newUpgrades.push(player.infinityUpgrades[u])
@@ -3290,8 +3289,9 @@ function eternity(force, auto, forceRespec, dilated) {
 	if (gainedEternityPoints().gte(player.eternityPoints) && player.eternityPoints.gte("1e1185") && (tmp.ngp3 ? player.dilation.active && player.quantum.bigRip.active : false)) giveAchievement("Gonna go fast")
 	var oldEP = player.eternityPoints
 	player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints())
+	if (player.eternityPoints.lt(1e16)) player.eternityPoints = player.eternityPoints.round()
 	var array = [player.thisEternity, gainedEternityPoints()]
-	if (player.dilation.active) array = [player.thisEternity, getDilGain().sub(player.dilation.totalTachyonParticles).max(0), "d2"]
+	if (player.dilation.active) array = [player.thisEternity, getTPGain().sub(player.dilation.totalTachyonParticles).max(0), "d2"]
 	else if (player.currentEternityChall != "") array.push(player.eternityChallUnlocked)
 	else if (tmp.be) {
 		tmp.qu.breakEternity.eternalMatter = tmp.qu.breakEternity.eternalMatter.add(getEMGain())
@@ -3305,7 +3305,7 @@ function eternity(force, auto, forceRespec, dilated) {
 
 	player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
 	if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
-		let gain = getDilGain()
+		let gain = getTPGain()
 		if (gain.gte(player.dilation.totalTachyonParticles)) {
 			if (player.dilation.totalTachyonParticles.gt(0) && gain.div(player.dilation.totalTachyonParticles).lt(2)) player.eternityBuyer.slowStopped = true
 			if (tmp.ngp3) player.dilation.times++
@@ -3328,7 +3328,7 @@ function eternity(force, auto, forceRespec, dilated) {
 	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
 	player.currentEternityChall = ""
 
-	doEternityResetStuff()
+	doEternityResetStuff(4, dilated ? "dil" : "")
 	doAfterEternityResetStuff()
 
 	if (player.eternities <= 1) {
@@ -3342,14 +3342,6 @@ function eternity(force, auto, forceRespec, dilated) {
 }
 
 function doAfterEternityResetStuff() {
-	player.tdBoosts = resetTDBoosts()
-	resetPSac()
-	resetTDsOnNGM4()
-	reduceDimCosts()
-	if (player.dbPower) player.dbPower = new Decimal(1)
-	setInitialResetPower()
-	GPminpeak = new Decimal(0)
-	IPminpeak = new Decimal(0)
 	if (getInfinitied() >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1")
 	var autobuyers = document.getElementsByClassName('autoBuyerDiv')
 	if (getEternitied() < 2) {
@@ -3364,10 +3356,6 @@ function doAfterEternityResetStuff() {
 	if (inNGM(3) && getEternitied() <= 1) player.autobuyers[13] = 14
 	if (inNGM(4) && getEternitied() <= 1) player.autobuyers[14] = 15
 	updateAutobuyers();
-	setInitialMoney()
-	if (hasAch("r85")) player.infMult = player.infMult.times(4)
-	if (hasAch("r93")) player.infMult = player.infMult.times(4)
-	resetInfDimensions(true)
 	updateChallenges()
 	updateNCVisuals()
 	updateLastTenRuns()
@@ -3397,10 +3385,6 @@ function doAfterEternityResetStuff() {
 		getEl("replicantiunlock").style.display = "none"
 	}
 	if (player.currentEternityChall == "eterc14") player.replicanti.amount = new Decimal(1)
-	if (dilated || !hasAch("ng3p67")) resetReplicantiUpgrades()
-	player.replicanti.galaxies = 0
-	tmp.extraRG = 0
-	if (getEternitied() > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false
 	updateReplicantiTemp()
 
 	EPminpeakType = 'normal'
@@ -3425,9 +3409,15 @@ function resetReplicantiUpgrades() {
 	player.replicanti.galCost = new Decimal((inNGM(2) && player.tickspeedBoosts == undefined) ? 1e110 : 1e170)	
 }
 
-function challengesCompletedOnEternity(bigRip) {
+function challengesCompletedOnEternity() {
 	var array = []
-	if (getEternitied() > 1 || bigRip || hasAch("ng3p51")) for (i = 1; i <= getTotalNormalChallenges() + 1; i++) array.push("challenge" + i)
+	var keepABs = getEternitied() > 1 || hasAch("ng3p12")
+	for (i = 1; i <= getTotalNormalChallenges() + 1; i++) {
+		if (keepABs) array.push("challenge" + i)
+		else player.autobuyers[i] = i + 1
+	}
+	if (!keepABs) player.autobuyers[0] = 1
+
 	if (hasAch("r133")) {
 		player.postChallUnlocked = order.length
 		for (i = 0; i < order.length; i++) array.push(order[i])
@@ -3443,7 +3433,7 @@ function gainEternitiedStat() {
 	if (hasTS(34) && tmp.ngC) ret = nM(ret, 10)
 	if (hasTS(35) && tmp.ngC) ret = nM(ret, tsMults[35]())
 	if (hasAch("r132") && (tmp.ngp3 || tmp.mod.newGamePlusVersion)) ret = nM(ret, getInfBoostInput(player.infinitied).add(1).log10() / 5 + 1)
-	if (hasAch("ng3p12")) ret = nM(ret, 100)
+	if (tmp.ngp3 && hasAch("ngpp18")) ret = nM(ret, 100)
 	let exp = getEternitiesAndDTBoostExp()
 	if (exp > 0) ret = nM(player.dilation.dilatedTime.max(1).pow(exp), ret)
 	if (tmp.ngC & exp > 0) ret = nM(ret, Decimal.pow(player.dilation.tachyonParticles.plus(1).log10() + 1, exp))
@@ -3739,13 +3729,7 @@ function givePerSecondNeuts(){
 
 function doPerSecondNGP3Stuff(){
 	if (!tmp.ngp3) return
-	
-	if (tmp.qu.autoECN !== undefined) {
-		justImported = true
-		if (tmp.qu.autoECN > 12) buyMasteryStudy("ec", tmp.qu.autoECN, true)
-		else getEl("ec" + tmp.qu.autoECN + "unl").onclick()
-		justImported = false
-	}
+
 	doNGP3UnlockStuff()
 	notifyGhostifyMilestones()
 	ghostifyAutomationUpdatingPerSecond()
@@ -3857,7 +3841,10 @@ setInterval(function() {
 	updateOrderGoals()
 	handleReplTabs()
 	bankedInfinityDisplay()
-	qMs.update()
+	if (tmp.quUnl) {
+		qMs.update()
+		qMs.updateDisplay()
+	}
 	notifyQuantumMilestones()
 	updateQuantumWorth()
 	updateNGM2RewardDisplay()
@@ -3898,7 +3885,7 @@ function updateEPminpeak(diff, type) {
 		var gainedPoints = gainedEternityPoints()
 		var oldPoints = player.eternityPoints
 	} else if (type == "TP") {
-		var gainedPoints = getDilGain().sub(player.dilation.totalTachyonParticles).max(0)
+		var gainedPoints = getTPGain().sub(player.dilation.totalTachyonParticles).max(0)
 		var oldPoints = player.dilation.totalTachyonParticles
 	} else {
 		var gainedPoints = getEMGain()
@@ -4530,11 +4517,11 @@ function doEternityButtonDisplayUpdating(diff){
 	if (getEl("eternitybtn").style.display != "none") {
 		getEl("eternitybtnFlavor").textContent = (((!player.dilation.active&&gainedEternityPoints().lt(1e6))||player.eternities<1||player.currentEternityChall!==""||(player.options.theme=="Aarex's Modifications"&&player.options.notation!="Morse code"))
 									    ? ((player.currentEternityChall!=="" ? "Other challenges await..." : player.eternities>0 ? "" : "Other times await...") + " I need to become Eternal.") : "")
-		if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getDilGain())) getEl("eternitybtnEPGain").innerHTML = "Reach " + shortenMoney(getReqForTPGain()) + " antimatter to gain more Tachyon Particles."
+		if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getTPGain())) getEl("eternitybtnEPGain").innerHTML = getReqForTPGainDisp()
 		else {
 			getEl("eternitybtnEPGain").innerHTML = ((player.eternities > 0 && (player.currentEternityChall == "" || player.options.theme == "Aarex's Modifications")) ?
 				(EPminpeak.gte(1e9) && EPminpeakType == "logarithm") || (EPminpeakType == 'normal' && EPminpeak.gte(Decimal.pow(10, 1e9))) ? "<b>Other times await... I need to become Eternal.</b>" :
-				"Gain <b>" + (player.dilation.active?shortenMoney(getDilGain().sub(player.dilation.totalTachyonParticles)):shortenDimensions(gainedEternityPoints()))+"</b> "+(player.dilation.active?"Tachyon particles.": tmp.be ?"EP and <b>"+shortenDimensions(getEMGain())+"</b> Eternal Matter." : "Eternity points.")
+				"Gain <b>" + (player.dilation.active?shortenMoney(getTPGain().sub(player.dilation.totalTachyonParticles)):shortenDimensions(gainedEternityPoints()))+"</b> "+(player.dilation.active?"Tachyon particles.": tmp.be ?"EP and <b>"+shortenDimensions(getEMGain())+"</b> Eternal Matter." : "Eternity points.")
 			: "")
 		}
 		var showEPmin=(player.currentEternityChall===""||player.options.theme=="Aarex's Modifications")&&EPminpeak>0&&player.eternities>0&&player.options.notation!='Morse code'&&player.options.notation!='Spazzy'&&(!(player.dilation.active||tmp.be)||isSmartPeakActivated)
@@ -4715,7 +4702,7 @@ function r138Progress(){
 }
 
 function gainTPProgress(){
-	var p = (getDilGain().log10() / player.dilation.totalTachyonParticles.log10()).toFixed(2) + "%"
+	var p = (getTPGain().log10() / player.dilation.totalTachyonParticles.log10()).toFixed(2) + "%"
 	getEl("progressbar").style.width = p
 	getEl("progresspercent").textContent = p
 	getEl("progresspercent").setAttribute('ach-tooltip','Percentage to the requirement for tachyon particle gain')
@@ -4774,7 +4761,7 @@ function progressBarUpdating(){
 		r128Progress()
 	} else if (hasDilationStudy(5) && player.dilation.active && !hasAch('r138') && player.timestudy.studies.length == 0) {
 		r138Progress()
-	} else if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getDilGain())) {
+	} else if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getTPGain())) {
 		gainTPProgress()
 	} else if ((QCs.inAny() || gainedEternityPoints().gte(Decimal.pow(2,1048576))) && player.meta) doQuantumProgress()
 	else preQuantumNormalProgress()
@@ -4919,7 +4906,7 @@ function EPonEternityPassiveGain(diff){
 }
 
 function ngp3DilationUpdating(){
-	let gain = getDilGain()
+	let gain = getTPGain()
 	if (inNGM(2)) player.dilation.bestIP = player.infinityPoints.max(player.dilation.bestIP)
 	//if (player.dilation.active && player.dilation.tachyonParticles.lt(gain) && qMs.tmp.amt >= 23) setTachyonParticles(gain)
 }
@@ -5031,7 +5018,7 @@ function gameLoop(diff) {
 		if (tmp.ngp3) {
 			if (hasDilationStudy(1)) {
 				if (isBigRipUpgradeActive(20)) {
-					let gain = getDilGain()
+					let gain = getTPGain()
 					if (player.dilation.tachyonParticles.lt(gain)) setTachyonParticles(gain)
 				} else if (player.dilation.active) ngp3DilationUpdating()
 			}
@@ -5356,7 +5343,7 @@ function dimBoostABTick(){
 
 var timer = 0
 function autoBuyerTick() {
-	if (tmp.quUnl && tmp.qu.autobuyer.enabled && !inBigRip()) autoQuantumABTick()
+	if (qMs.tmp.amt >= 18 && tmp.qu.autobuyer.enabled && !inBigRip()) autoQuantumABTick()
 	
 	if (getEternitied() >= 100 && isEterBuyerOn()) autoEternityABTick()
 

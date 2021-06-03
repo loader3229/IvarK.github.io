@@ -1,3 +1,4 @@
+var nanospeed = 1
 function getNanospeedText(){
 	s = ""
 	let speeds = []

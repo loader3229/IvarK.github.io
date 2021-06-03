@@ -187,6 +187,8 @@ function resetGalacticSacrifice(eternity) {
 function newGalacticDataOnInfinity(layer, chall) {
 	if (!inNGM(2)) return
 
+	GPminpeak = new Decimal(0)
+
 	let kept = false
 	if (layer == 3) kept = hasAch(inNGM(3) ? "r36" : "r33")
 	if (layer == 4) kept = getEternitied() >= 7

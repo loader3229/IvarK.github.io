@@ -272,18 +272,6 @@ function toggleAutoReset() {
 }
 
 //v2
-function autoECToggle() {
-	tmp.qu.autoEC = !tmp.qu.autoEC
-	getEl("autoEC").className = tmp.qu.autoEC ? "timestudybought" : "storebtn"
-}
-
-function toggleRG4Upg() {
-	tmp.qu.rg4 = !tmp.qu.rg4
-	getEl('rg4toggle').textContent = "Toggle: " + (tmp.qu.rg4 ? "ON":"OFF")
-}
-
-var nanospeed = 1
-
 function switchAB() {
 	var bigRip = tmp.qu.bigRip.active
 	tmp.qu.bigRip["savedAutobuyers" + (bigRip ? "" : "No") + "BR"] = {}

@@ -37,8 +37,9 @@ let qMs = {
 		let data = {}
 		qMs.tmp = data
 
-		if (!tmp.ngp3) return
+		data.amt = 0
 		data.points = 0
+		if (!tmp.ngp3) return
 
 		//Milestone Points
 		let types = qMs.data.types
@@ -53,7 +54,6 @@ let qMs = {
 		}
 
 		//Milestones
-		data.amt = 0
 		for (var i = 1; i <= qMs.max; i++) {
 			if (data.points >= qMs[i].req) data.amt++
 			else delete tmp.qu.disabledRewards[i]
@@ -102,7 +102,7 @@ let qMs = {
 		getEl("qMs_points").textContent = getFullExpansion(qMs.tmp.points)
 	},
 	isOn(id) {
-		return qMs.tmp.amt >= id && !tmp.qu.disabledRewards[id]
+		return qMs.tmp.amt >= id && (!this[id].disablable || !tmp.qu.disabledRewards[id])
 	},
 	toggle(id) {
 		if (!this[id].disablable) return
@@ -116,13 +116,13 @@ let qMs = {
 	max: 32,
 	1: {
 		req: 1,
-		eff: () => "Start with all Eternity Challenges completed and EC completions no longer respec studies",
-		effGot: () => "You now start with all Eternity Challenges completed and EC completions no longer respec studies."
+		eff: () => "Start with 100 Eternities, and EC completions no longer respec studies",
+		effGot: () => "You now start with 100 Eternities, EC completions no longer respec studies."
 	},
 	2: {
 		req: 2,
-		eff: () => "Unlock the autobuyer for Time Theorems and start with Eternities based on Quantum Milestones",
-		effGot: () => "You now can automatically buy Time Theorems and start with Eternities based on Quantum Milestones."
+		eff: () => "Unlock the autobuyer for Time Theorems, start with Eternities (based on Quantum Milestones), and keep Eternity Challenges",
+		effGot: () => "You now can automatically buy Time Theorems, start with Eternities (based on Quantum Milestones), and keep Eternity Challenges."
 	},
 	3: {
 		req: 3,
@@ -249,8 +249,9 @@ let qMs = {
 	},
 	27: {
 		req: 85,
-		eff: () => "???",
-		effGot: () => "???"
+		disablable: true,
+		eff: () => "You can toggle some achievement rewards",
+		effGot: () => "You now toggle some achievement rewards"
 	},
 	28: {
 		req: 100,
@@ -258,22 +259,23 @@ let qMs = {
 		effGot: () => "You now can automatically get Entangled Boosters."
 	},
 	29: {
-		req: 150,
+		req: 125,
 		eff: () => "Unlock the autobuyer for Positronic Boosters (not implemented)",
 		effGot: () => "You now can automatically get Positronic Boosters."
 	},
 	30: {
-		req: 200,
+		req: 150,
 		eff: () => "Able to maximize Meta-Dimension Boosts",
 		effGot: () => "You now can maximize Meta-Dimension Boosts."
 	},
 	31: {
-		req: 250,
-		eff: () => "???",
-		effGot: () => "???",
+		req: 175,
+		disablable: true,
+		eff: () => "Start with exactly 4 completions of EC14.",
+		effGot: () => "You now start with exactly 4 completions of EC14."
 	},
 	32: {
-		req: 300,
+		req: 200,
 		eff: () => "Able to purchase all time studies without blocking",
 		effGot: () => "You now can buy every single time study."
 	}

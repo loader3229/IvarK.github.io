@@ -290,6 +290,7 @@ let Prestiges = {
 		getEl("resetDispOptions").style.display = ""
 		getEl("hide_" + layer).style.display = ""
 		getEl("hide_" + layer).innerHTML = (tmp.mod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+		ph.updateActive()
 	},
 	setupHTML(layer) {
 		var html = ""

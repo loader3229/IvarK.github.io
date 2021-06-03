@@ -445,10 +445,7 @@ function respecTimeStudies(force) {
 	}
 
 	let respecMastery = false
-	if (tmp.ngp3) {
-		respecMastery = player.respecMastery || force
-		delete player.quantum.autoECN
-	}
+	if (tmp.ngp3) respecMastery = player.respecMastery || force
 	if (respecMastery) {
 		let oldMS = player.masterystudies.concat()
 		masteryStudies.respec()

@@ -211,12 +211,13 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	if (implode && qMs.tmp.amt < 1) {
 		showTab("dimensions")
 		showDimTab("antimatterdimensions")
-		showChallengesTab("challenges")
+		showChallengesTab("normalchallenges")
 		showInfTab("preinf")
 		showEternityTab("timestudies", true)
 	}
 	if (!ph.did("quantum")) {
 		exitNGMM()
+		giveAchievement("Sub-atomic")
 		ph.onPrestige("quantum")
 		ph.updateDisplay()
 		if (tmp.ngp3) {
@@ -249,6 +250,9 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		if (tmp.qu.best > tmp.qu.time) tmp.qu.best = tmp.qu.time
 		tmp.qu.times++
 
+		gainQKOnQuantum(qkGain)
+		gainQuantumEnergy()
+
 		if (player.meta.bestAntimatter.lte(Number.MAX_VALUE)) giveAchievement("We are not going squared.")
 		if (player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] < 1 && player.dilation.upgrades.length < 1) giveAchievement("Never make paradoxes!")
 		if (tmp.qu.times >= 1e4) giveAchievement("Prestige No-lifer")
@@ -266,22 +270,9 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 
 	// ng+3
 	if (tmp.ngp3) {
-		var aea = {
-			dilMode: player.eternityBuyer.dilMode,
-			tpUpgraded: player.eternityBuyer.tpUpgraded,
-			slowStop: player.eternityBuyer.slowStop,
-			slowStopped: player.eternityBuyer.slowStopped,
-			ifAD: player.eternityBuyer.ifAD,
-			presets: player.eternityBuyer.presets
-		}
-		if (!tmp.qu.gluons.rg) {
-			tmp.qu.gluons = {
-				rg: new Decimal(0),
-				gb: new Decimal(0),
-				br: new Decimal(0)
-			}
-		}
-		updateQuantumWorth()
+		qMs.update()
+		console.log(qMs.tmp.amt_en)
+		console.log(qMs.tmp.amt)
 
 		// big rip tracking
 		if (bigRip && !tmp.bruActive[12]) {
@@ -343,7 +334,8 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	var turnSomeOn = !bigRip || player.quantum.bigRip.upgrades.includes(1)
 	qMs.update()
 
-	doQuantumResetStuff(bigRip, isQC, QCs.save.in)
+	doQuantumResetStuff(5, bigRip, isQC, QCs.save.in)
+
 	// ghostify achievement reward - "Kee-hee-hee!"
 	if (ph.did("ghostify") && bigRip) {
 		player.timeDimension8 = {
@@ -362,10 +354,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
 	if (tmp.ngp3) {
-		player.dilation.times = 0
 		if (!force) {
-			gainQKOnQuantum(qkGain)
-
 			if (tmp.qu.autoOptions.assignQK) assignAll(true)
 			if (ph.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode != "t") rotateAutoUnstable()
@@ -414,7 +403,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		tmp.qu.notrelative = true
 		updateMasteryStudyCosts()
 		updateMasteryStudyButtons()
-		delete tmp.qu.autoECN
 	} // bounds if tmp.ngp3
 	if (qMs.tmp.amt < 1 && !bigRip) {
 		getEl("infmultbuyer").textContent = "Autobuy IP mult: OFF"
@@ -501,7 +489,7 @@ function handleDispAndTmpOnQuantum(bigRip, prestige) {
 	if (!tmp.ngp3) return
 
 	let keepECs = bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 2
-	if (!keepECs && getEl("eternitychallenges").style.display == "block") showChallengesTab("normalchallenges")
+	if (!keepECs && getEl("eternitychallenges").style.display == "block") showChallengesTab('normalchallenges')
 
 	let keepDil = bigRip ? tmp.bruActive[10] : player.dilation.studies.includes(1)
 	if (!keepDil && getEl("dilation").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display=="block")
@@ -557,7 +545,6 @@ function handleDispAndTmpOutOfQuantum(bigRip) {
 
 function handleQuantumDisplays(prestige) {
 	updateBankedEter()
-	qMs.update()
 	qMs.updateDisplay()
 	if (!tmp.ngp3) return
 

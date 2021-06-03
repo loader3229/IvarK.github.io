@@ -970,6 +970,7 @@ function gainQKOnQuantum(qkGain) {
 		u[p[c][0]] = u[p[c][0]].sub(d[c]).round()
 	}
 
+	updateQuantumWorth()
 	updateColorCharge()
 }
 

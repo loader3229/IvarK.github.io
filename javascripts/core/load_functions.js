@@ -285,11 +285,10 @@ function setPeakIfUndefined(){
 	QKminpeakValue = new Decimal(0)
 	GHPminpeak = new Decimal(0)
 	GHPminpeakValue = new Decimal(0)
-	if (player.peakSpent) player.peakSpent = 0
 }
 
 function dov1tov5(){
-        if (player.version === undefined) { 
+	if (player.version === undefined) { 
 		for (var i = 0; i < player.autobuyers.length; i++) {
 			if (player.autobuyers[i]%1 !== 0) player.infinityPoints = player.infinityPoints + player.autobuyers[i].cost - 1
 		}
@@ -608,7 +607,6 @@ function doNGP3NewPlayerStuff(){
         player.respecMastery=false
         player.dbPower = 1
         player.dilation.times = 0
-        player.peakSpent = 0
         player.masterystudies = []
         tmp.qu.reached = false
         player.meta.bestOverQuantums = player.meta.bestAntimatter

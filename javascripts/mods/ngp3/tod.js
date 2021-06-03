@@ -426,7 +426,7 @@ function getTreeUpgradeEffect(upg) {
 
 function getTreeUpgradeEffectDesc(upg) {
 	if (upg == 1) return getFullExpansion(getTreeUpgradeEffect(upg))
-	if (upg == 2) return getDilExp("TU3").toFixed(2) + " -> " + getDilExp().toFixed(2)
+	if (upg == 2) return getTPExp("TU3").toFixed(2) + " -> " + getTPExp().toFixed(2)
 	return shortenMoney(getTreeUpgradeEffect(upg))
 }
 

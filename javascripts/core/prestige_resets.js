@@ -48,90 +48,16 @@ function nanofieldResetOnQuantum(){
 	tmp.qu.nanofield.powerThreshold = new Decimal(50)
 }
 
-function doQuantumResetStuff(bigRip, isQC, qcData){
+function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	var headstart = !tmp.ngp3
-	var oheHeadstart = bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 2
-	var keepABnICs = oheHeadstart || bigRip || hasAch("ng3p51")
+	var oheHeadstart = bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 1
+	var keepABnICs = oheHeadstart || hasAch("ng3p12")
 	var turnSomeOn = !bigRip || tmp.bruActive[1]
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
 
-	player.money = new Decimal(10)
-	resetNormalDimensions()
-	player.tickBoughtThisInf = resetTickBoughtThisInf()
-	player.sacrificed = new Decimal(0)
-	if (!keepABnICs) {
-		temp = []
-		for (var i = 0; i < player.challenges.length; i++) {
-			if (!player.challenges[i].includes("post") && getEternitied() >= 1) temp.push(player.challenges[i])
-		}
-		player.challenges = temp
-	}
-	player.currentChallenge = ""
-	player.infinitied = 0
-	player.infinitiedBank = headstart || hasAch("ng3p15") ? player.infinitiedBank : 0
-	player.bestInfinityTime = 9999999999
-	player.thisInfinityTime = 0
-	player.resets = keepABnICs ? 4 : 0
-	player.tdBoosts = resetTDBoosts()
-	if (inNGM(3)) player.tickspeedBoosts = keepABnICs ? 16 : 0
-	player.galaxies = keepABnICs ? 1 : 0
-	player.galacticSacrifice = resetGalacticSacrifice()
-	player.interval = null
-	player.autobuyers = keepABnICs ? player.autobuyers : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-	player.partInfinityPoint = 0
-	player.partInfinitied = 0
-	player.break = keepABnICs ? player.break : false
-	player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-	player.chall2Pow = 1
-	player.chall3Pow = new Decimal(0.01)
-	player.matter = new Decimal(0)
-	player.chall11Pow = new Decimal(1)
-	player.lastTenRuns = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
-	player.lastTenEternities = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
-	player.infMult = new Decimal(1)
-	player.infMultCost = new Decimal(10)
-	player.tickSpeedMultDecrease = keepABnICs ? player.tickSpeedMultDecrease : 10
-	player.tickSpeedMultDecreaseCost = keepABnICs ? player.tickSpeedMultDecreaseCost : 3e6
-	player.dimensionMultDecrease = keepABnICs ? player.dimensionMultDecrease : 10
-	player.dimensionMultDecreaseCost = keepABnICs ? player.dimensionMultDecreaseCost : 1e8
-	player.extraDimPowerIncrease = keepABnICs ? player.extraDimPowerIncrease : 0
-	player.dimPowerIncreaseCost = keepABnICs ? player.dimPowerIncreaseCost : 1e3
-	player.postC4Tier = 1
-	player.postC8Mult = new Decimal(1)
-	player.overXGalaxies = keepABnICs ? player.overXGalaxies : 0
-	player.overXGalaxiesTickspeedBoost = keepABnICs || player.tickspeedBoosts == undefined ? player.overXGalaxiesTickspeedBoost : 0
-	player.postChallUnlocked = hasAch("r133") || bigRip ? order.length : 0
-	player.postC4Tier = 0
-	player.postC3Reward = new Decimal(1)
-	player.eternityPoints = new Decimal(0)
-	player.eternities = headstart ? player.eternities : bigRip ? (tmp.bruActive[2] ? 1e5 : 0) : oheHeadstart ? Math.pow(10, qMs.tmp.amt / 2 + 1) : 0
-	player.eternitiesBank = tmp.ngp3 ? nA(player.eternitiesBank, bankedEterGain) : undefined
-	player.thisEternity = 0
-	player.bestEternity = headstart ? player.bestEternity : 9999999999
-	if (!qMs.isOn(3) || (bigRip && !tmp.bruActive[12])) player.eternityUpgrades = []
-	player.epmult = new Decimal(1)
-	player.epmultCost = new Decimal(500)
-	resetInfDimensions(true)
-	player.infDimBuyers = oheHeadstart ? player.infDimBuyers : [false, false, false, false, false, false, false, false]
-	player.totalTickGained = 0
-	player.offlineProd = keepABnICs ? player.offlineProd : 0
-	player.offlineProdCost = keepABnICs ? player.offlineProdCost : 1e7
-	player.challengeTarget = 0
-	player.autoSacrifice = keepABnICs || hasAch("r133") ? player.autoSacrifice : 1
-	player.replicanti = {
-		amount: qMs.tmp.amt >= 25 ? player.replicanti.amount.pow(0.95).floor() : new Decimal(oheHeadstart ? 1 : 0),
-		unl: oheHeadstart,
-		chance: 0.01,
-		chanceCost: new Decimal(inNGM(2) ? 1e90 : 1e150),
-		interval: 1000,
-		intervalCost: new Decimal(inNGM(2) ? 1e80 : 1e140),
-		gal: 0,
-		galaxies: 0,
-		galCost: new Decimal(inNGM(2) ? 1e110 : 1e170),
-		galaxybuyer: bigRipChanged ? turnSomeOn : oheHeadstart ? player.replicanti.galaxybuyer : undefined,
-		auto: bigRipChanged ? [turnSomeOn, turnSomeOn, turnSomeOn] : oheHeadstart ? player.replicanti.auto : [false, false, false]
-	}
-	resetTimeDimensions(true)
+	player.infinitiedBank = 0
+	if (!headstart) player.eternities = oheHeadstart ? 100 : 0
+
 	player.timestudy = (bigRip ? tmp.bruActive[12] : qMs.tmp.amt >= 3) ? player.timestudy : {
 		theorem: 0,
 		amcost: new Decimal("1e20000"),
@@ -139,12 +65,6 @@ function doQuantumResetStuff(bigRip, isQC, qcData){
 		epcost: new Decimal(1),
 		studies: [],
 	}
-	resetEternityChallenges(bigRip, headstart)
-
-	//Multiplier cost fixes
-	player.dimensionMultDecrease = (keepABnICs ? 3 : 10) - parseFloat((ECComps("eterc6") * 0.2).toFixed(2))
-	player.tickSpeedMultDecrease = (keepABnICs ? 2 : 10) - parseFloat((ECComps("eterc11") * 0.07).toFixed(2))
-
 	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
 	player.currentEternityChall = ""
 	player.etercreq = 0
@@ -153,9 +73,8 @@ function doQuantumResetStuff(bigRip, isQC, qcData){
 	player.infMultBuyer = bigRipChanged ? turnSomeOn : oheHeadstart ? player.infMultBuyer : false
 	player.autoCrunchMode = keepABnICs ? player.autoCrunchMode : "amount"
 	player.autoEterMode = keepABnICs ? player.autoEterMode : "amount"
-	player.peakSpent = tmp.ngp3 ? 0 : undefined
 	player.respec = false
-	player.respecMastery = tmp.ngp3 ? false : undefined
+	if (tmp.ngp3) player.respecMastery = false
 	player.eternityBuyer = keepABnICs ? player.eternityBuyer : {
 		limit: new Decimal(0),
 		isOn: false
@@ -188,11 +107,16 @@ function doQuantumResetStuff(bigRip, isQC, qcData){
 			4: !isQC && qMs.tmp.amt >= 8 ? player.dilation.rebuyables[4] : 0,
 		}
 	}
+
+	resetTimeDimensions(true)
+	resetEternityChallenges(bigRip, !tmp.ngp3)
 	resetNGUdData(true)
 	doMetaDimensionsReset(bigRip, headstart, isQC)
 	player.old = tmp.ngp3 ? !QCs.inAny() : undefined
 	player.dontWant = tmp.ngp3 || undefined
 	if (tmp.ngp3) resetMasteryStudies(bigRip)
+
+	doEternityResetStuff(5)
 }
 
 function resetDimensions() {
@@ -204,7 +128,7 @@ function resetDimensions() {
 }
 
 function doDimBoostResetStuff(layer = 1) {
-	if (!hasAch("r111")) setInitialMoney()
+	if (layer >= 3 || !hasAch("r111")) setInitialMoney()
 	setInitialResetPower()
 	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e6) resetDimensions()
 
@@ -223,7 +147,10 @@ function doDimBoostResetStuff(layer = 1) {
 }
 
 function doGalaxyResetStuff(layer = 2) {
-	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e14) player.resets = 0
+	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e14) {
+		player.resets = 0
+		if (player.dbPower) player.dbPower = new Decimal(1)
+	}
 	if (tmp.ngmX >= 3) player.tickspeedBoosts = 0
 	player.tdBoosts = resetTDBoosts()
 
@@ -239,6 +166,7 @@ function doCrunchResetStuff(layer = 3, chall) {
 	if (tmp.ngmX >= 5) resetPSac()
 
 	player.thisInfinityTime = 0
+	IPminpeak = new Decimal(0)
 
 	doGalaxyResetStuff(layer)
 }
@@ -294,11 +222,14 @@ function resetEternityChallenges(bigRip, ngpp) {
 	let ecUpTo = ngpp ? 12 : 14
 	let data = {}
 
-	let kept = ngpp || (bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 1)
+	let kept = ngpp || (bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 2)
 	if (kept) for (let ec = 1; ec <= ecUpTo; ec++) data['eterc' + ec] = player.eternityChalls['eterc' + ec]
+	if (qMs.isOn(31)) data.eterc14 = 4
 	player.eternityChalls = data
 
+
 	resetEternityChallUnlocks()
+	updateEternityChallenges()
 }
 
 function doMetaDimensionsReset(bigRip, headstart, isQC) {
@@ -350,14 +281,15 @@ function doEternityResetStuff(layer = 4, chall) {
 	player.infinitied = 0
 	player.infMult = new Decimal(1)
 	player.infMultCost = new Decimal(10)
+	if (hasAch("r85")) player.infMult = player.infMult.times(4)
+	if (hasAch("r93")) player.infMult = player.infMult.times(4)
 	playerInfinityUpgradesOnEternity()
 
 	player.currentChallenge = ""
 	player.challengeTarget = 0
 	player.challenges = challengesCompletedOnEternity()
-	player.postChallUnlocked = hasAch("r133") ? order.length : 0
 
-	if (getEternitied() < 1) {
+	if (!hasAch("ng3p12") && getEternitied() < 1) {
 		player.autobuyers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 		player.break = false
 	}
@@ -382,14 +314,14 @@ function doEternityResetStuff(layer = 4, chall) {
 		player.dimPowerIncreaseCost = getEternitied() >= 20 ? player.dimPowerIncreaseCost : 1e3
 	}
 
-	player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e10 && player.currentEternityChall != "eterc14" ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
-	tmp.rm = new Decimal(1)
-	tmp.rmPseudo = new Decimal(1)
-
 	player.replicanti.unl = getEternitied() >= 50
+	player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e10 && player.currentEternityChall != "eterc14" ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
+	if (chall == "dil" || !hasAch("ng3p67")) resetReplicantiUpgrades()
 	player.replicanti.galaxies = 0
 	player.replicanti.galaxybuyer = (getEternitied() > 2) ? player.replicanti.galaxybuyer : undefined
-	if (tmp.ngp3) player.peakSpent = 0
+	tmp.rm = new Decimal(1)
+	tmp.rmPseudo = new Decimal(1)
+	tmp.extraRG = 0
 
 	player.eterc8ids = 50
 	player.eterc8repl = 40
@@ -483,7 +415,6 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 		time: 0,
 		best: 9999999999,
 		last10: [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]],
-		autoEC: tmp.qu.autoEC,
 		disabledRewards: tmp.qu.disabledRewards,
 		metaAutobuyerWait: 0,
 		autobuyer: {
