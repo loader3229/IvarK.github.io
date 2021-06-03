@@ -1616,9 +1616,12 @@ function doNGp3Init2(){
 		delete tmp.badm
 	}
 
+	qMs.update()
+	qMs.updateDisplay()
+
 	updateActiveBigRipUpgrades()
 	updateBosonicLimits()
-        
+
 	if (tmp.ngp3) {
 		if (player.eternityBuyer.presets === undefined) player.eternityBuyer.presets = {on: false, autoDil: false, selected: -1, selectNext: 0, left: 1, order: []}
 		if (player.meta.bestOverQuantums === undefined) player.meta.bestOverQuantums = player.meta.bestAntimatter
@@ -2844,14 +2847,6 @@ function transformSaveToDecimal() {
 
 
 function loadAutoBuyerSettings() {
-        for (var i=0; i <= 8; i++) {
-                getEl("priority" + (i+1)).selectedIndex = player.autobuyers[i].priority-1
-                if (i == 8 && player.autobuyers[i].target == 10) getEl("toggleBtnTickSpeed").textContent = "Buys max"
-                else if (i == 8 && player.autobuyers[i].target !== 10) getEl("toggleBtnTickSpeed").textContent = "Buys singles"
-                else if (player.autobuyers[i].target > 10) getEl("toggleBtn" + (i+1)).textContent = "Buys until 10"
-                else getEl("toggleBtn" + (i+1)).textContent = "Buys singles"
-        }
-		getEl("autoGalMax").textContent = "Max Galaxies" + (tmp.ngp3 ? " (0 to max all galaxies)" : "") + ":"
         getEl("priority10").value = player.autobuyers[9].priority
         getEl("priority11").value = player.autobuyers[10].priority
         getEl("priority12").value = player.autoCrunchMode == "amount" ? formatValue("Scientific", player.autobuyers[11].priority, 2, 0) : player.autobuyers[11].priority

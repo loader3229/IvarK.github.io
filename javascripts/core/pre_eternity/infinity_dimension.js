@@ -51,7 +51,7 @@ function hideMaxIDButton(onLoad = false) {
 
 function infDimensionDescription(tier) {
 	let amt = player['infinityDimension' + tier].amount
-	let bgt = player['infinityDimension' + tier].bought
+	let bgt = Math.max(player['infinityDimension' + tier].bought, player['infinityDimension' + tier].baseAmount)
 	let tierAdd = (inNGM(5) ? 2 : 1) + tier
 	let tierMax = inNGM(5) ? 6 : 8
 

@@ -57,6 +57,7 @@ function setupAutobuyerHTMLandData(){
 
    		if (player.autobuyers[id].interval == 100) {
 			if (id > 8) {
+				if (!player.infinityUpgradesRespecced) return
 				if (player.autobuyers[id].bulkBought || player.infinityPoints.lt(1e4) || id > 10) return
 				player.infinityPoints = player.infinityPoints.sub(1e4)
 				player.autobuyers[id].bulkBought = true
@@ -1640,12 +1641,9 @@ function setupBreakInfUpgHTMLandData() {
 		if (player.infinityPoints.gte(player.tickSpeedMultDecreaseCost) && player.tickSpeedMultDecrease > 2) {
 			player.infinityPoints = player.infinityPoints.minus(player.tickSpeedMultDecreaseCost)
 			player.tickSpeedMultDecreaseCost *= 5
-			player.tickSpeedMultDecrease--;
-			if (player.tickSpeedMultDecrease > 2) getEl("postinfi31").innerHTML = "Tickspeed cost multiplier increase <br>"+player.tickSpeedMultDecrease+"x -> "+(player.tickSpeedMultDecrease-1)+"x<br>Cost: "+shortenDimensions(player.tickSpeedMultDecreaseCost) +" IP"
-			else {
-				for (c=0;c<ECComps("eterc11");c++) player.tickSpeedMultDecrease-=0.07
-				getEl("postinfi31").innerHTML = "Tickspeed cost multiplier increase<br>"+player.tickSpeedMultDecrease.toFixed(player.tickSpeedMultDecrease<2?2:0)+"x"
-			}
+			player.tickSpeedMultDecrease -= 1
+			if (player.tickSpeedMultDecrease > 2) getEl("postinfi31").innerHTML = "Reduce the tickspeed cost multiplier increase post-" + shorten(Number.MAX_VALUE) + ".<br>" + player.tickSpeedMultDecrease+"x -> "+(player.tickSpeedMultDecrease-1)+"x<br>Cost: "+shortenDimensions(player.tickSpeedMultDecreaseCost) +" IP"
+			else getEl("postinfi31").innerHTML = "Reduce the tickspeed cost multiplier increase post-" + shorten(Number.MAX_VALUE) + ".<br>" + player.tickSpeedMultDecrease.toFixed(player.tickSpeedMultDecrease < 2 ? 2 : 0)+"x"
 		}
 	}
 
@@ -1669,12 +1667,9 @@ function setupBreakInfUpgHTMLandData() {
 		if (player.infinityPoints.gte(player.dimensionMultDecreaseCost) && player.dimensionMultDecrease > 3) {
 			player.infinityPoints = player.infinityPoints.minus(player.dimensionMultDecreaseCost)
 			player.dimensionMultDecreaseCost *= 5000
-			player.dimensionMultDecrease--;
-			if (player.dimensionMultDecrease > 3) getEl("postinfi42").innerHTML = "Dimension cost multiplier increase <br>"+player.dimensionMultDecrease+"x -> "+(player.dimensionMultDecrease-1)+"x<br>Cost: "+shortenCosts(player.dimensionMultDecreaseCost) +" IP"
-			else {
-				for (c=0;c<ECComps("eterc6");c++) player.dimensionMultDecrease-=0.2
-				getEl("postinfi42").innerHTML = "Dimension cost multiplier increase<br>"+player.dimensionMultDecrease.toFixed(ECComps("eterc6")%5>0?1:0)+"x"
-			}
+			player.dimensionMultDecrease -= 1
+			if (player.dimensionMultDecrease > 3) getEl("postinfi42").innerHTML = "Reduce the Dimension  cost multiplier increase post-" + shorten(Number.MAX_VALUE) + ".<br>" + player.dimensionMultDecrease + "x -> " + (player.dimensionMultDecrease - 1) + "x<br>Cost: " + shorten(player.dimensionMultDecreaseCost) +" IP"
+			else getEl("postinfi42").innerHTML = "Reduce the Dimension cost multiplier increase post-" + shorten(Number.MAX_VALUE) + ".<br>"+player.dimensionMultDecrease.toFixed(ECComps("eterc6") % 5 > 0 ? 1 : 0) + "x"
 		}
 	}
 
@@ -2817,6 +2812,14 @@ function updateAutobuyers() {
 	for (let i = 0; i < 8; i++) if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].bulk >= 512) b1++
 	if (b1 == 8) giveAchievement("Bulked up")
 
+	for (var i = 0; i <= 8; i++) {
+		getEl("priority" + (i + 1)).selectedIndex = player.autobuyers[i].priority - 1
+		if (i == 8 && player.autobuyers[i].target == 10) getEl("toggleBtnTickSpeed").textContent = "Buys max"
+		else if (i == 8 && player.autobuyers[i].target !== 10) getEl("toggleBtnTickSpeed").textContent = "Buys singles"
+		else if (player.autobuyers[i].target > 10) getEl("toggleBtn" + (i+1)).textContent = "Buys until 10"
+		else getEl("toggleBtn" + (i+1)).textContent = "Buys singles"
+	}
+
 	if (player.autobuyers[8].interval <= 100) {
 		getEl("buyerBtnTickSpeed").style.display = "none"
 		getEl("toggleBtnTickSpeed").style.display = "inline-block"
@@ -2856,12 +2859,16 @@ function updateAutobuyers() {
 		if (player.infinityUpgradesRespecced && !player.autobuyers[9].bulkBought) getEl("buyerBtnDimBoost").innerHTML = "Buy bulk feature<br>Cost: "+shortenCosts(1e4)+currencyEnd
 		else getEl("buyerBtnDimBoost").style.display = "none"
 		maxedAutobuy++;
+		if (!player.infinityUpgradesRespecced) delete player.autobuyers[9].bulkBought
 	}
 	if (player.autobuyers[10].interval <= 100) {
 		if (player.infinityUpgradesRespecced && !player.autobuyers[10].bulkBought) getEl("buyerBtnGalaxies").innerHTML = "Buy bulk feature<br>Cost: "+shortenCosts(1e4)+currencyEnd
 		else getEl("buyerBtnGalaxies").style.display = "none"
 		maxedAutobuy++;
+		if (!player.infinityUpgradesRespecced) delete player.autobuyers[10].bulkBought
 	}
+
+	getEl("autoGalMax").textContent = "Max Galaxies" + ((tmp.mod.newGamePlusVersion || tmp.ngp3) && getEternitied() >= 10 ? " (0 to max all galaxies)" : "") + ":"
 
 	//NG-X Hell
 	if (inNGM(2)) {
@@ -4908,7 +4915,6 @@ function EPonEternityPassiveGain(diff){
 function ngp3DilationUpdating(){
 	let gain = getTPGain()
 	if (inNGM(2)) player.dilation.bestIP = player.infinityPoints.max(player.dilation.bestIP)
-	//if (player.dilation.active && player.dilation.tachyonParticles.lt(gain) && qMs.tmp.amt >= 23) setTachyonParticles(gain)
 }
 
 function setTachyonParticles(x) {
@@ -5299,13 +5305,14 @@ function galaxyABTick(){
 		getAmount(inNC(4) || player.pSac != undefined ? 6 : 8) >= getGalaxyRequirement() &&
 		(!inNC(14) || tmp.ngmX <= 3)
 	) {
-		if (getEternitied() >= 9) {
-			if (
-				player.autobuyers[10].bulk == 0 ||
-				Math.round(timer * 100) % Math.round(player.autobuyers[10].bulk * 100) == 0
-			) maxBuyGalaxies()
+		let bulk = getEternitied() >= 9
+		if (bulk && (
+			player.autobuyers[10].bulk == 0 ||
+			Math.round(timer * 100) % Math.round(player.autobuyers[10].bulk * 100) == 0
+		)) {
+			maxBuyGalaxies()
 		} else {
-			if (player.autobuyers[10].priority > player.galaxies) {
+			if ((bulk && (tmp.ngp3 || tmp.mod.aarexModifications.newGamePlusVersion) && player.autobuyers[10].priority == 0) || player.autobuyers[10].priority > player.galaxies) {
 				autoS = false;
 				getEl("secondSoftReset").click()
 				player.autobuyers[10].ticks = 0

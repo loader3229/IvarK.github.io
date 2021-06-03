@@ -396,6 +396,8 @@ function buyInfinityUpgrade(name, cost) {
 	if (player.infinityPoints.gte(cost) && !player.infinityUpgrades.includes(name)) {
 		player.infinityUpgrades.push(name)
 		player.infinityPoints = player.infinityPoints.minus(cost)
+		if (name == "bulkBoost") DimBoostBulkDisplay()
+		if (name == "autoBuyerUpgrade") updateAutobuyers()
 		if (name == "postinfi53") for (tier = 1; tier <= 8; tier++) {
 			let dim = player["infinityDimension" + tier]
 			dim.cost = Decimal.pow(getIDCostMult(tier),dim.baseAmount / 10).times(infBaseCost[tier])

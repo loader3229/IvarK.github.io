@@ -17,15 +17,20 @@ function unlockReplicantis() {
 }
 
 function replicantiIncrease(diff) {
-	if (!player.replicanti.unl || player.currentEternityChall == "eterc14") return
+	if (!player.replicanti.unl || player.currentEternityChall == "eterc14") {
+		replicantiTicks = 0
+		return
+	}
 
 	let lim = getReplicantiLimit(true)
-	if (player.replicanti.amount.lt(lim)) {
-		if (diff > 5 || tmp.rep.chance > 1 || tmp.rep.interval < 50 || tmp.rep.est.gt(50) || isReplicantiLimitBroken()) continuousReplicantiUpdating(diff)
-		else notContinuousReplicantiUpdating()
-	}
 	if (player.replicanti.amount.gt(0)) replicantiTicks += diff
+	if (player.replicanti.amount.lt(lim)) {
+		if (!useContinuousRep()) notContinuousReplicantiUpdating()
+		if (useContinuousRep()) continuousReplicantiUpdating(replicantiTicks)
+	}
+
 	player.replicanti.amount = player.replicanti.amount.min(lim)
+	if (player.replicanti.amount.eq(lim)) replicantiTicks = 0
 
 	let auto = player.replicanti.galaxybuyer
 	if (auto && tmp.ngC) ngC.condense.rep.buy()
@@ -427,23 +432,29 @@ function runRandomReplicanti(chance) {
 
 function notContinuousReplicantiUpdating() {
 	var chance = tmp.rep.chance
-	var interval = Decimal.div(tmp.rep.interval, 100)
 	if (typeof(chance) !== "number") chance = chance.toNumber()
+	var interval = tmp.rep.interval.div(100).toNumber()
 
-	if (interval <= replicantiTicks && player.replicanti.unl) {
-		if (player.replicanti.amount.lte(100)) runRandomReplicanti(chance) //chance should be a decimal
-		else if (player.replicanti.amount.lt(getReplicantiLimit(true))) {
-			var temp = Decimal.round(player.replicanti.amount.dividedBy(100))
-			if (chance < 1) {
-				let counter = 0
-				for (var i = 0; i < 100; i++) if (chance > Math.random()) counter++;
-				player.replicanti.amount = temp.times(counter).plus(player.replicanti.amount)
-				counter = 0
-			} else player.replicanti.amount = player.replicanti.amount.times(2)
-			player.replicanti.amount = player.replicanti.amount.min(getReplicantiLimit(true))
+	var ticks = Math.floor(replicantiTicks / interval)
+	var ticksLeft = ticks
+	var ticksPerTick = Math.ceil(ticks / 10)
+
+	while (player.replicanti.amount.lt(Number.MAX_VALUE) && ticksLeft > 0) {
+		if (chance == 1) {
+			player.replicanti.amount = player.replicanti.amount.times(Decimal.pow(2, ticksLeft * Math.log2(chance + 1))).round()
+			ticksLeft = 0
+		} else if (player.replicanti.amount.lte(100)) {
+			runRandomReplicanti(chance) //chance should be a decimal
+			ticksLeft--
+		} else {
+			var ticksRan = Math.min(ticksLeft, ticksPerTick)
+			var counter = 0
+			for (var x = 0; x < 100; x++) if (chance > Math.random()) counter++
+			player.replicanti.amount = player.replicanti.amount.times(Decimal.pow(counter / 100 + 1, ticksRan)).round()
+			ticksLeft -= ticksRan
 		}
-		replicantiTicks -= interval
 	}
+	replicantiTicks -= (ticks - ticksLeft) * interval
 }
 
 function continuousReplicantiUpdating(diff){
@@ -455,6 +466,10 @@ function continuousReplicantiUpdating(diff){
 		player.replicanti.amount = Decimal.pow(Math.E, ln)
 	} else player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + (diff * tmp.rep.est / 10))
 	replicantiTicks = 0
+}
+
+function useContinuousRep() {
+	return replicantiTicks > 1e3 || Decimal.gt(tmp.rep.chance, 1) || tmp.rep.interval.lt(0.1) || getReplicantiLimit(true).gt(Number.MAX_VALUE)
 }
 
 function handleReplTabs() {
