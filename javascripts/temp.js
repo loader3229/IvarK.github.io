@@ -43,7 +43,7 @@ function updateTemp(init) {
 	if (tmp.ngpX >= 5) pl.updateTmp()
 
 	updateGhostifyTempStuff()
-	updateNGP3TempStuff()
+	updateNGP3TempStuff(init)
 
 	tmp.sacPow = calcTotalSacrificeBoost()
 
@@ -313,7 +313,7 @@ function updatePPTITemp() {
 	tmp.ppti = x
 }
 
-function updateNGP3TempStuff() {
+function updateNGP3TempStuff(init) {
 	if (tmp.quActive) {
 		if (tmp.qu.breakEternity.unlocked) updateBreakEternityUpgradesTemp()
 		if (player.masterystudies.includes("d14")) updateBigRipUpgradesTemp()
@@ -326,14 +326,12 @@ function updateNGP3TempStuff() {
 			tmp.twr = getTotalWorkers()
 			tmp.tra = getTotalReplicants()
 		}
-
-		QCs.updateTmpOnTick()
-
-		//Positrons
-		tmp.totalQE = tmp.qu.quarkEnergy
-		if (pos.unl()) tmp.totalQE -= pos.save.consumedQE || 0
-
-		pos.updateTmp()
+	}
+	if (tmp.quActive || init) {
+		//Quantum
+		QCs.updateTmpOnTick() //Quantum Challenges
+		pos.updateTmp() //Positrons
+		updateQEGainTmp() //Quantum Energy
 
 		updateGluonicBoosts()
 		updateQuarkEnergyEffects()

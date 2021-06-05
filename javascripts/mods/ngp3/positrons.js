@@ -26,6 +26,7 @@ let POSITRONS = {
 			tg: {sac: 0, qe: 0, pc: 0}
 		}
 
+		if (data.consumedQE) delete data.consumedQE
 		if (data.sacGals) delete data.sacGals
 		if (data.sacBoosts) delete data.sacBoosts
 	},
@@ -44,75 +45,51 @@ let POSITRONS = {
 	},
 	types: {
 		ng: {
-			pow() {
-				let x = 0.2
-				if (enB.active("glu", 4) && pos.on()) x *= enB.tmp.glu4
-				return x
+			galName: "Antimatter Galaxies",
+			pow(x) {
+				return x / 4
 			},
-			sacGals(pow) {
-				return Math.min(player.galaxies * pos.maxSacMult(), pow)
+			sacGals(x) {
+				return Math.min(player.galaxies / 4, x)
 			},
-			qeToGals(qe) {
-				return (Math.log10(qe + 1) / Math.log10(2)) * 5e3
-			},
-			galsToQE(gals) {
-				return Math.pow(2, gals / 5e3) - 1
-			},
-			pcGain(gals) {
-				return gals * Math.pow(2, Math.sqrt(gals / 5e3 + 1) - 1)
+			basePcGain(x) {
+				return x / 200
 			}
 		},
 		rg: {
-			pow() {
-				let x = 0
-				if (enB.active("glu", 6)) x = enB.tmp.glu6
+			galName: "base Replicated Galaxies",
+			pow(x) {
+				return 0
+			},
+			sacGals(x) {
+				return 0
+			},
+			basePcGain(x) {
 				return x
-			},
-			sacGals(pow) {
-				return Math.min(player.replicanti.galaxies * pos.maxSacMult(), pow)
-			},
-			qeToGals(qe) {
-				return Math.floor(qe * qe * 1e4)
-			},
-			galsToQE(gals) {
-				return Math.sqrt(gals / 1e4)
-			},
-			pcGain(gals) {
-				return gals
 			}
 		},
 		eg: {
-			pow() {
+			galName: "extra Replicated Galaxies",
+			pow(x) {
 				return 0
 			},
-			sacGals(pow) {
-				return 1
+			sacGals(x) {
+				return 0
 			},
-			qeToGals(qe) {
-				return Math.floor(qe * 1e4)
-			},
-			galsToQE(gals) {
-				return gals / 1e4
-			},
-			pcGain(gals) {
-				return gals
+			basePcGain(x) {
+				return x
 			}
 		},
 		tg: {
-			pow() {
+			galName: "Tachyonic Galaxies",
+			pow(x) {
 				return 0
 			},
-			sacGals(pow) {
-				return Math.min(player.dilation.freeGalaxies * pos.maxSacMult(), pow)
+			sacGals(x) {
+				return 0
 			},
-			qeToGals(qe) {
-				return Math.floor(qe * qe * 1e4)
-			},
-			galsToQE(gals) {
-				return Math.sqrt(gals / 1e4)
-			},
-			pcGain(gals) {
-				return gals
+			basePcGain(x) {
+				return x
 			}
 		}
 	},
@@ -120,63 +97,53 @@ let POSITRONS = {
 		let data = {}
 		pos.tmp = data
 
-		if (!pos.unl()) return
-
-		let qeMax = tmp.qu.quarkEnergy / 5
-		let qeMult = getQuantumEnergyMult()
-		let qeMultMax = qeMult / (Math.log10(qeMult * 10 + 1) + 1)
-
+		//Meta Dimension Boosts or Quantum Energy -> Positrons
+		pos.save.eng = 0
 		if (pos.on()) {
+			let mdbStart = 15
 			let mdbMult = 0.25
 			if (QCs.isRewardOn(5)) mdbMult = QCs.tmp.rewards[5]
 
-			let mdbs = player.meta.resets * mdbMult
-			let max_mdbs = Math.pow(Math.log2(qeMultMax) + 1.5, 2) / mdbMult
-
-			data.sac_mdb = Math.floor(Math.min(mdbs, max_mdbs))
-			data.sac_qem = Math.pow(2, Math.sqrt(data.sac_mdb / 4) - 1.5)
-			pos.save.amt = Math.pow(data.sac_mdb * 15, 2)
+			data.sac_mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
+			data.sac_qe = tmp.qu.quarkEnergy / 3
+			pos.save.amt = Math.floor(Math.min(Math.pow(data.sac_mdb, 2), data.sac_qe) * 100)
 		} else {
 			data.sac_mdb = 0
-			data.sac_qem = 0
+			data.sac_qe = 0
 			pos.save.amt = 0
 		}
-		pos.save.eng = 0
-		pos.save.consumedQE = 0
 
+		//Galaxies -> Charge
 		let types = ["ng", "rg", "eg", "tg"]
+		let pcSum = 0
 		for (var i = 0; i < types.length; i++) {
 			var type = types[i]
 			var save_data = pos.save.gals[type]
-			data["pow_" + type] = pos.types[type].pow() * pos.save.amt
 
-			save_data.sac = Math.min(pos.types[type].sacGals(data["pow_" + type]), pos.types[type].qeToGals(qeMax))
-			save_data.qe = pos.types[type].galsToQE(save_data.sac)
-			save_data.pc = pos.types[type].pcGain(save_data.sac)
-
-			pos.save.eng += save_data.pc
-			pos.save.consumedQE += save_data.qe
+			data["pow_" + type] = pos.types[type].pow(pos.save.amt)
+			save_data.sac = Math.floor(pos.types[type].sacGals(data["pow_" + type]))
+			save_data.pc = pos.types[type].basePcGain(save_data.sac)
+			pcSum += Math.sqrt(save_data.pc)
 		}
+		pos.save.eng = Math.pow(pcSum, 4)
 	},
 	updateTab() {
 		enB.update("pos")
 		enB.updateOnTick("pos")
 
-		getEl("pos_formula").innerHTML = pos.save.on ? getFullExpansion(pos.tmp.sac_mdb) + " MDBs + " + shorten(pos.tmp.sac_qem) + "x QE multiplier -><br>" : ""
+		getEl("pos_formula").textContent = getFullExpansion(pos.tmp.sac_mdb) + " Meta Dimension Boosts + " + shorten(pos.tmp.sac_qe) + " Quantum Energy ->"
 		getEl("pos_toggle").textContent = pos.save.on ? "ON" : "OFF"
 		getEl("pos_amt").textContent = getFullExpansion(pos.save.amt)
 
 		let types = ["ng", "rg", "eg", "tg"]
-		let data = pos.save.gals
+		let msg = []
 		for (var i = 0; i < types.length; i++) {
 			var type = types[i]
-			var typeData = pos.save.gals[type]
-
-			getEl("pos_pow_" + type).textContent = shorten(pos.tmp["pow_" + type])
-			getEl("pos_gals_" + type).textContent = shorten(typeData.sac)
-			getEl("pos_eng_" + type).textContent = shorten(typeData.qe)
-			getEl("pos_char_" + type).textContent = shorten(typeData.pc)
+			var gals = pos.save.gals[type].sac
+			if (gals > 0 || type == "ng") msg.push(getFullExpansion(gals) + " sacrificed " + pos.types[type].galName)
 		}
+
+		getEl("pos_charge_formula").innerHTML = wordizeList(msg, false, " +<br>", false) + " -> "
 	
 		if (enB.has("pos", 3)) getEl("enB_pos3_exp").textContent = "^" + (1 / enB.tmp.pos3).toFixed(Math.floor(3 + Math.log10(enB.tmp.pos3)))
 	}

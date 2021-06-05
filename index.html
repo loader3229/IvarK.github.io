@@ -1548,7 +1548,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 7.03)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 8)</p>
 			</span>
 			<div class="footer bottom"></div>
 		</div>
@@ -2218,7 +2218,7 @@
 								<div id="Hadronization" class="achievement achievementlocked" style="background-image: url(images/107.png)" ach-tooltip="Have colored quarks, but have no color charge. Reward: Quantum Worth boosts all Meta Dimensions."><br></div>
 							</td>
 							<td>
-								<div id="Work harder." class="achievement achievementlocked" style="background-image: url(images/108.png)" ach-tooltip="Unlock Time Dilation without buying Eternity Upgrades. Reward: Quantum energy gain is raised by ^1.5 before the multipliers."><br></div>
+								<div id="Work harder." class="achievement achievementlocked" style="background-image: url(images/108.png)" ach-tooltip="Unlock Time Dilation without buying Eternity Upgrades. Reward: Decrease the denominator of quark efficiency to 2."><br></div>
 							</td>
 							<td>
 								<div id="No more tax fraud!" class="achievement achievementlocked" style="background-image: url(images/109.png)" ach-tooltip="Have 900 galaxies without unlocking Time Dilation. Reward: You permanently keep your banked Infinities, and bank 5% of your Eternities on Quantum."><br></div>
@@ -4368,9 +4368,10 @@
 		<br>
 		<div>Your quantum worth (sum of anti-quarks, colored anti-quarks, and anti-gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.</div>
 		<br>
-		You have <span id="quarkEnergy" style="font-size:35px">0.0</span> quantum energy (based on quarks and entangled gluons), with a best-ever of <span id="bestQE" style="font-size:15px">0.0</span> energy. (<span id="quarkEnergyMult" style="font-size: 25px">0.0</span>x)
-		<br>
-		<span id="quarkEnergySub"></span>
+		You have <span id="quarkEnergy" style="font-size:35px">0.0</span> quantum energy.
+		(<span id="quarkEnergyMult" style="font-size: 25px">0.0</span>x)
+		<br>You have made a best-ever of <span id="bestQE" style="font-size:15px">0.0</span> energy. (no divisors)
+		<br>Quark Efficiency: <span id="qeEff" style="font-size:15px"></span> (<span id="qeFrac"></span>)
 		<br>
 		<table class="table" align="center" style="margin: auto">
 			<tr>
@@ -4734,84 +4735,60 @@
 				</tr>
 			</table>
 		</div>
-		<div class='quantumtab' id='positrons'><table class="qTable_4col">
+		<div class='quantumtab' id='positrons'>
+		If Positrons are on, then Meta-Dimension Boosts and Quantum Energy are sacrificed for Positrons...
+		<br>
+		which allow Galaxies to be sacrificed for Positronic Charge!
+		<br>
+		<table class="qTable">
 			<tr>
-				<td class="yellow" colspan=2>
+				<td class="yellow">
 					<span id="pos_formula"></span>
+					<br>
 					<span id="pos_amt" style="font-size:25px">0</span> Positrons
+					<br>
+					<button class="storebtn" id="pos_toggle" onclick="pos.toggle()"></button>
+					<br><br>
 				</td>
-				<td>
+				<td class="dark_yellow">
+					<span id="pos_charge_formula"></span>
+					<br>
 					<span id="enB_pos_eng" style="font-size:25px">0.0</span> Positronic Charge
+					<br><br>
 				</td>
 				<td>
 					<span id="enB_pos_amt" style="font-size:25px">0</span> Positronic Boosters
+					<br>
+					<button class="storebtn" id="enB_pos_buy" style="width: 360px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> charge</button>
+					<br>
+					<button class='storebtn' style="width: 360px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy Positronic Boosters</button>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=3>
+					<button id="entangle_rg_pos" style="width: 150px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('rg')">Use RG gluon kind</button>
+					<button id="entangle_gb_pos" style="width: 150px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('gb')">Use GB gluon kind</button>
+					<button id="entangle_br_pos" style="width: 150px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('br')">Use BR gluon kind</button>
 					<br>
 					<span id="enB_pos_next"></span>
 				</td>
 			</tr>
 			<tr>
-				<td class="yellow" colspan=2>
-					<button class="storebtn" id="pos_toggle" onclick="pos.toggle()"></button>
-					<br><br>
-					If Positrons are on, then Meta-Dimension Boosts and Quantum Energy multiplier are sacrificed for Positrons...
-					<br>
-					which allow Galaxies and Quantum Energy to be sacrificed for Positronic Charge!
-				</td>
-				<td colspan=2>
-					<button class="storebtn" id="enB_pos_buy" style="width: 360px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> charge</button>
-					<br>
-					<button class='storebtn' style="width: 360px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy Positronic Boosters</button>
-					<br><br>
-					<button id="entangle_rg_pos" style="width: 150px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('rg')">Use RG gluon kind</button>
-					<button id="entangle_gb_pos" style="width: 150px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('gb')">Use GB gluon kind</button>
-					<button id="entangle_br_pos" style="width: 150px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('br')">Use BR gluon kind</button>
-				</td>
-			</tr>
-			<tr>
-				<td class="dark_yellow">
-					<b style="font-size: 25px">Dimensional</b> (<span id="pos_pow_ng">0.00</span> Power)
-					<br>
-					<span id="pos_gals_ng">0.00</span> Antimatter Galaxies + <span id="pos_eng_ng">0.00</span> Energy -><br>
-					<span id="pos_char_ng" style="font-size: 15px">0.00</span> Charge
-				</td>
-				<td class="dark_yellow">
-					<b style="font-size: 25px">Replicanti</b> (<span id="pos_pow_rg">0.00</span> Power)
-					<br>
-					<span id="pos_gals_rg">0.00</span> Replicated Galaxies + <span id="pos_eng_rg">0.00</span> Energy -><br>
-					<span id="pos_char_rg" style="font-size: 15px">0.00</span> Charge
-				</td>
-				<td id="enB_pos1" colspan=2>
+				<td id="enB_pos1">
 					<b id="enB_pos1_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos1_type"></span>
 					<br>
-					Increase the quantum energy multiplier by +<span id="enB_pos1_eff" style="font-size:35px"></span>x.
+					Replicantis increase the numerator of quark efficiency by <span id="enB_pos1_eff" style="font-size:35px"></span>.
 				</td>
-			<tr>
-			</tr>
-				<td class="dark_yellow">
-					<b style="font-size: 25px">Extragalactic</b> (<span id="pos_pow_eg">0.00</span> Power)
-					<br>
-					<span id="pos_gals_eg">0.00</span> Extra RGs + <span id="pos_eng_eg">0.00</span> Energy -><br>
-					<span id="pos_char_eg" style="font-size: 15px">0.00</span> Charge
-				</td>
-				<td class="dark_yellow">
-					<b style="font-size: 25px">Tachyonic</b> (<span id="pos_pow_tg">0.00</span> Power)
-					<br>
-					<span id="pos_gals_tg">0.00</span> Tachyonic Galaxies + <span id="pos_eng_tg">0.00</span> Energy -><br>
-					<span id="pos_char_tg" style="font-size: 15px">0.00</span> Charge
-				</td>
-				<td id="enB_pos2" colspan=2>
+				<td id="enB_pos2">
 					<b id="enB_pos2_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos2_type"></span>
 					<br>
-					Best meta-antimatter raises the power per ten normal Dimensions by ^<span id="enB_pos2_eff" style="font-size:35px"></span>.
+					Raise the multiplier per ten normal Dimensions by <span id="enB_pos2_eff" style="font-size:35px"></span>.
 				</td>
-			<tr>
-			</tr>
-				<td colspan=2></td>
-				<td id="enB_pos3" colspan=2>
+				<td id="enB_pos3">
 					<b id="enB_pos3_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos3_type"></span>
@@ -4820,28 +4797,21 @@
 				</td>
 			<tr>
 			</tr>
-				<td colspan=2></td>
-				<td id="enB_pos4" colspan=2>
+				<td id="enB_pos4">
 					<b id="enB_pos4_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos4_type"></span>
 					<br>
-					Before multipliers, Meta Dimension Boosts greatly boost the Quantum Energy formula to ^<span id="enB_pos4_eff" style="font-size:35px"></span>, but also reduce the effects of quantum energy.
+					Boost something by <span id="enB_pos4_eff" style="font-size:35px"></span>x.
 				</td>
-			<tr>
-			</tr>
-				<td colspan=2></td>
-				<td id="enB_pos5" colspan=2>
+				<td id="enB_pos5">
 					<b id="enB_pos5_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos5_type"></span>
 					<br>
 					Base replicate chance is <span id="enB_pos5_eff" style="font-size:35px"></span>% higher.
 				</td>
-			<tr>
-			</tr>
-				<td colspan=2></td>
-				<td id="enB_pos6" colspan=2>
+				<td id="enB_pos6">
 					<b id="enB_pos6_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos6_type"></span>
@@ -4850,28 +4820,21 @@
 				</td>
 			<tr>
 			</tr>
-				<td colspan=2></td>
-				<td id="enB_pos7" colspan=2>
+				<td id="enB_pos7">
 					<b id="enB_pos7_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos7_type"></span>
 					<br>
 					All galaxies are <span id="enB_pos7_eff" style="font-size:35px"></span>% stronger in Quantum Challenges.
 				</td>
-			<tr>
-			</tr>
-				<td colspan=2></td>
-				<td id="enB_pos8" colspan=2>
+				<td id="enB_pos8">
 					<b id="enB_pos8_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos8_type"></span>
 					<br>
 					Partially share TS232 power to all galaxies by +<span id="enB_pos8_eff" style="font-size:35px"></span>%.
 				</td>
-			</tr>
-			<tr>
-				<td colspan=2></td>
-				<td id="enB_pos9" colspan=2>
+				<td id="enB_pos9">
 					<b id="enB_pos9_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos9_type"></span>
@@ -4880,14 +4843,15 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan=2></td>
-				<td id="enB_pos10" colspan=2>
+				<td id="enB_pos10">
 					<b id="enB_pos10_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos10_type"></span>
 					<br>
 					Reduce the goal of all Paired Challenges to ^<span id="enB_pos10_eff" style="font-size:35px"></span>.
 				</td>
+				<td></td>
+				<td></td>
 			</tr>
 		</table></div>
 		<div class='quantumtab' id='replicants'>

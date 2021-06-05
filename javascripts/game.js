@@ -1355,7 +1355,7 @@ function toString(x) {
 	return x
 }
 
-function wordizeList(list, caseFirst) {
+function wordizeList(list, caseFirst, prefix, useAnd = true) {
 	let length = list.length
 	if (caseFirst && length > 0) {
 		let split0 = [list[0][0], list[0].slice(1)]
@@ -1363,11 +1363,11 @@ function wordizeList(list, caseFirst) {
 		if (split0[1]) list[0] += split0[1]
 	}
 	let ret = ""
-	for (var i=0; i<length; i++) {
+	for (var i=0; i < length; i++) {
 		if (i > 0 && length > 2) {
-			ret += ", "
-			if (i == length - 1) ret += "and "
-		} else if (i > 0) ret += " and "
+			ret += prefix || ", "
+			if (useAnd && i == length - 1) ret += "and "
+		} else if (useAnd && i > 0) ret += " and "
 		ret += list[i]
 	}
 	return ret
