@@ -503,7 +503,7 @@ let enB = {
 			activeReq: () => !QCs.in(2),
 
 			eff(x) {
-				return Math.sqrt(x)
+				return Math.cbrt(x) * 0.75
 			},
 			effDisplay(x) {
 				return shorten(x)
