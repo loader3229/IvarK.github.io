@@ -113,6 +113,8 @@ function getMetaShiftRequirement() {
 	var mdb = player.meta.resets
 	var data = {tier: Math.min(8, mdb + 4), amount: 20, mult: 15}
 
+	if (tmp.ngp3_mul) data.mult--
+
 	data.amount += data.mult * Math.max(mdb - 4, 0)
 	if (isTreeUpgActive(1)) data.amount -= getTreeUpgradeEffect(1)
 	if (hasNU(1)) data.amount -= tmp.nu[1]
@@ -287,7 +289,7 @@ function getExtraDimensionBoostPowerExponent(ma = player.meta.antimatter){
 function getMADimBoostPowerExp(ma) {
 	let power = 8
 	if (hasDilationUpg("ngpp5")) power++
-	if (masteryStudies.has(262)) power += 0.5
+	if (masteryStudies.has(262)) power += doubleMSMult(0.5)
 	if (isNanoEffectUsed("ma_effect_exp")) power += tmp.nf.effects.ma_effect_exp
 	return power
 }
@@ -346,7 +348,7 @@ function updateMetaDimensions () {
 	var newClassName = reqGotten ? (bigRipped && player.options.theme == "Aarex's Modifications" ? "" : "storebtn ") + (bigRipped ? "aarexmodsghostifybtn" : "") : 'unavailablebtn'
 	var message = 'Lose all your previous progress, but '
 	getEl("quantumResetLabel").textContent = (bigRipped ? 'Ghostify' : 'Quantum') + ': requires ' + shorten(req) + (tmp.ngp3 ? " best" : "") + ' meta-antimatter'
-		+ (QCs.inAny() ? QCs.getGoalDisp() : tmp.ngp3 ? " and an EC14 completion" : "")
+		+ (QCs.inAny() ? QCs.getGoalDisp() : tmp.ngp3 && !tmp.ngp3_mul ? " and an EC14 completion" : "")
 	if (reqGotten && bigRipped && ph.did("ghostify")) {
 		var GS = getGHPGain()
 		message += "gain " + shortenDimensions(GS) + " Ghost Particle" + (GS.lt(2) ? "" : "s")

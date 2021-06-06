@@ -38,7 +38,7 @@ function getGHRCap() {
 
 function getLightThreshold(l) {
 	let inc = Decimal.pow(getLightThresholdIncrease(l), player.ghostify.ghostlyPhotons.lights[l])
-	let base = new Decimal(tmp.lt[l]).div(tmp.newNGP3E ? 10 : 1)
+	let base = new Decimal(tmp.lt[l]).div(tmp.ngp3_exp ? 10 : 1)
 	return inc.times(base)
 }
 
@@ -184,13 +184,13 @@ var leBoosts = {
 		leThreshold: 1,
 		eff() {
 			let le1exp = 0.75
-			if (tmp.newNGP3E) {
+			if (tmp.ngp3_exp) {
 				le1exp += 0.2
 				if (player.ghostify.ghostlyPhotons.unl) le1exp += .15
 				if (player.ghostify.wzb.unl) le1exp += .15
 			}
 			let le1mult = 500
-			if (tmp.newNGP3E) le1mult *= 2
+			if (tmp.ngp3_exp) le1mult *= 2
 			let eff = Math.pow(Math.log10(tmp.effL[3] + 1), le1exp) * le1mult
 			return {effect: eff}
 		},

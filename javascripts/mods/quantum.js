@@ -34,12 +34,10 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 	updateTemp()
 }
 
-function getQuantumReq() {
-	if (QCs.inAny()) return QCs.getGoalMA()
-
-	let exp = 1
-	if (tmp.ngp3) {
-		exp = 1.2
+function getQuantumReq(base) {
+	let exp = tmp.ngp3 && !tmp.ngp3_mul ? 1.2 : 1
+	if (!base && tmp.ngp3) {
+		if (QCs.inAny()) return QCs.getGoalMA()
 		if (enB.active("pos", 3)) exp /= enB.tmp.pos3
 	}
 	return Decimal.pow(Number.MAX_VALUE, exp)
@@ -271,8 +269,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	// ng+3
 	if (tmp.ngp3) {
 		qMs.update()
-		console.log(qMs.tmp.amt_en)
-		console.log(qMs.tmp.amt)
 
 		// big rip tracking
 		if (bigRip && !tmp.bruActive[12]) {
@@ -296,7 +292,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	else player.infinityPoints = new Decimal(0);
 
 	// Quantum Challenges
-	console.log(mode, data)
 	var isQC = mode == "qc"
 	if (!force) {
 		let qcData = QCs.save.in

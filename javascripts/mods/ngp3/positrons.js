@@ -96,6 +96,7 @@ let POSITRONS = {
 	updateTmp() {
 		let data = {}
 		pos.tmp = data
+		if (!pos.save) return
 
 		//Meta Dimension Boosts or Quantum Energy -> Positrons
 		pos.save.eng = 0
@@ -105,7 +106,7 @@ let POSITRONS = {
 			if (QCs.isRewardOn(5)) mdbMult = QCs.tmp.rewards[5]
 
 			data.sac_mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
-			data.sac_qe = tmp.qu.quarkEnergy / 3
+			data.sac_qe = tmp.qu.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)
 			pos.save.amt = Math.floor(Math.min(Math.pow(data.sac_mdb, 2), data.sac_qe) * 100)
 		} else {
 			data.sac_mdb = 0

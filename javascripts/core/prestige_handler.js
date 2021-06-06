@@ -27,11 +27,11 @@ let Prestiges = {
 		quantum() {
 			return Decimal.gte(
 					getQuantumReqSource(), 
-					getQuantumReq(undefined, tmp.ngp3 && tmp.qu.bigRip.active)
+					getQuantumReq(true)
 				)
 				&& (!tmp.ngp3 || (
 					QCs.inAny() ? QCs.getGoal() :
-					ECComps("eterc14") && quarkGain().gt(0)
+					(tmp.ngp3_mul || ECComps("eterc14")) && quarkGain().gt(0)
 				))
 		},
 		ghostify() {

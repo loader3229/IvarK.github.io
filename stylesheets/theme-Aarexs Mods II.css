@@ -378,19 +378,19 @@ button, div.storebtn {
 }
 
 #metadimensions table #quantum.storebtn, .quantumbtn, #pastquantums, .qMs_reward, #dilstudy8.dilationupgbought, #qctabbtn, #qcsbtn, #dilstudy9.dilationupgbought, #pccompletionsbtn {
-	background-color: #009900 !important;
-	border-color: #009900 !important;
+	background-color: #72e500 !important;
+	border-color: #72e500 !important;
 	color: #191919 !important
 }
 
-#progressbar.quantumProgress { background: #009900 !important }
+#progressbar.quantumProgress { background: #72e500 !important }
 
 #quantumbtn div {
 	color: #191919 !important
 }
 
 #metadimensions table #quantum.storebtn:hover, .quantumbtn:hover, #pastquantums:hover, #dilstudy8.dilationupg, #qctabbtn:hover, #qcsbtn:hover, #dilstudy9.dilationupg, #pccompletionsbtn:hover {
-	background-color: #269926 !important
+	background-color: #8fe539 !important
 }
 
 .qMs_toggle_on {
@@ -409,15 +409,16 @@ button, div.storebtn {
 	background-color: #e59999 !important
 }
 
-.QKAmount, #normalReplGatherRate, #gatherRate, #gatheredQuarks, #workerReplGatherRate, #babyReplGatherRate, .empQuarks, #quarksNanofield, #quarkLoss {
-	color: #009900 !important
+.QKAmount, #normalReplGatherRate, #gatherRate, #gatheredQuarks, #workerReplGatherRate, #babyReplGatherRate, .empQuarks, #quarksNanofield, #quarkLoss,
+#gbRepl, #quarkEnergy, #quarkEnergyMult, #quarkEnergyEffect1, #quarkEnergyEffect2, #bestQE, #enB_glu_amt, #quarkTranslation, #gbEDs, #quarkCharge, #quarkChargeRate {
+	color: #72e500 !important
 }
 
 .red, #rgRepl, #rgEDs {
 	color: #e50000 !important
 }
 
-.green, #gbRepl, #quarkEnergy, #bestQE, #enB_glu_amt, #quarkTranslation, #gbEDs, #quarkCharge, #quarkChargeRate {
+.green {
 	color: #00e500 !important
 }
 
@@ -486,7 +487,7 @@ button, div.storebtn {
     background-color: #4c4c4c !important
 }
 
-#preonEnergy, #quarkEnergy2, #quarkEnergyEffect1, #quarkEnergyEffect2, #quarkEnergyMult, #quantumFoodAmount, #workerProgress, #growupProgress, #quantumFoodAmountED, #preonEnergy, #quarkEnergyRate, #quarkPower, #quarkPowerThreshold, #rewards, #rewards_AP {
+#preonEnergy, #quarkEnergy2, #quantumFoodAmount, #workerProgress, #growupProgress, #quantumFoodAmountED, #preonEnergy, #quarkEnergyRate, #quarkPower, #quarkPowerThreshold, #rewards, #rewards_AP {
 	color: #39e539 !important
 }
 

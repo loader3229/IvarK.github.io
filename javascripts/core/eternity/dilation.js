@@ -48,13 +48,14 @@ function getDilTimeGainPerSecond() {
 	if (hasDilationUpg('ngusp3')) gain = gain.times(getD22Bonus())
 
 	//NG+3
-	if (hasAch("r137") && (tmp.mod.newGamePlusVersion || tmp.ngp3)) gain = gain.times(Decimal.pow(tmp.newNGP3E ? 2.25 : 1.75, Math.sqrt(tmp.rmPseudo.max(1).log10() / (masteryStudies.has(293) ? 9e3 : 1e4) + 1)))
+	if (hasAch("r137") && (tmp.mod.newGamePlusVersion || tmp.ngp3)) gain = gain.times(Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(tmp.rmPseudo.max(1).log10() / (masteryStudies.has(292) ? 9e3 : 1e4) + 1)))
 	if (tmp.ngp3) {
-		if (hasAch("r138")) gain = gain.times(tmp.newNGP3E ? 3 : 2)
+		if (hasAch("r138")) gain = gain.times(tmp.ngp3_exp ? 3 : 2)
 		if (hasAch("ngpp13")) gain = gain.times(2)
-		if (hasAch("ng3p11")) gain = gain.times(3)
+		if (hasAch("ng3p11")) gain = gain.times(2.5)
 		if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 	}
+	if (tmp.quActive && tmp.ngp3_mul) gain = gain.times(colorBoosts.b) //Color Powers (NG*+3)
 
 	//NG Update
 	if (player.exdilation != undefined) gain = gain.times(getNGUDTGain())
@@ -68,7 +69,7 @@ function getDilTimeGainPerSecond() {
 	}
 
 	//Boosts with hardcap productions
-	if (tmp.newNGP3E && hasAch("r138")) gain = gain.max(gain.times(3).min(1e100))
+	if (tmp.ngp3_exp && hasAch("r138")) gain = gain.max(gain.times(3).min(1e100))
 
 	//Light Speed
 	gain = gain.times(ls.mult("dil"))
@@ -91,6 +92,7 @@ function getDilUpgPower(x) {
 	if (tmp.mod.nguspV) r += exDilationUpgradeStrength(x)
 	else if (player.exdilation != undefined && !tmp.mod.ngudpV) r *= exDilationUpgradeStrength(x)
 	if (player.dilation.upgrades.includes("ngp3c8") && tmp.ngC && x != 3) r *= getDil85Mult()
+	if (tmp.ngp3_mul && x == 4) r *= 1.1
 	return r
 }
 
@@ -109,8 +111,9 @@ function getTPMult() {
 
 	//NG+3
 	if (tmp.ngp3) {
-		if (hasAch("ng3p11")) ret = ret.times(Math.max(getTotalRGs() / 125, 1)) //Achievements
-		if (masteryStudies.has(264)) ret = ret.times(5) //Mastery Studies
+		if (hasAch("ngpp13")) ret = ret.times(2)
+		if (hasAch("ng3p11")) ret = ret.times(2.5)
+		if (masteryStudies.has(264)) ret = ret.times(doubleMSMult(5)) //Mastery Studies
 		if (tmp.quActive) ret = ret.times(colorBoosts.b) //Color Powers
 	}
 
@@ -124,12 +127,13 @@ function getTPMult() {
 
 function getTPExp(disable) {
 	let x = 1.5
-	if (tmp.newNGP3E) x += .1 //NG^+3
+	if (tmp.ngp3_exp) x += .1 //NG^+3
 	else if (tmp.mod.newGameExpVersion) x += .001 //NG^
 
 	//NG++
 	if (disable == "dil4") return x
 	if (player.meta !== undefined && !tmp.mod.nguspV) x += getDilUpgPower(4) / 4
+	if (disable == "post-dil4") return x
 
 	//NG+3
 	if (tmp.ngp3) {
@@ -146,17 +150,19 @@ function getAMEffToTP() {
 	return 1 / 400
 }
 
-function getTPGain() {
-	let amLog = player.money.log10()
+function getTPGain(reset, amLog) {
+	let qm = qMs.tmp.amt
+
+	if (!amLog) amLog = player.money.log10()
 	let amLogEff = getAMEffToTP()
 	if (amLog < 1 / amLogEff) return new Decimal(0)
 
 	//Base TP
-	let gain = Decimal.pow(amLog * amLogEff, getTPExp())
-	gain = gain.times(getTPMult())
+	let gain = reset && qMs.isOn(26) ? new Decimal(qMs.tmp.amt >= 5 ? 1 : 0) : Decimal.pow(amLog * amLogEff, getTPExp())
+	gain = gain.times(reset ? Decimal.pow(3, player.dilation.rebuyables[3]) : getTPMult())
 
 	//NG Condensed
-	if (tmp.ngC) {
+	if (!reset && tmp.ngC) {
 		gain = softcap(gain, "tp_ngC")
 		if (hasDilationUpg("ngp3c3")) gain = gain.times(10)
 		if (hasDilationUpg("ngp3c6")) gain = gain.times(getDil83Mult())
@@ -216,7 +222,7 @@ function getEternityBoostToDT(){
 	if (baseExp > 0) gain = eter.pow(baseExp)
 
 	//NG^+3 boost to NG++
-	if (hasDilationUpg('ngpp2') && tmp.newNGP3E) {
+	if (hasDilationUpg('ngpp2') && tmp.ngp3_exp) {
 		let eterLog = eter.log10()
 		gain = gain.times(Math.max(eterLog, 1)) //Tier 1: Boost
 		gain = gain.times(Math.pow(Math.max(eterLog - 6, 1), 3)) //Tier 2: Superboost
@@ -242,7 +248,7 @@ function dilates(x, m) {
 	let a = false
 	if (player.dilation.active && m != 2 && (m != "meta" || !hasAch("ng3p63") || QCs.inAny())) {
 		e *= dilationPowerStrength()
-		if (tmp.mod.newGameMult) e = 0.9 + Math.min((player.dilation.dilatedTime.add(1).log10()) / 1000, 0.05)
+		if (tmp.mod.newGameMult && !tmp.ngp3_mul) e = 0.9 + Math.min((player.dilation.dilatedTime.add(1).log10()) / 1000, 0.05)
 		if (player.exdilation != undefined && !tmp.mod.ngudpV && !tmp.mod.nguspV) e += exDilationBenefit() * (1-e)
 		if (hasDilationUpg(9)) e *= 1.05
 		if (player.dilation.rebuyables[5]) e += 0.0025 * (1 - 1 / Math.pow(player.dilation.rebuyables[5] + 1 , 1 / 3))
@@ -432,9 +438,10 @@ function getDilUpgCost(id) {
 }
 
 function getRebuyableDilUpgCost(id, lvl) {
-	if (!lvl) lvl = player.dilation.rebuyables[id] || 0
-
 	let costGroup = DIL_UPG_COSTS["r" + id]
+	if (id == 3 && tmp.ngp3_mul) costGroup[1] = 20
+
+	if (!lvl) lvl = player.dilation.rebuyables[id] || 0
 	let cost = new Decimal(costGroup[0]).times(Decimal.pow(costGroup[1], lvl))
 
 	if (tmp.mod.nguspV) {
@@ -471,7 +478,7 @@ function buyDilationUpgrade(pos, max, isId) {
 			if (!tmp.ngp3) player.dilation.dilatedTime = new Decimal(0)
 			resetDilationGalaxies()
 		}
-		if (id[1] == 3 && hasAch("ng3p13")) setTachyonParticles(player.dilation.tachyonParticles.times(getDil3Power()))
+		if (id[1] == 3 && tmp.qMs.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(getDil3Power()))
 	} else {
 		// Not rebuyable
 		if (hasDilationUpg(id)) return
@@ -510,7 +517,7 @@ function getTTProduction() {
 	if (tmp.quUnl) tp = tp.times(colorBoosts.b)
 
 	let r = getTTGenPart(tp)
-	r /= (hasAch("ng3p51") ? 200 : 2e4)
+	r /= 2e4
 
 	r *= ls.mult("tt")
 	return r
@@ -519,8 +526,10 @@ function getTTProduction() {
 function getTTGenPart(x) {
 	if (!x) return new Decimal(0)
 	x = x.max(1).log10()
-	let y = 69
-	if (x > y) x = Math.pow(x - y + 1, 2/3) + y - 1
+
+	let sc1 = 69
+	if (x > sc1) x = Math.pow(x - sc1 + 1, 0.6) + sc1 - 1
+
 	return Math.pow(10, x)
 }
 
@@ -545,7 +554,7 @@ function updateDilationUpgradeButtons() {
 	var power = getDil3Power()
 	getEl("dil13desc").innerHTML = "You gain " + shorten(power) + "x more Tachyon Particles."
 	getEl("dil13eff").innerHTML = "Currently: " + shorten(Decimal.pow(power, getDilUpgPower(3))) + "x"
-	getEl("dil14eff").innerHTML = tmp.mod.nguspV ? "Currently: 3x -> " + (getDilUpgPower(4) / 2 + 3).toFixed(2) + "x" : "Currently: ^" + getTPExp("dil4").toFixed(2) + " -> ^" + (getDilUpgPower(4) / 4 + getTPExp("dil4")).toFixed(2)
+	getEl("dil14eff").innerHTML = tmp.mod.nguspV ? "Currently: 3x -> " + (getDilUpgPower(4) / 2 + 3).toFixed(2) + "x" : "Currently: ^" + getTPExp("dil4").toFixed(2) + " -> ^" + getTPExp("post-dil4").toFixed(2)
 
 	getEl("dil22desc").innerHTML = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Replicanti multiplier speeds up Time Dimensions.<br>Currently: " + shorten(tmp.rm.pow(getRepToTDExp())) + "x"
 	getEl("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
@@ -634,7 +643,7 @@ function getFreeGalaxyGainMult() {
 	if (hasDilationUpg("ngmm1")) galaxyMult *= 2
 	if (tmp.mod.ngudpV && !tmp.mod.nguepV) galaxyMult /= 1.5
 	if (isNanoEffectUsed("dil_gal_gain")) galaxyMult *= tmp.nf.effects.dil_gal_gain
-	let exp = tmp.newNGP3E ? 1.1 : 1
+	let exp = tmp.ngp3_exp ? 1.1 : 1
 	return Math.pow(galaxyMult, exp)
 }
 
@@ -650,7 +659,7 @@ function resetDilationGalaxies() {
 
 function getBaseDilGalaxyEff() {
 	let x = 1
-	if (masteryStudies.has(263)) x *= 1.25
+	if (masteryStudies.has(263)) x *= 1 + doubleMSMult(0.25)
 	if (enB.active("pos", 8)) x *= enB.tmp.pos8
 	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 

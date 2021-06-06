@@ -192,7 +192,7 @@ function updateColorCharge() {
 	if (player.ghostify.milestones <= 2) colorCharge[sorted[0]] = colorCharge.normal.charge
 	if (usedQuarks[sorted[0]] > 0 && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
 
-	colorCharge.subCancel = hasAch("ng3p13") && !QCs.in(2) ? Math.pow(colorCharge.normal.charge * 2, 1.5) : 0
+	colorCharge.subCancel = hasAch("ng3p13") && !QCs.in(2) ? Math.pow(colorCharge.normal.charge * 3, 1.25) : 0
 
 	colorCharge.neutralize = {}
 	colorCharge.neutralize[sorted[0]] = new Decimal(0)
@@ -227,12 +227,12 @@ function updateColorPowers() {
 	if (enB.active("pos", 7)) colorBoosts.g += enB.tmp.pos7
 
 	//Blue
-	colorBoosts.b = Math.pow(Math.max(tmp.qu.colorPowers.b * 1.5 + 1, 1), 2)
+	colorBoosts.b = Math.pow(Math.max(tmp.qu.colorPowers.b + 1, 1), 2)
 }
 
 //Gluons
 function gainQuantumEnergy() {
-	let xNoDiv = (getQEQuarksPortion() + getQEGluonsPortion()) * tmp.qe.mult
+	let xNoDiv = (getQEQuarksPortion() + getQEGluonsPortion()) * tmp.qe.mult * (tmp.ngp3_mul ? 1.25 : 1)
 	let x = xNoDiv / tmp.qe.div
 
 	if (isNaN(xNoDiv)) xNoDiv = 0
@@ -251,19 +251,20 @@ function getQEQuarksPortion() {
 function getQEGluonsPortion() {
 	if (QCs.in(2)) return 0
 	let exp = tmp.qe.exp
-	return Math.pow(tmp.qu.gluons[tmp.qu.entColor || "rg"].add(1).log10(), exp) * 0.25
+	return Math.pow(tmp.qu.gluons[tmp.qu.entColor || "rg"].add(1).log10(), exp) * (tmp.exMode ? 0 : tmp.ngp3_mul ? 1 : 0.25)
 }
 
 function getQuantumEnergyMult() {
 	if (QCs.in(2)) return 0
 	let x = 1
 	if (enB.active("glu", 1)) x += enB.tmp.glu1
+	if (tmp.ngp3_mul && tmp.glb) x += (tmp.glB.r.mult + tmp.glB.g.mult + tmp.glB.b.mult) / 15
 	return x
 }
 
 function getQuantumEnergyDiv() {
 	let x = 1
-	if (pos.on()) x = 4 / 3
+	if (pos.on()) x = tmp.ngp3_mul ? 10 / 9 : 4 / 3
 	return x
 }
 
@@ -273,14 +274,12 @@ function updateQEGainTmp() {
 	if (!tmp.quActive) return
 
 	//Quark Efficiency
-	data.expNum = 1
 	data.expDen = hasAch("ng3p14") ? 2 : 3
+	if (tmp.ngp3_mul) data.expDen *= 0.8
 
+	data.expNum = 1
 	if (enB.active("pos", 1)) data.expNum += enB.tmp.pos1
-	if (data.expNum > data.expDen - 1) {
-		console.log(data.expNum - data.expDen + 1)
-		data.expNum = data.expDen - 1 / Math.log2(data.expNum - data.expDen + 2)
-	}
+	if (data.expNum > data.expDen - 1) data.expNum = data.expDen - 1 / Math.log2(data.expNum - data.expDen + 2)
 
 	data.exp = data.expNum / data.expDen
 
@@ -356,25 +355,34 @@ function updateGluonicBoosts() {
 	let enBData = enB
 	let gluons = tmp.qu.gluons
 
-	data.r = { mult: getGluonEffBuff(gluons.rg), sub: getGluonEffNerf(gluons.br) } //x -> x * [RG effect] - [BR effect]
-	data.g = { mult: getGluonEffBuff(gluons.gb), sub: getGluonEffNerf(gluons.rg) } //x -> x * [GB effect] - [RG effect]
-	data.b = { mult: getGluonEffBuff(gluons.br), sub: getGluonEffNerf(gluons.gb) } //x -> x * [BR effect] - [GB effect]
+	data.r = { mult: getGluonEffBuff(gluons.rg), sub: getGluonEffNerf(gluons.br, "r") } //x -> x * [RG effect] - [BR effect]
+	data.g = { mult: getGluonEffBuff(gluons.gb), sub: getGluonEffNerf(gluons.rg, "g") } //x -> x * [GB effect] - [RG effect]
+	data.b = { mult: getGluonEffBuff(gluons.br), sub: getGluonEffNerf(gluons.gb, "b") } //x -> x * [BR effect] - [GB effect]
 
 	let type = tmp.qu.entColor || "rg"
 	data.enAmt = enBData.glu.gluonEff(gluons[type])
-	data.masAmt = enBData.glu.gluonEff(gluons.rg.add(gluons.gb).add(gluons.br))
+	data.masAmt = enBData.glu.gluonEff(tmp.exMode ? gluons[type].times(3) : gluons.rg.add(gluons.gb).add(gluons.br))
 
 	enB.updateTmp()
 }
 
 function getGluonEffBuff(x) {
 	if (QCs.in(2)) return 0
-	return Math.log10(Decimal.add(x, 1).log10() * 5 + 1) + 1
+
+	let r = Math.log10(Decimal.add(x, 1).log10() * 5 + 1) + 1
+	if (tmp.ngp3_mul) r *= 1.5
+	return r
 }
 
-function getGluonEffNerf(x) {
+function getGluonEffNerf(x, color) {
 	if (QCs.in(2)) return 0
-	return Math.max(Math.pow(Decimal.add(x, 1).log10(), masteryStudies.has(302) ? 1.8 : 2) - colorCharge.subCancel, 0)
+
+	let r = Math.max(Math.pow(Decimal.add(x, 1).log10(), tmp.exMode ? 1.8 : 1.5) - colorCharge.subCancel, 0)
+	if (tmp.ngp3_mul) r *= 0.5
+
+	let gluon = tmp.qu.entColor || "rg"
+	if (color == gluon[0] || color == gluon[1]) r *= tmp.exMode ? 0.5 : 0
+	return r
 }
 
 let enB = {
@@ -390,7 +398,7 @@ let enB = {
 		let data = this[type]
 		if (!data.unl()) return
 		if (!(data.engAmt() >= data.cost())) return
-		data.set(data.target())
+		data.set(Math.floor(data.target()))
 		updateGluonicBoosts()
 		enB.update(type)
 	},
@@ -418,7 +426,7 @@ let enB = {
 	},
 	getMastered(type, x) {
 		let data = this[type]
-		return (tmp.ngex && data[x].masReqExpert) || data[x].masReq
+		return (tmp.exMode && data[x].masReqExpert) || data[x].masReq
 	},
 
 	choose(x) {
@@ -467,7 +475,7 @@ let enB = {
 			return Math.pow(x / 3, 1.5) + 1
 		},
 		target() {
-			return Math.floor(Math.pow(Math.max(this.engAmt() - 1, 0), 1 / 1.5) * 3 + 1)
+			return Math.pow(Math.max(this.engAmt() - 1, 0), 1 / 1.5) * 3 + 1
 		},
 
 		amt() {
@@ -482,8 +490,8 @@ let enB = {
 
 		eff(x) {
 			let amt = 0
-			if (!QCs.in(2)) amt += this.amt()
-			if (pos.on()) amt += enB.pos.amt()
+			if (!QCs.in(2)) amt += this.target()
+			if (pos.on()) amt += enB.pos.target()
 
 			let r = Math.max(amt * 2 / 3 - 1, 1)
 			r *= tmp.glB[enB.mastered("glu", x) ? "masAmt" : "enAmt"]
@@ -663,7 +671,7 @@ let enB = {
 			return Math.pow(x + 1, 1.5)
 		},
 		target() {
-			return Math.floor(Math.pow(this.engAmt(), 1 / 1.5))
+			return Math.pow(this.engAmt(), 1 / 1.5)
 		},
 
 		amt() {
@@ -706,7 +714,10 @@ let enB = {
 				if (enB.mastered("pos", 1)) x = Math.max(x, enB.pos.masEff(enB.pos[1].chargeReq))
 				let rep = player.replicanti.amount.max(1)
 
-				return Math.log10(rep.log10() / 1e6 + 1) / 5 + Math.log10(x / 10 + 1) / 10
+				return Math.log10(
+					Math.pow(rep.log10() / 1e6 + 1) *
+					Math.pow(x + 1, 0.25)
+				) / 3 + 1
 			},
 			effDisplay(x) {
 				return "+" + shorten(x)
@@ -757,7 +768,7 @@ let enB = {
 				return x
 			},
 			effDisplay(x) {
-				return shorten(Decimal.pow(Number.MAX_VALUE, 1.2 / x))
+				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
 			}
 		},
 		4: {
@@ -1049,6 +1060,7 @@ function updateQuarksTabOnUpdate(mode) {
 	if (colorCharge.normal.charge == 0) {
 		getEl("colorCharge").innerHTML = 'neutral charge'
 		getEl("colorChargeAmt").innerHTML = 0
+		getEl("colorChargeColor").className = "black"
 
 		getEl("neutralize_req").innerHTML = 0
 		getEl("neutralize_quarks").className = "unavailablebtn"
@@ -1058,6 +1070,7 @@ function updateQuarksTabOnUpdate(mode) {
 			'<span class="' + color + '">' + color + '</span> charge of <span class="'+color+'" style="font-size:35px">' + shorten(colorCharge.normal.charge * tmp.qe.eff1) + "</span>" +
 			(hasAch("ng3p13") ? ", which cancelling the subtraction of gluon effects by " + shorten(colorCharge.subCancel) : "")
 		getEl("colorChargeAmt").innerHTML = shortenDimensions(colorCharge.normal.chargeAmt) + " " + color + " anti-quarks"
+		getEl("colorChargeColor").className = color
 
 		getEl("neutralize_req").innerHTML = shortenDimensions(colorCharge.neutralize.total)
 		getEl("neutralize_quarks").className = tmp.qu.quarks.gte(colorCharge.neutralize.total) ? "storebtn" : "unavailablebtn"

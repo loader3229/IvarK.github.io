@@ -52,10 +52,10 @@ let QCs = {
 					limit: new Decimal("1e10000000"),
 
 					speedMult: Decimal.pow(2, -boosts / 4),
-					scalingMult: 1 / Math.max(boosts / 20, 1),
+					scalingMult: 1 / (1 + maxBoosts / 40),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
-					effMult: 1 + (Math.max(boosts - 20, 0) + maxBoosts) / 40,
+					effMult: 1 + maxBoosts / 40,
 					effExp: Math.min(1 + boosts / 20, 2)
 				}
 				QCs.tmp.qc1 = data

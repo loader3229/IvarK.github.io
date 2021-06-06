@@ -394,15 +394,15 @@ strong { color: #0072e5 }
     color: #00e5e5 !important
 }
 #quantum.storebtn, .quantumbtn, #pastquantums, .qMs_locked, .qMs_locked:hover, #dilstudy8.dilationupg, #qctabbtn, #dilstudy9.dilationupg, #pccompletionsbtn {
-    border-color: #009900 !important
+    border-color: #72e500 !important
 }
 #quantum.storebtn:hover, .quantumbtn:hover, #pastquantums:hover, .qMs_reward, .qMs_reward:hover, #dilstudy8.dilationupg:hover, #dilstudy8.dilationupgbought, #qctabbtn:hover, #dilstudy9.dilationupg:hover, #dilstudy9.dilationupgbought, #pccompletionsbtn:hover {
-    border-color: #009900 !important;
-    background-color: #009900 !important;
+    border-color: #72e500 !important;
+    background-color: #72e500 !important;
 	color: #e5e5e5 !important
 }
 #progressbar.quantumProgress {
-	background-color: #009900 !important
+	background-color: #72e500 !important
 }
 .qMs_toggle_on {
 	border-color: #72e572 !important;
@@ -418,9 +418,10 @@ strong { color: #0072e5 }
 .qMs_toggle_off:hover {
 	background-color: #e57272 !important
 }
-.QKAmount, #gatheredQuarks, #normalReplGatherRate, #workerReplGatherRate, #babyReplGatherRate, #growupRate, #gatherRate, .empQuarks, #quarksNanofield, #quarkLoss { color: #009900 !important }
+#quarkEnergy, #quarkEnergyMult, #quarkEnergyEffect1, #quarkEnergyEffect2, #bestQE, #enB_glu_amt, #quarkTranslation, #quarkCharge, #quarkChargeRate,
+.QKAmount, #gatheredQuarks, #normalReplGatherRate, #workerReplGatherRate, #babyReplGatherRate, #growupRate, #gatherRate, .empQuarks, #quarksNanofield, #quarkLoss { color: #72e500 !important }
 .red { color: #e50000 }
-.green, #quarkEnergy, #bestQE, #enB_glu_amt, #quarkTranslation, #quarkCharge, #quarkChargeRate { color: #00e500 }
+.green { color: #00e500 }
 .blue { color: #0000e5 }
 .gluonupgrade.rg, .gluonupgrade.gb, .gluonupgrade.br {
 	background-color: #191919 !important;
@@ -494,7 +495,7 @@ strong { color: #0072e5 }
 	color: #191919;
 	text-shadow: none
 }
-#preonEnergy, #quarkEnergy2, #quarkEnergyEffect1, #quarkEnergyEffect2, #quarkEnergyMult, #preonEnergy, #quarkEnergyRate, #quarkPowerThreshold { color: #72e500 !important }
+#preonEnergy, #quarkEnergy2, #preonEnergy, #quarkEnergyRate, #quarkPowerThreshold { color: #72e500 !important }
 #quarkPower, #rewards, #rewards_AP { color: #ace572 !important }
 #quarkAntienergy, #quarkAntienergyRate, #quarkChargeProductionCap { color: #4c0099 !important }
 .nfReward:hover { 

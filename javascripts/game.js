@@ -398,7 +398,7 @@ function updateNewPlayer(mode) {
 			nguep: tmp.mod.nguepV !== undefined,
 			ngmu: tmp.mod.newGameMult === 1,
 			ngumu: tmp.mod.ngumuV !== undefined,
-			ngex: tmp.ngex !== undefined,
+			ngex: tmp.exMode,
 			aau: tmp.mod.aau !== undefined,
 			ls: tmp.mod.ls !== undefined,
 			ngc: tmp.ngC,
@@ -1738,7 +1738,7 @@ function updateInfCosts() {
 function updateMilestones() {
 	var eters = getEternitied()
 	var moreUnlocked = moreEMsUnlocked()
-	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e6, 1e8, 1e10, 1e12, 1e14, 1e16]
+	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e6, 1e8, 1e10, 1e12, 1e15, 1e18]
 	for (i = 0; i < (moreUnlocked ? 30 : 24); i++) {
 		var name = "reward" + i;
 		if (i >= 24) getEl("milestone" + i).textContent = shortenMoney(milestoneRequirements[i]) + " Eternities:"
@@ -3721,7 +3721,7 @@ function updateOrderGoals(){
 }
 
 function updateReplicantiGalaxyToggels(){
-	if (player.replicanti.galaxybuyer === undefined || player.boughtDims) getEl("replicantiresettoggle").style.display = "none"
+	if (getEternitied() < 3 || player.boughtDims) getEl("replicantiresettoggle").style.display = "none"
 	else getEl("replicantiresettoggle").style.display = "inline-block"
 }
 
@@ -4906,7 +4906,7 @@ function IPonCrunchPassiveGain(diff){
 }
 
 function EPonEternityPassiveGain(diff){
-	if (moreEMsUnlocked() && getEternitied() >= 1e16) {
+	if (moreEMsUnlocked() && getEternitied() >= 1e18) {
 		player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints().times(diff / 100))
 		getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity points."
 	}
@@ -5312,7 +5312,7 @@ function galaxyABTick(){
 		)) {
 			maxBuyGalaxies()
 		} else {
-			if ((bulk && (tmp.ngp3 || tmp.mod.aarexModifications.newGamePlusVersion) && player.autobuyers[10].priority == 0) || player.autobuyers[10].priority > player.galaxies) {
+			if ((bulk && (tmp.ngp3 || tmp.mod.newGamePlusVersion) && player.autobuyers[10].priority == 0) || player.autobuyers[10].priority > player.galaxies) {
 				autoS = false;
 				getEl("secondSoftReset").click()
 				player.autobuyers[10].ticks = 0

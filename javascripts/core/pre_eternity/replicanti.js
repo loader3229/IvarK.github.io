@@ -137,7 +137,7 @@ function getRGCost(offset = 0, costChange) {
 			if (player.exdilation != undefined) for (var g = Math.max(player.replicanti.gal, scaleStart - 1); g < player.replicanti.gal + offset; g++) increase += Math.pow(g - 389, 2)
 			if (player.meta != undefined) {
 				var isReduced = tmp.ngp3 && masteryStudies.has(266)
-				if (isReduced) increase += (Math.pow(player.replicanti.gal + offset - scaleStart, 3) - Math.pow(Math.max(player.replicanti.gal - scaleStart, 0), 3)) * 10
+				if (isReduced) increase += (Math.pow(player.replicanti.gal + offset - scaleStart, 3) - Math.pow(Math.max(player.replicanti.gal - scaleStart, 0), 3)) * 10 / doubleMSMult(1)
 				else for (var g = Math.max(player.replicanti.gal, scaleStart - 1); g < player.replicanti.gal + offset; g++) increase += 5 * Math.floor(Math.pow(1.2, g - scaleStart + 6))
 			}
 		}
@@ -214,7 +214,6 @@ function updateExtraReplMult() {
 	if (QCs.in(1)) x = 0
 	else if (tmp.ngp3) {
 		if (enB.active("glu", 2)) x *= enB.tmp.glu2
-		if (masteryStudies.has(304)) x *= 1.25
 	}
 	extraReplMulti = x
 }
@@ -278,7 +277,6 @@ function getReplicantiIntervalMult() {
 	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))
 	if (player.dilation.upgrades.includes('ngpp1') && tmp.mod.nguspV && !tmp.mod.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
-	if (masteryStudies.has(301)) interval = interval.div(getMTSMult(301))
 	if (tmp.ngC && ngC.tmp) interval = interval.div(ngC.tmp.rep.eff1)
 	return interval
 }
@@ -353,7 +351,7 @@ function updateEC14Reward() {
 
 		data.ec14 = {
 			interval: div,
-			ooms: div.max(1).log10() / 2 + 1
+			ooms: div.max(1).log10() / (1 - pow / 2) + 1
 		}
 		if (enB.active("pos", 7)) data.ec14.ooms += enB.tmp.pos7
 	} else {
@@ -391,7 +389,8 @@ function updateReplicantiTemp() {
 	if (enB.active("glu", 8)) data.baseChance = Math.pow(data.baseChance, 1.25)
 
 	let pow = 1
-	if (data.baseChance > 1) pow = Decimal.pow(data.baseChance / 100, masteryStudies.has(283) ? getMTSMult(283, "update") : 0.5)
+	let ms265Base = doubleMSMult(data.baseChance / 100)
+	if (ms265Base > 1) pow = Decimal.pow(ms265Base, masteryStudies.has(283) ? getMTSMult(283, "update") : 0.5)
 	if (pow > 1) data.chance = Decimal.pow(data.baseChance / 100, pow.toNumber())
 	else data.chance = data.baseChance / 100
 

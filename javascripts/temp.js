@@ -67,7 +67,7 @@ function updateTemp(init) {
 	if (tmp.ngC) ngC.updateTmp()
 
 	tmp.rm = getReplMult()
-	tmp.rmPseudo = QCs.data[1].convert(player.replicanti.amount).max(masteryStudies.has(294) ? tmp.rm.pow(1 / 0.032) : 1)
+	tmp.rmPseudo = QCs.data[1].convert(player.replicanti.amount).max(masteryStudies.has(293) ? tmp.rm.pow(1 / 0.032) : 1)
 
 	updateExtraReplMult()
 	updateExtraReplBase()
@@ -99,10 +99,10 @@ function updateTemp(init) {
 }
 
 function updateRedLightBoostTemp(){
-	var light0multiplier = tmp.newNGP3E ? .155 : .15
+	var light0multiplier = tmp.ngp3_exp ? .155 : .15
 	var lighteffect0 = Math.pow(tmp.effL[0].best, .25) * light0multiplier + 1
 	
-	if (lighteffect0 > 1.5 && !tmp.newNGP3E) lighteffect0 = Math.log10(lighteffect0 * 20 / 3) * 1.5
+	if (lighteffect0 > 1.5 && !tmp.ngp3_exp) lighteffect0 = Math.log10(lighteffect0 * 20 / 3) * 1.5
 	tmp.le[0] = lighteffect0
 }
 
@@ -112,7 +112,7 @@ function updateOrangeLightBoostTemp() {
 	let x = small
 
 	if (tmp.effL[1] > 64) {
-		let big = tmp.newNGP3E ? 10 + Math.pow(eff, 1/3) : Math.log10(eff / 64) + 14
+		let big = tmp.ngp3_exp ? 10 + Math.pow(eff, 1/3) : Math.log10(eff / 64) + 14
 
 		x = big
 		if (tmp.pce && tmp.pce.ms) x = Math.pow(small, 1 - tmp.pce.ms.ol) * Math.pow(big, tmp.pce.ms.ol)
@@ -123,7 +123,7 @@ function updateOrangeLightBoostTemp() {
 
 function updateYellowLightBoostTemp(){
 	var lighteffect2 = 0 // changed later no matter what
-	if (tmp.effL[2] > 60 && !tmp.newNGP3E) lighteffect2 = (Math.log10(tmp.effL[2] / 6) + 2) / 3 * Math.sqrt(1200)
+	if (tmp.effL[2] > 60 && !tmp.ngp3_exp) lighteffect2 = (Math.log10(tmp.effL[2] / 6) + 2) / 3 * Math.sqrt(1200)
 	else lighteffect2 = tmp.effL[2] > 20 ? Math.sqrt(tmp.effL[2] * 20) : tmp.effL[2]
 	tmp.le[2] = Math.sqrt(lighteffect2) * 45e3
 }
@@ -134,14 +134,14 @@ function updateGreenLightBoostTemp(){
 }
 
 function updateBlueLightBoostTemp(){
-	var light4mult = tmp.newNGP3E ? 1.3 : 5/4
+	var light4mult = tmp.ngp3_exp ? 1.3 : 5/4
 	var lighteffect4 = Math.log10(Math.sqrt(tmp.effL[4] * 2) + 1) * light4mult
 	tmp.le[4] = lighteffect4
 }
 
 function updateIndigoLightBoostTemp(){
 	let log = tmp.effL[5]
-	log *= tmp.newNGP3E ? 20 : 10
+	log *= tmp.ngp3_exp ? 20 : 10
 
 	if (log > 250) log = Math.sqrt(log + 375) * 10
 	if (log > 729) log = Math.pow(log * 27, 2 / 3)
@@ -150,7 +150,7 @@ function updateIndigoLightBoostTemp(){
 }
 
 function updateVioletLightBoostTemp(){
-	var lightexp6 = tmp.newNGP3E ? .36 : 1/3
+	var lightexp6 = tmp.ngp3_exp ? .36 : 1/3
 	var loglighteffect6 = Math.pow(player.postC3Reward.log10() * tmp.effL[6], lightexp6) * 2 
 	if (loglighteffect6 > 15e3) loglighteffect6 = 15e3 * Math.pow(loglighteffect6 / 15e3, .6)
 	if (loglighteffect6 > 5e4) loglighteffect6 = Math.sqrt(loglighteffect6 * 5e4)
@@ -576,10 +576,10 @@ function updatePhotonsUnlockedBRUpgrades(){
 	}
 	var bigRipUpg18base = 1 + tmp.qu.bigRip.spaceShards.div(1e140).add(1).log10()
 	var bigRipUpg18exp = Math.max(tmp.qu.bigRip.spaceShards.div(1e140).add(1).log10() / 10, 1)
-	if (bigRipUpg18base > 10 && tmp.newNGP3E) bigRipUpg18base *= Math.log10(bigRipUpg18base)
+	if (bigRipUpg18base > 10 && tmp.ngp3_exp) bigRipUpg18base *= Math.log10(bigRipUpg18base)
 	tmp.bru[18] = Decimal.pow(bigRipUpg18base, bigRipUpg18exp) // BRU18
 	
-	var bigRipUpg19exp = Math.sqrt(player.timeShards.add(1).log10()) / (tmp.newNGP3E ? 60 : 80)
+	var bigRipUpg19exp = Math.sqrt(player.timeShards.add(1).log10()) / (tmp.ngp3_exp ? 60 : 80)
 	tmp.bru[19] = Decimal.pow(10, bigRipUpg19exp) // BRU19
 }
 
@@ -624,12 +624,12 @@ function updateWZBosonsTemp(){
 	//if (bosonsExp > 200) bosonsExp = 200 * Math.sqrt(bosonsExp / 200) 
 	//softcap it to remove inflation in WZB
 
-	let secBase = tmp.newNGP3E ? 2 : 1
+	let secBase = tmp.ngp3_exp ? 2 : 1
 	data.wbt = Decimal.pow(3, bosonsExp).times(Decimal.pow(secBase, Math.sqrt(bosonsExp))) 
 	//W Bosons boost to extract time
 	data.wbo = Decimal.pow(10, bosonsExp).times(Decimal.pow(secBase, Math.sqrt(bosonsExp))) 
 	//W Bosons boost to Z Neutrino oscillation requirement
-	let div1 = tmp.newNGP3E ? 2 : 100
+	let div1 = tmp.ngp3_exp ? 2 : 100
 	data.wbp = player.ghostify.wzb.wpb.add(player.ghostify.wzb.wnb).div(div1).max(1).pow(1 / 3).sub(1) 
 	//W Bosons boost to Bosonic Antimatter production
 

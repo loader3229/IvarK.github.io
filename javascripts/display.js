@@ -653,8 +653,8 @@ function replicantiDisplay() {
 		let replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
 		getEl("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(replGal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
 		getEl("replicantireset").innerHTML = (
-			hasAch("ng3p67") ? "Get "
-			: hasAch("ngpp16") || (tmp.mod.ngp3c && ETER_UPGS.has(6)) ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get "
+			hasAch("ngpp16") ? "Get "
+			: (tmp.mod.ngp3c && ETER_UPGS.has(6)) ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get "
 			: "Reset replicanti amount, but get "
 		) + "1 free galaxy.<br>" +
 			getFullExpansion(player.replicanti.galaxies) +

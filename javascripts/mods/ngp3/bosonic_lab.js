@@ -516,7 +516,7 @@ var bEn = {
 	effects: {
 		12(l) {
 			let exp = 0.75
-			if (tmp.newNGP3E) exp += .025
+			if (tmp.ngp3_exp) exp += .025
 			if (l.gt(1e10)) exp *= Math.sqrt(Decimal.log10(l) / 10)
 
 			return Decimal.pow(l, exp).div(bEn.autoScalings[player.ghostify.bl.typeToExtract])
@@ -545,7 +545,7 @@ var bEn = {
 		},
 		34(l) {
 			let x = player.ghostify.hb.higgs
-			if (!tmp.newNGP3E) x = Math.sqrt(x / 2)
+			if (!tmp.ngp3_exp) x = Math.sqrt(x / 2)
 
 			return x * Math.log10(l.times(1e3).max(1).log10() + 1) + 1
 		},
@@ -901,7 +901,7 @@ var bu = {
 			if (hasBosonicUpg(42)) y = tmp.blu[42]
 
 			let exp = 0.5 - 0.25 * x / (x + 3) / y
-			if (tmp.newNGP3E) x += x / 2 + Math.sqrt(x)
+			if (tmp.ngp3_exp) x += x / 2 + Math.sqrt(x)
 			if (y > 1) x *= y
 			ret = Math.pow(x, exp) / 4
 
@@ -914,14 +914,14 @@ var bu = {
 			let exp = bu62.active("gph") ? 2/3 : 0.5
 			let x = Math.pow(decays, exp)
 
-			if (tmp.newNGP3E) x = x + 1
+			if (tmp.ngp3_exp) x = x + 1
 			else x = x / 3 + .6
 
 			return Math.max(x, 1)
 		},
 		15() {
 			let gLog = Decimal.max(player.ghostify.times, 1).log10()
-			if (tmp.newNGP3E) gLog += 2 * Math.sqrt(gLog)
+			if (tmp.ngp3_exp) gLog += 2 * Math.sqrt(gLog)
 
 			let ghlog = player.dilation.dilatedTime.div("1e1520").add(1).pow(.05).log10()
 			if (ghlog > 308) ghlog = Math.sqrt(ghlog * 308)
@@ -945,7 +945,7 @@ var bu = {
 		},
 		34() {
 			var galPart = Math.log10(player.galaxies / 1e4 + 10) * Math.log10(getTotalRGs() / 1e4 + 10) * Math.log10(player.dilation.freeGalaxies / 1e4 + 10) * Math.log10(tmp.aeg / 1e4 + 10)
-			var exp = tmp.newNGP3E ? 1/6 : 1/8
+			var exp = tmp.ngp3_exp ? 1/6 : 1/8
 			var ret = Math.pow(galPart, exp) - 1
 			for (var i = 2; i < 10; i++){
 				if (ret > i / 10) ret = i / 10 + Math.log10(ret - i/10 + 1)
@@ -954,7 +954,7 @@ var bu = {
 			return ret / 5 + 1
 		},
 		35() {
-			return Decimal.pow(tmp.newNGP3E ? 10 : 20, Math.pow((tmp.rmPseudo || player.replicanti.amount).log10(), 2/3) / 15e3)
+			return Decimal.pow(tmp.ngp3_exp ? 10 : 20, Math.pow((tmp.rmPseudo || player.replicanti.amount).log10(), 2/3) / 15e3)
 		},
 		41() {
 			return {
@@ -964,7 +964,7 @@ var bu = {
 		},
 		42() {
 			if (!tmp.quActive) return 1
-			let exp = tmp.newNGP3E ? 1/3 : 1/4
+			let exp = tmp.ngp3_exp ? 1/3 : 1/4
 			return Math.pow(tmp.qu.colorPowers.r / 2e4 + 1, exp)
 		},
 		43() {

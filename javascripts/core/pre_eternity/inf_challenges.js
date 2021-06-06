@@ -76,9 +76,9 @@ function inNC(x, n) {
 		let on = player.currentChallenge == "challenge6" || player.currentChallenge == "postc1"
 		if (!on) return false
 
-		if (n == 1) return !tmp.ngex && tmp.ngmX < 2
-		if (n == 2) return !tmp.ngex && tmp.ngmX >= 2
-		if (n == 3) return tmp.ngex
+		if (n == 1) return !tmp.exMode && tmp.ngmX < 2
+		if (n == 2) return !tmp.exMode && tmp.ngmX >= 2
+		if (n == 3) return tmp.exMode
 	}
 	if (x == 0) return player.currentChallenge == "" && (!(tmp.mod.ngmX > 3) || !player.galacticSacrifice.chall) && inPxC(0)
 	return player.currentChallenge == "challenge" + x || (tmp.mod.ngmX > 3 && player.galacticSacrifice.chall == x) || inPxC(x)

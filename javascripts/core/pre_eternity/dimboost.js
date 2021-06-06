@@ -140,7 +140,7 @@ function getDimboostCostIncrease () {
 			ret -= e
 		}
 		if (player.infinityUpgrades.includes('dimboostCost')) ret -= 1
-		if (player.infinityUpgrades.includes("postinfi50")) ret -= 0.5
+		if (player.infinityUpgrades.includes("postinfi50")) ret -= doubleMSMult(0.5)
 	} else {
 		if (masteryStudies.has(261)) ret -= 0.5
 		if (inNC(4)) ret += 5
@@ -158,7 +158,6 @@ function getSupersonicStart() {
 function getSupersonicMultIncrease() {
 	let r = 4
 	if (hasTS(194) && tmp.ngC) r = 2
-	if (masteryStudies.has(331)) r = 1
 	return r
 }
 
@@ -203,6 +202,6 @@ function getTotalDBs() {
 
 function getExtraDBs() {
 	let x = 0
-	if (masteryStudies.has(292)) x += getMTSMult(292)
+	if (masteryStudies.has(291)) x += getMTSMult(291)
 	return x
 }

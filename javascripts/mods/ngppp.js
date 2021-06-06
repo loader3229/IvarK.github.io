@@ -889,3 +889,12 @@ function convertToNGP5(setup) {
 		pl.save.on = true
 	} else ph.reset()
 }
+
+function doubleMSMult(x) {
+	//For NG*+3
+	if (tmp.ngp3_mul) {
+		if (x + 0 === x) x *= 2
+		else x = Decimal.times(x, 2)
+	}
+	return x
+}

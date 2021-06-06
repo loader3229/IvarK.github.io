@@ -244,8 +244,9 @@ let qMs = {
 	},
 	26: {
 		req: 75,
-		eff: () => "Start with one dilation worth of TP at " + shorten(Number.MAX_VALUE) + " antimatter (not implemented)",
-		effGot: () => "You now start with one dilation worth of TP at " + shorten(Number.MAX_VALUE) + " antimatter"
+		disablable: true,
+		eff: () => "Start with one dilation worth of TP at " + shorten(new Decimal("1e1000")) + " antimatter",
+		effGot: () => "You now start with one dilation worth of TP at " + shorten(new Decimal("1e1000")) + " antimatter"
 	},
 	27: {
 		req: 85,

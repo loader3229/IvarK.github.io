@@ -11,7 +11,7 @@ function updateConvertSave(convertMod) {
 }
 
 function eligibleConvert() {
-	if (tmp.mod.newGame3PlusVersion == undefined && (inNGM(2) || player.tickspeedBoosts || player.pSac) == undefined && (tmp.mod.newGameMult || tmp.mod.newGameExpVersion) == undefined && (tmp.mod.newGameUpdateVersion == undefined) && (tmp.ngex == undefined) && (tmp.mod.ersVersion || tmp.mod.irsVersion) == undefined) {
+	if (tmp.mod.newGame3PlusVersion == undefined && (inNGM(2) || player.tickspeedBoosts || player.pSac) == undefined && (tmp.mod.newGameMult || tmp.mod.newGameExpVersion) == undefined && (tmp.mod.newGameUpdateVersion == undefined) && (tmp.exMode == undefined) && (tmp.mod.ersVersion || tmp.mod.irsVersion) == undefined) {
 		convert = "NG+3";
 	} else
 		convert = undefined;

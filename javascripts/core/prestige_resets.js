@@ -56,7 +56,8 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
 
 	player.infinitiedBank = 0
-	if (!headstart) player.eternities = oheHeadstart ? 100 : 0
+	if (!headstart) player.eternities = oheHeadstart ? Math.pow(10, qMs.tmp.amt / 2 + 1) : 0
+	player.eternityPoints = new Decimal(0)
 
 	player.timestudy = (bigRip ? tmp.bruActive[12] : qMs.tmp.amt >= 3) ? player.timestudy : {
 		theorem: 0,
@@ -90,9 +91,6 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 			!qMs.isOn(5) ? [] :
 			qMs.tmp.amt >= 9 ? [1, 2, 3, 4, 5, 6] : qMs.tmp.amt >= 6 ? [1, 2, 3, 4, 5] : [1],
 		active: false,
-		tachyonParticles: 
-			qMs.tmp.amt >= 5 ? Decimal.pow(3, !isQC && qMs.tmp.amt >= 8 ? player.dilation.rebuyables[3] : 0) :
-			new Decimal(0),
 		dilatedTime: new Decimal(0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
@@ -107,6 +105,8 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 			4: !isQC && qMs.tmp.amt >= 8 ? player.dilation.rebuyables[4] : 0,
 		}
 	}
+	player.dilation.tachyonParticles = getTPGain(true, 1e3)
+	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
 
 	resetTimeDimensions(true)
 	resetEternityChallenges(bigRip, !tmp.ngp3)
@@ -147,7 +147,7 @@ function doDimBoostResetStuff(layer = 1) {
 }
 
 function doGalaxyResetStuff(layer = 2) {
-	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e14) {
+	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e15) {
 		player.resets = 0
 		if (player.dbPower) player.dbPower = new Decimal(1)
 	}
@@ -315,7 +315,7 @@ function doEternityResetStuff(layer = 4, chall) {
 	}
 
 	player.replicanti.unl = getEternitied() >= 50
-	player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e10 && player.currentEternityChall != "eterc14" ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
+	player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e10 && player.currentEternityChall == "" && layer == 4 ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
 	if (chall == "dil" || !hasAch("ng3p67")) resetReplicantiUpgrades()
 	player.replicanti.galaxies = 0
 	player.replicanti.galaxybuyer = (getEternitied() > 2) ? player.replicanti.galaxybuyer : undefined

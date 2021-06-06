@@ -187,7 +187,7 @@ let neutrinoBoosts = {
 		eff(nt) {
 			var nb6neutrinos = Math.pow(nt[0].add(1).log10(), 2) + Math.pow(nt[1].add(1).log10(), 2) + Math.pow(nt[2].add(1).log10(), 2)
 			var nb6exp1 = .25
-			if (tmp.newNGP3E) nb6exp1 = .26
+			if (tmp.ngp3_exp) nb6exp1 = .26
 			let nb6 = Math.pow(Math.pow(nb6neutrinos, nb6exp1) * 0.525 + 1, inBigRip() ? 0.5 : 1)
 			if (isLEBoostUnlocked(9)) nb6 *= tmp.leBonus[7]
 			return nb6
@@ -197,7 +197,7 @@ let neutrinoBoosts = {
 	7: {
 		eff(nt) {
 			let nb7exp = .5
-			if (tmp.newNGP3E) nb7exp = .6
+			if (tmp.ngp3_exp) nb7exp = .6
 			let nb7neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
 			let nb7 = Math.pow(Math.log10(1 + nb7neutrinos), nb7exp) * 2.35
 			if (nb7 > 4) nb7 = 2 * Math.log2(nb7)
@@ -211,7 +211,7 @@ let neutrinoBoosts = {
 		eff(nt) {
 			let nb8neutrinos = Math.pow(nt[0].add(1).log10(),2)+Math.pow(nt[1].add(1).log10(),2)+Math.pow(nt[2].add(1).log10(),2)
 			let nb8exp = .25
-			if (tmp.newNGP3E) nb8exp = .27
+			if (tmp.ngp3_exp) nb8exp = .27
 			var nb8 = Math.pow(nb8neutrinos, nb8exp) / 10 + 1
 			if (nb8 > 11) nb8 = 7 + Math.log2(nb8 + 5)
 			return nb8

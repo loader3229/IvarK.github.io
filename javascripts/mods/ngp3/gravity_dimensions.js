@@ -49,7 +49,7 @@ let GDs = {
 		if (tmp.blu && hasBosonicUpg(63)) data.gdbPow *= tmp.blu[63]
 
 		//Gravity Power
-		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.max(1).log10(), tmp.newNGP3E ? 2 : 3/2) - GDs.save.gr.add(10).log10(), 0), 2/3)
+		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.max(1).log10(), tmp.ngp3_exp ? 2 : 3/2) - GDs.save.gr.add(10).log10(), 0), 2/3)
 
 		if (gp > 10) {
 			//Endless Radioactive softcaps! :D

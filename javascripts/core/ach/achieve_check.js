@@ -127,7 +127,7 @@ function checkReplicantiBasedReqAchieve(){
 	if (player.replicanti.galaxies >= 180 * player.galaxies && player.galaxies >= 1) giveAchievement("Popular music")
 	if (player.replicanti.amount.gt(new Decimal("1e20000"))) giveAchievement("When will it be enough?")
 	if (player.boughtDims && player.replicanti.amount.gt("1e1000000")) giveAchievement("Do you really need a guide for this?");
-	if (player.replicanti.amount.gt(tmp.ngp3 ? "1e75000" : "1e100000")) giveAchievement("It will never be enough")
+	if (player.replicanti.amount.gt(tmp.ngp3 ? "1e60000" : "1e100000")) giveAchievement("It will never be enough")
 }
 
 function checkResetCountReqAchieve(){
@@ -211,7 +211,7 @@ function checkNGUdAchieve() {
 
 function checkNGp2Achieve() {
 	if (hasDilationStudy(6)) giveAchievement("I'm so meta")
-	if (player.meta.resets >= 10) giveAchievement("Meta-boosting to the max")
+	if (player.meta.resets >= (tmp.ngp3 ? 7 : 10)) giveAchievement("Meta-boosting to the max")
 }
 
 function getTwoDecaysBool(){

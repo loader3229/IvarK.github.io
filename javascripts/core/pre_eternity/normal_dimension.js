@@ -66,14 +66,15 @@ function getNormalDimensionVanillaAchievementBonus(tier){
 
 function getNormalDimensionVanillaTimeStudyBonus(tier){
 	var mult = new Decimal(1)
-	if (hasTS(71) && tier !== 8) mult = mult.times(tmp.sacPow.pow(0.25).min("1e210000"));
+	var sacPow = Decimal.max(tmp.sacPow || 0, 1)
+	if (hasTS(71) && tier !== 8) mult = mult.times(sacPow.pow(0.25).min("1e210000"));
 	if (hasTS(91)) mult = mult.times(Decimal.pow(10, Math.min(player.thisEternity, 18000) / 60));
 	let useHigherNDReplMult = player.dilation.active && masteryStudies.has("t323")
 	if (!useHigherNDReplMult) mult = mult.times(tmp.nrm)
 	if (hasTS(161)) mult = mult.times(Decimal.pow(10, (inNGM(2) ? 6660 : 616) * (tmp.mod.newGameExpVersion ? 5 : 1)))
-	if (hasTS(234) && tier == 1) mult = mult.times(tmp.sacPow)
+	if (hasTS(234) && tier == 1) mult = mult.times(sacPow)
 	if (hasTS(193)) mult = mult.times(Decimal.pow(1.03, Decimal.div(getEternitied(), tmp.ngC ? 1e6 : 1)).min("1e13000"))
-	if (tier == 8 && hasTS(214)) mult = mult.times((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1).min(new Decimal("1e125000"))))
+	if (tier == 8 && hasTS(214)) mult = mult.times(sacPow.pow(8).min("1e46000").times(sacPow.pow(1.1).min("1e125000")))
 	return mult
 }
 

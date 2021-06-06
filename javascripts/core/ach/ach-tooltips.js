@@ -270,7 +270,7 @@ function setR13Tooltip() {
 
 	let thisisReward = [] // for the achievement "This is what I have to do to get rid of you."
 	if (inNGM(2)) thisisReward.push("g23 is more effective based on your best IP in dilation")
-	if (tmp.ngp3 || tmp.mod.newGamePlusVersion) thisisReward.push("you produce dilated time " + (tmp.newNGP3E ? 3 : 2) + "x faster")
+	if (tmp.ngp3 || tmp.mod.newGamePlusVersion) thisisReward.push("you produce dilated time " + (tmp.ngp3_exp ? 3 : 2) + "x faster")
 	thisisReward = wordizeList(thisisReward, true)
 
 	//ACHIEVEMENT ROW 13
@@ -310,7 +310,7 @@ function setR14Tooltip() {
 	let harmony = getEl("Universal harmony")
 
 	let onlywarReward = [] // for the achievement "In the grim darkness of the far endgame"
-	if (tmp.ngp3) onlywarReward.push("you produce 2x more Dilated Time")
+	if (tmp.ngp3) onlywarReward.push("you gain 2x more dilated time and Tachyon particles")
 	if (tmp.mod.nguspV != undefined) onlywarReward.push("you can auto-buy Dilation upgrades every second if you have at least " + shortenMoney(new Decimal('1e40000')) + " EP")
 	onlywarReward = wordizeList(onlywarReward, true)
 
@@ -322,8 +322,8 @@ function setR14Tooltip() {
 	//ACHIEVEMENT ROW 14 (NG++)
 	onlywar.setAttribute('ach-tooltip', "Reach " + shortenMoney(new Decimal('1e40000')) + " EP." + (onlywarReward != "" ? " Reward: " + onlywarReward + "." : ""))
 	thecap.setAttribute('ach-tooltip', "Get " + shortenDimensions(1e12)+" Eternities. Reward: Eternity Upgrade 2 " + (tmp.ngp3 ? "and TS231 use" : "uses") + " a better formula.")
-	metamax.setAttribute('ach-tooltip', "Get 10 Meta-Dimension Boosts. Reward: Meta-dimension boosts are " + (tmp.ngp3 ? 5 : 1) + "% stronger.")
-	neverenough.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal(tmp.ngp3 ? "1e75000" : "1e100000")) + " replicanti. Reward: " + (tmp.ngp3 || tmp.mod.newGamePlusVersion ? "Replicated galaxies no longer reset the replicanti amount." : "You can always buy max RGs."))
+	metamax.setAttribute('ach-tooltip', "Get " + (tmp.ngp3 ? 7 : 10) + " Meta-Dimension Boosts. Reward: Meta-dimension boosts are " + (tmp.ngp3 ? 5 : 1) + "% stronger.")
+	neverenough.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal(tmp.ngp3 ? "1e60000" : "1e100000")) + " replicanti. Reward: " + (tmp.ngp3 || tmp.mod.newGamePlusVersion ? "Replicated galaxies no longer reset the replicanti amount." : "You can always buy max RGs."))
 	harmony.setAttribute('ach-tooltip', (player.meta ? "Have at least 700 normal, replicanti, and free dilated galaxies." : "Get the same amount (at least 300) of normal, replicanti, and Tachyonic Galaxies.") + (harmonyReward != "" ? " Reward: " + harmonyReward + "." : ""))
 }
 
@@ -339,7 +339,7 @@ function setR15Tooltip() {
 	//ng3p18/////
 
 	//ACHIEVEMENT ROW 15
-	notenough.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter. Reward: You produce dilated time 3x faster and gain more Tachyon particles based on your Replicated Galaxies.")
+	notenough.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter. Reward: You gain 2.5x more dilated time and Tachyon particles.")
 	old.setAttribute('ach-tooltip', "Reach " + shortenCosts(getOldAgeRequirement()) + " antimatter. Reward: Get a multiplier to first 3 Meta Dimensions based on total antimatter.") 
 	rid.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e400000")) + " IP while dilated, without having time studies. (not including mastery studies)")
 }

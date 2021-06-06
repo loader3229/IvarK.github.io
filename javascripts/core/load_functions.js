@@ -427,13 +427,13 @@ function setAarexModIfUndefined(){
 }
 
 function doNGp3Init1() {
+	tmp.ngp3 = player.masterystudies !== undefined
 	tmp.ngpX = hasAch("ng3p111") && player.pl && pl.save ? 5 :
-		player.masterystudies !== undefined ? 3 :
+		tmp.ngp3 ? 3 :
 		player.meta !== undefined ? 2 :
 		0
-	tmp.ngp3 = tmp.ngpX >= 3
-	tmp.ngex = tmp.mod.ngexV !== undefined
-	tmp.newNGP3E = tmp.ngp3 && tmp.mod.newGameExpVersion !== undefined
+	tmp.ngp3_mul = tmp.ngp3 && tmp.mod.newGameMult!== undefined
+	tmp.ngp3_exp = tmp.ngp3 && tmp.mod.newGameExpVersion !== undefined
 
 	transformSaveToDecimal();
 	tmp.tickUpdate = true;
@@ -1601,7 +1601,6 @@ function updateVersionsONLOAD(){
 	doNGM4v0tov2111()
 	doNGM5v0tov052()
 	doNGSPUpdatingVersion()
-	doInitInfMultStuff()
 	dov12tov122()
 }
 
@@ -1785,7 +1784,7 @@ function setChallengeDisplay(){
         var showMoreBreak = inNGM(2) ? "" : "none"
         for (i=1;i<5;i++) getEl("postinfi0"+i).parentElement.style.display=showMoreBreak
         getEl("d1AutoChallengeDesc").textContent=(tmp.mod.ngmX>=4?"Galactic Sacrifice":"Big Crunch")+" for the first time."
-        getEl("d5AutoChallengeDesc").textContent=tmp.ngex?"Each Dimension Boost reduces your tickspeed reduction by 0.1% additively, but galaxies are 50% stronger.":inNGM(2)?"Tickspeed upgrades"+(player.tickspeedBoosts==undefined?"":" and Tickspeed Boosts")+(tmp.mod.ngmX>=4?" are weaker":" start out useless")+", but galaxies make them stronger.":"Tickspeed starts at 7%."
+        getEl("d5AutoChallengeDesc").textContent=tmp.exMode?"Each Dimension Boost reduces your tickspeed reduction by 0.1% additively, but galaxies are 50% stronger.":inNGM(2)?"Tickspeed upgrades"+(player.tickspeedBoosts==undefined?"":" and Tickspeed Boosts")+(tmp.mod.ngmX>=4?" are weaker":" start out useless")+", but galaxies make them stronger.":"Tickspeed starts at 7%."
         getEl("tbAutoChallengeDesc").textContent=player.tickspeedBoosts==undefined?"Whenever you buy 10 of a dimension or tickspeed, everything else of equal cost will increase to its next cost step.":"You can't get Tickspeed Boosts and Antimatter Galaxies are 25% weaker."
         getEl("autoDBChallengeDesc").textContent="There are only 6 dimensions, with Dimension Boost"+(player.tickspeedBoosts==undefined?"":", Tickspeed Boost,")+" and Antimatter Galaxy costs modified."
         getEl("autoCrunchChallengeDesc").textContent="Each Normal Dimension produces the Dimension 2 tiers before it; First Dimensions produce reduced antimatter. "+(inNGM(2)?"Galaxies are far more powerful.":"")
@@ -1996,7 +1995,7 @@ function updateNGModeMessage(){
 	let condensed = player.condensed !== undefined
 
 	ngModeMessages=[]
-	if (tmp.ngex) ngModeMessages.push("Welcome to Expert Mode! This is a more difficult version of Antimatter Dimensions. Please note that this mod is in beta and may be unfinished. If you experience unbalancing, report it to #other_modifications in the Discord server. Good luck!")
+	if (tmp.exMode) ngModeMessages.push("Welcome to Expert Mode! This is a more difficult version of Antimatter Dimensions. Please note that this mod is in beta and may be unfinished. If you experience unbalancing, report it to #other_modifications in the Discord server. Good luck!")
 	if (tmp.mod.newGameMult) ngModeMessages.push("Welcome to NG Multiplied, made by Despacit and Soul147! This mode adds many buffs which may break the game, similar to NG^.")
 	if (tmp.mod.newGameExpVersion) ngModeMessages.push("Welcome to NG^, made by Naruyoko! This mode adds many buffs to features that can end up unbalancing the game significantly.")
 	if (condensed) {
@@ -2067,8 +2066,9 @@ function onLoad(noOffline) {
 	tmp.ngmX = calcNGMX()
 	if (tmp.ngmX) tmp.mod.ngmX = tmp.ngmX
 	ngC.compile()
-	tmp.ez = tmp.mod.ez
+	tmp.ez = tmp.mod.ez !== undefined
 	ngSg.compile()
+	tmp.exMode = tmp.mod.ngexV !== undefined
 
 	ph.reset()
 	ls.reset()
@@ -2076,6 +2076,7 @@ function onLoad(noOffline) {
 	setupTimeStudies()
 	performedTS = false
 	updateVersionsONLOAD()
+	doInitInfMultStuff()
 	transformSaveToDecimal()
 	doNGp3Init2()
 	for (s = 0; s < (player.boughtDims ? 4 : 3); s++) toggleCrunchMode(true)
@@ -2236,10 +2237,6 @@ function setupNGP31Versions() {
 	tmp.mod.newGame3PlusVersion = 3
 
 	if (tmp.mod.ngp3Build === undefined) tmp.mod.ngp3Build = 0
-	if (tmp.mod.ngp3Build < 20210511 && masteryStudies.has("d7")) {
-		alert("Your mastery studies has been respecced due to the rework of Positronic-era studies.")
-		masteryStudies.respec(true)
-	}
 	if (tmp.mod.ngp3Build < 20210517) {
 		delete tmp.qu.challenge
 		delete tmp.qu.challenges
@@ -2251,7 +2248,11 @@ function setupNGP31Versions() {
 	}
 	if (tmp.mod.ngp3Build < 20210519) tmp.qu.quarkEnergy = tmp.qu.bestEnergy || 0
 	if (tmp.mod.ngp3Build < 20210529) QCs.save.qc5 = 0
-	tmp.mod.ngp3Build = 20210529
+	if (tmp.mod.ngp3Build < 20210605 && masteryStudies.has("d7")) {
+		alert("Your mastery studies has been respecced due to the rework of Positronic-era studies.")
+		masteryStudies.respec(true)
+	}
+	tmp.mod.ngp3Build = 20210605
 }
 
 function checkNGM(imported) {

@@ -284,7 +284,7 @@ function getEC12TimeLimit() {
 	//In the multiple of 0.1 seconds
 	let r = 10 - 2 * ECComps("eterc12")
 	if (tmp.ngmX >= 2 && ECComps("eterc12") >= 4) r += 1.5 // add 0.15 seconds to try to make 12x5 in NG-- possible
-	if (tmp.ngex) r *= 0.9
+	if (tmp.exMode) r *= 0.9
 	return Math.max(r, 1)
 }
 
@@ -337,8 +337,6 @@ function getECReward(x) {
 	if (x == 12) return 1 - c * (m2 ? .06 : 0.008)
 	if (x == 13) return Math.sqrt(1 + c / 7.5)
 	if (x == 14) {
-		if (masteryStudies.has(304)) c -= 0.5
-
 		let effs = [0, 0.1, 0.2, 0.3, 0.5, 1]
 		if (c < 0) return 0
 		if (c > 5) return 1

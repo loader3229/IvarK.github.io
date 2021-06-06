@@ -214,7 +214,10 @@ function canBuyStudy(name) {
 		}
 	}
 
-	if (row > 1 && qMs.tmp.amt >= 32) return hasRow(row - 1) 
+	if (row > 1 && (
+		qMs.tmp.amt >= 32 || //NG+3
+		(tmp.ngp3_mul && player.eternityUpgrades.includes(15)) //NG*+3
+	)) return hasRow(row - 1) 
 	if (tmp.ngC) {
 		if (name == 61 && total < 18) return false
 		if (name == 151 && total < 195) return false
@@ -839,7 +842,8 @@ function focus_preset(id) {
 }
 
 function getPresetLayout(id) {
-	return "<b id='preset_" + id + "_title'>Preset #" + (loadedPresets + 1) + "</b><br><br>" +
+	return "<b id='preset_" + id + "_title'>Preset #" + (loadedPresets + 1) + "</b><br>" +
+		"<span id='preset_" + id + "_dilation_div'>Dilation run (not implemented): <input id='preset_" + id + "_dilation' type='checkbox'></span><br>" +
 		"<input id='preset_" + id +"_data' style='width: 75%' onchange='focus_preset(" + id + ")'><br>" +
 
 		"<button class='storebtn' onclick='save_preset(" + id + ")'>Save</button>" +
@@ -859,6 +863,8 @@ function changePresetTitle(id, placement, editing) {
 		while (poData[placement] != id) placement++
 	}
 
+	getEl("preset_" + id + "_dilation_div").style.display = hasDilationStudy(1) || ph.has("quantum")
+
 	if (editing) {
 		getEl("preset_" + id + "_title").textContent = (presets[id].title ? presets[id].title : "Preset #" + placement) + "*"
 		return
@@ -867,9 +873,10 @@ function changePresetTitle(id, placement, editing) {
 	if (presets[id] === undefined) {
 		var preset = localStorage.getItem(btoa(presetPrefix + id))
 		if (preset === null) {
-			presets[id] = {preset: "|0", title: "Deleted preset #" + placement}
+			presets[id] = {preset: "|0", title: "Deleted preset #" + placement, dilation: false}
 			localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
 		} else presets[id] = JSON.parse(atob(preset))
+		getEl("preset_" + id + "_dilation").value = presets[id].dilation
 	}
 	getEl("preset_" + id + "_title").textContent = presets[id].title ? presets[id].title : "Preset #" + placement
 	getEl("preset_" + id + "_data").value = presets[id].preset
@@ -913,11 +920,11 @@ let tsMults = {
 		return tmp.mod.newGameExpVersion ? 1e30 : 1e15
 	},
 	61() {
-		return tmp.ngC ? Decimal.pow(25, Math.log10(tmp.rmPseudo.log10() / 308.25 + 1) / Math.log10(2)) : (tmp.newNGP3E ? 100 : 10)
+		return tmp.ngC ? Decimal.pow(25, Math.log10(tmp.rmPseudo.log10() / 308.25 + 1) / Math.log10(2)) : (tmp.ngp3_exp ? 100 : 10)
 	},
 	62() {
 		let r = tmp.mod.newGameExpVersion ? 4 : 3
-		if (tmp.ngex) r -= 0.5
+		if (tmp.exMode) r -= 0.5
 		if (tmp.ngC) r /= 2
 		return r
 	},
@@ -937,7 +944,7 @@ let tsMults = {
 		return Math.min(Math.pow(r, 0.005), 1.1)
 	},
 	213() {
-		return tmp.ngC ? 2 : tmp.ngex ? 15 : 20
+		return tmp.ngC ? 2 : tmp.exMode ? 15 : 20
 	},
 	222() {
 		return inNGM(2) ? 0.5 : 2
@@ -949,7 +956,7 @@ let tsMults = {
 		let x = Math.floor(tmp.rmPseudo.e / 1e3)
 
 		let softcapEff = 2
-		if (x > 100) x = Math.sqrt(x * 100)
+		if (x > 100) x = Math.pow(x * 1e6, 1/4)
 		return Math.floor(x)
 	},
 	226() {
@@ -960,8 +967,9 @@ let tsMults = {
 		return Math.pow(tmp.sacPow.max(10).log10(), 10)
 	},
 	231() {
-		let x = Decimal.pow(Math.max(getTotalDBs(), 1), 0.3)
-		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(10, Math.pow(getTotalDBs() / 1e5 + 1, 1.25)))
+		let db = getTotalDBs()
+		let x = Decimal.pow(Math.max(db, 1), 0.3)
+		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(2, Math.pow(db / 1e6 + 1, 2)))
 		return x
 	},
 	232() {
@@ -970,7 +978,7 @@ let tsMults = {
 	233() {
 		let rep = tmp.rmPseudo || player.replicanti.amount
 
-		if (masteryStudies.has(293)) rep = rep.pow(rep.log10() / 1e5 + 1)
+		if (masteryStudies.has(292)) rep = rep.pow(rep.log10() / 1e5 + 1)
 		else rep = rep.pow(0.3)
 
 		return rep

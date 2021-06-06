@@ -501,17 +501,26 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="timestudylocked" id="timestudy291" style='font-size:9px' onclick='buyMasteryStudy("t", 291)'></button></td>
-						<td><button class="timestudylocked" id="timestudy292" style='font-size:9px' onclick='buyMasteryStudy("t", 292)'></button></td>
+						<td><button class="timestudylocked" id="timestudy292" style="width: 200px; height: 100px" onclick='buyMasteryStudy("t", 292)'></button></td>
 						<td><button class="timestudylocked" id="timestudy293" style='font-size:9px' onclick='buyMasteryStudy("t", 293)'></button></td>
-						<td><button class="timestudylocked" id="timestudy294" style='font-size:9px' onclick='buyMasteryStudy("t", 294)'></button></td>
-						<td><button class="timestudylocked" id="timestudy295" style='font-size:9px' onclick='buyMasteryStudy("t", 295)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
+						<td><button class="timestudylocked" id="timestudy301" style='font-size:9px' onclick='buyMasteryStudy("t", 301)'></button></td>
+						<td style="visibility: hidden"><button class="timestudylocked"></button></td>
+						<td><button class="timestudylocked" id="dilstudy8" onclick='buyMasteryStudy("d", 8)' style='font-size:9px'>Unlock Quantum Challenges<br><span id="ds8Cost"></span><span id="ds8Req"></span></button></td>
+						<td style="visibility: hidden"><button class="timestudylocked"></button></td>
 						<td><button class="timestudylocked" id="timestudy302" style='font-size:9px' onclick='buyMasteryStudy("t", 302)'></button></td>
-						<td><button class="timestudylocked" id="dilstudy8" onclick='buyMasteryStudy("d", 8)'>Unlock Quantum Challenges<br><span id="ds8Cost"></span><span id="ds8Req"></span></button></td>
-						<td><button class="timestudylocked" id="timestudy303" style='font-size:9px' onclick='buyMasteryStudy("t", 303)'></button></td>
+					</tr>
+				</table>
+				<table class="table" id="studytable">
+					<tr>
+						<td><button class="timestudylocked" id="timestudy311" style='font-size:9px' onclick='buyMasteryStudy("t", 311)'></button></td>
+						<td><button class="timestudylocked" id="timestudy312" style='font-size:9px' onclick='buyMasteryStudy("t", 312)'></button></td>
+						<td style="visibility: hidden"><button class="timestudylocked"></button></td>
+						<td><button class="timestudylocked" id="timestudy313" style='font-size:9px' onclick='buyMasteryStudy("t", 313)'></button></td>
+						<td><button class="timestudylocked" id="timestudy314" style='font-size:9px' onclick='buyMasteryStudy("t", 314)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -720,7 +729,7 @@
 						<td class="milestoneText" id='milestone27'></td>
 					</tr>
 					<tr id='mdmilestonesrow2b'>
-						<td><button class="milestonerewardlocked" id="reward26">Eternity divides the Replicanti amount by 1e1000x instead.</button></td>
+						<td><button class="milestonerewardlocked" id="reward26">Each normal / dilated Eternity run divides the Replicanti amount by 1e1000x instead.</button></td>
 						<td><button class="milestonerewardlocked" id="reward27">Unlock slow Meta Dimension autobuyers permanently.</button></td>
 					</tr>
 					<tr id='mdmilestonesrow3a'>
@@ -1548,7 +1557,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 8)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 9)</p>
 			</span>
 			<div class="footer bottom"></div>
 		</div>
@@ -4402,31 +4411,22 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan=3>
-						Your colored anti-quarks have a net <span id='colorCharge'></span>.
-						<br>
-						(net worth of <span id='colorChargeAmt'></span>)
-						<br><br>
-						<button class='storebtn' id="neutralize_quarks" style="width: 360px" onclick='neutralize_quarks()'>Neutralize (requires <span id="neutralize_req"></span> anti-quarks)</button>
-					</td>
-				</tr>
-				<tr>
-					<td class="red">
-						You have <span class="red" id="redQuarks" style="font-size:35px">0</span> red anti-quarks.
+					<td class="red more">
+						You have <span id="redQuarks" style="font-size:35px">0</span> red anti-quarks.
 						<br>
 						<button class='storebtn' id='redAssort' onclick='assignQuark("r")'>Assort</button>
 						<br><br>
 						Ratio: <input id="ratio_r" type="number" min=0 onchange="changeRatio('r')"></input>
 					</td>
-					<td class="green">
-						You have <span class="green" id="greenQuarks" style="font-size:35px">0</span> green anti-quarks.
+					<td class="green more">
+						You have <span id="greenQuarks" style="font-size:35px">0</span> green anti-quarks.
 						<br>
 						<button class='storebtn' id='greenAssort' onclick='assignQuark("g")'>Assort</button>
 						<br><br>
 						Ratio: <input id="ratio_g" type="number" min=0 onchange="changeRatio('g')"></input>
 					</td>
-					<td class="blue">
-						You have <span class="blue" id="blueQuarks" style="font-size:35px">0</span> blue anti-quarks.
+					<td class="blue more">
+						You have <span id="blueQuarks" style="font-size:35px">0</span> blue anti-quarks.
 						<br>
 						<button class='storebtn' id='blueAssort' onclick='assignQuark("b")'>Assort</button>
 						<br><br>
@@ -4434,18 +4434,30 @@
 					</td>
 				</tr>
 				<tr>
-					<td>
-						You have <span class="red" id="redPower" style="font-size:35px">0.0</span> red power. Translated to +<span class="red" id="redTranslation" style="font-size:35px"></span>% stronger galaxies.
-					</td>
-					<td>
-						You have <span class="green" id="greenPower" style="font-size:35px">0.0</span> green power. Translated to <span class="green" id="greenTranslation" style="font-size:35px"></span>x slower replicate interval scaling.
-					</td>
-					<td>
-						You have <span class="blue" id="bluePower" style="font-size:35px">0.0</span> blue power. Translated to <span class="blue" id="blueTranslation" style="font-size:35px"></span>x more Tachyon Particles and passive TT gains. (before softcaps)
+					<td class="grey" colspan=3>
+						<button class='storebtn' id="neutralize_quarks" style="width: 360px" onclick='neutralize_quarks()'>Neutralize (requires <span id="neutralize_req"></span> anti-quarks)</button>
 					</td>
 				</tr>
 				<tr>
-					<td colspan=3>
+					<td id="colorChargeColor" colspan=3>
+						Your colored anti-quarks have a net <span id='colorCharge'></span>.
+						<br>
+						(net worth of <span id='colorChargeAmt'></span>)
+					</td>
+				</tr>
+				<tr>
+					<td class="red">
+						You have <span id="redPower" style="font-size:35px">0.0</span> red power. Translated to +<span class="red" id="redTranslation" style="font-size:35px"></span>% stronger galaxies.
+					</td>
+					<td class="green">
+						You have <span id="greenPower" style="font-size:35px">0.0</span> green power. Translated to <span class="green" id="greenTranslation" style="font-size:35px"></span>x slower replicate interval scaling.
+					</td>
+					<td class="blue">
+						You have <span id="bluePower" style="font-size:35px">0.0</span> blue power. Translated to <span class="blue" id="blueTranslation" style="font-size:35px"></span>x more Tachyon Particles and passive TT gains. (before softcaps)
+					</td>
+				</tr>
+				<tr>
+					<td class="lime" colspan=3>
 						Your quantum energy is giving a +<span id="quarkEnergyEffect1" style="font-size:35px">0.0</span>% more color powers and +<span id="quarkEnergyEffect2" style="font-size:35px">0.0</span> total extra color powers.
 					</td>
 				</tr>
@@ -4453,10 +4465,10 @@
 		</div>
 		<div class='quantumtab' id='gluons'><table class="qTable">
 			<tr>
-				<td>
+				<td class="red">
 					You have <span id="rg" style="font-size:35px">0</span> red-green anti-gluons,
 					<br>
-					which multiply the red power by <span class="red" id="rPowerBuff">1.00</span>x, but subtract the green power by -<span class="green" id="gPowerNerf">0.00</span>.
+					which multiply the red power by <span class="red" id="rPowerBuff" style="font-size:15px">1.00</span>x, but subtract the green power by -<span class="green" id="gPowerNerf" style="font-size:15px">0.00</span>.
 					<br>
 					(+<span id='rg_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='rg_prev'></span> to <span id='rg_next'>0</span>.)
 					<br><br>
@@ -4464,10 +4476,10 @@
 					<br>
 					<span id="entangle_rg_bonus"></span>
 				</td>
-				<td>
+				<td class="green">
 					You have <span id="gb" style="font-size:35px">0</span> green-blue anti-gluons,
 					<br>
-					which multiply the red power by <span class="green" id="gPowerBuff">1.00</span>x, but subtract the green power by -<span class="blue" id="bPowerNerf">0.00</span>.
+					which multiply the red power by <span class="green" id="gPowerBuff" style="font-size:15px">1.00</span>x, but subtract the green power by -<span class="blue" id="bPowerNerf" style="font-size:15px">0.00</span>.
 					<br>
 					(+<span id='gb_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='gb_prev'></span> to <span id='gb_next'>0</span>.)
 					<br><br>
@@ -4475,10 +4487,10 @@
 					<br>
 					<span id="entangle_gb_bonus"></span>
 				</td>
-				<td>
+				<td class="blue">
 					You have <span id="br" style="font-size:35px">0</span> blue-red anti-gluons,
 					<br>
-					which multiply the red power by <span class="blue" id="bPowerBuff">1.00</span>x, but subtract the green power by -<span class="red" id="rPowerNerf">0.00</span>.
+					which multiply the red power by <span class="blue" id="bPowerBuff" style="font-size:15px">1.00</span>x, but subtract the green power by -<span class="red" id="rPowerNerf" style="font-size:15px">0.00</span>.
 					<br>
 					(+<span id='br_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='br_prev'></span> to <span id='br_next'>0</span>.)
 					<br><br>

@@ -3,17 +3,19 @@ var masteryStudies = {
 		time: {
 			//Eternity
 			241: 1e68,
-			251: 2e70, 252: 2e70, 253: 2e70,
-			261: 1e70, 262: 1e70, 263: 1e70, 264: 1e70, 265: 1e70, 266: 1e70,
+			251: 5e69, 252: 5e69, 253: 5e69,
+			261: 6.6666666666666674e69, 262: 6.6666666666666674e69, 263: 6.6666666666666674e69, 264: 6.6666666666666674e69, 265: 6.6666666666666674e69, 266: 6.6666666666666674e69,
 
 			//Quantum
 			271: 3.90625e71,
 			281: 2e74, 282: 2e73, 283: 2e73, 284: 2e74,
-			291: 1/0, 292: 4e74, 293: 2e74, 294: 4e74, 295: 1/0,
-			302: 1/0, 303: 1/0,
+			291: 4e74, 292: 2e74, 293: 4e74,
+			301: 1/0, 302: 1/0,
+			311: 1/0, 312: 1/0,
 
 			//Expert Mode
 			ex_241: 2e68,
+			ex_261: 5e69, ex_262: 5e69, ex_263: 5e69, ex_264: 5e69, ex_265: 5e69, ex_266: 5e69,
 			ex_271: 1e68
 		},
 		ec: {
@@ -29,14 +31,15 @@ var masteryStudies = {
 		mults: {
 			//Eternity
 			t241: 1,
-			t251: 2, t252: 2, t253: 2,
+			t251: 1.5, t252: 1.5, t253: 1.5,
 			t261: 2, t262: 2, t263: 2, t264: 2, t265: 2, t266: 2,
 
 			//Quantum
 			t271: 1 / 128,
 			t281: 5, t282: 3, t283: 3, t284: 5,
-			t291: 1 / 2, t292: 12, t293: 1, t294: 12, t295: 1 / 2,
-			t302: 1 / 3, t303: 1 / 3,
+			t291: 4, t292: 1, t293: 4,
+			t301: 8, t302: 8,
+			t311: 1 / 4, t312: 2, t313: 2, t314: 1 / 4,
 
 			//Expert Mode
 			t251_ex: 2.5, t252_ex: 2.5, t253_ex: 2.5,
@@ -70,10 +73,10 @@ var masteryStudies = {
 			return hasAch("ng3p16") || player.dilation.dilatedTime.gte(1e100)
 		},
 		272() {
-			return masteryStudies.bought >= (tmp.ngex ? 9 : 10)
+			return masteryStudies.bought >= (tmp.exMode ? 9 : 10)
 		},
 		d7() {
-			return tmp.qu.quarkEnergy >= 2.75
+			return enB.glu.engAmt() >= 2.75
 		},
 		d8() {
 			return enB.pos.engAmt() >= 900
@@ -102,7 +105,7 @@ var masteryStudies = {
 			return hasAch("ng3p16") ? undefined : shorten(1e100) + " dilated time"
 		},
 		272() {
-			return (tmp.ngex ? 9 : 10) + " bought mastery studies"
+			return (tmp.exMode ? 9 : 10) + " bought mastery studies"
 		},
 		d7() {
 			return "2.75 quantum energy"
@@ -141,16 +144,25 @@ var masteryStudies = {
 	timeStudyEffects: {
 		251() {
 			if (hasNU(6)) return 0
+
 			let x = player.meta.resets
-			return x * (13 / (Math.abs(x / 50) + 1) + 2)
+			x *= (13 / (Math.abs(x / 50) + 1) + 2)
+			if (tmp.ngp3_mul) x *= 1.25
+			return x
 		},
 		252() {
 			if (hasNU(6)) return 0
-			return Math.floor(player.dilation.freeGalaxies / 9)
+
+			let x = Math.floor(player.dilation.freeGalaxies / 9)
+			if (tmp.ngp3_mul) x *= 1.25
+			return x
 		},
 		253() {
 			if (hasNU(6)) return 0
-			return Math.floor(getTotalRGs() / 7) * 2
+
+			let x = Math.floor(getTotalRGs() / 7) * 2
+			if (tmp.ngp3_mul) x *= 1.25
+			return x
 		},
 
 		271() {
@@ -172,60 +184,74 @@ var masteryStudies = {
 			return 0.7 * Math.pow(x / 1.5e9 + 1, 0.2)
 		},
 		284() {
-			let x = (player.galaxies + getTotalRGs() + player.dilation.freeGalaxies) / 25
+			let powEff = 1.5
+			let x = Math.pow(
+				Math.pow(player.galaxies, 1 / powEff) +
+				Math.pow(getTotalRGs(), 1 / powEff) +
+				Math.pow(player.dilation.freeGalaxies, 1 / powEff)
+			, powEff) / 300
 
 			if (enB.active("pos", 7)) x += enB.tmp.pos7
 			return x
 		},
 		291() {
-			return 0
-		},
-		292() {
 			let rep = (tmp.rmPseudo || player.replicanti.amount).log10()
 			let exp = (4 - 1 / (Math.log10(rep + 1) / 10 + 1)) / 3
 			return Math.pow(rep / 3e5, exp) * 3e3
 		},
-		295() {
+
+		301() {
+			return 0
+		},
+		302() {
 			let rg = getFullEffRGs()
 			return Math.log10(rg / 1e3 + 1) * Math.log10(Math.log10(tmp.qu.colorPowers.g + 1) + 1) / 5 + 1
 		},
-		302() {
+		311() {
 			return 0
 		},
-		303(x) {
-			if (!x) x = getInfinitied()
-			return Decimal.add(x, 1).log10() / 5 + 1
-		}
+		312() {
+			return 0
+		},
+		313() {
+			return 0
+		},
+		314() {
+			return 0.0045
+		},
 	},
 	timeStudyDescs: {
 		241: () => "The IP mult multiplies IP gain by 2.1x per upgrade.",
 		251: () => "Remote galaxy scaling starts later based on Meta-Dimension Boosts.",
-		252: () => "Remote galaxy scaling starts 1 galaxy later per 9 Tachyonic Galaxies.",
-		253: () => "Remote galaxy scaling starts 2 galaxies later per 7 total Replicated Galaxies.",
-		261: () => "Dimension Boost cost scales by 0.5 less.",
-		262: () => "The power of meta-antimatter effect is increased by ^0.5.",
-		263: () => "Tachyonic Galaxies are 25% stronger.",
-		264: () => "You gain 5x more Tachyon Particles.",
-		265: () => "Replicate chance upgrades can go over 100%.",
+		252: () => "Remote galaxy scaling starts later based on Tachyonic Galaxies.",
+		253: () => "Remote galaxy scaling starts later based on total Replicated Galaxies.",
+		261: () => "Dimension Boost cost scales by " + doubleMSMult(0.5) + " less.",
+		262: () => "The power of meta-antimatter effect is increased by ^" + doubleMSMult(0.5) + ".",
+		263: () => "Tachyonic Galaxies are " + doubleMSMult(25) + "% stronger.",
+		264: () => "You gain " + doubleMSMult(5) + "x more Tachyon Particles.",
+		265: () => "You can upgrade replicate chance after 100%, with a greatly boost.",
 		266: () => "Reduce the post-400 max replicated galaxy cost scaling.",
 
 		271: () => "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
 
 		281: () => "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
-		282: () => "You can buy sub-1ms interval upgrades, but the cost starts to scale faster.",
-		283: () => "Replicate chance gradually increases higher above 100%.",
+		282: () => "You can upgrade replicate interval below 1ms, but the cost scales extremely higher.",
+		283: () => "Replicate chance gradually increases faster above 100%.",
 		284: () => "After boosts, total galaxies increase the OoMs of replicate interval scaling.",
 
-		291: () => "Red power makes Replicated Galaxies more evenly.",
-		292: () => "Replicantis generate free Dimension Boosts.",
-		293: () => "Some boosts from Replicantis are stronger.",
-		294: () => "All Replicanti boosts are based on Replicanti multiplier.",
-		295: () => "Green power makes Replicated Galaxies raise Replicanti multiplier instead.",
+		291: () => "Replicantis generate free Dimension Boosts.",
+		292: () => "Some boosts from Replicantis are stronger.",
+		293: () => "All Replicanti boosts are based on Replicanti multiplier.",
 
-		302: () => "Color charge makes Replicanti multiplier more useful to Replicanti boosts.",
-		303: () => "Blue power boosts Tachyon Particles even more."
+		301: () => "Red power makes Replicated Galaxies more evenly.",
+		302: () => "Blue power makes Replicated Galaxies raise Replicanti multiplier instead.",
+
+		311: () => "Red power partially shares TS232 power to all galaxies.",
+		312: () => "Green power makes Replicanti multiplier more useful to Replicanti boosts.",
+		313: () => "Each color power boosts the next color at a cyclical order.",
+		314: () => "Blue power strengthen the synergy from meta-antimatter to dilated time."
 	},
-	hasStudyEffect: [251, 252, 253, 271, 281, 283, 284, 291, 292, 295, 302, 303],
+	hasStudyEffect: [251, 252, 253, 271, 281, 283, 284, 291, 301, 302, 311, 312, 314],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -246,19 +272,22 @@ var masteryStudies = {
 			return "+" + shorten(x) + " OoMs"
 		},
 		291(x) {
-			return formatPercentage(x) + "% even"
-		},
-		292(x) {
 			return "+" + getFullExpansion(Math.floor(x))
 		},
-		295(x) {
-			return "^" + x.toFixed(3)
+		301(x) {
+			return formatPercentage(x) + "% even"
 		},
 		302(x) {
+			return "^" + x.toFixed(3)
+		},
+		311(x) {
+			return formatPercentage(x) + "% power -> " + formatPercentage(Math.pow(tsMults[232], x) - 1) + "%"
+		},
+		312(x) {
 			return formatPercentage(x) + "% more multiplier-like"
 		},
-		303(x) {
-			return "^" + shorten(x)
+		314(x) {
+			return "^" + x.toFixed(4)
 		},
 	},
 	ecsUpTo: 14,
@@ -272,8 +301,9 @@ var masteryStudies = {
 		//Quantum
 		ec13: ["d7"], ec14: ["d7"], d7: [271],
 		271: [281, 282, 283, 284],
-		281: [293], 282: [293], 283: [293], 284: [293],
-		292: [291, 302], 293: [292, 294, "d8"], 294: [295, 303],
+		281: [292], 282: [292], 283: [292], 284: [292],
+		291: [301, 312], 292: [291, 293, "d8"], 293: [302, 313],
+		301: [311], 302: [314],
 
 		//No more mastery studies after that
 		d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"]},
@@ -283,12 +313,6 @@ var masteryStudies = {
 		},
 		r27() {
 			return pos.unl()
-		},
-		291() {
-			return QCs.unl()
-		},
-		295() {
-			return QCs.unl()
 		},
 		r30() {
 			return QCs.unl()
@@ -341,7 +365,7 @@ function convertMasteryStudyIdToDisplay(x) {
 function updateMasteryStudyCosts() {
 	var oldBought = masteryStudies.bought
 	masteryStudies.latestBoughtRow = 0
-	masteryStudies.costMult = QCs.in(3) ? 1e-32 : hasAch("ng3p12") ? 0.25 : 1
+	masteryStudies.costMult = 1 //QCs.in(3) ? 1e-32 : hasAch("ng3p12") ? 0.25 : 1
 	masteryStudies.bought = 0
 	masteryStudies.ttSpent = 0
 	for (id = 0; id<player.masterystudies.length; id++) {
@@ -452,26 +476,34 @@ function addSpentableMasteryStudies(x) {
 	while (true) {
 		var id = map[pos]
 		if (!id) break
-		var isNum=typeof(id) == "number"
-		var ecId = !isNum&&id.split("ec")[1]
+
+		var isNum = typeof(id) == "number"
+		var ecId = !isNum && id.split("ec")[1]
+		var dId = !isNum && id[0] == "d"
+
 		var canAdd = false
-		if (ecId) canAdd = ECComps("eterc"+ecId)
-		else canAdd = player.masterystudies.includes(isNum?"t"+id:id)
+		if (ecId) canAdd = ECComps("eterc" + ecId) >= 1
+		else if (dId) canAdd = true
+		else canAdd = player.masterystudies.includes(isNum ? "t" + id : id)
+
 		if (masteryStudies.unlocked.includes(id) && !masteryStudies.spentable.includes(id)) masteryStudies.spentable.push(id)
 		if (canAdd) {
 			var paths = getMasteryStudyConnections(id)
-			if (paths) for (var x=0;x<paths.length;x++) map.push(paths[x])
+			if (paths) for (var x = 0; x < paths.length; x++) {
+				var subPath = paths[x]
+				if (!map.includes(subPath)) map.push(subPath)
+			}
 		}
 		pos++
 	}
 }
 
-function setMasteryStudyCost(id,type) {
+function setMasteryStudyCost(id, type) {
 	let d = masteryStudies.initCosts
 	let t = masteryStudies.types[type]
 	let f = d[t]
 	let r = f[id] || 0
-	if (tmp.ngex) r = f["ex_" + id] || r
+	if (tmp.exMode) r = f["ex_" + id] || r
 
 	masteryStudies.costs[t][id] = r * (type == "d" ? 1 : masteryStudies.costMult)
 }
@@ -479,7 +511,8 @@ function setMasteryStudyCost(id,type) {
 function getMasteryStudyCostMult(id) {
 	let d = masteryStudies.costs.mults
 	let r = d[id] || 1
-	if (tmp.ngex) r = d[id + "_ex"] || r
+	if (id.split("t")[1] < 290 && tmp.ngp3_mul) r = Math.sqrt(r)
+	if (tmp.exMode) r = d[id + "_ex"] || r
 
 	return r
 }
@@ -581,7 +614,7 @@ function buyMasteryStudy(type, id, quick=false) {
 function canBuyMasteryStudy(type, id) {
 	if (type == 't') {
 		if (player.timestudy.theorem < masteryStudies.costs.time[id] || player.masterystudies.includes('t' + id) || player.eternityChallUnlocked > 12 || !masteryStudies.timeStudies.includes(id)) return false
-		if (masteryStudies.latestBoughtRow > Math.floor(id / 10)) return false
+		if (masteryStudies.latestBoughtRow - (tmp.ngp3_mul ? 1 : 0) > Math.floor(id / 10)) return false
 		if (!masteryStudies.spentable.includes(id)) return false
 		if (masteryStudies.unlockReqConditions[id] && !masteryStudies.unlockReqConditions[id]()) return false
 	} else if (type == 'd') {

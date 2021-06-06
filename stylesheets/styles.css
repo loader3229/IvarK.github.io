@@ -2627,6 +2627,10 @@ td.red {
 	background: rgba(191, 0, 0, 0.25)
 }
 
+td.red.more {
+	background: rgba(255, 0, 0, 0.375)
+}
+
 .orange {
 	color: #bf5f00
 }
@@ -2651,12 +2655,32 @@ td.dark_yellow {
 	background: rgba(127, 127, 0, 0.25)
 }
 
+.lime {
+	color: #5fbf00
+}
+
+td.lime {
+	background: rgba(95, 191, 0, 0.25)
+}
+
+.green {
+	color: #00bf00
+}
+
 td.green {
 	background: rgba(0, 191, 0, 0.25)
 }
 
+td.green.more {
+	background: rgba(0, 255, 0, 0.375)
+}
+
 td.blue {
 	background: rgba(0, 0, 191, 0.25)
+}
+
+td.blue.more {
+	background: rgba(0, 0, 255, 0.375)
 }
 
 .indigo {
@@ -2681,6 +2705,22 @@ td.violet {
 
 td.uv {
 	background: rgba(143, 0, 191, 0.25)
+}
+
+.black {
+	color: #5f5f5f
+}
+
+td.black {
+	background: rgba(0, 0, 0, 0.25)
+}
+
+.grey {
+	color: #9f9f9f
+}
+
+td.grey {
+	background: rgba(159, 159, 159, 0.25)
 }
 
 .lEp {
