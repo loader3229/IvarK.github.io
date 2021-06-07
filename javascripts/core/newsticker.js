@@ -418,7 +418,7 @@ amNewsArray = [
 ["When quarks have gone radioactive, the atom becomes a level that goes beyond radioactivity. Scientists call this level 'quarkfusey.'", "ph.did('ghostify')", "am205"],
 ["Scientific fact: The hotter the atom gets, the more radioactive it gets. Wait... Is this proven by the reactor?", "ph.did('ghostify')", "am206"],
 ["To do for the next update: Procrastinate, procrastinate, procrastinate, do a small development build, ...", "true", "am207"],
-["Tired of waiting many minutes, hours to progress? Try the Barrier-Easing mod! This makes your save easier and faster. You should try it. ~ Aarex", "!tmp.ez", "am208"],
+["Tired of waiting many minutes, hours to progress? Try the Barrier-Easing mod! This makes your save easier and faster. You should try it. ~ Aarex", "!tmp.bgMode", "am208"],
 ['In NG+3.1 everyone is a speed runner', "tmp.ngp3", "am209"],
 ["Coming soon: NG+3.2. ETA: We don't have a release date. There is a possibility that it takes infinite time.", "tmp.ngp3", "am210"],
 ["Pfft, screw Gravity Dimensions! *slide whistle effect*", "GDs.unlocked()", "am211"],

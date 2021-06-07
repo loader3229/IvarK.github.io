@@ -315,7 +315,7 @@ function getMPTPreInfBase() {
 	if (player.tickspeedBoosts !== undefined) x = 1
 	if (tmp.mod.newGameExpVersion) x *= 10
 	if (tmp.mod.newGameMult) x *= 2.1
-	if (tmp.ez) x *= 1.05
+	if (tmp.bgMode) x *= 1.05
 	return x
 }
 	
@@ -576,7 +576,7 @@ function infUpg11Pow() {
 		exp = 0.75
 	}
 	if (tmp.ngC) exp *= Math.log10(player.money.plus(1).log10() + 1) * 3 + 1
-	if (tmp.ez) x *= 10
+	if (tmp.bgMode) x *= 10
 	x = Math.max(x, 1)
 
 	if (exp > 10) return Decimal.pow(x, exp).max(1)
@@ -601,7 +601,7 @@ function infUpg13Pow() {
 		exp *= Math.sqrt(player.galaxies + 1) * 200
 		x += 1
 	}
-	if (tmp.ez) x *= 10
+	if (tmp.bgMode) x *= 10
 
 	return Decimal.pow(x, exp).max(1)
 }
@@ -650,10 +650,10 @@ function getDimensionProductionPerSecond(tier) {
 	ret = ret.times(getDimensionFinalMultiplier(tier))
 
 	if (tier === 1) {
-		if (tmp.ngC || tmp.ez) ret = ret.times(3)
+		if (tmp.ngC || tmp.bgMode) ret = ret.times(3)
 		if (inNGM(5)) ret = ret.times(1000)
 	}
-	if (tmp.ez && tier != 1) ret = ret.times(10)
+	if (tmp.bgMode && tier != 1) ret = ret.times(10)
 	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || inNGM(5)) ret = ret.times(player.chall2Pow)
 	if (tier == 1 && (inNC(3) || player.currentChallenge == "postc1")) ret = ret.times(player.chall3Pow)
 	if (player.tickspeedBoosts != undefined) ret = ret.div(10)

@@ -348,25 +348,25 @@ let INF_UPGS = {
 			21: 1,
 			31: 3,
 			41() {
-				return tmp.ez ? 2 : 20
+				return tmp.bgMode ? 2 : 20
 			},
 			12: 1,
 			22: 1,
 			32: 5,
 			42() {
-				return tmp.ez ? 3 : 40
+				return tmp.bgMode ? 3 : 40
 			},
 			13: 1,
 			23: 1,
 			33: 7,
 			43() {
-				return tmp.ez ? 5 : 80
+				return tmp.bgMode ? 5 : 80
 			},
 			14: 1,
 			24: 2,
 			34: 10,
 			44() {
-				return tmp.ez ? 8 : 500
+				return tmp.bgMode ? 8 : 500
 			}
 		},
 		getCost(x) {
@@ -425,7 +425,7 @@ getEl("infiMult").onclick = function() {
 }
 
 function canBuyIPMult() {
-	if (tmp.ngC || tmp.ez || player.infinityUpgradesRespecced != undefined) return player.infinityPoints.gte(player.infMultCost)
+	if (tmp.ngC || tmp.bgMode || player.infinityUpgradesRespecced != undefined) return player.infinityPoints.gte(player.infMultCost)
 	return player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost") && player.infinityPoints.gte(player.infMultCost)
 }
 

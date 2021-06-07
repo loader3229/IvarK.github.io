@@ -31,8 +31,8 @@ var masteryStudies = {
 		mults: {
 			//Eternity
 			t241: 1,
-			t251: 1.5, t252: 1.5, t253: 1.5,
-			t261: 2, t262: 2, t263: 2, t264: 2, t265: 2, t266: 2,
+			t251: 2, t252: 2, t253: 2,
+			t261: 2, t262: 2, t263: 2, t264: 3, t265: 3, t266: 2,
 
 			//Quantum
 			t271: 1 / 128,
@@ -41,8 +41,13 @@ var masteryStudies = {
 			t301: 8, t302: 8,
 			t311: 1 / 4, t312: 2, t313: 2, t314: 1 / 4,
 
+			//Beginner Mode
+			t251_bg: 1.5, t252_bg: 1.5, t253_bg: 1.5,
+			t264_bg: 1, t265_bg: 1,
+
 			//Expert Mode
-			t251_ex: 2.5, t252_ex: 2.5, t253_ex: 2.5,
+			t251_ex: 2.5, t253_ex: 2.5,
+			t261_ex: 3, t262_ex: 3, t264_ex: 4, t265_ex: 4, t266_ex: 3,
 			t271_ex: 1 / 250,
 			t282_ex: 5, t283_ex: 5},
 		ec: {},
@@ -511,7 +516,9 @@ function setMasteryStudyCost(id, type) {
 function getMasteryStudyCostMult(id) {
 	let d = masteryStudies.costs.mults
 	let r = d[id] || 1
+
 	if (id.split("t")[1] < 290 && tmp.ngp3_mul) r = Math.sqrt(r)
+	if (tmp.bgMode) r = d[id + "_bg"] || r
 	if (tmp.exMode) r = d[id + "_ex"] || r
 
 	return r

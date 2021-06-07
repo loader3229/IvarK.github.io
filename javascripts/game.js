@@ -402,7 +402,7 @@ function updateNewPlayer(mode) {
 			aau: tmp.mod.aau !== undefined,
 			ls: tmp.mod.ls !== undefined,
 			ngc: tmp.ngC,
-			ez: tmp.mod.ez !== undefined
+			diff: tmp.dtMode ? 3 : tmp.exMode ? 2 : tmp.bgMode ? 1 : 0
 		}
 	} else if (mode == "new") {
 		modesChosen = modes
@@ -734,8 +734,8 @@ function updateNewPlayer(mode) {
 		if (modesChosen.nguep) tmp.mod.nguepV = 1.03
 
 		// Difficulties
-		if (modesChosen.ez) tmp.mod.ez = 1
-		if (modesChosen.ngex) tmp.mod.ngexV = 0.1
+		if (modesChosen.diff === 1) tmp.mod.ez = 1
+		if (modesChosen.diff === 2) tmp.mod.ngexV = 0.1
 
 		// Respecced
 		if (modesChosen.rs == 1) doInfinityRespeccedNewPlayer()
@@ -1852,18 +1852,19 @@ function changeSaveDesc(saveId, placement) {
 		var ngmX = calcNGMX(temp)
 		if (ngmX >= 4) msg += "-" + ngmX
 		else if (ngmX) msg += "-".repeat(ngmX)
-		var ex=temp.aarexModifications.ngexV
+		var diffNum = calcDifficulty(temp)
 		if (ngmX < 2 && temp.aarexModifications.ngmR !== undefined) msg = msg != "" || ex ? msg + "-R" : msg + "- Remade"
 		if (temp.condensed !== undefined) msg = msg != "" || ex ? msg + "C" : msg + " Condensed"
 		if (temp.boughtDims) msg = msg != "" || ex ? "ER" + msg : "Eternity Respecced"
 		else if (temp.singularity) msg = msg != "" || ex ? "IR" + msg : "Infinity Respecced"
 		else msg = "NG" + msg
-		if (ex) msg = msg == "NG" ? "Expert Mode" : msg + "Ex"
+		if (diffNum == 0) msg = msg == "NG" ? "Beginner Mode" : msg + "Bg"
+		if (diffNum == 2) msg = msg == "NG" ? "Expert Mode" : msg + "Ex"
+		if (diffNum == 3) msg = msg == "NG" ? "Death Mode" : msg + "Dt"
 		if (temp.galacticSacrifice) {
 			if (temp.aarexModifications.ngmR) msg += ", NG-R"
 			if (temp.aarexModifications.newGameMinusVersion) msg += ", NG-"
 		}
-		if (temp.aarexModifications.ez) msg = (msg == "NG" ? "" : msg + ", ") + "Barrier-Easing"
 		if ((temp.exdilation || temp.meta) && !temp.aarexModifications.newGamePlusVersion) msg += ", The Grand Run [No NG+]"
 		if (temp.aarexModifications.aau) msg = (msg == "NG" ? "" : msg + ", ") + "AAU"
 		if (temp.aarexModifications.ls) msg = (msg == "NG" ? "" : msg + ", ") + "Light Speed"
@@ -1952,6 +1953,8 @@ function changeSaveDesc(saveId, placement) {
 
 var modsShown = false
 var modFullNames = {
+	diff: "Difficulty",
+	journey: "Journey (NG+3)",
 	rs: "Respecced",
 	arrows: "NG↑",
 	ngpp: "NG++",
@@ -1962,12 +1965,10 @@ var modFullNames = {
 	nguep: "NGUd↑'",
 	ngmu: "NG*",
 	ngumu: "NGUd*'",
-	ngex: "Expert Mode",
 	aau: "AAU",
 	ngprw: "NG+ Reworked",
 	ls: "Light Speed",
 	ngc: "NG Condensed",
-	ez: "Barrier-Easing",
 	ngm5rg: "NG-5 Regulated",
 	us: "Upsided"
 }
@@ -1982,7 +1983,7 @@ var modSubNames = {
 	nguep: ["Linear' (↑⁰')", "Exponential' (↑')"/*, "Tetrational' (↑↑')"*/],
 	ngmu: ["OFF", "ON", /*"NG**", "NG***"*/], //NG** won't be made.
 	ngumu: ["OFF", "ON", /*"NGUd**'", "NGUd***'"*/], //Same goes to NGUd**'.
-	ngex: ["OFF", "ON", /*"DEATH MODE 💀"*/] // modes that aren't even made yet
+	diff: ["Normal", "Beginner", "Expert", "Death 💀"] // modes that aren't even made yet
 }
 function toggle_mod(id) {
 	if (id == "rs" && !modes.rs) {
@@ -1999,8 +2000,7 @@ function toggle_mod(id) {
 	// Change submod
 	var subMode = ((modes[id] || 0) + 1) % ((hasSubMod && modSubNames[id].length) || 2)
 	if (id == "ngp" && subMode == 2 && !metaSave.ngp4) subMode = 0
-	else if (id == "ngpp" && subMode == 1 && (modes.ngud || modes.ngex)) subMode = 2
-	else if (id == "ngpp" && subMode == 3 && modes.ngex) subMode = 0
+	else if (id == "ngpp" && subMode == 1 && modes.ngud) subMode = 2
 	else if (id == "arrows" && subMode == 2 && modes.rs) subMode = 0
 	modes[id] = subMode
 
@@ -2009,7 +2009,7 @@ function toggle_mod(id) {
 
 	// Update displays
 	getEl(id + "Btn").textContent = `${modFullNames[id]}: ${hasSubMod?modSubNames[id][subMode] : subMode ? "ON" : "OFF"}`
-	if (id == "ngex" && subMode) {
+	if (id == "diff" && subMode) {
 		modes.ngp = 0
 		modes.aau = 0
 		modes.ls = 0
@@ -2033,31 +2033,23 @@ function toggle_mod(id) {
 	}
 	if (subMode && (
 		(id=="ngud" && ((subMode >= 2 && !modes.ngpp) || modes.ngpp == 1)) ||
-		(id=="ngp" && subMode >= 2) ||
-		(id=="ngex" && modes.ngpp == 1 && metaSave.ngp3ex)
+		(id=="ngp" && subMode >= 2)
 	)) {
 		modes.ngpp = 2
 		notifyExpert = true
 		getEl("ngppBtn").textContent = "NG++: NG+++"
 	}
-	if (id=="ngex"&&!metaSave.ngp3ex&&subMode) {
-		modes.ngpp = 0
-		getEl("ngppBtn").textContent = "NG++: OFF"
-	}
 	if (id=="rs" && subMode) {
 		modes.ngpp = 0
+		modes.ngud = 0
 		getEl("ngppBtn").textContent = "NG++: OFF"
+		getEl("ngudBtn").textContent = "NGUd: OFF"
 	}
-
-	if (id=="rs" && subMode) {
+	if (id == "ngp" && subMode >= 3) {
 		modes.ngud = 0
 		getEl("ngudBtn").textContent = "NGUd: OFF"
 	}
-	if (id=="ngp" && subMode>2) {
-		modes.ngud = 0
-		getEl("ngudBtn").textContent = "NGUd: OFF"
-	}
-	if (((id=="ngpp" || id=="ngud") && !subMode) || ((id == "rs" || (id == "ngex" && !metaSave.ngp3ex)) && subMode) || (id == "ngp" && subMode >= 1)) {
+	if (((id=="ngpp" || id=="ngud") && !subMode) || (id == "rs" && subMode) || (id == "ngp" && subMode >= 1)) {
 		if (modes.ngud > 1) {
 			modes.ngud = 1
 			getEl("ngudBtn").textContent = "NGUd: ON"
@@ -2076,7 +2068,25 @@ function toggle_mod(id) {
 		toggle_mod("ngud")
 	}
 
-	var ngp3ex = modes.ngex && modes.ngpp == 2
+	if (id == "diff" && subMode) {
+		delete modes.journey
+		getEl("journeyBtn").textContent = "Journey (NG+3): OFF"
+	}
+
+	if (id == "journey" && !subMode) getEl("diffBtn").textContent = "Difficulty: Normal"
+	if (id == "journey" && subMode) {
+		delete modes.diff
+		getEl("diffBtn").textContent = "Difficulty: Fluctuant"
+
+		delete modes.ngp
+		getEl("ngpBtn").textContent = "NG+: OFF"
+
+		modes.ngpp = 2
+		notifyExpert = true
+		getEl("ngppBtn").textContent = "NG++: NG+++"
+	}
+
+	var ngp3ex = modes.diff >= 2 && modes.ngpp == 2
 	if (modes.ngp3ex != ngp3ex) {
 		if (notifyExpert && ngp3ex) $.notify("A space crystal begins to collide with reality...")
 		modes.ngp3ex = ngp3ex
@@ -2100,6 +2110,13 @@ function show_mods(type = 'basic') {
 	getEl("newAdvSaveBtn").style.display = modsShown ? "none" : ""
 	getEl("newImportBtn").style.display = modsShown ? "none" : ""
 	getEl("cancelNewSaveBtn").style.display = modsShown ? "" : "none"
+}
+
+function calcDifficulty(x) {
+	var aarexMod = x.aarexModifications
+	if (!aarexMod) return 0
+
+	return aarexMod.ngexV ? 2 : aarexMod.ez ? 0 : 1
 }
 
 function showOptions(id) {
@@ -2520,7 +2537,7 @@ function calcSacrificeBoostBeforeSoftcap() {
 		if (hasAch("r57")) pow += player.boughtDims ? 0.3 : 0.2 //this upgrade was too OP lol
 		if (player.infinityUpgradesRespecced) pow *= getInfUpgPow(5)
 		if (tmp.ngmR) pow *= 1.5
-		if (tmp.ez) pow *= 1.5
+		if (tmp.bgMode) pow *= 1.5
 		ret = Decimal.pow(Math.max(player.firstAmount.e / 10, 1) / Math.max(player.sacrificed.e / 10, 1), pow).max(1)
 	} else ret = player.firstAmount.pow(0.05).dividedBy(player.sacrificed.pow(inNGM(4)?0.05:0.04).max(1)).max(1)
 	if (player.boughtDims) ret = ret.pow(1 + Math.log(1 + Math.log(1 + player.timestudy.ers_studies[1] / 5)))
@@ -2545,7 +2562,7 @@ function calcTotalSacrificeBoostBeforeSoftcap(next) {
 		if (hasAch("r57")) pow += player.boughtDims ? 0.3 : 0.2 //this upgrade was too OP lol
 		if (player.infinityUpgradesRespecced) pow *= getInfUpgPow(5)
 		if (tmp.ngmR) pow *= 1.5
-		if (tmp.ez) pow *= 1.5
+		if (tmp.bgMode) pow *= 1.5
 		ret = Decimal.pow(Math.max(player.sacrificed.e / 10, 1), pow)
 	} else ret = player.chall11Pow 
 	if (player.boughtDims) ret = ret.pow(1 + Math.log(1 + Math.log(1 + (player.timestudy.ers_studies[1] + (next ? 1 : 0))/ 5)))
@@ -2618,7 +2635,7 @@ function updateAutobuyers() {
 	var autoBuyerInf = new Autobuyer (getEl("bigcrunch"))
 	var autoSacrifice = new Autobuyer(13)
 
-	if (tmp.mod.newGameExpVersion || tmp.ez) {
+	if (tmp.mod.newGameExpVersion || tmp.bgMode) {
 		autoBuyerDim1.interval = 1000
 		autoBuyerDim2.interval = 1000
 		autoBuyerDim3.interval = 1000
@@ -2639,25 +2656,25 @@ function updateAutobuyers() {
 	}
 
 	autoBuyerDimBoost.interval = 8000
-	if (tmp.ez) autoBuyerDimBoost.interval = 1000
+	if (tmp.bgMode) autoBuyerDimBoost.interval = 1000
 	if (player.infinityUpgradesRespecced) autoBuyerDimBoost.bulkBought = false
 
 	autoBuyerGalaxy.interval = inNGM(2) ? 6e4 : 1.5e4
-	if (tmp.ez) autoBuyerGalaxy.interval /= 10
+	if (tmp.bgMode) autoBuyerGalaxy.interval /= 10
 	if (player.infinityUpgradesRespecced) autoBuyerGalaxy.bulkBought = false
 
 	autoBuyerTickspeed.interval = 5000
-	if (tmp.ez) autoBuyerTickspeed.interval = 1000
+	if (tmp.bgMode) autoBuyerTickspeed.interval = 1000
 
 	autoBuyerInf.interval = inNGM(2) ? 6e4 : 3e5
-	if (tmp.ez) autoBuyerInf.interval /= 10
+	if (tmp.bgMode) autoBuyerInf.interval /= 10
    	if (player.boughtDims) {
 		autoBuyerInf.requireMaxReplicanti = false
 		autoBuyerInf.requireIPPeak = false
 	}
 
 	autoSacrifice.interval = inNGM(2) ? 1.5e4 : player.infinityUpgradesRespecced ? 3500 : 100
-	if (tmp.ez) autoSacrifice.interval /= 10
+	if (tmp.bgMode) autoSacrifice.interval /= 10
 	autoSacrifice.priority = 5
 
 	autoBuyerDim1.tier = 1
@@ -2673,19 +2690,19 @@ function updateAutobuyers() {
 	if (inNGM(2)) {
 		var autoGalSacrifice = new Autobuyer(14)
 		autoGalSacrifice.interval = 1.5e4
-		if (tmp.ez) autoGalSacrifice.interval /= 10
+		if (tmp.bgMode) autoGalSacrifice.interval /= 10
 		autoGalSacrifice.priority = 5
 	}
 	if (inNGM(3)) {
 		var autoTickspeedBoost = new Autobuyer(15)
 		autoTickspeedBoost.interval = 1.5e4
-		if (tmp.ez) autoTickspeedBoost.interval /= 10
+		if (tmp.bgMode) autoTickspeedBoost.interval /= 10
 		autoTickspeedBoost.priority = 5
 	}
 	if (inNGM(4)) {
 		var autoTDBoost = new Autobuyer(16)
 		autoTDBoost.interval = 1.5e4
-		if (tmp.ez) autoTDBoost.interval /= 10
+		if (tmp.bgMode) autoTDBoost.interval /= 10
 		autoTDBoost.priority = 5
 		autoTDBoost.overXGals = 0
 	}

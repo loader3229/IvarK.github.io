@@ -2066,9 +2066,11 @@ function onLoad(noOffline) {
 	tmp.ngmX = calcNGMX()
 	if (tmp.ngmX) tmp.mod.ngmX = tmp.ngmX
 	ngC.compile()
-	tmp.ez = tmp.mod.ez !== undefined
 	ngSg.compile()
+
+	tmp.bgMode = tmp.mod.ez !== undefined
 	tmp.exMode = tmp.mod.ngexV !== undefined
+	tmp.dtMode = false
 
 	ph.reset()
 	ls.reset()

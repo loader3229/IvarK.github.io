@@ -176,7 +176,7 @@ let GDs = {
 		for (let d = Math.min(GDs.totalGDBs() + 1, 4); d >= 1; d--) {
 			let add = Decimal.pow(GDs.tmp.gdm, GDs.gdExp(d)).times(GDs.save["gd" + d])
 			if (d == 1) GDs.save.gv = GDs.save.gv.add(add.times(diff))
-			else GDs.save["gd" + (d - 1)] = GDs.save["gd" + (d - 1)].add(add.times(tmp.ez ? diff : diff / 10))
+			else GDs.save["gd" + (d - 1)] = GDs.save["gd" + (d - 1)].add(add.times(tmp.bgMode ? diff : diff / 10))
 		}
 	},
 	gdMult() {

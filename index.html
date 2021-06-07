@@ -1557,7 +1557,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 9)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 9.01)</p>
 			</span>
 			<div class="footer bottom"></div>
 		</div>
@@ -5632,9 +5632,11 @@
 			<button class="storebtn longbtn" style="font-size: 15px" onclick="quick_mod('ngp3')" style="display: inline">New Game Plus 3</button><br>
 			<button class="storebtn longbtn" style="font-size: 15px" onclick="quick_mod('ngm2')" style="display: inline">New Game Minus 2</button><br>
 		</div>
-		<div id="advModsTab" style="height:320px;overflow-y:auto;display:none">
-			Select a mod first before you start your new journey.<br><br>
-
+		<div id="advModsTab" style="height: 320px; overflow-y: auto; display: none">
+			Select a mod first before you start your new journey.<br>
+			<b>Journey Mods</b><br>
+			<button class="storebtn longbtn" id='diffBtn' style="font-size: 15px" onclick="toggle_mod('diff')" style="display: inline" ach-tooltip="Make this game easier or harder, with different strategies to comprehend.">Difficulty: Normal</button>
+			<button class="storebtn longbtn" id='journeyBtn' style="font-size: 15px" onclick="toggle_mod('journey')" style="display: inline" ach-tooltip="Start your journey from the beginners, with hardening sub-modes and challenges to overcome.">Journey (NG+3): OFF</button>
 			<b>Expansion Mods</b><br>
 			<button class="storebtn longbtn" id='ngppBtn' style="font-size: 15px" onclick="toggle_mod('ngpp')" style="display: inline" ach-tooltip="Adds new several end-game content. Featuring NG+3, the most popular mod yet!">NG++: OFF</button>
 			<button class="storebtn longbtn" id='ngudBtn' style="font-size: 15px" onclick="toggle_mod('ngud')" style="display: inline" ach-tooltip="Adds some end-game content including Black Hole.">NGUd: OFF</button>
@@ -5643,7 +5645,6 @@
 			<b>Hellish Mods</b><br>
 			<button class="storebtn longbtn" id='ngmmBtn' style="font-size: 15px" onclick="toggle_mod('ngmm')" style="display: inline" ach-tooltip="Make this game harder, but adds some mechanics to compromise.">NG--: OFF</button>
 			<!--<button class="unavailablebtn longbtn" id='ngm5rgBtn' style="font-size: 15px" onclick="alert('Coming soon...')" style="display: inline" ach-tooltip="A upcoming mod of NG-5.">NG-5 Regulated: OFF</button>-->
-			<button class="storebtn longbtn" id='ngexBtn' style="font-size: 15px" onclick="toggle_mod('ngex')" style="display: inline" ach-tooltip="Make this game harder with different stratagies">Expert Mode: OFF</button>
 			<br><br>
 			<b>Easy Mods</b><br>
 			<button class="storebtn longbtn" id='ngpBtn' style="font-size: 15px" onclick="toggle_mod('ngp')" style="display: inline" ach-tooltip="Make this game faster and start at Time Dilation.">NG+: OFF</button>
