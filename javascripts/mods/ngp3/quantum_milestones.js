@@ -39,7 +39,7 @@ let qMs = {
 
 		data.amt = 0
 		data.points = 0
-		if (!tmp.ngp3) return
+		if (!tmp.quUnl) return
 
 		//Milestone Points
 		let types = qMs.data.types
@@ -80,7 +80,7 @@ let qMs = {
 		}
 
 		getEl('dilationmode').style.display = qMs.tmp.amt >= 4 ? "" : "none"
-		getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 7 ? "" : "none"
+		getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 11 ? "" : "none"
 		getEl('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
 		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 18 ? "" : "none"
 		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 24 ? "" : "none"
@@ -148,8 +148,8 @@ let qMs = {
 	},
 	7: {
 		req: 7,
-		eff: () => "Keep all your dilation upgrades expect the repeatables",
-		effGot: () => "You now can keep all your dilation upgrades expect the repeatables."
+		eff: () => "Keep all your dilation upgrades except the repeatables",
+		effGot: () => "You now can keep all your dilation upgrades except the repeatables."
 	},
 	8: {
 		req: 8,

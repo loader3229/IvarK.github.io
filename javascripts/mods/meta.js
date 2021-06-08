@@ -244,11 +244,11 @@ function canAffordMetaDimension(cost) {
 
 for (let i = 1; i <= 8; i++) {
 	getEl("meta" + i).onclick = function () {
-		if (moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= 1e12)) player.autoEterOptions["md" + i] = !player.autoEterOptions["md" + i]
+		if (moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= tmp.ngp3_em[3])) player.autoEterOptions["md" + i] = !player.autoEterOptions["md" + i]
 		else metaBuyOneDimension(i)
 	}
 	getEl("metaMax" + i).onclick = function () {
-		if (shiftDown && moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= 1e12)) metaBuyOneDimension(i)
+		if (shiftDown && moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= tmp.ngp3_em[3])) metaBuyOneDimension(i)
 		else metaBuyManyDimension(i);
 	}
 }
@@ -320,7 +320,7 @@ function updateMetaDimensions () {
 	updateOverallMetaDimensionsStuff()
 	let showDim = false
 	let useTwo = player.options.notation == "Logarithm" ? 2 : 0
-	let autod = moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= 1e12)
+	let autod = moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= tmp.ngp3_em[3])
 	for (let tier = 8; tier > 0; tier--) {
 		showDim = showDim || canBuyMetaDimension(tier)
 		getEl(tier + "MetaRow").style.display = showDim ? "" : "none"

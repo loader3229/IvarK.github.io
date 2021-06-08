@@ -434,6 +434,7 @@ function doNGp3Init1() {
 		0
 	tmp.ngp3_mul = tmp.ngp3 && tmp.mod.newGameMult!== undefined
 	tmp.ngp3_exp = tmp.ngp3 && tmp.mod.newGameExpVersion !== undefined
+	tmp.ngp3_em = getNGP3EterMilestones()
 
 	transformSaveToDecimal();
 	tmp.tickUpdate = true;
@@ -1995,7 +1996,13 @@ function updateNGModeMessage(){
 	let condensed = player.condensed !== undefined
 
 	ngModeMessages=[]
-	if (tmp.exMode) ngModeMessages.push("Welcome to Expert Mode! This is a more difficult version of Antimatter Dimensions. Please note that this mod is in beta and may be unfinished. If you experience unbalancing, report it to #other_modifications in the Discord server. Good luck!")
+
+	//Difficulties
+	if (tmp.bgMode) ngModeMessages.push("Welcome to Beginner Mode! This is a easy version of Antimatter Dimensions. I don't recommend you to play this mode if you experience incremental games.")
+	if (tmp.exMode) ngModeMessages.push("Welcome to Expert Mode! This is a quite harder version of Antimatter Dimensions. This is a intermediary step, between normal and hardcore difficulties. It is neccessary to play this mode if you want to go hardcore mode for the first time. Have fun!")
+	if (tmp.dtMode) ngModeMessages.push("Welcome to Death Mode! This is a more difficult version of Antimatter Dimensions. Please note that this mod is in beta and may be unfinished. If you experience unbalancing, report it to #other_modifications in the Discord server. Good luck!")
+
+	//Others
 	if (tmp.mod.newGameMult) ngModeMessages.push("Welcome to NG Multiplied, made by Despacit and Soul147! This mode adds many buffs which may break the game, similar to NG^.")
 	if (tmp.mod.newGameExpVersion) ngModeMessages.push("Welcome to NG^, made by Naruyoko! This mode adds many buffs to features that can end up unbalancing the game significantly.")
 	if (condensed) {
@@ -2052,7 +2059,12 @@ function onLoad(noOffline) {
 	ghostifyDenied = 0
 	setEverythingPreNGp3onLoad()
 	setAarexModIfUndefined()
+
+	tmp.bgMode = tmp.mod.ez !== undefined
+	tmp.exMode = tmp.mod.ngexV !== undefined
+	tmp.dtMode = tmp.mod.dtMode
 	doNGp3Init1()
+
 	setSaveStuffHTML()
 
 	setSomeEterEraStuff2()
@@ -2068,9 +2080,6 @@ function onLoad(noOffline) {
 	ngC.compile()
 	ngSg.compile()
 
-	tmp.bgMode = tmp.mod.ez !== undefined
-	tmp.exMode = tmp.mod.ngexV !== undefined
-	tmp.dtMode = false
 
 	ph.reset()
 	ls.reset()

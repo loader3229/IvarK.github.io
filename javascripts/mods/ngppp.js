@@ -95,7 +95,7 @@ function doAutoMetaTick(ticks) {
 	if (wait >= slowSpeed) {
 		var bulk = Math.floor(wait / slowSpeed)
 		wait = wait % slowSpeed
-		for (var d = 1; d <= 8; d++) if (player.autoEterOptions["md" + d] && moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= 1e12)) buyMaxMetaDimension(d, bulk)
+		for (var d = 1; d <= 8; d++) if (player.autoEterOptions["md" + d] && moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= tmp.ngp3_em[3])) buyMaxMetaDimension(d, bulk)
 	}
 	tmp.qu.metaAutobuyerSlowWait = wait
 
@@ -872,6 +872,27 @@ function toggleLEConf() {
 }
 
 //v3
+function moreEMsUnlocked() {
+	return tmp.ngp3 && (hasDilationStudy(1) || ph.did("quantum"))
+}
+
+function getNGP3EterMilestones() {
+	let r = [1e8, 1e10, 1e12, 1e15, 1e18]
+	if (tmp.bgMode) {
+		r[3] = 1e14
+		r[4] = 1e16
+	}
+	if (tmp.exMode) {
+		r[1] = 1e13
+		r[4] = 1e20
+	}
+	if (tmp.dtMode) {
+		r[1] = 1e15
+		r[4] = 1e25
+	}
+	return r
+}
+
 function convertToNGP5(setup) {
 	tmp.mod.ngpX = 5
 	tmp.ngpX = 5

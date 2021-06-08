@@ -487,6 +487,22 @@ function updateGalaxyTabs() {
 	if (player.pSac === undefined) showGalTab("galUpgs")
 }
 
+function updateGalstones() {
+	var galStoneRequirements = [1, 2, 5, 10, 25, 50]
+	tmp.Greward = 0
+	if (tmp.ngmX < 5) return 
+	for (i=0; i<6; i++) {
+		var name = "Greward" + i;
+		if (player.galacticSacrifice.times >= galStoneRequirements[i]) {
+			tmp.Greward++
+			getEl(name).className = "galStonereward"
+		} else {
+			getEl(name).className = "galStonerewardlocked"
+		}
+	}
+	if (tmp.Greward >= 5) tmp.PDunl = true
+}
+
 function unlockInfinNGm5(dim) {
 	dim--
 	if (player.infDimensionsUnlocked[dim]) return 

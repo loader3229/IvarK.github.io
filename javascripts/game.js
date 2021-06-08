@@ -736,6 +736,7 @@ function updateNewPlayer(mode) {
 		// Difficulties
 		if (modesChosen.diff === 1) tmp.mod.ez = 1
 		if (modesChosen.diff === 2) tmp.mod.ngexV = 0.1
+		if (modesChosen.diff === 3) tmp.mod.dtMode = true
 
 		// Respecced
 		if (modesChosen.rs == 1) doInfinityRespeccedNewPlayer()
@@ -1738,7 +1739,7 @@ function updateInfCosts() {
 function updateMilestones() {
 	var eters = getEternitied()
 	var moreUnlocked = moreEMsUnlocked()
-	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e6, 1e8, 1e10, 1e12, 1e15, 1e18]
+	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e6].concat(tmp.ngp3_em)
 	for (i = 0; i < (moreUnlocked ? 30 : 24); i++) {
 		var name = "reward" + i;
 		if (i >= 24) getEl("milestone" + i).textContent = shortenMoney(milestoneRequirements[i]) + " Eternities:"
@@ -1752,26 +1753,6 @@ function updateMilestones() {
 	getEl("mdmilestonesrow2b").style.display = moreUnlocked ? "" : "none"
 	getEl("mdmilestonesrow3a").style.display = moreUnlocked ? "" : "none"
 	getEl("mdmilestonesrow3b").style.display = moreUnlocked ? "" : "none"
-}
-
-function moreEMsUnlocked() {
-	return tmp.ngp3 && (hasDilationStudy(1) || ph.did("quantum"))
-}
-
-function updateGalstones() {
-	var galStoneRequirements = [1, 2, 5, 10, 25, 50]
-	tmp.Greward = 0
-	if (tmp.ngmX < 5) return 
-	for (i=0; i<6; i++) {
-		var name = "Greward" + i;
-		if (player.galacticSacrifice.times >= galStoneRequirements[i]) {
-			tmp.Greward++
-			getEl(name).className = "galStonereward"
-		} else {
-			getEl(name).className = "galStonerewardlocked"
-		}
-	}
-	if (tmp.Greward >= 5) tmp.PDunl = true
 }
 
 getEl("save").onclick = function () {
@@ -1858,9 +1839,6 @@ function changeSaveDesc(saveId, placement) {
 		if (temp.boughtDims) msg = msg != "" || ex ? "ER" + msg : "Eternity Respecced"
 		else if (temp.singularity) msg = msg != "" || ex ? "IR" + msg : "Infinity Respecced"
 		else msg = "NG" + msg
-		if (diffNum == 0) msg = msg == "NG" ? "Beginner Mode" : msg + "Bg"
-		if (diffNum == 2) msg = msg == "NG" ? "Expert Mode" : msg + "Ex"
-		if (diffNum == 3) msg = msg == "NG" ? "Death Mode" : msg + "Dt"
 		if (temp.galacticSacrifice) {
 			if (temp.aarexModifications.ngmR) msg += ", NG-R"
 			if (temp.aarexModifications.newGameMinusVersion) msg += ", NG-"
@@ -1868,6 +1846,10 @@ function changeSaveDesc(saveId, placement) {
 		if ((temp.exdilation || temp.meta) && !temp.aarexModifications.newGamePlusVersion) msg += ", The Grand Run [No NG+]"
 		if (temp.aarexModifications.aau) msg = (msg == "NG" ? "" : msg + ", ") + "AAU"
 		if (temp.aarexModifications.ls) msg = (msg == "NG" ? "" : msg + ", ") + "Light Speed"
+		var diffNum = calcDifficulty(temp)
+		if (diffNum == 0) msg = (msg == "NG" ? "" : msg + ", ") + "Beginner Mode (Easy)"
+		if (diffNum == 2) msg = (msg == "NG" ? "" : msg + ", ") + "Expert Mode (Normal+)"
+		if (diffNum == 3) msg = (msg == "NG" ? "" : msg + ", ") + "Death Mode 💀 (Hard)"
 		msg = (msg == "NG" ? "(<b>Vanilla</b>)<br>" : "(<b>" + msg + "</b>)<br>") + (isSaveCurrent ? "Selected" : "Played for " + timeDisplayShort(temp.totalTimePlayed)) + "<br>"
 		var originalBreak = player.break
 		var originalNotation = player.options.notation
@@ -2070,7 +2052,7 @@ function toggle_mod(id) {
 
 	if (id == "diff" && subMode) {
 		delete modes.journey
-		getEl("journeyBtn").textContent = "Journey (NG+3): OFF"
+		//getEl("journeyBtn").textContent = "Journey (NG+3): OFF"
 	}
 
 	if (id == "journey" && !subMode) getEl("diffBtn").textContent = "Difficulty: Normal"
@@ -2116,7 +2098,7 @@ function calcDifficulty(x) {
 	var aarexMod = x.aarexModifications
 	if (!aarexMod) return 0
 
-	return aarexMod.ngexV ? 2 : aarexMod.ez ? 0 : 1
+	return aarexMod.dtMode ? 3 : aarexMod.ngexV ? 2 : aarexMod.ez ? 0 : 1
 }
 
 function showOptions(id) {
@@ -3424,7 +3406,7 @@ function doAfterEternityResetStuff() {
 }
 
 function resetReplicantiUpgrades() {
-	let keepPartial = moreEMsUnlocked() && getEternitied() >= 9
+	let keepPartial = moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[1]
 	player.replicanti.chance = keepPartial ? Math.min(player.replicanti.chance, 1) : 0.01
 	player.replicanti.interval = keepPartial ? Math.max(player.replicanti.interval, hasTimeStudy(22) ? 1 : 50) : 1000
 	player.replicanti.gal = 0
@@ -4072,7 +4054,7 @@ function dimensionButtonDisplayUpdating() {
    	getEl("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || ph.did("eternity")) && (inNGM(5) || ph.shown("infinity"))) ? "" : "none"
 	getEl("tdtabbtn").style.display = ((ph.shown("eternity") || inNGM(4)) && (!QCs.in(8) || tmp.be)) ? "" : "none"
 	getEl("mdtabbtn").style.display = ph.shown("eternity") && hasDilationStudy(6) ? "" : "none"
-	getEl('toggleallmetadims').style.display = moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= 1e12) ? "" : "none"
+	getEl('toggleallmetadims').style.display = moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= tmp.ngp3_em[3]) ? "" : "none"
 }
 
 function ghostifyAutomationUpdating(diff){
@@ -4923,7 +4905,7 @@ function IPonCrunchPassiveGain(diff){
 }
 
 function EPonEternityPassiveGain(diff){
-	if (moreEMsUnlocked() && getEternitied() >= 1e18) {
+	if (moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[5]) {
 		player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints().times(diff / 100))
 		getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity points."
 	}

@@ -53,7 +53,7 @@ let POSITRONS = {
 				return Math.min(player.galaxies / 4, x)
 			},
 			basePcGain(x) {
-				return x / 200
+				return Math.sqrt(x / 30)
 			}
 		},
 		rg: {
@@ -124,7 +124,7 @@ let POSITRONS = {
 			data["pow_" + type] = pos.types[type].pow(pos.save.amt)
 			save_data.sac = Math.floor(pos.types[type].sacGals(data["pow_" + type]))
 			save_data.pc = pos.types[type].basePcGain(save_data.sac)
-			pcSum += Math.sqrt(save_data.pc)
+			pcSum += save_data.pc
 		}
 		pos.save.eng = Math.pow(pcSum, 4)
 	},

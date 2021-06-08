@@ -220,7 +220,10 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		ph.updateDisplay()
 		if (tmp.ngp3) {
 			getEl("bestAntimatterType").textContent = "Your best meta-antimatter for this quantum"
-			getEl("quarksAnimBtn").style.display="inline-block"
+			getEl("quarksAnimBtn").style.display = "inline-block"
+
+			updateUnlockedMasteryStudies()
+			updateSpentableMasteryStudies()
 		}
 	}
 	if (isEmptiness) {
@@ -231,7 +234,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	getEl("quantumbtn").style.display = "none"
 	getEl("bigripbtn").style.display = "none"
 	getEl("ghostifybtn").style.display = "none"
-	updateBankedEter()
 
 	// check if forced quantum
 	// otherwise, give rewards
@@ -256,12 +258,14 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		if (tmp.qu.times >= 1e4) giveAchievement("Prestige No-lifer")
 
 		if (hasAch("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
+		player.eternitiesBank = nA(player.eternitiesBank, bankedEterGain)
 	} //bounds the else statement to if (force)
 	var oheHeadstart = bigRip ? tmp.bruActive[2] : tmp.ngp3
 	var keepABnICs = oheHeadstart || bigRip || hasAch("ng3p51")
 	var oldTime = tmp.qu.time
 	tmp.qu.time = 0
 	updateQuarkDisplay()
+	updateBankedEter()
 
 	// ng-2 display
 	getEl("galaxyPoints2").innerHTML = "You have <span class='GPAmount'>0</span> Galaxy points."

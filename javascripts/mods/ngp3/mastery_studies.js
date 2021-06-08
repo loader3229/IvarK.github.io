@@ -15,7 +15,7 @@ var masteryStudies = {
 
 			//Expert Mode
 			ex_241: 2e68,
-			ex_261: 5e69, ex_262: 5e69, ex_263: 5e69, ex_264: 5e69, ex_265: 5e69, ex_266: 5e69,
+			ex_261: 5e69, ex_262: 5e69, ex_263: 5e69, ex_264: 5e70, ex_265: 5e70, ex_266: 5e69,
 			ex_271: 1e68
 		},
 		ec: {
@@ -44,12 +44,18 @@ var masteryStudies = {
 			//Beginner Mode
 			t251_bg: 1.5, t252_bg: 1.5, t253_bg: 1.5,
 			t264_bg: 1, t265_bg: 1,
+			t281_bg: 3, t282_bg: 2, t283_bg: 2, t284_bg: 3,
 
 			//Expert Mode
-			t251_ex: 2.5, t253_ex: 2.5,
-			t261_ex: 3, t262_ex: 3, t264_ex: 4, t265_ex: 4, t266_ex: 3,
+			t251_ex: 3,
+			t264_ex: 4,
 			t271_ex: 1 / 250,
-			t282_ex: 5, t283_ex: 5},
+			t282_ex: 4, t283_ex: 4,
+
+			//Death Mode
+			t252_dt: 3, t253_dt: 3,
+			t264_dt: 5, t265_dt: 5,
+			t281_dt: 6, t282_dt: 6, t283_dt: 6, t264_dt: 5},
 		ec: {},
 		dil: {}
 	},
@@ -311,7 +317,13 @@ var masteryStudies = {
 		301: [311], 302: [314],
 
 		//No more mastery studies after that
-		d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"]},
+		d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"],
+		
+		//Expert Mode
+		ex_264: [], ex_282: [], ex_283: [],
+		
+		//Death Mode
+		dt_265: []},
 	allUnlocks: {
 		d7() {
 			return ph.did("quantum")
@@ -441,7 +453,14 @@ function setupMasteryStudiesHTML() {
 }
 
 function getMasteryStudyConnections(id) {
-	return masteryStudies.allConnections[id]
+	let f = masteryStudies.allConnections
+	let r = f[id] || []
+
+	if (tmp.bgMode) r = f["bg_" + id] || r
+	if (tmp.exMode) r = f["ex_" + id] || r
+	if (tmp.dtMode) r = f["dt_" + id] || r
+
+	return r
 }
 
 function updateUnlockedMasteryStudies() {
@@ -508,7 +527,10 @@ function setMasteryStudyCost(id, type) {
 	let t = masteryStudies.types[type]
 	let f = d[t]
 	let r = f[id] || 0
+
+	if (tmp.bgMode) r = f["bg_" + id] || r
 	if (tmp.exMode) r = f["ex_" + id] || r
+	if (tmp.dtMode) r = f["dt_" + id] || r
 
 	masteryStudies.costs[t][id] = r * (type == "d" ? 1 : masteryStudies.costMult)
 }
@@ -517,9 +539,11 @@ function getMasteryStudyCostMult(id) {
 	let d = masteryStudies.costs.mults
 	let r = d[id] || 1
 
-	if (id.split("t")[1] < 290 && tmp.ngp3_mul) r = Math.sqrt(r)
 	if (tmp.bgMode) r = d[id + "_bg"] || r
 	if (tmp.exMode) r = d[id + "_ex"] || r
+	if (tmp.dtMode) r = d[id + "_dt"] || r
+
+	if (id.split("t")[1] < 290 && tmp.ngp3_mul && tmp.bgMode) r = Math.sqrt(r)
 
 	return r
 }
@@ -533,6 +557,7 @@ function buyingD7Changes() {
 }
 
 function buyingDilStudyForQC() {
+	qMs.updateDisplay()
 	getEl("qctabbtn").style.display = ""
 
 	QCs.tp()
@@ -601,14 +626,13 @@ function buyMasteryStudy(type, id, quick=false) {
 			player.replicanti.gal = gal
 		}
 	}
-	if (type=="d") buyingDilationStudy(id)
+	if (type == "d") buyingDilationStudy(id)
 	if (!quick) {
 		if (type == "t") masteryStudies.bought++
 		else if (type == "ec") {
 			showTab("challenges")
 			showChallengesTab("eternitychallenges")
 		} else if (type == "d") {
-			if (id == 8) qMs.updateDisplay()
 			updateUnlockedMasteryStudies()
 			updateSpentableMasteryStudies()
 		}
@@ -621,9 +645,12 @@ function buyMasteryStudy(type, id, quick=false) {
 function canBuyMasteryStudy(type, id) {
 	if (type == 't') {
 		if (player.timestudy.theorem < masteryStudies.costs.time[id] || player.masterystudies.includes('t' + id) || player.eternityChallUnlocked > 12 || !masteryStudies.timeStudies.includes(id)) return false
-		if (masteryStudies.latestBoughtRow - (tmp.ngp3_mul ? 1 : 0) > Math.floor(id / 10)) return false
+		if (masteryStudies.latestBoughtRow - (tmp.bgMode || tmp.ngp3_mul && !tmp.exMode ? 1 : 0) > Math.floor(id / 10)) return false
 		if (!masteryStudies.spentable.includes(id)) return false
 		if (masteryStudies.unlockReqConditions[id] && !masteryStudies.unlockReqConditions[id]()) return false
+
+		//Death Mode
+		if (tmp.dtMode && masteryStudies.latestBoughtRow <= 26 && (id != "t264" && id != "t265") && (masteryStudies.has(264) || masteryStudies.has(265))) return false
 	} else if (type == 'd') {
 		if (player.timestudy.theorem < masteryStudies.costs.dil[id] || player.masterystudies.includes('d' + id)) return false
 		if (!ph.did("ghostify") && !(masteryStudies.unlockReqConditions["d" + id] && masteryStudies.unlockReqConditions["d" + id]())) return false

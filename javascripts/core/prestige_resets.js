@@ -59,13 +59,14 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	if (!headstart) player.eternities = oheHeadstart ? Math.pow(10, qMs.tmp.amt / 2 + 1) : 0
 	player.eternityPoints = new Decimal(0)
 
-	player.timestudy = (bigRip ? tmp.bruActive[12] : qMs.tmp.amt >= 3) ? player.timestudy : {
+	player.timestudy = (bigRip ? tmp.bruActive[12] : qMs.isOn(3)) ? player.timestudy : {
 		theorem: 0,
 		amcost: new Decimal("1e20000"),
 		ipcost: new Decimal(1),
 		epcost: new Decimal(1),
 		studies: [],
 	}
+	if (!qMs.isOn(3)) player.eternityUpgrades = []
 	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
 	player.currentEternityChall = ""
 	player.etercreq = 0
@@ -130,7 +131,7 @@ function resetDimensions() {
 function doDimBoostResetStuff(layer = 1) {
 	if (layer >= 3 || !hasAch("r111")) setInitialMoney()
 	setInitialResetPower()
-	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e6) resetDimensions()
+	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < tmp.ngp3_em[0]) resetDimensions()
 
 	player.totalBoughtDims = resetTotalBought()
 	player.sacrificed = new Decimal(0)
@@ -147,7 +148,7 @@ function doDimBoostResetStuff(layer = 1) {
 }
 
 function doGalaxyResetStuff(layer = 2) {
-	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e15) {
+	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < tmp.ngp3_em[4]) {
 		player.resets = 0
 		if (player.dbPower) player.dbPower = new Decimal(1)
 	}

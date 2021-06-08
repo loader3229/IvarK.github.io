@@ -443,8 +443,10 @@ amNewsArray = [
 ["You have e3.523 DCe unmeta-antimatter, which causes a e1.762 DCex expansion to real-life.", "hasDilationStudy(6)", "am230"],
 ["You have unlocked infinite Microdimensions! That's cool, because Microdimensions expand Dimensions with Blueprint Particles!", true, "am231"],
 ["All Dimensions = AD = Antimatter Dimensions", true, "am232"],
-["Did you realize that this is not just about large numbers? You might see more small numbers soon, while your antimatter grows faster than superexponential rate.", "ph.did('ghostify')", "am233"]
-/*NEXT ID: am233*/
+["Did you realize that this is not just about large numbers? You might see more small numbers soon, while your antimatter grows faster than superexponential rate.", "ph.did('ghostify')", "am233"],
+["Who thought that Expert Mode should nerf the production all of times? It should give players how to do strategies properly! Not just add timewalls! That's wrong, and it will be like- another generic NG- mod!", "tmp.mod.newGameMinusVersion || tmp.exMode", "am234"],
+["Local replicant paralyzed after eating 413 quantum food", "masteryStudies.has('d10')", "am235"],
+/*NEXT ID: am236*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
