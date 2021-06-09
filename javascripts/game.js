@@ -1739,7 +1739,7 @@ function updateInfCosts() {
 function updateMilestones() {
 	var eters = getEternitied()
 	var moreUnlocked = moreEMsUnlocked()
-	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e6].concat(tmp.ngp3_em)
+	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100].concat(tmp.ngp3_em)
 	for (i = 0; i < (moreUnlocked ? 30 : 24); i++) {
 		var name = "reward" + i;
 		if (i >= 24) getEl("milestone" + i).textContent = shortenMoney(milestoneRequirements[i]) + " Eternities:"
@@ -3913,7 +3913,7 @@ function updateEPminpeak(diff, type) {
 function checkMatter(diff){
 	let pow = 0
 	if (inNC(12) || player.currentChallenge == "postc1") pow = 1
-	if (player.currentChallenge == "postc7") pow = 20
+	if (player.currentChallenge == "postc6") pow = 20
 
 	if (isNaN(player.matter.e)) player.matter = new Decimal(0)
 	if (pow > 0 && getAmount(1) > 0) player.matter = player.matter.max(1).times(Decimal.pow(tmp.mv, diff))

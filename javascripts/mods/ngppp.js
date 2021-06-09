@@ -877,18 +877,18 @@ function moreEMsUnlocked() {
 }
 
 function getNGP3EterMilestones() {
-	let r = [1e8, 1e10, 1e12, 1e15, 1e18]
+	let r = [1e6, 1e8, 1e10, 1e12, 1e15, 1e18]
 	if (tmp.bgMode) {
-		r[3] = 1e14
-		r[4] = 1e16
+		r[3] = 1e10
+		r[4] = 1e10
 	}
 	if (tmp.exMode) {
-		r[1] = 1e13
-		r[4] = 1e20
+		r[2] = 1e13
+		r[5] = 1e20
 	}
 	if (tmp.dtMode) {
-		r[1] = 1e15
-		r[4] = 1e25
+		r[2] = 1e16
+		r[5] = 1e25
 	}
 	return r
 }

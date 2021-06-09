@@ -56,7 +56,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
 
 	player.infinitiedBank = 0
-	if (!headstart) player.eternities = oheHeadstart ? Math.pow(10, qMs.tmp.amt / 2 + 1) : 0
+	if (!headstart) player.eternities = oheHeadstart ? Math.pow(10, Math.max(qMs.tmp.amt / 2 + 1, 2)) : 0
 	player.eternityPoints = new Decimal(0)
 
 	player.timestudy = (bigRip ? tmp.bruActive[12] : qMs.isOn(3)) ? player.timestudy : {
@@ -67,9 +67,12 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 		studies: [],
 	}
 	if (!qMs.isOn(3)) player.eternityUpgrades = []
-	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
-	player.currentEternityChall = ""
+
 	player.etercreq = 0
+	player.eternityChallUnlocked = 0
+	player.currentEternityChall = ""
+	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
+
 	player.autoIP = new Decimal(0)
 	player.autoTime = 1e300
 	player.infMultBuyer = bigRipChanged ? turnSomeOn : oheHeadstart ? player.infMultBuyer : false
@@ -244,7 +247,7 @@ function resetMasteryStudies(bigRip) {
 	if (bigRip ? !tmp.bruActive[12] : qMs.tmp.amt < 10) {
 		let respeccedMS = []
 		for (var d = 7; d <= 13; d++) if (player.masterystudies.includes("d" + d)) respeccedMS.push("d" + d)
-		player.masteryStudies = respeccedMS
+		player.masterystudies = respeccedMS
 	}
 }
 

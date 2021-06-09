@@ -251,7 +251,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		tmp.qu.times++
 
 		gainQKOnQuantum(qkGain)
-		gainQuantumEnergy()
 
 		if (player.meta.bestAntimatter.lte(Number.MAX_VALUE)) giveAchievement("We are not going squared.")
 		if (player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] < 1 && player.dilation.upgrades.length < 1) giveAchievement("Never make paradoxes!")
@@ -346,12 +345,17 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	}
 
 	doInitInfMultStuff()
-	if (inNGM(2) && !keepABnICs) player.autobuyers[12] = 13
-	if (player.tickspeedBoosts !== undefined && !keepABnICs) player.autobuyers[13] = 14
 	player.challenges = challengesCompletedOnEternity(bigRip)
+	if (getEternitied() < 50) {
+		getEl("replicantidiv").style.display = "none"
+		getEl("replicantiunlock").style.display = "inline-block"
+	} else if (getEl("replicantidiv").style.display === "none" && getEternitied() >= 50) {
+		getEl("replicantidiv").style.display = "inline-block"
+		getEl("replicantiunlock").style.display = "none"
+	}
 	if (bigRip && player.ghostify.milestones > 9 && tmp.mod.ngudpV) for (var u = 7; u < 10; u++) player.eternityUpgrades.push(u)
-
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
+
 	if (tmp.ngp3) {
 		if (!force) {
 			if (tmp.qu.autoOptions.assignQK) assignAll(true)
@@ -466,7 +470,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	getEl("totaltickgained").textContent = "You've gained "+player.totalTickGained.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
 	hideDimensions()
 	tmp.tickUpdate = true
-	playerInfinityUpgradesOnEternity()
 	getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
 	getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: 1x<p>Cost: 500 EP"
 	updateTheoremButtons()

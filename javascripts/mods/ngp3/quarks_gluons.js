@@ -279,7 +279,11 @@ function updateQEGainTmp() {
 
 	data.expNum = 1
 	if (enB.active("pos", 1)) data.expNum += enB.tmp.pos1
-	if (data.expNum > data.expDen - 1) data.expNum = data.expDen - 1 / Math.log2(data.expNum - data.expDen + 2)
+	if (data.expNum > data.expDen - 1) {
+		let sc = data.expDen - 1
+		let scEff = data.expNum / sc
+		data.expNum = data.expDen - 1 / Math.log2(scEff + 1)
+	}
 
 	data.exp = data.expNum / data.expDen
 
@@ -532,9 +536,9 @@ let enB = {
 			}
 		},
 		3: {
-			req: 6,
-			masReq: 8,
-			masReqExpert: 9,
+			req: 8,
+			masReq: 10,
+			masReqExpert: 12,
 			type: "r",
 			activeReq: () => !QCs.in(2),
 
@@ -546,8 +550,9 @@ let enB = {
 			}
 		},
 		4: {
-			req: 7,
-			masReq: 10,
+			req: 15,
+			masReq: 20,
+			masReqExpert: 25,
 			type: "b",
 			activeReq: () => !QCs.in(2),
 
@@ -566,8 +571,9 @@ let enB = {
 			}
 		},
 		5: {
-			req: 11,
-			masReq: 1/0,
+			req: 20,
+			masReq: 30,
+			masReqExpert: 35,
 			type: "b",
 			activeReq: () => !QCs.in(2),
 
@@ -712,12 +718,11 @@ let enB = {
 			type: "g",
 			eff(x) {
 				if (enB.mastered("pos", 1)) x = Math.max(x, enB.pos.masEff(enB.pos[1].chargeReq))
-				let rep = player.replicanti.amount.max(1)
+				let rep = (tmp.rmPseudo || player.replicanti.amount).max(1)
 
 				return Math.log10(
-					Math.pow(rep.log10() / 1e6 + 1) *
-					Math.pow(x + 1, 0.25)
-				) / 3 + 1
+					rep.log10() * Math.pow(x, 0.25) / 1e7 + 1
+				)
 			},
 			effDisplay(x) {
 				return "+" + shorten(x)
@@ -740,7 +745,7 @@ let enB = {
 			type: "r",
 			eff(x) {
 				if (enB.mastered("pos", 2)) x = Math.max(x, enB.pos.masEff(enB.pos[2].chargeReq))
-				return Math.pow(x, 1 / 6) * 20 + 1
+				return Math.pow(x, 1/6) * 1e3 + 1
 			},
 			effDisplay(x) {
 				return "^" + shorten(x)
@@ -1015,6 +1020,9 @@ function gainQKOnQuantum(qkGain) {
 
 	updateQuantumWorth()
 	updateColorCharge()
+
+	updateQEGainTmp()
+	gainQuantumEnergy()
 }
 
 //Display
