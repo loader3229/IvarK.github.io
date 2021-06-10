@@ -77,7 +77,7 @@ function getMDDescription(tier) {
 	if (tier == Math.min(8, player.meta.resets + 4)) return getFullExpansion(player.meta[tier].bought) + ' (' + dimMetaBought(tier) + ')';
 	else {
 		let a = shortenDimensions(player.meta[tier].amount)
-		if (player.meta.bestOverGhostifies.log10() > 1e4) return a
+		if (tmp.ngp3 && player.meta.bestOverGhostifies.log10() > 1e4) return a
 		let b = ' (' + dimMetaBought(tier) + ')  (+' + formatValue(player.options.notation, getMDRateOfChange(tier), 2, 2) + dimDescEnd
 		return a+b
 	}

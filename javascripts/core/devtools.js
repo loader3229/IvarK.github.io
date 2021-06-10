@@ -29,8 +29,8 @@ dev.giveAllNGAchievements = function() {
 }
 
 dev.forceMaxDB = function(){
-	if (getShiftRequirement(0).tier < 8) {
-		player.resets += Decimal.gte(getAmount(getShiftRequirement(0).tier), getShiftRequirement(0).amount) ? 1 : 0
+	if (getShiftRequirement().tier < 8) {
+		player.resets += Decimal.gte(getAmount(getShiftRequirement().tier), getShiftRequirement().amount) ? 1 : 0
 		return
 	}
 	player.resets += doBulkSpent(getAmount(8), getShiftRequirement, 0, true).toBuy

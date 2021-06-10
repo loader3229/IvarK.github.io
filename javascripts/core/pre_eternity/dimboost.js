@@ -86,46 +86,58 @@ function setInitialResetPower() {
 
 function maxBuyDimBoosts(manual) {
 	let tier = player.pSac != undefined ? 6 : 8
-	let maxamount = Math.min(getAmount(getShiftRequirement(0).tier), (player.galaxies >= player.overXGalaxies || manual) ? 1/0 : player.autobuyers[9].priority)
-	
+	let maxamount = Math.min(getAmount(getShiftRequirement().tier), (player.galaxies >= player.overXGalaxies || manual) ? 1/0 : player.autobuyers[9].priority)
+
 	if (player.autobuyers[9].priority >= getAmount(tier) || player.galaxies >= player.overXGalaxies || manual) {
 		let r = doBulkSpent(maxamount, getFixedShiftReq, player.resets, true).toBuy
 
 		if (r >= 750) giveAchievement("Costco sells dimboosts now")
 		if (r >= 1) softReset(r)
-	} else if (getShiftRequirement(0).tier < tier) {
-		if (getShiftRequirement(0).amount <= maxamount) softReset(1)
+	} else if (getShiftRequirement().tier < tier) {
+		if (getShiftRequirement().amount <= maxamount) softReset(1)
 	}
 }
 
-function getFixedShiftReq(n){
-	return getShiftRequirement(n - player.resets).amount
+function getFixedShiftReq(n) {
+	return getShiftRequirement(n).amount
 }
 
-function getShiftRequirement(bulk = 0) {
+function getNextShiftReq(n) {
+	return getShiftRequirement(player.resets + n).amount
+}
+
+function getShiftRequirement(num = 0) {
+	if (!num) num = player.resets
+	let minDim = 4
+	let maxDim = getMaxGeneralDimensions()
+	let dim = Math.min(num + minDim, maxDim)
+
 	let amount = 20
 	let mult = getDimboostCostIncrease()
-	var resetNum = player.resets + bulk
-	var maxTier = inNC(4) || player.pSac != undefined ? 6 : 8
-	let tier = Math.min(resetNum + 4, maxTier)
-	if (inNGM(4) && player.pSac == undefined) amount = 10
-	if (tier == maxTier) amount += Math.max(resetNum + (inNGM(2) && player.tickspeedBoosts === undefined && hasGalUpg(21) ? 2 : 4) - maxTier, 0) * mult
-	var costStart = getSupersonicStart()
-	if (player.currentEternityChall == "eterc5") {
-		amount += Math.pow(resetNum, 3) + resetNum
-	} else if (resetNum >= costStart) {
-		var multInc = getSupersonicMultIncrease()
-		var increased = Math.ceil((resetNum - costStart + 1) / 4e4)
-		var offset = (resetNum - costStart) % 4e4 + 1
-		amount += (increased * (increased * 2e4 - 2e4 + offset)) * multInc
-		mult += multInc * increased
+
+	if (inNGM(4) && !inNGM(5)) amount = 10
+	if (dim == maxDim) {
+		amount += Math.max(num - (maxDim - minDim) - (inNGM(2) && !inNGM(3) && hasGalUpg(21) ? 2 : 0), 0) * mult
 	}
 
-	if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;
+	if (player.currentEternityChall == "eterc5") {
+		amount += Math.pow(num, 3) + num
+	} else {
+		let ssStart = getSupersonicStart()
+		if (num >= ssStart) {
+			let multInc = getSupersonicMultIncrease()
+			let increased = Math.ceil((num - ssStart + 1) / 4e4)
+			let offset = (num - ssStart) % 4e4 + 1
+			amount += (increased * (increased * 2e4 - 2e4 + offset)) * multInc
+			mult += multInc * increased
+		}
+	}
+
+	if (player.infinityUpgrades.includes("resetBoost")) amount -= 9
 	if (player.challenges.includes("postc5")) amount -= 1
 	if (player.infinityUpgradesRespecced != undefined) amount -= getInfUpgPow(4)
 
-	return {tier: tier, amount: amount, mult: mult};
+	return {tier: dim, amount: amount, mult: mult};
 }
 
 function getDimboostCostIncrease () {
@@ -163,7 +175,7 @@ function getSupersonicMultIncrease() {
 
 getEl("softReset").onclick = function () {
 	if (cantReset()) return
-	var req = getShiftRequirement(0)
+	var req = getShiftRequirement()
 	if (tmp.ri || getAmount(req.tier) < req.amount) return;
 	auto = false;
 	var pastResets = player.resets

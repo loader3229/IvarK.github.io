@@ -1,5 +1,5 @@
 function dimShiftDisplay(){
-	var shiftRequirement = getShiftRequirement(0);
+	var shiftRequirement = getShiftRequirement();
 	var isShift = getMaxUnlockableDimensions() < (haveSixDimensions() ? 6 : 8)
 	getEl("resetLabel").textContent = 'Dimension ' + (isShift ? "Shift" : player.resets < getSupersonicStart() ? "Boost" : "Supersonic") + ' (' + getFullExpansion(Math.ceil(player.resets)) + (getTotalDBs() > player.resets ? " + " + getFullExpansion(Math.ceil(getExtraDBs())) : "") +'): requires ' + getFullExpansion(Math.ceil(shiftRequirement.amount)) + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions"
 	getEl("softReset").textContent = "Reset the game for a " + (isShift ? "new Dimension" : "Boost")
@@ -27,7 +27,7 @@ function getGalaxyScaleName(x) {
 }
 
 function intergalacticDisplay(){
-	if (hasAch("ng3p27") && getShiftRequirement(0).tier == 8) {
+	if (hasAch("ng3p27") && getShiftRequirement().tier == 8) {
 		getEl("intergalacticLabel").parentElement.style.display = ""
 		let extra = Decimal.sub(tmp.igg, player.galaxies)
 		let nanopart = 1

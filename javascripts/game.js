@@ -3042,26 +3042,36 @@ function fromValue(value) {
 
 let MAX_BULK = Math.pow(2, 60)
 function doBulkSpent(res, scaling, bought, fixed, max) {
-	if (!max) max = MAX_BULK
+	//Log2 Skip
+	let log2Skip = Math.pow(2,
+		Math.max(
+			Math.floor(Math.log2(
+				Math.min(bought, max || 1/0)
+			))
+		- 20, 0)
+	)
+
+	//Set Max
+	if (!max) max = MAX_BULK * log2Skip
 
 	//Maximize (Multiply)
-	let inc = 1
-	while (inc <= MAX_BULK && nGE(res, scaling(bought + inc * 2 - 1))) inc *= 2
+	let inc = log2Skip
+	while (inc <= max && nGE(res, scaling(bought + inc * 2 - 1))) inc *= 2
 
 	//Maximize (Add)
 	let toBuy = 0
 	for (var p = 1; p < 53; p++) {
-		if (toBuy + inc <= MAX_BULK && nGE(res, scaling(bought + toBuy + inc - 1))) toBuy += inc
+		if (toBuy + inc <= max && nGE(res, scaling(bought + toBuy + inc - 1))) toBuy += inc
 		inc /= 2
 
 		if (inc < 1) break
 	}
 
 	//Sum-checking failsafe
-	if (!fixed) {
+	if (!fixed && toBuy <= Math.pow(2, 53)) {
 		let num = toBuy
 		let newRes = res
-		while (num > 0 && num <= 9007199254740992) {
+		while (num > 0 && num <= Math.pow(2, 53)) {
 			let temp = newRes
 			let cost = scaling(bought + num - 1)
 			if (newRes.lt(cost)) {
@@ -3424,6 +3434,7 @@ function challengesCompletedOnEternity() {
 	}
 	if (!keepABs) player.autobuyers[0] = 1
 
+	player.postChallUnlocked = 0
 	if (hasAch("r133")) {
 		player.postChallUnlocked = order.length
 		for (i = 0; i < order.length; i++) array.push(order[i])
@@ -4830,7 +4841,7 @@ function chall23PowerUpdating(){
 }
 
 function dimboostBtnUpdating(){
-	var shiftRequirement = getShiftRequirement(0);
+	var shiftRequirement = getShiftRequirement();
 
 	if (getAmount(shiftRequirement.tier) >= shiftRequirement.amount) {
 		getEl("softReset").className = 'storebtn';
@@ -5238,14 +5249,14 @@ getEl("renderrateslider").oninput = function() {
 }
 
 function dimBoolean() {
-	var req = getShiftRequirement(0)
+	var req = getShiftRequirement()
 	var amount = getAmount(req.tier)
 	if (QCs.in(6)) return false
 	if (!player.autobuyers[9].isOn) return false
 	if (player.autobuyers[9].ticks*100 < player.autobuyers[9].interval) return false
 	if (amount < req.amount) return false
 	if (inNGM(4) && inNC(14)) return false
-	if (getEternitied() < 10 && !player.autobuyers[9].bulkBought && amount < getShiftRequirement(player.autobuyers[9].bulk-1).amount) return false
+	if (getEternitied() < 10 && !player.autobuyers[9].bulkBought && amount < getNextShiftReq(player.autobuyers[9].bulk - 1).amount) return false
 	if (player.overXGalaxies <= player.galaxies) return true
 	if (player.autobuyers[9].priority < req.amount && req.tier == ((inNC(4) || player.currentChallenge == "postc1") ? 6 : 8)) return false
 	return true
@@ -5341,7 +5352,7 @@ function dimBoostABTick(){
 	if (player.autobuyers[9].isOn && dimBoolean()) {
 		if (player.resets < 4) softReset(1)
 		else if (getEternitied() < 10 && !player.autobuyers[9].bulkBought) softReset(player.autobuyers[9].bulk)
-		else if ((Math.round(timer * 100))%(Math.round(player.autobuyers[9].bulk * 100)) == 0 && getAmount(8) >= getShiftRequirement(0).amount) maxBuyDimBoosts()
+		else if ((Math.round(timer * 100))%(Math.round(player.autobuyers[9].bulk * 100)) == 0 && getAmount(8) >= getShiftRequirement().amount) maxBuyDimBoosts()
 		player.autobuyers[9].ticks = 0
 	}
 	player.autobuyers[9].ticks += 1;

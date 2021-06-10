@@ -195,7 +195,7 @@ function getMaxRG() {
 function autoBuyRG() {
 	if (!player.infinityPoints.gte(getRGCost())) return
 
-	let data = doBulkSpent(player.infinityPoints, getRGCost, 0)
+	let data = doBulkSpent(player.infinityPoints, getRGCost, 0, false, masteryStudies.has(265) ? 200 : undefined)
 	player.replicanti.infinityPoints = data.res
 	player.replicanti.galCost = getRGCost(data.toBuy, true)
 	player.replicanti.gal += data.toBuy

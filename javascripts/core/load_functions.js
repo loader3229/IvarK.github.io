@@ -1606,7 +1606,11 @@ function updateVersionsONLOAD(){
 }
 
 function doNGp3Init2(){
+	qMs.update()
+	qMs.updateDisplay()
+
 	if (!tmp.ngp3) return
+
 	tmp.eds = tmp.qu && tmp.qu.emperorDimensions
 	if (tmp.ngp3) {
 		setupMasteryStudies()
@@ -1615,9 +1619,6 @@ function doNGp3Init2(){
 		tmp.bl = player.ghostify.bl
 		delete tmp.badm
 	}
-
-	qMs.update()
-	qMs.updateDisplay()
 
 	updateActiveBigRipUpgrades()
 	updateBosonicLimits()
