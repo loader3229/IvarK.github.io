@@ -432,6 +432,7 @@ function doNGp3Init1() {
 		tmp.ngp3 ? 3 :
 		player.meta !== undefined ? 2 :
 		0
+	tmp.ngp3_boost = tmp.ngpX >= 3 || (tmp.mod.newGamePlusVersion && tmp.ngpX != 2)
 	tmp.ngp3_mul = tmp.ngp3 && tmp.mod.newGameMult!== undefined
 	tmp.ngp3_exp = tmp.ngp3 && tmp.mod.newGameExpVersion !== undefined
 	tmp.ngp3_em = getNGP3EterMilestones()

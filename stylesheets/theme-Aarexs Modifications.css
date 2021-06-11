@@ -12,7 +12,7 @@ body {
 }
 #container button, .popup button {
     font-family:'Inconsolata', monospace !important;
-    background-color: #191919;
+    background-color: transparent;
     color: #e5e5e5;
     border-color: #0072e5;
     border-radius: 0px !important
@@ -41,7 +41,7 @@ body {
 }
 #progress {
     bottom: 5px !important;
-    background-color: #191919 !important;
+    background-color: transparent !important;
     border-radius: 0px !important
 }
 #progressbar {
@@ -61,7 +61,7 @@ body {
 }
 .storebtn, .completedchallengesbtn, .pc4completed {
     border-color: #00e500 !important;
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important;
     border-radius: 0px !important
 }
@@ -74,7 +74,7 @@ body {
     color: #e5e5e5 !important
 }
 .unavailablebtn:hover, .infinistorebtnlocked:hover, .newdimlocked:hover, .infinistorebtnbought:hover, .onchallengebtn:hover, .completedchallengesbtn:hover, .milestonerewardlocked:hover, .galStonerewardlocked:hover, .qMs_locked:hover, .milestonereward:hover, .galStonereward, .timestudylocked:hover, .eternityupbtnlocked:hover, .eternityttbtnlocked:hover, .eternitychallengestudylocked:hover, .lockedchallengesbtn:hover, .dilationupglocked:hover, .dilationupgbought:hover, .dilationupgrebuyablelocked:hover, .dilationupgrebuyablebought:hover, .upgbought:hover, .nfRewardlocked:hover, .gluonupgradebought.bigripoff:hover {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important
 }
 .popup {
@@ -131,7 +131,7 @@ strong { color: #0072e5 }
 }
 #vanillaGalaxyPoints { display: none }
 .challengediv {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     font-family:'Inconsolata', monospace !important;
     border-color: #0072e5 !important;
     border-radius: 0px !important
@@ -143,7 +143,7 @@ strong { color: #0072e5 }
     background-color: #009900 !important
 }
 .onchallengebtn {
-    background-color: #191919;
+    background-color: transparent;
     color: #e5e5e5 !important;
     border-color: #e5e500 !important
 }
@@ -186,7 +186,7 @@ strong { color: #0072e5 }
 	text-shadow: 0px 0px 3px #333333, 0px 0px 4.5px #e5e5e5
 }
 .infchallengediv {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     font-family:'Inconsolata', monospace !important;
     border-color: #e2bd00 !important;
     border-radius: 0px !important
@@ -216,12 +216,12 @@ strong { color: #0072e5 }
     visibility:hidden
 }
 .timetheorembtnlocked {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important;
     border-color: #e50000 !important
 }
 .timetheorembtn {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important;
     border-color: #7100e2 !important
 }
@@ -233,7 +233,7 @@ strong { color: #0072e5 }
     color: #7100e2 !important
 }
 .timestudylocked, .timestudy, .eternitychallengestudylocked, .eternitychallengestudy {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important
 }
 .timestudylocked, .eternitychallengestudylocked {
@@ -245,7 +245,7 @@ strong { color: #0072e5 }
     border-color: #191919 !important
 }
 .timestudy.normaldimstudy {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important;
     border-color: #0072e5 !important;
     animation: none
@@ -255,7 +255,7 @@ strong { color: #0072e5 }
     color: #191919 !important;
 }
 .timestudy.infdimstudy {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important;
     border-color: #e2bd00 !important;
     animation: none
@@ -265,7 +265,7 @@ strong { color: #0072e5 }
     color: #191919 !important;
 }
 .timestudy.timedimstudy {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important;
     border-color: #7100e2 !important;
     animation: none
@@ -275,7 +275,7 @@ strong { color: #0072e5 }
     color: #191919 !important;
 }
 .timestudy.activestudy {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important;
     border-color: #990000 !important;
     animation: none
@@ -285,7 +285,7 @@ strong { color: #0072e5 }
     color: #191919 !important;
 }
 .timestudy.passivestudy {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important;
     border-color: #7200e5 !important;
     animation: none
@@ -295,7 +295,7 @@ strong { color: #0072e5 }
     color: #191919 !important;
 }
 .timestudy.idlestudy {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important;
     border-color: #0072e5 !important;
     animation: none
@@ -313,13 +313,13 @@ strong { color: #0072e5 }
     color: #191919 !important
 }
 .eterchallengediv {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     font-family:'Inconsolata', monospace !important;
     border-color: #7100e2 !important;
     border-radius: 0px !important
 }
 .timestudy.darkstudy {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important;
     border-color: #4c0099 !important;
     animation: none
@@ -335,7 +335,7 @@ strong { color: #0072e5 }
     border-color: #191919 !important
 }
 .timestudy.lightstudy {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important;
     border-color: #ac72e5 !important;
     animation: none
@@ -357,7 +357,7 @@ strong { color: #0072e5 }
     color: #0072e5 !important
 }
 #dilationTabbtn button, .dilationbtn, .dilationupg, .dilationupgrebuyable {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     color: #e5e5e5 !important;
     border-color: #72e572 !important;
     animation: none
@@ -420,11 +420,12 @@ strong { color: #0072e5 }
 }
 #quarkEnergy, #quarkEnergyMult, #quarkEnergyEffect1, #quarkEnergyEffect2, #bestQE, #enB_glu_amt, #quarkTranslation, #quarkCharge, #quarkChargeRate,
 .QKAmount, #gatheredQuarks, #normalReplGatherRate, #workerReplGatherRate, #babyReplGatherRate, #growupRate, #gatherRate, .empQuarks, #quarksNanofield, #quarkLoss { color: #72e500 !important }
-.red { color: #e50000 }
-.green { color: #00e500 }
-.blue { color: #0000e5 }
+.red { color: #e53939 }
+.lime { color: #8fe539 }
+.green { color: #39e539 }
+.blue { color: #3939e5 }
 .gluonupgrade.rg, .gluonupgrade.gb, .gluonupgrade.br {
-	background-color: #191919 !important;
+	background-color: transparent !important;
 	box-shadow: none !important;
 	color: #e5e5e5 !important
 }
@@ -437,7 +438,7 @@ strong { color: #0072e5 }
 	color: #191919 !important
 }
 #dilstudy7.dilationupg, .timestudy.elcstudy, #positronstabbtn button, #positrons .gluonupgrade.storebtn { 
-	background-color: #191919 !important;
+	background-color: transparent !important;
 	border: 2px solid #d2e500 !important;
 	animation: none !important
 }
@@ -445,31 +446,31 @@ strong { color: #0072e5 }
 #elc_percentage, #elc_amount, #elc_translation { color: #d2e500 !important }
 #elc_effect { color: #00e500 !important }
 .quantumchallengediv {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     font-family:'Inconsolata', monospace !important;
     border-color: #009900 !important;
     border-radius: 0px !important
 }
 .pc1completed {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     border-color: #009900 !important;
     color: #e5e5e5 !important;
     border-radius: 0px !important
 }
 .pc2completed {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     border-color: #7100e2 !important;
     color: #e5e5e5 !important;
     border-radius: 0px !important
 }
 .pc3completed {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     border-color: #e2bd00 !important;
     color: #e5e5e5 !important;
     border-radius: 0px !important
 }
 .ndcompleted {
-    background-color: #191919 !important;
+    background-color: transparent !important;
     border-color: #72e572 !important;
     color: #e5e5e5 !important;
     border-radius: 0px !important;
@@ -485,7 +486,7 @@ strong { color: #0072e5 }
 #reduceHatchSpeed.storebtn:hover { background-color: #e5dab7 !important }
 #dilstudy12.dilationupg, #nanofieldtabbtn button { border: 2px solid #999999 !important }
 #produceQuarkCharge, .nfReward { 
-	background-color: #191919 !important;
+	background-color: transparent !important;
 	border: 1px solid #999999 !important;
 	text-shadow: none;
 	animation: none
@@ -509,21 +510,21 @@ strong { color: #0072e5 }
 	text-shadow: none
 }
 .gluonupgrade.r {
-	background-color: #191919 !important;
+	background-color: transparent !important;
     border-color: #cc6666 !important;
 	box-shadow: none !important;
 	color: #e5e5e5 !important;
 	text-shadow: none
 }
 .gluonupgrade.g {
-	background-color: #191919 !important;
+	background-color: transparent !important;
     border-color: #00e500 !important;
 	box-shadow: none !important;
 	color: #e5e5e5 !important;
 	text-shadow: none
 }
 .gluonupgrade.b {
-	background-color: #191919 !important;
+	background-color: transparent !important;
     border-color: #0000e5 !important;
 	box-shadow: none !important;
 	color: #e5e5e5 !important;
@@ -547,7 +548,7 @@ strong { color: #0072e5 }
 	box-shadow: none !important
 }
 .bigripbtn, .quickBigRip {
-	background-color: #191919 !important;
+	background-color: transparent !important;
 	border: 3px solid #5be567 !important;
 	color: #e5e5e5 !important;
 	box-shadow: none !important
@@ -612,7 +613,7 @@ strong { color: #0072e5 }
 	text-shadow: none;
 }
 #gphtabbtn button {
-	background-color: #191919 !important;
+	background-color: transparent !important;
     border-color: #bfaf5f !important;
 	color: #e5e5e5 !important
 }

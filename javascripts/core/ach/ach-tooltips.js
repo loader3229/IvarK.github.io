@@ -238,7 +238,7 @@ function setR12Tooltip() {
 	//Setup rewards
 	let layerReward = []
 	if (inNGM(2)) layerReward.push("Galaxies boost Galaxy points even more")
-	if (tmp.ngp3 || tmp.mod.newGamePlusVersion) layerReward.push("you passively generate 1% of IP per second")
+	if (tmp.ngp3_boost) layerReward.push("you passively generate 1% of IP per second")
 	layerReward = wordizeList(layerReward, true)
 
 	//ACHIEVEMENT ROW 12
@@ -265,20 +265,20 @@ function setR13Tooltip() {
 	//Setup rewards
 	let potato3Reward = []
 	if (inNGM(2)) potato3Reward.push("the Galaxy boost to Galaxy points gain is buffed based on a specific value (~663 galaxies)")
-	if (tmp.ngp3 || tmp.mod.newGamePlusVersion) potato3Reward.push("TS131 doesn't disable RG autobuyer anymore")
+	if (tmp.ngp3_boost) potato3Reward.push("TS131 doesn't disable RG autobuyer anymore")
 	potato3Reward = wordizeList(potato3Reward, true)
 
 	let thisisReward = [] // for the achievement "This is what I have to do to get rid of you."
 	if (inNGM(2)) thisisReward.push("g23 is more effective based on your best IP in dilation")
-	if (tmp.ngp3 || tmp.mod.newGamePlusVersion) thisisReward.push("you produce dilated time " + (tmp.ngp3_exp ? 3 : 2) + "x faster")
+	if (tmp.ngp3_boost) thisisReward.push("you produce dilated time " + (tmp.ngp3_exp ? 3 : 2) + "x faster")
 	thisisReward = wordizeList(thisisReward, true)
 
 	//ACHIEVEMENT ROW 13
-	unique.setAttribute('ach-tooltip', "Have 540 galaxies without having any Replicated Galaxies." + (tmp.ngp3 || tmp.mod.newGamePlusVersion ? " Reward: Your infinitied stat boosts Eternitied, but not banked infinities." : ""))
+	unique.setAttribute('ach-tooltip', "Have 540 galaxies without having any Replicated Galaxies." + (tmp.ngp3_boost ? " Reward: Your infinitied stat boosts Eternitied, but not banked infinities." : ""))
 	potato3.setAttribute('ach-tooltip', "Get more than "+shortenCosts(new Decimal("1e8296262"))+" ticks per second." + (potato3Reward != "" ? " Reward: " + potato3Reward + "." : ""))
 	infstuff.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e140000"))+" IP without buying IDs or IP multipliers. Reward: You start eternities with all Infinity Challenges unlocked and completed" + (player.meta ? ", and your Infinity gain is multiplied by dilated time^(1/4)." : "."))
-	when.setAttribute('ach-tooltip', "Reach "+shortenCosts( new Decimal("1e20000"))+" replicanti. Reward: You gain replicanti 2 times faster under " + shortenMoney(Number.MAX_VALUE) + " replicanti" + (tmp.ngp3 || tmp.mod.newGamePlusVersion ? " and you can always buy max RGs." : "."))
-	thinking.setAttribute('ach-tooltip', "Eternity for " + shortenCosts( new Decimal("1e600")) + " EP in 1 minute or less while Dilated" + (tmp.ngp3 || tmp.mod.newGamePlusVersion ? " Reward: Multiply Dilated Time gain based on replicanti and TS141 is always " + shortenCosts(1e40) + "x." : "."))
+	when.setAttribute('ach-tooltip', "Reach "+shortenCosts( new Decimal("1e20000"))+" replicanti. Reward: You gain replicanti 2 times faster under " + shortenMoney(Number.MAX_VALUE) + " replicanti" + (tmp.ngp3_boost ? " and you can always buy max RGs." : "."))
+	thinking.setAttribute('ach-tooltip', "Eternity for " + shortenCosts( new Decimal("1e600")) + " EP in 1 minute or less while Dilated" + (tmp.ngp3_boost ? " Reward: Multiply Dilated Time gain based on replicanti and TS141 is always " + shortenCosts(1e40) + "x." : "."))
 	thisis.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal('1e20000')) + " IP without any time studies while Dilated." + (thisisReward != "" ? " Reward: " + thisisReward + "." : ""))
 }
 
@@ -323,7 +323,7 @@ function setR14Tooltip() {
 	onlywar.setAttribute('ach-tooltip', "Reach " + shortenMoney(new Decimal('1e40000')) + " EP." + (onlywarReward != "" ? " Reward: " + onlywarReward + "." : ""))
 	thecap.setAttribute('ach-tooltip', "Get " + shortenDimensions(1e12)+" Eternities. Reward: Eternity Upgrade 2 " + (tmp.ngp3 ? "and TS231 use" : "uses") + " a better formula.")
 	metamax.setAttribute('ach-tooltip', "Get " + (tmp.ngp3 ? 7 : 10) + " Meta-Dimension Boosts. Reward: Meta-dimension boosts are " + (tmp.ngp3 ? 5 : 1) + "% stronger.")
-	neverenough.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal(tmp.ngp3 ? "1e60000" : "1e100000")) + " replicanti. Reward: " + (tmp.ngp3 || tmp.mod.newGamePlusVersion ? "Replicated galaxies no longer reset the replicanti amount." : "You can always buy max RGs."))
+	neverenough.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal(tmp.ngp3 ? "1e60000" : "1e100000")) + " replicanti. Reward: " + (tmp.ngp3_boost ? "Replicated galaxies no longer reset the replicanti amount." : "You can always buy max RGs."))
 	harmony.setAttribute('ach-tooltip', (player.meta ? "Have at least 700 normal, replicanti, and free dilated galaxies." : "Get the same amount (at least 300) of normal, replicanti, and Tachyonic Galaxies.") + (harmonyReward != "" ? " Reward: " + harmonyReward + "." : ""))
 }
 

@@ -20,18 +20,21 @@ button:hover {
 }
 
 .tabbtn {
+	background: #001f3f !important;
 	border-color: transparent #7fbfff transparent #7fbfff !important;
 	box-shadow: 1px 0px 3px rgba(127, 191, 255, 0.25), -1px 0px 3px rgba(127, 191, 255, 0.25);
 	color: #bfdfff !important
 }
 
 .secondarytabbtn {
+	background: #1f3f00 !important;
 	border-color: transparent #bfff7f transparent #bfff7f !important;
 	box-shadow: 1px 0px 3px rgba(191, 255, 127, 0.25), -1px 0px 3px rgba(191, 255, 127, 0.25);
 	color: #dfffbf !important
 }
 
 .storebtn {
+	background: #001f3f !important;
 	border-color: transparent #7fbfff transparent #7fbfff !important;
 	box-shadow: 1px 0px 3px rgba(127, 191, 255, 0.25), -1px 0px 3px rgba(127, 191, 255, 0.25);
 	color: #bfdfff !important
@@ -65,6 +68,7 @@ button:hover {
 
 /* Galaxy */
 .galaxybtn, #gSacrifice.storebtn {
+	background: #000f3f !important;
 	border-color: transparent #003fff !important;
 	box-shadow: 1px 0px 3px rgba(0, 63, 255, 0.25), -1px 0px 3px rgba(0, 63, 255, 0.25);
 	color: #7f9fff !important
@@ -72,6 +76,7 @@ button:hover {
 
 /* Infinity */
 .infinitybtn, #idtabbtn button, .newdim {
+	background: #3f2f00 !important;
 	border-color: transparent #ffbf00 transparent #ffbf00 !important;
 	box-shadow: 1px 0px 3px rgba(255, 191, 0, 0.25), -1px 0px 3px rgba(255, 191, 0, 0.25);
 	color: #ffdf7f !important
@@ -83,6 +88,7 @@ button:hover {
 
 /* Eternity */
 .eternitybtn, .eternitytabbtn, #tdtabbtn button, .timestudy, .eternityupbtn {
+	background: #1f003f !important;
 	border-color: transparent #bf00ff transparent #bf00ff !important;
 	box-shadow: 1px 0px 3px rgba(191, 0, 255, 0.25), -1px 0px 3px rgba(191, 0, 255, 0.25);
 	color: #df7fff !important
@@ -94,6 +100,7 @@ button:hover {
 
 /* Meta */
 #mdtabbtn button {
+	background: #003f3f !important;
 	border-color: transparent #00ffff transparent #00ffff !important;
 	box-shadow: 1px 0px 3px rgba(0, 255, 255, 0.25), -1px 0px 3px rgba(0, 255, 255, 0.25);
 	color: #7fffff !important
@@ -101,9 +108,23 @@ button:hover {
 
 /* Quantum */
 .quantumbtn {
+	background: #0f1f00 !important;
 	border-color: transparent #3fff00 !important;
 	box-shadow: 1px 0px 3px rgba(63, 255, 0, 0.25), -1px 0px 3px rgba(63, 255, 0, 0.25);
 	color: #9fff7f !important
+}
+
+.red {
+	color: #ff3f3f
+}
+.lime {
+	color: #9fff3f
+}
+.green {
+	color: #3fff3f
+}
+.blue {
+	color: #3f3fff
 }
 
 /* Fixes */

@@ -415,15 +415,19 @@ button, div.storebtn {
 }
 
 .red, #rgRepl, #rgEDs {
-	color: #e50000 !important
+	color: #e53939 !important
+}
+
+.lime {
+	color: #8fe539 !important
 }
 
 .green {
-	color: #00e500 !important
+	color: #39e539 !important
 }
 
 .blue, #brRepl, #brEDs {
-	color: #0000e5 !important
+	color: #3939e5 !important
 }
 
 #dilstudy7.dilationupgbought, .timestudybought.elcstudy, #positronstabbtn button, #positrons .gluonupgrade.storebtn {

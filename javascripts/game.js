@@ -3449,7 +3449,7 @@ function gainEternitiedStat() {
 	}
 	if (hasTS(34) && tmp.ngC) ret = nM(ret, 10)
 	if (hasTS(35) && tmp.ngC) ret = nM(ret, tsMults[35]())
-	if (hasAch("r132") && (tmp.ngp3 || tmp.mod.newGamePlusVersion)) ret = nM(ret, getInfBoostInput(player.infinitied).add(1).log10() / 5 + 1)
+	if (hasAch("r132") && tmp.ngp3_boost) ret = nM(ret, getInfBoostInput(player.infinitied).add(1).log10() / 5 + 1)
 	if (tmp.ngp3 && hasAch("ngpp18")) ret = nM(ret, 100)
 	let exp = getEternitiesAndDTBoostExp()
 	if (exp > 0) ret = nM(player.dilation.dilatedTime.max(1).pow(exp), ret)
@@ -3619,7 +3619,7 @@ function updateNGpp17Reward(){
 }
 
 function updateNGpp16Reward(){
-	getEl('replicantibulkmodetoggle').style.display = (hasAch(tmp.ngp3 || tmp.mod.newGamePlusVersion ? "r134" : "ngpp16") || (tmp.ngC && player.eternityUpgrades.includes(6))) ? "inline-block" : "none"
+	getEl('replicantibulkmodetoggle').style.display = (hasAch(tmp.ngp3_boost ? "r134" : "ngpp16") || (tmp.ngC && player.eternityUpgrades.includes(6))) ? "inline-block" : "none"
 }
 
 function notifyQuantumMilestones(){
@@ -4912,7 +4912,7 @@ function galSacBtnUpdating() {
 
 function IPonCrunchPassiveGain(diff){
 	if (hasTimeStudy(181)) player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints().times(diff / 100))
-	if (hasAch("r127") && (tmp.ngp3 || tmp.mod.newGamePlusVersion)) player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints().times(diff / 100))
+	if (hasAch("r127") && tmp.ngp3_boost) player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints().times(diff / 100))
 }
 
 function EPonEternityPassiveGain(diff){
@@ -5322,7 +5322,7 @@ function galaxyABTick(){
 		)) {
 			maxBuyGalaxies()
 		} else {
-			if ((bulk && (tmp.ngp3 || tmp.mod.newGamePlusVersion) && player.autobuyers[10].priority == 0) || player.autobuyers[10].priority > player.galaxies) {
+			if ((bulk && tmp.ngp3_boost && player.autobuyers[10].priority == 0) || player.autobuyers[10].priority > player.galaxies) {
 				autoS = false;
 				getEl("secondSoftReset").click()
 				player.autobuyers[10].ticks = 0

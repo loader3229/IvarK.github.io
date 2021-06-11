@@ -4,7 +4,7 @@ var masteryStudies = {
 			//Eternity
 			241: 1e68,
 			251: 5e69, 252: 5e69, 253: 5e69,
-			261: 6.6666666666666674e69, 262: 6.6666666666666674e69, 263: 6.6666666666666674e69, 264: 6.6666666666666674e69, 265: 6.6666666666666674e69, 266: 6.6666666666666674e69,
+			261: 3e69, 262: 3e69, 263: 3e69, 264: 3e69, 265: 3e69, 266: 3e69,
 
 			//Quantum
 			271: 3.90625e71,
@@ -13,16 +13,21 @@ var masteryStudies = {
 			301: 1/0, 302: 1/0,
 			311: 1/0, 312: 1/0,
 
-			//Expert Mode
-			ex_241: 2e68,
-			ex_261: 5e69, ex_262: 5e69, ex_263: 5e69, ex_264: 5e70, ex_265: 5e70, ex_266: 5e69,
-			ex_271: 1e68
-		},
-		ec: {
-			13: 1e71, 14: 1e71,
+			//Beginner Mode
+			bg_261: 2e69, bg_262: 2e69, bg_263: 2e69, bg_264: 2e69, bg_265: 2e69, bg_266: 2e69,
 
 			//Expert Mode
-			ex_13: 5e70, ex_14: 5e70
+			ex_264: 3e70,
+			ex_271: 1e68,
+
+			//Death Mode
+			dt_265: 3e70
+		},
+		ec: {
+			13: 5e69, 14: 5e69,
+
+			//Expert Mode
+			ex_13: 1e70, ex_14: 1e70
 		},
 		dil: {7: 1e74, 8: 3e76, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
@@ -32,7 +37,7 @@ var masteryStudies = {
 			//Eternity
 			t241: 1,
 			t251: 2, t252: 2, t253: 2,
-			t261: 2, t262: 2, t263: 2, t264: 3, t265: 3, t266: 2,
+			t261: 2.5, t262: 2.5, t263: 2, t264: 1.5, t265: 1.5, t266: 2,
 
 			//Quantum
 			t271: 1 / 128,
@@ -43,19 +48,19 @@ var masteryStudies = {
 
 			//Beginner Mode
 			t251_bg: 1.5, t252_bg: 1.5, t253_bg: 1.5,
-			t264_bg: 1, t265_bg: 1,
+			t261_bg: 2, t262_bg: 2, t264_bg: 1, t265_bg: 1,
 			t281_bg: 3, t282_bg: 2, t283_bg: 2, t284_bg: 3,
 
 			//Expert Mode
 			t251_ex: 3,
-			t264_ex: 4,
+			t261_ex: 3.5, t262_ex: 3.5, t264_ex: 2,
 			t271_ex: 1 / 250,
 			t282_ex: 4, t283_ex: 4,
 
 			//Death Mode
 			t252_dt: 3, t253_dt: 3,
-			t264_dt: 5, t265_dt: 5,
-			t281_dt: 6, t282_dt: 6, t283_dt: 6, t264_dt: 5},
+			t261_dt: 4, t262_dt: 4, t264_dt: 5, t265_dt: 5,
+			t281_dt: 6, t282_dt: 6, t283_dt: 3, t264_dt: 3},
 		ec: {},
 		dil: {}
 	},
@@ -63,11 +68,11 @@ var masteryStudies = {
 	ecReqs: {
 		13() {
 			let comps = ECComps("eterc13")
-			return 95e4 + 5e4 * Math.pow(comps, 2)
+			return (tmp.exMode ? 950000 : tmp.bgMode ? 900000 : 925000) + 4e4 * Math.pow(comps, 2)
 		},
 		14() {
 			let comps = ECComps("eterc14")
-			return Decimal.pow(10, 275000 * Math.pow(2, comps))
+			return Decimal.pow(10, 265000 * Math.pow(2, comps))
 		}
 	},
 	ecReqsStored: {},

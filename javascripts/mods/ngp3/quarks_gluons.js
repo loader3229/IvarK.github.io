@@ -1191,3 +1191,50 @@ function drawQuarkAnimation(ts){
 		requestAnimationFrame(drawQuarkAnimation);
 	}
 }
+
+//Quantum Tiers: Strong boosts to Color Powers
+let QT = {
+	effs: {
+		qe: () => tmp.qu.quarkEnergy,
+		cc: () => colorCharge.normal.amt,
+		gb_rg: () => tmp.qu.gluons.rg,
+		gb_gb: () => tmp.qu.gluons.gb,
+		gb_br: () => tmp.qu.gluons.br,
+	},
+	tiers: {
+		qe: () => 1,
+		cc: () => 1,
+		gl_rg: () => 1,
+		gl_gb: () => 1,
+		gl_br: () => 1
+	},
+	funcs: {
+		1(x, y) { //Add
+			return x.add(y)
+		},
+		2(x, y) { //Multiply
+			y = y.add(1).log10() + 1
+			return x.times(y)
+		},
+		3(x, y) { //Exponent
+			y = Math.log10(y.add(1).log10() + 1) + 1
+			return x.pow(y)
+		},
+		4(x, y) { //Anti-Dilation
+			y = 1 - 1 / (Math.log10(y.add(1).log10() + 1) / 2 + 1)
+			return x.pow(Math.pow(Decimal.max(x, 1).log10(), y))
+		},
+		5(x, y, t) { //Superexponent
+			y = 0
+			return x.pow(Math.pow(2, Math.pow(x.max(1).log(2), 0.1) * y))
+		}
+	},
+	boost(x, type, tier) {
+		if (!tier) tier = QT.tiers[type]()
+
+		x = new Decimal(x)
+		let eff = new Decimal(QT.effs[type]())
+
+		return QT.funcs[tier](x, eff)
+	}
+}

@@ -1557,7 +1557,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 11)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 11.01)</p>
 			</span>
 			<div class="footer bottom"></div>
 		</div>
@@ -4396,70 +4396,110 @@
 		<div class='quantumtab' id='uquarks'>
 			<canvas id="quarkCanvas"></canvas>
 			<table class='qTable'><tr>
+				<!-- Color charge -->
 				<tr>
-					<td colspan=3>
-						You will get <span id="assort_amount"></span> colored anti-quarks when you assort anti-quarks<br>
-						<input id="assort_percentage" type="number" min=1 max=100 onchange="changeAssortPercentage()">%
+					<td colspan=2></td>
+					<td id="colorChargeColor" style="vertical-align: middle">
+						Your colored anti-quarks have a net <span id='colorCharge'></span>.
+						<br>
+						<span style="font-size: 10px">(net worth of <span id='colorChargeAmt'></span>)</span>
+					</td>
+				</tr>
+
+				<!-- Red -->
+				<tr>
+					<td class="red light">
+						<span id="redQuarks" style="font-size:35px">0</span> red anti-quarks.
+					</td>
+					<td class="red">
+						You have <span id="redPower" style="font-size:35px">0.0</span> red power.
+					</td>
+					<td>
+						Translated to +<span class="red" id="redTranslation" style="font-size:35px"></span>% stronger galaxies.
+					</td>
+				</tr>
+				<tr>
+					<td class="red light" style="vertical-align: middle">
+						<button class='storebtn' id='redAssort' onclick='assignQuark("r")'>Assort</button>
+					</td>
+					<td class="red light">
+						Ratio: <input id="ratio_r" type="number" min=0 onchange="changeRatio('r')"></input>
+					</td>
+				</tr>
+
+				<!-- Green -->
+				<tr>
+					<td class="green light">
+						<span id="greenQuarks" style="font-size:35px">0</span> green anti-quarks.
+					</td>
+					<td class="green">
+						You have <span id="greenPower" style="font-size:35px">0.0</span> green power.
+					</td>
+					<td>
+						Translated to +<span class="green" id="greenTranslation" style="font-size:35px"></span>x slower replicanti interval scaling.
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td class="green light" style="vertical-align: middle">
+						<button class='storebtn' id='greenAssort' onclick='assignQuark("g")'>Assort</button>
+					</td>
+					<td class="green light">
+						Ratio: <input id="ratio_g" type="number" min=0 onchange="changeRatio('g')"></input>
+					</td>
+					<td></td>
+				</tr>
+
+				<!-- Blue -->
+				<tr>
+					<td class="blue light">
+						<span id="blueQuarks" style="font-size:35px">0</span> blue anti-quarks.
+					</td>
+					<td class="blue">
+						You have <span id="bluePower" style="font-size:35px">0.0</span> blue power.
+					</td>
+					<td>
+						Translated to +<span class="blue" id="blueTranslation" style="font-size:35px"></span>x multiplier to Tachyon particles and Time Theorems.
+					</td>
+				</tr>
+				<tr>
+					<td class="blue light" style="vertical-align: middle">
+						<button class='storebtn' id='blueAssort' onclick='assignQuark("b")'>Assort</button>
+					</td>
+					<td class="blue light">
+						Ratio: <input id="ratio_b" type="number" min=0 onchange="changeRatio('b')"></input>
+					</td>
+					<td class="grey">
+						<button class='storebtn' id="neutralize_quarks" style="width: 360px" onclick='neutralize_quarks()'>Neutralize (requires <span id="neutralize_req"></span> anti-quarks)</button>
+					</td>
+				</tr>
+
+				<!-- Distribution -->
+				<tr>
+					<td style="vertical-align: middle">
+						You will get <span id="assort_amount"></span> colored anti-quarks when you assort anti-quarks
+						<br>
+						<button class='storebtn' id="assignAllButton" style="width:135px" onclick='assignAll()'>Distribute</button>
+					</td>
+					<td style="vertical-align: middle">
 						<button class='storebtn' id="assort_percentage_10" style="width:50px" onclick="changeAssortPercentage(10)">10%</button>
 						<button class='storebtn' id="assort_percentage_25" style="width:50px" onclick="changeAssortPercentage(25)">25%</button>
 						<button class='storebtn' id="assort_percentage_50" style="width:50px" onclick="changeAssortPercentage(50)">50%</button>
 						<button class='storebtn' id="assort_percentage_100" style="width:50px" onclick="changeAssortPercentage(100)">100%</button>
-						<br><br>
-						<button class='storebtn' id="assignAllButton" style="width:135px" onclick='assignAll()'>Distribute</button>
+						<br>
+						<input id="assort_percentage" type="number" min=1 max=100 onchange="changeAssortPercentage()">%
+					</td>
+					<td class="lime" rowspan=2>
+						Your quantum energy is giving a +<span id="quarkEnergyEffect1" style="font-size:35px">0.0</span>% more color powers and +<span id="quarkEnergyEffect2" style="font-size:35px">0.0</span> total extra color powers.
+					</td>
+				</tr>
+				<tr>
+					<td>
 						<button class='storebtn' id="autoAssignRotate" style="width:135px" onclick='rotateAutoAssign()'>Rotation: None</button>
 						<button class='storebtn' id="autoAssign" style="width:135px" onclick='toggleAutoAssign()'>Auto: OFF</button>
 					</td>
-				</tr>
-				<tr>
-					<td class="red more">
-						You have <span id="redQuarks" style="font-size:35px">0</span> red anti-quarks.
-						<br>
-						<button class='storebtn' id='redAssort' onclick='assignQuark("r")'>Assort</button>
-						<br><br>
-						Ratio: <input id="ratio_r" type="number" min=0 onchange="changeRatio('r')"></input>
-					</td>
-					<td class="green more">
-						You have <span id="greenQuarks" style="font-size:35px">0</span> green anti-quarks.
-						<br>
-						<button class='storebtn' id='greenAssort' onclick='assignQuark("g")'>Assort</button>
-						<br><br>
-						Ratio: <input id="ratio_g" type="number" min=0 onchange="changeRatio('g')"></input>
-					</td>
-					<td class="blue more">
-						You have <span id="blueQuarks" style="font-size:35px">0</span> blue anti-quarks.
-						<br>
-						<button class='storebtn' id='blueAssort' onclick='assignQuark("b")'>Assort</button>
-						<br><br>
-						Ratio: <input id="ratio_b" type="number" min=0 onchange="changeRatio('b')"></input>
-					</td>
-				</tr>
-				<tr>
-					<td class="grey" colspan=3>
-						<button class='storebtn' id="neutralize_quarks" style="width: 360px" onclick='neutralize_quarks()'>Neutralize (requires <span id="neutralize_req"></span> anti-quarks)</button>
-					</td>
-				</tr>
-				<tr>
-					<td id="colorChargeColor" colspan=3>
-						Your colored anti-quarks have a net <span id='colorCharge'></span>.
-						<br>
-						(net worth of <span id='colorChargeAmt'></span>)
-					</td>
-				</tr>
-				<tr>
-					<td class="red">
-						You have <span id="redPower" style="font-size:35px">0.0</span> red power. Translated to +<span class="red" id="redTranslation" style="font-size:35px"></span>% stronger galaxies.
-					</td>
-					<td class="green">
-						You have <span id="greenPower" style="font-size:35px">0.0</span> green power. Translated to <span class="green" id="greenTranslation" style="font-size:35px"></span>x slower replicate interval scaling.
-					</td>
-					<td class="blue">
-						You have <span id="bluePower" style="font-size:35px">0.0</span> blue power. Translated to <span class="blue" id="blueTranslation" style="font-size:35px"></span>x more Tachyon Particles and passive TT gains. (before softcaps)
-					</td>
-				</tr>
-				<tr>
-					<td class="lime" colspan=3>
-						Your quantum energy is giving a +<span id="quarkEnergyEffect1" style="font-size:35px">0.0</span>% more color powers and +<span id="quarkEnergyEffect2" style="font-size:35px">0.0</span> total extra color powers.
-					</td>
+					<td></td>
+					<td></td>
 				</tr>
 			</table>
 		</div>

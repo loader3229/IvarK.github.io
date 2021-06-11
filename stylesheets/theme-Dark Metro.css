@@ -549,6 +549,19 @@ input {
     color: #2682ca !important
 }
 
+.red {
+	color: #ff3f3f
+}
+.lime {
+	color: #9fff3f
+}
+.green {
+	color: #3fff3f
+}
+.blue {
+	color: #3f3fff
+}
+
 #replicantAmountED {
 	color: #757575 !important
 }

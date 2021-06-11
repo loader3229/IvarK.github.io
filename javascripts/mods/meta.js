@@ -352,7 +352,7 @@ function updateMetaDimensions () {
 	if (reqGotten && bigRipped && ph.did("ghostify")) {
 		var GS = getGHPGain()
 		message += "gain " + shortenDimensions(GS) + " Ghost Particle" + (GS.lt(2) ? "" : "s")
-	} else if (reqGotten && !bigRipped && (tmp.qu.times || player.ghostify.milestones)) {
+	} else if (reqGotten && !bigRipped && ph.did("quantum")) {
 		var QS = quarkGain()
 		message += "gain " + shortenDimensions(QS) + " quark" + (QS.lt(2) ? "" : "s") + " for boosts"
 	} else message += "get a boost"

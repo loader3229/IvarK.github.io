@@ -180,7 +180,7 @@ function getRemoteScalingStart(galaxies) {
 }
 
 function maxBuyGalaxies(manual) {
-	let max = (manual || (getEternitied() >= 10 && (tmp.ngp3 || tmp.mod.newGamePlusVersion) && player.autobuyers[10].priority == 0)) ? 1/0 : player.autobuyers[10].priority
+	let max = (manual || (getEternitied() >= 10 && tmp.ngp3_boost && player.autobuyers[10].priority == 0)) ? 1/0 : player.autobuyers[10].priority
 	if ((inNC(11) || player.currentEternityChall == "eterc6" || player.currentChallenge == "postc1" || (player.currentChallenge == "postc5" && inNGM(3)) || player.currentChallenge == "postc7") && !tmp.be) return
 	if (max > player.galaxies) galaxyReset(doBulkSpent(getAmount(inNC(4) || inNGM(5) ? 6 : 8), getGalaxyRequirement, 0, true).toBuy) //Offset function
 }

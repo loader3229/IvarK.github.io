@@ -140,8 +140,10 @@ let ecExpData = {
 		eterc10: 3000,
 		eterc11: 500,
 		eterc12: 110000,
-		eterc13: 245000000,
-		eterc14: 365000000,
+		eterc13: 285000000,
+		eterc14: 310000000,
+		eterc14_ex: 325000000,
+		eterc14_dt: 340000000,
 		eterc1_ngmm: 1800,
 		eterc2_ngmm: 1125,
 		eterc3_ngmm: 1025,
@@ -212,6 +214,14 @@ function getECGoal(x) {
 	let expInit = ecExpData.inits[x]
 	let expIncrease = ecExpData.increases[x]
 	let completions = ECComps(x)
+	if (tmp.exMode) {
+		expInit = ecExpData.inits[x + "_ex"] || expInit
+		expIncrease = ecExpData.increases[x + "_ex"] || expIncrease
+	}
+	if (tmp.dtMode) {
+		expInit = ecExpData.inits[x + "_dt"] || expInit
+		expIncrease = ecExpData.increases[x + "_dt"] || expIncrease
+	}
 	if (inNGM(2)) {
 		expInit = ecExpData.inits[x + "_ngmm"] || expInit
 		expIncrease = ecExpData.increases[x + "_ngmm"] || expIncrease

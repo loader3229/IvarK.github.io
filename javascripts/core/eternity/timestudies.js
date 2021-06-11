@@ -893,8 +893,9 @@ let tsMults = {
 		let log = -player.tickspeed.div(1e3).pow(0.005).times(0.95).plus(player.tickspeed.div(1e3).pow(0.0003).times(0.95)).log10()
 
 		if (bigRipped && log > 900) log = Math.sqrt(log * 900)
-		else if (tmp.mod.newGameExpVersion) log = Math.min(log, 25000) // buff to NG+++^
-		else if (tmp.ngp3) log = Math.min(log, 2500)
+		else if (tmp.ngp3_mul) log = Math.min(log, 25000) // buff to NG*+3
+		else log = Math.min(log, 2500)
+
 		if (log < 0) log = 0
 		
 		if (inNGM(2) || !bigRipped) return Decimal.pow(10, log)
