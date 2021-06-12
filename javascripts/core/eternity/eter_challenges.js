@@ -141,9 +141,10 @@ let ecExpData = {
 		eterc11: 500,
 		eterc12: 110000,
 		eterc13: 285000000,
-		eterc14: 310000000,
+		eterc14: 315000000,
+		eterc14_bg: 295000000,
 		eterc14_ex: 325000000,
-		eterc14_dt: 340000000,
+		eterc14_dt: 335000000,
 		eterc1_ngmm: 1800,
 		eterc2_ngmm: 1125,
 		eterc3_ngmm: 1025,
@@ -182,8 +183,11 @@ let ecExpData = {
 		eterc10: 300,
 		eterc11: 200,
 		eterc12: 12000,
-		eterc13: 30000000,
-		eterc14: 110000000,
+		eterc13: 50000000,
+		eterc14: 85000000,
+		eterc14_bg: 80000000,
+		eterc14_ex: 90000000,
+		eterc14_dt: 95000000,
 		eterc1_ngmm: 400,
 		eterc2_ngmm: 250,
 		eterc3_ngmm: 100,
@@ -214,6 +218,10 @@ function getECGoal(x) {
 	let expInit = ecExpData.inits[x]
 	let expIncrease = ecExpData.increases[x]
 	let completions = ECComps(x)
+	if (tmp.ngMode) {
+		expInit = ecExpData.inits[x + "_bg"] || expInit
+		expIncrease = ecExpData.increases[x + "_bg"] || expIncrease
+	}
 	if (tmp.exMode) {
 		expInit = ecExpData.inits[x + "_ex"] || expInit
 		expIncrease = ecExpData.increases[x + "_ex"] || expIncrease
@@ -231,7 +239,10 @@ function getECGoal(x) {
 		expIncrease = ecExpData.increases[x + "_ngc"] || expIncrease
 	}
 	let exp = expInit + expIncrease * completions
-	if (x == "ec13") exp += 10000000 * Math.max(completions - 2, 0) * (completions - 3, 0)
+
+	if (x == "eterc13" && completions >= 2) exp += 10000000 * (completions - 1) * completions
+	if (x == "eterc14" && completions >= 1) exp *= Math.pow(1.75, completions)
+
 	return Decimal.pow(10, exp)
 }
 

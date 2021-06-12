@@ -2,34 +2,40 @@ var masteryStudies = {
 	initCosts: {
 		time: {
 			//Eternity
-			241: 1e68,
+			241: 1e69,
 			251: 5e69, 252: 5e69, 253: 5e69,
 			261: 3e69, 262: 3e69, 263: 3e69, 264: 3e69, 265: 3e69, 266: 3e69,
 
 			//Quantum
-			271: 3.90625e71,
-			281: 2e74, 282: 2e73, 283: 2e73, 284: 2e74,
+			271: 6e68,
+			281: 2e74, 282: 4e73, 283: 4e73, 284: 2e74,
 			291: 4e74, 292: 2e74, 293: 4e74,
 			301: 1/0, 302: 1/0,
 			311: 1/0, 312: 1/0,
 
 			//Beginner Mode
+			bg_251: 2e69, bg_252: 2e69, bg_253: 2e69,
 			bg_261: 2e69, bg_262: 2e69, bg_263: 2e69, bg_264: 2e69, bg_265: 2e69, bg_266: 2e69,
 
 			//Expert Mode
-			ex_264: 3e70,
-			ex_271: 1e68,
+			ex_241: 3e69,
+			ex_251: 1e70, ex_252: 1e70, ex_253: 1e70,
+			ex_261: 1e70, ex_262: 1e70, ex_264: 3e70,
+			ex_281: 4e74, ex_284: 4e74,
 
 			//Death Mode
+			dt_251: 1e70,
 			dt_265: 3e70
 		},
 		ec: {
-			13: 5e69, 14: 5e69,
-
-			//Expert Mode
-			ex_13: 1e70, ex_14: 1e70
+			13: 1e69, 14: 5e69,
+	
+			//Beginner Mode
+			ex_13: 5e69
 		},
-		dil: {7: 1e74, 8: 3e76, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
+		dil: {
+			7: 2e73, 8: 3e76, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
+		}
 	},
 	costs: {
 		time: {},
@@ -37,10 +43,10 @@ var masteryStudies = {
 			//Eternity
 			t241: 1,
 			t251: 2, t252: 2, t253: 2,
-			t261: 2.5, t262: 2.5, t263: 2, t264: 1.5, t265: 1.5, t266: 2,
+			t261: 8, t262: 8, t263: 4, t264: 2, t265: 2, t266: 4,
 
 			//Quantum
-			t271: 1 / 128,
+			t271: "reset",
 			t281: 5, t282: 3, t283: 3, t284: 5,
 			t291: 4, t292: 1, t293: 4,
 			t301: 8, t302: 8,
@@ -52,15 +58,14 @@ var masteryStudies = {
 			t281_bg: 3, t282_bg: 2, t283_bg: 2, t284_bg: 3,
 
 			//Expert Mode
-			t251_ex: 3,
-			t261_ex: 3.5, t262_ex: 3.5, t264_ex: 2,
-			t271_ex: 1 / 250,
+			t252_ex: 4, t253_ex: 4,
+			t261_ex: 16, t262_ex: 16, t263_ex: 6, t264_ex: 16, t265_ex: 16, t266_ex: 6,
 			t282_ex: 4, t283_ex: 4,
 
 			//Death Mode
-			t252_dt: 3, t253_dt: 3,
-			t261_dt: 4, t262_dt: 4, t264_dt: 5, t265_dt: 5,
-			t281_dt: 6, t282_dt: 6, t283_dt: 3, t264_dt: 3},
+			t251_dt: 4,
+			t261_dt: 8, t262_dt: 8, t263_dt: 8, t264_dt: 16, t265_dt: 16, t266_dt: 8,
+		},
 		ec: {},
 		dil: {}
 	},
@@ -68,11 +73,11 @@ var masteryStudies = {
 	ecReqs: {
 		13() {
 			let comps = ECComps("eterc13")
-			return (tmp.exMode ? 950000 : tmp.bgMode ? 900000 : 925000) + 4e4 * Math.pow(comps, 2)
+			return (tmp.exMode ? 900000 : tmp.bgMode ? 800000 : 850000) + (35000 + 5000 * comps) * Math.pow(comps, 2)
 		},
 		14() {
 			let comps = ECComps("eterc14")
-			return Decimal.pow(10, 265000 * Math.pow(2, comps))
+			return Decimal.pow(10, (comps ? 750000 : tmp.exMode ? 225000 : tmp.bgMode ? 125000 : 175000) * Math.pow(1.75, comps))
 		}
 	},
 	ecReqsStored: {},
@@ -88,11 +93,11 @@ var masteryStudies = {
 		241() {
 			return hasAch("ng3p16") || player.dilation.dilatedTime.gte(1e100)
 		},
-		272() {
-			return masteryStudies.bought >= (tmp.exMode ? 9 : 10)
+		271() {
+			return masteryStudies.bought >= (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10)
 		},
 		d7() {
-			return enB.glu.engAmt() >= 2.75
+			return enB.glu.engAmt() >= 3.25
 		},
 		d8() {
 			return enB.pos.engAmt() >= 900
@@ -120,11 +125,11 @@ var masteryStudies = {
 		241() {
 			return hasAch("ng3p16") ? undefined : shorten(1e100) + " dilated time"
 		},
-		272() {
-			return (tmp.exMode ? 9 : 10) + " bought mastery studies"
+		271() {
+			return (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10) + " bought mastery studies"
 		},
 		d7() {
-			return "2.75 quantum energy"
+			return "3.25 quantum energy"
 		},
 		d8() {
 			return shorten(900) + " positronic charge"
@@ -387,15 +392,18 @@ function convertMasteryStudyIdToDisplay(x) {
 function updateMasteryStudyCosts() {
 	var oldBought = masteryStudies.bought
 	masteryStudies.latestBoughtRow = 0
-	masteryStudies.costMult = 1 //QCs.in(3) ? 1e-32 : hasAch("ng3p12") ? 0.25 : 1
+	masteryStudies.baseCostMult = QCs.in(3) ? 1e-32 : hasAch("ng3p12") ? 0.25 : 1
+	masteryStudies.costMult = 1
 	masteryStudies.bought = 0
 	masteryStudies.ttSpent = 0
 	for (id = 0; id<player.masterystudies.length; id++) {
 		var t = player.masterystudies[id].split("t")[1]
 		if (t) {
+			var costMult = getMasteryStudyCostMult("t" + t)
+
 			setMasteryStudyCost(t, "t")
 			masteryStudies.ttSpent += masteryStudies.costs.time[t] < 1/0 ? masteryStudies.costs.time[t] : 0
-			masteryStudies.costMult *= getMasteryStudyCostMult("t" + t)
+			masteryStudies.costMult = costMult == "reset" ? masteryStudies.baseCostMult : masteryStudies.costMult * costMult
 			masteryStudies.latestBoughtRow = Math.max(masteryStudies.latestBoughtRow,Math.floor(t/10))
 			masteryStudies.bought++
 		}
@@ -769,7 +777,7 @@ function drawMasteryBranch(id1, id2) {
 			var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
 			var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
 			var mult = getMasteryStudyCostMult("t" + id2.split("study")[1])
-			var msg = "MS" + (id2.split("study")[1] - 230) + " (" + (mult >= 1e3 ? shorten(mult) : mult.toFixed(2 - Math.floor(Math.log10(mult)))) + "x)"
+			var msg = "MS" + (id2.split("study")[1] - 230) + " (" + (mult == "reset" ? "reset" : mult >= 1e3 ? shorten(mult) + "x" : mult.toFixed(2 - Math.floor(Math.log10(mult))) + "x") + ")"
 			msctx.fillStyle = 'white';
 			msctx.strokeStyle = 'black';
 			msctx.lineWidth = 3;

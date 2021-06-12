@@ -514,8 +514,6 @@ function buyDilationUpgrade(pos, max, isId) {
 
 function getTTProduction() {
 	let tp = player.dilation.tachyonParticles
-	if (tmp.quUnl) tp = tp.times(colorBoosts.b)
-
 	let r = getTTGenPart(tp)
 	r /= 2e4
 
@@ -528,7 +526,10 @@ function getTTGenPart(x) {
 	x = x.max(1).log10()
 
 	let sc1 = 69
-	if (x > sc1) x = Math.pow(x - sc1 + 1, 0.6) + sc1 - 1
+	if (x > sc1) {
+		let speed = tmp.exMode ? 1.5 : tmp.bgMode ? 1 : 1.25
+		x = Math.pow((x - sc1) * speed + 1, 2/3) + sc1 - 1
+	}
 
 	return Math.pow(10, x)
 }

@@ -3352,7 +3352,7 @@ function eternity(force, auto, forceRespec, dilated) {
 		showDimTab("timedimensions")
 		loadAutoBuyerSettings()
 	}
-	if (player.respec || player.respecMastery || forceRespec) respecTimeStudies(forceRespec)
+	if (!force && (player.respec || player.respecMastery || forceRespec)) respecTimeStudies(forceRespec)
 	doAutoEterTick()
 	if (tmp.ngp3) updateBreakEternity()
 }

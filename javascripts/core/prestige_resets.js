@@ -319,10 +319,14 @@ function doEternityResetStuff(layer = 4, chall) {
 	}
 
 	player.replicanti.unl = getEternitied() >= 50
-	player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e10 && player.currentEternityChall == "" && layer == 4 ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
 	if (chall == "dil" || !hasAch("ng3p67")) resetReplicantiUpgrades()
 	player.replicanti.galaxies = 0
 	player.replicanti.galaxybuyer = (getEternitied() > 2) ? player.replicanti.galaxybuyer : undefined
+
+	if (player.currentEternityChall == "eterc14") player.replicanti.kept = player.replicanti.amount
+	player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e10 && player.currentEternityChall == "" && layer == 4 ? Decimal.div(player.replicanti.kept || player.replicanti.amount, "1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
+	if (player.currentEternityChall != "eterc14") delete player.replicanti.kept
+
 	tmp.rm = new Decimal(1)
 	tmp.rmPseudo = new Decimal(1)
 	tmp.extraRG = 0
