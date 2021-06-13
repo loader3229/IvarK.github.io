@@ -32,7 +32,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 		}, 2000)
 	} else quantumReset(force, auto, data, mode, bigRip)
 
-	updateTemp()
+	updateTmp()
 }
 
 function getQuantumReq(base) {
@@ -412,7 +412,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		getEl("infmultbuyer").textContent = "Autobuy IP mult: OFF"
 		getEl("togglecrunchmode").textContent = "Auto crunch mode: amount"
 		getEl("limittext").textContent = "Amount of IP to wait until reset:"
-		getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: " + shortenDimensions(player.epmult) + "x<p>Cost: " + shortenDimensions(player.epmultCost) + " EP"
 	}
 	if (!oheHeadstart) {
 		player.autobuyers[9].bulk = Math.ceil(player.autobuyers[9].bulk)
@@ -472,7 +471,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	hideDimensions()
 	tmp.tickUpdate = true
 	getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
-	getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: 1x<p>Cost: 500 EP"
 	updateTheoremButtons()
 	updateTimeStudyButtons()
 	updateDilationUpgradeCosts()

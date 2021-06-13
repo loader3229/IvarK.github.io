@@ -675,7 +675,7 @@ function buyBosonicUpgrade(id, quick) {
 	if (!canBuyBosonicUpg(id)) return false
 	player.ghostify.bl.upgrades.push(id)
 	player.ghostify.bl.am = player.ghostify.bl.am.sub(getBosonicFinalCost(bu.reqData[id][0]))
-	if (!quick) updateTemp()
+	if (!quick) updateTmp()
 	if (id == 21 || id == 22) updateNanoRewardTemp()
 	if (id == 32 || id == 65) tmp.updateLights = true
 	delete player.ghostify.hb.bosonicSemipowerment
@@ -692,7 +692,7 @@ function buyMaxBosonicUpgrades() {
 			if (!buyBosonicUpgrade(id, true)) break
 		}
 	}
-	if (player.ghostify.bl.upgrades.length > oldLength) updateTemp()
+	if (player.ghostify.bl.upgrades.length > oldLength) updateTmp()
 }
 
 function hasBosonicUpg(id) {

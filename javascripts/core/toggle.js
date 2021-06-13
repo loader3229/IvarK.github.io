@@ -22,12 +22,19 @@ function toggleTabsSave() {
 function infMultAutoToggle() {
 	if (getEternitied()<1) {
 		if (canBuyIPMult()) {
-			var toBuy = Math.max(Math.floor(player.infinityPoints.div(player.infMultCost).times(ipMultCostIncrease - 1).plus(1).log(ipMultCostIncrease)), 1)
-			var toSpend = Decimal.pow(ipMultCostIncrease, toBuy).sub(1).div(ipMultCostIncrease - 1).times(player.infMultCost).round()
+			let toBuy = Math.max(Math.floor(player.infinityPoints.div(player.infMultCost).times(ipMultCostIncrease - 1).plus(1).log(ipMultCostIncrease)), 1)
+			let toSpend = Decimal.pow(ipMultCostIncrease, toBuy).sub(1).div(ipMultCostIncrease - 1).times(player.infMultCost).round()
+
 			if (toSpend.gt(player.infinityPoints)) player.infinityPoints = new Decimal(0)
 			else player.infinityPoints = player.infinityPoints.sub(toSpend)
-			player.infMult = player.infMult.times(Decimal.pow(getIPMultPower(), toBuy))
-			player.infMultCost = player.infMultCost.times(Decimal.pow(ipMultCostIncrease,toBuy))
+
+			let multInc = Decimal.pow(getIPMultPower(), toBuy)
+			player.infMult = player.infMult.times(multInc)
+			player.infMultCost = player.infMultCost.times(Decimal.pow(ipMultCostIncrease, toBuy))
+			player.autoIP = player.autoIP.times(multInc)
+
+			if (player.autobuyers[11].priority !== undefined && player.autobuyers[11].priority !== null && player.autoCrunchMode == "amount") player.autobuyers[11].priority = multInc.times(player.autobuyers[11].priority)
+			if (player.autoCrunchMode == "amount") getEl("priority12").value = formatValue("Scientific", player.autobuyers[11].priority, 2, 0)
 		}
 	} else {
 		player.infMultBuyer = !player.infMultBuyer

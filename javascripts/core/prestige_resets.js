@@ -66,7 +66,10 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 		epcost: new Decimal(1),
 		studies: [],
 	}
+
 	if (!qMs.isOn(3)) player.eternityUpgrades = []
+	player.epmult = new Decimal(1)
+	player.epmultCost = new Decimal(500)
 
 	player.etercreq = 0
 	player.eternityChallUnlocked = 0
@@ -295,10 +298,7 @@ function doEternityResetStuff(layer = 4, chall) {
 	player.challengeTarget = 0
 	player.challenges = challengesCompletedOnEternity()
 
-	if (!hasAch("ng3p12") && getEternitied() < 1) {
-		player.autobuyers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-		player.break = false
-	}
+	if (!canBreakInfinity()) player.break = false
 	if (!player.challenges.includes("postc2") && getEternitied() < 7) player.autoSacrifice = 1
 
 	player.partInfinityPoint = 0
@@ -704,7 +704,6 @@ function doEternityGhostifyResetStuff(implode, bm){
 	doMetaDimensionsReset()
 	getEl("eternitybtn").style.display = "none"
 	getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
-	getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: 1x<p>Cost: 500 EP"
 	if (implode) showEternityTab("timestudies", getEl("eternitystore").style.display == "none")
 	updateLastTenEternities()
 	resetTimeDimensions(true)

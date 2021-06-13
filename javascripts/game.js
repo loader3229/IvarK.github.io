@@ -2329,7 +2329,6 @@ function onNotationChange() {
 		GDs.updateDisplay()
 		if (ph.did("planck")) pl.updateDisplay()
 	}
-	getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 	getEl("achmultlabel").textContent = "Current achievement multiplier on each Dimension: " + shortenMoney(player.achPow) + "x"
 	if (hasAch("ng3p18") || hasAch("ng3p37")) {
 		getEl('bestTP').textContent="Your best"+(ph.did("ghostify") ? "" : " ever")+" Tachyon particles"+(ph.did("ghostify") ? " in this Ghostify" : "")+" was "+shorten(player.dilation.bestTP)+"."
@@ -3408,6 +3407,9 @@ function doAfterEternityResetStuff() {
 	updateLastTenEternities()
 	updateEternityChallenges()
 	updateEterChallengeTimes()
+
+	updateTmp()
+	resetUP()
 }
 
 function resetReplicantiUpgrades() {
@@ -3434,7 +3436,7 @@ function challengesCompletedOnEternity() {
 		player.postChallUnlocked = order.length
 		for (i = 0; i < order.length; i++) {
 			var ic = order[i]
-			if (!tmp.ngp3 || tmp.bgMode || player.currentEternityChall == "" && player.challenges.includes(ic)) array.push(ic)
+			if (!tmp.ngp3 || tmp.bgMode || player.currentEternityChall == "") array.push(ic)
 		}
 	}
 	return array
@@ -3648,7 +3650,7 @@ function doBosonsUnlockStuff() {
 	player.ghostify.wzb.unl=true
 	$.notify("Congratulations! You have unlocked Bosonic Lab!", "success")
 	giveAchievement("Even Ghostlier than before")
-	updateTemp()
+	updateTmp()
 	updateNeutrinoBoosts()
 	updateBLUnlocks()
 	updateBosonicLimits()
@@ -3658,7 +3660,7 @@ function doPhotonsUnlockStuff(){
 	player.ghostify.ghostlyPhotons.unl=true
 	$.notify("Congratulations! You have unlocked Ghostly Photons!", "success")
 	giveAchievement("Progressing as a Ghost")
-	updateTemp()
+	updateTmp()
 	QCs.updateDisp()
 	updateBreakEternity()
 	updateGPHUnlocks()
@@ -3811,7 +3813,7 @@ function doNGm2CorrectPostC3Reward(){
 
 let autoSaveSeconds=0
 setInterval(function() {
-	updateTemp()
+	updateTmp()
 	runAutoSave()
 	if (!player) return
 
@@ -4461,7 +4463,7 @@ function bigCrunchButtonUpdating(){
 
 function nextICUnlockUpdating(){
 	let nextUnlock = getNextAt(order[player.postChallUnlocked])
-	if (hasAch("r133")) {
+	if (!nextUnlock) {
 		getEl("nextchall").textContent = ""
 		return
 	}
@@ -4471,7 +4473,10 @@ function nextICUnlockUpdating(){
 		var name = order[player.postChallUnlocked]
 
 		player.postChallUnlocked++
-		if (name && getEternitied() >= 7) player.challenges.push(name)
+		if (name && getEternitied() >= 7) {
+			if (name == "postc2") updateAutobuyers()
+			player.challenges.push(name)
+		}
 
 		nextUnlock = getNextAt(name)
 		newChallsUnlocked = true
@@ -5002,7 +5007,7 @@ function gameLoop(diff) {
 	if (tmp.inEC12) diff /= tmp.ec12Mult
 
 	updateInfinityTimes()
-	updateTemp()
+	updateTmp()
 	infUpgPassiveIPGain(diff)
 
 	if (!isGamePaused()) {
@@ -5108,7 +5113,6 @@ function gameLoop(diff) {
 
 	isEmptinessDisplayChanges()
 	DimBoostBulkDisplay()
-	getEl("epmult").className = player.eternityPoints.gte(player.epmultCost) ? "eternityupbtn" : "eternityupbtnlocked"
 
 	progressBarUpdating()
 	challengeOverallDisplayUpdating()
@@ -5834,7 +5838,7 @@ var updatePowerInt
 function resetUP() {
 	clearInterval(updatePowerInt)
 	updatePowers()
-	updateTemp()
+	updateTmp()
 	mult18 = 1
 	updatePowerInt = setInterval(updatePowers, 100)
 }

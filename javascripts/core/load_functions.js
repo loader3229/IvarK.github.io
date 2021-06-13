@@ -1666,7 +1666,7 @@ function doNGp3Init2(){
 		tmp.bl.odSpeed = Math.max(tmp.bl.odSpeed, 1)
 		if (Decimal.eq(player.ghostify.wzb.zNeReq, 0)) player.ghostify.wzb.zNeReq = 1
 		updateAutoGhosts(true)
-		updateTemp(true)
+		updateTmp(true)
 	}
 }
 
@@ -2074,8 +2074,6 @@ function onLoad(noOffline) {
 
 	clearOldAchieves()
 
-	getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
-
 	ngmR.compile()
 	tmp.ngmX = calcNGMX()
 	if (tmp.ngmX) tmp.mod.ngmX = tmp.ngmX
@@ -2202,7 +2200,7 @@ function onLoad(noOffline) {
 	} else if (tmp.mod.popUpId!="STD") showNextModeMessage()
 	getEl("ghostlyNewsTicker").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?24:0)+"px"
 	getEl("ghostlyNewsTickerBlock").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?16:0)+"px"
-	updateTemp(true)
+	updateTmp(true)
 	updateAchievements()
 }
 

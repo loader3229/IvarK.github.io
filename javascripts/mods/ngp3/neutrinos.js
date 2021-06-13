@@ -123,7 +123,7 @@ function unlockNeutrinoBoost() {
 	player.ghostify.ghostParticles=player.ghostify.ghostParticles.sub(cost).round()
 	player.ghostify.neutrinos.boosts++
 	updateNeutrinoBoosts()
-	updateTemp()
+	updateTmp()
 }
 
 function hasNU(id) {

@@ -20,7 +20,7 @@ let tmp = {
 	leBonus: {}
 }
 
-function updateTemp(init) {
+function updateTmp(init) {
 	if (typeof player != "undefined") {
 		if (player.money) tmp.ri = player.money.gte(getLimit()) && ((player.currentChallenge != "" && player.money.gte(player.challengeTarget)) || !onPostBreak())
 		else tmp.ri = false

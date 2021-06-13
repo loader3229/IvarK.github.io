@@ -188,7 +188,7 @@ function breakEternity() {
 	getEl("breakEternityBtn").textContent = (tmp.qu.breakEternity.break ? "FIX" : "BREAK") + " ETERNITY"
 	if (tmp.qu.bigRip.active) {
 		tmp.be = tmp.quActive && tmp.qu.breakEternity.break
-		updateTemp()
+		updateTmp()
 		if (!tmp.be && getEl("timedimensions").style.display == "block") showDimTab("antimatterdimensions")
 	}
 	if (!player.dilation.active && isSmartPeakActivated) {

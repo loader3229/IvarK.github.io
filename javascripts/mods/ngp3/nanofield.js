@@ -373,7 +373,7 @@ function updateNanoRewardTemp() {
 
 	updateNanoRewardScaling()
 	updateNanoEffectUsages()
-	//The rest is calculated by updateTemp().
+	//The rest is calculated by updateTmp().
 }
 
 function getAntipreonGhostWake() {

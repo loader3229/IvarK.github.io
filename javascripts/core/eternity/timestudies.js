@@ -64,6 +64,7 @@ function maxTheorems() {
 		if (!break_infinity_js && isNaN(player.eternityPoints.logarithm)) player.eternityPoints = new Decimal(0)
 		player.timestudy.epcost = player.timestudy.epcost.times(Decimal.pow(2, gainTT))
 	}
+
 	updateTimeStudyButtons(true)
 	updateEternityUpgrades()
 }
@@ -87,10 +88,10 @@ function updateTheoremButtons() {
 		getEl("theorembuybackground").style.bottom = "0"
 		getEl("theoremam").className = player.money.gte(player.timestudy.amcost) ? "timetheorembtn" : "timetheorembtnlocked"
 		getEl("theoremip").className = player.infinityPoints.gte(player.timestudy.ipcost) ? "timetheorembtn" : "timetheorembtnlocked"
-		getEl("theoremep").className = player.eternityPoints.gte(player.timestudy.epcost) ? "timetheorembtn" : "timetheorembtnlocked"
-		getEl("theoremep").innerHTML = "Buy Time Theorems <br>Cost: " + shortenDimensions(player.timestudy.epcost) + " EP"
-		getEl("theoremip").innerHTML = "Buy Time Theorems <br>Cost: " + shortenCosts(player.timestudy.ipcost) + " IP"
-		getEl("theoremam").innerHTML = "Buy Time Theorems <br>Cost: " + shortenCosts(player.timestudy.amcost)
+		getEl("theoremep").className = player.eternityPoints.gte(player.timestudy.epcost) && canBuyTTWithEP() ? "timetheorembtn" : "timetheorembtnlocked"
+		getEl("theoremep").innerHTML = (!canBuyTTWithEP() ? "(requires 1 Time Dimension)" : "+1 Time Theorem<br>Cost: " + shortenDimensions(player.timestudy.epcost) + " EP")
+		getEl("theoremip").innerHTML = "+1 Time Theorem<br>Cost: " + shortenCosts(player.timestudy.ipcost) + " IP"
+		getEl("theoremam").innerHTML = "+1 Time Theorem<br>Cost: " + shortenCosts(player.timestudy.amcost)
 		getEl("theoremmax").innerHTML = qMs.tmp.amt >= 2 ? ("Auto max: "+(player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max Theorems"
 	}
 	var tt = player.timestudy.theorem
