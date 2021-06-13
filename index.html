@@ -729,16 +729,16 @@
 						<td class="milestoneText" id='milestone27'></td>
 					</tr>
 					<tr id='mdmilestonesrow2b'>
-						<td><button class="milestonerewardlocked" id="reward26">Each normal / dilated Eternity run divides the Replicanti amount by 1e1000x instead.</button></td>
-						<td><button class="milestonerewardlocked" id="reward27">Unlock slow Meta Dimension autobuyers permanently.</button></td>
+						<td><button class="milestonerewardlocked" id="reward26">Each normal / dilated Eternity run reduces Replicantis by ^0.995 instead</button></td>
+						<td><button class="milestonerewardlocked" id="reward27">Unlock slow Meta Dimension autobuyers permanently</button></td>
 					</tr>
 					<tr id='mdmilestonesrow3a'>
 						<td class="milestoneText" id='milestone28'></td>
 						<td class="milestoneText" id='milestone29'></td>
 					</tr>
 					<tr id='mdmilestonesrow3b'>
-						<td><button class="milestonerewardlocked" id="reward28">Dimension Boosts no longer reset on Dimension Boosts and Galaxies.</button></td>
-						<td><button class="milestonerewardlocked" id="reward29">You passively generate 1% of EP gain per second.</button></td>
+						<td><button class="milestonerewardlocked" id="reward28">Galaxies no longer reset Dimension Boosts</button></td>
+						<td><button class="milestonerewardlocked" id="reward29">Passively generate 1% of EP gain per second</button></td>
 					</tr>
 				</table>
 				<div class="footer"></div>
@@ -1557,7 +1557,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 11.02)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 12?)</p>
 			</span>
 			<div class="footer bottom"></div>
 		</div>
@@ -3773,7 +3773,7 @@
 						<span style="font-size: 80%">Is active</span>
 						<input type="checkbox" onchange="updateAutobuyers()"  id="eternityison"></input>
 						<div id='dilationmode'>
-							<div>Amount of eternities to wait until dilate time:
+							<div>Dilate for every X eternities:
 							<input type="text" onchange="updatePriorities()" id="prioritydil"></input></div>
 							<span style="font-size: 80%">Is active</span>
 							<input type="checkbox" onchange="updateAutobuyers()"  id="dilatedeternityison"></input>
@@ -4519,9 +4519,9 @@
 				<td class="green">
 					You have <span id="gb" style="font-size:35px">0</span> green-blue anti-gluons,
 					<br>
-					which multiply the red power by <span class="green" id="gPowerBuff" style="font-size:15px">1.00</span>x, but subtract the green power by -<span class="blue" id="bPowerNerf" style="font-size:15px">0.00</span>.
+					which multiply the green power by <span class="green" id="gPowerBuff" style="font-size:15px">1.00</span>x, but subtract the blue power by -<span class="blue" id="bPowerNerf" style="font-size:15px">0.00</span>.
 					<br>
-					(+<span id='gb_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='gb_prev'></span> to <span id='gb_next'>0</span>.)
+					(+<span id='gb_gain'>0</span> on next quantum, but reduce your green anti-quarks from <span id='gb_prev'></span> to <span id='gb_next'>0</span>.)
 					<br><br>
 					<button id="entangle_gb" style="width: 180px; height: 36px" onclick="ENTANGLED_BOOSTS.choose('gb')">Use GB gluons to activate some boosts</button>
 					<br>
@@ -4530,9 +4530,9 @@
 				<td class="blue">
 					You have <span id="br" style="font-size:35px">0</span> blue-red anti-gluons,
 					<br>
-					which multiply the red power by <span class="blue" id="bPowerBuff" style="font-size:15px">1.00</span>x, but subtract the green power by -<span class="red" id="rPowerNerf" style="font-size:15px">0.00</span>.
+					which multiply the blue power by <span class="blue" id="bPowerBuff" style="font-size:15px">1.00</span>x, but subtract the red power by -<span class="red" id="rPowerNerf" style="font-size:15px">0.00</span>.
 					<br>
-					(+<span id='br_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='br_prev'></span> to <span id='br_next'>0</span>.)
+					(+<span id='br_gain'>0</span> on next quantum, but reduce your blue anti-quarks from <span id='br_prev'></span> to <span id='br_next'>0</span>.)
 					<br><br>
 					<button id="entangle_br" style="width: 180px; height: 36px" onclick="ENTANGLED_BOOSTS.choose('br')">Use BR gluons to activate some boosts</button>
 					<br>
@@ -4577,23 +4577,23 @@
 					<br>
 					<span id="enB_glu3_type"></span>
 					<br>
-					Remote Antimatter Galaxy scaling starts <span id="enB_glu3_eff" style="font-size:25px"></span> later.
+					The cost superscaling of 3x TP upgrade is <span id="enB_glu3_eff" style="font-size:25px"></span>% slower.
 				</td>
 			</tr>
 			<tr>
 				<td id="enB_glu4">
-					<b id="enB_glu4_name" style="font-size: 25px"></b>
+					<b id="enB_glu4_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu4_type"></span>
 					<br>
-					<span id="enB_glu4_eff"></span>
+					Meta-antimatter boosts dilated time by ^<span id="enB_glu4_eff" style="font-size:24px"></span>. (from ^0.0045)
 				</td>
 				<td id="enB_glu5">
 					<b id="enB_glu5_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_glu5_type"></span>
 					<br>
-					The cost superscaling of 3x TP upgrade is <span id="enB_glu5_eff" style="font-size:25px"></span>% slower.
+					<span id="enB_glu5_eff"></span>
 				</td>
 				<td id="enB_glu6">
 					<b id="enB_glu6_name" style="font-size: 25px"></b>

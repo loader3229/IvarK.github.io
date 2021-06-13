@@ -56,7 +56,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
 
 	player.infinitiedBank = 0
-	if (!headstart) player.eternities = oheHeadstart ? Math.pow(10, Math.max(qMs.tmp.amt / 2 + 1, 2)) : 0
+	if (!headstart) player.eternities = qMs.tmp.amt >= 2 ? 100 * Math.pow(3, qMs.tmp.amt) : oheHeadstart ? 100 : 0
 	player.eternityPoints = new Decimal(0)
 
 	player.timestudy = (bigRip ? tmp.bruActive[12] : qMs.isOn(3)) ? player.timestudy : {
@@ -78,8 +78,6 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	player.infMultBuyer = bigRipChanged ? turnSomeOn : oheHeadstart ? player.infMultBuyer : false
 	player.autoCrunchMode = keepABnICs ? player.autoCrunchMode : "amount"
 	player.autoEterMode = keepABnICs ? player.autoEterMode : "amount"
-	player.respec = false
-	if (tmp.ngp3) player.respecMastery = false
 	player.eternityBuyer = keepABnICs ? player.eternityBuyer : {
 		limit: new Decimal(0),
 		isOn: false
@@ -88,6 +86,8 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	player.eterc8repl = 40
 	player.dimlife = true
 	player.dead = true
+
+	let multUpgs = !qMs.isOn(8) ? 0 : tmp.exMode ? 0.25 : tmp.bgMode ? 1 : 0.5
 	if (!player.dilation.bestTP) player.dilation.bestTP = player.dilation.tachyonParticles
 	player.dilation = {
 		studies:
@@ -95,6 +95,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 			!qMs.isOn(5) ? [] :
 			qMs.tmp.amt >= 9 ? [1, 2, 3, 4, 5, 6] : qMs.tmp.amt >= 6 ? [1, 2, 3, 4, 5] : [1],
 		active: false,
+		tachyonParticles: player.dilation.tachyonParticles,
 		dilatedTime: new Decimal(0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
@@ -105,11 +106,11 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 		rebuyables: {
 			1: 0,
 			2: 0,
-			3: !isQC && qMs.tmp.amt >= 8 ? player.dilation.rebuyables[3] : 0,
-			4: !isQC && qMs.tmp.amt >= 8 ? player.dilation.rebuyables[4] : 0,
+			3: Math.floor(player.dilation.rebuyables[3] * multUpgs),
+			4: Math.floor(player.dilation.rebuyables[4] * multUpgs),
 		}
 	}
-	player.dilation.tachyonParticles = getTPGain(true, 1e3)
+	player.dilation.tachyonParticles = getTPGain(true, player.totalmoney.log10()).min(player.dilation.tachyonParticles)
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
 
 	resetTimeDimensions(true)
@@ -133,6 +134,7 @@ function resetDimensions() {
 
 function doDimBoostResetStuff(layer = 1) {
 	if (layer >= 3 || !hasAch("r111")) setInitialMoney()
+	skipResets()
 	setInitialResetPower()
 	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < tmp.ngp3_em[0]) resetDimensions()
 
@@ -297,7 +299,7 @@ function doEternityResetStuff(layer = 4, chall) {
 		player.autobuyers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 		player.break = false
 	}
-	if (!player.challenges.includes("postc2")) player.autoSacrifice = 1
+	if (!player.challenges.includes("postc2") && getEternitied() < 7) player.autoSacrifice = 1
 
 	player.partInfinityPoint = 0
 	player.partInfinitied = 0
@@ -323,9 +325,17 @@ function doEternityResetStuff(layer = 4, chall) {
 	player.replicanti.galaxies = 0
 	player.replicanti.galaxybuyer = (getEternitied() > 2) ? player.replicanti.galaxybuyer : undefined
 
-	if (player.currentEternityChall == "eterc14") player.replicanti.kept = player.replicanti.amount
-	player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e10 && player.currentEternityChall == "" && layer == 4 ? Decimal.div(player.replicanti.kept || player.replicanti.amount, "1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
-	if (player.currentEternityChall != "eterc14") delete player.replicanti.kept
+	if (chall == 14) player.replicanti.kept = player.replicanti.amount
+	player.replicanti.amount = layer >= 5 ? (
+		qMs.isOn(25) ? Decimal.pow(player.replicanti.kept || player.replicanti.amount, 0.9) :
+		new Decimal(getEternitied() >= 50 ? 1 : 0)
+	) : (
+		moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[2] && (chall == 0 || chall == "dil") ? Decimal.pow(player.replicanti.kept || player.replicanti.amount, 0.995).floor().max(1) :
+		new Decimal(getEternitied() >= 50 ? 1 : 0)
+	)
+	if (chall != 14) delete player.replicanti.kept
+
+	player.dilation.active = chall == "dil"
 
 	tmp.rm = new Decimal(1)
 	tmp.rmPseudo = new Decimal(1)

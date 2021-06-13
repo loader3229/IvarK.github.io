@@ -567,7 +567,7 @@ function exdilationDisplay(){
 
 function mainDilationDisplay(){
 	if (player.dilation.active) uponDilationDisplay()
-	else getEl("enabledilation").textContent = "Dilate time." + (player.eternityBuyer.dilationMode ? " (" + (player.eternityBuyer.dilationPerAmount - player.eternityBuyer.statBeforeDilation) + " Eternity runs left)" : "")
+	else getEl("enabledilation").textContent = "Dilate time." + (player.eternityBuyer.dilationMode ? " (" + player.eternityBuyer.statBeforeDilation + " Eternity runs left)" : "")
 	if (player.exdilation==undefined||tmp.mod.ngudpV?false:player.blackhole.unl) {
 		exdilationDisplay()
 	} else getEl("reversedilationdiv").style.display = "none"

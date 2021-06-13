@@ -184,10 +184,10 @@ let ecExpData = {
 		eterc11: 200,
 		eterc12: 12000,
 		eterc13: 50000000,
-		eterc14: 85000000,
-		eterc14_bg: 80000000,
-		eterc14_ex: 90000000,
-		eterc14_dt: 95000000,
+		eterc14: 4500000,
+		eterc14_bg: 0,
+		eterc14_ex: 10000000,
+		eterc14_dt: 15000000,
 		eterc1_ngmm: 400,
 		eterc2_ngmm: 250,
 		eterc3_ngmm: 100,
@@ -240,8 +240,7 @@ function getECGoal(x) {
 	}
 	let exp = expInit + expIncrease * completions
 
-	if (x == "eterc13" && completions >= 2) exp += 10000000 * (completions - 1) * completions
-	if (x == "eterc14" && completions >= 1) exp *= Math.pow(1.75, completions)
+	if (x == "eterc14" && completions >= 2) exp *= Math.pow(1.5, completions / 2)
 
 	return Decimal.pow(10, exp)
 }
@@ -357,15 +356,7 @@ function getECReward(x) {
 	if (x == 11 && pc) return Math.sqrt(Math.log10((Math.pow(c, 2) * (player.totalTickGained + (Math.max(c, 1) - 1) * 5e4)) / 1e5 + 1)/(4 - c / 2) + 1)
 	if (x == 12) return 1 - c * (m2 ? .06 : 0.008)
 	if (x == 13) return Math.sqrt(1 + c / 7.5)
-	if (x == 14) {
-		let effs = [0, 0.1, 0.2, 0.3, 0.5, 1]
-		if (c < 0) return 0
-		if (c > 5) return 1
-
-		let cInt = Math.floor(c)
-		if (c == cInt) return effs[c]
-		return effs[cInt] * (cInt + 1 - c) + effs[cInt + 1] * (c - cInt)
-	}
+	if (x == 14) return [0, 0.125, 0.25, 0.5, 0.75, 1][c]
 }
 
 function doCheckECCompletionStuff() {

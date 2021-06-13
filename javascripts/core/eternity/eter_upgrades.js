@@ -129,17 +129,17 @@ let ETER_UPGS = {
 	// NG+3: Post-Mastery Studies
 	13: {
 		unl: () => tmp.ngp3,
-		cost: "1e1500",
+		cost: "1e3000",
 		desc: () => "You can buy all row-23 time studies."
 	},
 	14: {
 		unl: () => tmp.ngp3,
-		cost: "1e2500000",
+		cost: "1e1500000",
 		desc: () => "You can buy all row-22 time studies."
 	},
 	15: {
 		unl: () => tmp.ngp3,
-		cost: "1e6500000",
+		cost: "1e2500000",
 		desc: () => tmp.ngp3_mul ? "You can buy all possible time studies." : "You can buy up to 2 paths from second split."
 	},
 

@@ -21,10 +21,11 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 
 	var implode = !auto && !force && !ph.did("ghostify") && (tmp.qu.best >= 100 || !tmp.quUnl)
 	if (implode) {
-		implosionCheck = 1
+		implosionCheck = 2
 		dev.implode()
 		setTimeout(function(){
 			quantumReset(force, auto, data, mode, bigRip, true)
+			implosionCheck = 1
 		}, 1000)
 		setTimeout(function(){
 			implosionCheck = 0
@@ -252,7 +253,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 
 		gainQKOnQuantum(qkGain)
 
-		if (player.meta.bestAntimatter.lte(Number.MAX_VALUE)) giveAchievement("We are not going squared.")
+		if (Decimal.max(player.meta.bestAntimatter, getQuantumReq()).lte(Number.MAX_VALUE)) giveAchievement("We are not going squared.")
 		if (player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] < 1 && player.dilation.upgrades.length < 1) giveAchievement("Never make paradoxes!")
 		if (tmp.qu.times >= 1e4) giveAchievement("Prestige No-lifer")
 

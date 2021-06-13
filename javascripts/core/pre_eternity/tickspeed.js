@@ -344,7 +344,7 @@ function getTickspeedText(ts) {
 	if (isNaN(exp)) return 'Infinite'
 	if (exp > 1) return ts.toFixed(0)
 
-	let precise = Math.max(Math.min(Math.ceil(12 - Math.log10(2 - exp)), 3), 0)
+	let precise = Math.max(Math.min(Math.ceil(9 - Math.log10(2 - exp)), 3), 0)
 	if (precise == 0) return shortenCosts(Decimal.div(1000, ts)) + "/s"
 	return Math.min(ts.m * Math.pow(10, precise - 1), Math.pow(10, precise) - 1).toFixed(0) + ' / ' + shortenCosts(Decimal.pow(10, 2 - exp))
 }
@@ -354,7 +354,7 @@ function updateTickspeed() {
 	let label = ""
 	if (showTickspeed) {
 		let tick = getTickspeed()
-		label = (tick.e <= -1e12 ? "Ticks" : "Tickspeed") + ": " + getTickspeedText(tick)
+		label = (tick.e <= -1e9 ? "Ticks" : "Tickspeed") + ": " + getTickspeedText(tick)
 		if (!isTickDisabled() && tmp.ts.pre2.gt(tmp.ts.pre1)) label += " (" + formatReductionPercentage(tmp.ts.pre1.log10() / tmp.ts.pre2.log10()) + "% subluminal)"
 	}
 	if (player.currentChallenge == "postc3" || player.challenges.includes("postc3") || isIC3Trapped()) label = (showTickspeed ? label + ", Tickspeed m" : "M") + "ultiplier: " + formatValue(player.options.notation, player.postC3Reward, 2, 3)

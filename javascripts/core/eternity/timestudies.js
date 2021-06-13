@@ -69,7 +69,7 @@ function maxTheorems() {
 }
 
 function updateTheoremButtons() {
-	if (hasDilationUpg(10) && getTTProduction() > 1e3) {
+	if (hasDilationUpg(10) && getTTProduction() > 10) {
 		getEl("theoremmax").style.display = "none"
 		getEl("theoremam").style.display = "none"
 		getEl("theoremip").style.display = "none"
@@ -933,7 +933,7 @@ let tsMults = {
 		return Decimal.pow(1.0004, player.totalTickGained)
 	},
 	141() {
-		if (hasAch("r137") && (tmp.mod.newGamePlusVersion || tmp.ngp3)) return new Decimal(1e40)
+		if (hasAch("r137") && tmp.ngp3_boost && !tmp.exMode) return new Decimal(1e40)
 		return Decimal.div(1e45, Decimal.pow(15, Math.log(player.thisInfinityTime + 1) * Math.pow(player.thisInfinityTime + 1, 0.125))).max(1)
 	},
 	211() {

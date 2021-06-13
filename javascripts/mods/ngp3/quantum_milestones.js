@@ -7,8 +7,9 @@ let qMs = {
 			name: "Speedrun",
 			targ: () => tmp.qu.best,
 			targDisp: timeDisplay,
-			gain: (x) => Math.log10(86400 / x) / Math.log10(2) * 2 + 1,
-			nextAt: (x) => Math.pow(2, (1 - x) / 2) * 86400
+			daysStart: () => tmp.dtMode ? 0.25 : tmp.exMode ? 0.375 : tmp.bgMode ? 0.75 : 0.5,
+			gain: (x) => Math.log10(86400 * qMs.data.sr.daysStart() / x) / Math.log10(2) * 3 + 1,
+			nextAt: (x) => Math.pow(2, (1 - x) / 3) * 86400 * qMs.data.sr.daysStart()
 		},
 		rl: {
 			name: "Relativistic",
@@ -21,8 +22,8 @@ let qMs = {
 			name: "Enegretic",
 			targ: () => tmp.qu.bestEnergy || 0,
 			targDisp: shorten,
-			gain: (x) => Math.sqrt(x) * 2,
-			nextAt: (x) => Math.pow(x / 2, 2)
+			gain: (x) => Math.sqrt(Math.max(x - 0.5, 0)) * 3,
+			nextAt: (x) => Math.pow(x / 3, 2) + 0.5
 		},
 		ch: {
 			name: "Challenging",
@@ -72,7 +73,7 @@ let qMs = {
 
 			for (var i = 1; i <= qMs.max; i++) {
 				getEl("qMs_req_" + i).textContent = "Milestone Point #" + getFullExpansion(qMs[i].req)
-				getEl("qMs_reward_" + i).className = qMs.tmp.amt < i ? "qMs_locked" :
+				getEl("qMs_reward_" + i).className = qMs.tmp.amt < i || qMs.forceOff(i) ? "qMs_locked" :
 					!this[i].disablable ? "qMs_reward" :
 					"qMs_toggle_" + (!tmp.qu.disabledRewards[i] ? "on" : "off")
 				getEl("qMs_reward_" + i).textContent = qMs[i].eff()
@@ -102,10 +103,14 @@ let qMs = {
 		getEl("qMs_points").textContent = getFullExpansion(qMs.tmp.points)
 	},
 	isOn(id) {
-		return qMs.tmp.amt >= id && (!this[id].disablable || !tmp.qu.disabledRewards[id])
+		return qMs.tmp.amt >= id && (!this[id].disablable || !tmp.qu.disabledRewards[id]) && !qMs.forceOff(id)
+	},
+	forceOff(id) {
+		return qMs[id].forceDisable !== undefined && qMs[id].forceDisable()
 	},
 	toggle(id) {
-		if (!this[id].disablable) return
+		if (!qMs[id].disablable) return
+		if (qMs.forceOff(id)) return
 		if (qMs.tmp.amt < id) return
 
 		let on = !tmp.qu.disabledRewards[id]
@@ -121,8 +126,8 @@ let qMs = {
 	},
 	2: {
 		req: 2,
-		eff: () => "Unlock the autobuyer for Time Theorems, start with Eternities (based on Quantum Milestones), and keep Eternity Challenges",
-		effGot: () => "You now can automatically buy Time Theorems, start with Eternities (based on Quantum Milestones), and keep Eternity Challenges."
+		eff: () => "Unlock the autobuyer for Time Theorems, start with 3x more Eternities per milestone, and keep Eternity Challenges",
+		effGot: () => "You now can automatically buy Time Theorems, start with 3x more Eternities per milestone, and keep Eternity Challenges."
 	},
 	3: {
 		req: 3,
@@ -138,8 +143,8 @@ let qMs = {
 	5: {
 		req: 5,
 		disablable: true,
-		eff: () => "Start with Time Dilation unlocked & 1 TP and each time you buy '3x TP' upgrade, your TP amount is increased by 3x",
-		effGot: () => "You now start with Time Dilation unlocked & 1 TP and each time you buy '3x TP' upgrade, your TP amount is increased by 3x."
+		eff: () => "Start with Time Dilation unlocked & 1 TP" + (tmp.dtMode ? "" : " and each time you buy '3x TP' upgrade, your TP amount is increased by 3x"),
+		effGot: () => "You now start with Time Dilation unlocked & 1 TP" + (tmp.dtMode ? "" : " and each time you buy '3x TP' upgrade, your TP amount is increased by 3x.")
 	},
 	6: {
 		req: 6,
@@ -153,8 +158,10 @@ let qMs = {
 	},
 	8: {
 		req: 8,
-		eff: () => "Keep all your dilation upgrades that boost TP gain",
-		effGot: () => "You now can keep all your dilation upgrades that boost TP gain."
+		forceDisable: () => tmp.dtMode || QCs.inAny(),
+		disablable: true,
+		eff: () => tmp.dtMode ? "N/A" : "Keep " + (tmp.exMode ? "25% of" : tmp.bgMode ? "all" : "50% of") + " your dilation upgrades that boost TP gain",
+		effGot: () => tmp.dtMode ? "" : "You now can keep " + (tmp.exMode ? "25% of" : tmp.bgMode ? "all" : "50% of") + " your dilation upgrades that boost TP gain."
 	},
 	9: {
 		req: 9,
@@ -187,72 +194,74 @@ let qMs = {
 		effGot: () => "You now can automatically buy meta-Dimension Boosts."
 	},
 	15: {
-		req: 16,
+		req: 15,
 		eff: () => "Unlock an option for auto-Eternity that automatically dilates for each interval of Eternity runs",
 		effGot: () => "You have unlocked an option for auto-Eternity that automatically dilates for each interval of Eternity runs."
 	},
 	16: {
-		req: 18,
+		req: 16,
 		eff: () => "Start with " + shortenCosts(1e30) + " meta-antimatter",
 		effGot: () => "You now start with " + shortenCosts(1e30) + " meta-antimatter."
 	},
 	17: {
-		req: 20,
+		req: 17,
 		eff: () => "All Meta Dimensions are available for purchase on Quantum",
 		effGot: () => "All Meta Dimensions are now available for purchase on Quantum."
 	},
 	18: {
-		req: 22,
+		req: 18,
 		eff: () => "Unlock the autobuyer for Quantum runs",
 		effGot: () => "You can now automatically go Quantum."
 	},
 	19: {
-		req: 24,
+		req: 19,
 		eff: () => "Start with 4 Meta-Dimension Boosts and Meta-Dimension Boosts no longer reset Meta Dimensions",
 		effGot: () => "You now start with 4 Meta-Dimension Boosts and Meta-Dimension Boosts no longer reset Meta Dimensions anymore."
 	},
 	20: {
-		req: 27,
+		req: 20,
 		eff: () => "Gain banked infinities based on your post-crunch infinitied stat",
 		effGot: () => "Gain banked infinities based on your post-crunch infinitied stat."
 	},
 	21: {
-		req: 30,
+		req: 25,
 		eff: () => "Each milestone greatly reduces the interval of auto-dilation upgrades and MDBs",
 		effGot: () => "Each milestone now greatly reduces the interval of auto-dilation upgrades and MDBs."
 	},
 	22: {
-		req: 35,
+		req: 30,
 		eff: () => "'2 Million Infinities' effect actives at 1s instead of 5s",
 		effGot: () => "'2 Million Infinities' effect now actives at 1s instead of 5s."
 	},
 	23: {
-		req: 40,
+		req: 35,
 		eff: () => "All Infinity-related autobuyers fire for each tick",
 		effGot: () => "All Infinity-related autobuyers now fire for each tick"
 	},
 	24: {
-		req: 50,
+		req: 45,
 		disablable: true,
 		eff: () => "Auto-dilation upgrades maximize all repeatable dilation upgrades",
 		effGot: () => "Auto-dilation upgrades now can maximize all repeatable dilation upgrades."
 	},
 	25: {
-		req: 60,
+		req: 55,
+		forceDisable: () => QCs.inAny(),
+		disablable: true,
 		eff: () => "Each Quantum reduces Replicantis by ^0.95.",
 		effGot: () => "Each following Quantum run now reduces Replicantis by ^0.95."
 	},
 	26: {
-		req: 75,
+		req: 70,
 		disablable: true,
-		eff: () => "Start with one dilation worth of TP at " + shorten(new Decimal("1e1000")) + " antimatter",
-		effGot: () => "You now start with one dilation worth of TP at " + shorten(new Decimal("1e1000")) + " antimatter"
+		eff: () => "Start with one dilation worth of TP at same antimatter as total",
+		effGot: () => "You now start with one dilation worth of TP at same antimatter as total."
 	},
 	27: {
-		req: 85,
+		req: 80,
 		disablable: true,
-		eff: () => "You can toggle some achievement rewards",
-		effGot: () => "You now toggle some achievement rewards"
+		eff: () => "Some achievement rewards are disabled when turned off",
+		effGot: () => "Some achievement rewards are disabled when turned off."
 	},
 	28: {
 		req: 100,

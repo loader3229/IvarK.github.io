@@ -159,7 +159,7 @@ function getInfinitiedGain() {
 	let infGain = 1
 	if (player.thisInfinityTime > (qMs.tmp.amt >= 22 ? 10 : 50) && hasAch("r87")) infGain = 250
 	if (hasTS(32)) infGain *= tsMults[32]()
-	if (tmp.ngp3 && hasAch("ngpp18")) infGain *= 100
+	if (tmp.ngp3 && hasAch("ngpp18")) infGain *= 10
 	if (hasAch("r133") && player.meta) infGain = nM(player.dilation.dilatedTime.pow(.25).max(1), infGain)
 	return nA(infGain, hasAch("r87") && inNGM(2) ? 249 : 0)
 }
@@ -208,7 +208,6 @@ function doDefaultTickspeedReduction(){
 function doAfterResetCrunchStuff(g11MultShown){
 	getEl("challengeconfirmation").style.display = "inline-block"
 	if (!player.options.retryChallenge) player.currentChallenge = ""
-	skipResets()
 	doIRCrunchResetStuff()
 	updateSingularity()
 	updateDimTechs()

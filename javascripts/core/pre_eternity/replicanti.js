@@ -181,7 +181,7 @@ function canGetReplicatedGalaxy() {
 }
 
 function canAutoReplicatedGalaxy() {
-	return (hasAch("r136") && tmp.ngp3_boost) || !hasTimeStudy(131) || tmp.ngC
+	return (hasAch("r136") && tmp.ngp3_boost && (tmp.bgMode || Decimal.div(1e3, getTickspeed()).log10() >= tmp.dtMode ? 8e6 : tmp.exMode ? 4e6 : 2e6)) || !hasTimeStudy(131) || tmp.ngC
 }
 
 function getMaxRG() {
@@ -351,7 +351,7 @@ function updateEC14Reward() {
 
 		data.ec14 = {
 			interval: div,
-			ooms: div.max(1).log10() / (1 - pow / 2) + 1
+			ooms: div.max(1).log10() * (1 + pow) + 1
 		}
 		if (enB.active("pos", 7)) data.ec14.ooms += enB.tmp.pos7
 	} else {
@@ -368,8 +368,8 @@ function boostReplicateInterval() {
 
 	if (ECComps("eterc14")) {
 		let pow = getECReward(14)
-		data.ec14.interval = data.ec14.interval.div(Math.pow(data.speeds.exp / Math.log10(data.speeds.inc), pow))
 
+		data.ec14.interval = data.ec14.interval.div(Math.pow(data.speeds.exp / Math.log10(data.speeds.inc), pow))
 		x = x.div(data.ec14.interval)
 	}
 	if (QCs.tmp.qc1) x = x.times(QCs.tmp.qc1.speedMult)

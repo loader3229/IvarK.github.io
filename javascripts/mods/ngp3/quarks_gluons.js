@@ -169,7 +169,7 @@ function updateColorCharge() {
 	var colors = ['r', 'g', 'b']
 	var colorPowers = {}
 	for (var i = 0; i < 3; i++) {
-		var ret = Decimal.add(usedQuarks[colors[i]], 1). log10()
+		var ret = Decimal.div(usedQuarks[colors[i]], 2).add(1).log10()
 		colorCharge[colors[i]] = player.ghostify.milestones >= 2 ? ret : 0
 		colorPowers[colors[i]] = ret
 	}
@@ -220,14 +220,14 @@ colorBoosts = {
 
 function updateColorPowers() {
 	//Red
-	colorBoosts.r = Math.log10(tmp.qu.colorPowers.r * 15 + 1) / 3.5 + 1
+	colorBoosts.r = Math.log10(tmp.qu.colorPowers.r * 5 + 1) / 3.5 + 1
 
 	//Green
 	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g * 3 + 1) * 2 + 1
 	if (enB.active("pos", 7)) colorBoosts.g += enB.tmp.pos7
 
 	//Blue
-	colorBoosts.b = Math.pow(Math.max(tmp.qu.colorPowers.b + 1, 1), 2)
+	colorBoosts.b = Math.pow(Math.max(tmp.qu.colorPowers.b * 1.5 + 1, 1), 2)
 }
 
 //Gluons
@@ -464,9 +464,9 @@ let enB = {
 
 	types: ["glu", "pos"],
 	priorities: [
-		["glu", 4],
+		["glu", 5],
 		["pos", 1], ["pos", 2], ["pos", 3], ["pos", 4], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 8], ["pos", 9], ["pos", 10],
-		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 5], ["glu", 6], ["glu", 7], ["glu", 8], ["glu", 9], ["glu", 10],
+		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 4], ["glu", 6], ["glu", 7], ["glu", 8], ["glu", 9], ["glu", 10],
 	],
 	glu: {
 		name: "Entangled",
@@ -509,8 +509,8 @@ let enB = {
 		max: 10,
 		1: {
 			req: 1,
-			masReq: 4,
-			masReqExpert: 5,
+			masReq: 7,
+			masReqExpert: 9,
 			type: "r",
 			activeReq: () => !QCs.in(2),
 
@@ -523,8 +523,8 @@ let enB = {
 		},
 		2: {
 			req: 3,
-			masReq: 7,
-			masReqExpert: 9,
+			masReq: 9,
+			masReqExpert: 11,
 			type: "g",
 			activeReq: () => !QCs.in(2),
 
@@ -536,20 +536,36 @@ let enB = {
 			}
 		},
 		3: {
+			req: 6,
+			masReq: 15,
+			masReqExpert: 17,
+			type: "b",
+			activeReq: () => !QCs.in(2),
+
+			eff(x) {
+				return Math.sqrt(x / 2 + 1, 0.5)
+			},
+			effDisplay(x) {
+				return formatReductionPercentage(x, 2, 3)
+			}
+		},
+		4: {
 			req: 8,
-			masReq: 10,
-			masReqExpert: 12,
+			masReq: 12,
+			masReqExpert: 14,
 			type: "r",
 			activeReq: () => !QCs.in(2),
 
 			eff(x) {
-				return Math.sqrt(x) * 20
+				x = (1 + Math.log10(x / 5 + 1))
+				if (x > 5) x = 10 - 25 / x
+				return 0.0045 * x
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return x.toFixed(4)
 			}
 		},
-		4: {
+		5: {
 			req: 15,
 			masReq: 20,
 			masReqExpert: 25,
@@ -568,20 +584,6 @@ let enB = {
 			effDisplay(x) {
 				return pos.on() ? "Positrons on: Increase the power of Dimensional Positronic Charge by <span style='font-size:25px'>" + formatPercentage(x - 1) + "</span>%."
 				: "Positrons off: Strengthen all effects for mastered Positronic Boosts by +<span style='font-size:25px'>" + shorten(x) + "</span> charge."
-			}
-		},
-		5: {
-			req: 20,
-			masReq: 30,
-			masReqExpert: 35,
-			type: "b",
-			activeReq: () => !QCs.in(2),
-
-			eff(x) {
-				return Math.pow(x / 3 + 1, 0.2)
-			},
-			effDisplay(x) {
-				return formatReductionPercentage(x, 2, 3)
 			}
 		},
 		6: {

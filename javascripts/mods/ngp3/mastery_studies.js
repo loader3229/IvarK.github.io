@@ -7,7 +7,7 @@ var masteryStudies = {
 			261: 3e69, 262: 3e69, 263: 3e69, 264: 3e69, 265: 3e69, 266: 3e69,
 
 			//Quantum
-			271: 6e68,
+			271: 5e69,
 			281: 2e74, 282: 4e73, 283: 4e73, 284: 2e74,
 			291: 4e74, 292: 2e74, 293: 4e74,
 			301: 1/0, 302: 1/0,
@@ -34,7 +34,7 @@ var masteryStudies = {
 			ex_13: 5e69
 		},
 		dil: {
-			7: 2e73, 8: 3e76, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
+			7: 1e74, 8: 3e76, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
 		}
 	},
 	costs: {
@@ -73,11 +73,11 @@ var masteryStudies = {
 	ecReqs: {
 		13() {
 			let comps = ECComps("eterc13")
-			return (tmp.exMode ? 900000 : tmp.bgMode ? 800000 : 850000) + (35000 + 5000 * comps) * Math.pow(comps, 2)
+			return (tmp.exMode ? 900000 : tmp.bgMode ? 800000 : 850000) + 4e4 * Math.pow(comps, 2)
 		},
 		14() {
 			let comps = ECComps("eterc14")
-			return Decimal.pow(10, (comps ? 750000 : tmp.exMode ? 225000 : tmp.bgMode ? 125000 : 175000) * Math.pow(1.75, comps))
+			return Decimal.pow(10, (comps ? 750000 : tmp.exMode ? 225000 : tmp.bgMode ? 125000 : 175000) * Math.pow(1.5, comps))
 		}
 	},
 	ecReqsStored: {},
@@ -97,7 +97,7 @@ var masteryStudies = {
 			return masteryStudies.bought >= (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10)
 		},
 		d7() {
-			return enB.glu.engAmt() >= 3.25
+			return enB.glu.engAmt() >= (tmp.exMode ? 5.9 : tmp.bgMode ? 5.3 : 5.5)
 		},
 		d8() {
 			return enB.pos.engAmt() >= 900
@@ -129,7 +129,7 @@ var masteryStudies = {
 			return (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10) + " bought mastery studies"
 		},
 		d7() {
-			return "3.25 quantum energy"
+			return (tmp.exMode ? 5.9 : tmp.bgMode ? 5.3 : 5.5) + " quantum energy"
 		},
 		d8() {
 			return shorten(900) + " positronic charge"
@@ -392,8 +392,8 @@ function convertMasteryStudyIdToDisplay(x) {
 function updateMasteryStudyCosts() {
 	var oldBought = masteryStudies.bought
 	masteryStudies.latestBoughtRow = 0
-	masteryStudies.baseCostMult = QCs.in(3) ? 1e-32 : hasAch("ng3p12") ? 0.25 : 1
-	masteryStudies.costMult = 1
+	masteryStudies.baseCostMult = QCs.in(3) ? 1e-32 : hasAch("ng3p12") ? 0.5 : 1
+	masteryStudies.costMult = masteryStudies.baseCostMult
 	masteryStudies.bought = 0
 	masteryStudies.ttSpent = 0
 	for (id = 0; id<player.masterystudies.length; id++) {

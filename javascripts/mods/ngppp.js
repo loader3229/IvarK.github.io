@@ -72,7 +72,7 @@ const MAX_DIL_UPG_PRIORITIES = [6, 4, 3, 1, 2]
 function preQuantumAutoNGP3(diff) {
 	//Pre-Quantum Automation
 	let tickPerDiff = 10
-	if (qMs.tmp.amt >= 12) tickPerDiff *= Math.pow(0.9, Math.pow(qMs.tmp.amt - 12 + 1, 1 + Math.max(qMs.tmp.amt - 20, 0) / 10))
+	if (qMs.tmp.amt >= 12) tickPerDiff *= Math.pow(0.9, Math.pow(qMs.tmp.amt - 12 + 1, 1 + Math.max(qMs.tmp.amt - 20, 0) / 15))
 
 	tmp.qu.metaAutobuyerWait += diff
 	if (tmp.qu.metaAutobuyerWait >= tickPerDiff) {
@@ -217,6 +217,8 @@ function maxAllDilUpgs() {
 					dt = data.res
 					player.dilation.rebuyables[num] = (player.dilation.rebuyables[num] || 0) + data.toBuy
 					update = true
+
+					if (num == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), data.toBuy)))
 				}
 			}
 		}

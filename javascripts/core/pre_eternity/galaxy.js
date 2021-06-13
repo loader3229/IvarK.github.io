@@ -12,8 +12,6 @@ function galaxyReset(bulk) {
 
 	doGalaxyResetStuff()
 
-	skipResets()
-
 	if (player.options.notation == "Emojis") player.spreadingCancer += bulk
 
 	if (player.infinitied < 1 && player.eternities == 0 && !quantumed) {
@@ -171,7 +169,6 @@ function getRemoteScalingStart(galaxies) {
 	if (hasDilationUpg(5) && tmp.ngC) n += 25;
 	if (tmp.ngp3) {
 		for (var t = 251; t <= 253; t++) if (masteryStudies.has(t)) n += getMTSMult(t)
-		if (enB.active("glu", 3)) n += enB.tmp.glu3
 
 		if (isNanoEffectUsed("remote_start")) n += tmp.nf.effects.remote_start
 		if (galaxies > 1/0 && !tmp.be) n -= galaxies - 1/0 

@@ -2867,7 +2867,7 @@ function updateAutobuyers() {
 		if (!player.infinityUpgradesRespecced) delete player.autobuyers[10].bulkBought
 	}
 
-	getEl("autoGalMax").textContent = "Max Galaxies" + ((tmp.mod.newGamePlusVersion || tmp.ngp3) && getEternitied() >= 10 ? " (0 to max all galaxies)" : "") + ":"
+	getEl("autoGalMax").textContent = "Max Galaxies" + (tmp.ngp3_boost && getEternitied() >= 10 ? " (0 to max all galaxies)" : "") + ":"
 
 	//NG-X Hell
 	if (inNGM(2)) {
@@ -2934,11 +2934,8 @@ function updateAutobuyers() {
 
 	//NG+3
 	player.eternityBuyer.dilationMode = getEl("dilatedeternityison").checked
-	player.eternityBuyer.dilationPerAmount = Math.max(parseInt(getEl("prioritydil").value),2)
-	if (player.eternityBuyer.dilationMode && player.eternityBuyer.statBeforeDilation >= player.eternityBuyer.dilationPerAmount) {
-		dilateTime(true)
-		return
-	}
+	player.eternityBuyer.dilationPerAmount = Math.max(parseInt(getEl("prioritydil").value), 1)
+	player.eternityBuyer.statBeforeDilation = Math.min(player.eternityBuyer.statBeforeDilation, player.eternityBuyer.dilationPerAmount)
 
 	if (tmp.qu && tmp.qu.autobuyer) tmp.qu.autobuyer.enabled = getEl("quantumison").checked
 	priorityOrder()
@@ -3145,7 +3142,7 @@ function updatePriorities() {
 	if (tmp.ngp3) {
 		const dilValue = parseFloat(getEl("prioritydil").value)
 		if (dilValue == Math.round(dilValue) && dilValue > 1) player.eternityBuyer.dilationPerAmount = dilValue
-		if (player.eternityBuyer.dilationMode && player.eternityBuyer.statBeforeDilation >= player.eternityBuyer.dilationPerAmount) {
+		if (player.eternityBuyer.dilationMode && player.eternityBuyer.statBeforeDilation <= 0) {
 			dilateTime(true)
 			return
 		}
@@ -3319,7 +3316,16 @@ function eternity(force, auto, forceRespec, dilated) {
 	player.thisEternity = 0
 	forceRespec = doCheckECCompletionStuff() || forceRespec
 
+	var oldStat = getEternitied()
+	player.eternities = nA(player.eternities, gainEternitiedStat())
+
 	player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
+	updateBankedEter()
+
+	if (!force && (player.respec || player.respecMastery || forceRespec)) respecTimeStudies(forceRespec)
+	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
+	player.currentEternityChall = ""
+
 	if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
 		let gain = getTPGain()
 		if (gain.gte(player.dilation.totalTachyonParticles)) {
@@ -3329,22 +3335,13 @@ function eternity(force, auto, forceRespec, dilated) {
 			setTachyonParticles(gain)
 		}
 	}
-	if (!dilated && player.eternityBuyer.dilationMode) {
-		player.eternityBuyer.statBeforeDilation++
-		if (player.eternityBuyer.statBeforeDilation >= player.eternityBuyer.dilationPerAmount) {
-			dilateTime(true)
-			return
-		}
+	if (!force && !dilated && player.eternityBuyer.dilationMode) {
+		player.eternityBuyer.statBeforeDilation--
+		if (player.eternityBuyer.statBeforeDilation <= 0) dilated = true
 	}
+	if (dilated) player.eternityBuyer.statBeforeDilation = player.eternityBuyer.dilationPerAmount
 
-	var oldStat = getEternitied()
-	player.eternities = nA(player.eternities, gainEternitiedStat())
-	updateBankedEter()
-
-	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
-	player.currentEternityChall = ""
-
-	doEternityResetStuff(4, dilated ? "dil" : "")
+	doEternityResetStuff(4, dilated ? "dil" : 0)
 	doAfterEternityResetStuff()
 
 	if (player.eternities <= 1) {
@@ -3352,7 +3349,6 @@ function eternity(force, auto, forceRespec, dilated) {
 		showDimTab("timedimensions")
 		loadAutoBuyerSettings()
 	}
-	if (!force && (player.respec || player.respecMastery || forceRespec)) respecTimeStudies(forceRespec)
 	doAutoEterTick()
 	if (tmp.ngp3) updateBreakEternity()
 }
@@ -3412,7 +3408,6 @@ function doAfterEternityResetStuff() {
 	updateLastTenEternities()
 	updateEternityChallenges()
 	updateEterChallengeTimes()
-	player.dilation.active = false
 }
 
 function resetReplicantiUpgrades() {
@@ -3437,7 +3432,10 @@ function challengesCompletedOnEternity() {
 	player.postChallUnlocked = 0
 	if (hasAch("r133")) {
 		player.postChallUnlocked = order.length
-		for (i = 0; i < order.length; i++) array.push(order[i])
+		for (i = 0; i < order.length; i++) {
+			var ic = order[i]
+			if (!tmp.ngp3 || tmp.bgMode || player.currentEternityChall == "" && player.challenges.includes(ic)) array.push(ic)
+		}
 	}
 	return array
 }
@@ -3450,7 +3448,7 @@ function gainEternitiedStat() {
 	if (hasTS(34) && tmp.ngC) ret = nM(ret, 10)
 	if (hasTS(35) && tmp.ngC) ret = nM(ret, tsMults[35]())
 	if (hasAch("r132") && tmp.ngp3_boost) ret = nM(ret, getInfBoostInput(player.infinitied).add(1).log10() / 5 + 1)
-	if (tmp.ngp3 && hasAch("ngpp18")) ret = nM(ret, 100)
+	if (tmp.ngp3 && hasAch("ngpp18")) ret = nM(ret, 10)
 	let exp = getEternitiesAndDTBoostExp()
 	if (exp > 0) ret = nM(player.dilation.dilatedTime.max(1).pow(exp), ret)
 	if (tmp.ngC & exp > 0) ret = nM(ret, Decimal.pow(player.dilation.tachyonParticles.plus(1).log10() + 1, exp))
@@ -3988,7 +3986,7 @@ function incrementTimesUpdating(diffStat){
 	player.totalTimePlayed += diffStat
 	if (tmp.ngpX >= 5) pl.save.time += diffStat
 	if (tmp.ngp3) player.ghostify.time += diffStat
-	if (tmp.qu) tmp.qu.time += diffStat
+	if (tmp.qu && implosionCheck !== 2) tmp.qu.time += diffStat
 	if (player.currentEternityChall == "eterc12") diffStat /= 1e3
 	player.thisEternity += diffStat
    	player.thisInfinityTime += diffStat
@@ -4798,7 +4796,9 @@ function ECRewardDisplayUpdating(){
 	getEl("ec11reward").textContent = "Reward: Further reduce the tickspeed cost multiplier increase. Currently: " + player.tickSpeedMultDecrease.toFixed(2) + "x" + (tmp.ngC ? ", and galaxies are " + shorten((getECReward(11) - 1) * 100) + "% stronger (based on free tickspeed upgrades)":" ")
 	getEl("ec12reward").textContent = "Reward: Infinity Dimension cost multipliers are reduced. (x^" + getECReward(12) + ")"
 	getEl("ec13reward").textContent = "Reward: For boosting dimension boosts, everything except meta-antimatter boosts them more. (x^1 -> ^" + getECReward(13).toFixed(2) + ")"
-	getEl("ec14reward").textContent = "Reward: Slow down the base replicate interval by " + shorten(tmp.rep.ec14 ? tmp.rep.ec14.interval : 1) + "x, but also slow down the replicanti scaling by " + shorten(tmp.rep.ec14 ? tmp.rep.ec14.ooms : 1) + "x OoMs."
+
+	let ec14Div = tmp.rep.ec14 ? tmp.rep.ec14.interval : new Decimal(1)
+	getEl("ec14reward").textContent = "Reward: " + (ec14Div.lt(1) ? "Speed up the base replicate interval by " + shorten(Decimal.div(1, ec14Div)) : "Slow down the base replicate interval by " + shorten(ec14Div)) + "x, but also slow down the replicanti scaling by " + shorten(tmp.rep.ec14 ? tmp.rep.ec14.ooms : 1) + "x OoMs."
 
 	getEl("ec10span").textContent = shortenMoney(ec10bonus) + "x"
 	getEl("eterc7ts").textContent = tmp.ngC ? "does nothing" : "affects all dimensions normally"
@@ -4974,7 +4974,7 @@ function generateTT(diff){
 }
 
 function thisQuantumTimeUpdating(){
-	setAndMaybeShow("quantumClock", tmp.quUnl && !ph.did("ghostify") && tmp.qu.best >= 10, '"Quantum time: <b class=\'QKAmount\'>"+timeDisplayShort(tmp.qu.time)+"</b>"')
+	setAndMaybeShow("quantumClock", tmp.quUnl && hasAch('ng3p21'), '"Quantum time: <b class=\'QKAmount\'>"+timeDisplay(tmp.qu.time)+"</b>"')
 }
 
 function updateInfinityTimes(){
@@ -5739,7 +5739,7 @@ window.addEventListener('keydown', function(event) {
 		break;
 
 		case 77: // M
-			if (ndAutobuyersUsed <= 8 || !player.challenges.includes("postc8")) getEl("maxall").onclick()
+			if (ndAutobuyersUsed <= 8) getEl("maxall").onclick()
 			if (hasDilationStudy(6)) getEl("metaMaxAll").onclick()
 		break;
 
