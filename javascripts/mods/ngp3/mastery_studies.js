@@ -7,8 +7,8 @@ var masteryStudies = {
 			261: 3e69, 262: 3e69, 263: 3e69, 264: 3e69, 265: 3e69, 266: 3e69,
 
 			//Quantum
-			271: 5e69,
-			281: 2e74, 282: 4e73, 283: 4e73, 284: 2e74,
+			271: 2e70,
+			281: 1/0, 282: 1/0, 283: 1/0, 284: 1/0,
 			291: 4e74, 292: 2e74, 293: 4e74,
 			301: 1/0, 302: 1/0,
 			311: 1/0, 312: 1/0,
@@ -34,7 +34,7 @@ var masteryStudies = {
 			ex_13: 5e69
 		},
 		dil: {
-			7: 1e74, 8: 3e76, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
+			7: 2e74, 8: 3e76, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
 		}
 	},
 	costs: {
@@ -185,13 +185,17 @@ var masteryStudies = {
 			if (tmp.ngp3_mul) x *= 1.25
 			return x
 		},
+		265() {
+			let x = doubleMSMult(tmp.rep ? tmp.rep.baseChance : 0)
+			return Decimal.pow(x, masteryStudies.has(283) ? getMTSMult(283, "update") : 0.5)
+		},
 
 		271() {
 			let log = tmp.rm.log10()
 			let dLog = Math.max(Math.log10(log), 0)
-			let str = Math.max(dLog / 4, 1)
+			let str = Math.pow(Math.max(dLog / 5 + 1, 1), 2)
 
-			return Decimal.pow(2 + 8 / str, Math.pow(log, 2 - 1 / str))
+			return Decimal.pow(10, Math.pow(log, 2 - 1 / str) * Math.pow(10, 5 / str - 5) * str)
 		},
 		281() {
 			let x = player.dilation.dilatedTime.add(1).log10()
@@ -202,7 +206,8 @@ var masteryStudies = {
 		},
 		283() {
 			let x = tmp.rep ? tmp.rep.baseChance : 0
-			return 0.7 * Math.pow(x / 1.5e9 + 1, 0.2)
+			let log = Math.max(Math.log10(x), 0)
+			return Math.pow(x / 1e7 + 1, 0.1) - 0.5
 		},
 		284() {
 			let powEff = 1.5
@@ -219,6 +224,12 @@ var masteryStudies = {
 			let rep = (tmp.rmPseudo || player.replicanti.amount).log10()
 			let exp = (4 - 1 / (Math.log10(rep + 1) / 10 + 1)) / 3
 			return Math.pow(rep / 3e5, exp) * 3e3
+		},
+		292() {
+			let rep = (tmp.rmPseudo || player.replicanti.amount).log10()
+			let x = Math.pow(rep + 1, 0.01)
+			if (x > 2) x = 4 - 4 / x
+			return x
 		},
 
 		301() {
@@ -261,7 +272,7 @@ var masteryStudies = {
 		284: () => "After boosts, total galaxies increase the OoMs of replicate interval scaling.",
 
 		291: () => "Replicantis generate free Dimension Boosts.",
-		292: () => "Some boosts from Replicantis are stronger.",
+		292: () => "Replicantis gradually boost dilated time more.",
 		293: () => "All Replicanti boosts are based on Replicanti multiplier.",
 
 		301: () => "Red power makes Replicated Galaxies more evenly.",
@@ -272,7 +283,7 @@ var masteryStudies = {
 		313: () => "Each color power boosts the next color at a cyclical order.",
 		314: () => "Blue power strengthen the synergy from meta-antimatter to dilated time."
 	},
-	hasStudyEffect: [251, 252, 253, 271, 281, 283, 284, 291, 301, 302, 311, 312, 314],
+	hasStudyEffect: [251, 252, 253, 265, 271, 281, 283, 284, 291, 292, 301, 302, 311, 312, 314],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -282,6 +293,9 @@ var masteryStudies = {
 		},
 		253(x) {
 			return "+" + getFullExpansion(Math.floor(x))
+		},
+		265(x) {
+			return "^" + shorten(x)
 		},
 		281(x) {
 			return "+" + shorten(x * getReplSpeedExpMult()) + " OoMs"
@@ -294,6 +308,9 @@ var masteryStudies = {
 		},
 		291(x) {
 			return "+" + getFullExpansion(Math.floor(x))
+		},
+		292(x) {
+			return "^" + shorten(x)
 		},
 		301(x) {
 			return formatPercentage(x) + "% even"

@@ -389,8 +389,7 @@ function updateReplicantiTemp() {
 	if (enB.active("glu", 8)) data.baseChance = Math.pow(data.baseChance, 1.25)
 
 	let pow = 1
-	let ms265Base = doubleMSMult(data.baseChance / 100)
-	if (ms265Base > 1) pow = Decimal.pow(ms265Base, masteryStudies.has(283) ? getMTSMult(283, "update") : 0.5)
+	if (masteryStudies.has(265)) pow = getMTSMult(265, "update")
 	if (pow > 1) data.chance = Decimal.pow(data.baseChance / 100, pow.toNumber())
 	else data.chance = data.baseChance / 100
 

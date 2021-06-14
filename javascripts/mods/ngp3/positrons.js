@@ -101,7 +101,7 @@ let POSITRONS = {
 		//Meta Dimension Boosts or Quantum Energy -> Positrons
 		pos.save.eng = 0
 		if (pos.on()) {
-			let mdbStart = 15
+			let mdbStart = 0
 			let mdbMult = 0.25
 			if (QCs.isRewardOn(5)) mdbMult = QCs.tmp.rewards[5]
 

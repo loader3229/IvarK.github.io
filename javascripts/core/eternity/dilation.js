@@ -48,7 +48,11 @@ function getDilTimeGainPerSecond() {
 	if (hasDilationUpg('ngusp3')) gain = gain.times(getD22Bonus())
 
 	//NG+3
-	if (hasAch("r137") && tmp.ngp3_boost) gain = gain.times(Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(tmp.rmPseudo.max(1).log10() / (masteryStudies.has(292) ? 9e3 : 1e4) + 1)))
+	if (hasAch("r137") && tmp.ngp3_boost) {
+		let exp = tmp.rmPseudo.max(1).log10()
+		if (masteryStudies.has(292)) exp *= getMTSMult(292)
+		gain = gain.times(Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(exp / 1e4 + 1)))
+	}
 	if (tmp.ngp3) {
 		if (hasAch("r138")) gain = gain.times(tmp.ngp3_exp ? 3 : 2)
 		if (hasAch("ngpp13")) gain = gain.times(2)

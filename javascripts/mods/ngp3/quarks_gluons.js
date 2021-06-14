@@ -464,9 +464,8 @@ let enB = {
 
 	types: ["glu", "pos"],
 	priorities: [
-		["glu", 5],
 		["pos", 1], ["pos", 2], ["pos", 3], ["pos", 4], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 8], ["pos", 9], ["pos", 10],
-		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 4], ["glu", 6], ["glu", 7], ["glu", 8], ["glu", 9], ["glu", 10],
+		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 4], ["glu", 5], ["glu", 6], ["glu", 7], ["glu", 8], ["glu", 9], ["glu", 10],
 	],
 	glu: {
 		name: "Entangled",
@@ -551,8 +550,8 @@ let enB = {
 		},
 		4: {
 			req: 8,
-			masReq: 12,
-			masReqExpert: 14,
+			masReq: 11,
+			masReqExpert: 12,
 			type: "r",
 			activeReq: () => !QCs.in(2),
 
@@ -566,23 +565,21 @@ let enB = {
 			}
 		},
 		5: {
-			req: 15,
+			req: 10,
 			masReq: 20,
 			masReqExpert: 25,
-			type: "b",
+			type: "g",
 			activeReq: () => !QCs.in(2),
 
 			eff(x) {
 				if (pos.on()) {
-					x = Math.sqrt(x / 5 + 1)
-					if (x > 4) x = 5 - 4 / x
-					return x
+					return 1.25 - 0.25 / Math.sqrt(x + 1)
 				} else {
-					return Math.sqrt(x) * 100
+					return Math.sqrt(x)
 				}
 			},
 			effDisplay(x) {
-				return pos.on() ? "Positrons on: Increase the power of Dimensional Positronic Charge by <span style='font-size:25px'>" + formatPercentage(x - 1) + "</span>%."
+				return pos.on() ? "Positrons on: Meta-Dimension Boosts are <span style='font-size:25px'>" + formatPercentage(x - 1) + "</span>% stronger."
 				: "Positrons off: Strengthen all effects for mastered Positronic Boosts by +<span style='font-size:25px'>" + shorten(x) + "</span> charge."
 			}
 		},
