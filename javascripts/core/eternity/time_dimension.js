@@ -68,7 +68,7 @@ function calcVanillaTSTDMult(tier){
 }
 
 function getRepToTDExp() {
-	let x = masteryStudies.has(292) ? 0.15 : 0.1
+	let x = masteryStudies.has(302) ? 0.15 : 0.1
 	return x
 }
 

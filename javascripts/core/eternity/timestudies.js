@@ -978,12 +978,11 @@ let tsMults = {
 		return Math.pow(1 + player.galaxies / 1000, 0.2)
 	},
 	233() {
-		let rep = tmp.rmPseudo || player.replicanti.amount
+		let rep = (tmp.rmPseudo || player.replicanti.amount).max(1).log10()
+		rep *= 0.3
+		if (masteryStudies.has(302)) rep *= rep / 1e3 + 1
 
-		if (masteryStudies.has(292)) rep = rep.pow(rep.log10() / 1e5 + 1)
-		else rep = rep.pow(0.3)
-
-		return rep
+		return Decimal.pow(10, rep)
 	},
 
 	//NG Condensed

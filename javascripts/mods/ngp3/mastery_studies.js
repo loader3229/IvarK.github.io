@@ -9,8 +9,8 @@ var masteryStudies = {
 			//Quantum
 			271: 2e70,
 			281: 1/0, 282: 1/0, 283: 1/0, 284: 1/0,
-			291: 4e74, 292: 2e74, 293: 4e74,
-			301: 1/0, 302: 1/0,
+			291: 4e74, 292: 4e74,
+			301: 1/0, 302: 2e74, 303: 1/0,
 			311: 1/0, 312: 1/0,
 
 			//Beginner Mode
@@ -48,8 +48,8 @@ var masteryStudies = {
 			//Quantum
 			t271: "reset",
 			t281: 5, t282: 3, t283: 3, t284: 5,
-			t291: 4, t292: 1, t293: 4,
-			t301: 8, t302: 8,
+			t291: 4, t292: 4,
+			t301: 8, t302: 1, t303: 8,
 			t311: 1 / 4, t312: 2, t313: 2, t314: 1 / 4,
 
 			//Beginner Mode
@@ -226,30 +226,18 @@ var masteryStudies = {
 			return Math.pow(rep / 3e5, exp) * 3e3
 		},
 		292() {
-			let rep = (tmp.rmPseudo || player.replicanti.amount).log10()
-			let x = Math.pow(rep + 1, 0.01)
-			if (x > 2) x = 4 - 4 / x
-			return x
+			let rg = getFullEffRGs()
+			return Math.log10(rg / 1e3 + 1) + 1
 		},
 
-		301() {
-			return 0
-		},
-		302() {
-			let rg = getFullEffRGs()
-			return Math.log10(rg / 1e3 + 1) * Math.log10(Math.log10(tmp.qu.colorPowers.g + 1) + 1) / 5 + 1
-		},
 		311() {
-			return 0
+			return 1
 		},
 		312() {
-			return 0
+			return 1
 		},
 		313() {
 			return 0
-		},
-		314() {
-			return 0.0045
 		},
 	},
 	timeStudyDescs: {
@@ -272,18 +260,18 @@ var masteryStudies = {
 		284: () => "After boosts, total galaxies increase the OoMs of replicate interval scaling.",
 
 		291: () => "Replicantis generate free Dimension Boosts.",
-		292: () => "Replicantis gradually boost dilated time more.",
-		293: () => "All Replicanti boosts are based on Replicanti multiplier.",
+		292: () => "Replicated Galaxies raise Replicanti multiplier to an exponent instead.",
 
-		301: () => "Red power makes Replicated Galaxies more evenly.",
-		302: () => "Blue power makes Replicated Galaxies raise Replicanti multiplier instead.",
+		301: () => "Replicated Galaxies have equal powers instead.",
+		302: () => "Some Replicanti boosts are greatly stronger.",
+		303: () => "All Replicanti boosts are based on replicanti multiplier instead.",
 
-		311: () => "Red power partially shares TS232 power to all galaxies.",
-		312: () => "Green power makes Replicanti multiplier more useful to Replicanti boosts.",
-		313: () => "Each color power boosts the next color at a cyclical order.",
-		314: () => "Blue power strengthen the synergy from meta-antimatter to dilated time."
+		311: () => "Red power shares TS232's power to all galaxies.",
+		312: () => "Green power shares Replicated Galaxies' strength to Tachyonic Galaxies.",
+		313: () => "Blue power boosts ???",
+		314: () => "Each color power boosts the next color at a cyclical order."
 	},
-	hasStudyEffect: [251, 252, 253, 265, 271, 281, 283, 284, 291, 292, 301, 302, 311, 312, 314],
+	hasStudyEffect: [251, 252, 253, 265, 271, 281, 283, 284, 291, 292, 311, 312, 313],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -310,22 +298,13 @@ var masteryStudies = {
 			return "+" + getFullExpansion(Math.floor(x))
 		},
 		292(x) {
-			return "^" + shorten(x)
-		},
-		301(x) {
-			return formatPercentage(x) + "% even"
-		},
-		302(x) {
 			return "^" + x.toFixed(3)
 		},
 		311(x) {
-			return formatPercentage(x) + "% power -> " + formatPercentage(Math.pow(tsMults[232], x) - 1) + "%"
+			return formatPercentage(Math.pow(tsMults[232](), x) - 1) + "% (^" + x.toFixed(3) + " power)"
 		},
 		312(x) {
-			return formatPercentage(x) + "% more multiplier-like"
-		},
-		314(x) {
-			return "^" + x.toFixed(4)
+			return formatPercentage(Math.pow(getReplGalaxyEff(), x) - 1) + "% (^" + x.toFixed(3) + " power)"
 		},
 	},
 	ecsUpTo: 14,
@@ -339,9 +318,9 @@ var masteryStudies = {
 		//Quantum
 		ec13: ["d7"], ec14: ["d7"], d7: [271],
 		271: [281, 282, 283, 284],
-		281: [292], 282: [292], 283: [292], 284: [292],
-		291: [301, 312], 292: [291, 293, "d8"], 293: [302, 313],
-		301: [311], 302: [314],
+		281: [291, 302], 282: [302], 283: [302], 284: [292, 302],
+		291: [311, 312], 292: [313, 314],
+		302: [301, "d8", 303],
 
 		//No more mastery studies after that
 		d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"],
@@ -357,9 +336,6 @@ var masteryStudies = {
 		},
 		r27() {
 			return pos.unl()
-		},
-		r30() {
-			return QCs.unl()
 		}
 	},
 	unlocked: [],

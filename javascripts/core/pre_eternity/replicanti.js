@@ -82,7 +82,7 @@ function getReplMult(next) {
 		let base = new Decimal(replmult)
 
 		replmult = base.times(Decimal.pow(5, rg))
-		if (masteryStudies.has(295)) replmult = replmult.max(base.pow(getMTSMult(295)))
+		if (masteryStudies.has(303)) replmult = replmult.max(base.pow(getMTSMult(303)))
 	}
 	return replmult
 }
@@ -226,7 +226,7 @@ function getFullEffRGs(min) {
 	if (QCs.in(1)) return 0
 
 	let x = player.replicanti.galaxies
-	if (masteryStudies.has(291)) x = getTotalRGs()
+	if (masteryStudies.has(301)) x = getTotalRGs()
 	else if (min) x = Math.min(x, player.replicanti.gal)
 
 	return x
@@ -238,6 +238,7 @@ function getReplGalaxyEff() {
 	if (player.boughtDims) x = Math.log10(player.replicanti.limit.log(2)) / Math.log10(2) / 10
 	else if (ECComps("eterc8") > 0) x = getECReward(8)
 
+	if (masteryStudies.has(311)) x *= Math.pow(tsMults[232](), getMTSMult(311))
 	if (enB.active("pos", 8)) x *= enB.tmp.pos8
 	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 

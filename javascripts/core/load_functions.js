@@ -2247,6 +2247,7 @@ function setupNGP31Versions() {
 	}
 	tmp.mod.newGame3PlusVersion = 3
 
+	//NG+3R Builds
 	if (tmp.mod.ngp3Build === undefined) tmp.mod.ngp3Build = 0
 	if (tmp.mod.ngp3Build < 20210517) {
 		delete tmp.qu.challenge
@@ -2259,11 +2260,11 @@ function setupNGP31Versions() {
 	}
 	if (tmp.mod.ngp3Build < 20210519) tmp.qu.quarkEnergy = tmp.qu.bestEnergy || 0
 	if (tmp.mod.ngp3Build < 20210529) QCs.save.qc5 = 0
-	if (tmp.mod.ngp3Build < 20210605 && masteryStudies.has("d7")) {
+	if (tmp.mod.ngp3Build < 20210614 && player.masterystudies.includes("d7")) {
 		alert("Your mastery studies has been respecced due to the rework of Positronic-era studies.")
 		masteryStudies.respec(true)
 	}
-	tmp.mod.ngp3Build = 20210605
+	tmp.mod.ngp3Build = 20210614
 }
 
 function checkNGM(imported) {

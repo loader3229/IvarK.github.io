@@ -49,9 +49,11 @@ function getDilTimeGainPerSecond() {
 
 	//NG+3
 	if (hasAch("r137") && tmp.ngp3_boost) {
-		let exp = tmp.rmPseudo.max(1).log10()
-		if (masteryStudies.has(292)) exp *= getMTSMult(292)
-		gain = gain.times(Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(exp / 1e4 + 1)))
+		let log = (tmp.rmPseudo || player.replicanti.amount).max(1).log10()
+		let slog = log / 1e4
+		if (masteryStudies.has(302)) slog *= Math.log10(log + 10) * 2
+
+		gain = gain.times(Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(slog + 1)))
 	}
 	if (tmp.ngp3) {
 		if (hasAch("r138")) gain = gain.times(tmp.ngp3_exp ? 3 : 2)
@@ -664,7 +666,9 @@ function resetDilationGalaxies() {
 
 function getBaseDilGalaxyEff() {
 	let x = 1
-	if (masteryStudies.has(263)) x *= 1 + doubleMSMult(0.25)
+
+	if (masteryStudies.has(263)) x = 1 + doubleMSMult(0.25)
+	if (masteryStudies.has(311)) x *= Math.pow(tsMults[232](), getMTSMult(311))
 	if (enB.active("pos", 8)) x *= enB.tmp.pos8
 	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 
