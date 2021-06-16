@@ -570,7 +570,7 @@ function updateQuarkDisplay() {
 	let msg = ""
 	if (ph.did("quantum")) {
 		msg += "You have <b class='QKAmount'>"+shortenDimensions(tmp.qu.quarks)+"</b> "	
-		if (tmp.ngp3&&player.masterystudies.includes("d14")) msg += " aQK and <b class='SSAmount'>" + shortenDimensions(tmp.qu.bigRip.spaceShards) + "</b> Space Shard" + (tmp.qu.bigRip.spaceShards.round().eq(1) ? "" : "s")
+		if (tmp.ngp3&&player.masterystudies.includes("d14")) msg += " aQs and <b class='SSAmount'>" + shortenDimensions(tmp.qu.bigRip.spaceShards) + "</b> Space Shard" + (tmp.qu.bigRip.spaceShards.round().eq(1) ? "" : "s")
 		else msg += "anti-quark" + (tmp.qu.quarks.round().eq(1) ? "" : "s")
 		msg += "."
 	}

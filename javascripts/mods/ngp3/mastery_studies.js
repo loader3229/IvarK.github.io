@@ -43,7 +43,7 @@ var masteryStudies = {
 			//Eternity
 			t241: 1,
 			t251: 2, t252: 2, t253: 2,
-			t261: 8, t262: 8, t263: 4, t264: 2, t265: 2, t266: 4,
+			t261: 9, t262: 9, t263: 5, t265: 2, t265: 2, t266: 5,
 
 			//Quantum
 			t271: "reset",
@@ -58,13 +58,13 @@ var masteryStudies = {
 			t281_bg: 3, t282_bg: 2, t283_bg: 2, t284_bg: 3,
 
 			//Expert Mode
-			t252_ex: 4, t253_ex: 4,
-			t261_ex: 16, t262_ex: 16, t263_ex: 6, t264_ex: 16, t265_ex: 16, t266_ex: 6,
-			t282_ex: 4, t283_ex: 4,
+			t252_ex: 5, t253_ex: 5,
+			t281_ex: 20, t282_ex: 20, t283_ex: 8, t285_ex: 20, t285_ex: 20, t288_ex: 8,
+			t282_ex: 5, t283_ex: 5,
 
 			//Death Mode
-			t251_dt: 4,
-			t261_dt: 8, t262_dt: 8, t263_dt: 8, t264_dt: 16, t265_dt: 16, t266_dt: 8,
+			t251_dt: 5,
+			t261_dt: 10, t262_dt: 10, t263_dt: 10, t264_dt: 16, t265_dt: 16, t266_dt: 10,
 		},
 		ec: {},
 		dil: {}
@@ -200,8 +200,6 @@ var masteryStudies = {
 		281() {
 			let x = player.dilation.dilatedTime.add(1).log10()
 			x /= Math.pow(Math.log10(x + 1) + 1, 2) * 8 / 5
-
-			if (enB.active("pos", 7)) x += enB.tmp.pos7
 			return x
 		},
 		283() {
@@ -216,8 +214,6 @@ var masteryStudies = {
 				Math.pow(getTotalRGs(), 1 / powEff) +
 				Math.pow(player.dilation.freeGalaxies, 1 / powEff)
 			, powEff) / 300
-
-			if (enB.active("pos", 7)) x += enB.tmp.pos7
 			return x
 		},
 		291() {
@@ -237,7 +233,10 @@ var masteryStudies = {
 			return 1
 		},
 		313() {
-			return 0
+			let tpLog = player.dilation.tachyonParticles.max(1).log10()
+			let bpLog = Math.log10(tmp.qu.colorPowers.b * 1.5 + 1) * 2
+
+			return Math.pow(tpLog + 1, 0.125) * Math.sqrt(bpLog) / 5 + 1
 		},
 	},
 	timeStudyDescs: {
@@ -268,7 +267,7 @@ var masteryStudies = {
 
 		311: () => "Red power shares TS232's power to all galaxies.",
 		312: () => "Green power shares Replicated Galaxies' strength to Tachyonic Galaxies.",
-		313: () => "Blue power boosts ???",
+		313: () => "Tachyon Particles and Blue Power raise Blue Power's effect by an exponent.",
 		314: () => "Each color power boosts the next color at a cyclical order."
 	},
 	hasStudyEffect: [251, 252, 253, 265, 271, 281, 283, 284, 291, 292, 311, 312, 313],
@@ -305,6 +304,9 @@ var masteryStudies = {
 		},
 		312(x) {
 			return formatPercentage(Math.pow(getReplGalaxyEff(), x) - 1) + "% (^" + x.toFixed(3) + " power)"
+		},
+		313(x) {
+			return "^" + shorten(x)
 		},
 	},
 	ecsUpTo: 14,

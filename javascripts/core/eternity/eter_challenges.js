@@ -356,7 +356,7 @@ function getECReward(x) {
 	if (x == 11 && pc) return Math.sqrt(Math.log10((Math.pow(c, 2) * (player.totalTickGained + (Math.max(c, 1) - 1) * 5e4)) / 1e5 + 1)/(4 - c / 2) + 1)
 	if (x == 12) return 1 - c * (m2 ? .06 : 0.008)
 	if (x == 13) return Math.sqrt(1 + c / 7.5)
-	if (x == 14) return [0, 0.125, 0.25, 0.5, 0.75, 1][c]
+	if (x == 14) return [0, 0.125, 0.25, 0.5, 0.75, 0.875][c]
 }
 
 function doCheckECCompletionStuff() {

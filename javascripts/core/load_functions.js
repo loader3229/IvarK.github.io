@@ -480,7 +480,7 @@ function setSomeEterEraStuff(){
 }
 
 function setSaveStuffHTML(){
-        getEl("rename").innerHTML = "<p style='font-size:15px'>Rename</p>Name: "+(tmp.mod.save_name?tmp.mod.save_name:"Save #" + savePlacement)
+	getEl("save_name").textContent = "You are currently playing in " + (tmp.mod.save_name ? tmp.mod.save_name : "Save #" + savePlacement)
 	getEl("offlineProgress").textContent = "Offline progress: O"+(tmp.mod.offlineProgress?"N":"FF")
 	getEl("autoSave").textContent = "Auto save: " + (tmp.mod.autoSave ? "ON" : "OFF")
 	getEl("autoSaveInterval").textContent = "Auto-save interval: " + getAutoSaveInterval() + "s"
@@ -2383,7 +2383,7 @@ function rename_save(id) {
 	if (save_name === null) return
 	if (metaSave.current == id || id === undefined) {
 		tmp.mod.save_name = save_name
-		getEl("rename").innerHTML = "<p style='font-size:15px'>Rename</p>Name: "+(tmp.mod.save_name?tmp.mod.save_name:"Save #" + savePlacement)
+		getEl("save_name").textContent = "You are currently playing in " + (tmp.mod.save_name ? tmp.mod.save_name : "Save #" + savePlacement)
 	} else {
 		var temp_save = get_save(id)
 		if (!temp_save.aarexModifications) temp_save.aarexModifications={
@@ -2482,10 +2482,7 @@ function delete_save(saveId) {
 
 var ngModeMessages=[]
 function new_game(type) {
-	if (!modsShown && type != "adv") {
-		alert('This button is coming soon. I recommend you to use the button on the right to make your new save.')
-		return
-	}
+	if (!type && modsShown === "basic") return
 
 	show_mods(type)
 	if (modsShown) return
@@ -2494,19 +2491,22 @@ function new_game(type) {
 
 	save_game(true)
 	clearInterval(gameLoopIntervalId)
-	updateNewPlayer("new")
+	updateNewPlayer(type ? "quick" : "new", type)
 	infiniteCheck2 = false
-	var oldId=metaSave.current
+
+	var oldId = metaSave.current
 	metaSave.current=1
 	while (metaSave.saveOrder.includes(metaSave.current)) metaSave.current++
 	metaSave.saveOrder.push(metaSave.current)
 	localStorage.setItem(metaSaveId,btoa(JSON.stringify(metaSave)))
+
 	changeSaveDesc(oldId, savePlacement)
-	latestRow=getEl("saves").insertRow(loadedSaves)
-	latestRow.innerHTML=getSaveLayout(metaSave.current)
+	latestRow = getEl("saves").insertRow(loadedSaves)
+	latestRow.innerHTML = getSaveLayout(metaSave.current)
 	loadedSaves++
 	changeSaveDesc(metaSave.current, loadedSaves)
-	savePlacement=loadedSaves
+	savePlacement = loadedSaves
+
 	closeToolTip()
 	onLoad()
 	startInterval()
@@ -2916,10 +2916,13 @@ function pauseGame(load) {
 	getEl("pauseStatus").textContent = tmp.mod.pause ? "Unpause" : "Pause"
 }
 
+var meta_started = false
 function initiateMetaSave() {
 	metaSave = localStorage.getItem(metaSaveId)
-	if (metaSave == null) metaSave = {presetsOrder: [], version: 2.02}
-	else metaSave = JSON.parse(atob(metaSave))
+	if (metaSave == null) {
+		metaSave = {presetsOrder: [], version: 2.02}
+		meta_started = true
+	} else metaSave = JSON.parse(atob(metaSave))
 	if (metaSave.current == undefined) {
 		metaSave.current = 1
 		metaSave.saveOrder = [1]
@@ -2983,7 +2986,7 @@ function migrateOldSaves() {
 		}
 	}
 	if (metaSave.version < 2.01) metaSave.presetsOrder_ers=[]
-	metaSave.version=2.02
+	metaSave.version = 2.02
 }
 
 //Save Storage System

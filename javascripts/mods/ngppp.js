@@ -71,8 +71,7 @@ const MAX_DIL_UPG_PRIORITIES = [6, 4, 3, 1, 2]
 
 function preQuantumAutoNGP3(diff) {
 	//Pre-Quantum Automation
-	let tickPerDiff = 10
-	if (qMs.tmp.amt >= 12) tickPerDiff *= Math.pow(0.9, Math.pow(qMs.tmp.amt - 12 + 1, 1 + Math.max(qMs.tmp.amt - 20, 0) / 15))
+	let tickPerDiff = qMs.tmp.metaSpeed
 
 	tmp.qu.metaAutobuyerWait += diff
 	if (tmp.qu.metaAutobuyerWait >= tickPerDiff) {

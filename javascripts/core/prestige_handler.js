@@ -197,7 +197,7 @@ let Prestiges = {
 	tmp: {},
 	reset() {
 		getEl("layerDispOptions").style.display = "none"
-		getEl("resetDispOptions").style.display = "none"
+		//getEl("resetDispOptions").style.display = "none"
 
 		var did = false
 		ph.tmp = { layers: 0 }
@@ -287,7 +287,7 @@ let Prestiges = {
 		ph.tmp[layer].did = true
 		ph.tmp.layers++
 		getEl("layerDispOptions").style.display = ""
-		getEl("resetDispOptions").style.display = ""
+		//getEl("resetDispOptions").style.display = ""
 		getEl("hide_" + layer).style.display = ""
 		getEl("hide_" + layer).innerHTML = (tmp.mod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 		ph.updateActive()

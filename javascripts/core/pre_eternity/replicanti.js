@@ -239,7 +239,6 @@ function getReplGalaxyEff() {
 	else if (ECComps("eterc8") > 0) x = getECReward(8)
 
 	if (masteryStudies.has(311)) x *= Math.pow(tsMults[232](), getMTSMult(311))
-	if (enB.active("pos", 8)) x *= enB.tmp.pos8
 	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 
 	return x
@@ -254,12 +253,9 @@ function getReplicantiBaseInterval(speed) {
 	if (speed === undefined) speed = player.replicanti.interval
 
 	speed = new Decimal(speed)
-	if (enB.active("glu", 8)) {
-		let lvls = Math.round(Decimal.div(speed, 1e3).log(0.9)) + 1
-		speed = Decimal.pow(0.9, Math.pow(lvls, enB.tmp.glu8) - 1).times(1e3)
-	}
-
+	if (enB.active("glu", 6)) speed = Decimal.div(1000, 3 - speed.log10() * enB.tmp.glu6)
 	if (speed.lt(1)) speed = speed.pow(0.25)
+
 	return speed
 }
 
@@ -352,9 +348,8 @@ function updateEC14Reward() {
 
 		data.ec14 = {
 			interval: div,
-			ooms: div.max(1).log10() * (1 + pow) + 1
+			ooms: div.max(1).log10() * (1 + ECComps("eterc14") / 10) + 1
 		}
-		if (enB.active("pos", 7)) data.ec14.ooms += enB.tmp.pos7
 	} else {
 		data.ec14 = {
 			interval: new Decimal(1),
@@ -386,8 +381,6 @@ function updateReplicantiTemp() {
 	data.ln = player.replicanti.amount.ln()
 
 	data.baseChance = Math.round(player.replicanti.chance * 100)
-	if (enB.active("pos", 5)) data.baseChance *= enB.tmp.pos5
-	if (enB.active("glu", 8)) data.baseChance = Math.pow(data.baseChance, 1.25)
 
 	let pow = 1
 	if (masteryStudies.has(265)) pow = getMTSMult(265, "update")

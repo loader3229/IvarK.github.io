@@ -55,7 +55,6 @@ function getGalaxyEff(bi) {
 
 	if (tmp.mod.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1
 	if (tmp.quActive) eff *= colorBoosts.r
-	if (enB.active("pos", 7) && !QCs.inAny()) eff *= enB.tmp.pos7
 	if (hasBosonicUpg(34)) eff *= tmp.blu[34]
 	return eff
 }
@@ -88,7 +87,7 @@ function getExtraGalaxyPower(noDil) {
 	let dilGalEff = 1
 	if (hasDilationStudy(1) && !noDil) {
 		dilGalEff = getBaseDilGalaxyEff()
-		if (enB.active("glu", 7)) dilGalEff *= enB.tmp.glu7
+		if (masteryStudies.has(312)) dilGalEff *= Math.pow(replGalEff, getMTSMult(312))
 
 		x += Math.floor(player.dilation.freeGalaxies) * dilGalEff
 	}

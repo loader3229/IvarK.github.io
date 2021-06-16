@@ -17,7 +17,7 @@ var break_infinity_js = false
 var forceHardReset = false
 var player
 var metaSave = null
-var modes = {}
+var mods = {}
 var gameSpeed = 1
 
 function setupFooterHTML() {
@@ -384,10 +384,10 @@ function setupHTMLAndData() {
 	GDs.setupHTML()
 }
 
-function updateNewPlayer(mode) {
-	let modesChosen = {}
+function updateNewPlayer(mode, preset) {
+	let modsChosen = {}
 	if (mode == "reset") {
-		modesChosen = {
+		modsChosen = {
 			ngm: tmp.mod.ngmR !== undefined ? 2 : tmp.mod.newGameMinusVersion !== undefined ? 1 : 0,
 			ngp: tmp.mod.ngpX ? tmp.mod.ngpX - 2 : tmp.mod.ngp4V !== undefined ? 2 : tmp.mod.newGamePlusVersion !== undefined ? 1 : 0,
 			arrows: tmp.mod.newGameExpVersion !== undefined,
@@ -404,14 +404,18 @@ function updateNewPlayer(mode) {
 			ngc: tmp.ngC,
 			diff: tmp.dtMode ? 3 : tmp.exMode ? 2 : tmp.bgMode ? 1 : 0
 		}
+	} else if (mode == "quick") {
+		modsChosen = modPresets[preset]
 	} else if (mode == "new") {
-		modesChosen = modes
+		modsChosen = mods
+	} else if (mode == "meta_started") {
+		modsChosen = modPresets.ngp3
 	}
 
 	player = {
-		money: new Decimal(modesChosen.ngmm>2?200:modesChosen.ngp>1?20:10),
+		money: new Decimal(modsChosen.ngmm>2?200:modsChosen.ngp>1?20:10),
 		tickSpeedCost: new Decimal(1000),
-		tickspeed: new Decimal(modesChosen.ngp>1?500:1000),
+		tickspeed: new Decimal(modsChosen.ngp>1?500:1000),
 		firstCost: new Decimal(10),
 		secondCost: new Decimal(100),
 		thirdCost: new Decimal(10000),
@@ -424,7 +428,7 @@ function updateNewPlayer(mode) {
 		secondAmount: new Decimal(0),
 		thirdAmount: new Decimal(0),
 		fourthAmount: new Decimal(0),
-		firstBought: modesChosen.ngm === 1 ? 5 : 0,
+		firstBought: modsChosen.ngm === 1 ? 5 : 0,
 		secondBought: 0,
 		thirdBought: 0,
 		fourthBought: 0,
@@ -442,13 +446,13 @@ function updateNewPlayer(mode) {
 		challenges: [],
 		currentChallenge: "",
 		infinityPoints: new Decimal(0),
-		infinitied: modesChosen.ngm === 1 ? 990 : modesChosen.ngp%2>0 ? 1 : 0,
-		infinitiedBank: modesChosen.ngm === 1 ? -1000 : 0,
+		infinitied: modsChosen.ngm === 1 ? 990 : modsChosen.ngp%2>0 ? 1 : 0,
+		infinitiedBank: modsChosen.ngm === 1 ? -1000 : 0,
 		totalTimePlayed: 0,
 		bestInfinityTime: 9999999999,
 		thisInfinityTime: 0,
 		resets: 0,
-		galaxies: modesChosen.ngm === 1 ? -1 : 0,
+		galaxies: modsChosen.ngm === 1 ? -1 : 0,
 		totalmoney: new Decimal(0),
 		achPow: 1,
 		newsArray: [],
@@ -461,30 +465,30 @@ function updateNewPlayer(mode) {
 		chall3Pow: new Decimal(0.01),
 		matter: new Decimal(0),
 		chall11Pow: new Decimal(1),
-		partInfinityPoint: modesChosen.ngm === 1 ? -1e300 : 0,
-		partInfinitied: modesChosen.ngm === 1 ? -1e8 : 0,
+		partInfinityPoint: modsChosen.ngm === 1 ? -1e300 : 0,
+		partInfinitied: modsChosen.ngm === 1 ? -1e8 : 0,
 		break: false,
 		challengeTimes: [600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31],
 		infchallengeTimes: [600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31],
 		lastTenRuns: [[600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0]],
 		lastTenEternities: [[600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0]],
-		infMult: new Decimal(modesChosen.ngm === 1 ? 0.5 : 1),
-		infMultCost: new Decimal(modesChosen.ngm === 1 ? 30 : 10),
+		infMult: new Decimal(modsChosen.ngm === 1 ? 0.5 : 1),
+		infMultCost: new Decimal(modsChosen.ngm === 1 ? 30 : 10),
 		tickSpeedMultDecrease: 10,
 		tickSpeedMultDecreaseCost: 3e6,
-		dimensionMultDecrease: modesChosen.ngm === 1 ? 11 : 10,
+		dimensionMultDecrease: modsChosen.ngm === 1 ? 11 : 10,
 		dimensionMultDecreaseCost: 1e8,
 		overXGalaxies: 10,
 		version: 10,
 		infDimensionsUnlocked: [],
 		infinityPower: new Decimal(1),
-		spreadingCancer: modesChosen.ngm === 1 ? -9990 : 0,
+		spreadingCancer: modsChosen.ngm === 1 ? -9990 : 0,
 		postChallUnlocked: 0,
 		postC4Tier: 0,
 		postC3Reward: new Decimal(1),
 		postC8Mult: new Decimal(1),
 		eternityPoints: new Decimal(0),
-		eternities: modesChosen.ngm === 1 ? -20 : 0,
+		eternities: modsChosen.ngm === 1 ? -20 : 0,
 		thisEternity: 0,
 		bestEternity: 9999999999,
 		eternityUpgrades: [],
@@ -515,35 +519,35 @@ function updateNewPlayer(mode) {
 			cost: new Decimal(1e20),
 			amount: new Decimal(0),
 			bought: 0,
-			power: new Decimal(modesChosen.ngm === 1 ? 0.0000125 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 0.0000125 : 1),
 			baseAmount: 0
 		},
 		infinityDimension5 : {
 			cost: new Decimal(1e140),
 			amount: new Decimal(0),
 			bought: 0,
-			power: new Decimal(modesChosen.ngm === 1 ? 0.01 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 0.01 : 1),
 			baseAmount: 0
 		},
 		infinityDimension6 : {
 			cost: new Decimal(1e200),
 			amount: new Decimal(0),
 			bought: 0,
-			power: new Decimal(modesChosen.ngm === 1 ? 0.015 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 0.015 : 1),
 			baseAmount: 0
 		},
 		infinityDimension7 : {
 			cost: new Decimal(1e250),
 			amount: new Decimal(0),
 			bought: 0,
-			power: new Decimal(modesChosen.ngm === 1 ? 0.01 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 0.01 : 1),
 			baseAmount: 0
 		},
 		infinityDimension8 : {
 			cost: new Decimal(1e280),
 			amount: new Decimal(0),
 			bought: 0,
-			power: new Decimal(modesChosen.ngm === 1 ? 0.01 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 0.01 : 1),
 			baseAmount: 0
 		},
 		infDimBuyers: [false, false, false, false, false, false, false, false],
@@ -553,75 +557,75 @@ function updateNewPlayer(mode) {
 		timeDimension1: {
 			cost: new Decimal(1),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm === 1 ? 0.01 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 0.01 : 1),
 			bought: 0
 		},
 		timeDimension2: {
 			cost: new Decimal(5),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm === 1 ? 0.03 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 0.03 : 1),
 			bought: 0
 		},
 		timeDimension3: {
 			cost: new Decimal(100),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm === 1 ? 0.025 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 0.025 : 1),
 			bought: 0
 		},
 		timeDimension4: {
 			cost: new Decimal(1000),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm === 1 ? 0.02 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 0.02 : 1),
 			bought: 0
 		},
 		timeDimension5: {
 			cost: new Decimal("1e2350"),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm === 1 ? 1e-5 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 1e-5 : 1),
 			bought: 0
 		},
 		timeDimension6: {
 			cost: new Decimal("1e2650"),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm === 1 ? 5e-6 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 5e-6 : 1),
 			bought: 0
 		},
 		timeDimension7: {
 			cost: new Decimal("1e3000"),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm === 1 ? 3e-6 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 3e-6 : 1),
 			bought: 0
 		},
 		timeDimension8: {
 			cost: new Decimal("1e3350"),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm === 1 ? 2e-6 : 1),
+			power: new Decimal(modsChosen.ngm === 1 ? 2e-6 : 1),
 			bought: 0
 		},
 		offlineProd: 0,
-		offlineProdCost: modesChosen.ngm === 1 ? 5e11 : 1e7,
+		offlineProdCost: modsChosen.ngm === 1 ? 5e11 : 1e7,
 		challengeTarget: 0,
 		autoSacrifice: 1,
 		replicanti: {
 			amount: new Decimal(0),
 			unl: false,
 			chance: 0.01,
-			chanceCost: new Decimal(modesChosen.ngmm?1e90:1e150),
-			interval: modesChosen.ngm === 1 ? 5000 : 1000,
-			intervalCost: new Decimal(modesChosen.ngmm?1e80:modesChosen.rs==1?1e150:1e140),
+			chanceCost: new Decimal(modsChosen.ngmm?1e90:1e150),
+			interval: modsChosen.ngm === 1 ? 5000 : 1000,
+			intervalCost: new Decimal(modsChosen.ngmm?1e80:modsChosen.rs==1?1e150:1e140),
 			gal: 0,
 			galaxies: 0,
-			galCost: new Decimal(modesChosen.ngmm?1e110:1e170),
+			galCost: new Decimal(modsChosen.ngmm?1e110:1e170),
 			auto: [false, false, false]
 		},
 		timestudy: {
-			theorem: modesChosen.ngm === 1 ? -6 : 0,
+			theorem: modsChosen.ngm === 1 ? -6 : 0,
 			amcost: new Decimal("1e20000"),
-			ipcost: new Decimal(modesChosen.ngm === 1 ? 1e-13 : 1),
+			ipcost: new Decimal(modsChosen.ngm === 1 ? 1e-13 : 1),
 			epcost: new Decimal(1),
 			studies: [],
 		},
-		eternityChalls: modesChosen.ngm === 1 ? {eterc1: -6} : {},
+		eternityChalls: modsChosen.ngm === 1 ? {eterc1: -6} : {},
 		eternityChallGoal: new Decimal(Number.MAX_VALUE),
 		currentEternityChall: "",
 		eternityChallUnlocked: 0,
@@ -644,13 +648,13 @@ function updateNewPlayer(mode) {
 			active: false,
 			tachyonParticles: new Decimal(0),
 			dilatedTime: new Decimal(0),
-			totalTachyonParticles: new Decimal(modesChosen.ngm === 1 ? 2000 :0),
+			totalTachyonParticles: new Decimal(modsChosen.ngm === 1 ? 2000 :0),
 			nextThreshold: new Decimal(1000),
 			freeGalaxies: 0,
 			upgrades: [],
 			rebuyables: {
 				1: 0,
-				2: modesChosen.ngm === 1 ? 1 : 0,
+				2: modsChosen.ngm === 1 ? 1 : 0,
 				3: 0,
 			}
 		},
@@ -699,19 +703,19 @@ function updateNewPlayer(mode) {
 	}
 	tmp.mod = player.aarexModifications
 
-	if (mode == "reset" || mode == "new") {
+	if (mode) {
 		// NG+x
-		if (modesChosen.ngp) doNGPlusOneNewPlayer()
-		if (modesChosen.ngpp) doNGPlusTwoNewPlayer()
-		if (modesChosen.ngpp === 2) doNGPlusThreeNewPlayer()
-		if (modesChosen.ngp === 2) doNGPlusFourPlayer()
-		if (modesChosen.ngp >= 3) convertToNGP5(true)
+		if (modsChosen.ngp) doNGPlusOneNewPlayer()
+		if (modsChosen.ngpp) doNGPlusTwoNewPlayer()
+		if (modsChosen.ngpp === 2) doNGPlusThreeNewPlayer()
+		if (modsChosen.ngp === 2) doNGPlusFourPlayer()
+		if (modsChosen.ngp >= 3) convertToNGP5(true)
 
 		// NG-x
-		if (modesChosen.ngm === 1) tmp.mod.newGameMinusVersion = 2.2
-		if (modesChosen.ngm === 2) ngmR.setup()
-		if (modesChosen.ngmm) {
-			tmp.ngmX = modesChosen.ngmm + 1
+		if (modsChosen.ngm === 1) tmp.mod.newGameMinusVersion = 2.2
+		if (modsChosen.ngm === 2) ngmR.setup()
+		if (modsChosen.ngmm) {
+			tmp.ngmX = modsChosen.ngmm + 1
 			tmp.mod.ngmX = tmp.ngmX
 			doNGMinusTwoNewPlayer()
 
@@ -721,37 +725,37 @@ function updateNewPlayer(mode) {
 		}
 
 		// NG Update
-		if (modesChosen.ngud) doNGUDNewPlayer()
-		if (modesChosen.ngud == 2) tmp.mod.ngudpV = 1.12
-		if (modesChosen.ngud == 3) doNGUDSemiprimePlayer()
+		if (modsChosen.ngud) doNGUDNewPlayer()
+		if (modsChosen.ngud == 2) tmp.mod.ngudpV = 1.12
+		if (modsChosen.ngud == 3) doNGUDSemiprimePlayer()
 
 		// NG Multiplied
-		if (modesChosen.ngmu) doNGMultipliedPlayer()
-		if (modesChosen.ngumu) tmp.mod.ngumuV = 1.03
+		if (modsChosen.ngmu) doNGMultipliedPlayer()
+		if (modsChosen.ngumu) tmp.mod.ngumuV = 1.03
 
 		// NG Exponential
-		if (modesChosen.arrows) doNGEXPNewPlayer()
-		if (modesChosen.nguep) tmp.mod.nguepV = 1.03
+		if (modsChosen.arrows) doNGEXPNewPlayer()
+		if (modsChosen.nguep) tmp.mod.nguepV = 1.03
 
 		// Difficulties
-		if (modesChosen.diff === 1) tmp.mod.ez = 1
-		if (modesChosen.diff === 2) tmp.mod.ngexV = 0.1
-		if (modesChosen.diff === 3) tmp.mod.dtMode = true
+		if (modsChosen.diff === 1) tmp.mod.ez = 1
+		if (modsChosen.diff === 2) tmp.mod.ngexV = 0.1
+		if (modsChosen.diff === 3) tmp.mod.dtMode = true
 
 		// Respecced
-		if (modesChosen.rs == 1) doInfinityRespeccedNewPlayer()
-		if (modesChosen.rs == 2) doEternityRespeccedNewPlayer()
+		if (modsChosen.rs == 1) doInfinityRespeccedNewPlayer()
+		if (modsChosen.rs == 2) doEternityRespeccedNewPlayer()
 
 		// Alternate
-		if (modesChosen.ngc) ngC.setup()
+		if (modsChosen.ngc) ngC.setup()
 
 		// Others
-		if (modesChosen.aau) {
+		if (modsChosen.aau) {
 			tmp.mod.aau = 1
 			tmp.mod.hideAchs = true
 			dev.giveAllAchievements(true)
 		}
-		if (modesChosen.ls) tmp.mod.ls = {}
+		if (modsChosen.ls) tmp.mod.ls = {}
 	}
 
 	player.infDimensionsUnlocked = resetInfDimUnlocked()
@@ -1934,6 +1938,13 @@ function changeSaveDesc(saveId, placement) {
 }
 
 var modsShown = false
+var modPresets = {
+	vanilla: {},
+	ngp3: {ngpp: 2, ngp: 1},
+	grand_run: {ngpp: 2},
+	beginner_mode: {ngpp: 2, diff: 1},
+	expert_mode: {ngpp: 2, ngp: 1, diff: 2}
+}
 var modFullNames = {
 	diff: "Difficulty",
 	journey: "Journey (NG+3)",
@@ -1968,7 +1979,7 @@ var modSubNames = {
 	diff: ["Normal", "Beginner", "Expert", "Death 💀"] // modes that aren't even made yet
 }
 function toggle_mod(id) {
-	if (id == "rs" && !modes.rs) {
+	if (id == "rs" && !mods.rs) {
 		if (!confirm("WARNING! Most Respecced mods are extremely broken and will be fixed in a far future! Are you sure to proceed?"))
 		return
 	}
@@ -1980,11 +1991,11 @@ function toggle_mod(id) {
 	hasSubMod = Object.keys(modSubNames).includes(id)
 
 	// Change submod
-	var subMode = ((modes[id] || 0) + 1) % ((hasSubMod && modSubNames[id].length) || 2)
+	var subMode = ((mods[id] || 0) + 1) % ((hasSubMod && modSubNames[id].length) || 2)
 	if (id == "ngp" && subMode == 2 && !metaSave.ngp4) subMode = 0
-	else if (id == "ngpp" && subMode == 1 && modes.ngud) subMode = 2
-	else if (id == "arrows" && subMode == 2 && modes.rs) subMode = 0
-	modes[id] = subMode
+	else if (id == "ngpp" && subMode == 1 && mods.ngud) subMode = 2
+	else if (id == "arrows" && subMode == 2 && mods.rs) subMode = 0
+	mods[id] = subMode
 
 	//Setup notifications
 	var notifyExpert = id == "ngpp" || id == "ngex"
@@ -1992,86 +2003,86 @@ function toggle_mod(id) {
 	// Update displays
 	getEl(id + "Btn").textContent = `${modFullNames[id]}: ${hasSubMod?modSubNames[id][subMode] : subMode ? "ON" : "OFF"}`
 	if (id == "diff" && subMode) {
-		modes.ngp = 0
-		modes.aau = 0
-		modes.ls = 0
+		mods.ngp = 0
+		mods.aau = 0
+		mods.ls = 0
 		getEl("ngpBtn").textContent = "NG+: OFF"
 		getEl("aauBtn").textContent = "AAU: OFF"
 		getEl("lsBtn").textContent = "Light Speed: OFF"
 	}
-	if ((id == "ngpp" || id=="ngud") && subMode && (modes.rs != 0 && modes.rs != 3)) {
-		//if (!modes.ngp && !modes.ngex) toggle_mod("ngp")
-		modes.rs = 0
+	if ((id == "ngpp" || id=="ngud") && subMode && (mods.rs != 0 && mods.rs != 3)) {
+		//if (!mods.ngp && !mods.ngex) toggle_mod("ngp")
+		mods.rs = 0
 		getEl("rsBtn").textContent = "Respecced: NONE"
 	}
 	if (
-		(id=="ngpp" && !subMode && modes.ngp >= 2) ||
-		(id=="rs" && subMode && modes.ngp >= 2) ||
-		(id=="ngmm" && subMode && modes.ngp >= 2) ||
-		(id=="ngud" && subMode && modes.ngp >= 3)
+		(id=="ngpp" && !subMode && mods.ngp >= 2) ||
+		(id=="rs" && subMode && mods.ngp >= 2) ||
+		(id=="ngmm" && subMode && mods.ngp >= 2) ||
+		(id=="ngud" && subMode && mods.ngp >= 3)
 	) {
-		modes.ngp=1
+		mods.ngp=1
 		getEl("ngpBtn").textContent = "NG+: ON"
 	}
 	if (subMode && (
-		(id=="ngud" && ((subMode >= 2 && !modes.ngpp) || modes.ngpp == 1)) ||
+		(id=="ngud" && ((subMode >= 2 && !mods.ngpp) || mods.ngpp == 1)) ||
 		(id=="ngp" && subMode >= 2)
 	)) {
-		modes.ngpp = 2
+		mods.ngpp = 2
 		notifyExpert = true
 		getEl("ngppBtn").textContent = "NG++: NG+++"
 	}
 	if (id=="rs" && subMode) {
-		modes.ngpp = 0
-		modes.ngud = 0
+		mods.ngpp = 0
+		mods.ngud = 0
 		getEl("ngppBtn").textContent = "NG++: OFF"
 		getEl("ngudBtn").textContent = "NGUd: OFF"
 	}
 	if (id == "ngp" && subMode >= 3) {
-		modes.ngud = 0
+		mods.ngud = 0
 		getEl("ngudBtn").textContent = "NGUd: OFF"
 	}
 	if (((id=="ngpp" || id=="ngud") && !subMode) || (id == "rs" && subMode) || (id == "ngp" && subMode >= 1)) {
-		if (modes.ngud > 1) {
-			modes.ngud = 1
+		if (mods.ngud > 1) {
+			mods.ngud = 1
 			getEl("ngudBtn").textContent = "NGUd: ON"
 		}
-		if (id == "rs" && modes.arrows > 1) {
-			modes.arrows=1
+		if (id == "rs" && mods.arrows > 1) {
+			mods.arrows=1
 			getEl("arrowsBtn").textContent = "NG↑: Exponential (↑)"
 		}
-		modes.nguep = 0
-		modes.ngumu = 0
+		mods.nguep = 0
+		mods.ngumu = 0
 		getEl("nguepBtn").textContent = "NGUd↑': Linear' (↑⁰')"
 		getEl("ngumuBtn").textContent = "NGUd*': OFF"
 	}
-	if ((id == "ngumu" || id == "nguep") && !(modes.ngud >= 2) && subMode) {
-		modes.ngud = 1
+	if ((id == "ngumu" || id == "nguep") && !(mods.ngud >= 2) && subMode) {
+		mods.ngud = 1
 		toggle_mod("ngud")
 	}
 
 	if (id == "diff" && subMode) {
-		delete modes.journey
+		delete mods.journey
 		//getEl("journeyBtn").textContent = "Journey (NG+3): OFF"
 	}
 
 	if (id == "journey" && !subMode) getEl("diffBtn").textContent = "Difficulty: Normal"
 	if (id == "journey" && subMode) {
-		delete modes.diff
+		delete mods.diff
 		getEl("diffBtn").textContent = "Difficulty: Fluctuant"
 
-		delete modes.ngp
+		delete mods.ngp
 		getEl("ngpBtn").textContent = "NG+: OFF"
 
-		modes.ngpp = 2
+		mods.ngpp = 2
 		notifyExpert = true
 		getEl("ngppBtn").textContent = "NG++: NG+++"
 	}
 
-	var ngp3ex = modes.diff >= 2 && modes.ngpp == 2
-	if (modes.ngp3ex != ngp3ex) {
+	var ngp3ex = mods.diff >= 2 && mods.ngpp == 2
+	if (mods.ngp3ex != ngp3ex) {
 		if (notifyExpert && ngp3ex) $.notify("A space crystal begins to collide with reality...")
-		modes.ngp3ex = ngp3ex
+		mods.ngp3ex = ngp3ex
 	}
 
 	/* 
@@ -2081,7 +2092,6 @@ function toggle_mod(id) {
 	I also dont know how to do this and this is supa ugly so pls fix
 	*/
 }
-
 function show_mods(type = 'basic') {
 	modsShown = modsShown ? false : type
 
@@ -2089,6 +2099,7 @@ function show_mods(type = 'basic') {
 	getEl("modsTab").style.display = modsShown === 'basic' ? "" : "none"
 	getEl("advModsTab").style.display = modsShown === 'adv' ? "" : "none"
 
+	getEl("newSaveBtn").style.display = modsShown ? (modsShown === 'adv' ? "" : "none") : ""
 	getEl("newAdvSaveBtn").style.display = modsShown ? "none" : ""
 	getEl("newImportBtn").style.display = modsShown ? "none" : ""
 	getEl("cancelNewSaveBtn").style.display = modsShown ? "" : "none"
@@ -5609,7 +5620,7 @@ function initGame() {
 	//Setup stuff.
 	initiateMetaSave()
 	migrateOldSaves()
-	updateNewPlayer()
+	updateNewPlayer(meta_started ? "meta_started" : "")
 	setupHTMLAndData()
 	localStorage.setItem(metaSaveId, btoa(JSON.stringify(metaSave)))
 

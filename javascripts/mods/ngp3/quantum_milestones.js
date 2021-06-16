@@ -40,6 +40,7 @@ let qMs = {
 
 		data.amt = 0
 		data.points = 0
+		data.metaSpeed = 10
 		if (!tmp.quUnl) return
 
 		//Milestone Points
@@ -59,6 +60,8 @@ let qMs = {
 			if (data.points >= qMs[i].req) data.amt++
 			else delete tmp.qu.disabledRewards[i]
 		}
+
+		if (qMs.tmp.amt >= 12) data.metaSpeed *= Math.pow(0.9, Math.pow(qMs.tmp.amt - 12 + 1, 1 + Math.max(qMs.tmp.amt - 20, 0) / 15))
 	},
 	updateDisplay() {
 		if (tmp.quUnl) {
@@ -180,8 +183,8 @@ let qMs = {
 	},
 	12: {
 		req: 12,
-		eff: () => "Reduce the interval of auto-dilation upgrades and MDs by 10% (repeats for each following milestone)",
-		effGot: () => "The interval of auto-dilation upgrades and MDs is now reduced by 10%. (repeats for each following milestone)"
+		eff: () => "Reduce the interval of auto-dilation upgrades and MDs by 10% per milestone" + (qMs.tmp.amt >= 12 ? " (" + shorten(1 / qMs.tmp.metaSpeed) + "/s)" : ""),
+		effGot: () => "The interval of auto-dilation upgrades and MDs is now reduced by 10% per milestone."
 	},
 	13: {
 		req: 13,
@@ -230,8 +233,8 @@ let qMs = {
 	},
 	22: {
 		req: 30,
-		eff: () => "'2 Million Infinities' effect actives at 1s instead of 5s",
-		effGot: () => "'2 Million Infinities' effect now actives at 1s instead of 5s."
+		eff: () => "'2 Million Infinities' effect is always applied and is increased to " + shorten(1e3) + "x",
+		effGot: () => "'2 Million Infinities' effect is now always applied and is increased to " + shorten(1e3) + "x."
 	},
 	23: {
 		req: 35,

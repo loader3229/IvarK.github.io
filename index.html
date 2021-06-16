@@ -1429,28 +1429,31 @@
 				</tr>
 			</table>
 			<div class='optionstab' id='saving'>
+				<span id="save_name"></span>
 				<table>
 					<tr>
 						<td><div><button id="save" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Save</button></div></td>
 						<td><div><button id="load" class="storebtn" onclick='load_saves()' style="color:black; width: 200px; height: 55px; font-size: 20px">Load</button></div></td>
-						<td><div><button id="rename" class="storebtn" onclick='rename_save()' style="color:black; width: 200px; height: 55px; font-size:10px"></button></div></td>
-					</tr>
-					<tr>
 						<td><div><button id="exportbtn" class="storebtn" onclick='export_save()' style="color:black; width: 200px; height: 55px; font-size: 20px">Export</button></div></td>
 						<td><div><button id="importbtn" class="storebtn" onclick='import_save("current")' style="color:black; width: 200px; height: 55px; font-size: 20px">Import</button></div></td>
-						<td><div><button onclick="pauseGame()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 10px"><p id="pauseStatus" style="font-size:15px">Pause</p>(Stops all time, production, and automation)</button></div></td>
+						<td><div><button id="rename" class="storebtn" onclick='rename_save()' style="color:black; width: 200px; height: 55px; font-size: 20px">Rename</button></div></td>
 					</tr>
 					<tr>
 						<td><div><button id="autoSave" onclick='toggleAutoSave()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
-						<td><div><button id="offlineProgress" onclick='toggleOfflineProgress()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
-						<td><div><button onclick='reload()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Reload w/o offline progress</button></div></td>
+						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="autoSaveInterval">Auto-save interval: 30s</b><input id="autoSaveIntervalSlider" style="width: 170px;" type="range" min="15" max="120" value="30" class="slider" oninput="changeAutoSaveInterval()"></div></td>
+						<td></td>
+						<td></td>
+						<td><div><button onclick="pauseGame()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 8px"><p id="pauseStatus" style="font-size:20px">Pause</p>(Stops all time, production, and automation)</button></div></td>
 					</tr>
 					<tr>
-						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="autoSaveInterval">Auto-save interval: 30s</b><input id="autoSaveIntervalSlider" style="width: 170px;" type="range" min="15" max="120" value="30" class="slider" oninput="changeAutoSaveInterval()"></div></td>
-						<td><div><button id="convertSave" onclick="convertSave(convert)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
+						<td><div><button id="offlineProgress" onclick='toggleOfflineProgress()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
+						<td></td>
+						<td></td>
+						<td><div><button onclick='reload()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 8px"><p style="font-size: 20px">Rollback</p>(to last save point)</button></div></td>
 						<td><div><button id="reset" onclick="reset_game()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">RESET THE GAME</button></div></td>
 					</tr>
 					<tr>
+						<td><div><button id="convertSave" onclick="convertSave(convert)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
 						<td><div><button id="bugExport" onclick="bugExport()" class="storebtn" style="color:black; width:200px; height:55px; font-size:12px; display:none">Export "Infinite" bug save<br><b>(WARNING: This disappears when you reload the game!)</button></b></div></td>
 					</tr>
 				</table>
@@ -1458,22 +1461,25 @@
 			<div class='optionstab' id='displays' style='display:none'>
 				<table>
 					<tr>
-						<td><div><button id="theme" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 12px" onclick="showOptions('thememenu')"></button></div></td>
-						<td><div><button id="animationoptionsbtn" class="storebtn" onclick="showOptions('animationoptions')" style="color:black; width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
 						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size: 130%; text-align: center"><b id="updaterate">Update Rate: 50ms</b><input id="updaterateslider" style="width: 170px;" type="range" min="0" max="200" value="50" class="slider" ></div></td>
 						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size: 130%; text-align: center"><b id="renderrate">Render rate: 1 tick</b><input id="renderrateslider" style="width: 170px;" type="range" min="1" max="20" value="1" class="slider"></div></td>
+						<td></td>
+						<td><div><button id="theme" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 12px" onclick="showOptions('thememenu')"></button></div></td>
+						<td><div><button id="animationoptionsbtn" class="storebtn" onclick="showOptions('animationoptions')" style="color:black; width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
 					</tr>
 					<tr>
+						<td></td>
 						<td><div><button onclick="showOptions('visibilityoptions')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide stuff</button></div></td>
-						<td><div><button id="tabsSave" onclick="toggleTabsSave()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button></div></td>
-						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Shortcuts: OFF</button></div></td>
-						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Alternate Tab Grouping: OFF</button></div></td>
+						<td><div><button id="layerDispOptions" onclick="showOptions('layervisibilitymenu')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide layers</button></div></td>
+						<td><!--<div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Menu: OFF</button></div>--></td>
+						<td></td>
 					</tr>
 					<tr>
-						<td><div><button id="layerDispOptions" onclick="showOptions('layervisibilitymenu')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide layers</button></div></td>
-						<td><div><button id="resetDispOptions" onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Reset Displays: Top</button></div></td>
-						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Gameplay Tabs: Combined</button></div></td>
-						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Menu: OFF</button></div></td>
+						<td><div><button id="tabsSave" onclick="toggleTabsSave()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button></div></td>
+						<td><!--<div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Gameplay Tabs: Combined</button></div>--></td>
+						<td><!--<div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Alternate Tab Grouping: OFF</button></div>--></td>
+						<td><!--<div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Shortcuts: OFF</button>--></div></td>
+						<td><!--<div><button id="resetDispOptions" onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Reset Displays: Top</button></div>--></td>
 					</tr>
 				</table>
 			</div>
@@ -1559,7 +1565,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 12? - Post-Build 2)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 12? - Post-Build 3)</p>
 			</span>
 			<div class="footer bottom"></div>
 		</div>
@@ -4602,7 +4608,7 @@
 					<br>
 					<span id="enB_glu6_type"></span>
 					<br>
-					Replicated Galaxies contribute to Positrons, with <span id="enB_glu6_eff" style="font-size:35px"></span>% power.
+					Strengthen replicate interval upgrades by <span id="enB_glu6_eff" style="font-size:24px"></span>%.
 				</td>
 			</tr>
 			<tr>
@@ -4611,21 +4617,21 @@
 					<br>
 					<span id="enB_glu7_type"></span>
 					<br>
-					Tachyonic Galaxies share the partial strength of Replicated Galaxies. (by <span id="enB_glu7_eff" style="font-size:25px"></span>%)
+					Reduce the cost scaling of 4th rebuyable dilation upgrade by <span id="enB_glu7_eff" style="font-size:24px"></span>%, after 1e100 DT.
 				</td>
 				<td id="enB_glu8">
 					<b id="enB_glu8_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_glu8_type"></span>
 					<br>
-					Replicanti upgrades greatly boost themselves expect Replicated Galaxies.<br>(x levels -> <span id="enB_glu8_eff" style="font-size:25px"></span>)
+					Dilated time boosts meta-antimatter by x^<span id="enB_glu8_eff" style="font-size:24px"></span>.
 				</td>
 				<td id="enB_glu9">
 					<b id="enB_glu9_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_glu9_type"></span>
 					<br>
-					Infinite Time reward is raised to the power of ^<span id="enB_glu9_eff" style="font-size:25px"></span>.
+					Before exponents, multiply the blue power effect by <span id="enB_glu9_eff" style="font-size:24px"></span>x.
 				</td>
 			</tr>
 			<tr>
@@ -4634,10 +4640,22 @@
 					<br>
 					<span id="enB_glu10_type"></span>
 					<br>
-					Protect <span id="enB_glu10_eff" style="font-size:35px"></span> for each galaxy type from converting into Positrons.
+					Boost something by <span id="enB_glu10_eff" style="font-size:24px"></span>x.
 				</td>
-				<td></td>
-				<td></td>
+				<td id="enB_glu11">
+					<b id="enB_glu11_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_glu11_type"></span>
+					<br>
+					Boost something by <span id="enB_glu11_eff" style="font-size:24px"></span>x.
+				</td>
+				<td id="enB_glu12">
+					<b id="enB_glu12_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_glu12_type"></span>
+					<br>
+					Boost something by <span id="enB_glu12_eff" style="font-size:24px"></span>x.
+				</td>
 			</tr>
 		</table></div>
 		<div id="speedruns" class="quantumtab">
@@ -4856,21 +4874,21 @@
 					<br>
 					<span id="enB_pos4_type"></span>
 					<br>
-					Boost something by <span id="enB_pos4_eff" style="font-size:35px"></span>x.
+					Boost something by <span id="enB_pos4_eff" style="font-size:24px"></span>x.
 				</td>
 				<td id="enB_pos5">
 					<b id="enB_pos5_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos5_type"></span>
 					<br>
-					Base replicate chance is <span id="enB_pos5_eff" style="font-size:35px"></span>% higher.
+					Boost something by <span id="enB_pos5_eff" style="font-size:24px"></span>x.
 				</td>
 				<td id="enB_pos6">
 					<b id="enB_pos6_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos6_type"></span>
 					<br>
-					Infinitied stat boosts itself for stronger boosts, by ^<span id="enB_pos6_eff" style="font-size:35px"></span>.
+					Boost something by <span id="enB_pos6_eff" style="font-size:24px"></span>x.
 				</td>
 			<tr>
 			</tr>
@@ -4879,33 +4897,22 @@
 					<br>
 					<span id="enB_pos7_type"></span>
 					<br>
-					All galaxies are <span id="enB_pos7_eff" style="font-size:35px"></span>% stronger in Quantum Challenges.
+					Boost something by <span id="enB_pos7_eff" style="font-size:24px"></span>x.
 				</td>
 				<td id="enB_pos8">
 					<b id="enB_pos8_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos8_type"></span>
 					<br>
-					Partially share TS232 power to all galaxies by +<span id="enB_pos8_eff" style="font-size:35px"></span>%.
+					Boost something by <span id="enB_pos8_eff" style="font-size:24px"></span>x.
 				</td>
 				<td id="enB_pos9">
 					<b id="enB_pos9_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos9_type"></span>
 					<br>
-					The slowdown effect of Replicated Boosts starts <span id="enB_pos9_eff" style="font-size:35px"></span> later.
+					Boost something by <span id="enB_pos9_eff" style="font-size:24px"></span>x.
 				</td>
-			</tr>
-			<tr>
-				<td id="enB_pos10">
-					<b id="enB_pos10_name" style="font-size: 25px"></b>
-					<br>
-					<span id="enB_pos10_type"></span>
-					<br>
-					Reduce the goal of all Paired Challenges to ^<span id="enB_pos10_eff" style="font-size:35px"></span>.
-				</td>
-				<td></td>
-				<td></td>
 			</tr>
 		</table></div>
 		<div class='quantumtab' id='replicants'>
@@ -5658,9 +5665,9 @@
 	</div>
 	<div class="popup loadmenu" id="loadmenu" style="overflow-y:hidden; height: 360px">
 		<button class="closebtn storebtn" onclick="closeToolTip(true)">&times;</button>
-		<button id="newSaveBtn" class="storebtn" style="font-size: 15px" onclick="new_game()" style="display: inline">New</button>
-		<button id="newAdvSaveBtn" class="storebtn longbtn" style="font-size: 15px" onclick="new_game('adv')" style="display: inline">New (Advanced)</button>
+		<button id="newSaveBtn" class="storebtn" style="font-size: 15px" onclick="new_game()" style="display: inline">New save</button>
 		<button id="newImportBtn" class="storebtn" style="font-size: 15px" onclick="import_save('new')" style="display: inline">Import save</button>
+		<button id="newAdvSaveBtn" class="storebtn" style="font-size: 15px" onclick="new_game('adv')" style="display: inline">Other mods</button>
 		<button id="cancelNewSaveBtn" class="storebtn" style="font-size: 15px; display: none" onclick="show_mods()" style="display: inline">Cancel</button><br>
 		<div id="savesTab" style="height:320px;overflow-y:auto">
 			To load without offline progress, load while holding shift.<br><br>
@@ -5668,11 +5675,11 @@
 			</table>
 		</div>
 		<div id="modsTab" style="height:320px;overflow-y:auto;display:none">
-			Select a mod first before you start your new journey.<br><br>
-
-			<button class="storebtn longbtn" style="font-size: 15px" onclick="quick_mod('ng')" style="display: inline">Vanilla</button><br>
-			<button class="storebtn longbtn" style="font-size: 15px" onclick="quick_mod('ngp3')" style="display: inline">New Game Plus 3</button><br>
-			<button class="storebtn longbtn" style="font-size: 15px" onclick="quick_mod('ngm2')" style="display: inline">New Game Minus 2</button><br>
+			<button class="storebtn" style="width: 360px; font-size: 15px" onclick="new_game('vanilla')" style="display: inline">Vanilla (NG=)</button><br>
+			<button class="storebtn" style="width: 360px; font-size: 15px" onclick="new_game('ngp3')" style="display: inline">New Game Plus 3 (Recommended)</button><br>
+			<button class="storebtn" style="width: 360px; font-size: 15px" onclick="new_game('grand_run')" style="display: inline">Grand Run (NG= -> NG+3)</button><br>
+			<button class="storebtn" style="width: 360px; font-size: 15px" onclick="new_game('beginner_mode')" style="display: inline">Beginner Mode (Easy)</button><br>
+			<button class="storebtn" style="width: 360px; font-size: 15px" onclick="new_game('expert_mode')" style="display: inline">Expert Mode (Hard)</button><br>
 		</div>
 		<div id="advModsTab" style="height: 320px; overflow-y: auto; display: none">
 			Select a mod first before you start your new journey.

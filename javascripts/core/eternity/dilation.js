@@ -518,12 +518,13 @@ function buyDilationUpgrade(pos, max, isId) {
 	updateDilationUpgradeButtons()
 }
 
-function getTTProduction() {
+function getTTProduction(display) {
 	let tp = player.dilation.tachyonParticles
 	let r = getTTGenPart(tp)
-	r /= 2e4
+	r = r.div(2e4)
 
-	r *= ls.mult("tt")
+	r = r.times(ls.mult("tt"))
+	if (!display) r = r.toNumber()
 	return r
 }
 
@@ -534,10 +535,10 @@ function getTTGenPart(x) {
 	let sc1 = 69
 	if (x > sc1) {
 		let speed = tmp.exMode ? 1.5 : tmp.bgMode ? 1 : 1.25
-		x = Math.pow((x - sc1) * speed + 1, 2/3) + sc1 - 1
+		x = Math.pow((x - sc1) + 1, 2/3) * speed + sc1 - 1
 	}
 
-	return Math.pow(10, x)
+	return Decimal.pow(10, x)
 }
 
 function updateDilationUpgradeButtons() {
@@ -568,8 +569,7 @@ function updateDilationUpgradeButtons() {
 	getEl("dil32desc").textContent = tmp.ngC ? "Replicated Condensers are 15% stronger." : "Unlock the ability to pick all the study paths from the first split."
 	getEl("dil34desc").textContent = tmp.ngC ? "Eternities, TP, & DT power up each other." : "Eternities and dilated time power up each other."
 
-	var genSpeed = getTTProduction()
-	getEl("dil41desc").textContent = "Currently: " + shortenMoney(hasAch("ng3p44") && player.timestudy.theorem / genSpeed < 3600 ? genSpeed * 10 : genSpeed)+"/s"
+	getEl("dil41desc").textContent = "Currently: " + shortenMoney(getTTProduction(true))+"/s"
 
 	if (player.dilation.studies.includes(6)) {
 		getEl("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
@@ -669,7 +669,6 @@ function getBaseDilGalaxyEff() {
 
 	if (masteryStudies.has(263)) x = 1 + doubleMSMult(0.25)
 	if (masteryStudies.has(311)) x *= Math.pow(tsMults[232](), getMTSMult(311))
-	if (enB.active("pos", 8)) x *= enB.tmp.pos8
 	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 
 	return x
