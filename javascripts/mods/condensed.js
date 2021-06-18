@@ -156,7 +156,7 @@ let CONDENSED = {
 				return Decimal.pow(player.money.plus(1).log10() + 1, amt * ngC.tmp.nds.pow)
 			},
 			update(x) {
-				let costPart = ph.did("quantum") ? '' : 'Condense: '
+				let costPart = pH.did("quantum") ? '' : 'Condense: '
 				let cost = this.cost(x)
 				let resource = getOrSubResource(x)
 				getEl("Condense" + x).textContent = costPart + shortenPreInfCosts(cost)
@@ -226,12 +226,12 @@ let CONDENSED = {
 				return Decimal.pow(player.infinityPower.plus(1).log10() + 1, amt * ngC.tmp.ids.pow)
 			},
 			update(x) {
-				if (!ph.did("infinity")) {
+				if (!pH.did("infinity")) {
 					getEl("infCnd" + x).textContent = "Condense: LOCKED"
 					return
 				}
 
-				let costPart = ph.did("quantum") ? '' : 'Condense: '
+				let costPart = pH.did("quantum") ? '' : 'Condense: '
 				let cost = this.cost(x)
 				let resource = player.infinityPoints
 				getEl("infCnd" + x).textContent = costPart + shortenPreInfCosts(cost) + (inNGM(5) ? " IP" : "")
@@ -318,12 +318,12 @@ let CONDENSED = {
 				return Decimal.pow(player.timeShards.plus(1).log10() + 1, amt * ngC.tmp.tds.pow)
 			},
 			update(x) {
-				if (!ph.did("eternity")) {
+				if (!pH.did("eternity")) {
 					getEl("timeCnd" + x).textContent = "Condense: LOCKED"
 					return
 				}
 
-				let costPart = ph.did("quantum") ? '' : 'Condense: '
+				let costPart = pH.did("quantum") ? '' : 'Condense: '
 				let cost = this.cost(x)
 				let resource = player.eternityPoints
 				getEl("timeCnd" + x).textContent = costPart + shortenPreInfCosts(cost) + (inNGM(4) ? " EP" : "")

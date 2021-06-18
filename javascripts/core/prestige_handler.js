@@ -1,4 +1,4 @@
-let Prestiges = {
+var pH = {
 	order: ["paradox", "accelerate", "galaxy", "infinity", "eternity", "interreality", "singularity", "quantum", "ghostify", "planck"],
 	reqs: {
 		paradox() {
@@ -127,14 +127,14 @@ let Prestiges = {
 		planck: "p"
 	},
 	can(id) {
-		return ph.tmp[id] && ph.reqs[id]()
+		return tmp_pH[id] && pH.reqs[id]()
 	},
 	didData: {
 		paradox() {
 			return player.pSac.times >= 1
 		},
 		accelerate() {
-			return ph.did("galaxy")
+			return pH.did("galaxy")
 		},
 		galaxy() {
 			return player.galacticSacrifice.times >= 1
@@ -146,7 +146,7 @@ let Prestiges = {
 			return player.eternities >= 1
 		},
 		interreality() {
-			return ph.did("singularity") || ph.did("quantum")
+			return pH.did("singularity") || pH.did("quantum")
 		},
 		singularity() {
 			return ngSg.save.times >= 1
@@ -162,10 +162,10 @@ let Prestiges = {
 		}
 	},
 	did(id) {
-		return ph.tmp[id] && ph.tmp[id].did
+		return tmp_pH[id] && tmp_pH[id].did
 	},
 	has(id){
-		return ph.tmp[id] && ph.tmp[id].did
+		return tmp_pH[id] && tmp_pH[id].did
 	},
 	displayData: {
 		paradox: ["pSac", "px", "paradoxbtn"],
@@ -180,8 +180,8 @@ let Prestiges = {
 		planck: ["planck", "planckinfo", "plancktabbtn"],
 	},
 	shown(id) {
-		if (!ph.tmp[id]) return false
-		if (!ph.tmp[id].did) return false
+		if (!tmp_pH[id]) return false
+		if (!tmp_pH[id].did) return false
 
 		if (id == "eternity" && !tmp.eterUnl) return false
 		if (id == "quantum" && !tmp.quUnl) return false
@@ -189,10 +189,10 @@ let Prestiges = {
 		return !tmp.mod.layerHidden[id]
 	},
 	onHotkey(layer) {
-		if (!layer) layer = ph.tmp.lastDid
+		if (!layer) layer = tmp_pH.lastDid
 		if (shiftDown) {
-			if (ph.shown(layer)) showTab(ph.tabLocs[layer])
-		} else ph.resetFuncs[layer]()
+			if (pH.shown(layer)) showTab(pH.tabLocs[layer])
+		} else pH.resetFuncs[layer]()
 	},
 	tmp: {},
 	reset() {
@@ -200,61 +200,61 @@ let Prestiges = {
 		//getEl("resetDispOptions").style.display = "none"
 
 		var did = false
-		ph.tmp = { layers: 0 }
-		for (var x = ph.order.length; x > 0; x--) {
-			var p = ph.order[x - 1]
-			if (ph.modReqs[p] === undefined || ph.modReqs[p]()) {
-				ph.tmp[p] = {}
-				if (!did && ph.didData[p]()) {
+		tmp_pH = { layers: 0 }
+		for (var x = pH.order.length; x > 0; x--) {
+			var p = pH.order[x - 1]
+			if (pH.modReqs[p] === undefined || pH.modReqs[p]()) {
+				tmp_pH[p] = {}
+				if (!did && pH.didData[p]()) {
 					did = true
-					ph.tmp.lastDid = p
+					tmp_pH.lastDid = p
 				}
-				if (did) ph.onPrestige(p)
+				if (did) pH.onPrestige(p)
 				else getEl("hide_" + p).style.display = "none"
 			} else getEl("hide_" + p).style.display = "none"
 		}
 
-		ph.updateActive()
+		pH.updateActive()
 	},
 	updateDisplay() {
-		ph.tmp.shown = 0
-		for (var x = 0; x < ph.order.length; x++) {
-			var p = ph.order[x]
-			var d = ph.displayData[p]
+		tmp_pH.shown = 0
+		for (var x = 0; x < pH.order.length; x++) {
+			var p = pH.order[x]
+			var d = pH.displayData[p]
 			var prestigeShown = false
 			var tabShown = false
 			var shown = false
 
 			if (!isEmptiness) {
-				if (ph.can(p) && !tmp.mod.layerHidden[p]) prestigeShown = true
-				if (ph.shown(p)) tabShown = true
+				if (pH.can(p) && !tmp.mod.layerHidden[p]) prestigeShown = true
+				if (pH.shown(p)) tabShown = true
 				if (prestigeShown || tabShown) shown = true
 			}
 
-			if (ph.tmp[p] !== undefined) {
-				if (shown) ph.tmp.shown++
-				ph.tmp[p].shown = shown
-				ph.tmp[p].order = ph.tmp.shown
+			if (tmp_pH[p] !== undefined) {
+				if (shown) tmp_pH.shown++
+				tmp_pH[p].shown = shown
+				tmp_pH[p].order = tmp_pH.shown
 			}
 
 			getEl(d[0]).style.display = prestigeShown ? "" : "none"
 			getEl(d[1]).style.display = tabShown ? "" : "none"
 			getEl(d[2]).style.display = tabShown ? "" : "none"
 
-			getEl(d[0]).className = "presBtn presPos" + ph.tmp.shown + " " + p + "btn"
-			getEl(d[1]).className = "presCurrency" + ph.tmp.shown
+			getEl(d[0]).className = "presBtn presPos" + tmp_pH.shown + " " + p + "btn"
+			getEl(d[1]).className = "presCurrency" + tmp_pH.shown
 		}
 
 		//Blockages
-		var haveBlock = ph.tmp.shown >= 3
-		getEl("bigcrunch").parentElement.style.top = haveBlock ? (Math.floor(ph.tmp.shown / 3) * 120 + 19) + "px" : "19px"
+		var haveBlock = tmp_pH.shown >= 3
+		getEl("bigcrunch").parentElement.style.top = haveBlock ? (Math.floor(tmp_pH.shown / 3) * 120 + 19) + "px" : "19px"
 		getEl("quantumBlock").style.display = haveBlock ? "" : "none"
-		getEl("quantumBlock").style.height = haveBlock ? (Math.floor(ph.tmp.shown / 3) * 120 + 12) + "px" : "120px"
+		getEl("quantumBlock").style.height = haveBlock ? (Math.floor(tmp_pH.shown / 3) * 120 + 12) + "px" : "120px"
 
 		//Infinity Dimension unlocks
 		if (player.break && !player.infDimensionsUnlocked[7] && getEternitied() < 25) {
-			newDimPresPos = ph.tmp.eternity.shown ? ph.tmp.eternity.order : ph.tmp.shown + 1
-			if (!ph.tmp.eternity.shown) ph.tmp.shown++
+			newDimPresPos = tmp_pH.eternity.shown ? tmp_pH.eternity.order : tmp_pH.shown + 1
+			if (!tmp_pH.eternity.shown) tmp_pH.shown++
 		}
 
 		//Quantum (after Neutrino Upgrade 16)
@@ -262,41 +262,41 @@ let Prestiges = {
 		if (!bigRipAndQuantum && !QCs.inAny()) getEl("quantumbtn").style.display = "none"
 
 		//Big Rip
-		var canBigRip = canQuickBigRip() && (ph.shown("quantum") || bigRipAndQuantum)
+		var canBigRip = canQuickBigRip() && (pH.shown("quantum") || bigRipAndQuantum)
 		getEl("bigripbtn").style.display = canBigRip ? "" : "none"
 		if (canBigRip) {
 			let pos = bigRipAndQuantum ? "ghostify" : "quantum"
-			getEl("bigripbtn").className = "presBtn presPos" + (ph.tmp[pos].shown ? ph.tmp[pos].order : ph.tmp.shown + 1) + " quickBigRip"
-			if (!ph.tmp[pos].shown) ph.tmp.shown++
+			getEl("bigripbtn").className = "presBtn presPos" + (tmp_pH[pos].shown ? tmp_pH[pos].order : tmp_pH.shown + 1) + " quickBigRip"
+			if (!tmp_pH[pos].shown) tmp_pH.shown++
 		}
 
 		if (tmp.ngp3 && tmp.qu.bigRip.active) {
-			getEl("quantumbtn").className = "presBtn presPos" + (ph.tmp.quantum.shown ? ph.tmp.quantum.order : ph.tmp.shown + 1) + " quickBigRip"
+			getEl("quantumbtn").className = "presBtn presPos" + (tmp_pH.quantum.shown ? tmp_pH.quantum.order : tmp_pH.shown + 1) + " quickBigRip"
 			getEl("quantumbtn").style.display = ""
-			if (!ph.tmp.quantum.shown) ph.tmp.shown++
+			if (!tmp_pH.quantum.shown) tmp_pH.shown++
 		}
 	},
 	updateActive() {
-		tmp.eterUnl = ph.did("eternity") && !pl.on() //&& !QCs.inModifier("tb")
+		tmp.eterUnl = pH.did("eternity") && !pl.on() //&& !QCs.inModifier("tb")
 
-		tmp.quUnl = tmp.ngp3 && ph.did("quantum") && !pl.on()
+		tmp.quUnl = tmp.ngp3 && pH.did("quantum") && !pl.on()
 		tmp.quActive = tmp.quUnl
 	},
 	onPrestige(layer) {
-		if (ph.tmp[layer].did) return
-		ph.tmp[layer].did = true
-		ph.tmp.layers++
+		if (tmp_pH[layer].did) return
+		tmp_pH[layer].did = true
+		tmp_pH.layers++
 		getEl("layerDispOptions").style.display = ""
 		//getEl("resetDispOptions").style.display = ""
 		getEl("hide_" + layer).style.display = ""
 		getEl("hide_" + layer).innerHTML = (tmp.mod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
-		ph.updateActive()
+		pH.updateActive()
 	},
 	setupHTML(layer) {
 		var html = ""
-		for (var x = 0; x < ph.order.length; x++) {
-			var p = ph.order[x]
-			html += '<button id="hide_' + p + '" onclick="ph.hideOption(\'' + p + '\')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button> '
+		for (var x = 0; x < pH.order.length; x++) {
+			var p = pH.order[x]
+			html += '<button id="hide_' + p + '" onclick="pH.hideOption(\'' + p + '\')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button> '
 		}
 		getEl("hideLayers").innerHTML = html
 	},
@@ -318,5 +318,5 @@ let Prestiges = {
 		if (layer == "quantum") handleDispAndTmpOutOfQuantum()
 	}
 }
-
-let ph = Prestiges
+var tmp_pH = {}
+let PRESTIGES = pH

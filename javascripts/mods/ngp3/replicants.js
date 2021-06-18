@@ -99,7 +99,7 @@ function updateReplicants(mode) {
 
 function getGatherRate() {
 	var mult = new Decimal(1)
-	if (masteryStudies.has(373)) mult = getMTSMult(373)
+	if (hasMTS(373)) mult = getMTSMult(373)
 	var data = {
 		normal: tmp.qu.replicants.amount.times(mult),
 		babies: tmp.qu.replicants.babies.times(mult).div(20),
@@ -166,8 +166,8 @@ function getEmperorDimensionMultiplier(dim) {
 
 function getEmperorDimensionGlobalMultiplier() {
 	let ret = new Decimal(1)
-	if (masteryStudies.has(392)) ret = getMTSMult(392)
-	if (masteryStudies.has(402)) ret = ret.times(30)
+	if (hasMTS(392)) ret = getMTSMult(392)
+	if (hasMTS(402)) ret = ret.times(30)
 	if (isTreeUpgActive(6)) ret = ret.times(getTreeUpgradeEffect(6))
 	if (tmp.pce && tmp.pce.ms) ret = ret.times(Decimal.pow(tmp.pce.ms.eds, tmp.eds[8].perm))
 	if (hasBosonicUpg(35)) ret = ret.times(tmp.blu[35])
@@ -269,12 +269,12 @@ function getNextLimitMsg() {
 
 function getHatchSpeed() {
 	var speed = tmp.qu.replicants.hatchSpeed
-	if (masteryStudies.has(361)) speed /= getMTSMult(361)
-	if (masteryStudies.has(371)) speed /= getMTSMult(371)
-	if (masteryStudies.has(372)) speed /= getMTSMult(372)
-	if (masteryStudies.has(381)) speed /= getMTSMult(381)
-	if (masteryStudies.has(391)) speed /= getMTSMult(391)
-	if (masteryStudies.has(402)) speed /= 30
+	if (hasMTS(361)) speed /= getMTSMult(361)
+	if (hasMTS(371)) speed /= getMTSMult(371)
+	if (hasMTS(372)) speed /= getMTSMult(372)
+	if (hasMTS(381)) speed /= getMTSMult(381)
+	if (hasMTS(391)) speed /= getMTSMult(391)
+	if (hasMTS(402)) speed /= 30
 	if (isNanoEffectUsed("hatch_speed")) speed /= tmp.nf.effects.hatch_speed
 	return speed
 }

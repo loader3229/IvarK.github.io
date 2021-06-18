@@ -135,7 +135,7 @@ function galacticSacrifice(auto, force, chall) {
 	if (!force) {
 		player.galacticSacrifice.galaxyPoints = player.galacticSacrifice.galaxyPoints.plus(getGSAmount())
 		player.galacticSacrifice.times++
-		ph.onPrestige("galaxy")
+		pH.onPrestige("galaxy")
 	}
 	if (chall) {
 		player.galacticSacrifice.chall = chall
@@ -804,5 +804,5 @@ function exitNGMM() {
 	tmp.ngmX = calcNGMX()
 	tmp.mod.ngmX = tmp.ngmX
 	getEl("gSacrifice").style.display = "none"
-	ph.reset()
+	pH.reset()
 }

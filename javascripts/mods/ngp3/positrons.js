@@ -1,18 +1,19 @@
-let POSITRONS = {
+var pos = {
 	setup() {
-		return {
+		pos_save = {
 			amt: 0,
 			eng: 0,
 			boosts: 0
 		}
+		return pos_save
 	},
 	compile() {
-		pos.save = undefined
-		if (tmp.qu === undefined) return
+		pos_save = undefined
+		if (!tmp.ngp3 || tmp.qu === undefined) return
 
 		let data = tmp.qu.pos
-		if (data === undefined) data = pos.setup()
-		pos.save = data
+		if (data === undefined) data = this.setup()
+		pos_save = data
 
 		if (!data.on) {
 			data.amt = 0
@@ -31,17 +32,17 @@ let POSITRONS = {
 		if (data.sacBoosts) delete data.sacBoosts
 	},
 	unl() {
-		return tmp.quActive && pos.save && masteryStudies.has("d7")
+		return tmp.quActive && pos_save && hasMTS("d7")
 	},
 	on() {
-		return pos.unl() && pos.save.on
+		return this.unl() && pos_save.on
 	},
 	toggle() {
-		pos.save.on = !pos.save.on
+		pos_save.on = !pos_save.on
 		quantum(false, true)
 	},
 	maxSacMult() {
-		return QCs.isRewardOn(2) ? QCs.tmp.rewards[2] : 0.25
+		return 0.25
 	},
 	types: {
 		ng: {
@@ -95,23 +96,22 @@ let POSITRONS = {
 	},
 	updateTmp() {
 		let data = {}
-		pos.tmp = data
-		if (!pos.save) return
+		save_tmp = data
+		if (pos_save === undefined) return
 
 		//Meta Dimension Boosts or Quantum Energy -> Positrons
-		pos.save.eng = 0
-		if (pos.on()) {
+		pos_save.eng = 0
+		if (this.on()) {
 			let mdbStart = 0
 			let mdbMult = 0.25
-			if (QCs.isRewardOn(5)) mdbMult = QCs.tmp.rewards[5]
 
 			data.sac_mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
 			data.sac_qe = tmp.qu.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)
-			pos.save.amt = Math.floor(Math.min(Math.pow(data.sac_mdb, 2), data.sac_qe) * 100)
+			pos_save.amt = Math.floor(Math.min(Math.pow(data.sac_mdb, 2), data.sac_qe) * 100)
 		} else {
 			data.sac_mdb = 0
 			data.sac_qe = 0
-			pos.save.amt = 0
+			pos_save.amt = 0
 		}
 
 		//Galaxies -> Charge
@@ -119,34 +119,37 @@ let POSITRONS = {
 		let pcSum = 0
 		for (var i = 0; i < types.length; i++) {
 			var type = types[i]
-			var save_data = pos.save.gals[type]
+			var save_data = pos_save.gals[type]
 
-			data["pow_" + type] = pos.types[type].pow(pos.save.amt)
-			save_data.sac = Math.floor(pos.types[type].sacGals(data["pow_" + type]))
-			save_data.pc = pos.types[type].basePcGain(save_data.sac)
+			data["pow_" + type] = this.types[type].pow(pos_save.amt)
+			save_data.sac = Math.floor(this.types[type].sacGals(data["pow_" + type]))
+			save_data.pc = this.types[type].basePcGain(save_data.sac)
 			pcSum += save_data.pc
 		}
-		pos.save.eng = Math.pow(pcSum, 4)
+		pos_save.eng = Math.pow(pcSum, 4)
 	},
 	updateTab() {
 		enB.update("pos")
 		enB.updateOnTick("pos")
 
-		getEl("pos_formula").textContent = getFullExpansion(pos.tmp.sac_mdb) + " Meta Dimension Boosts + " + shorten(pos.tmp.sac_qe) + " Quantum Energy ->"
-		getEl("pos_toggle").textContent = pos.save.on ? "ON" : "OFF"
-		getEl("pos_amt").textContent = getFullExpansion(pos.save.amt)
+		getEl("pos_formula").textContent = getFullExpansion(save_tmp.sac_mdb) + " Meta Dimension Boosts + " + shorten(save_tmp.sac_qe) + " Quantum Energy ->"
+		getEl("pos_toggle").textContent = pos_save.on ? "ON" : "OFF"
+		getEl("pos_amt").textContent = getFullExpansion(pos_save.amt)
 
 		let types = ["ng", "rg", "eg", "tg"]
 		let msg = []
 		for (var i = 0; i < types.length; i++) {
 			var type = types[i]
-			var gals = pos.save.gals[type].sac
-			if (gals > 0 || type == "ng") msg.push(getFullExpansion(gals) + " sacrificed " + pos.types[type].galName)
+			var gals = pos_save.gals[type].sac
+			if (gals > 0 || type == "ng") msg.push(getFullExpansion(gals) + " sacrificed " + this.types[type].galName)
 		}
 
 		getEl("pos_charge_formula").innerHTML = wordizeList(msg, false, " +<br>", false) + " -> "
 	
-		if (enB.has("pos", 3)) getEl("enB_pos3_exp").textContent = "^" + (1 / enB.tmp.pos3).toFixed(Math.floor(3 + Math.log10(enB.tmp.pos3)))
+		if (enB.has("pos", 3)) getEl("enB_pos3_exp").textContent = "^" + (1 / tmp_enB.pos3).toFixed(Math.floor(3 + Math.log10(tmp_enB.pos3)))
 	}
 }
-let pos = POSITRONS
+var pos_save = undefined
+var pos_tmp = {}
+
+let POSITRONS = pos

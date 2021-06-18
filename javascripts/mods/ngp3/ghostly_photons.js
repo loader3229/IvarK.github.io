@@ -282,7 +282,7 @@ var leBoosts = {
 function isLEBoostUnlocked(x) {
 	let data = leBoosts
 
-	if (!ph.did("ghostify")) return false
+	if (!pH.did("ghostify")) return false
 	if (!player.ghostify.ghostlyPhotons.unl) return false
 	if (x > data.max) return false
 	if (data[x].req && !data[x].req()) return false

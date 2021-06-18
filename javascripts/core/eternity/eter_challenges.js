@@ -123,7 +123,7 @@ function resetEternityChallUnlocks() {
 	updateEternityChallenges()
 
 	if (ec <= 12) player.timestudy.theorem += ([null, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[ec]
-	else player.timestudy.theorem += masteryStudies.costs.ec[ec]
+	else player.timestudy.theorem += mTs.costs.ec[ec]
 }
 
 let ecExpData = {
@@ -267,13 +267,13 @@ function updateEternityChallenges() {
 		getEl(property).textContent=onchallenge?"Running":"Start"
 		getEl(property).className=onchallenge?"onchallengebtn":"challengesbtn"
 	}
-	getEl("eterctabbtn").parentElement.style.display = ph.shown("eternity") && !locked ? "" : "none"
+	getEl("eterctabbtn").parentElement.style.display = pH.shown("eternity") && !locked ? "" : "none"
 }
 
 function startEternityChallenge(n) {
 	if (player.currentEternityChall == "eterc" + n || parseInt(n) != player.eternityChallUnlocked) return
 	if (player.options.challConf) if (!confirm("You will start over with just your time studies, eternity upgrades and achievements. You need to reach a set IP goal with special conditions.")) return
-	if (ph.did("ghostify") && name == "eterc10") player.ghostify.under = false
+	if (pH.did("ghostify") && name == "eterc10") player.ghostify.under = false
 	let oldStat = getEternitied()
 	player.eternities = nA(player.eternities, gainEternitiedStat())
 	updateBankedEter()
@@ -356,7 +356,11 @@ function getECReward(x) {
 	if (x == 11 && pc) return Math.sqrt(Math.log10((Math.pow(c, 2) * (player.totalTickGained + (Math.max(c, 1) - 1) * 5e4)) / 1e5 + 1)/(4 - c / 2) + 1)
 	if (x == 12) return 1 - c * (m2 ? .06 : 0.008)
 	if (x == 13) return Math.sqrt(1 + c / 7.5)
-	if (x == 14) return [0, 0.125, 0.25, 0.5, 0.75, 0.875][c]
+	if (x == 14) {
+		let r = [0, 0.125, 0.25, 0.5, 0.75, 0.875][c]
+		if (enB.active("pos", 7)) r = (r + tmp_enB.pos7) / (tmp_enB.pos7 + 1)
+		return r
+	}
 }
 
 function doCheckECCompletionStuff() {
@@ -380,7 +384,7 @@ function doCheckECCompletionStuff() {
 			player.etercreq = 0
 			if (ecNum > 12) {
 				getEl("ec" + ecNum + "Req").style.display = "block"
-				masteryStudies.ecReqsStored[ecNum] = masteryStudies.ecReqs[ecNum]()
+				mTs.ecReqsStored[ecNum] = mTs.ecReqs[ecNum]()
 				updateMasteryStudyTextDisplay()
 			}
 			resetEternityChallUnlocks()

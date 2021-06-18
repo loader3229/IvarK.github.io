@@ -72,7 +72,7 @@ function updateInfinityDimensions() {
 			if (unl) {
 				getEl("infD" + tier).textContent = DISPLAY_NAMES[tier] + " Infinity Dimension x" + shortenMoney(infDimensionPower(tier));
 				getEl("infAmount" + tier).textContent = infDimensionDescription(tier);
-				getEl("infMax" + tier).textContent = (ph.did("quantum") ? '' : "Cost: ") + (player.pSac !== undefined ? shortenDimensions(player["infinityDimension" + tier].costAM) : shortenInfDimCosts(getIDCost(tier)) + " IP")
+				getEl("infMax" + tier).textContent = (pH.did("quantum") ? '' : "Cost: ") + (player.pSac !== undefined ? shortenDimensions(player["infinityDimension" + tier].costAM) : shortenInfDimCosts(getIDCost(tier)) + " IP")
 				if (player.pSac !== undefined ? player.money.gte(player["infinityDimension"+tier].costAM) : player.infinityPoints.gte(getIDCost(tier))) getEl("infMax"+tier).className = "storebtn"
 				else getEl("infMax" + tier).className = "unavailablebtn"
 				getEl("infRow" + tier).style.visibility = "visible";
@@ -365,7 +365,7 @@ function loadInfAutoBuyers() {
 var infDimPow = 1
 
 function getIDReplMult() {
-	return masteryStudies.has(271) ? getMTSMult(271) : tmp.rm
+	return hasMTS(271) ? getMTSMult(271) : tmp.rm
 }
 
 function updateInfPower() {

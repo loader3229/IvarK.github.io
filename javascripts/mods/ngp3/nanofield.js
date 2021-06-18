@@ -3,7 +3,7 @@ function getNanospeedText(){
 	s = ""
 	let speeds = []
 	let speedDescs = []
-	if (ph.did("ghostify")) {
+	if (pH.did("ghostify")) {
 		speeds.push(tmp.ns)
 		speedDescs.push("")
 	}
@@ -93,8 +93,8 @@ function getQuarkLossProduction() {
 
 function getQuantumEnergyProduction() {
 	let ret = tmp.qu.nanofield.charge.sqrt()
-	if (masteryStudies.has(411)) ret = ret.times(getMTSMult(411))
-	if (masteryStudies.has(421)) ret = ret.times(getMTSMult(421))
+	if (hasMTS(411)) ret = ret.times(getMTSMult(411))
+	if (hasMTS(421)) ret = ret.times(getMTSMult(421))
 	if (isNanoEffectUsed("preon_energy")) ret = ret.times(tmp.nf.effects.preon_energy)
 	ret = ret.times(getNanofieldFinalSpeed())
 	return ret
@@ -103,7 +103,7 @@ function getQuantumEnergyProduction() {
 function getQuarkAntienergyProduction() {
 	if (hasBosonicUpg(51)) return new Decimal(0)
 	let ret = tmp.qu.nanofield.charge.sqrt()
-	if (masteryStudies.has(401)) ret = ret.div(getMTSMult(401))
+	if (hasMTS(401)) ret = ret.div(getMTSMult(401))
 	if (tmp.qu.nanofield.power > tmp.apgw) ret = ret.times(Decimal.pow(2, (tmp.qu.nanofield.power - tmp.apgw) / 2))
 	ret = ret.times(getNanofieldFinalSpeed())
 	return ret
@@ -244,7 +244,7 @@ function isNanoEffectUsed(x) {
 
 function getNanofieldSpeedText(){
 	text = ""
-	if (ph.did("ghostify") && tmp.qu.nanofield.rewards < 16) text += "Ghostify Bonus: " + shorten(player.ghostify.milestone >= 1 ? 6 : 3) + "x, "
+	if (pH.did("ghostify") && tmp.qu.nanofield.rewards < 16) text += "Ghostify Bonus: " + shorten(player.ghostify.milestone >= 1 ? 6 : 3) + "x, "
 	if (hasAch("ng3p78")) text += "'Aren't you already dead' reward: " +shorten(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)) + "x, "
 	if (hasNU(15)) text += "Neutrino upgrade 15: " + shorten(tmp.nu[15]) + "x, "
 	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.nf) + ", "
@@ -263,7 +263,7 @@ function getNanofieldSpeedText(){
 
 function getNanofieldSpeed() {
 	let x = 1
-	if (ph.did("ghostify")) x *= tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
+	if (pH.did("ghostify")) x *= tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
 	if (hasAch("ng3p78")) x *= Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)
 	if (hasNU(15)) x = tmp.nu[15].times(x)
 	if (GDs.boostUnl('nf')) x = Decimal.pow(x, GDs.tmp.nf)

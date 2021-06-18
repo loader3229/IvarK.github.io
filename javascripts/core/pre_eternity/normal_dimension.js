@@ -69,7 +69,7 @@ function getNormalDimensionVanillaTimeStudyBonus(tier){
 	var sacPow = Decimal.max(tmp.sacPow || 0, 1)
 	if (hasTS(71) && tier !== 8) mult = mult.times(sacPow.pow(0.25).min("1e210000"));
 	if (hasTS(91)) mult = mult.times(Decimal.pow(10, Math.min(player.thisEternity, 18000) / 60));
-	let useHigherNDReplMult = player.dilation.active && masteryStudies.has("t323")
+	let useHigherNDReplMult = player.dilation.active && hasMTS("t323")
 	if (!useHigherNDReplMult) mult = mult.times(tmp.nrm)
 	if (hasTS(161)) mult = mult.times(Decimal.pow(10, (inNGM(2) ? 6660 : 616) * (tmp.mod.newGameExpVersion ? 5 : 1)))
 	if (hasTS(234) && tier == 1) mult = mult.times(sacPow)
@@ -218,7 +218,7 @@ function getDimensionFinalMultiplier(tier) {
 	if (mult.gt(10)) mult = dilates(mult.max(1), 1)
 	if (player.dilation.upgrades.includes(6)) mult = mult.times(player.dilation.dilatedTime.max(1).pow(308))
 	if (tier == 1 && player.tickspeedBoosts == undefined && player.infinityUpgrades.includes("postinfi60")) mult = mult.times(getNewB60Mult())
-	let useHigherNDReplMult = player.dilation.active && masteryStudies.has("t323")
+	let useHigherNDReplMult = player.dilation.active && hasMTS("t323")
 	if (useHigherNDReplMult) mult = mult.times(tmp.nrm)
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) mult = mult.pow(tmp.nf.effects.dil_effect_exp)
 	if (isBigRipUpgradeActive(1)) mult = mult.times(tmp.bru[1])
@@ -339,7 +339,7 @@ function getMPTBase(focusOn) {
 
 function getMPTExp(focusOn) {
 	let x = 1
-	if (enB.active("pos", 2)) x *= enB.tmp.pos2
+	if (enB.active("pos", 2)) x *= tmp_enB.pos2
 	return x
 }
 	
@@ -559,6 +559,48 @@ function getOrSubResource(tier, sub) {
 	}
 }
 
+function getDimensionProductionPerSecond(tier) {
+	let ret = player[TIER_NAMES[tier] + 'Amount'].floor()
+	if ((inNC(7) || player.currentChallenge == "postcngm3_3") && !inNGM(2)) {
+		if (tier == 4) ret = ret.pow(1.3)
+		else if (tier == 2) ret = ret.pow(1.5)
+	}
+	ret = ret.times(getDimensionFinalMultiplier(tier))
+
+	if (tier === 1) {
+		if (tmp.ngC || tmp.bgMode) ret = ret.times(3)
+		if (inNGM(5)) ret = ret.times(1000)
+	}
+	if (tmp.bgMode && tier != 1) ret = ret.times(10)
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || inNGM(5)) ret = ret.times(player.chall2Pow)
+	if (tier == 1 && (inNC(3) || player.currentChallenge == "postc1")) ret = ret.times(player.chall3Pow)
+	if (player.tickspeedBoosts != undefined) ret = ret.div(10)
+	if (tmp.mod.ngmX > 3) ret = ret.div(10)
+	if (tier == 1 && (inNC(7) || player.currentChallenge == "postcngm3_3" || player.pSac !== undefined)) ret = ret.plus(getDimensionProductionPerSecond(2))
+
+	let tick = dilates(Decimal.div(1e3, getTickspeed()), "tick")
+	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) tick = tick.pow(tmp.nf.effects.dil_effect_exp)
+	ret = ret.times(tick)
+	return ret
+}
+
+var totalMult = 1
+var currentMult = 1
+var infinitiedMult = 1
+var achievementMult = 1
+var unspentBonus = 1
+var mult18 = 1
+var ec10bonus = new Decimal(1)
+
+function getUnspentBonus() {
+	x = player.infinityPoints
+	if (!x) return new Decimal(1)
+
+	if (inNGM(2)) x = x.pow(Math.max(Math.min(Math.pow(x.max(1).log(10), 1 / 3) * 3, 8), 1)).plus(1)
+	else x = x.dividedBy(2).pow(1.5).plus(1)
+	if (tmp.ngC) x = x.pow(5)
+	return x
+}
 
 function timeMult() {
 	var mult = new Decimal(1)
@@ -566,6 +608,58 @@ function timeMult() {
 	if (player.infinityUpgrades.includes("timeMult2")) mult = mult.times(infUpg13Pow());
 	if (hasAch("r76")) mult = mult.times(Math.max(Math.pow(player.totalTimePlayed / (600 * 60 * 48), inNGM(2) ? 0.1 : 0.05)), 1);
 	return mult;
+}
+
+function getAchievementMult(){
+	var ach = player.achievements.length
+	var gups = inNGM(2) ? player.galacticSacrifice.upgrades.length : 0
+	var minus = inNGM(2) ? 10 : 30
+	var exp = inNGM(2) ? 5 : 3
+	var div = 40
+	if (inNGM(4)) {
+		minus = 0
+		exp = 10
+		div = 20
+		div -= Math.sqrt(gups)
+		if (gups > 15) exp += gups
+	}
+	if (tmp.ngC) div /= 10
+	return Decimal.pow(ach - minus - getSecretAchAmount(), exp).div(div).max(1)
+}
+
+function getInfinitiedMult() {
+	var inf = getInfinitied()
+	var add = inNGM(2) ? 0 : 1
+	var base = (inNGM(2) ? 1 : 0) + Decimal.add(inf, 1).log10() * (inNGM(2) ? 100 : 10)
+	var exp = (inNGM(2) ? 2 : 1) * getInfEffExp(inf)
+	if (tmp.mod.ngmX >= 4) {
+		if ((player.currentChallenge == "postcngmm_1" || player.challenges.includes("postcngmm_1")) && !hasAch("r71")) exp += .2
+		else exp *= 1 + Math.log10(getInfinitied() + 1) / 3
+	}
+	if (exp > 10) return Decimal.pow(base, exp).add(add)
+	return add + Math.pow(base, exp)
+}
+
+function getInfBoostInput(inf) {
+	if (!inf) inf = getInfinitied()
+	return Decimal.pow(inf, getInfEffExp(inf))
+}
+
+function getInfEffExp(x) {
+	let exp = 1
+	if (hasTS(31)) exp *= 4
+	if (enB.active("pos", 9)) exp *= tmp_enB.pos9
+	return exp
+}
+
+function dimMults() {
+	let inf = getInfinitied()
+
+	let exp = getInfEffExp(inf)
+	if (tmp.ngC) exp *= Decimal.log10(nA(inf, 1)) + 1
+	if (inNGM(2)) exp *= 2
+
+	return Decimal.pow(Decimal.times(inf, 0.2).add(1), exp)
 }
 
 function infUpg11Pow() {
@@ -606,61 +700,27 @@ function infUpg13Pow() {
 	return Decimal.pow(x, exp).max(1)
 }
 
-function dimMults() {
-	let inf = getInfinitied()
+function updatePostInfiTemp() {
+	var exp11 = inNGM(2) ? 2 : 0.5
+	var exp21 = inNGM(2) ? 2 : 0.5
 
-	let exp = getInfEffExp(inf)
-	if (tmp.ngC) exp *= Decimal.log10(nA(inf, 1)) + 1
-	if (inNGM(2)) exp *= 2
+	if (inNGM(4)){
+		exp11 += player.totalmoney.plus(10).div(10).log10() / 1e4
+		exp21 += player.money.plus(10).div(10).log10() / 1e4
+		base11 = player.totalmoney.plus(10).log10()
+		base21 = player.money.plus(10).log10()
 
-	return Decimal.pow(Decimal.times(inf, 0.2).add(1), exp)
-}
+		if (hasAch("r72")) {
+			exp11 *= 4
+			exp21 *= 4
+			base11 *= 4
+			base21 *= 4
+		}
 
-function getInfBoostInput(inf) {
-	if (!inf) inf = getInfinitied()
-	return Decimal.pow(inf, getInfEffExp(inf))
-}
-
-function getInfEffExp(x) {
-	let exp = 1
-	if (hasTS(31)) exp *= 4
-	return exp
-}
-
-function getInfinitiedMult() {
-	var inf = getInfinitied()
-	var add = inNGM(2) ? 0 : 1
-	var base = (inNGM(2) ? 1 : 0) + Decimal.add(inf, 1).log10() * (inNGM(2) ? 100 : 10)
-	var exp = (inNGM(2) ? 2 : 1) * getInfEffExp(inf)
-	if (tmp.mod.ngmX >= 4) {
-		if ((player.currentChallenge == "postcngmm_1" || player.challenges.includes("postcngmm_1")) && !hasAch("r71")) exp += .2
-		else exp *= 1 + Math.log10(getInfinitied() + 1) / 3
+		tmp.postinfi11 = Decimal.pow(base11, exp11)
+		tmp.postinfi21 = Decimal.pow(base21, exp21)
+	} else {
+		tmp.postinfi11 = Decimal.pow(player.totalmoney.plus(10).log10(), exp11)
+		tmp.postinfi21 = Decimal.pow(player.money.plus(10).log10(), exp21)
 	}
-	if (exp > 10) return Decimal.pow(base, exp).add(add)
-	return add + Math.pow(base, exp)
-}
-
-function getDimensionProductionPerSecond(tier) {
-	let ret = player[TIER_NAMES[tier] + 'Amount'].floor()
-	if ((inNC(7) || player.currentChallenge == "postcngm3_3") && !inNGM(2)) {
-		if (tier == 4) ret = ret.pow(1.3)
-		else if (tier == 2) ret = ret.pow(1.5)
-	}
-	ret = ret.times(getDimensionFinalMultiplier(tier))
-
-	if (tier === 1) {
-		if (tmp.ngC || tmp.bgMode) ret = ret.times(3)
-		if (inNGM(5)) ret = ret.times(1000)
-	}
-	if (tmp.bgMode && tier != 1) ret = ret.times(10)
-	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || inNGM(5)) ret = ret.times(player.chall2Pow)
-	if (tier == 1 && (inNC(3) || player.currentChallenge == "postc1")) ret = ret.times(player.chall3Pow)
-	if (player.tickspeedBoosts != undefined) ret = ret.div(10)
-	if (tmp.mod.ngmX > 3) ret = ret.div(10)
-	if (tier == 1 && (inNC(7) || player.currentChallenge == "postcngm3_3" || player.pSac !== undefined)) ret = ret.plus(getDimensionProductionPerSecond(2))
-
-	let tick = dilates(Decimal.div(1e3, getTickspeed()), "tick")
-	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) tick = tick.pow(tmp.nf.effects.dil_effect_exp)
-	ret = ret.times(tick)
-	return ret
 }

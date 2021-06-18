@@ -17,8 +17,8 @@ function tickspeedBoostDisplay(){
 function galaxyReqDisplay(){
 	var nextGal = getGalaxyRequirement(0, true)
 	var totalReplGalaxies = getTotalRGs()
-	var totalTypes = tmp.aeg ? 4 : player.dilation.freeGalaxies ? 3 : totalReplGalaxies ? 2 : 1
-	getEl("secondResetLabel").innerHTML = getGalaxyScaleName(nextGal.scaling) + (nextGal.scaling <= 3 ? "Antimatter " : "") + ' Galaxies ('+ getFullExpansion(player.galaxies) + (totalTypes > 1 ? ' + ' + getFullExpansion(totalReplGalaxies) : '') + (totalTypes > 2 ? ' + ' + getFullExpansion(Math.round(player.dilation.freeGalaxies)) : '') + (totalTypes > 3 ? ' + ' + getFullExpansion(tmp.aeg) : '') +'): requires ' + getFullExpansion(nextGal.amount) + ' '+DISPLAY_NAMES[inNC(4) || player.pSac != undefined ? 6 : 8]+' Dimensions'
+	var totalTypes = player.dilation.freeGalaxies ? 3 : totalReplGalaxies ? 2 : 1
+	getEl("secondResetLabel").innerHTML = getGalaxyScaleName(nextGal.scaling) + (nextGal.scaling <= 3 ? "Antimatter " : "") + ' Galaxies ('+ getFullExpansion(player.galaxies) + (totalTypes >= 2 ? ' + ' + getFullExpansion(totalReplGalaxies) : '') + (totalTypes >= 3 ? ' + ' + getFullExpansion(Math.round(player.dilation.freeGalaxies)) : '') +'): requires ' + getFullExpansion(nextGal.amount) + ' '+DISPLAY_NAMES[inNC(4) || player.pSac != undefined ? 6 : 8]+' Dimensions'
 }
 
 var galaxyScalings = ["", "Distant ", "Further ", "Remote ", "Dark Matter ", "Ghostly ", "Ethereal ", "Ethereal+ ", "Ethereal++ ", "Ethereal IV ", "Ethereal V "]
@@ -145,7 +145,7 @@ function galaxySacDisplay(){
 
 function bestInfinityDisplay(){
 	getEl("infinityStatistics").style.display = "none"
-	if (!ph.shown("infinity")) {
+	if (!pH.shown("infinity")) {
 		getEl("bestInfinity").textContent = ""
 		getEl("thisInfinity").textContent = ""
 		getEl("infinitied").textContent = ""
@@ -155,22 +155,22 @@ function bestInfinityDisplay(){
 		getEl("thisInfinity").textContent = "You have spent " + timeDisplay(player.thisInfinityTime) + " in this Infinity."
 		getEl("infinitied").textContent = "You have Infinitied " + getFullExpansion(player.infinitied) + " time" + (player.infinitied == 1 ? "" : "s") + (player.eternities!==0||player.eternitiesBank>0 ? " this Eternity." : ".")
 	}
-	if (ph.shown("infinity") && player.infinitiedBank > 0) getEl("infinityStatistics").style.display = ""
+	if (pH.shown("infinity") && player.infinitiedBank > 0) getEl("infinityStatistics").style.display = ""
 }
 
 function bestEternityDisplay(){
-	if (ph.shown("eternity")) {
+	if (pH.shown("eternity")) {
 		getEl("eternityStatistics").style.display = ""
 		if (player.bestEternity >= 9999999999) {
 			getEl("besteternity").textContent = ""
 		} else getEl("besteternity").textContent = "Your fastest Eternity is in " + timeDisplay(player.bestEternity) + "."
 		getEl("thiseternity").textContent = "You have spent " + timeDisplay(player.thisEternity) + " in this Eternity."
-		getEl("eternitied").textContent = "You have Eternitied " + getFullExpansion(Decimal.floor(player.eternities).toNumber()) + " time" + (player.eternities == 1 ? "" : "s") + (ph.did("quantum") ? " this Quantum." : ".")
+		getEl("eternitied").textContent = "You have Eternitied " + getFullExpansion(Decimal.floor(player.eternities).toNumber()) + " time" + (player.eternities == 1 ? "" : "s") + (pH.did("quantum") ? " this Quantum." : ".")
 	} else getEl("eternityStatistics").style.display = "none"
 }
 
 function bestQuantumDisplay(){
-	if (!ph.shown("quantum")) getEl("quantumStatistics").style.display = "none"
+	if (!pH.shown("quantum")) getEl("quantumStatistics").style.display = "none"
 	else {
 		getEl("quantumStatistics").style.display = ""
 		getEl("quantumed").textContent = "You have gone Quantum " + getFullExpansion(tmp.qu.times) + " times."
@@ -180,7 +180,7 @@ function bestQuantumDisplay(){
 }
 
 function bestGhostifyDisplay(){
-	if (!ph.shown("ghostify")) getEl("ghostifyStatistics").style.display = "none"
+	if (!pH.shown("ghostify")) getEl("ghostifyStatistics").style.display = "none"
 	else {
 		getEl("ghostifyStatistics").style.display = ""
 		getEl("ghostified").textContent = "You have became a ghost and passed Big Ripped universes " + getFullExpansion(player.ghostify.times) + " times."
@@ -515,10 +515,10 @@ function INFINITYUPGRADESDisplay(){
 	} else if (getEl("postinf").style.display == "block" && getEl("breaktable").style.display == "inline-block") {
 		breakInfinityUpgradeDisplay()
 		if (inNGM(2)) breakNGm2UpgradeColumnDisplay()
-		if (inNGM(2) && (player.infinityDimension3.amount.gt(0) || player.eternities > (tmp.mod.newGameMinusVersion? -20 : 0) || ph.did("quantum"))) {
+		if (inNGM(2) && (player.infinityDimension3.amount.gt(0) || player.eternities > (tmp.mod.newGameMinusVersion? -20 : 0) || pH.did("quantum"))) {
 			breakNGm2UpgradeRow5Display()
 		} else getEl("postinfir5").style.display = "none"
-		if (inNGM(2) && (player.infinityDimension4.amount.gt(0) || player.eternities > (tmp.mod.newGameMinusVersion ? -20 : 0) || ph.did("quantum"))) {
+		if (inNGM(2) && (player.infinityDimension4.amount.gt(0) || player.eternities > (tmp.mod.newGameMinusVersion ? -20 : 0) || pH.did("quantum"))) {
 			breakNGm2UpgradeRow6Display()
 		} else getEl("postinfir6").style.display = "none"
 		if (tmp.ngC) ngC.breakInfUpgs.display()
@@ -557,7 +557,7 @@ function exdilationDisplay(){
 	getEl("reversedilationdiv").style.display = ""
 	if (canReverseDilation()) {
 		getEl("reversedilation").className = "dilationbtn"
-		getEl("reversedilation").innerHTML = "Reverse dilation."+(player.exdilation.times>0||ph.did("quantum")?"<br>Gain "+shortenDimensions(getExDilationGain())+" ex-dilation":"")
+		getEl("reversedilation").innerHTML = "Reverse dilation."+(player.exdilation.times>0||pH.did("quantum")?"<br>Gain "+shortenDimensions(getExDilationGain())+" ex-dilation":"")
 	} else {
 		let req = getExdilationReq()
 		getEl("reversedilation").className = "eternityupbtnlocked"
@@ -676,12 +676,12 @@ function replicantiDisplay() {
 		getEl("replDesc").textContent = tmp.ngC ? "multiplier to IP gain (after softcaps) & all Normal Dimensions" : "multiplier on all infinity dimensions"
 		if (tmp.ngC) ngC.condense.rep.update()
 
-		if (QCs.tmp.qc1) {
-			getEl("repCompress").innerHTML = "Do a Eternity reset to compress.<br>Requirement: " + shortenCosts(QCs.tmp.qc1.req) + "<br>" + QCs.save.qc1.boosts + " / 20 Compressors" + (QCs.save.qc1.max ? "<br>(" + QCs.save.qc1.max + " max boosts)" : "")
+		if (QCs_tmp.qc1) {
+			getEl("repCompress").innerHTML = "Do a Eternity reset to compress.<br>Requirement: " + shortenCosts(QCs_tmp.qc1.req) + "<br>" + QCs_save.qc1.boosts + " / 20 Compressors" + (QCs_save.qc1.max ? "<br>(" + QCs_save.qc1.max + " max boosts)" : "")
 			getEl("repCompress").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
 		}
-		if (QCs.tmp.qc5) {
-			getEl("repExpand").innerHTML = "Do a Eternity reset to expand.<br>Requirement: < " + shortenCosts(QCs.tmp.qc5.req) + "<br>" + QCs.save.qc5 + " Expanders"
+		if (QCs_tmp.qc5) {
+			getEl("repExpand").innerHTML = "Do a Eternity reset to expand.<br>Requirement: < " + shortenCosts(QCs_tmp.qc5.req) + "<br>" + QCs_save.qc5 + " Expanders"
 			getEl("repExpand").className = QCs.data[5].can() ? "storebtn" : "unavailablebtn"
 		}
 	} else {
@@ -763,7 +763,7 @@ function mainTimeStudyDisplay(){
 	initialTimeStudyDisplay()
 	eternityChallengeUnlockDisplay()
 	getEl("dilstudy1").innerHTML = "Unlock time dilation" +
-		(player.dilation.studies.includes(1) || ph.did("quantum") ? "" :
+		(player.dilation.studies.includes(1) || pH.did("quantum") ? "" :
 		"<span>Requirement: 5 EC11 and EC12 completions" + (tmp.ngp3 ? "" : " and " + getFullExpansion(getDilationTotalTTReq()) + " total theorems")) +
 		"<span>Cost: " + getFullExpansion(dsStudyCosts[1]()) + " Time Theorems"
 }
@@ -779,12 +779,12 @@ function ABTypeDisplay(){
 }
 
 function infPoints2Display(){
-	if (ph.did("infinity")) getEl("infinityPoints2").style.display = "inline-block"
+	if (pH.did("infinity")) getEl("infinityPoints2").style.display = "inline-block"
 	else getEl("infinityPoints2").style.display = "none"
 }
 
 function updateChallTabDisplay(){
-	if (player.postChallUnlocked > 0 || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0 || ph.did("quantum")) getEl("challTabButtons").style.display = "table"
+	if (player.postChallUnlocked > 0 || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0 || pH.did("quantum")) getEl("challTabButtons").style.display = "table"
 }
 
 function eterPoints2Display(){
@@ -838,7 +838,7 @@ function primaryStatsDisplayResetLayers() {
 		ghostify: "pastghostifies"
 	}
 	for (var i in statsIds) {
-		var shown = ph.shown(i)
+		var shown = pH.shown(i)
 		showStats = showStats || shown
 		getEl(statsIds[i]).style.display = shown ? "" : "none"
 	}
@@ -852,7 +852,7 @@ function primaryStatsDisplayResetLayers() {
 }
 
 function ECCompletionsDisplay(){
-	for (let x = 1; x <= masteryStudies.ecsUpTo; x++) getEl("eterc" + x + "completed").textContent = "Completed " + ECComps("eterc" + x) + " times."
+	for (let x = 1; x <= mTs.ecsUpTo; x++) getEl("eterc" + x + "completed").textContent = "Completed " + ECComps("eterc" + x) + " times."
 }
 
 function ECchallengePortionDisplay(){
@@ -929,7 +929,7 @@ function showAutoTab(tabName) {
 }
 
 function moveAutoTabs() {
-	let autoUnl = ph.did(tmp.ngmX >= 4 ? "galaxy" : "infinity")
+	let autoUnl = pH.did(tmp.ngmX >= 4 ? "galaxy" : "infinity")
 	let autoShown = autoUnl && tmp.mod.showAuto && !isEmptiness
 
 	getEl("showAuto").style.display = autoUnl ? "" : "none"

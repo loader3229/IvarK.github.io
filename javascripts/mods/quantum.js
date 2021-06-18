@@ -14,12 +14,12 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 		data = [qc]
 	}
 	if (tmp.mod.quantumConf && !(auto || force)) if (!confirm(player.masterystudies ? "Quantum will reset everything Eternity resets, and including all Eternity Content. You will gain a quark and unlock various upgrades." + (inNGM(2) ? " WARNING! THIS EXITS NG-- MODE DUE TO BALANCING REASONS!" : ""):"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
-	if (!ph.did("quantum")) if (!confirm("Are you sure you want to do this? You will lose everything you have!")) return
+	if (!pH.did("quantum")) if (!confirm("Are you sure you want to do this? You will lose everything you have!")) return
 
 	var qcData = []
 	var QCType = 0
 
-	var implode = !auto && !force && !ph.did("ghostify") && (tmp.qu.best >= 100 || !tmp.quUnl)
+	var implode = !auto && !force && !pH.did("ghostify") && (tmp.qu.best >= 100 || !tmp.quUnl)
 	if (implode) {
 		implosionCheck = 2
 		dev.implode()
@@ -39,13 +39,13 @@ function getQuantumReq(base) {
 	let exp = tmp.ngp3 && !tmp.ngp3_mul ? 1.2 : 1
 	if (!base && tmp.ngp3) {
 		if (QCs.inAny()) return QCs.getGoalMA()
-		if (enB.active("pos", 3)) exp /= enB.tmp.pos3
+		if (enB.active("pos", 3)) exp /= tmp_enB.pos3
 	}
 	return Decimal.pow(Number.MAX_VALUE, exp)
 }
 
 function isQuantumReached() {
-	return ph.can("quantum")
+	return pH.can("quantum")
 }
 
 function getQuarkGain(){
@@ -83,7 +83,7 @@ function getQuantumReqSource() {
 
 function quarkGain() {
 	if (QCs.inAny()) return new Decimal(0)
-	if (!ph.did("quantum")) return new Decimal(1)
+	if (!pH.did("quantum")) return new Decimal(1)
 
 	let ma = getQuantumReqSource().max(1)
 	let maReq = getQuantumReq()
@@ -144,12 +144,12 @@ function updateLastTenQuantums() {
 function doQuantumProgress() {
 	var quantumReq = getQuantumReq()
 	var id = 1
-	if (ph.did("quantum") && tmp.ngp3) {
+	if (pH.did("quantum") && tmp.ngp3) {
 		if (tmp.qu.bigRip.active) {
 			var gg = getGHPGain()
 			if (player.meta.antimatter.lt(quantumReq)) id = 1
 			else if (!tmp.qu.breakEternity.unlocked) id = 4
-			else if (!ph.did("ghostify") || player.money.lt(QCs.getGoalMA(undefined, true)) || Decimal.lt(gg, 2)) id = 5
+			else if (!pH.did("ghostify") || player.money.lt(QCs.getGoalMA(undefined, true)) || Decimal.lt(gg, 2)) id = 5
 			else if (player.ghostify.neutrinos.boosts > 8 && hasNU(12) && !player.ghostify.ghostlyPhotons.unl) id = 7
 			else id = 6
 		} else if (!QCs.inAny()) {
@@ -214,11 +214,11 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		showInfTab("preinf")
 		showEternityTab("timestudies", true)
 	}
-	if (!ph.did("quantum")) {
+	if (!pH.did("quantum")) {
 		exitNGMM()
 		giveAchievement("Sub-atomic")
-		ph.onPrestige("quantum")
-		ph.updateDisplay()
+		pH.onPrestige("quantum")
+		pH.updateDisplay()
 		if (tmp.ngp3) {
 			getEl("bestAntimatterType").textContent = "Your best meta-antimatter for this quantum"
 			getEl("quarksAnimBtn").style.display = "inline-block"
@@ -230,7 +230,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	if (isEmptiness) {
 		showTab("dimensions")
 		isEmptiness = false
-		ph.updateDisplay()
+		pH.updateDisplay()
 	}
 	getEl("quantumbtn").style.display = "none"
 	getEl("bigripbtn").style.display = "none"
@@ -283,7 +283,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 				boughtI: player.timestudy.ipcost.log("1e100"),
 				boughtE: Math.round(player.timestudy.epcost.log(2))
 			}
-			if (player.eternityChallUnlocked >= 12) tmp.qu.bigRip.storedTS.tt += masteryStudies.costs.ec[player.eternityChallUnlocked]
+			if (player.eternityChallUnlocked >= 12) tmp.qu.bigRip.storedTS.tt += mTs.costs.ec[player.eternityChallUnlocked]
 			else tmp.qu.bigRip.storedTS.tt += ([0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[player.eternityChallUnlocked]
 			for (var s = 0; s < player.masterystudies.length; s++) if (player.masterystudies[s].indexOf("t") == 0) tmp.qu.bigRip.storedTS.studies.push(parseInt(player.masterystudies[s].split("t")[1]))
 		}
@@ -298,14 +298,14 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	// Quantum Challenges
 	var isQC = mode == "qc"
 	if (!force) {
-		let qcData = QCs.save.in
+		let qcData = QCs_save.in
 		if (qcData.length == 1) {
 			let qc = qcData2[0]
-			QCs.save.comps = Math.max(QCs.save.comps, qc)
-			QCs.save.best[qc] = Math.max(QCs.save.best[qc] || 1/0, tmp.qu.best)
+			QCs_save.comps = Math.max(QCs_save.comps, qc)
+			QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, tmp.qu.best)
 		}
 	}
-	QCs.save.in = isQC ? data : []
+	QCs_save.in = isQC ? data : []
 
 	QCs.reset()
 	QCs.updateTmp()
@@ -333,10 +333,10 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	var turnSomeOn = !bigRip || player.quantum.bigRip.upgrades.includes(1)
 	qMs.update()
 
-	doQuantumResetStuff(5, bigRip, isQC, QCs.save.in)
+	doQuantumResetStuff(5, bigRip, isQC, QCs_save.in)
 
 	// ghostify achievement reward - "Kee-hee-hee!"
-	if (ph.did("ghostify") && bigRip) {
+	if (pH.did("ghostify") && bigRip) {
 		player.timeDimension8 = {
 			cost: timeDimCost(8, 1),
 			amount: new Decimal(1),
@@ -360,11 +360,11 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	if (tmp.ngp3) {
 		if (!force) {
 			if (tmp.qu.autoOptions.assignQK) assignAll(true)
-			if (ph.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
+			if (pH.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode != "t") rotateAutoUnstable()
 		} //bounds if (!force)
 
-		ph.updateActive()
+		pH.updateActive()
 
 		if ((!isQC && player.ghostify.milestones < 6) || bigRip != tmp.qu.bigRip.active) tmp.qu.replicants.amount = new Decimal(0)
 		replicantsResetOnQuantum(isQC)
@@ -386,7 +386,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 				}
 				if (qMs.tmp.amt >= 12) unstoreTT()
 			}
-			if (ph.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
+			if (pH.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			tmp.qu.bigRip.active = bigRip
 		}
 		player.eternityBuyer.statBeforeDilation = 0
@@ -498,7 +498,7 @@ function handleDispAndTmpOnQuantum(bigRip, prestige) {
 	let keepMDs = bigRip ? tmp.bruActive[12] : keepDil && qMs.tmp.amt >= 6
 	if (!keepMDs && getEl("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
 
-	let keepMSs = bigRip || masteryStudies.unl()
+	let keepMSs = bigRip || mTs.unl()
 	getEl("masterystudyunlock").style.display = keepMSs ? "" : "none"
 	getEl("respecMastery").style.display = keepMSs ? "block" : "none"
 	getEl("respecMastery2").style.display = keepMSs ? "block" : "none"
@@ -531,9 +531,9 @@ function handleDispAndTmpOutOfQuantum(bigRip) {
 	if (!bigRip) bigRip = inBigRip()
 
 	let keepQuantum = tmp.quActive && qMs.tmp.amt >= 16
-	let keepQCs = ph.shown("quantum") && keepQuantum && QCs.unl()
-	let keepEDs = ph.shown("quantum") && keepQuantum && player.masterystudies.includes("d11")
-	let keepBE = tmp.ngp3 && (bigRip || tmp.qu.breakEternity.unlocked || ph.did("ghostify"))
+	let keepQCs = pH.shown("quantum") && keepQuantum && QCs.unl()
+	let keepEDs = pH.shown("quantum") && keepQuantum && player.masterystudies.includes("d11")
+	let keepBE = tmp.ngp3 && (bigRip || tmp.qu.breakEternity.unlocked || pH.did("ghostify"))
 
 	if (!keepQCs && getEl("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
 	if (!keepEDs && getEl("emperordimensions").style.display == "block") showDimTab("antimatterdimensions")
@@ -568,7 +568,7 @@ function handleQuantumDisplays(prestige) {
 
 function updateQuarkDisplay() {
 	let msg = ""
-	if (ph.did("quantum")) {
+	if (pH.did("quantum")) {
 		msg += "You have <b class='QKAmount'>"+shortenDimensions(tmp.qu.quarks)+"</b> "	
 		if (tmp.ngp3&&player.masterystudies.includes("d14")) msg += " aQs and <b class='SSAmount'>" + shortenDimensions(tmp.qu.bigRip.spaceShards) + "</b> Space Shard" + (tmp.qu.bigRip.spaceShards.round().eq(1) ? "" : "s")
 		else msg += "anti-quark" + (tmp.qu.quarks.round().eq(1) ? "" : "s")

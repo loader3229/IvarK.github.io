@@ -324,7 +324,7 @@ function updateBosonicLabTemp() {
 	delete tmp.blu
 	tmp.wzb = {}
 
-	if (!ph.did("ghostify")) return 
+	if (!pH.did("ghostify")) return 
 	if (!player.ghostify.wzb.unl) return 
 
 	updateBosonicEnchantsTemp()
@@ -944,7 +944,7 @@ var bu = {
 			return ret
 		},
 		34() {
-			var galPart = Math.log10(player.galaxies / 1e4 + 10) * Math.log10(getTotalRGs() / 1e4 + 10) * Math.log10(player.dilation.freeGalaxies / 1e4 + 10) * Math.log10(tmp.aeg / 1e4 + 10)
+			var galPart = Math.log10(player.galaxies / 1e4 + 10) * Math.log10(getTotalRGs() / 1e4 + 10) * Math.log10(player.dilation.freeGalaxies / 1e4 + 10)
 			var exp = tmp.ngp3_exp ? 1/6 : 1/8
 			var ret = Math.pow(galPart, exp) - 1
 			for (var i = 2; i < 10; i++){

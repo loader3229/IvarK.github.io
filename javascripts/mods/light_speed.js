@@ -9,13 +9,13 @@ let LIGHT_SPEED = {
 			return true
 		},
 		rep() {
-			return player.replicanti.unl || ph.did("eternity")
+			return player.replicanti.unl || pH.did("eternity")
 		},
 		dil() {
-			return hasDilationStudy(1) || ph.did("quantum")
+			return hasDilationStudy(1) || pH.did("quantum")
 		},
 		tt() {
-			return hasDilationUpg(10) || ph.did("quantum")
+			return hasDilationUpg(10) || pH.did("quantum")
 		},
 		nf() {
 			return tmp.ngp3 && player.masterystudies.includes("d11")

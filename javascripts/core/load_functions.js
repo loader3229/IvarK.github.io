@@ -1614,9 +1614,7 @@ function doNGp3Init2(){
 
 	tmp.eds = tmp.qu && tmp.qu.emperorDimensions
 	if (tmp.ngp3) {
-		setupMasteryStudies()
-		updateUnlockedMasteryStudies()
-		updateSpentableMasteryStudies()
+		setupMasteryStudiesHTML()
 		tmp.bl = player.ghostify.bl
 		delete tmp.badm
 	}
@@ -1671,25 +1669,25 @@ function doNGp3Init2(){
 }
 
 function setConfirmationsDisplay(){
-		var sacDisplay = player.resets >= 5 || player.galaxies >= 2 || ph.did("infinity") || (ph.did("galaxy") && tmp.ngmX < 5) ? "inline-block" : "none"
+		var sacDisplay = player.resets >= 5 || player.galaxies >= 2 || pH.did("infinity") || (pH.did("galaxy") && tmp.ngmX < 5) ? "inline-block" : "none"
         getEl("confirmations").style.display = sacDisplay
         getEl("confirmation").style.display = sacDisplay
         getEl("sacrifice").style.display = sacDisplay
         getEl("sacConfirmBtn").style.display = sacDisplay
 
-        var gSacDisplay = ph.did("galaxy") && (inNGM(2) && player.galaxies >= 1) ? "inline-block" : "none"
+        var gSacDisplay = pH.did("galaxy") && (inNGM(2) && player.galaxies >= 1) ? "inline-block" : "none"
         getEl("gConfirmation").style.display = gSacDisplay
         getEl("gConfirmation").style.display = gSacDisplay
         getEl("gSacrifice").style.display = gSacDisplay
         getEl("gSacConfirmBtn").style.display = gSacDisplay
 
-        getEl("challengeconfirmation").style.display = ph.did("infinity") ? "inline-block" : "none"
-        getEl("eternityconf").style.display = ph.did("eternity") ? "inline-block" : "none"
-        getEl("dilationConfirmBtn").style.display = (player.dilation.studies.includes(1) || ph.did("quantum")) ? "inline-block" : "none"
-        getEl("quantumConfirmBtn").style.display = ph.did("quantum") ? "inline-block" : "none"
+        getEl("challengeconfirmation").style.display = pH.did("infinity") ? "inline-block" : "none"
+        getEl("eternityconf").style.display = pH.did("eternity") ? "inline-block" : "none"
+        getEl("dilationConfirmBtn").style.display = (player.dilation.studies.includes(1) || pH.did("quantum")) ? "inline-block" : "none"
+        getEl("quantumConfirmBtn").style.display = pH.did("quantum") ? "inline-block" : "none"
         getEl("bigRipConfirmBtn").style.display = tmp.ngp3 && tmp.qu.bigRip.times ? "inline-block" : "none"
-        getEl("ghostifyConfirmBtn").style.display = ph.did("ghostify") ? "inline-block" : "none"
-        getEl("leConfirmBtn").style.display = ph.did("ghostify") && player.ghostify.ghostlyPhotons.enpowerments ? "inline-block" : "none"
+        getEl("ghostifyConfirmBtn").style.display = pH.did("ghostify") ? "inline-block" : "none"
+        getEl("leConfirmBtn").style.display = pH.did("ghostify") && player.ghostify.ghostlyPhotons.enpowerments ? "inline-block" : "none"
 
         getEl("confirmation").checked = !player.options.sacrificeConfirmation
         getEl("sacConfirmBtn").textContent = "Sacrifice confirmation: O" + (player.options.sacrificeConfirmation ? "N" : "FF")
@@ -1750,16 +1748,16 @@ function setDisplaysStuff1(){
 	getEl("secretstudy").style.opacity = 0
 	getEl("secretstudy").style.cursor = "pointer"
   
-	getEl("bestAntimatterType").textContent = player.masterystudies && ph.did("quantum") ? "Your best meta-antimatter for this quantum" : "Your best-ever meta-antimatter"
+	getEl("bestAntimatterType").textContent = player.masterystudies && pH.did("quantum") ? "Your best meta-antimatter for this quantum" : "Your best-ever meta-antimatter"
 
-	let masteryUnl = masteryStudies.unl()
+	let masteryUnl = mTs.unl()
 	getEl("masterystudyunlock").style.display = masteryUnl ? "" : "none"
 	getEl("respecMastery").style.display = masteryUnl ? "block" : "none"
 	getEl("respecMastery2").style.display = masteryUnl ? "block" : "none"
 
 	if (inNGM(2)) {
-		getEl("galaxy11").innerHTML = "Normal " + (inNGM(4) ? "and Time " : "") + "Dimensions are " + (ph.did("infinity") ? "cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x" : "99% cheaper.") + "<br>Cost: 1 GP"
-		getEl("galaxy15").innerHTML = "Normal and Time Dimensions produce " + (ph.did("infinity") ? "faster based on your Infinities.<br>Currently: <span id='galspan15'></span>x" : "100x faster.") + "<br>Cost: 1 GP"
+		getEl("galaxy11").innerHTML = "Normal " + (inNGM(4) ? "and Time " : "") + "Dimensions are " + (pH.did("infinity") ? "cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x" : "99% cheaper.") + "<br>Cost: 1 GP"
+		getEl("galaxy15").innerHTML = "Normal and Time Dimensions produce " + (pH.did("infinity") ? "faster based on your Infinities.<br>Currently: <span id='galspan15'></span>x" : "100x faster.") + "<br>Cost: 1 GP"
 	} else {
 		let base = getMPTPreInfBase()
 		if (!tmp.ngC) getEl("infi21desc").innerHTML = "Increase the multiplier for buying 10 Dimensions.<br>" + base.toFixed(1) + "x -> " + (base * infUpg12Pow()).toFixed(1) + "x"
@@ -1915,11 +1913,6 @@ function setTSDisplay(){
 }
 
 function updateNGp3DisplayStuff(){
-	for (var i = 0; i < masteryStudies.timeStudies.length; i++) {
-		var t = masteryStudies.timeStudies[i]
-		var d = masteryStudies.timeStudyDescs[t]
-		getEl("ts" + t + "Desc").innerHTML = (typeof(d)=="function" ? d() : d) || "Unknown desc."
-	}
 	updateMasteryStudyCosts()
 	getEl('rebuyupgauto').textContent="Rebuyable upgrade auto: O"+(player.autoEterOptions.rebuyupg?"N":"FF")
 	getEl('dilUpgsauto').textContent="Auto-buy dilation upgrades: O"+(player.autoEterOptions.dilUpgs?"N":"FF")
@@ -1960,7 +1953,7 @@ function setSomeQuantumAutomationDisplay(){
         getEl("dil52").style["font-size"] = !tmp.ngp3 || tmp.mod.nguspV !== undefined ? "10px" : "9px"
         getEl("dil52formula").style.display = !tmp.ngp3 || tmp.mod.nguspV !== undefined ? "none" : ""
         getEl("exDilationDesc").innerHTML = tmp.mod.nguspV ? 'making galaxies <span id="exDilationBenefit" style="font-size:25px; color: black">0</span>% stronger in dilation.' : 'making dilation <span id="exDilationBenefit" style="font-size:25px; color: black">0</span>% less severe.'
-        getEl("metaAntimatterEffectType").textContent = "extra multiplier per Dimension Boost"
+        getEl("metaAntimatterEffectType").textContent = "power to Dimension Boosts"
         if (player.meta) {
                 getEl('epmultauto').textContent="Auto: O"+(player.autoEterOptions.epmult?"N":"FF")
                 for (i=1;i<9;i++) getEl("td"+i+'auto').textContent="Auto: O"+(player.autoEterOptions["td"+i]?"N":"FF")
@@ -1968,7 +1961,7 @@ function setSomeQuantumAutomationDisplay(){
         getEl('replicantibulkmodetoggle').textContent="Mode: "+(player.galaxyMaxBulk?"Max":"Singles")
         getEl('versionDesc').style.display = tmp.ngp3 ? "" : "none"
         getEl('toggleautoquantummode').style.display=(player.masterystudies?tmp.qu.reachedInfQK||hasAch("ng3p25"):false)?"":"none"
-        var autoAssignUnl = tmp.ngp3 && (ph.did("ghostify") || tmp.qu.reachedInfQK)
+        var autoAssignUnl = tmp.ngp3 && (pH.did("ghostify") || tmp.qu.reachedInfQK)
         getEl('autoAssign').style.display = autoAssignUnl ? "" : "none"
         getEl('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
         getEl('autoReset').style.display=hasAch("ng3p47")?"":"none"
@@ -2081,7 +2074,7 @@ function onLoad(noOffline) {
 	ngSg.compile()
 
 
-	ph.reset()
+	pH.reset()
 	ls.reset()
 
 	setupTimeStudies()
@@ -2092,7 +2085,7 @@ function onLoad(noOffline) {
 	doNGp3Init2()
 	for (s = 0; s < (player.boughtDims ? 4 : 3); s++) toggleCrunchMode(true)
 	updateAutoEterMode()
-	ph.updateDisplay()
+	pH.updateDisplay()
 	setConfirmationsDisplay()
 	setOptionsDisplaysStuff1()
 	updateHotkeys()
@@ -2145,10 +2138,10 @@ function onLoad(noOffline) {
 		updateGalaxyControl()
 	} else if (getEl("ers_timestudies").style.display=="block") showEternityTab("timestudies",true)
 	poData=metaSave["presetsOrder"+(player.boughtDims?"_ers":"")]
-	setAndMaybeShow('bestTP',hasAch("ng3p18") || hasAch("ng3p37"),'"Your best"+(ph.did("ghostify") ? "" : " ever")+" Tachyon particles"+(ph.did("ghostify") ? " in this Ghostify" : "")+" was "+shorten(player.dilation.bestTP)+"."')
-	setAndMaybeShow('bestTPOverGhostifies',(hasAch("ng3p18") || hasAch("ng3p37")) && ph.did("ghostify"),'"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
+	setAndMaybeShow('bestTP',hasAch("ng3p18") || hasAch("ng3p37"),'"Your best"+(pH.did("ghostify") ? "" : " ever")+" Tachyon particles"+(pH.did("ghostify") ? " in this Ghostify" : "")+" was "+shorten(player.dilation.bestTP)+"."')
+	setAndMaybeShow('bestTPOverGhostifies',(hasAch("ng3p18") || hasAch("ng3p37")) && pH.did("ghostify"),'"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
 	getEl('autoDisableQuantum').style.display=hasAch("ng3p66")?"":"none"
-	getEl("quarksAnimBtn").style.display=ph.did("quantum")&&player.masterystudies?"inline-block":"none"
+	getEl("quarksAnimBtn").style.display=pH.did("quantum")&&player.masterystudies?"inline-block":"none"
 	getEl("quarksAnimBtn").textContent="Quarks: O"+(player.options.animations.quarks?"N":"FF")
 
 	var removeMaxTD = false
@@ -2161,19 +2154,20 @@ function onLoad(noOffline) {
 	getEl("maxTimeDimensions").style.display = removeMaxTD ? "none" : ""
 
 	getEl("edtabbtn").style.display=tmp.quUnl&&player.masterystudies.includes("d11")?"":"none"
-	getEl("ghostifyAnimBtn").style.display=ph.did("ghostify")?"inline-block":"none"
+	getEl("ghostifyAnimBtn").style.display=pH.did("ghostify")?"inline-block":"none"
 	GDs.unlDisplay()
 	notifyId=qMs.tmp.amt
 	notifyId2=player.masterystudies===undefined?0:player.ghostify.milestones
 	showHideFooter()
 	getEl("newsbtn").textContent=(player.options.newsHidden?"Show":"Hide")+" news ticker"
 	getEl("game").style.display=player.options.newsHidden?"none":"block"
+
 	var tabsSave = tmp.mod.tabsSave
 	showDimTab((tabsSave.on && tabsSave.tabDims) || 'antimatterdimensions')
 	showStatsTab((tabsSave.on && tabsSave.tabStats) || 'stats')
 	showAchTab((tabsSave.on && (tabsSave.tabAchs == 'normalachievements' || tabsSave.tabAchs == 'secretachievements') && tabsSave.tabAchs) || 'normalachievements')
-        showChallengesTab((tabsSave.on && tabsSave.tabChalls) || 'normalchallenges')
-        showGalTab((tabsSave.on && tabsSave.tabGalaxy && player.pSac !== undefined) || 'galUpgs')
+	showChallengesTab((tabsSave.on && tabsSave.tabChalls) || 'normalchallenges')
+	showGalTab((tabsSave.on && tabsSave.tabGalaxy && player.pSac !== undefined) || 'galUpgs')
 	showAutoTab((tabsSave.on && tabsSave.tabAuto) || 'autobuyers')
 	showInfTab((tabsSave.on && tabsSave.tabInfinity) || 'preinf')
 	showEternityTab((tabsSave.on && tabsSave.tabEternity) || 'timestudies', true)
@@ -2185,7 +2179,8 @@ function onLoad(noOffline) {
 	if (!player.options.newsHidden) scrollNextMessage()
 	getEl("secretoptionsbtn").style.display=player.options.secrets?"":"none"
 	getEl("ghostlynewsbtn").textContent=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?"Hide":"Show")+" ghostly news ticker"
-	resetUP()
+
+	updateConvertSave(eligibleConvert())
 	pauseGame(true)
 	if (tmp.mod.offlineProgress && !tmp.mod.pause && !noOffline) {
 		let diff = new Date().getTime() - player.lastUpdate
@@ -2200,7 +2195,7 @@ function onLoad(noOffline) {
 	} else if (tmp.mod.popUpId!="STD") showNextModeMessage()
 	getEl("ghostlyNewsTicker").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?24:0)+"px"
 	getEl("ghostlyNewsTickerBlock").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?16:0)+"px"
-	updateTmp(true)
+	resetUP()
 	updateAchievements()
 }
 
@@ -2259,10 +2254,10 @@ function setupNGP31Versions() {
 		delete tmp.qu.nonMAGoalReached
 	}
 	if (tmp.mod.ngp3Build < 20210519) tmp.qu.quarkEnergy = tmp.qu.bestEnergy || 0
-	if (tmp.mod.ngp3Build < 20210529) QCs.save.qc5 = 0
+	if (tmp.mod.ngp3Build < 20210529) QCs_save.qc5 = 0
 	if (tmp.mod.ngp3Build < 20210614 && player.masterystudies.includes("d7")) {
 		alert("Your mastery studies has been respecced due to the rework of Positronic-era studies.")
-		masteryStudies.respec(true)
+		mTs.respec(true)
 	}
 	tmp.mod.ngp3Build = 20210614
 }

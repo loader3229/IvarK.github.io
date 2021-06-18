@@ -35,59 +35,12 @@ var softcap_data = {
 		}
 	},
 	ts_reduce_log: {
-		name: "log base 10 of tickspeed reduction",
-		1: {
-			func: "pow",
-			start: 1e6,
-			pow: 0.75,
-			derv: false
-		},
-		2: {
-			func: "pow",
-			start: 2e6,
-			pow: 0.7,
-			derv: false
-		},
-		3: {
-			func: "pow",
-			start: 3e6,
-			pow: 0.65,
-			derv: false
-		},
-		4: {
-			func: "pow",
-			start: 4e6,
-			pow: 0.6,
-			derv: false
-		},
-		5: {
-			func: "pow",
-			start: 5e6,
-			pow: 0.55,
-			derv: false
-		}
+		name: "log base 10 of tickspeed reduction"
+		//No softcaps
 	},
 	ts_reduce_log_big_rip: {
 		name: "log base 10 of tickspeed reduction in Big Rip",
-		1: {
-			func: "pow",
-			start: 1e4,
-			pow: 0.75,
-			derv: false
-		},
-		2: {
-			func: "pow",
-			start: 2e4,
-			pow: 0.65,
-			derv: false
-		},
-		3: {
-			func: "pow",
-			start: 4e4,
-			pow: .55,
-			derv: false,
-			active: false,
-		}
+		//No softcaps
 	},
 	ts11_log_big_rip: {
 		name: "log base 10 of time study 11 effect in Big Rip",
@@ -169,32 +122,38 @@ var softcap_data = {
 			derv: false
 		}
 	},
-	inf_time_log: {
-		name: "log base 10 of Infinite Time reward",
+	tt: {
+		name: "TT production",
 		1: {
-			func: "pow",
-			start: 12e4,
-			pow: 0.5,
-			derv: false
-		}
-	},
-	inf_time_log_dilation: {
-		name: "log base 10 of Infinite Time reward in dilation",
-		1: {
-			func: "pow",
-			start: 1e5,
-			pow: .2,
+			func: "dilate",
+			start: new Decimal(1e69 / 2e4),
+			base: 10,
+			pow: 2/3,
+			mul: () => tmp.exMode ? 1.5 : tmp.bgMode ? 1 : 1.25,
+			sub: 68 - Math.log10(2e4),
 			derv: false
 		},
 	},
-	inf_time_log_big_rip: {
-		name: "log base 10 of Infinite Time reward in Big Rip",
+	ma: {
+		name: "meta-antimatter",
 		1: {
 			func: "pow",
-			start: 100,
-			pow: 0.5,
+			start: new Decimal(Number.MAX_VALUE),
+			pow(x) {
+				let l2 = Decimal.log(x, 2)
+				return 1 / (Math.log2(l2 / 1024) / 4 + 2)
+			},
 			derv: false
-		}
+		},
+	},
+	it: {
+		name: "Infinite Time reward",
+		1: {
+			func: "dilate",
+			start: Decimal.pow(10, 1e5),
+			base: 10,
+			pow: 0.5
+		},
 	},
 	ig_log_high: { 
 		name: "log base 10 of Intergalactic reward",
@@ -672,6 +631,7 @@ var softcap_data = {
 
 var softcap_vars = {
 	pow: ["start", "pow", "derv"],
+	dilate: ["start", "base", "pow", "mul", "sub"],
 	log: ["pow", "mul", "add"],
 	logshift: ["shift", "pow", "add"]
 }
@@ -705,7 +665,29 @@ var softcap_funcs = {
 	logshift_decimal: function (x, shift, pow, add = 0){
 		let x2 = Decimal.pow(x.times(shift).log10(), pow).add(add)
 		return Decimal.min(x, x2)
-	}
+	},
+	dilate(x, start, base = 10, pow = 1, mul = 1, sub = 0) { 
+		if (x <= start) return x
+
+		let x_log = Math.log10(x) / Math.log10(base)
+		let start_log = Math.log10(start) / Math.log10(base)
+
+		x_log -= sub
+		start_log -= sub
+
+		return Math.pow(base, Math.pow(x_log / start_log, pow) * mul * start_log + sub)
+	},
+	dilate_decimal(x, start, base = 10, pow = 1, mul = 1, sub = 0) { 
+		if (x.lte(start)) return x
+
+		let x_log = x.log(base)
+		let start_log = start.log(base)
+
+		x_log -= sub
+		start_log -= sub
+
+		return Decimal.pow(base, Math.pow(x_log / start_log, pow) * mul * start_log + sub)
+	},
 }
 
 function do_softcap(x, data, num) {
@@ -716,20 +698,20 @@ function do_softcap(x, data, num) {
 	var vars = softcap_vars[func]
 
 	var start = 0
-	var v = [data[vars[0]], data[vars[1]], data[vars[2]], data.active]
-	for (let i = 0; i < 4; i++) {
-		if (typeof v[i] == "function") v[i] = v[i]()
+	var v = [data[vars[0]], data[vars[1]], data[vars[2]], data[vars[3]], data[vars[4]], data.active]
+	for (let i = 0; i < 6; i++) {
+		if (typeof v[i] == "function") v[i] = v[i](x)
 		if (vars[i] == "start") start = v[i]
 	}
 
-	if (v[4] === false) return x //DO NOT change to if (!v[4])  cause we DONT want undefined to return on this line
+	if (v[6] === false) return x //DO NOT change to if (!v[6])  cause we DONT want undefined to return on this line
 
 	var decimal = false
 	var canSoftcap = false
 	if (x.l != undefined || x.e != undefined) decimal = true
 	if (!start || (decimal ? x.gt(start) : x > start)) canSoftcap = true
 
-	if (canSoftcap) return softcap_funcs[func + (decimal ? "_decimal" : "")](x, v[0], v[1], v[2])
+	if (canSoftcap) return softcap_funcs[func + (decimal ? "_decimal" : "")](x, v[0], v[1], v[2], v[3], v[4])
 	return "stop"
 }
 
@@ -745,7 +727,7 @@ function softcap(x, id) {
 	}
 
 	if (data == undefined) {
-		console.log("your thing broke at" + id)
+		console.log("your thing broke at " + id)
 		return
 	}
 
@@ -772,9 +754,9 @@ function getSoftcapAmtFromId(id){
 		ts11_log_big_rip: () => tsMults[11]().log10(),
 		bru1_log: () => tmp.bru[1].max(1).log10(),
 		beu3_log: () => tmp.beu[3].max(1).log10(),
-		inf_time_log: () => tmp.it.max(1).log10(),
-		inf_time_log_dilation: () => tmp.it.max(1).log10(),
-		inf_time_log_big_rip: () => tmp.it.max(1).log10(),
+		it: () => tmp.it.max(1),
+		tt: () => getTTGenPart(player.dilation.tachyonParticles),
+		ma: () => getExtraDimensionBoostPowerUse(),
 		ig_log_high: () => tmp.ig.max(1).log10(),
 		bam: () => getBosonicAMProduction(),
 		idbase: () => getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).max(1).log10(),
@@ -818,6 +800,8 @@ function hasSoftcapStarted(id, num){
 		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined && tmp.quActive,
 		bam: tmp.ngp3,
 		bu45: tmp.ngp3,
+		tt: tmp.ngp3,
+		ma: tmp.ngp3,
 		ig_log_high: tmp.ngp3 && tmp.ig !== undefined,
 		mptd_log: false, //again, for now only
 	}
@@ -868,7 +852,7 @@ function softcapShorten(x){
 	else return shorten(x)
 }
 
-function getSoftcapStringEffect(id, num, namenum){
+function getSoftcapStringEffect(id, num, amt, namenum){
 	let data = softcap_data[id][num]
 	if (namenum == undefined) namenum = num
 	if (data == undefined) return "Nothing, prb bug."
@@ -877,15 +861,19 @@ function getSoftcapStringEffect(id, num, namenum){
 	var func = data.func
 	var vars = softcap_vars[func]
 
-	var v = [data[vars[0]], data[vars[1]], data[vars[2]]]
-	for (let i = 0; i < 3; i++) if (typeof v[i] == "function") v[i] = v[i]()
-	
+	var v = [data[vars[0]], data[vars[1]], data[vars[2]], data[vars[3]], data[vars[4]]]
+	for (let i = 0; i < 5; i++) if (typeof v[i] == "function") v[i] = v[i](amt)
+
 	if (func == "pow"){
 		let inside = "Start: " + softcapShorten(v[0]) + ", Exponent: " + softcapShorten(v[1])
 		if (shiftDown) inside += (v[2] ? ", and keeps " : ", and does not keep ") + "smoothness at softcap start"
 		return "Softcap of " + name + " " + inside + "."
 	}
-	if (func == "log"){ // vars ["pow", "mul", "add"]
+	if (func == "dilate") { // vars ["base", "pow", ...]
+		let inside = "Start: " + softcapShorten(v[0]) + ", Exponent: " + softcapShorten(v[0]) + ", Base (log): " + softcapShorten(v[1])
+		return "Softcap of " + name + " " + inside + "."
+	}
+	if (func == "log") { // vars ["pow", "mul", "add"]
 		let mult = (v[1] != undefined && Decimal.neq(v[1], 1)) ? ", Times: " + softcapShorten(v[1]) : ""
 		let add = ""
 		if (v[2] != undefined) {
@@ -908,7 +896,7 @@ function getInnerHTMLSoftcap(id){
 	let amt = getSoftcapAmtFromId(id)
 	for (let i = 1; i <= n; i++) {
 		if (hasSoftcapStartedArg(id, i, amt)) {
-			s += getSoftcapStringEffect(id, i, c) + "<br>"
+			s += getSoftcapStringEffect(id, i, amt, c) + "<br>"
 			c ++
 		}
 	}
@@ -923,9 +911,9 @@ function updateSoftcapStatsTab(){
 		ts11_log_big_rip: "softcap_ts2",
 		bru1_log: "softcap_bru1",
 		beu3_log: "softcap_beu3",
-		inf_time_log: "softcap_it",
-		inf_time_log_dilation: "softcap_itD",
-		inf_time_log_big_rip: "softcap_itBR",
+		it: "softcap_it",
+		tt: "softcap_tt",
+		ma: "softcap_ma",
 		ig_log_high: "softcap_ig",
 		bam: "softcap_bam",
 		idbase: "softcap_idbase",
@@ -951,13 +939,21 @@ function updateSoftcapStatsTab(){
 
 	for (let i = 0; i < n.length; i++){
 		let elname = names[n[i]]
+		let el = getEl(elname)
 		if (hasAnySoftcapStarted(n[i])) {  
-			getEl(elname).style = "display:block"
-			getEl(elname).innerHTML = getInnerHTMLSoftcap(n[i])
+			el.style = "display:block"
+			el.innerHTML = getInnerHTMLSoftcap(n[i])
 
 			anyActive = true
 		} else {
-			getEl(elname).style = "display:none"
+			el.style = "display:none"
+		}
+
+		let elDisp = getEl(elname + "_disp")
+		if (elDisp) {
+			elDisp.className = "softcap"
+			elDisp.textContent = "(softcapped)"
+			elDisp.style.display = hasAnySoftcapStarted(n[i]) ? "" : "none"
 		}
 	}
 

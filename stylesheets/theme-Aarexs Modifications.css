@@ -390,7 +390,7 @@ strong { color: #0072e5 }
     color: #191919 !important;
 	border-color: #191919 !important
 }
-#metaAntimatterAmount, #metaAntimatterBest, #metaAntimatterPower, #metaAntimatterEffect {
+#metaAntimatterAmount, #metaAntimatterPower, #metaAntimatterBest, #metaAntimatterEffect {
     color: #00e5e5 !important
 }
 #quantum.storebtn, .quantumbtn, #pastquantums, .qMs_locked, .qMs_locked:hover, #dilstudy8.dilationupg, #qctabbtn, #dilstudy9.dilationupg, #pccompletionsbtn {

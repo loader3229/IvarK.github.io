@@ -10,7 +10,7 @@ function getTickspeedMultiplier() {
 function initialGalaxies() {
 	let g = player.galaxies
 
-	if (pos.on()) g -= pos.save.gals.ng.sac
+	if (pos.on()) g -= pos_save.gals.ng.sac
 	if (tmp.ngC) g *= 2
 	if ((inNC(15) || player.currentChallenge == "postc1") && tmp.mod.ngmX == 3) g = 0
 
@@ -78,7 +78,7 @@ function getExtraGalaxyPower(noDil) {
 	let extraReplGalPower = 0
 	extraReplGalPower += replPower * tsReplEff + tmp.extraRG // tmp.extraRG is a constant
 
-	if (masteryStudies.has(291)) replPower = (replPower + extraReplGalPower) * replGalEff
+	if (hasMTS(291)) replPower = (replPower + extraReplGalPower) * replGalEff
 	else replPower += Math.min(replPower, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
 
 	x += replPower
@@ -87,19 +87,9 @@ function getExtraGalaxyPower(noDil) {
 	let dilGalEff = 1
 	if (hasDilationStudy(1) && !noDil) {
 		dilGalEff = getBaseDilGalaxyEff()
-		if (masteryStudies.has(312)) dilGalEff *= Math.pow(replGalEff, getMTSMult(312))
+		if (hasMTS(312)) dilGalEff *= Math.pow(replGalEff, getMTSMult(312))
 
 		x += Math.floor(player.dilation.freeGalaxies) * dilGalEff
-	}
-
-	//AntiElectronic
-	let aelcGalEff = 1
-	if (tmp.aeg > 0) {
-		aelcGalEff = getBaseAelcGalaxyEff()
-		if (false) aelcGalEff *= dilGalEff
-		//Coming soon...
-
-		x += tmp.effAeg * aelcGalEff
 	}
 	return x
 }
@@ -170,7 +160,7 @@ function canBuyTickSpeed() {
 function buyTickSpeed() {
 	if (!canBuyTickSpeed()) return false
 	if (player.tickSpeedCost.gt(player.money)) return false
-	if (!ph.did("quantum")) player.money = player.money.minus(player.tickSpeedCost)
+	if (!pH.did("quantum")) player.money = player.money.minus(player.tickSpeedCost)
 	if ((!inNC(5) && player.currentChallenge != "postc5") || player.tickspeedBoosts != undefined) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
 	else multiplySameCosts(player.tickSpeedCost)
 	if (costIncreaseActive(player.tickSpeedCost)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(getTickSpeedCostMultiplierIncrease())
@@ -218,13 +208,20 @@ function resetTickspeed() {
 
 function getTickSpeedCostMultiplierIncrease() {
 	let ret = player.tickSpeedMultDecrease;
-	let exp = .9 - .02 * ECComps("eterc11")
+
+	//NG+3
+	if (enB.active("pos", 6)) ret = Math.pow(ret, 1 / tmp_enB.pos6)
+
+	//NG--
 	if (player.currentChallenge === 'postcngmm_2') ret = Math.pow(ret, .5)
 	else if (player.challenges.includes('postcngmm_2')) {
+		let exp = .9 - .02 * ECComps("eterc11")
 		let galeff = (1 + Math.pow(player.galaxies, 0.7) / 10)
 		if (tmp.mod.ngmX >= 4) galeff = Math.pow(galeff, .2)
+
 		ret = Math.pow(ret, exp / galeff)
 	}
+
 	return ret
 }
 

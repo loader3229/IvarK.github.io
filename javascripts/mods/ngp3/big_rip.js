@@ -92,7 +92,7 @@ function buyBigRipUpg(id) {
 
 function tweakBigRip(id, reset) {
 	if (id == 2) {
-		for (var ec = 1; ec <= masteryStudies.ecsUpTo; ec++) player.eternityChalls["eterc" + ec] = 5
+		for (var ec = 1; ec <= mTs.ecsUpTo; ec++) player.eternityChalls["eterc" + ec] = 5
 		player.eternities = Math.max(player.eternities, 1e5)
 		if (!reset) updateEternityChallenges()
 	}

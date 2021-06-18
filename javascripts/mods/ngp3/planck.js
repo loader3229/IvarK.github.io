@@ -68,7 +68,7 @@ let PLANCK = {
 				for (let x = 0; x < pl.warnings.length; x++) if (!confirm(pl.warnings[x])) return
 			}
 
-			ph.onPrestige("planck")
+			pH.onPrestige("planck")
 			pl.onReset()
 		},
 		exit() {
@@ -77,7 +77,7 @@ let PLANCK = {
 			pl.save.on = false
 			bosonicLabReset()
 			pl.updateDisplay()
-			ph.updateDisplay()
+			pH.updateDisplay()
 		},
 		onReset() {
 			if (!pl.save) {
@@ -123,7 +123,7 @@ let PLANCK = {
 			GDs.updateDisplay()
 			pl.updateDisplay()
 
-			ph.updateDisplay()
+			pH.updateDisplay()
 		},
 		conf() {
 			let exit = []
@@ -141,7 +141,7 @@ let PLANCK = {
 			return hasAch("ng3p111") && pl.save
 		},
 		updateDisplay() {
-			getEl("planck").style.display = ph.can("planck") ? "" : "none"
+			getEl("planck").style.display = pH.can("planck") ? "" : "none"
 			getEl("plExit").className = "gluonupgrade " + (pl.on() ? "quantumbtn" : "unavailablebtn")
 			getEl("plMsg").textContent = pl.on() ? "Tier up the Planck Scale to " + getFullExpansion(pl.save.layer + 1) + " and supercharge!" : "See beyond the forces of Quantum... I want to go deeper into Planck scale."
 

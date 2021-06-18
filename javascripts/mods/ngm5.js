@@ -64,7 +64,7 @@ function getPxGain() {
 }
 
 function canPSac() {
-	return ph.can("paradox")
+	return pH.can("paradox")
 }
 
 function pSac(chall) {
@@ -88,7 +88,7 @@ function pSacReset(force, chall, pxGain) {
 	//resetPDs()
 	updateParadoxUpgrades()
 	galaxyReset(-player.galaxies)
-	ph.onPrestige("paradox")
+	pH.onPrestige("paradox")
 }
 
 function pSacrificed() {
@@ -175,7 +175,7 @@ let puDescs = {
 	14: "Time speed is 2x faster.",
 	
 	21() {
-		return "Boost Time Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
+		return "Boost Time Dimensions" + (pH.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
 	},
 	
 	22: "Time Dimensions are affected by tickspeed at a reduced rate.",

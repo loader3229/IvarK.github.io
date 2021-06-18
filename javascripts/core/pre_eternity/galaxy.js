@@ -25,7 +25,7 @@ function galaxyReset(bulk) {
 	if (!hasAch("r111")) setInitialMoney()
 	if (hasAch("r66")) player.tickspeed = player.tickspeed.times(0.98);
 	if (tmp.quActive && tmp.qu.bigRip.active) tmp.qu.bigRip.bestGals = Math.max(tmp.qu.bigRip.bestGals, player.galaxies)
-	if (ph.did("ghostify") && player.ghostify.neutrinos.boosts) gainNeutrinos(bulk, "gen")
+	if (pH.did("ghostify") && player.ghostify.neutrinos.boosts) gainNeutrinos(bulk, "gen")
 	hideDimensions()
 	tmp.tickUpdate = true;
 }
@@ -46,7 +46,7 @@ getEl("secondSoftReset").onclick = function() {
 
 function getDistantScalingEffect(){
 	let speed = 1
-	if (ph.did("ghostify") && player.ghostify.neutrinos.boosts >= 6) speed /= tmp.nb[6]
+	if (pH.did("ghostify") && player.ghostify.neutrinos.boosts >= 6) speed /= tmp.nb[6]
 	if (hasBosonicUpg(45)) speed /= tmp.blu[45]
 	if (hasAch("ng3p98")) speed *= 0.9
 	if (hasAch("ng3p101")) speed *= 0.5
@@ -168,7 +168,7 @@ function getRemoteScalingStart(galaxies) {
 	else if (inNGM(2)) n += 1e7
 	if (hasDilationUpg(5) && tmp.ngC) n += 25;
 	if (tmp.ngp3) {
-		for (var t = 251; t <= 253; t++) if (masteryStudies.has(t)) n += getMTSMult(t)
+		for (var t = 251; t <= 253; t++) if (hasMTS(t)) n += getMTSMult(t)
 
 		if (isNanoEffectUsed("remote_start")) n += tmp.nf.effects.remote_start
 		if (galaxies > 1/0 && !tmp.be) n -= galaxies - 1/0 

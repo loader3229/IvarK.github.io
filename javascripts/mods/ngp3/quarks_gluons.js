@@ -184,15 +184,16 @@ function updateColorCharge() {
 	colorCharge.normal = {
 		color: sorted[0],
 		chargeAmt: Decimal.sub(usedQuarks[sorted[0]], usedQuarks[sorted[1]]).round(),
-		charge: QCs.in(2) ? 0 : colorPowers[sorted[0]] * Decimal.div(
+		charge: colorPowers[sorted[0]] * Decimal.div(
 			Decimal.sub(usedQuarks[sorted[0]], usedQuarks[sorted[1]]),
 			Decimal.add(usedQuarks[sorted[0]], 1)
 		)
 	}
+	if (QCs.isRewardOn(2)) colorCharge[sorted[0]] = colorCharge.normal.charge
 	if (player.ghostify.milestones <= 2) colorCharge[sorted[0]] = colorCharge.normal.charge
 	if (usedQuarks[sorted[0]] > 0 && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
 
-	colorCharge.subCancel = hasAch("ng3p13") && !QCs.in(2) ? Math.pow(colorCharge.normal.charge * 3, 1.25) : 0
+	colorCharge.subCancel = hasAch("ng3p13") ? Math.pow(colorCharge.normal.charge * 3, 1.25) : 0
 
 	colorCharge.neutralize = {}
 	colorCharge.neutralize[sorted[0]] = new Decimal(0)
@@ -204,8 +205,6 @@ function updateColorCharge() {
 }
 
 function getColorPowerQuantity(color) {
-	if (QCs.in(2)) return 0
-
 	let ret = colorCharge[color] * tmp.glB[color].mult
 	if (tmp.qe) ret = ret * tmp.qe.eff1 + tmp.qe.eff2
 	if (tmp.glB) ret = ret - tmp.glB[color].sub
@@ -223,11 +222,18 @@ function updateColorPowers() {
 	colorBoosts.r = Math.log10(tmp.qu.colorPowers.r * 5 + 1) / 3.5 + 1
 
 	//Green
-	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g * 3 + 1) * 2 + 1
+	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g * 3 + 1) + 1
 
 	//Blue
-	colorBoosts.b = Math.pow(tmp.qu.colorPowers.b * 1.5 + 1, 2)
-	if (masteryStudies.has(313)) colorBoosts.b = Decimal.pow(colorBoosts.b, getMTSMult(313))
+	colorBoosts.b_base = tmp.qu.colorPowers.b * 1.5 + 1
+	colorBoosts.b_exp = 2
+	if (enB.active("glu", 9)) colorBoosts.b_base *= tmp_enB.glu9
+	if (enB.active("glu", 11)) colorBoosts.b_exp += tmp_enB.glu11
+
+	colorBoosts.b_base2 = Decimal.pow(colorBoosts.b_base, colorBoosts.b_exp)
+	if (hasMTS(313)) colorBoosts.b_exp *= getMTSMult(313, "update")
+
+	colorBoosts.b = Decimal.pow(colorBoosts.b_base, colorBoosts.b_exp)
 }
 
 //Gluons
@@ -243,21 +249,18 @@ function gainQuantumEnergy() {
 }
 
 function getQEQuarksPortion() {
-	if (QCs.in(2)) return 0
 	let exp = tmp.qe.exp
 	return Math.pow(quantumWorth.add(1).log10(), exp) * 1.25
 }
 
 function getQEGluonsPortion() {
-	if (QCs.in(2)) return 0
 	let exp = tmp.qe.exp
 	return Math.pow(tmp.qu.gluons[tmp.qu.entColor || "rg"].add(1).log10(), exp) * (tmp.exMode ? 0 : tmp.ngp3_mul ? 1 : 0.25)
 }
 
 function getQuantumEnergyMult() {
-	if (QCs.in(2)) return 0
 	let x = 1
-	if (enB.active("glu", 1)) x += enB.tmp.glu1
+	if (enB.active("glu", 1)) x += tmp_enB.glu1
 	if (tmp.ngp3_mul && tmp.glb) x += (tmp.glB.r.mult + tmp.glB.g.mult + tmp.glB.b.mult) / 15
 	return x
 }
@@ -278,7 +281,7 @@ function updateQEGainTmp() {
 	if (tmp.ngp3_mul) data.expDen *= 0.8
 
 	data.expNum = 1
-	if (enB.active("pos", 1)) data.expNum += enB.tmp.pos1
+	if (enB.active("pos", 1)) data.expNum += tmp_enB.pos1
 	if (data.expNum > data.expDen - 1) {
 		let sc = data.expDen - 1
 		let scEff = data.expNum / sc
@@ -299,7 +302,7 @@ function updateQEGainTmp() {
 function updateQuarkEnergyEffects() {
 	if (!tmp.quActive) return
 
-	let exp = enB.active("pos", 4) ? Math.sqrt(4 / (enB.tmp.pos4 * 3)) : 2
+	let exp = 4 / 3
 	tmp.qe.eff1 = Math.pow(Math.log10(tmp.qu.quarkEnergy / 1.7 + 1) + 1, exp)
 	tmp.qe.eff2 = Math.pow(tmp.qu.quarkEnergy, exp) * tmp.qe.eff1 / 4
 }
@@ -371,16 +374,12 @@ function updateGluonicBoosts() {
 }
 
 function getGluonEffBuff(x) {
-	if (QCs.in(2)) return 0
-
 	let r = Math.log10(Decimal.add(x, 1).log10() * 5 + 1) + 1
 	if (tmp.ngp3_mul) r *= 1.5
 	return r
 }
 
 function getGluonEffNerf(x, color) {
-	if (QCs.in(2)) return 0
-
 	let r = Math.max(Math.pow(Decimal.add(x, 1).log10(), tmp.exMode ? 1.8 : 1.5) - colorCharge.subCancel, 0)
 	if (tmp.ngp3_mul) r *= 0.5
 
@@ -389,47 +388,49 @@ function getGluonEffNerf(x, color) {
 	return r
 }
 
-let enB = {
+var enB = {
 	buy(type) {
-		let data = this[type]
+		var data = this[type]
 		if (!data.unl()) return
 		if (!(data.engAmt() >= data.cost())) return
+
 		data.set(data.amt() + 1)
 		updateGluonicBoosts()
-		enB.update(type)
+		this.update(type)
 	},
 	maxBuy(type) {
-		let data = this[type]
+		var data = this[type]
 		if (!data.unl()) return
 		if (!(data.engAmt() >= data.cost())) return
+
 		data.set(Math.floor(data.target()))
 		updateGluonicBoosts()
-		enB.update(type)
+		this.update(type)
 	},
 
 	has(type, x) {
-		let data = this[type]
+		var data = this[type]
 		return this[type].unl() && data.amt() >= data[x].req
 	},
 	active(type, x) {
-		let data = this[type][x]
+		var data = this[type][x]
 
-		if (enB.tmp === undefined || enB.tmp[type + x] === undefined) return false
+		if (tmp_enB[type + x] === undefined) return false
 
 		if (!this.has(type, x)) return false
 		if (data.activeReq && !data.activeReq()) return false
 
 		if (this.mastered(type, x)) return true
 
-		let gluon = tmp.qu.entColor || "rg"
+		var gluon = tmp.qu.entColor || "rg"
 		return data.type == gluon[0] || data.type == gluon[1]
 	},
 	mastered(type, x) {
-		let data = this[type]
+		var data = this[type]
 		return data.amt() >= this.getMastered(type, x)
 	},
 	getMastered(type, x) {
-		let data = this[type]
+		var data = this[type]
 		return (tmp.exMode && data[x].masReqExpert) || data[x].masReq
 	},
 
@@ -444,30 +445,29 @@ let enB = {
 		quantum(false, true)
 	},
 
-	tmp: {
-	},
 	updateTmp() {
-		let data = {}
-		enB.tmp = data
-	
-		for (var x = 0; x < enB.priorities.length; x++) {
-			var boost = enB.priorities[x]
+		var data = {}
+		tmp_enB = data
+
+		for (var x = 0; x < this.priorities.length; x++) {
+			var boost = this.priorities[x]
 			var type = boost[0]
 			var num = boost[1]
 
-			if (enB.has(type, num)) {
-				var eff = enB[type][num].eff
-				if (eff !== undefined) data[type + num] = eff(enB[type].eff(num))
+			if (this.has(type, num)) {
+				var eff = this[type][num].eff
+				if (eff !== undefined) data[type + num] = eff(this[type].eff(num))
 			}
 		}
 	},
 
 	types: ["glu", "pos"],
 	priorities: [
-		["glu", 5],
+		["glu", 5], ["glu", 10],
+		["pos", 8], 
 
-		["pos", 1], ["pos", 2], ["pos", 3], ["pos", 4], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 8], ["pos", 9],
-		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 4], ["glu", 6], ["glu", 7], ["glu", 8], ["glu", 9], ["glu", 10], ["glu", 11], ["glu", 12],
+		["pos", 1], ["pos", 2], ["pos", 3], ["pos", 4], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 9],
+		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 4], ["glu", 6], ["glu", 7], ["glu", 8], ["glu", 9], ["glu", 11], ["glu", 12],
 	],
 	glu: {
 		name: "Entangled",
@@ -479,31 +479,29 @@ let enB = {
 			if (x === undefined) x = this.amt()
 			return Math.pow(x / 3, 1.5) + 1
 		},
-		target() {
-			return Math.pow(Math.max(this.engAmt() - 1, 0), 1 / 1.5) * 3 + 1
+		target(noBest) {
+			return Math.pow(Math.max(this.engAmt(noBest) - 1, 0), 1 / 1.5) * 3 + 1
 		},
 
 		amt() {
 			return tmp.qu.entBoosts || 0
 		},
-		engAmt() {
-			return tmp.qu.bestEnergy
+		engAmt(noBest) {
+			return noBest ? tmp.qu.quarkEnergy : tmp.qu.bestEnergy
 		},
 		set(x) {
 			tmp.qu.entBoosts = x
 		},
 
 		eff(x) {
-			let amt = 0
-			if (!QCs.in(2)) amt += this.target()
+			var amt = this.target(true)
 			if (pos.on()) amt += enB.pos.target()
 
-			let r = Math.max(amt * 2 / 3 - 1, 1)
+			var r = Math.max(amt * 2 / 3 - 1, 1)
 			r *= tmp.glB[enB.mastered("glu", x) ? "masAmt" : "enAmt"]
 			return r
 		},
 		gluonEff(x) {
-			if (QCs.in(2)) return 0
 			return Decimal.add(x, 1).log10()
 		},
 
@@ -513,7 +511,6 @@ let enB = {
 			masReq: 7,
 			masReqExpert: 9,
 			type: "r",
-			activeReq: () => !QCs.in(2),
 
 			eff(x) {
 				return Math.cbrt(x) * 0.75
@@ -527,10 +524,9 @@ let enB = {
 			masReq: 9,
 			masReqExpert: 11,
 			type: "g",
-			activeReq: () => !QCs.in(2),
 
 			eff(x) {
-				return Math.log10(x * 2 + 1) * 1.5 + 1
+				return Math.log10(x * 2 + 1) + 1
 			},
 			effDisplay(x) {
 				return x.toFixed(3)
@@ -538,10 +534,9 @@ let enB = {
 		},
 		3: {
 			req: 6,
-			masReq: 15,
-			masReqExpert: 17,
+			masReq: 10,
+			masReqExpert: 13,
 			type: "b",
-			activeReq: () => !QCs.in(2),
 
 			eff(x) {
 				return Math.sqrt(x / 2 + 1, 0.5)
@@ -555,11 +550,10 @@ let enB = {
 			masReq: 11,
 			masReqExpert: 12,
 			type: "r",
-			activeReq: () => !QCs.in(2),
 
 			eff(x) {
 				x = (1 + Math.log10(x / 5 + 1))
-				if (x > 5) x = 10 - 25 / x
+				if (x > 2) x = 4 - 4 / x
 				return 0.0045 * x
 			},
 			effDisplay(x) {
@@ -571,7 +565,6 @@ let enB = {
 			masReq: 20,
 			masReqExpert: 25,
 			type: "g",
-			activeReq: () => !QCs.in(2),
 
 			eff(x) {
 				if (pos.on()) {
@@ -586,7 +579,7 @@ let enB = {
 			}
 		},
 		6: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
 
 			//Temp
@@ -598,11 +591,11 @@ let enB = {
 				return 1
 			},
 			effDisplay(x) {
-				return formatPercentage(x - 1)
+				return formatPercentage(x - 1) + "%"
 			}
 		},
 		7: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
 
 			//Temp
@@ -614,11 +607,11 @@ let enB = {
 				return 2
 			},
 			effDisplay(x) {
-				return x.toFixed(3)
+				return "^" + x.toFixed(3)
 			}
 		},
 		8: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
 
 			//Temp
@@ -630,11 +623,11 @@ let enB = {
 				return 0.1
 			},
 			effDisplay(x) {
-				return x.toFixed(3)
+				return "x^" + x.toFixed(3)
 			}
 		},
 		9: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
 
 			//Temp
@@ -646,11 +639,11 @@ let enB = {
 				return 1
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return shorten(x) + "x"
 			}
 		},
 		10: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
 
 			//Temp
@@ -662,11 +655,11 @@ let enB = {
 				return 1
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return formatReductionPercentage(x, 3) + "%"
 			}
 		},
 		11: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
 
 			//Temp
@@ -682,7 +675,7 @@ let enB = {
 			}
 		},
 		12: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
 
 			//Temp
@@ -690,11 +683,12 @@ let enB = {
 			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			type: "r",
+			anti: true,
 			eff(x) {
-				return 1
+				return 0
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return "^" + x.toFixed(3)
 			}
 		},
 	},
@@ -713,13 +707,13 @@ let enB = {
 		},
 
 		amt() {
-			return pos.save.boosts
+			return pos_save.boosts
 		},
 		engAmt() {
-			return pos.save.eng
+			return pos_save.eng
 		},
 		set(x) {
-			pos.save.boosts = x
+			pos_save.boosts = x
 		},
 
 		eff() {
@@ -728,7 +722,7 @@ let enB = {
 		},
 		masEff(x) {
 			x /= 2
-			if (enB.active("glu", 5) && !pos.on()) x += enB.tmp.glu5
+			if (enB.active("glu", 5) && !pos.on()) x += tmp_enB.glu5
 			return x
 		},
 
@@ -740,8 +734,7 @@ let enB = {
 
 			chargeReq: 1,
 			activeReq() {
-				if (QCs.in(2)) return false
-				return enB.mastered("pos", 1) || pos.save.eng >= this.chargeReq
+				return enB.mastered("pos", 1) || pos_save.eng >= this.chargeReq
 			},
 			activeDispReq() {
 				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 1) ? " (full effect)" : "")
@@ -750,7 +743,7 @@ let enB = {
 			type: "g",
 			eff(x) {
 				if (enB.mastered("pos", 1)) x = Math.max(x, enB.pos.masEff(enB.pos[1].chargeReq))
-				let rep = (tmp.rmPseudo || player.replicanti.amount).max(1)
+				var rep = (tmp.rmPseudo || player.replicanti.amount).max(1)
 
 				return Math.log10(rep.log10() + 1) * Math.log10(x + 1)
 			},
@@ -765,8 +758,7 @@ let enB = {
 
 			chargeReq: 1,
 			activeReq() {
-				if (QCs.in(2)) return false
-				return enB.mastered("pos", 2) || pos.save.eng >= this.chargeReq
+				return enB.mastered("pos", 2) || pos_save.eng >= this.chargeReq
 			},
 			activeDispReq() {
 				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 2) ? " (full effect)" : "")
@@ -788,8 +780,7 @@ let enB = {
 
 			chargeReq: 350,
 			activeReq() {
-				if (QCs.in(2)) return false
-				return enB.mastered("pos", 3) || pos.save.eng >= this.chargeReq
+				return enB.mastered("pos", 3) || pos_save.eng >= this.chargeReq
 			},
 			activeDispReq() {
 				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 3) ? " (full effect)" : "")
@@ -807,28 +798,40 @@ let enB = {
 			}
 		},
 		4: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
 
-			chargeReq: 0,
+			chargereq: 1/0,
 			activeReq() {
-				if (QCs.in(2)) return false
-				return enB.mastered("pos", 4) || pos.save.eng >= this.chargeReq
+				return enB.mastered("pos", 4) || pos_save.eng >= this.chargeReq
 			},
 			activeDispReq() {
 				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 4) ? " (full effect)" : "")
 			},
 
-			type: "r",
+			type: "b",
 			eff(x) {
-				return 1
+				var mdb = player.meta.resets
+
+				var slowStart = 4
+				var slowSpeed = 1
+				if (enB.active("pos", 8)) slowStart += tmp_enB.pos8
+				if (enB.active("glu", 10)) slowSpeed /= tmp_enB.glu10
+
+				var base = player.meta.antimatter.max(10).log10()
+				var exp = mdb
+
+				exp += Math.min(mdb, slowStart) * (Math.min(mdb, slowStart) - 1)
+				exp /= 20
+
+				return Decimal.pow(base, exp)
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return "Unlock Meta-Accelerator."
 			}
 		},
 		5: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
 
 			//Temp
@@ -836,10 +839,9 @@ let enB = {
 			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			/*
-			chargeReq: 0,
+			chargereq: 1/0,
 			activeReq() {
-				if (QCs.in(2)) return false
-				return enB.mastered("pos", 5) || pos.save.eng >= this.chargeReq
+				return enB.mastered("pos", 5) || pos_save.eng >= this.chargeReq
 			},
 			activeDispReq() {
 				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 5) ? " (full effect)" : "")
@@ -851,11 +853,11 @@ let enB = {
 				return 1
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return "^" + x.toFixed(3)
 			}
 		},
 		6: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
 
 			//Temp
@@ -863,10 +865,9 @@ let enB = {
 			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			/*
-			chargeReq: 0,
+			chargereq: 1/0,
 			activeReq() {
-				if (QCs.in(2)) return false
-				return enB.mastered("pos", 6) || pos.save.eng >= this.chargeReq
+				return enB.mastered("pos", 6) || pos_save.eng >= this.chargeReq
 			},
 			activeDispReq() {
 				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 6) ? " (full effect)" : "")
@@ -874,15 +875,16 @@ let enB = {
 			*/
 
 			type: "r",
+			anti: true,
 			eff(x) {
 				return 1
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return Math.pow(player.tickSpeedMultDecrease, 1 / x).toFixed(4) + "x"
 			}
 		},
 		7: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
 
 			//Temp
@@ -890,17 +892,16 @@ let enB = {
 			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			/*
-			chargeReq: 0,
+			chargereq: 1/0,
 			activeReq() {
-				if (QCs.in(2)) return false
-				return enB.mastered("pos", 7) || pos.save.eng >= this.chargeReq
+				return enB.mastered("pos", 7) || pos_save.eng >= this.chargeReq
 			},
 			activeDispReq() {
 				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 7) ? " (full effect)" : "")
 			},
 			*/
 
-			type: "r",
+			type: "g",
 			eff(x) {
 				return 1
 			},
@@ -909,34 +910,34 @@ let enB = {
 			}
 		},
 		8: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
+			anti: true,
 
 			//Temp
 			activeReq: () => false,
 			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			/*
-			chargeReq: 0,
+			chargereq: 1/0,
 			activeReq() {
-				if (QCs.in(2)) return false
-				return enB.mastered("pos", 8) || pos.save.eng >= this.chargeReq
+				return enB.mastered("pos", 8) || pos_save.eng >= this.chargeReq
 			},
 			activeDispReq() {
 				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 8) ? " (full effect)" : "")
 			},
 			*/
 
-			type: "r",
+			type: "g",
 			eff(x) {
-				return 1
+				return 0
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return x.toFixed(3)
 			}
 		},
 		9: {
-			req: 0,
+			req: 1/0,
 			masReq: 1/0,
 
 			//Temp
@@ -944,22 +945,25 @@ let enB = {
 			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			/*
-			chargeReq: 0,
+			chargereq: 1/0,
 			activeReq() {
-				if (QCs.in(2)) return false
-				return enB.mastered("pos", 9) || pos.save.eng >= this.chargeReq
+				return enB.mastered("pos", 9) || pos_save.eng >= this.chargeReq
 			},
 			activeDispReq() {
 				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 9) ? " (full effect)" : "")
 			},
 			*/
 
-			type: "r",
+			type: "b",
+			anti: true,
 			eff(x) {
-				return 1
+				var expExp = 1
+				var expDiv = 1
+
+				return Math.pow(Decimal.max(getInfinitied(), 1).log10(), expExp) / expDiv
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return "^" + shorten(x)
 			}
 		},
 	},
@@ -995,17 +999,18 @@ let enB = {
 		}
 	},
 	updateOnTick(type) {
-		let data = this[type]
+		var data = this[type]
 
 		if (getEl("enB_" + type + "_eng") !== null) getEl("enB_" + type + "_eng").textContent = shorten(data.engAmt())
 		getEl("enB_" + type + "_buy").className = data.engAmt() >= data.cost() ? "storebtn" : "unavailablebtn"
 
 		for (var i = 1; i <= data.max; i++) {
 			if (!this.has(type, i)) break
-			if (enB.tmp[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(enB.tmp[type + i])
+			if (tmp_enB[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(tmp_enB[type + i])
 		}
 	}
 }
+var tmp_enB = {}
 let ENTANGLED_BOOSTS = enB
 
 function gainQKOnQuantum(qkGain) {
@@ -1040,6 +1045,7 @@ function updateQuarksTab(tab) {
 	getEl("redTranslation").textContent = formatPercentage(colorBoosts.r - 1)
 	getEl("greenTranslation").textContent = shorten(colorBoosts.g)
 	getEl("blueTranslation").textContent = shorten(colorBoosts.b)
+	getEl("blueTransInfo").textContent = shiftDown ? "(Base: " + shorten(colorBoosts.b_base) + ", raised by ^" + shorten(colorBoosts.b_exp) + ")" : ""
 
 	getEl("quarkEnergyEffect1").textContent = formatPercentage(tmp.qe.eff1 - 1)
 	getEl("quarkEnergyEffect2").textContent = shorten(tmp.qe.eff2)
@@ -1112,7 +1118,7 @@ function updateQuarksTabOnUpdate(mode) {
 		getEl(pair + "_next").textContent = shortenDimensions(uq[pair[0]].sub(diff).round())
 	}
 	getEl("assignAllButton").className = canAssign ? "storebtn" : "unavailablebtn"
-	if (masteryStudies.has("d13")) {
+	if (hasMTS("d13")) {
 		getEl("redQuarksToD").textContent = shortenDimensions(tmp.qu.usedQuarks.r)
 		getEl("greenQuarksToD").textContent = shortenDimensions(tmp.qu.usedQuarks.g)
 		getEl("blueQuarksToD").textContent = shortenDimensions(tmp.qu.usedQuarks.b)	

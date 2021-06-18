@@ -9,8 +9,9 @@ function getMetaAntimatterStart(bigRip) {
 function getDilationMDMultiplier() {
 	let pow = 0.1
 	let div = 1e40
-	if (isNanoEffectUsed("dt_to_ma_exp")) if (tmp.nf.effects.dt_to_ma_exp) pow = tmp.nf.effects.dt_to_ma_exp //this is a quick fix, but we need to fix this bug
+	if (enB.active("glu", 8)) pow = tmp_enB.glu8
 	if (tmp.mod.nguspV !== undefined) div = 1e50
+
 	if (tmp.mod.ngudpV && !tmp.mod.nguepV) {
 		let l = tmp.qu.colorPowers.b.plus(10).log10()
 		let x = 3 - Math.log10(l + 1)
@@ -29,12 +30,15 @@ function getDilationMDMultiplier() {
 function getMDMultiplier(tier) {
 	if (player.currentEternityChall === "eterc11") return new Decimal(1)
 	let ret = Decimal.pow(getPerTenMetaPower(), Math.floor(player.meta[tier].bought / 10))
-	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(Math.max(player.meta.resets - (pos.on() ? pos.tmp.sac_mdb : 0), 0) + 1 - tier, 0)))
+	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(Math.max(player.meta.resets - (pos.on() ? save_tmp.sac_mdb : 0), 0) + 1 - tier, 0)))
 	ret = ret.times(tmp.mdGlobalMult) //Global multiplier of all Meta Dimensions
 
 	//Achievements:
 	if (tier == 1 && hasAch("ng3p21")) ret = ret.times(player.meta.bestAntimatter.max(1).log10() / 5 + 1)
 	if (tier <= 3 && hasAch("ng3p17")) ret = ret.times(Decimal.pow(1.001, Math.pow(player.totalmoney.plus(10).log10(), 0.25)))
+
+	//Positronic Boosts:
+	if (tier == 1 && enB.active("pos", 4)) ret = ret.times(tmp_enB.pos4)
 
 	//Dilation Upgrades:
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
@@ -69,7 +73,7 @@ function getMetaBoostPower() {
 
 	let exp = 1
 	if (tmp.ngp3 && hasAch("ngpp14")) exp = 1.05
-	if (enB.active("glu", 5) && pos.on()) exp *= enB.tmp.glu5
+	if (enB.active("glu", 5) && pos.on()) exp *= tmp_enB.glu5
 	if (hasAch("ng3p26")) exp = 1.5 - 0.5 / Math.log2(player.meta.resets / 100 + 2)
 	return Math.pow(r, exp)
 }
@@ -245,11 +249,11 @@ function canAffordMetaDimension(cost) {
 
 for (let i = 1; i <= 8; i++) {
 	getEl("meta" + i).onclick = function () {
-		if (moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= tmp.ngp3_em[3])) player.autoEterOptions["md" + i] = !player.autoEterOptions["md" + i]
+		if (moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3])) player.autoEterOptions["md" + i] = !player.autoEterOptions["md" + i]
 		else metaBuyOneDimension(i)
 	}
 	getEl("metaMax" + i).onclick = function () {
-		if (shiftDown && moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= tmp.ngp3_em[3])) metaBuyOneDimension(i)
+		if (shiftDown && moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3])) metaBuyOneDimension(i)
 		else metaBuyManyDimension(i);
 	}
 }
@@ -268,19 +272,24 @@ function getMDProduction(tier) {
 	return ret.times(getMDMultiplier(tier));
 }
 
-function getExtraDimensionBoostPower() {
-	let r = getExtraDimensionBoostPowerUse()
-	r = Decimal.pow(r, getMADimBoostPowerExp(r)).max(1)
-	if (tmp.mod.nguspV) {
-		let l = r.log(2)
-		if (l > 1024) r = Decimal.pow(2, Math.pow(l * 32, 2/3))
+function getExtraDimensionBoostPower(ma) {
+	if (!ma) ma = getExtraDimensionBoostPowerUse()
+	if (tmp.ngp3) ma = softcap(ma, "ma")
+
+	ma = Decimal.pow(ma, getMADimBoostPowerExp(ma)).max(1)
+
+	let l2 = ma.log(2)
+	if (l2 > 1024) {
+		if (tmp.mod.nguspV) l2 = Math.pow(l2 * 32, 2/3)
+		ma = Decimal.pow(2, l2)
 	}
-	return r
+	return ma
 }
 
 function getExtraDimensionBoostPowerUse() {
-	//if (hasAch("ng3p71")) return player.meta.bestOverQuantums
-	return player.meta.bestAntimatter
+	let r = player.meta.bestAntimatter
+	//if (hasAch("ng3p71")) r = player.meta.bestOverQuantums
+	return r
 }
 
 function getExtraDimensionBoostPowerExponent(ma = player.meta.antimatter){
@@ -290,9 +299,17 @@ function getExtraDimensionBoostPowerExponent(ma = player.meta.antimatter){
 function getMADimBoostPowerExp(ma) {
 	let power = 8
 	if (hasDilationUpg("ngpp5")) power++
-	if (masteryStudies.has(262)) power += doubleMSMult(0.5)
+	if (hasMTS(262)) power += doubleMSMult(0.5)
 	if (isNanoEffectUsed("ma_effect_exp")) power += tmp.nf.effects.ma_effect_exp
 	return power
+}
+
+function getRelativeMADimBoostPowerExp(ma) {
+	let exp = getMADimBoostPowerExp(ma)
+	let eff = Decimal.pow(ma, exp)
+	let effSC = getExtraDimensionBoostPower(ma)
+
+	return exp * effSC.log10() / eff.log10()
 }
 
 function getDil14Bonus() {
@@ -307,17 +324,18 @@ function getDil17Bonus() {
 }
 
 function getDil17Exp() {
-	if (enB.active("glu", 4)) return enB.tmp.glu4
+	if (enB.active("glu", 4)) return tmp_enB.glu4
 	return 0.0045
 }
 
 function updateOverallMetaDimensionsStuff(){
 	getEl("metaAntimatterAmount").textContent = shortenMoney(player.meta.antimatter)
 	getEl("metaAntimatterBest").textContent = shortenMoney(player.meta.bestAntimatter)
-	getEl("bestAntimatterQuantum").textContent = player.masterystudies && ph.did("quantum") ? "Your best" + (ph.did("ghostify") ? "" : "-ever") + " meta-antimatter" + (ph.did("ghostify") ? " in this Ghostify" : "") + " was " + shortenMoney(player.meta.bestOverQuantums) + "." : ""
-	setAndMaybeShow("bestMAOverGhostifies", ph.did("ghostify"), '"Your best-ever meta-antimatter was " + shortenMoney(player.meta.bestOverGhostifies) + "."')
+	getEl("bestAntimatterQuantum").textContent = player.masterystudies && pH.did("quantum") ? "Your best" + (pH.did("ghostify") ? "" : "-ever") + " meta-antimatter" + (pH.did("ghostify") ? " in this Ghostify" : "") + " was " + shortenMoney(player.meta.bestOverQuantums) + "." : ""
+	setAndMaybeShow("bestMAOverGhostifies", pH.did("ghostify"), '"Your best-ever meta-antimatter was " + shortenMoney(player.meta.bestOverGhostifies) + "."')
 
-	getEl("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && tmp.mod.nguspV === undefined && tmp.qu.nanofield.rewards >= 2) ? ', which is raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getMADimBoostPowerExp(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, and then t' : "which is t"
+	getEl("metaAntimatterTranslation").style.display = tmp.ngp3 ? "" : "none"
+	getEl("metaAntimatterPower").textContent = "^" + shorten(getRelativeMADimBoostPowerExp(getExtraDimensionBoostPowerUse()))
 	getEl("metaAntimatterEffect").textContent = shortenMoney(getExtraDimensionBoostPower())
 	getEl("metaAntimatterPerSec").textContent = 'You are getting ' + shortenDimensions(getMDProduction(1)) + ' meta-antimatter per second.'
 }
@@ -326,7 +344,7 @@ function updateMetaDimensions () {
 	updateOverallMetaDimensionsStuff()
 	let showDim = false
 	let useTwo = player.options.notation == "Logarithm" ? 2 : 0
-	let autod = moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= tmp.ngp3_em[3])
+	let autod = moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3])
 	for (let tier = 8; tier > 0; tier--) {
 		showDim = showDim || canBuyMetaDimension(tier)
 		getEl(tier + "MetaRow").style.display = showDim ? "" : "none"
@@ -335,7 +353,7 @@ function updateMetaDimensions () {
 			getEl("meta" + tier + "Amount").textContent = getMDDescription(tier)
 			getEl("meta" + tier).textContent = autod ? "Auto: " + (player.autoEterOptions["md" + tier] ? "ON" : "OFF") : "Cost: " + formatValue(player.options.notation, player.meta[tier].cost, useTwo, 0) + " MA"
 			getEl('meta' + tier).className = autod ? "storebtn" : canAffordMetaDimension(player.meta[tier].cost) ? 'storebtn' : 'unavailablebtn'
-			getEl("metaMax"+tier).textContent = (autod ? (shiftDown ? "Singles: " : ph.did("ghostify") ? "" : "Cost: ") : "Until 10: ") + formatValue(player.options.notation, ((shiftDown && autod) ? player.meta[tier].cost : getMetaMaxCost(tier)), useTwo, 0) + " MA"
+			getEl("metaMax"+tier).textContent = (autod ? (shiftDown ? "Singles: " : pH.did("ghostify") ? "" : "Cost: ") : "Until 10: ") + formatValue(player.options.notation, ((shiftDown && autod) ? player.meta[tier].cost : getMetaMaxCost(tier)), useTwo, 0) + " MA"
 			getEl('metaMax' + tier).className = canAffordMetaDimension((shiftDown && autod) ? player.meta[tier].cost : getMetaMaxCost(tier)) ? 'storebtn' : 'unavailablebtn'
 		}
 	}
@@ -355,15 +373,17 @@ function updateMetaDimensions () {
 	var message = 'Lose all your previous progress, but '
 	getEl("quantumResetLabel").textContent = (bigRipped ? 'Ghostify' : 'Quantum') + ': requires ' + shorten(req) + (tmp.ngp3 ? " best" : "") + ' meta-antimatter'
 		+ (QCs.inAny() ? QCs.getGoalDisp() : tmp.ngp3 && !tmp.ngp3_mul ? " and an EC14 completion" : "")
-	if (reqGotten && bigRipped && ph.did("ghostify")) {
+	if (reqGotten && bigRipped && pH.did("ghostify")) {
 		var GS = getGHPGain()
 		message += "gain " + shortenDimensions(GS) + " Ghost Particle" + (GS.lt(2) ? "" : "s")
-	} else if (reqGotten && !bigRipped && ph.did("quantum")) {
+	} else if (reqGotten && !bigRipped && pH.did("quantum")) {
 		var QS = quarkGain()
 		message += "gain " + shortenDimensions(QS) + " quark" + (QS.lt(2) ? "" : "s") + " for boosts"
 	} else message += "get a boost"
 	getEl("quantum").textContent = message
 	if (getEl("quantum").className !== newClassName) getEl("quantum").className = newClassName
+
+	getEl("metaAccelerator").textContent = enB.active("pos", 4) ? "Meta Accelerator: " + shorten(tmp_enB.pos4) + "x to MA, DT, and replicate interval" : ""
 }
 
 function getDil15Bonus() {

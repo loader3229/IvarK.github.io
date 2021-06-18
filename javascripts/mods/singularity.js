@@ -63,7 +63,7 @@ let SINGULARITY = {
 			delete player.sing
 
 			this.compile()
-			ph.reset()
+			pH.reset()
 		}
 	},
 	dims: {

@@ -1,7 +1,7 @@
 var testHarderNGp3 = false
 
 function updateNGP3EterUpgs() {
-	if (ph.did("quantum"))  {
+	if (pH.did("quantum"))  {
 		getEl("eterrowMS").style.display = ""
 		getEl("eter13").className = (player.eternityUpgrades.includes(13)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"
 		getEl("eter14").className = (player.eternityUpgrades.includes(14)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"
@@ -94,7 +94,7 @@ function doAutoMetaTick(ticks) {
 	if (wait >= slowSpeed) {
 		var bulk = Math.floor(wait / slowSpeed)
 		wait = wait % slowSpeed
-		for (var d = 1; d <= 8; d++) if (player.autoEterOptions["md" + d] && moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= tmp.ngp3_em[3])) buyMaxMetaDimension(d, bulk)
+		for (var d = 1; d <= 8; d++) if (player.autoEterOptions["md" + d] && moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3])) buyMaxMetaDimension(d, bulk)
 	}
 	tmp.qu.metaAutobuyerSlowWait = wait
 
@@ -125,7 +125,7 @@ function toggleAllMetaDims() {
 //v1.997
 function respecTogglePC() {
 	if (hasNU(16)) {
-		if (!ph.can("quantum")) return
+		if (!pH.can("quantum")) return
 		tmp.qu.pairedChallenges.respec = true
 		quantum(true)
 	} else {
@@ -217,7 +217,7 @@ function maxAllDilUpgs() {
 					player.dilation.rebuyables[num] = (player.dilation.rebuyables[num] || 0) + data.toBuy
 					update = true
 
-					if (num == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), data.toBuy)))
+					if (num == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), data.toBuy * getDilUpg3Mult())))
 				}
 			}
 		}
@@ -442,7 +442,7 @@ function getAMforGHPGain(){
 }
 
 function getGHPGain() {
-	if (!ph.did("ghostify")) return new Decimal(1)
+	if (!pH.did("ghostify")) return new Decimal(1)
 	let log = 0 //getAMforGHPGain() / QCs.getGoalMA([6, 8], "ghp_gain") - 1
 	if (hasAch("ng3p58")) { 
 		//the square part of the formula maxes at e10, and gets weaker after ~e60 total
@@ -466,12 +466,12 @@ function getGHPMult() {
 }
 
 function ghostify(auto, force) {
-	if (!force && (implosionCheck || !ph.can("ghostify"))) return
+	if (!force && (implosionCheck || !pH.can("ghostify"))) return
 	if (!auto && !force && tmp.mod.ghostifyConf && !confirm("Becoming a ghost resets everything Quantum resets, and also resets all your Quantum content and banked stats to gain a Ghost Particle. " + (tmp.mod.nguspV ? "You will also exit NGUdS' mode and permanently bring you to NGUd'! " : "") + "Are you ready for this?")) {
 		denyGhostify()
 		return
 	}
-	if (!ph.did("ghostify") && (!confirm("Are you sure you want to do this? You will lose everything you have!") || !confirm("ARE YOU REALLY SURE YOU WANT TO DO THAT? YOU CAN'T UNDO THIS AFTER YOU BECAME A GHOST AND PASS THE UNIVERSE EVEN IT IS BIG RIPPED! THIS IS YOUR LAST CHANCE!"))) {
+	if (!pH.did("ghostify") && (!confirm("Are you sure you want to do this? You will lose everything you have!") || !confirm("ARE YOU REALLY SURE YOU WANT TO DO THAT? YOU CAN'T UNDO THIS AFTER YOU BECAME A GHOST AND PASS THE UNIVERSE EVEN IT IS BIG RIPPED! THIS IS YOUR LAST CHANCE!"))) {
 		denyGhostify()
 		return
 	}
@@ -479,7 +479,7 @@ function ghostify(auto, force) {
 	if (implode) {
 		var gain = getGHPGain()
 		var amount = player.ghostify.ghostParticles.add(gain).round()
-		var seconds = ph.did("ghostify") ? 4 : 10
+		var seconds = pH.did("ghostify") ? 4 : 10
 		implosionCheck=1
 		dev.ghostify(gain, amount, seconds)
 		setTimeout(function(){
@@ -516,15 +516,15 @@ function ghostifyReset(implode, gain, amount, force) {
 		player.ghostify.times = nA(player.ghostify.times, bulk)
 		player.ghostify.best = Math.min(player.ghostify.best, player.ghostify.time)
 		while (tmp.qu.times <= tmp.bm[player.ghostify.milestones]) player.ghostify.milestones++
-		if (!ph.did("ghostify")) {
-			ph.onPrestige("ghostify")
-			ph.updateDisplay()
+		if (!pH.did("ghostify")) {
+			pH.onPrestige("ghostify")
+			pH.updateDisplay()
 		}
 	}
 	if (isEmptiness) {
 		showTab("dimensions")
 		isEmptiness = false
-		ph.updateDisplay()
+		pH.updateDisplay()
 	}
 
 	if (tmp.mod.nguspV) {
@@ -549,7 +549,7 @@ function ghostifyReset(implode, gain, amount, force) {
 	doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU)
 	
 	tmp.qu = player.quantum
-	ph.updateActive()
+	pH.updateActive()
 	doPreInfinityGhostifyResetStuff()
 	doInfinityGhostifyResetStuff(implode, bm)
 	doEternityGhostifyResetStuff(implode, bm)	
@@ -607,7 +607,7 @@ function updateLastTenGhostifies() {
 }
 
 function updateBraveMilestones() {
-	if (ph.did("ghostify")) {
+	if (pH.did("ghostify")) {
 		for (var m = 1; m < 17;m++) getEl("braveMilestone" + m).className = "achievement achievement" + (player.ghostify.milestones < m ? "" : "un") + "locked"
 		for (var r = 1; r < 3; r++) getEl("braveRow" + r).className = player.ghostify.milestones < r * 8 ? "" : "completedrow"
 	}
@@ -751,7 +751,7 @@ function updateAutoGhosts(load) {
 	isAutoGhostsSafe = data.power >= powerConsumed
 	getEl("tooMuchPowerConsumed").style.display = isAutoGhostsSafe ? "none" : ""
 
-	getEl("agbtn_pos_yes_auto").style.display = ph.did("ghostify") ? "" : "none"
+	getEl("agbtn_pos_yes_auto").style.display = pH.did("ghostify") ? "" : "none"
 }
 
 function toggleAutoGhost(id) {
@@ -760,7 +760,7 @@ function toggleAutoGhost(id) {
 }
 
 function isAutoGhostActive(id) {
-	if (!ph.did("ghostify")) return
+	if (!pH.did("ghostify")) return
 	return player.ghostify.automatorGhosts[id].on
 }
 
@@ -874,7 +874,7 @@ function toggleLEConf() {
 
 //v3
 function moreEMsUnlocked() {
-	return tmp.ngp3 && (hasDilationStudy(1) || ph.did("quantum"))
+	return tmp.ngp3 && (hasDilationStudy(1) || pH.did("quantum"))
 }
 
 function getNGP3EterMilestones() {
@@ -909,7 +909,7 @@ function convertToNGP5(setup) {
 		player.achievements.push("ng3p101")
 		player.achievements.push("ng3p111")
 		pl.save.on = true
-	} else ph.reset()
+	} else pH.reset()
 }
 
 function doubleMSMult(x) {

@@ -368,7 +368,7 @@ function setupHTMLAndData() {
 	setupFooterHTML()
 	setupDimensionsHTML()
 	setupBreakInfUpgHTMLandData()
-	ph.setupHTML()
+	pH.setupHTML()
 	setupParadoxUpgrades()
 	setupInfUpgHTMLandData()
 	setupAutobuyerHTMLandData()
@@ -1144,7 +1144,7 @@ function doInfinityRespeccedNewPlayer(){
 
 function doNGPlusFourPlayer(){
 	player.eternities = 1e13
-	for (var c = 13; c <= masteryStudies.ecsUpTo; c++) player.eternityChalls["eterc" + c] = 5
+	for (var c = 13; c <= mTs.ecsUpTo; c++) player.eternityChalls["eterc" + c] = 5
 	player.dilation.studies = [1, 2, 3, 4, 5, 6]
 	player.dilation.dilatedTime = 1e100
 	for (var u = 4; u < 11; u++) player.dilation.upgrades.push(u)
@@ -1154,7 +1154,7 @@ function doNGPlusFourPlayer(){
 	player.quantum.times = 1
 	player.quantum.best = 10
 	for (var d = 7; d < 14; d++) player.masterystudies.push("d"+d)
-	QCs.save.comps = QCs.data.max
+	QCs_save.comps = QCs.data.max
 	player.quantum.nanofield.rewards = 19
 	player.quantum.reachedInfQK = true
 	player.quantum.tod.r.spin = 1e25
@@ -1565,9 +1565,9 @@ function updatePerformanceTicks() {
 }
 
 function updateCosts() {
-	var costPart = ph.did("quantum") ? '' : 'Cost: '
+	var costPart = pH.did("quantum") ? '' : 'Cost: '
 	if (getEl("dimensions").style.display == "block" && getEl("antimatterdimensions").style.display == "block") {
-		var until10CostPart = ph.did("quantum") ? '' : 'Until 10, Cost: '
+		var until10CostPart = pH.did("quantum") ? '' : 'Until 10, Cost: '
 		for (var i=1; i<9; i++) {
 			var cost = player[TIER_NAMES[i] + "Cost"]
 			var resource = getOrSubResource(i)
@@ -1598,7 +1598,7 @@ function glowText(id) {
 
 getEl("news").onclick = function () {
 	if (getEl("news").textContent === "Click this to unlock a secret achievement.") giveAchievement("Real news")
-	if (getEl("news").textContent === "If you are a ghost, try to click me!" && ph.did("ghostify") && (player.options.secrets === undefined || player.options.secrets.ghostlyNews === undefined)) {
+	if (getEl("news").textContent === "If you are a ghost, try to click me!" && pH.did("ghostify") && (player.options.secrets === undefined || player.options.secrets.ghostlyNews === undefined)) {
 		if (player.options.secrets === undefined) {
 			player.options.secrets = {}
 			getEl("secretoptionsbtn").style.display = ""
@@ -1749,7 +1749,7 @@ function updateMilestones() {
 		if (i >= 24) getEl("milestone" + i).textContent = shortenMoney(milestoneRequirements[i]) + " Eternities:"
 		getEl(name).className = "milestonereward" + (eters >= milestoneRequirements[i] ? "" : "locked")
 	}
-	if (ph.did("quantum")) getEl("reward27").className = "milestonereward"
+	if (pH.did("quantum")) getEl("reward27").className = "milestonereward"
 
 	getEl("mdmilestonesrow1a").style.display = moreUnlocked ? "" : "none"
 	getEl("mdmilestonesrow1b").style.display = moreUnlocked ? "" : "none"
@@ -2338,12 +2338,12 @@ function onNotationChange() {
 		else if (!player.ghostify.wzb.unl) updateBLUnlockDisplay()
 		else updateBosonUnlockDisplay()
 		GDs.updateDisplay()
-		if (ph.did("planck")) pl.updateDisplay()
+		if (pH.did("planck")) pl.updateDisplay()
 	}
 	getEl("achmultlabel").textContent = "Current achievement multiplier on each Dimension: " + shortenMoney(player.achPow) + "x"
 	if (hasAch("ng3p18") || hasAch("ng3p37")) {
-		getEl('bestTP').textContent="Your best"+(ph.did("ghostify") ? "" : " ever")+" Tachyon particles"+(ph.did("ghostify") ? " in this Ghostify" : "")+" was "+shorten(player.dilation.bestTP)+"."
-		setAndMaybeShow('bestTPOverGhostifies',ph.did("ghostify"),'"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
+		getEl('bestTP').textContent="Your best"+(pH.did("ghostify") ? "" : " ever")+" Tachyon particles"+(pH.did("ghostify") ? " in this Ghostify" : "")+" was "+shorten(player.dilation.bestTP)+"."
+		setAndMaybeShow('bestTPOverGhostifies',pH.did("ghostify"),'"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
 	}
 }
 
@@ -3188,7 +3188,7 @@ function updateHotkeys() {
 	if (!hasAch("ng3p51")) {
 		if (inNGM(3)) html += ", B to Tickspeed Boost"
 		if (inNGM(4)) html += ", N to Time Dimension Boost"
-		html += ", G to " + (ph.did("galaxy") ? "Galactic Sacrifice" : "buy a Galaxy")
+		html += ", G to " + (pH.did("galaxy") ? "Galactic Sacrifice" : "buy a Galaxy")
 	}
 	html += ", C / I to Crunch, A to toggle autobuyers, R to buy Replicanti Galaxies, E to Eternity"
 	if (hasAch("r136")) html += ", D to Dilate Time"
@@ -3288,7 +3288,7 @@ function updateRespecButtons() {
 }
 
 function eternity(force, auto, forceRespec, dilated) {
-	var canEternity = force || ((forceRespec || ph.can("eternity")) && (auto || !player.options.eternityconfirm || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades.")))
+	var canEternity = force || ((forceRespec || pH.can("eternity")) && (auto || !player.options.eternityconfirm || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades.")))
 	if (!canEternity) return false
 
 	if (force) player.currentEternityChall = ""
@@ -3296,18 +3296,18 @@ function eternity(force, auto, forceRespec, dilated) {
 
 	if (player.thisEternity < 2) giveAchievement("Eternities are the new infinity")
 	if (player.currentEternityChall == "eterc6" && ECComps("eterc6") < 5 && player.dimensionMultDecrease < 4) player.dimensionMultDecrease = Math.max(parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1)),2)
-	if ((player.currentEternityChall == "eterc11" || (player.currentEternityChall == "eterc12" && ph.did("ghostify"))) && ECComps("eterc11") < 5) player.tickSpeedMultDecrease = Math.max(parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2)), 1.65)
+	if ((player.currentEternityChall == "eterc11" || (player.currentEternityChall == "eterc12" && pH.did("ghostify"))) && ECComps("eterc11") < 5) player.tickSpeedMultDecrease = Math.max(parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2)), 1.65)
 	if (player.infinitied < 10 && !force && !player.boughtDims) giveAchievement("Do you really need a guide for this?");
 	if (Decimal.round(player.replicanti.amount) == 9) giveAchievement("We could afford 9");
 	if (player.dimlife && !force) giveAchievement("8 nobody got time for that")
 	if (player.dead && !force) giveAchievement("You're already dead.")
 	if (player.infinitied <= 1 && !force) giveAchievement("Do I really need to infinity")
 	if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 600 && player.dilation.active && !force) giveAchievement("Now you're thinking with dilation!")
-	if (ph.did("ghostify") && player.currentEternityChall == "eterc11" && QCs.in(6) && QCs.in(8) && player.infinityPoints.e >= 15500) giveAchievement("The Deep Challenge")
+	if (pH.did("ghostify") && player.currentEternityChall == "eterc11" && QCs.in(6) && QCs.in(8) && player.infinityPoints.e >= 15500) giveAchievement("The Deep Challenge")
 	if (isEmptiness) {
 		showTab("dimensions")
 		isEmptiness = false
-		ph.updateDisplay()
+		pH.updateDisplay()
 	}
 	if (gainedEternityPoints().gte(player.eternityPoints) && player.eternityPoints.gte("1e1185") && (tmp.ngp3 ? player.dilation.active && player.quantum.bigRip.active : false)) giveAchievement("Gonna go fast")
 	var oldEP = player.eternityPoints
@@ -3419,7 +3419,6 @@ function doAfterEternityResetStuff() {
 	updateEternityChallenges()
 	updateEterChallengeTimes()
 
-	updateTmp()
 	resetUP()
 }
 
@@ -3455,7 +3454,7 @@ function challengesCompletedOnEternity() {
 
 function gainEternitiedStat() {
 	let ret = 1
-	if (ph.did("ghostify")) {
+	if (pH.did("ghostify")) {
 		if (tmp.quActive && hasNU(9)) ret = nM(ret, tmp.qu.bigRip.spaceShards.max(1).pow(.1))
 	}
 	if (hasTS(34) && tmp.ngC) ret = nM(ret, 10)
@@ -3584,12 +3583,12 @@ function runIDBuyersTick(){
 }
 
 function crunchAnimationBtn(){
-	if (player.infinitied !== 0 || getEternitied() !== 0 || ph.did("quantum")) getEl("bigCrunchAnimBtn").style.display = "inline-block"
+	if (player.infinitied !== 0 || getEternitied() !== 0 || pH.did("quantum")) getEl("bigCrunchAnimBtn").style.display = "inline-block"
 	else getEl("bigCrunchAnimBtn").style.display = "none"
 }
 
 function TPAnimationBtn(){
-	if (!player.dilation.tachyonParticles.eq(0) || ph.did("quantum")) getEl("tachyonParticleAnimBtn").style.display = "inline-block"
+	if (!player.dilation.tachyonParticles.eq(0) || pH.did("quantum")) getEl("tachyonParticleAnimBtn").style.display = "inline-block"
 	else getEl("tachyonParticleAnimBtn").style.display = "none"
 }
 
@@ -3602,9 +3601,9 @@ function dilAndBHDisplay() {
 function replicantiShopABRun() {
 	if (getEternitied() >= 40 && (player.replicanti.auto[0]) && player.currentEternityChall !== "eterc8" && isChanceAffordable()) {
 		var chance = Math.round(player.replicanti.chance * 100)
-		var maxCost = masteryStudies.has(265) ? 1 / 0 : new Decimal("1e1620").div(tmp.ngmX == 2 ? 1e60 : 1);
+		var maxCost = hasMTS(265) ? 1 / 0 : new Decimal("1e1620").div(tmp.ngmX == 2 ? 1e60 : 1);
 		var bought = Math.max(Math.floor(player.infinityPoints.min(maxCost).div(player.replicanti.chanceCost).log(1e15) + 1), 0)
-		if (!masteryStudies.has(265)) bought = Math.min(bought, 100 - chance)
+		if (!hasMTS(265)) bought = Math.min(bought, 100 - chance)
 		player.replicanti.chance = (chance + bought) / 100
 		player.replicanti.chanceCost = player.replicanti.chanceCost.times(Decimal.pow(1e15, bought))
 	}
@@ -3712,7 +3711,7 @@ function doNGP3UnlockStuff(){
 	if (!tmp.qu.reached && isQuantumReached()) doQuantumUnlockStuff()
 
 	var inEasierModeCheck = !inEasierMode()
-	if (player.masterystudies && (masteryStudies.has("d14")||hasAch("ng3p51")) && !metaSave.ngp4 && !inEasierModeCheck) doNGP4UnlockStuff()
+	if (player.masterystudies && (hasMTS("d14")||hasAch("ng3p51")) && !metaSave.ngp4 && !inEasierModeCheck) doNGP4UnlockStuff()
 	if (player.eternityPoints.gte("1e1200") && tmp.qu.bigRip.active && !tmp.qu.breakEternity.unlocked) doBreakEternityUnlockStuff()
 	if (pl.did()) {
 		pl.unlCheck()
@@ -3726,9 +3725,9 @@ function doNGP3UnlockStuff(){
 }
 
 function updateResetTierButtons(){
-	ph.updateDisplay()
+	pH.updateDisplay()
 
-	if (ph.did("ghostify")) {
+	if (pH.did("ghostify")) {
 		getEl("GHPAmount").textContent = shortenDimensions(player.ghostify.ghostParticles)
 		var showQuantumed = player.ghostify.times > 0 && player.ghostify.milestones < 16
 		getEl("quantumedBM").style.display = showQuantumed ? "" : "none"
@@ -3806,7 +3805,7 @@ function ghostifyAutomationUpdatingPerSecond() {
 
 function checkGluonRounding(){
 	if (!tmp.ngp3) return
-	if (player.ghostify.milestones > 7 || !ph.did("quantum")) return
+	if (player.ghostify.milestones > 7 || !pH.did("quantum")) return
 	if (player.quantum.gluons.rg.lt(101)) player.quantum.gluons.rg = player.quantum.gluons.rg.round()
 	if (player.quantum.gluons.gb.lt(101)) player.quantum.gluons.gb = player.quantum.gluons.gb.round()
 	if (player.quantum.gluons.br.lt(101)) player.quantum.gluons.br = player.quantum.gluons.br.round()
@@ -3865,6 +3864,8 @@ setInterval(function() {
 
 	// Other 
 	moveAutoTabs()
+	isEmptinessDisplayChanges()
+	DimBoostBulkDisplay()
 	updateChallTabDisplay()
 	updateOrderGoals()
 	handleReplTabs()
@@ -3883,7 +3884,8 @@ setInterval(function() {
 	doNGm2CorrectPostC3Reward()
 
 	//Rounding errors
-	if (!tmp.ngp3 || !ph.did("quantum")) if (player.infinityPoints.lt(100)) player.infinityPoints = player.infinityPoints.round()
+	if (isNaN(player.totalmoney.e)) player.totalmoney = new Decimal(10)
+	if (!tmp.ngp3 || !pH.did("quantum")) if (player.infinityPoints.lt(100)) player.infinityPoints = player.infinityPoints.round()
 	checkGluonRounding()
 }, 1000)
 
@@ -4072,11 +4074,11 @@ function incrementParadoxUpdating(diff) {
 }
 
 function dimensionButtonDisplayUpdating() {
-	getEl("pdtabbtn").style.display = ph.shown("paradox") && player.galacticSacrifice.times >= 25 ? "" : "none"
-   	getEl("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || ph.did("eternity")) && (inNGM(5) || ph.shown("infinity"))) ? "" : "none"
-	getEl("tdtabbtn").style.display = ((ph.shown("eternity") || inNGM(4)) && (!QCs.in(8) || tmp.be)) ? "" : "none"
-	getEl("mdtabbtn").style.display = ph.shown("eternity") && hasDilationStudy(6) ? "" : "none"
-	getEl('toggleallmetadims').style.display = moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= tmp.ngp3_em[3]) ? "" : "none"
+	getEl("pdtabbtn").style.display = pH.shown("paradox") && player.galacticSacrifice.times >= 25 ? "" : "none"
+   	getEl("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || pH.did("eternity")) && (inNGM(5) || pH.shown("infinity"))) ? "" : "none"
+	getEl("tdtabbtn").style.display = ((pH.shown("eternity") || inNGM(4)) && (!QCs.in(8) || tmp.be)) ? "" : "none"
+	getEl("mdtabbtn").style.display = pH.shown("eternity") && hasDilationStudy(6) ? "" : "none"
+	getEl('toggleallmetadims').style.display = moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3]) ? "" : "none"
 }
 
 function ghostifyAutomationUpdating(diff){
@@ -4121,7 +4123,7 @@ function ghostifyAutomationUpdating(diff){
 	if (!tmp.quUnl) return
 
 	let limit = player.ghostify.automatorGhosts[13].o || 1 / 0
-	if (masteryStudies.has("d13") && isAutoGhostActive(13)) {
+	if (hasMTS("d13") && isAutoGhostActive(13)) {
 		if (tmp.qu.bigRip.active) {
 			if (tmp.qu.time >= player.ghostify.automatorGhosts[13].u * 10 && tmp.qu.bigRip.times <= limit) quantumReset(true, true)
 		} else if (tmp.qu.time >= player.ghostify.automatorGhosts[13].t * 10 && tmp.qu.bigRip.times < limit) bigRip(true)
@@ -4129,7 +4131,7 @@ function ghostifyAutomationUpdating(diff){
 
 	if (!tmp.quUnl || !tmp.quActive) return
 
-	if (masteryStudies.has("d12")) {
+	if (hasMTS("d12")) {
 		let colorShorthands = ["r", "g", "b"]
 		for (let c = 1; c <= 3; c++) {
 			let shorthand = colorShorthands[c - 1]
@@ -4142,7 +4144,7 @@ function ghostifyAutomationUpdating(diff){
 		}
 		if (isAutoGhostActive(6)) maxTreeUpg()
 	}
-	if (masteryStudies.has("d11") && isAutoGhostActive(11)) {
+	if (hasMTS("d11") && isAutoGhostActive(11)) {
 		let ag = player.ghostify.automatorGhosts[11]
 		ag.t = (ag.t || 0) + diff
 
@@ -4337,10 +4339,10 @@ function quantumOverallUpdating(diff){
 		for (var c = 0; c < 3; c++) tmp.qu.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
 		updateColorPowers()
 
-		if (masteryStudies.has("d10")) replicantOverallUpdating(diff)
-		if (masteryStudies.has("d11")) emperorDimUpdating(diff)
-		if (masteryStudies.has("d12")) nanofieldUpdating(diff)
-		if (masteryStudies.has("d13")) treeOfDecayUpdating(diff)
+		if (hasMTS("d10")) replicantOverallUpdating(diff)
+		if (hasMTS("d11")) emperorDimUpdating(diff)
+		if (hasMTS("d12")) nanofieldUpdating(diff)
+		if (hasMTS("d13")) treeOfDecayUpdating(diff)
 	}
 }
 
@@ -4362,7 +4364,7 @@ function infinityTimeMetaBlackHoleDimUpdating(diff){
 
 	var max = inNGM(5) ? 6 : 8
 
-	for (let tier = 1 ; tier <= max; tier++) {
+	for (let tier = max; tier >= 1; tier--) {
 		if (!QCs.in(3)) {
 			// Infinity
 			if (tier <= max - step) player["infinityDimension" + tier].amount = player["infinityDimension"+tier].amount.plus(infDimensionProduction(tier + step).times(diff / 10))
@@ -4382,11 +4384,11 @@ function infinityTimeMetaBlackHoleDimUpdating(diff){
 function dimensionPageTabsUpdating(){
 	var showProdTab=false
 	getEl("dimTabButtons").style.display = "none"
-	if (player.infinitied > 0 || player.eternities !== 0 || ph.did("quantum")) {
+	if (player.infinitied > 0 || player.eternities !== 0 || pH.did("quantum")) {
 		getEl("hideProductionTab").style.display = ""
 		showProdTab=!tmp.mod.hideProductionTab
 	} else getEl("hideProductionTab").style.display = "none"
-	if (player.infDimensionsUnlocked[0] || player.eternities !== 0 || ph.did("quantum") || showProdTab || inNGM(4)) getEl("dimTabButtons").style.display = "inline-block"
+	if (player.infDimensionsUnlocked[0] || player.eternities !== 0 || pH.did("quantum") || showProdTab || inNGM(4)) getEl("dimTabButtons").style.display = "inline-block"
 	getEl("prodtabbtn").style.display=showProdTab ? "inline-block":"none"
 	if (!showProdTab) player.options.chart.on=false
 }
@@ -4432,7 +4434,7 @@ function nonERFreeTickUpdating(){
 		if (tmp.mod.newGameMult) thresholdMult -= 0.08
 	}
 	if (inNGM(5)) thresholdMult = 1.5
-	if (ph.did("ghostify") && player.ghostify.neutrinos.boosts > 9) thresholdMult -= tmp.nb[10]
+	if (pH.did("ghostify") && player.ghostify.neutrinos.boosts > 9) thresholdMult -= tmp.nb[10]
 	if (thresholdMult < 1.1 && player.galacticSacrifice == undefined) thresholdMult = 1.05 + 0.05 / (2.1 - thresholdMult)
 	if (thresholdMult < 1.01 && inNGM(2)) thresholdMult = 1.005 + 0.005 / (2.01 - thresholdMult)
 
@@ -4456,10 +4458,10 @@ function bigCrunchButtonUpdating(){
 		if ((player.bestInfinityTime > 600 && player.bestEternityTime > 600) || (!player.options.retryChallenge && (player.currentChallenge != "" || (inNGM(4) && player.galacticSacrifice.chall > 0)))) {
 			isEmptiness = true
 			showTab('emptiness')
-			ph.updateDisplay()
+			pH.updateDisplay()
 		}
 	} else if ((player.break && player.currentChallenge == "") || player.infinityUpgradesRespecced != undefined) {
-		if (player.money.gte(Number.MAX_VALUE) && ph.tmp.infinity.shown) {
+		if (player.money.gte(Number.MAX_VALUE) && tmp_pH.infinity.shown) {
 			getEl("postInfinityButton").style.display = "inline-block"
 			var currentIPmin = gainedInfinityPoints().dividedBy(player.thisInfinityTime/600)
 			if (currentIPmin.gt(IPminpeak)) IPminpeak = currentIPmin
@@ -4529,7 +4531,7 @@ function IPMultBuyUpdating() {
 			player.infMult = player.infMult.times(Decimal.pow(getIPMultPower(), dif))
 			player.infMultCost = player.infMultCost.times(Decimal.pow(ipMultCostIncrease, dif))
 			if (player.infinityPoints.lte(Decimal.pow(10, 1e9))) {
-				if (ph.did("ghostify")) {
+				if (pH.did("ghostify")) {
 					if (player.ghostify.milestones < 11) player.infinityPoints = player.infinityPoints.minus(player.infMultCost.dividedBy(tmp.mod.newGameExpVersion?4:10).min(player.infinityPoints))
 				}
 				else player.infinityPoints = player.infinityPoints.minus(player.infMultCost.dividedBy(tmp.mod.newGameExpVersion?4:10).min(player.infinityPoints))
@@ -4571,7 +4573,7 @@ function doQuantumButtonDisplayUpdating(diff){
 	let inBR = inBigRip()
 
 	var currentQKmin = new Decimal(0)
-	if (ph.did("quantum") && isQuantumReached()) {
+	if (pH.did("quantum") && isQuantumReached()) {
 		var bigRipped = !tmp.ngp3 ? false : player.quantum.bigRip.active
 		if (!bigRipped) {
 			currentQKmin = quarkGain().dividedBy(tmp.qu.time / 600)
@@ -4583,8 +4585,8 @@ function doQuantumButtonDisplayUpdating(diff){
 		}
 	}
 	
-	getEl("quantumbtnFlavor").textContent = ((tmp.qu!==undefined?!tmp.qu.times&&(player.ghostify!==undefined?!player.ghostify.milestones:true):false)||QCs.inAny()?(inBR?"I am":!QCs.inAny()?"My computer is":QCs.tmp.in.length>1?"These paired challenges are":"This challenge is")+" not powerful enough... ":"") + "I need to go quantum."
-	var showGain = ((ph.did("quantum") && tmp.qu.times) || (ph.did("ghostify") && player.ghostify.milestones)) && (!QCs.inAny()||player.options.theme=="Aarex's Modifications") ? "QK" : ""
+	getEl("quantumbtnFlavor").textContent = ((tmp.qu!==undefined?!tmp.qu.times&&(player.ghostify!==undefined?!player.ghostify.milestones:true):false)||QCs.inAny()?(inBR?"I am":!QCs.inAny()?"My computer is":QCs_tmp.in.length>1?"These paired challenges are":"This challenge is")+" not powerful enough... ":"") + "I need to go quantum."
+	var showGain = ((pH.did("quantum") && tmp.qu.times) || (pH.did("ghostify") && player.ghostify.milestones)) && (!QCs.inAny()||player.options.theme=="Aarex's Modifications") ? "QK" : ""
 	if (inBR) showGain = "SS"
 	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain "+shortenDimensions(quarkGain())+" anti-quark"+(quarkGain().eq(1)?".":"s.") : ""
 	if (showGain == "SS") getEl("quantumbtnQKGain").textContent = "Gain " + shortenDimensions(getSpaceShardsGain()) + " Space Shards."
@@ -4600,7 +4602,7 @@ function doQuantumButtonDisplayUpdating(diff){
 
 function doGhostifyButtonDisplayUpdating(diff){
 	var currentGHPmin = new Decimal(0)
-	if (ph.did("ghostify") && bigRipped) {
+	if (pH.did("ghostify") && bigRipped) {
 		currentGHPmin = getGHPGain().dividedBy(player.ghostify.time / 600)
 		if (currentGHPmin.gt(GHPminpeak)) {
 			GHPminpeak = currentGHPmin
@@ -4608,7 +4610,7 @@ function doGhostifyButtonDisplayUpdating(diff){
 		}
 	}
 	var ghostifyGains = []
-	if (ph.did("ghostify")) {
+	if (pH.did("ghostify")) {
 		ghostifyGains.push(shortenDimensions(getGHPGain()) + " Ghost Particles")
 		if (hasAch("ng3p78")) ghostifyGains.push(shortenDimensions(Decimal.times(6e3 * tmp.qu.bigRip.bestGals, getGhostifiedGain()).times(getNeutrinoGain())) + " Neutrinos")
 		if (hasBosonicUpg(15)) ghostifyGains.push(getFullExpansion(getGhostifiedGain()) + " Ghostifies")
@@ -4846,7 +4848,7 @@ function challengeOverallDisplayUpdating(){
 		if (getEl("eternitychallenges").style.display == "block") ECRewardDisplayUpdating()
 		if (getEl("quantumchallenges").style.display == "block") {
 			QCs.updateDispOnTick()
-			if (masteryStudies.has("d14")) bigRipUpgradeUpdating() //big rip
+			if (hasMTS("d14")) bigRipUpgradeUpdating() //big rip
 		}
 	}
 }
@@ -4884,7 +4886,7 @@ function newIDDisplayUpdating() {
 			if (player.infDimBuyers[req.tier-1] && player.currentEternityChall != "eterc8") buyMaxInfDims(req.tier)
 			req = getNewInfReq()
 		}
-	} else if (player.break && player.currentChallenge == "" && !player.infDimensionsUnlocked[7] && ph.tmp.infinity.shown) {
+	} else if (player.break && player.currentChallenge == "" && !player.infDimensionsUnlocked[7] && tmp_pH.infinity.shown) {
 		getEl("newDimensionButton").style.display = "inline-block"
 		getEl("newDimensionButton").textContent = "Get " + shortenCosts(req.money) + " antimatter to unlock a new Dimension."
 		if (player.money.gte(req.money)) getEl("newDimensionButton").className = "presPos" + newDimPresPos + " newdim"
@@ -4951,15 +4953,15 @@ function setTachyonParticles(x) {
 		player.dilation.bestTP = Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles)
 		player.dilation.bestTPOverGhostifies = player.dilation.bestTPOverGhostifies.max(player.dilation.bestTP)
 
-		getEl('bestTP').textContent = "Your best" + (ph.did("ghostify") ? "" : " ever")+" Tachyon particles" + (ph.did("ghostify") ? " in this Ghostify" : "") + " was " + shorten(player.dilation.bestTP) + "."
-		setAndMaybeShow('bestTPOverGhostifies', ph.did("ghostify"), '"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
+		getEl('bestTP').textContent = "Your best" + (pH.did("ghostify") ? "" : " ever")+" Tachyon particles" + (pH.did("ghostify") ? " in this Ghostify" : "") + " was " + shorten(player.dilation.bestTP) + "."
+		setAndMaybeShow('bestTPOverGhostifies', pH.did("ghostify"), '"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
 	}
 }
 
 function passiveQuantumLevelStuff(diff){
 	let inBR = inBigRip()
 
-	if ((inBR ? hasAch("ng3p103") : hasAch("ng3p112")) && ph.can("ghostify")) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
+	if ((inBR ? hasAch("ng3p103") : hasAch("ng3p112")) && pH.can("ghostify")) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
 	if (hasAch("ng3p112")) player.ghostify.times = nA(player.ghostify.times, nM(getGhostifiedGain(), diff))
 
 	if (inBR || hasBosonicUpg(24)) tmp.qu.bigRip.spaceShards = tmp.qu.bigRip.spaceShards.add(getSpaceShardsGain().times(diff / 100))
@@ -5042,9 +5044,11 @@ function gameLoop(diff) {
 		EPonEternityPassiveGain(diff)
 		generateTT(diff)
 		if (hasDilationStudy(1)) {
+			let old = player.dilation.dilatedTime
 			let gain = getDilTimeGainPerSecond()
-			player.dilation.dilatedTime = player.dilation.dilatedTime.plus(gain.times(diff))
+			player.dilation.dilatedTime = old.plus(gain.times(diff))
 			gainDilationGalaxies()
+			if (QCs.isRewardOn(4)) replicantiIncrease(player.dilation.dilatedTime.max(1).div(old.max(1)).log10())
 		}
 
 		if (tmp.ngp3) {
@@ -5056,7 +5060,7 @@ function gameLoop(diff) {
 			}
 			if (player.ghostify.milestones >= 8 && tmp.quActive) passiveQuantumLevelStuff(diff)
 			if (ETER_UPGS.has(15)) updateEternityUpgrades() // to fix the 5ep upg display
-			if (ph.did("ghostify")) {
+			if (pH.did("ghostify")) {
 				if (GDs.unlocked()) {
 					// Gravity Dimensions
 					GDs.gdTick(diff)
@@ -5067,7 +5071,7 @@ function gameLoop(diff) {
 				if (player.ghostify.ghostlyPhotons.unl) ghostlyPhotonsUpdating(diff) // Ghostly Photons
 				ghostifyAutomationUpdating(diff)
 			}
-			if (ph.did("quantum")) quantumOverallUpdating(diff)
+			if (pH.did("quantum")) quantumOverallUpdating(diff)
 			preQuantumAutoNGP3(diff * 10)
 		}
 
@@ -5089,8 +5093,8 @@ function gameLoop(diff) {
 	if (player.break) getEl("iplimit").style.display = "inline"
 	else getEl("iplimit").style.display = "none"
 	getEl("IPPeakDiv").style.display = (player.break && player.boughtDims) ? "" : "none"
-	if (inNGM(2) && ph.shown("galaxy")) getEl("GPAmount").textContent = shortenDimensions(player.galacticSacrifice.galaxyPoints)
-	if (inNGM(5) && ph.shown("paradox")) getEl("pxAmount").textContent = shortenDimensions(player.pSac.px)
+	if (inNGM(2) && pH.shown("galaxy")) getEl("GPAmount").textContent = shortenDimensions(player.galacticSacrifice.galaxyPoints)
+	if (inNGM(5) && pH.shown("paradox")) getEl("pxAmount").textContent = shortenDimensions(player.pSac.px)
 
 	if (tmp.tickUpdate) {
 		updateTickspeed()
@@ -5120,10 +5124,7 @@ function gameLoop(diff) {
 	sacLayersDisplay()
 	d8SacDisplay()
 
-	getEl("challengesbtn").style.display = ph.did(inNGM(4) ? "galaxy" : "infinity") && !isEmptiness ? "inline-block" : "none"
-
-	isEmptinessDisplayChanges()
-	DimBoostBulkDisplay()
+	getEl("challengesbtn").style.display = pH.did(inNGM(4) ? "galaxy" : "infinity") && !isEmptiness ? "inline-block" : "none"
 
 	progressBarUpdating()
 	challengeOverallDisplayUpdating()
@@ -5134,9 +5135,6 @@ function gameLoop(diff) {
 	galaxyBtnUpdating()  
 	newIDDisplayUpdating()
 	galSacBtnUpdating()
-	updateConvertSave(eligibleConvert())
-
-	if (isNaN(player.totalmoney.e)) player.totalmoney = new Decimal(10)
 
 	thisQuantumTimeUpdating()
 	var s = shortenDimensions(player.infinityPoints)
@@ -5181,14 +5179,14 @@ function simulateTime(seconds, real, id) {
 	closeToolTip()
 	var popupString = "While you were away"
 	if (player.money.gt(playerStart.money)) popupString+= ",<br> your antimatter increased "+shortenMoney(player.money.log10() - (playerStart.money).log10())+" orders of magnitude"
-	if (player.infinityPower.gt(playerStart.infinityPower) && !ph.did("quantum")) popupString+= ",<br> infinity power increased "+shortenMoney(player.infinityPower.log10() - (Decimal.max(playerStart.infinityPower, 1)).log10())+" orders of magnitude"
-	if (player.timeShards.gt(playerStart.timeShards) && !ph.did("quantum")) popupString+= ",<br> time shards increased "+shortenMoney(player.timeShards.log10() - (Decimal.max(playerStart.timeShards, 1)).log10())+" orders of magnitude"
+	if (player.infinityPower.gt(playerStart.infinityPower) && !pH.did("quantum")) popupString+= ",<br> infinity power increased "+shortenMoney(player.infinityPower.log10() - (Decimal.max(playerStart.infinityPower, 1)).log10())+" orders of magnitude"
+	if (player.timeShards.gt(playerStart.timeShards) && !pH.did("quantum")) popupString+= ",<br> time shards increased "+shortenMoney(player.timeShards.log10() - (Decimal.max(playerStart.timeShards, 1)).log10())+" orders of magnitude"
 	if (storage.dt && player.dilation.dilatedTime.gt(storage.dt)) popupString+= ",<br> dilated time increased "+shortenMoney(player.dilation.dilatedTime.log10() - (Decimal.max(storage.dt, 1)).log10())+" orders of magnitude"
 	if (storage.bp && player.blackhole.power.gt(storage.bp)) popupString+= ",<br> black hole power increased "+shortenMoney(player.blackhole.power.log10() - (Decimal.max(storage.bp, 1)).log10())+" orders of magnitude"
-	if (storage.ma && player.meta.antimatter.gt(storage.ma) && !ph.did("ghostify")) popupString+= ",<br> meta-antimatter increased "+shortenMoney(player.meta.antimatter.log10() - (Decimal.max(storage.ma, 1)).log10())+" orders of magnitude"
+	if (storage.ma && player.meta.antimatter.gt(storage.ma) && !pH.did("ghostify")) popupString+= ",<br> meta-antimatter increased "+shortenMoney(player.meta.antimatter.log10() - (Decimal.max(storage.ma, 1)).log10())+" orders of magnitude"
 	if (storage.dt) {
-		if (tmp.qu.replicants.amount.gt(storage.nr) && !ph.did("ghostify")) popupString+= ",<br> normal replicants increased "+shortenMoney(tmp.qu.replicants.amount.log10() - (Decimal.max(storage.nr, 1)).log10())+" orders of magnitude"
-		if (Decimal.gt(player.ghostify.bl.am, storage.bAm) && ph.did("ghostify")) popupString+= ",<br> Bosonic Antimatter increased "+shortenMoney(player.ghostify.bl.am.log10() - (Decimal.max(storage.bAm, 1)).log10())+" orders of magnitude"
+		if (tmp.qu.replicants.amount.gt(storage.nr) && !pH.did("ghostify")) popupString+= ",<br> normal replicants increased "+shortenMoney(tmp.qu.replicants.amount.log10() - (Decimal.max(storage.nr, 1)).log10())+" orders of magnitude"
+		if (Decimal.gt(player.ghostify.bl.am, storage.bAm) && pH.did("ghostify")) popupString+= ",<br> Bosonic Antimatter increased "+shortenMoney(player.ghostify.bl.am.log10() - (Decimal.max(storage.bAm, 1)).log10())+" orders of magnitude"
 	}
 	if (player.infinitied > playerStart.infinitied || player.eternities > playerStart.eternities) popupString+= ","
 	else popupString+= "."
@@ -5722,7 +5720,7 @@ window.addEventListener('keydown', function(event) {
 		break;
 
 		case 67: // C
-			ph.onHotkey("infinity")
+			pH.onHotkey("infinity")
 		break;
 
 		case 68: // D
@@ -5732,12 +5730,12 @@ window.addEventListener('keydown', function(event) {
 		break;
 
 		case 69: // E, also, nice.
-			ph.onHotkey("eternity")
+			pH.onHotkey("eternity")
 		break;
 
 		case 71: // G
-			if (hasAch("ng3p51")) ph.onHotkey("ghostify")
-			else if (ph.did("galaxy")) ph.onHotkey("galaxy")
+			if (hasAch("ng3p51")) pH.onHotkey("ghostify")
+			else if (pH.did("galaxy")) pH.onHotkey("galaxy")
 			else getEl("secondSoftReset").onclick()
 		break;
 
@@ -5746,7 +5744,7 @@ window.addEventListener('keydown', function(event) {
 		break
 
 		case 73: // I
-			ph.onHotkey("infinity")
+			pH.onHotkey("infinity")
 		break;
 
 		case 76: // N
@@ -5759,11 +5757,11 @@ window.addEventListener('keydown', function(event) {
 		break;
 
 		case 80: // P, reset at latest layer
-			ph.onHotkey()
+			pH.onHotkey()
 		break;
 
 		case 81: // Q, for quantum.
-			ph.onHotkey("quantum")
+			pH.onHotkey("quantum")
 		break;
 
 		case 82: //R
@@ -5793,66 +5791,6 @@ window.addEventListener('keyup', function(event) {
 		if (Math.random() <= 1e-6) giveAchievement("keyboard broke?")
 	if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text") return false
 }, false);
-
-function getUnspentBonus() {
-	x = player.infinityPoints
-	if (!x) return new Decimal(1)
-
-	if (inNGM(2)) x = x.pow(Math.max(Math.min(Math.pow(x.max(1).log(10), 1 / 3) * 3, 8), 1)).plus(1)
-	else x = x.dividedBy(2).pow(1.5).plus(1)
-	if (tmp.ngC) x = x.pow(5)
-	return x
-}
-
-var totalMult = 1
-var currentMult = 1
-var infinitiedMult = 1
-var achievementMult = 1
-var unspentBonus = 1
-var mult18 = 1
-var ec10bonus = new Decimal(1)
-var QC4Reward
-
-function getAchievementMult(){
-	var ach = player.achievements.length
-	var gups = inNGM(2) ? player.galacticSacrifice.upgrades.length : 0
-	var minus = inNGM(2) ? 10 : 30
-	var exp = inNGM(2) ? 5 : 3
-	var div = 40
-	if (inNGM(4)) {
-		minus = 0
-		exp = 10
-		div = 20
-		div -= Math.sqrt(gups)
-		if (gups > 15) exp += gups
-	}
-	if (tmp.ngC) div /= 10
-	return Decimal.pow(ach - minus - getSecretAchAmount(), exp).div(div).max(1)
-}
-
-function updatePowers() {
-	totalMult = tmp.postinfi11
-	currentMult = tmp.postinfi21
-	infinitiedMult = getInfinitiedMult()
-	achievementMult = getAchievementMult()
-	unspentBonus = getUnspentBonus()
-	if (player.boughtDims) mult18 = getDimensionFinalMultiplier(1).max(1).times(getDimensionFinalMultiplier(8).max(1)).pow(0.02)
-	else mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
-	if (player.currentEternityChall == "eterc10") {
-		ec10bonus = Decimal.pow(getInfBoostInput(), 1e3).max(1)
-	} else {
-		ec10bonus = new Decimal(1)
-	}
-}
-
-var updatePowerInt
-function resetUP() {
-	clearInterval(updatePowerInt)
-	updatePowers()
-	updateTmp()
-	mult18 = 1
-	updatePowerInt = setInterval(updatePowers, 100)
-}
 
 function switchDecimalMode() {
 	if (confirm('You will change the number library preference to ' + (tmp.mod.breakInfinity ? 'logarithmica_numerus_lite':'break_infinity.min') + '.js. This requires the webpage to reload for this to take effect. Are you sure you want to do this?')) {

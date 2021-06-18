@@ -170,7 +170,7 @@ input[type=text], input[type=number], input:not([type]) {
     color: #070710 !important;
     text-shadow: 0 0 5px #caf, 0 0 5px #caf;
 }
-#metaAntimatterAmount, #metaAntimatterBest, #metaAntimatterEffect {
+#metaAntimatterAmount, #metaAntimatterPower, #metaAntimatterBest, #metaAntimatterEffect {
     color: #88e !important;
     animation: antiGlow 25s linear infinite;
 }

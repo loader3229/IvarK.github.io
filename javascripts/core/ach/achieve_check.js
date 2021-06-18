@@ -285,7 +285,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (nG(getEternitied(), Number.MAX_VALUE)) giveAchievement("Everlasting Eternities")
 	if (player.options.secrets && player.options.secrets.ghostlyNews && !player.options.newsHidden) giveAchievement("Two tickers")
 	if (tmp.qu.breakEternity.did) giveAchievement("Time Breaker")
-	if (masteryStudies.bought >= 48) giveAchievement("The Theory of Ultimate Studies")
+	if (mTs.bought >= 48) giveAchievement("The Theory of Ultimate Studies")
 	if (tmp.qu.best <= 200) giveAchievement("And the winner is...")
 	if (qMs.tmp.amt >= 21) giveAchievement("Special Relativity")
 	if (tmp.qu.best <= 10) giveAchievement("Quantum doesn't take so long")

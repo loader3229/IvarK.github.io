@@ -68,8 +68,22 @@ function calcVanillaTSTDMult(tier){
 }
 
 function getRepToTDExp() {
-	let x = masteryStudies.has(302) ? 0.15 : 0.1
+	let x = hasMTS(302) ? 0.15 : 0.1
 	return x
+}
+
+function updateInfiniteTimeTemp() {
+	if (!tmp.eterUnl || !hasAch("r105")) {
+		tmp.it = new Decimal(1)
+		return
+	}
+	var x = (3 - getTickspeed().log10()) * 5e-6
+	if (tmp.ngp3) {
+		if (enB.active("pos", 5)) x *= tmp_enB.pos5
+
+		x = softcap(Decimal.pow(10, x), "it").log10()
+	}
+	tmp.it = Decimal.pow(10, x)
 }
 
 function getTimeDimensionPower(tier) {
@@ -160,7 +174,7 @@ function updateTimeDimensions() {
 				getEl("timeRow" + tier).style.display = "table-row"
 				getEl("timeD" + tier).textContent = DISPLAY_NAMES[tier] + " Time Dimension x" + shortenMoney(getTimeDimensionPower(tier));
 				getEl("timeAmount" + tier).textContent = getTimeDimensionDescription(tier);
-				getEl("timeMax" + tier).textContent = inNGM(4) && cost.gte(maxCost) ? "Maxed out!" : (ph.did("quantum") ? '' : "Cost: ") + (inNGM(4) ? shortenPreInfCosts(cost) + "" : shortenDimensions(cost) + " EP")
+				getEl("timeMax" + tier).textContent = inNGM(4) && cost.gte(maxCost) ? "Maxed out!" : (pH.did("quantum") ? '' : "Cost: ") + (inNGM(4) ? shortenPreInfCosts(cost) + "" : shortenDimensions(cost) + " EP")
 				if (getOrSubResourceTD(tier).gte(player["timeDimension" + tier].cost)) getEl("timeMax"+tier).className = "storebtn"
 			else getEl("timeMax" + tier).className = "unavailablebtn"
 			} else getEl("timeRow" + tier).style.display = "none"

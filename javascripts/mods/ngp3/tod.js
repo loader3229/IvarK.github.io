@@ -74,7 +74,7 @@ function updateTreeOfDecayTab(){
 			else eff = "4"
 			getEl(color + "UpgEffDesc").textContent =  " " + eff + "x"
 			for (var u = 1; u < 4; u++) getEl(color + "upg" + u).className = "gluonupgrade " + (branch.spin.lt(getBranchUpgCost(shorthand, u)) ? "unavailablebtn" : shorthand)
-			if (ph.did("ghostify")) getEl(shorthand + "RadioactiveDecay").className = "gluonupgrade "  +(branch.quarks.lt(Decimal.pow(10, Math.pow(2, 50))) ? "unavailablebtn" : shorthand)
+			if (pH.did("ghostify")) getEl(shorthand + "RadioactiveDecay").className = "gluonupgrade "  +(branch.quarks.lt(Decimal.pow(10, Math.pow(2, 50))) ? "unavailablebtn" : shorthand)
 		}
 	} //for loop
 	if (!branchNum) {
@@ -90,7 +90,7 @@ function updateTreeOfDecayTab(){
 			getEl("treeupg" + u + "lvl").textContent = getGalaxyScaleName(scalingsActive) + "Level: " + getFullExpansion(lvl) + (lvl != effLvl ? " -> " + getFullExpansion(Math.floor(effLvl)) + (effLvl != lvl * tmp.tue ? " (softcapped)" : "") : "")
 			getEl("treeupg" + u + "cost").textContent = start + shortenMoney(cost) + " " + colors[lvl % 3] + end
 		}
-		setAndMaybeShow("treeUpgradeEff", ph.did("ghostify"), 'getTreeUpgradeEfficiencyDisplayText()')
+		setAndMaybeShow("treeUpgradeEff", pH.did("ghostify"), 'getTreeUpgradeEfficiencyDisplayText()')
 	}
 	updateToDSpeedDisplay()
 }
@@ -116,7 +116,7 @@ function updateTODStuff() {
 			getEl(color + "upg" + b + "cost").textContent = start + shortenMoney(getBranchUpgCost(shorthand, b)) + " " + end
 			if (b > 1) getEl(color + "UpgName" + b).innerHTML = name
 		}
-		if (ph.did("ghostify")) {
+		if (pH.did("ghostify")) {
 			getEl(shorthand+"RadioactiveDecay").parentElement.parentElement.style.display = ""
 			getEl(shorthand+"RDReq").innerHTML = "(requires " + shorten(Decimal.pow(10, Math.pow(2, 50))) + " of " + color + " " + name + " quarks)"
 			getEl(shorthand+"RDLvl").textContent = getFullExpansion(getRadioactiveDecays(shorthand))
@@ -181,7 +181,7 @@ function getBranchSpeedText(){
 	let text = ""
 	if (new Decimal(getTreeUpgradeEffect(3)).gt(1)) text += "Tree Upgrade 3: " + shorten(getTreeUpgradeEffect(3)) + "x, "
 	if (new Decimal(getTreeUpgradeEffect(5)).gt(1)) text += "Tree Upgrade 5: " + shorten(getTreeUpgradeEffect(5)) + "x, "
-	if (masteryStudies.has(431)) if (getMTSMult(431).gt(1)) text += "Mastery Study 431: " + shorten(getMTSMult(431)) + "x, "
+	if (hasMTS(431)) if (getMTSMult(431).gt(1)) text += "Mastery Study 431: " + shorten(getMTSMult(431)) + "x, "
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) text += "19th Big Rip upgrade: " + shorten(tmp.bru[19]) + "x, "
 	if (hasNU(4)) if (tmp.nu[4].gt(1)) text += "Fourth Neutrino Upgrade: " + shorten(tmp.nu[4]) + "x, "
 	if (hasAch("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
@@ -202,7 +202,7 @@ function getBranchSpeedText(){
 
 function getBranchSpeed() { 
 	let x = Decimal.times(getTreeUpgradeEffect(3), getTreeUpgradeEffect(5))
-	if (masteryStudies.has(431)) x = x.times(getMTSMult(431))
+	if (hasMTS(431)) x = x.times(getMTSMult(431))
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) x = x.times(tmp.bru[19])
 	if (hasNU(4)) x = x.times(tmp.nu[4])
 	if (hasAch("ng3p48")) x = x.times(Math.sqrt(player.meta.resets + 1))
@@ -407,7 +407,7 @@ function isTreeUpgActive(upg) {
 }
 
 function getTreeUpgradeLevel(upg) {
-	return masteryStudies.has("d12") ? (tmp.qu.tod.upgrades[upg] || 0) : 0
+	return hasMTS("d12") ? (tmp.qu.tod.upgrades[upg] || 0) : 0
 }
 
 function getEffectiveTreeUpgLevel(upg){
@@ -699,7 +699,7 @@ function getTreeUpgradeEfficiencyText(){
 }
 
 function getTreeUpgradeEfficiency(mod) {
-	if (!masteryStudies.has("d12")) return 0
+	if (!hasMTS("d12")) return 0
 
 	let r = 1
 	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasNU(17) || mod == "br") && mod != "noNB") r += tmp.nb[7]

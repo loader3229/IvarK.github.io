@@ -127,7 +127,7 @@ function unlockNeutrinoBoost() {
 }
 
 function hasNU(id) {
-	return ph.did("ghostify") ? player.ghostify.neutrinos.upgrades.includes(id) : false
+	return pH.did("ghostify") ? player.ghostify.neutrinos.upgrades.includes(id) : false
 }
 
 function buyNeutrinoMult() {

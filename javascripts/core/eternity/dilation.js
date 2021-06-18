@@ -33,7 +33,7 @@ function buyDilationStudy(name) {
 }
 
 function hasDilationStudy(x) {
-	if (x > 6) return masteryStudies.has("d" + x)
+	if (x > 6) return hasMTS("d" + x)
 	return tmp.eterUnl && player.dilation.studies.includes(x)
 }
 
@@ -51,7 +51,7 @@ function getDilTimeGainPerSecond() {
 	if (hasAch("r137") && tmp.ngp3_boost) {
 		let log = (tmp.rmPseudo || player.replicanti.amount).max(1).log10()
 		let slog = log / 1e4
-		if (masteryStudies.has(302)) slog *= Math.log10(log + 10) * 2
+		if (hasMTS(302)) slog *= Math.log10(log + 10) * 2
 
 		gain = gain.times(Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(slog + 1)))
 	}
@@ -59,6 +59,7 @@ function getDilTimeGainPerSecond() {
 		if (hasAch("r138")) gain = gain.times(tmp.ngp3_exp ? 3 : 2)
 		if (hasAch("ngpp13")) gain = gain.times(2)
 		if (hasAch("ng3p11")) gain = gain.times(Math.min(Math.max(Math.log10(player.eternityPoints.max(1).log10()), 1) / 2, 2.5))
+		if (enB.active("pos", 4)) gain = gain.times(tmp_enB.pos4)
 		if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 	}
 	if (tmp.quActive && tmp.ngp3_mul) gain = gain.times(colorBoosts.b) //Color Powers (NG*+3)
@@ -84,7 +85,7 @@ function getDilTimeGainPerSecond() {
 
 function getTPBoostToDT() {
 	let exp = 1
-	//if (ph.has("ghostify") && player.ghostify && player.ghostify.ghostlyPhotons.unl) exp *= tmp.le[0]
+	//if (pH.has("ghostify") && player.ghostify && player.ghostify.ghostlyPhotons.unl) exp *= tmp.le[0]
 
 	return player.dilation.tachyonParticles.pow(exp)
 }
@@ -95,10 +96,19 @@ function hasDilationUpg(x) {
 
 function getDilUpgPower(x) {
 	let r = player.dilation.rebuyables[x] || 0
+
 	if (tmp.mod.nguspV) r += exDilationUpgradeStrength(x)
 	else if (player.exdilation != undefined && !tmp.mod.ngudpV) r *= exDilationUpgradeStrength(x)
+
 	if (player.dilation.upgrades.includes("ngp3c8") && tmp.ngC && x != 3) r *= getDil85Mult()
 	if (tmp.ngp3_mul && x == 4) r *= 1.1
+	if (x == 3) r *= getDilUpg3Mult()
+	return r
+}
+
+function getDilUpg3Mult(x) {
+	let r = 1
+	if (QCs.isRewardOn(7)) r *= 1.1
 	return r
 }
 
@@ -119,7 +129,7 @@ function getTPMult() {
 	if (tmp.ngp3) {
 		if (hasAch("ngpp13")) ret = ret.times(2)
 		if (hasAch("ng3p11")) ret = ret.times(Math.min(Math.max(Math.log10(player.eternityPoints.max(1).log10()) / 2, 1), 2.5))
-		if (masteryStudies.has(264)) ret = ret.times(doubleMSMult(5)) //Mastery Studies
+		if (hasMTS(264)) ret = ret.times(doubleMSMult(5)) //Mastery Studies
 		if (tmp.quActive) ret = ret.times(colorBoosts.b) //Color Powers
 	}
 
@@ -457,10 +467,10 @@ function getRebuyableDilUpgCost(id, lvl) {
 		if (id == 4 && tmp.ngp3) cost = cost.div(Math.pow(Math.max(10 - lvl, 1), 2))
 		if (player.meta != undefined && lvl >= costGroup[2]) {
 			let exp = 2
-			if (id == 4 && QCs.isRewardOn(7)) exp = QCs.tmp.rewards[7]
+			if (id == 4 && enB.active("glu", 7)) exp = tmp_enB.glu7
 
 			let costSS = Decimal.pow(costGroup[1], (lvl - costGroup[2] + 1) * Math.pow(lvl - costGroup[2] + 2, exp - 1) / 4)
-			if (id == 3 && enB.active("glu", 3)) costSS = costSS.pow(1 / enB.tmp.glu3)
+			if (id == 3 && enB.active("glu", 3)) costSS = costSS.pow(1 / tmp_enB.glu3)
 			return cost.times(costSS)
 		}
 		if (player.exdilation != undefined && !tmp.mod.ngudpV && cost.gt(1e30)) cost = cost.div(1e30).pow(cost.log(1e30)).times(1e30)
@@ -484,7 +494,7 @@ function buyDilationUpgrade(pos, max, isId) {
 			if (!tmp.ngp3) player.dilation.dilatedTime = new Decimal(0)
 			resetDilationGalaxies()
 		}
-		if (id[1] == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(getDil3Power()))
+		if (id[1] == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), getDilUpg3Mult())))
 	} else {
 		// Not rebuyable
 		if (hasDilationUpg(id)) return
@@ -503,6 +513,7 @@ function buyDilationUpgrade(pos, max, isId) {
 			if (getEternitied() >= 1e9) player.dbPower = new Decimal(getDimensionBoostPower())
 		}
 		if (id == "ngpp6" && tmp.ngp3) {
+			setupMasteryStudiesHTML()
 			getEl("masterystudyunlock").style.display = ""
 			getEl("respecMastery").style.display = "block"
 			getEl("respecMastery2").style.display = "block"
@@ -521,7 +532,6 @@ function buyDilationUpgrade(pos, max, isId) {
 function getTTProduction(display) {
 	let tp = player.dilation.tachyonParticles
 	let r = getTTGenPart(tp)
-	r = r.div(2e4)
 
 	r = r.times(ls.mult("tt"))
 	if (!display) r = r.toNumber()
@@ -529,16 +539,9 @@ function getTTProduction(display) {
 }
 
 function getTTGenPart(x) {
-	if (!x) return new Decimal(0)
-	x = x.max(1).log10()
-
-	let sc1 = 69
-	if (x > sc1) {
-		let speed = tmp.exMode ? 1.5 : tmp.bgMode ? 1 : 1.25
-		x = Math.pow((x - sc1) + 1, 2/3) * speed + sc1 - 1
-	}
-
-	return Decimal.pow(10, x)
+	x = x.div(2e4)
+	if (tmp.ngp3) x = softcap(x, "tt")
+	return x
 }
 
 function updateDilationUpgradeButtons() {
@@ -617,7 +620,7 @@ function canBuyGalaxyThresholdUpg() {
 
 function getFreeGalaxyThresholdIncrease() {
 	let thresholdMult = 1.35
-	if (QCs.isRewardOn(8)) thresholdMult = QCs.tmp.rewards[8]
+	if (QCs.isRewardOn(8)) thresholdMult = QCs_tmp.rewards[8]
 
 	let dil2 = getDilUpgPower(2)
 	if (dil2 > 0) thresholdMult += (5 - thresholdMult) * Math.pow(0.8, dil2)
@@ -641,8 +644,6 @@ function gainDilationGalaxies() {
 
 	player.dilation.freeGalaxies = gained * galaxyMult
 	player.dilation.nextThreshold = Decimal.pow(thresholdMult, gained).times(thresholdStart)
-
-	if (baseGain > oldGals && QCs.isRewardOn(4)) replicantiIncrease((baseGain - oldGals) * QCs.tmp.rewards[4] * 10)
 }
 
 function getFreeGalaxyGainMult() {
@@ -667,8 +668,8 @@ function resetDilationGalaxies() {
 function getBaseDilGalaxyEff() {
 	let x = 1
 
-	if (masteryStudies.has(263)) x = 1 + doubleMSMult(0.25)
-	if (masteryStudies.has(311)) x *= Math.pow(tsMults[232](), getMTSMult(311))
+	if (hasMTS(263)) x = 1 + doubleMSMult(0.25)
+	if (hasMTS(311)) x *= Math.pow(tsMults[232](), getMTSMult(311))
 	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 
 	return x
@@ -684,7 +685,7 @@ function dilateTime(auto, shortcut) {
 	var onActive = player.dilation.active
 	if (!onActive && !auto && tmp.mod.dilationConf) if (!confirm("Dilating time will start a new Eternity where all of your Normal/Infinity/Time Dimension multiplier's exponents and the Tickspeed multiplier's exponent will be reduced to ^ 0.75. If you can Eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) return
 
-	eternity(!ph.can("eternity"), true, undefined, !onActive)
+	eternity(!pH.can("eternity"), true, undefined, !onActive)
 }
 
 function updateDilationDisplay() {

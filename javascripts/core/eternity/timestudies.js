@@ -360,7 +360,7 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 
 	for (let i = 1; i <= 6; i++) {
 		if (hasDilationStudy(i)) getEl("dilstudy" + i).className = "dilationupgbought"
-		else if (player.timestudy.theorem >= dsStudyCosts[i]() && (i == 1 ? ph.did("quantum") ||
+		else if (player.timestudy.theorem >= dsStudyCosts[i]() && (i == 1 ? pH.did("quantum") ||
 			//Dilation Upgrade 1
 			ECComps("eterc11") >= 5 &&
 			ECComps("eterc12") >= 5 &&
@@ -372,8 +372,8 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 	getEl("dilstudy6").style.display = player.meta ? "" : "none"
 	getEl("masteryportal").style.display = player.masterystudies ? "" : "none"
 	if (tmp.ngp3) {
-		getEl("masteryportal").innerHTML = masteryStudies.unl() ? "Mastery portal<span>Continue into mastery studies.</span>" : !hasDilationStudy(1) ? "To be continued...." : "Mastery portal (" + (hasDilationStudy(6) ? "66%: requires "+shortenCosts(1e100)+" dilated time upgrade)" : "33%: requires meta-dimensions)") 
-		getEl("masteryportal").className = masteryStudies.unl() ? "dilationupg" : "timestudylocked"
+		getEl("masteryportal").innerHTML = mTs.unl() ? "Mastery portal<span>Continue into mastery studies.</span>" : !hasDilationStudy(1) ? "To be continued...." : "Mastery portal (" + (hasDilationStudy(6) ? "66%: requires "+shortenCosts(1e100)+" dilated time upgrade)" : "33%: requires meta-dimensions)") 
+		getEl("masteryportal").className = mTs.unl() ? "dilationupg" : "timestudylocked"
 	}
 }
 
@@ -452,7 +452,7 @@ function respecTimeStudies(force) {
 	if (tmp.ngp3) respecMastery = player.respecMastery || force
 	if (respecMastery) {
 		let oldMS = player.masterystudies.concat()
-		masteryStudies.respec()
+		mTs.respec()
 
 		if (player.masterystudies.length > oldMS.length) {
 			player.quantum.wasted = false
@@ -718,7 +718,7 @@ function load_preset(id) {
 	let data = getEl("preset_" + id + "_data").value
 
 	if (tmp.mod.presetReset) {
-		if (!ph.can("eternity")) return
+		if (!pH.can("eternity")) return
 
 		player.respec = true
 		if (tmp.ngp3) player.respecMastery = true
@@ -864,7 +864,7 @@ function changePresetTitle(id, placement, editing) {
 		while (poData[placement] != id) placement++
 	}
 
-	getEl("preset_" + id + "_dilation_div").style.display = hasDilationStudy(1) || ph.has("quantum")
+	getEl("preset_" + id + "_dilation_div").style.display = hasDilationStudy(1) || pH.has("quantum")
 
 	if (editing) {
 		getEl("preset_" + id + "_title").textContent = (presets[id].title ? presets[id].title : "Preset #" + placement) + "*"
@@ -971,7 +971,7 @@ let tsMults = {
 	231() {
 		let db = getTotalDBs()
 		let x = Decimal.pow(Math.max(db, 1), 0.3)
-		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(2, Math.pow(db / 1e6 + 1, 2)))
+		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(2, db / 1e5 * Math.log2(db / 1e5 + 1)))
 		return x
 	},
 	232() {
@@ -980,7 +980,7 @@ let tsMults = {
 	233() {
 		let rep = (tmp.rmPseudo || player.replicanti.amount).max(1).log10()
 		rep *= 0.3
-		if (masteryStudies.has(302)) rep *= rep / 1e3 + 1
+		if (hasMTS(302)) rep *= rep / 1e3 + 1
 
 		return Decimal.pow(10, rep)
 	},

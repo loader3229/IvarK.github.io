@@ -53,10 +53,8 @@ function updateTmp(init) {
 	}
 	tmp.mptb = getMPTBase()
 	tmp.mpte = getMPTExp()
-	updatePostInfiTemp()
+
 	updateInfiniteTimeTemp()
-	updateAntiElectronGalaxiesTemp()
-	updateEffectiveAntiElectronGalaxiesTemp()
 	updateIntergalacticTemp() // starts with if (tmp.ngp3)
 	if (hasBosonicUpg(41)) {
 		tmp.blu[41] = bu.effects[41]()
@@ -67,7 +65,7 @@ function updateTmp(init) {
 	if (tmp.ngC) ngC.updateTmp()
 
 	tmp.rm = getReplMult()
-	tmp.rmPseudo = QCs.data[1].convert(player.replicanti.amount).max(masteryStudies.has(292) ? tmp.rm.pow(1 / 0.032) : 1)
+	tmp.rmPseudo = QCs.data[1].convert(player.replicanti.amount).max(hasMTS(292) ? tmp.rm.pow(1 / 0.032) : 1)
 
 	updateExtraReplMult()
 	updateExtraReplBase()
@@ -94,7 +92,6 @@ function updateTmp(init) {
 		tmp.gameSpeed = totalSpeed
 		tmp.tickUpdate = true
 	}
-
 	dev.boosts.update()
 }
 
@@ -193,28 +190,12 @@ function updateFixedLightTemp() {
 	}
 }
 
-function updateInfiniteTimeTemp() {
-	if (!tmp.eterUnl || !hasAch("r105")) {
-		tmp.it = new Decimal(1)
-		return
-	}
-	var x = (3 - getTickspeed().log10()) * 5 * Math.pow(10, -6)
-	if (tmp.ngp3) {
-		if (hasAch("ng3p56")) x *= 1.03
-
-		x = softcap(x, "inf_time_log")
-		if (player.dilation.active) x = softcap(x, "inf_time_log_dilation")
-	}
-	tmp.it = Decimal.pow(10, x)
-}
-
 function updateIntergalacticTemp() {
 	if (!tmp.ngp3) return
 
 	let x = Math.max(player.galaxies, 1)
 	if (isLEBoostUnlocked(3) && !inBigRip()) x *= tmp.leBonus[3]
 	if (tmp.be && player.dilation.active && tmp.qu.breakEternity.upgrades.includes(10)) x *= getBreakUpgMult(10)
-	x += tmp.effAeg
 	if (pl.on()) x *= fNu.tmp.buffNeutral
 	if (hasBosonicUpg(52)) x = Decimal.pow(x, tmp.blu[52].ig)
 	if (hasAch("ng3p114")) x = Decimal.times(x, 1.3)
@@ -248,19 +229,8 @@ function updateIntergalacticTemp() {
 	tmp.ig = Decimal.pow(10, igLog)
 }
 
-function updateAntiElectronGalaxiesTemp(){
-	tmp.aeg = 0
-}
-
-function updateEffectiveAntiElectronGalaxiesTemp() {
-	tmp.effAeg = tmp.aeg
-	if (tmp.aeg == 0) return
-
-	if (hasBosonicUpg(34)) tmp.effAeg *= tmp.blu[34]
-}
-
 function updateTS431ExtraGalTemp() {
-	tmp.eg431 = tmp.effAeg * 5
+	tmp.eg431 = 0
 	if (isLEBoostUnlocked(1)) {
 		tmp.leBonus[1].total = (colorBoosts.g - 1) * tmp.leBonus[1].effect
 		tmp.eg431 += tmp.leBonus[1].total
@@ -275,31 +245,6 @@ function updateMatterSpeed(){
 	tmp.mv = 1.03 + player.resets / 200 + player.galaxies / 100
 	if (inNGM(4)) tmp.mv += player.money.log10() / 1000
 	if (exp != 1) tmp.mv = Decimal.pow(tmp.mv, exp)
-}
-
-function updatePostInfiTemp() {
-	var exp11 = inNGM(2) ? 2 : 0.5
-	var exp21 = inNGM(2) ? 2 : 0.5
-
-	if (inNGM(4)){
-		exp11 += player.totalmoney.plus(10).div(10).log10() / 1e4
-		exp21 += player.money.plus(10).div(10).log10() / 1e4
-		base11 = player.totalmoney.plus(10).log10()
-		base21 = player.money.plus(10).log10()
-
-		if (hasAch("r72")) {
-			exp11 *= 4
-			exp21 *= 4
-			base11 *= 4
-			base21 *= 4
-		}
-
-		tmp.postinfi11 = Decimal.pow(base11, exp11)
-		tmp.postinfi21 = Decimal.pow(base21, exp21)
-	} else {
-		tmp.postinfi11 = Decimal.pow(player.totalmoney.plus(10).log10(), exp11)
-		tmp.postinfi21 = Decimal.pow(player.money.plus(10).log10(), exp21)
-	}
 }
 
 function updatePPTITemp() {
@@ -335,7 +280,9 @@ function updateNGP3TempStuff(init) {
 		updateGluonicBoosts()
 		updateQuarkEnergyEffects()
 	}
-	updateMasteryStudyTemp()
+	if (mTs.unl() || init) {
+		mTs.updateTmp()
+	}
 	if (tmp.quActive) {
 		if (player.masterystudies.includes("d13")) tmp.branchSpeed = getBranchSpeed()
 		if (player.masterystudies.includes("d12") && tmp.nf !== undefined && tmp.nf.rewardsUsed !== undefined) {
@@ -361,7 +308,7 @@ function updateGhostifyTempStuff() {
 	updateBosonicLabTemp()
 	tmp.apgw = (tmp.quActive && tmp.qu.nanofield.apgWoke) || getAntipreonGhostWake()
 	if (tmp.quActive) updatePPTITemp() //preon power threshold increase
-	if (ph.did("ghostify") && player.ghostify.ghostlyPhotons.unl) {
+	if (pH.did("ghostify") && player.ghostify.ghostlyPhotons.unl) {
 		tmp.phF = getPhotonicFlow()
 
 		var x = getLightEmpowermentBoost()
@@ -382,7 +329,7 @@ function updateGhostifyTempStuff() {
 
 function updateNeutrinoBoostsTemp() {
 	tmp.nb = {}
-	if (!ph.did("ghostify")) return
+	if (!pH.did("ghostify")) return
 
 	var nt = []
 	var exp = 1
@@ -392,7 +339,7 @@ function updateNeutrinoBoostsTemp() {
 
 function updateNeutrinoUpgradesTemp() {
 	tmp.nu = {}
-	if (!ph.did("ghostify")) return
+	if (!pH.did("ghostify")) return
 
 	for (var nu = 1; nu <= neutrinoUpgrades.max; nu++) if (neutrinoUpgrades[nu] !== undefined) tmp.nu[nu] = neutrinoUpgrades[nu].eff()
 }
@@ -555,7 +502,7 @@ function updateBRU16Temp() {
 }
 
 function updateBRU17Temp() {
-	tmp.bru[17] = ph.did("ghostify") ? 3 : 2.9
+	tmp.bru[17] = pH.did("ghostify") ? 3 : 2.9
 }
 
 function updateBigRipUpgradesTemp(){
@@ -586,7 +533,7 @@ function updateBosonicAMDimReturnsTemp() {
 	var data = {}
 	tmp.badm = data
 
-	if (!ph.did("ghostify")) return
+	if (!pH.did("ghostify")) return
 	if (!player.ghostify.wzb.unl) return
 
 	data.start = getHiggsRequirement()
@@ -637,4 +584,40 @@ function updateWZBosonsTemp(){
 	if (isEnchantUsed(25)) zLogMult = tmp.bEn[25]
 
 	data.zbs = Decimal.pow(10, zLog * zLogMult) //Z Bosons boost to W Quark
+}
+
+//"Powers" tmp (100ms)
+var updatePowerInt
+function updatePowers() {
+	totalMult = tmp.postinfi11
+	currentMult = tmp.postinfi21
+	infinitiedMult = getInfinitiedMult()
+	achievementMult = getAchievementMult()
+	unspentBonus = getUnspentBonus()
+
+	if (player.boughtDims) mult18 = getDimensionFinalMultiplier(1).max(1).times(getDimensionFinalMultiplier(8).max(1)).pow(0.02)
+	else mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
+
+	if (player.currentEternityChall == "eterc10") {
+		ec10bonus = Decimal.pow(getInfBoostInput(), 1e3).max(1)
+	} else {
+		ec10bonus = new Decimal(1)
+	}
+
+	tmp.mptb = getMPTBase()
+	tmp.mpte = getMPTExp()
+
+	updatePostInfiTemp()
+}
+
+function resetPowers() {
+	clearInterval(updatePowerInt)
+	updatePowers()
+	mult18 = 1
+	updatePowerInt = setInterval(updatePowers, 100)
+}
+
+function resetUP() {
+	resetPowers()
+	updateTmp(true)
 }

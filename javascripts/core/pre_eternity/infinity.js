@@ -192,7 +192,7 @@ function doIRCrunchResetStuff(){
 }
 
 function doGPUpgCrunchUpdating(g11MultShown){
-	var showg11Mult = player.infinitied > 0 || player.eternities !== 0 || ph.did("quantum")
+	var showg11Mult = player.infinitied > 0 || player.eternities !== 0 || pH.did("quantum")
 	if (inNGM(2) && (showg11Mult != g11MultShown)) {
 		getEl("galaxy11").innerHTML = "Normal" + (tmp.mod.ngmX > 3 ? " and Time D" : " d")+"imensions are " + (showg11Mult ? "cheaper based on your infinitied stat.<br>Currently: <span id='galspan11'></span>x":"99% cheaper.")+"<br>Cost: 1 GP"
 		getEl("galaxy15").innerHTML = "Normal and Time Dimensions produce " + (showg11Mult ? "faster based on your infinitied stat.<br>Currently: <span id='galspan15'></span>x":"100x faster")+".<br>Cost: 1 GP"
@@ -266,7 +266,7 @@ function bigCrunch(autoed) {
 		updateLastTenRuns()
 		return
 	}
-	ph.onPrestige("infinity")
+	pH.onPrestige("infinity")
 	
 	if ((!hasAch("r55") || (player.options.animations.bigCrunch === "always" && !autoed)) && isEmptiness && implosionCheck === 0 && player.options.animations.bigCrunch) {
 		implosionCheck = 1;
@@ -288,7 +288,7 @@ function bigCrunch(autoed) {
 	if (isEmptiness) {
 		showTab("dimensions")
 		isEmptiness = false
-		ph.updateDisplay()
+		pH.updateDisplay()
 	}
 	if (player.currentChallenge != "" && !player.challenges.includes(player.currentChallenge)) player.challenges.push(player.currentChallenge);
 	if (inNGM(4) && player.galacticSacrifice.chall) {
@@ -318,7 +318,7 @@ function bigCrunch(autoed) {
 	doCrunchInfinitiesGain()
 	doCrunchResetStuff()
 
-	var g11MultShown = ph.did("infinity")
+	var g11MultShown = pH.did("infinity")
 	doAfterResetCrunchStuff(g11MultShown)
 }
 
@@ -432,7 +432,7 @@ function canBuyIPMult() {
 
 function doInitInfMultStuff() {
 	ipMultPower=2
-	if (masteryStudies.has(241)) ipMultPower=2.2
+	if (hasMTS(241)) ipMultPower=2.2
 
 	if (tmp.mod.newGameExpVersion !== undefined) ipMultCostIncrease=4
 	else ipMultCostIncrease=10
