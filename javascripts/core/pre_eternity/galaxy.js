@@ -24,7 +24,7 @@ function galaxyReset(bulk) {
 	}
 	if (!hasAch("r111")) setInitialMoney()
 	if (hasAch("r66")) player.tickspeed = player.tickspeed.times(0.98);
-	if (tmp.quActive && tmp.qu.bigRip.active) tmp.qu.bigRip.bestGals = Math.max(tmp.qu.bigRip.bestGals, player.galaxies)
+	if (tmp.quActive && qu_save.bigRip.active) qu_save.bigRip.bestGals = Math.max(qu_save.bigRip.bestGals, player.galaxies)
 	if (pH.did("ghostify") && player.ghostify.neutrinos.boosts) gainNeutrinos(bulk, "gen")
 	hideDimensions()
 	tmp.tickUpdate = true;
@@ -65,8 +65,8 @@ function getGalaxyRequirement(offset = 0, display) {
 	if (inNC(4) || inNGM(5)) amount = player.tickspeedBoosts == undefined ? 99 + base : amount + (inNGM(4) ? 20 : -30)
 	if (tmp.be) {
 		amount *= 50
-		if (tmp.qu.breakEternity.upgrades.includes(2)) amount /= getBreakUpgMult(2)
-		if (player.currentEternityChall == "eterc10" && tmp.qu.breakEternity.upgrades.includes(9)) amount /= getBreakUpgMult(9)
+		if (qu_save.breakEternity.upgrades.includes(2)) amount /= getBreakUpgMult(2)
+		if (player.currentEternityChall == "eterc10" && qu_save.breakEternity.upgrades.includes(9)) amount /= getBreakUpgMult(9)
 	}
 	if (!player.boughtDims) {
 		tmp.grd.speed = 1
@@ -139,7 +139,7 @@ function getDistantScalingStart() {
 	if (hasTimeStudy(224)) n += Math.floor(getTotalDBs() / 2000)
 	if (hasDilationUpg("ngmm11")) n += 25
 	if (tmp.ngp3) {
-		if (inBigRip() && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]
+		if (inBigRip() && qu_save.bigRip.upgrades.includes(15)) n += tmp.bru[15]
 		if (pl.on()) n -= fNu.tmp.nerfMu
 	}
 

@@ -13,7 +13,7 @@ function getDilationMDMultiplier() {
 	if (tmp.mod.nguspV !== undefined) div = 1e50
 
 	if (tmp.mod.ngudpV && !tmp.mod.nguepV) {
-		let l = tmp.qu.colorPowers.b.plus(10).log10()
+		let l = qu_save.colorPowers.b.plus(10).log10()
 		let x = 3 - Math.log10(l + 1)
 		if (tmp.mod.ngumuV) {
 			if (x < 2) x = 2 - 2 * (2 - x) / (5 - x)
@@ -30,7 +30,7 @@ function getDilationMDMultiplier() {
 function getMDMultiplier(tier) {
 	if (player.currentEternityChall === "eterc11") return new Decimal(1)
 	let ret = Decimal.pow(getPerTenMetaPower(), Math.floor(player.meta[tier].bought / 10))
-	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(Math.max(player.meta.resets - (pos.on() ? save_tmp.sac_mdb : 0), 0) + 1 - tier, 0)))
+	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(Math.max(player.meta.resets - (pos.on() ? pos_tmp.sac_mdb : 0), 0) + 1 - tier, 0)))
 	ret = ret.times(tmp.mdGlobalMult) //Global multiplier of all Meta Dimensions
 
 	//Achievements:
@@ -136,7 +136,7 @@ function metaBoost() {
 
 	if (!(player.meta[req.tier].bought >= req.amount)) return
 
-	let isNU1ReductionActive = hasNU(1) ? !tmp.qu.bigRip.active : false
+	let isNU1ReductionActive = hasNU(1) ? !qu_save.bigRip.active : false
 	if (qMs.tmp.amt >= 30) {
 		if (isNU1ReductionActive && player.meta.resets < 110) {
 			player.meta.resets = Math.min(player.meta.resets + Math.floor((player.meta[8].bought - req.amount) / (req.mult + 1)) + 1, 110)
@@ -366,7 +366,7 @@ function updateMetaDimensions () {
 	} else {
 		getEl("metaSoftReset").className = 'unavailablebtn'
 	}
-	var bigRipped = tmp.ngp3 && tmp.qu.bigRip.active
+	var bigRipped = tmp.ngp3 && qu_save.bigRip.active
 	var req = getQuantumReq()
 	var reqGotten = isQuantumReached()
 	var newClassName = reqGotten ? (bigRipped && player.options.theme == "Aarex's Modifications" ? "" : "storebtn ") + (bigRipped ? "aarexmodsghostifybtn" : "") : 'unavailablebtn'

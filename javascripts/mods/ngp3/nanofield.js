@@ -23,16 +23,16 @@ function getNanospeedText(){
 function updateNanoverseTab(){
 	getEl("ns").textContent = getNanospeedText()
 
-	let rewards = tmp.qu.nanofield.rewards
-	getEl("quarksNanofield").textContent = shortenDimensions(tmp.qu.replicants.quarks)		
-	getEl("quarkCharge").textContent = shortenMoney(tmp.qu.nanofield.charge)
+	let rewards = qu_save.nanofield.rewards
+	getEl("quarksNanofield").textContent = shortenDimensions(qu_save.replicants.quarks)		
+	getEl("quarkCharge").textContent = shortenMoney(qu_save.nanofield.charge)
 	getEl("quarkChargeRate").textContent = shortenDimensions(getQuarkChargeProduction())
 	getEl("quarkLoss").textContent = shortenDimensions(getQuarkLossProduction())
-	getEl("preonEnergy").textContent = shortenMoney(tmp.qu.nanofield.energy)
+	getEl("preonEnergy").textContent = shortenMoney(qu_save.nanofield.energy)
 	getEl("quarkEnergyRate").textContent = shortenMoney(getQuantumEnergyProduction())
-	getEl("quarkPower").textContent = getFullExpansion(tmp.qu.nanofield.power)
-	getEl("quarkPowerThreshold").textContent = shortenMoney(tmp.qu.nanofield.powerThreshold)
-	getEl("quarkAntienergy").textContent = shortenMoney(tmp.qu.nanofield.antienergy)
+	getEl("quarkPower").textContent = getFullExpansion(qu_save.nanofield.power)
+	getEl("quarkPowerThreshold").textContent = shortenMoney(qu_save.nanofield.powerThreshold)
+	getEl("quarkAntienergy").textContent = shortenMoney(qu_save.nanofield.antienergy)
 	getEl("quarkAntienergyRate").textContent = shortenMoney(getQuarkAntienergyProduction())
 	getEl("quarkChargeProductionCap").textContent = shortenMoney(getQuarkChargeProductionCap())
 
@@ -53,11 +53,11 @@ function updateNanoverseTab(){
 }
 
 function updateNanofieldAntipreon(){
-	var rewards = tmp.qu.nanofield.rewards
+	var rewards = qu_save.nanofield.rewards
 	getEl("rewards_AP").textContent = getFullExpansion(rewards)
 	getEl("rewards_wake").textContent = getFullExpansion(tmp.apgw)
-	getEl("sleepy").style.display = tmp.qu.nanofield.apgWoke ? "none" : ""
-	getEl("woke").style.display = tmp.qu.nanofield.apgWoke ? "" : "none"
+	getEl("sleepy").style.display = qu_save.nanofield.apgWoke ? "none" : ""
+	getEl("woke").style.display = qu_save.nanofield.apgWoke ? "" : "none"
 }
 
 function updateNanofieldTab(){
@@ -70,14 +70,14 @@ function getQuarkChargeProduction(noSpeed) {
 	if (isNanoEffectUsed("preon_charge")) ret = tmp.nf.effects.preon_charge
 	if (hasNU(3)) ret = ret.times(tmp.nu[3])
 	if (hasNU(7)) ret = ret.times(tmp.nu[7])
-	if (tmp.qu.nanofield.power > tmp.apgw) ret = ret.div(Decimal.pow(2, (tmp.qu.nanofield.power - tmp.apgw) / 2))
+	if (qu_save.nanofield.power > tmp.apgw) ret = ret.div(Decimal.pow(2, (qu_save.nanofield.power - tmp.apgw) / 2))
 	if (!noSpeed) ret = ret.times(getNanofieldFinalSpeed())
 	return ret
 }
 
 function startProduceQuarkCharge() {
-	tmp.qu.nanofield.producingCharge = !tmp.qu.nanofield.producingCharge
-	getEl("produceQuarkCharge").innerHTML = (tmp.qu.nanofield.producingCharge ? "Stop" : "Start") + " production of preon charge." + (tmp.qu.nanofield.producingCharge ? "" : "<br>(You will not get preons when you do this.)")
+	qu_save.nanofield.producingCharge = !qu_save.nanofield.producingCharge
+	getEl("produceQuarkCharge").innerHTML = (qu_save.nanofield.producingCharge ? "Stop" : "Start") + " production of preon charge." + (qu_save.nanofield.producingCharge ? "" : "<br>(You will not get preons when you do this.)")
 }
 
 function getQuarkLossProduction() {
@@ -86,13 +86,13 @@ function getQuarkLossProduction() {
 	if (retCube.gte("1e180")) retCube = retCube.pow(Math.pow(180 / retCube.log10(), 2 / 3))
 	ret = ret.times(retCube).times(4e25)
 	if (hasNU(3)) ret = ret.div(10)
-	if (tmp.qu.nanofield.power > tmp.apgw) ret = ret.pow((tmp.qu.nanofield.power - tmp.apgw) / 5 + 1)
+	if (qu_save.nanofield.power > tmp.apgw) ret = ret.pow((qu_save.nanofield.power - tmp.apgw) / 5 + 1)
 	ret = ret.times(getNanofieldFinalSpeed())
 	return ret
 }
 
 function getQuantumEnergyProduction() {
-	let ret = tmp.qu.nanofield.charge.sqrt()
+	let ret = qu_save.nanofield.charge.sqrt()
 	if (hasMTS(411)) ret = ret.times(getMTSMult(411))
 	if (hasMTS(421)) ret = ret.times(getMTSMult(421))
 	if (isNanoEffectUsed("preon_energy")) ret = ret.times(tmp.nf.effects.preon_energy)
@@ -102,15 +102,15 @@ function getQuantumEnergyProduction() {
 
 function getQuarkAntienergyProduction() {
 	if (hasBosonicUpg(51)) return new Decimal(0)
-	let ret = tmp.qu.nanofield.charge.sqrt()
+	let ret = qu_save.nanofield.charge.sqrt()
 	if (hasMTS(401)) ret = ret.div(getMTSMult(401))
-	if (tmp.qu.nanofield.power > tmp.apgw) ret = ret.times(Decimal.pow(2, (tmp.qu.nanofield.power - tmp.apgw) / 2))
+	if (qu_save.nanofield.power > tmp.apgw) ret = ret.times(Decimal.pow(2, (qu_save.nanofield.power - tmp.apgw) / 2))
 	ret = ret.times(getNanofieldFinalSpeed())
 	return ret
 }
 
 function getQuarkChargeProductionCap() {
-	return tmp.qu.nanofield.charge.times(2500).sqrt()
+	return qu_save.nanofield.charge.times(2500).sqrt()
 }
 
 var nanoRewards = {
@@ -244,7 +244,7 @@ function isNanoEffectUsed(x) {
 
 function getNanofieldSpeedText(){
 	text = ""
-	if (pH.did("ghostify") && tmp.qu.nanofield.rewards < 16) text += "Ghostify Bonus: " + shorten(player.ghostify.milestone >= 1 ? 6 : 3) + "x, "
+	if (pH.did("ghostify") && qu_save.nanofield.rewards < 16) text += "Ghostify Bonus: " + shorten(player.ghostify.milestone >= 1 ? 6 : 3) + "x, "
 	if (hasAch("ng3p78")) text += "'Aren't you already dead' reward: " +shorten(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)) + "x, "
 	if (hasNU(15)) text += "Neutrino upgrade 15: " + shorten(tmp.nu[15]) + "x, "
 	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.nf) + ", "
@@ -263,7 +263,7 @@ function getNanofieldSpeedText(){
 
 function getNanofieldSpeed() {
 	let x = 1
-	if (pH.did("ghostify")) x *= tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
+	if (pH.did("ghostify")) x *= qu_save.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
 	if (hasAch("ng3p78")) x *= Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)
 	if (hasNU(15)) x = tmp.nu[15].times(x)
 	if (GDs.boostUnl('nf')) x = Decimal.pow(x, GDs.tmp.nf)
@@ -292,7 +292,7 @@ function getNanoRewardPowerEff() {
 }
 
 function getNanoRewardReq(additional) {
-	return getNanoRewardReqFixed(additional - 1 + tmp.qu.nanofield.power)
+	return getNanoRewardReqFixed(additional - 1 + qu_save.nanofield.power)
 }
 
 function isNanoScalingActive(x) {
@@ -310,8 +310,8 @@ function getNanoRewardReqFixed(n) {
 }
 
 function updateNextPreonEnergyThreshold(){
-	tmp.qu.nanofield.power += doBulkSpent(tmp.qu.nanofield.energy, getNanoRewardReqFixed, tmp.qu.nanofield.power).toBuy
-	tmp.qu.nanofield.powerThreshold = getNanoRewardReq(1)
+	qu_save.nanofield.power += doBulkSpent(qu_save.nanofield.energy, getNanoRewardReqFixed, qu_save.nanofield.power).toBuy
+	qu_save.nanofield.powerThreshold = getNanoRewardReq(1)
 }
 
 function updateNanoEffectUsages() {
@@ -361,7 +361,7 @@ function updateNanoRewardEffects() {
 
 function updateNanoRewardScaling() {
 	let d = nanoRewards.scaling
-	for (let s = 1; s <= nanoRewards.scaling.max; s++) if (isNanoScalingActive(s) && tmp.qu.nanofield.rewards >= d[s].start) tmp.nf.scale = s
+	for (let s = 1; s <= nanoRewards.scaling.max; s++) if (isNanoScalingActive(s) && qu_save.nanofield.rewards >= d[s].start) tmp.nf.scale = s
 	tmp.nf.scale -= 1
 }
 

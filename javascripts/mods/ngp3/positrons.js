@@ -3,15 +3,19 @@ var pos = {
 		pos_save = {
 			amt: 0,
 			eng: 0,
-			boosts: 0
+			boosts: 0,
+			exictons: {}
 		}
 		return pos_save
 	},
 	compile() {
 		pos_save = undefined
-		if (!tmp.ngp3 || tmp.qu === undefined) return
+		if (!tmp.ngp3 || qu_save === undefined) {
+			this.updateTmp()
+			return
+		}
 
-		let data = tmp.qu.pos
+		let data = qu_save.pos
 		if (data === undefined) data = this.setup()
 		pos_save = data
 
@@ -26,13 +30,16 @@ var pos = {
 			eg: {sac: 0, qe: 0, pc: 0},
 			tg: {sac: 0, qe: 0, pc: 0}
 		}
+		if (!data.excite) data.excite = {}
 
 		if (data.consumedQE) delete data.consumedQE
 		if (data.sacGals) delete data.sacGals
 		if (data.sacBoosts) delete data.sacBoosts
+
+		this.updateTmp()
 	},
 	unl() {
-		return tmp.quActive && pos_save && hasMTS("d7")
+		return tmp.quActive && hasMTS("d7")
 	},
 	on() {
 		return this.unl() && pos_save.on
@@ -96,8 +103,13 @@ var pos = {
 	},
 	updateTmp() {
 		let data = {}
-		save_tmp = data
+		pos_tmp = data
 		if (pos_save === undefined) return
+
+		data.next_excite = {...pos_save.excite}
+	},
+	updateTmpOnTick() {
+		if (!this.unl()) return
 
 		//Meta Dimension Boosts or Quantum Energy -> Positrons
 		pos_save.eng = 0
@@ -106,7 +118,7 @@ var pos = {
 			let mdbMult = 0.25
 
 			data.sac_mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
-			data.sac_qe = tmp.qu.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)
+			data.sac_qe = qu_save.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)
 			pos_save.amt = Math.floor(Math.min(Math.pow(data.sac_mdb, 2), data.sac_qe) * 100)
 		} else {
 			data.sac_mdb = 0
@@ -132,7 +144,7 @@ var pos = {
 		enB.update("pos")
 		enB.updateOnTick("pos")
 
-		getEl("pos_formula").textContent = getFullExpansion(save_tmp.sac_mdb) + " Meta Dimension Boosts + " + shorten(save_tmp.sac_qe) + " Quantum Energy ->"
+		getEl("pos_formula").textContent = getFullExpansion(pos_tmp.sac_mdb) + " Meta Dimension Boosts + " + shorten(pos_tmp.sac_qe) + " Quantum Energy ->"
 		getEl("pos_toggle").textContent = pos_save.on ? "ON" : "OFF"
 		getEl("pos_amt").textContent = getFullExpansion(pos_save.amt)
 
@@ -141,7 +153,7 @@ var pos = {
 		for (var i = 0; i < types.length; i++) {
 			var type = types[i]
 			var gals = pos_save.gals[type].sac
-			if (gals > 0 || type == "ng") msg.push(getFullExpansion(gals) + " sacrificed " + this.types[type].galName)
+			if (gals > 0 || type == "ng") msg.push(getFullExpansion(gals) + " sacrificed " + pos.types[type].galName)
 		}
 
 		getEl("pos_charge_formula").innerHTML = wordizeList(msg, false, " +<br>", false) + " -> "

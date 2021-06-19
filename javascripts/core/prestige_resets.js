@@ -21,15 +21,15 @@ function NC10NDCostsOnReset() {
 }
 
 function replicantsResetOnQuantum(isQC){
-	tmp.qu.replicants.requirement = new Decimal("1e3000000")
-	tmp.qu.replicants.quarks = (!isQC && hasAch("ng3p45")) ? tmp.qu.replicants.quarks.pow(2/3) : new Decimal(0)
-	tmp.qu.replicants.eggonProgress = new Decimal(0)
-	tmp.qu.replicants.eggons = new Decimal(0)
-	tmp.qu.replicants.babyProgress = new Decimal(0)
-	tmp.qu.replicants.babies = new Decimal(0)
-	tmp.qu.replicants.growupProgress = new Decimal(0)
+	qu_save.replicants.requirement = new Decimal("1e3000000")
+	qu_save.replicants.quarks = (!isQC && hasAch("ng3p45")) ? qu_save.replicants.quarks.pow(2/3) : new Decimal(0)
+	qu_save.replicants.eggonProgress = new Decimal(0)
+	qu_save.replicants.eggons = new Decimal(0)
+	qu_save.replicants.babyProgress = new Decimal(0)
+	qu_save.replicants.babies = new Decimal(0)
+	qu_save.replicants.growupProgress = new Decimal(0)
 	for (let d = 1; d <= 8; d++) {
-		if (d == 8 || tmp.eds[d].perm < 10) tmp.qu.replicants.quantumFood += Math.round(tmp.eds[d].progress.toNumber() * 3) % 3
+		if (d == 8 || tmp.eds[d].perm < 10) qu_save.replicants.quantumFood += Math.round(tmp.eds[d].progress.toNumber() * 3) % 3
 		if (d != 1 || !hasAch("ng3p46") || isQC) {
 			tmp.eds[d].workers = new Decimal(tmp.eds[d].perm)
 			tmp.eds[d].progress = new Decimal(0)
@@ -41,11 +41,11 @@ function replicantsResetOnQuantum(isQC){
 }
 
 function nanofieldResetOnQuantum(){
-	tmp.qu.nanofield.charge = new Decimal(0)
-	tmp.qu.nanofield.energy = new Decimal(0)
-	tmp.qu.nanofield.antienergy = new Decimal(0)
-	tmp.qu.nanofield.power = 0
-	tmp.qu.nanofield.powerThreshold = new Decimal(50)
+	qu_save.nanofield.charge = new Decimal(0)
+	qu_save.nanofield.energy = new Decimal(0)
+	qu_save.nanofield.antienergy = new Decimal(0)
+	qu_save.nanofield.power = 0
+	qu_save.nanofield.powerThreshold = new Decimal(50)
 }
 
 function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
@@ -244,7 +244,7 @@ function resetEternityChallenges(bigRip, ngpp) {
 function doMetaDimensionsReset(bigRip, headstart, isQC) {
 	player.meta.antimatter = getMetaAntimatterStart(bigRip)
 	if (!headstart) player.meta.bestAntimatter = false ? Decimal.max(player.meta.antimatter, player.meta.bestOverQuantums) : player.meta.antimatter
-	player.meta.resets = qMs.tmp.amt >= 19 ? 4 : 0 //(!isQC && player.ghostify.milestones >= 5 && (bigRip !== undefined || bigRip == tmp.qu.bigRip.active) ? player.meta.resets : 4)
+	player.meta.resets = qMs.tmp.amt >= 19 ? 4 : 0 //(!isQC && player.ghostify.milestones >= 5 && (bigRip !== undefined || bigRip == qu_save.bigRip.active) ? player.meta.resets : 4)
 	clearMetaDimensions()
 }
 
@@ -404,13 +404,13 @@ function getBigRipOnGhostifyData(nBRU){
 	var bm = player.ghostify.milestones
 	return {
 		active: false,
-		conf: tmp.qu.bigRip.conf,
+		conf: qu_save.bigRip.conf,
 		times: 0,	
 		bestThisRun: new Decimal(0),
-		totalAntimatter: tmp.qu.bigRip.totalAntimatter,
-		bestGals: tmp.qu.bigRip.bestGals,
-		savedAutobuyersNoBR: tmp.qu.bigRip.savedAutobuyersNoBR,
-		savedAutobuyersBR: tmp.qu.bigRip.savedAutobuyersBR,
+		totalAntimatter: qu_save.bigRip.totalAntimatter,
+		bestGals: qu_save.bigRip.bestGals,
+		savedAutobuyersNoBR: qu_save.bigRip.savedAutobuyersNoBR,
+		savedAutobuyersBR: qu_save.bigRip.savedAutobuyersBR,
 		spaceShards: new Decimal(hasAch("ng3p105") ? 1e25 : 0),
 		upgrades: bm ? nBRU : []
 	}
@@ -419,7 +419,7 @@ function getBigRipOnGhostifyData(nBRU){
 function getBreakEternityDataOnGhostify(nBEU, bm){
 	return {
 		unlocked: bm > 14,
-		break: bm > 14 ? tmp.qu.breakEternity.break : false,
+		break: bm > 14 ? qu_save.breakEternity.break : false,
 		eternalMatter: new Decimal(hasAch("ng3p105") ? 1e25 : 0),
 		upgrades: bm > 14 ? nBEU : [],
 		epMultPower: 0
@@ -433,7 +433,7 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 		time: 0,
 		best: 9999999999,
 		last10: [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]],
-		disabledRewards: tmp.qu.disabledRewards,
+		disabledRewards: qu_save.disabledRewards,
 		metaAutobuyerWait: 0,
 		autobuyer: {
 			enabled: false,
@@ -442,13 +442,13 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			peakTime: 0
 		},
 		autoOptions: {
-			assignQK: tmp.qu.autoOptions.assignQK,
-			assignQKRotate: tmp.qu.autoOptions.assignQKRotate,
-			sacrifice: bm ? tmp.qu.autoOptions.sacrifice : false,
-			replicantiReset: tmp.qu.autoOptions.replicantiReset
+			assignQK: qu_save.autoOptions.assignQK,
+			assignQKRotate: qu_save.autoOptions.assignQKRotate,
+			sacrifice: bm ? qu_save.autoOptions.sacrifice : false,
+			replicantiReset: qu_save.autoOptions.replicantiReset
 		},
-		assortPercentage: tmp.qu.assortPercentage,
-		assignAllRatios: tmp.qu.assignAllRatios,
+		assortPercentage: qu_save.assortPercentage,
+		assignAllRatios: qu_save.assignAllRatios,
 		quarks: new Decimal(0),
 		usedQuarks: {
 			r: new Decimal(0),
@@ -483,7 +483,7 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			powerThreshold: new Decimal(50),
 			rewards: bm >= 13 ? 16 : 0,
 			producingCharge: false,
-			apgWoke: tmp.qu.nanofield.apgWoke
+			apgWoke: qu_save.nanofield.apgWoke
 		},
 		reachedInfQK: bm,
 		tod: getToDOnGhostifyData(),
@@ -507,7 +507,7 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			1: 0,
 			2: 0
 		},
-		upgrades: bm > 1 ? tmp.qu.upgrades : [],
+		upgrades: bm > 1 ? qu_save.upgrades : [],
 		rg4: false
 	}
 }
@@ -719,16 +719,16 @@ function doEternityGhostifyResetStuff(implode, bm){
 }
 
 function doQuantumGhostifyResetStuff(implode, bm){
-	tmp.qu.quarkEnergy = new Decimal(0)
-	tmp.qu.replicants.amount = new Decimal(0)
-	tmp.qu.replicants.requirement = new Decimal("1e3000000")
-	tmp.qu.replicants.quarks = new Decimal(0)
-	tmp.qu.replicants.eggonProgress = new Decimal(0)
-	tmp.qu.replicants.eggons = new Decimal(0)
-	tmp.qu.replicants.babyProgress = new Decimal(0)
-	tmp.qu.replicants.babies = new Decimal(0)
-	tmp.qu.replicants.growupProgress = new Decimal(0)
-	tmp.eds = tmp.qu.emperorDimensions
+	qu_save.quarkEnergy = new Decimal(0)
+	qu_save.replicants.amount = new Decimal(0)
+	qu_save.replicants.requirement = new Decimal("1e3000000")
+	qu_save.replicants.quarks = new Decimal(0)
+	qu_save.replicants.eggonProgress = new Decimal(0)
+	qu_save.replicants.eggons = new Decimal(0)
+	qu_save.replicants.babyProgress = new Decimal(0)
+	qu_save.replicants.babies = new Decimal(0)
+	qu_save.replicants.growupProgress = new Decimal(0)
+	tmp.eds = qu_save.emperorDimensions
 	QKminpeak = new Decimal(0)
 	QKminpeakValue = new Decimal(0)
 	if (implode) showQuantumTab("uquarks")
@@ -736,16 +736,16 @@ function doQuantumGhostifyResetStuff(implode, bm){
 	for (var i = 1; i < 9; i++) {
 		var num = bm >= permUnlocks[i - 1] ? 10 : 0
 		tmp.eds[i] = {workers: new Decimal(num), progress: new Decimal(0), perm: num}
-		if (num > 9) tmp.qu.replicants.limitDim = i
+		if (num > 9) qu_save.replicants.limitDim = i
 	}
 	if (bm > 6) {
-		tmp.qu.replicants.limit = 10
-		tmp.qu.replicants.limitCost = Decimal.pow(200, tmp.qu.replicants.limitDim * 9).times(1e49)
-		tmp.qu.replicants.quantumFoodCost = Decimal.pow(5, tmp.qu.replicants.limitDim * 30).times(2e46)
+		qu_save.replicants.limit = 10
+		qu_save.replicants.limitCost = Decimal.pow(200, qu_save.replicants.limitDim * 9).times(1e49)
+		qu_save.replicants.quantumFoodCost = Decimal.pow(5, qu_save.replicants.limitDim * 30).times(2e46)
 	}
 	if (bm > 3) {
 		var colors = ['r', 'g', 'b']
-		for (var c = 0; c < 3; c++) tmp.qu.tod[colors[c]].upgrades[1] = 5
+		for (var c = 0; c < 3; c++) qu_save.tod[colors[c]].upgrades[1] = 5
 	}
 	if (!bm) {
 		getEl('rebuyupgauto').style.display = "none"

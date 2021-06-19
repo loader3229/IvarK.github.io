@@ -153,7 +153,7 @@ function getTPExp(disable) {
 
 	//NG+3
 	if (tmp.ngp3) {
-		if ((!tmp.qu.bigRip.active || tmp.qu.bigRip.upgrades.includes(11)) && isTreeUpgActive(2) && disable != "TU3") x += getTreeUpgradeEffect(2)
+		if ((!qu_save.bigRip.active || qu_save.bigRip.upgrades.includes(11)) && isTreeUpgActive(2) && disable != "TU3") x += getTreeUpgradeEffect(2)
 	}
 	return x
 }
@@ -504,8 +504,8 @@ function buyDilationUpgrade(pos, max, isId) {
 		if (tmp.mod.nguspV !== undefined && !player.dilation.autoUpgrades.includes(id)) player.dilation.autoUpgrades.push(id)
 		if (id == 4 || id == "ngmm1") player.dilation.freeGalaxies *= 2 // Double the current galaxies
 		if (id == 10) {
-			tmp.qu.wasted = false
-			if (tmp.ngp3) tmp.qu.wasted = false
+			qu_save.wasted = false
+			if (tmp.ngp3) qu_save.wasted = false
 			ls.reset()
 		}
 		if (id == "ngpp3" && tmp.ngp3 && !tmp.ngC) {

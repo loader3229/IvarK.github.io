@@ -390,7 +390,7 @@ let bu62 = {
 			return 1
 		},
 		nf() {
-			return Math.pow(tmp.qu.nanofield.rewards / 15000 + 1, 10)
+			return Math.pow(qu_save.nanofield.rewards / 15000 + 1, 10)
 		},
 		tod() {
 			return getTotalRadioactiveDecays() / 250

@@ -1,7 +1,7 @@
 function getTickspeedMultiplier() {
 	if (isTickDisabled()) return new Decimal(1)
 	let x = new Decimal(getGalaxyTickSpeedMultiplier())
-	if (tmp.be && tmp.qu.breakEternity.upgrades.includes(5)) x = x.div(getBreakUpgMult(5))
+	if (tmp.be && qu_save.breakEternity.upgrades.includes(5)) x = x.div(getBreakUpgMult(5))
 	if (tmp.ngC && player.timestudy.studies.includes(25)) x = x.div(tsMults[25]())
 	if (inNC(6, 3)) x = x.add(getTotalDBs() * 1e-3)
 	return x.min(1)

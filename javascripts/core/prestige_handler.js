@@ -15,7 +15,7 @@ var pH = {
 		},
 		eternity() {
 			var id7unlocked = player.infDimensionsUnlocked[7]
-			if (getEternitied() >= 25 || (tmp.ngp3 && tmp.qu.bigRip.active)) id7unlocked = true
+			if (getEternitied() >= 25 || (tmp.ngp3 && qu_save.bigRip.active)) id7unlocked = true
 			return player.infinityPoints.gte(player.currentEternityChall != "" ? player.eternityChallGoal : Number.MAX_VALUE) && id7unlocked
 		},
 		interreality() {
@@ -35,7 +35,7 @@ var pH = {
 				))
 		},
 		ghostify() {
-			return tmp.qu.bigRip.active ? this.quantum() : false //hasNU(16) || pl.on()
+			return qu_save.bigRip.active ? this.quantum() : false //hasNU(16) || pl.on()
 		},
 		planck() {
 			return pl.on() ? pl.canTier() : pl.can()
@@ -152,7 +152,7 @@ var pH = {
 			return ngSg.save.times >= 1
 		},
 		quantum() {
-			return tmp.qu.times >= 1
+			return qu_save.times >= 1
 		},
 		ghostify() {
 			return player.ghostify.times >= 1
@@ -270,7 +270,7 @@ var pH = {
 			if (!tmp_pH[pos].shown) tmp_pH.shown++
 		}
 
-		if (tmp.ngp3 && tmp.qu.bigRip.active) {
+		if (tmp.ngp3 && qu_save.bigRip.active) {
 			getEl("quantumbtn").className = "presBtn presPos" + (tmp_pH.quantum.shown ? tmp_pH.quantum.order : tmp_pH.shown + 1) + " quickBigRip"
 			getEl("quantumbtn").style.display = ""
 			if (!tmp_pH.quantum.shown) tmp_pH.shown++

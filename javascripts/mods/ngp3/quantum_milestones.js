@@ -5,7 +5,7 @@ let qMs = {
 		types: ["sr", "rl", "en", "ch"],
 		sr: {
 			name: "Speedrun",
-			targ: () => tmp.qu.best,
+			targ: () => qu_save.best,
 			targDisp: timeDisplay,
 			daysStart: () => tmp.dtMode ? 0.25 : tmp.exMode ? 0.375 : tmp.bgMode ? 0.75 : 0.5,
 			gain: (x) => Math.log10(86400 * qMs.data.sr.daysStart() / x) / Math.log10(2) * 3 + 1,
@@ -20,7 +20,7 @@ let qMs = {
 		},
 		en: {
 			name: "Enegretic",
-			targ: () => tmp.qu.bestEnergy || 0,
+			targ: () => qu_save.bestEnergy || 0,
 			targDisp: shorten,
 			gain: (x) => Math.sqrt(Math.max(x - 0.5, 0)) * 3,
 			nextAt: (x) => Math.pow(x / 3, 2) + 0.5
@@ -58,7 +58,7 @@ let qMs = {
 		//Milestones
 		for (var i = 1; i <= qMs.max; i++) {
 			if (data.points >= qMs[i].req) data.amt++
-			else delete tmp.qu.disabledRewards[i]
+			else delete qu_save.disabledRewards[i]
 		}
 
 		if (qMs.tmp.amt >= 12) data.metaSpeed *= Math.pow(0.9, Math.pow(qMs.tmp.amt - 12 + 1, 1 + Math.max(qMs.tmp.amt - 20, 0) / 15))
@@ -78,7 +78,7 @@ let qMs = {
 				getEl("qMs_req_" + i).textContent = "Milestone Point #" + getFullExpansion(qMs[i].req)
 				getEl("qMs_reward_" + i).className = qMs.tmp.amt < i || qMs.forceOff(i) ? "qMs_locked" :
 					!this[i].disablable ? "qMs_reward" :
-					"qMs_toggle_" + (!tmp.qu.disabledRewards[i] ? "on" : "off")
+					"qMs_toggle_" + (!qu_save.disabledRewards[i] ? "on" : "off")
 				getEl("qMs_reward_" + i).textContent = qMs[i].eff()
 			}
 		}
@@ -106,7 +106,7 @@ let qMs = {
 		getEl("qMs_points").textContent = getFullExpansion(qMs.tmp.points)
 	},
 	isOn(id) {
-		return qMs.tmp.amt >= id && (!this[id].disablable || !tmp.qu.disabledRewards[id]) && !qMs.forceOff(id)
+		return qMs.tmp.amt >= id && (!this[id].disablable || !qu_save.disabledRewards[id]) && !qMs.forceOff(id)
 	},
 	forceOff(id) {
 		return qMs[id].forceDisable !== undefined && qMs[id].forceDisable()
@@ -116,8 +116,8 @@ let qMs = {
 		if (qMs.forceOff(id)) return
 		if (qMs.tmp.amt < id) return
 
-		let on = !tmp.qu.disabledRewards[id]
-		tmp.qu.disabledRewards[id] = on
+		let on = !qu_save.disabledRewards[id]
+		qu_save.disabledRewards[id] = on
 		getEl("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
 	},
 

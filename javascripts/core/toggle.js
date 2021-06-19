@@ -66,7 +66,7 @@ function toggleAutoBuyers() {
 	}
 	player.autoSacrifice.isOn = !bool
 	player.eternityBuyer.isOn = !bool
-	if (tmp.ngp3) tmp.qu.autobuyer.enabled = !bool
+	if (tmp.ngp3) qu_save.autobuyer.enabled = !bool
 	updateCheckBoxes()
 	updateAutobuyers()
 }

@@ -610,20 +610,20 @@ function doNGP3NewPlayerStuff(){
         player.dbPower = 1
         player.dilation.times = 0
         player.masterystudies = []
-        tmp.qu.reached = false
+        qu_save.reached = false
         player.meta.bestOverQuantums = player.meta.bestAntimatter
         player.options.animations.quarks = true
-        tmp.qu.usedQuarks = {
+        qu_save.usedQuarks = {
                 r: 0,
                 g: 0,
                 b: 0
         }
-        tmp.qu.colorPowers = {
+        qu_save.colorPowers = {
                 r: 0,
                 g: 0,
                 b: 0
         }
-        tmp.qu.gluons = {
+        qu_save.gluons = {
                 rg: 0,
                 gb: 0,
                 br: 0
@@ -635,20 +635,20 @@ function doNGP3NewPlayerStuff(){
         player.eternityBuyer.slowStop = false
         player.eternityBuyer.slowStopped = false
         player.eternityBuyer.ifAD = false
-        tmp.qu.autobuyer = {
+        qu_save.autobuyer = {
 			enabled: false,
 			limit: 1,
 			mode: "amount",
 			peakTime: 0
 		}
-        tmp.qu.disabledRewards = {}
-        tmp.qu.metaAutobuyerWait = 0
-        tmp.qu.multPower = {rg:0,gb:0,br:0,total:0}
-        tmp.qu.nonMAGoalReached = []
+        qu_save.disabledRewards = {}
+        qu_save.metaAutobuyerWait = 0
+        qu_save.multPower = {rg:0,gb:0,br:0,total:0}
+        qu_save.nonMAGoalReached = []
         player.dilation.bestTP = 0
         player.old = false
-        tmp.qu.autoOptions = {}
-        tmp.qu.replicants = {
+        qu_save.autoOptions = {}
+        qu_save.replicants = {
                 amount: 0,
                 requirement: "1e3000000",
                 quarks: 0,
@@ -665,9 +665,9 @@ function doNGP3NewPlayerStuff(){
                 babies: 0,
                 ageProgress: 0
         }
-        tmp.qu.emperorDimensions = {}
-        for (d=1;d<9;d++) tmp.qu.emperorDimensions[d] = {workers: 0, progress: 0, perm: 0}
-        tmp.qu.nanofield = {
+        qu_save.emperorDimensions = {}
+        for (d=1;d<9;d++) qu_save.emperorDimensions[d] = {workers: 0, progress: 0, perm: 0}
+        qu_save.nanofield = {
                 charge: 0,
                 energy: 0,
                 antienergy: 0,
@@ -676,15 +676,15 @@ function doNGP3NewPlayerStuff(){
                 rewards: 0,
                 producingCharge: false
         }
-        tmp.qu.reachedInfQK = false
-        tmp.qu.assignAllRatios = {
+        qu_save.reachedInfQK = false
+        qu_save.assignAllRatios = {
                 r: 1,
                 g: 1,
                 b: 1
         }
-        tmp.qu.notrelative = false
-        tmp.qu.wasted = false
-        tmp.qu.tod = {
+        qu_save.notrelative = false
+        qu_save.wasted = false
+        qu_save.tod = {
                 r: {
                         quarks: 0,
                         spin: 0,
@@ -702,7 +702,7 @@ function doNGP3NewPlayerStuff(){
                 },
                 upgrades: {}
         }
-        tmp.qu.bigRip = {
+        qu_save.bigRip = {
                 active: false,
                 conf: true,
                 times: 0,
@@ -714,7 +714,7 @@ function doNGP3NewPlayerStuff(){
                 spaceShards: 0,
                 upgrades: []
         }
-        tmp.qu.breakEternity = {
+        qu_save.breakEternity = {
                 unlocked: false,
                 break: false,
                 eternalMatter: 0,
@@ -823,12 +823,12 @@ function doInitNGp2NOT3Stuff(){
 					delete player.timeDimensionAutobuyer
 					delete player.ep5xAutobuyer
 			}
-			tmp.qu = player.quantum
-			if (tmp.qu) {
+			qu_save = player.quantum
+			if (qu_save) {
 					tmp.mod.newGamePlusPlusVersion = 2.901
-					tmp.qu.time = player.totalTimePlayed
-					tmp.qu.best = 9999999999
-					tmp.qu.last10 = [[600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0]]
+					qu_save.time = player.totalTimePlayed
+					qu_save.best = 9999999999
+					qu_save.last10 = [[600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0]]
 					tmp.mod.quantumConf = true
 			}
 			tmp.mod.newGamePlusVersion = 1
@@ -839,7 +839,7 @@ function doInitNGp2NOT3Stuff(){
 		delete tmp.mod.meta
 		delete tmp.mod.autoEterMode
 		delete tmp.mod.autoEterOptions
-		delete tmp.qu
+		delete qu_save
 	}
 }
 
@@ -879,7 +879,7 @@ function doNGP2v2tov2302(){
 }
 
 function doQuantumRestore(){
-        var quantumRestore = tmp.mod.newGamePlusPlusVersion < 2.9 || (!tmp.qu && tmp.mod.newGamePlusPlusVersion > 2.4)
+        var quantumRestore = tmp.mod.newGamePlusPlusVersion < 2.9 || (!qu_save && tmp.mod.newGamePlusPlusVersion > 2.4)
         if (quantumRestore) {
                 player.quantum={
                         times: 0,
@@ -902,12 +902,12 @@ function doQuantumRestore(){
                         },
                         upgrades: []
                 }
-                tmp.qu=player.quantum
+                qu_save=player.quantum
         }
         if (quantumRestore || tmp.mod.newGamePlusPlusVersion < 2.901) {
-                tmp.qu.time = player.totalTimePlayed
-                tmp.qu.best = 9999999999
-                tmp.qu.last10 = [[600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0]]
+                qu_save.time = player.totalTimePlayed
+                qu_save.best = 9999999999
+                qu_save.last10 = [[600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0]]
         }
         if (tmp.mod.newGamePlusPlusVersion < 2.901) {
                 tmp.mod.quantumConf = true
@@ -917,25 +917,25 @@ function doQuantumRestore(){
                 player.autoEterOptions = {epmult:false}
                 for (dim=1;dim<9;dim++) player.autoEterOptions["td"+dim] = false
         }
-        if (tmp.mod.newGamePlusPlusVersion < 2.9013) if (tmp.mod.quantumConf===undefined||tmp.qu.times<1) tmp.mod.quantumConf=true
+        if (tmp.mod.newGamePlusPlusVersion < 2.9013) if (tmp.mod.quantumConf===undefined||qu_save.times<1) tmp.mod.quantumConf=true
         if (tmp.mod.newGamePlusPlusVersion < 2.90142) tmp.mod.newGamePlusPlusVersion = 2.90142
         if (tmp.mod.newGame3PlusVersion < 1.01) tmp.mod.dbPower = new Decimal(getDimensionBoostPower())
         if ((tmp.mod.newGame3PlusVersion && !tmp.ngp3) || tmp.mod.newGame3PlusVersion < 1.02) player.masterystudies = []
         if (tmp.mod.newGame3PlusVersion < 1.21) player.replicanti.chanceCost = Decimal.pow(1e15, player.replicanti.chance * 100 + 9)
         if ((quantumRestore && player.masterystudies) || tmp.mod.newGame3PlusVersion < 1.5) {
-                tmp.qu.usedQuarks = {
+                qu_save.usedQuarks = {
                         r: 0,
                         g: 0,
                         b: 0
                 }
-                tmp.qu.colorPowers = {
+                qu_save.colorPowers = {
                         r: 0,
                         g: 0,
                         b: 0
                 }
         }
         if ((quantumRestore && player.masterystudies) || tmp.mod.newGame3PlusVersion < 1.51) {
-                tmp.qu.gluons = {
+                qu_save.gluons = {
                         rg: 0,
                         gb: 0,
                         br: 0
@@ -948,7 +948,7 @@ function doNGp3v15tov199(){
         if (tmp.mod.newGame3PlusVersion < 1.8) {
                 player.eternityBuyer.statBeforeDilation = 0
                 player.eternityBuyer.dilationPerAmount = 10
-                tmp.qu.autobuyer = {
+                qu_save.autobuyer = {
                         enabled: false,
                         limit: 1,
                         mode: "amount"
@@ -956,24 +956,24 @@ function doNGp3v15tov199(){
         }
         if (tmp.mod.newGame3PlusVersion < 1.9) {
                 player.replicanti.intervalCost = Decimal.pow(1e10, Math.round(Math.log10(1000/player.replicanti.interval)/-Math.log10(0.9))+14)
-                tmp.qu.disabledRewards={}
+                qu_save.disabledRewards={}
         }
         if (tmp.mod.newGame3PlusVersion < 1.95) {
-                tmp.qu.multPower=0
-                tmp.qu.challenge=0
-                tmp.qu.challenges=0
+                qu_save.multPower=0
+                qu_save.challenge=0
+                qu_save.challenges=0
         }
         if (tmp.mod.newGame3PlusVersion < 1.99) {
-                tmp.qu.challenge=tmp.qu.challenge>0?[tmp.qu.challenge]:[]
+                qu_save.challenge=qu_save.challenge>0?[qu_save.challenge]:[]
                 var newChallenges={}
-                for (c=1;c<=tmp.qu.challenges;c++) newChallenges[c]=1
-                tmp.qu.challenges=newChallenges
-                tmp.qu.metaAutobuyerWait=0
+                for (c=1;c<=qu_save.challenges;c++) newChallenges[c]=1
+                qu_save.challenges=newChallenges
+                qu_save.metaAutobuyerWait=0
         }
 }
 
 function doNGp3v199tov19995(){
-        if (tmp.mod.newGame3PlusVersion < 1.9975&&!tmp.qu.challenge) tmp.qu.challenge=[]
+        if (tmp.mod.newGame3PlusVersion < 1.9975&&!qu_save.challenge) qu_save.challenge=[]
         if (tmp.mod.newGame3PlusVersion < 1.9979) {
                 player.dilation.bestTP=hasAch("ng3p18")?player.dilation.tachyonParticles:new Decimal(0)
                 player.old=false
@@ -987,8 +987,8 @@ function doNGp3v199tov19995(){
                         else respecedMS.push(player.masterystudies[id])
                 }
                 player.masterystudies=respecedMS
-                tmp.qu.autoOptions = {}
-                tmp.qu.replicants = {
+                qu_save.autoOptions = {}
+                qu_save.replicants = {
                         amount: 0,
                         requirement: "1e3000000",
                         quarks: 0,
@@ -1007,7 +1007,7 @@ function doNGp3v199tov19995(){
                         ageProgress: 0
                 }
         }
-        if (tmp.mod.newGame3PlusVersion < 1.9985)  tmp.qu.multPower = {rg:Math.ceil(tmp.qu.multPower/3),gb:Math.ceil((tmp.qu.multPower-1)/3),br:Math.floor(tmp.qu.multPower/3),total:tmp.qu.multPower}
+        if (tmp.mod.newGame3PlusVersion < 1.9985)  qu_save.multPower = {rg:Math.ceil(qu_save.multPower/3),gb:Math.ceil((qu_save.multPower-1)/3),br:Math.floor(qu_save.multPower/3),total:qu_save.multPower}
         if (tmp.mod.newGame3PlusVersion < 1.9986) {
                 player.respec=player.respecOptions.time
                 player.respecMastery=player.respecOptions.mastery
@@ -1016,16 +1016,16 @@ function doNGp3v199tov19995(){
         }
         if (tmp.mod.newGame3PlusVersion < 1.9987) player.eternitiesBank=0
         if (tmp.mod.newGame3PlusVersion < 1.99871) {
-                tmp.qu.replicants.limit=Math.min(tmp.qu.replicants.limit,10)
-                tmp.qu.replicants.limitCost=Math.pow(200,tmp.qu.replicants.limit-1)*1e49
-                tmp.qu.replicants.workers=Decimal.min(tmp.qu.replicants.workers,10)
-                if (tmp.qu.replicants.workers.eq(10)) tmp.qu.replicants.workerProgress=0
+                qu_save.replicants.limit=Math.min(qu_save.replicants.limit,10)
+                qu_save.replicants.limitCost=Math.pow(200,qu_save.replicants.limit-1)*1e49
+                qu_save.replicants.workers=Decimal.min(qu_save.replicants.workers,10)
+                if (qu_save.replicants.workers.eq(10)) qu_save.replicants.workerProgress=0
         }
         if (tmp.mod.newGame3PlusVersion < 1.998711) {
-                tmp.qu.quantumFood=0
-                tmp.qu.quantumFoodCost=1e46*Math.pow(5,Math.round(new Decimal(tmp.qu.replicants.workers).toNumber()*3+new Decimal(tmp.qu.replicants.workerProgress).toNumber()))
+                qu_save.quantumFood=0
+                qu_save.quantumFoodCost=1e46*Math.pow(5,Math.round(new Decimal(qu_save.replicants.workers).toNumber()*3+new Decimal(qu_save.replicants.workerProgress).toNumber()))
         }
-        if (player.masterystudies ? tmp.mod.newGame3PlusVersion < 1.999 || (tmp.qu.emperorDimensions ? tmp.qu.emperorDimensions[1] == undefined : false) : false) { 
+        if (player.masterystudies ? tmp.mod.newGame3PlusVersion < 1.999 || (qu_save.emperorDimensions ? qu_save.emperorDimensions[1] == undefined : false) : false) { 
                 var oldLength=player.masterystudies.length
                 var newMS=[]
                 for (var m=0;m<player.masterystudies.length;m++) {
@@ -1038,24 +1038,24 @@ function doNGp3v199tov19995(){
                 }
                 player.masterystudies=newMS
                 if (oldLength > newMS.length) forceToQuantumAndRemove = true
-                tmp.qu.replicants.quantumFoodCost = Decimal.times(tmp.qu.replicants.quantumFoodCost, 2)
-                tmp.qu.replicants.limitDim=1
-                tmp.qu.emperorDimensions = {}
-                tmp.qu.emperorDimensions[1] = {workers: tmp.qu.replicants.workers, progress: tmp.qu.replicants.workerProgress, perm: Math.round(parseFloat(tmp.qu.replicants.workers))}
-                for (d=2;d<9;d++) tmp.qu.emperorDimensions[d] = {workers: 0, progress: 0, perm: 0}
+                qu_save.replicants.quantumFoodCost = Decimal.times(qu_save.replicants.quantumFoodCost, 2)
+                qu_save.replicants.limitDim=1
+                qu_save.emperorDimensions = {}
+                qu_save.emperorDimensions[1] = {workers: qu_save.replicants.workers, progress: qu_save.replicants.workerProgress, perm: Math.round(parseFloat(qu_save.replicants.workers))}
+                for (d=2;d<9;d++) qu_save.emperorDimensions[d] = {workers: 0, progress: 0, perm: 0}
                 player.dontWant = false
-                delete tmp.qu.replicants.workers
-                delete tmp.qu.replicants.workerProgress
+                delete qu_save.replicants.workers
+                delete qu_save.replicants.workerProgress
         }
         if (tmp.mod.newGame3PlusVersion < 1.9995) {
-                if (tmp.qu.emperorDimensions[1].perm === undefined) {
-                        tmp.qu.replicants.quantumFood = 0
-                        tmp.qu.replicants.quantumFoodCost = 1e46
-                        for (d=1;d<9;d++) tmp.qu.emperorDimensions[d] = {workers: 0, progress: 0, perm: 0}
+                if (qu_save.emperorDimensions[1].perm === undefined) {
+                        qu_save.replicants.quantumFood = 0
+                        qu_save.replicants.quantumFoodCost = 1e46
+                        for (d=1;d<9;d++) qu_save.emperorDimensions[d] = {workers: 0, progress: 0, perm: 0}
                 }
                 player.meta.bestOverQuantums = player.meta.bestAntimatter
-                tmp.qu.autobuyer.peakTime = 0
-                tmp.qu.nanofield = {
+                qu_save.autobuyer.peakTime = 0
+                qu_save.nanofield = {
                         charge: 0,
                         energy: 0,
                         antienergy: 0,
@@ -1064,14 +1064,14 @@ function doNGp3v199tov19995(){
                         rewards: 0,
                         producingCharge: false
                 }
-                tmp.qu.reachedInfQK = false
-                tmp.qu.assignAllRatios = {
+                qu_save.reachedInfQK = false
+                qu_save.assignAllRatios = {
                         r: 1,
                         g: 1,
                         b: 1
                 }
-                tmp.qu.notrelative = false
-                tmp.qu.wasted = false
+                qu_save.notrelative = false
+                qu_save.wasted = false
         }
 }
 
@@ -1079,7 +1079,7 @@ function doNGp3v19995tov21(){
         var setTTAfterQuantum = 0
         if (tmp.mod.newGame3PlusVersion < 1.9997) {
                 player.dilation.times = 0
-                tmp.qu.tod = {
+                qu_save.tod = {
                         r: {
                                 quarks: 0,
                                 spin: 0,
@@ -1097,14 +1097,14 @@ function doNGp3v19995tov21(){
                         },
                         upgrades: {}
                 }
-                if (tmp.qu.nanofield.rewards>16) {
+                if (qu_save.nanofield.rewards>16) {
                         var newMS=[]
                         for (var m=0;m<player.masterystudies.length;m++) {
                                 var d=player.masterystudies[m].split("d")
                                 if (d[1]!==undefined) newMS.push(player.masterystudies[m])
                         }
                         player.masterystudies = newMS
-                        tmp.qu.nanofield.rewards = 16
+                        qu_save.nanofield.rewards = 16
                         forceToQuantumAndRemove = true
                         setTTAfterQuantum = 2e94
                 }
@@ -1115,9 +1115,9 @@ function doNGp3v19995tov21(){
                 player.eternityBuyer.slowStop = false
                 player.eternityBuyer.slowStopped = false
                 player.eternityBuyer.ifAD = false
-                tmp.qu.reached = tmp.qu.times > 0
-                tmp.qu.nonMAGoalReached = {}
-                tmp.qu.bigRip = {
+                qu_save.reached = qu_save.times > 0
+                qu_save.nonMAGoalReached = {}
+                qu_save.bigRip = {
                         active: false,
                         conf: true,
                         times: 0,
@@ -1128,7 +1128,7 @@ function doNGp3v19995tov21(){
                         spaceShards: 0,
                         upgrades: []
                 }
-                tmp.qu.breakEternity = {
+                qu_save.breakEternity = {
                         unlocked: false,
                         break: false,
                         eternalMatter: 0,
@@ -1160,7 +1160,7 @@ function doNGp3v19995tov21(){
                 tmp.mod.ghostifyConf = true
         }
         if (tmp.mod.newGamePlusVersion < 2) {
-                if (player.masterystudies!==undefined?!tmp.qu.reached&&!player.ghostify.reached:true) {
+                if (player.masterystudies!==undefined?!qu_save.reached&&!player.ghostify.reached:true) {
                         player.money=Decimal.max(player.money,1e25)
                         player.infinitiedBank=nMx(player.infinitiedBank,1e6)
                         var filter=["timeMult","dimMult","timeMult2","unspentBonus","27Mult","18Mult","36Mult","resetMult","passiveGen","45Mult","resetBoost","galaxyBoost"]
@@ -1209,8 +1209,8 @@ function doNGp3v21tov221(){
         }
         if (tmp.mod.newGame3PlusVersion < 2.21) {
                 alert("Welcome to the NG+3.1 update! You are receiving this message because this save has been made before the update. This update changes and rebalances NG+3 significantly. The opportunity of NG+3L has been expired. Your journey now has been re-experienced.")
-                var oldBRUpg20Bought = tmp.qu.bigRip.upgrades.pop()
-                if (oldBRUpg20Bought != 20) tmp.qu.bigRip.upgrades.push(oldBRUpg20Bought)
+                var oldBRUpg20Bought = qu_save.bigRip.upgrades.pop()
+                if (oldBRUpg20Bought != 20) qu_save.bigRip.upgrades.push(oldBRUpg20Bought)
         }
         if (tmp.ngp3) setupNGP31Versions()
         if (tmp.mod.newGameMinusMinusVersion === undefined && !player.meta) {
@@ -1529,7 +1529,7 @@ function doNGM4v0tov2111(){
                 resetTDs()
         }
         if (tmp.mod.newGame4MinusVersion<2.1) {
-                if ((player.galacticSacrifice.times > 0 || player.infinitied > 0 || player.eternities != 0 || (tmp.qu !== undefined && tmp.qu.times > 0) || (player.ghostify !== undefined && player.ghostify.times > 0)) && !player.challenges.includes("challenge1")) player.challenges.push("challenge1")
+                if ((player.galacticSacrifice.times > 0 || player.infinitied > 0 || player.eternities != 0 || (qu_save !== undefined && qu_save.times > 0) || (player.ghostify !== undefined && player.ghostify.times > 0)) && !player.challenges.includes("challenge1")) player.challenges.push("challenge1")
                 player.autobuyers.push(15)
                 player.challengeTimes.push(600*60*24*31)
         }
@@ -1612,7 +1612,7 @@ function doNGp3Init2(){
 
 	if (!tmp.ngp3) return
 
-	tmp.eds = tmp.qu && tmp.qu.emperorDimensions
+	tmp.eds = qu_save && qu_save.emperorDimensions
 	if (tmp.ngp3) {
 		setupMasteryStudiesHTML()
 		tmp.bl = player.ghostify.bl
@@ -1625,32 +1625,32 @@ function doNGp3Init2(){
 	if (tmp.ngp3) {
 		if (player.eternityBuyer.presets === undefined) player.eternityBuyer.presets = {on: false, autoDil: false, selected: -1, selectNext: 0, left: 1, order: []}
 		if (player.meta.bestOverQuantums === undefined) player.meta.bestOverQuantums = player.meta.bestAntimatter
-		tmp.be=tmp.qu.bigRip.active&&tmp.qu.breakEternity.break
+		tmp.be=qu_save.bigRip.active&&qu_save.breakEternity.break
 		getEl("eggonsCell").style.display = player.ghostify.neutrinos.upgrades.includes(2) ? "none" : ""
 		getEl("workerReplWhat").textContent = player.ghostify.neutrinos.upgrades.includes(2) ? "babies" : "eggons"
 		updateQuantumWorth()
-		if (tmp.qu.autoOptions === undefined) tmp.qu.autoOptions = {}
-		if (tmp.qu["10ofield"] !== undefined) {
-			tmp.qu.nanofield = tmp.qu["10ofield"]
-			delete tmp.qu["10ofield"]
+		if (qu_save.autoOptions === undefined) qu_save.autoOptions = {}
+		if (qu_save["10ofield"] !== undefined) {
+			qu_save.nanofield = qu_save["10ofield"]
+			delete qu_save["10ofield"]
 		}
-		if (tmp.qu.nanofield.powerThreshold === undefined) {
-			tmp.qu.nanofield.powerThreshold = 50
-			tmp.qu.nanofield.producingCharge = false
+		if (qu_save.nanofield.powerThreshold === undefined) {
+			qu_save.nanofield.powerThreshold = 50
+			qu_save.nanofield.producingCharge = false
 		}
-		if (tmp.qu.autobuyer.peakTime === undefined) tmp.qu.autobuyer.peakTime = 0
-		if (tmp.qu.nanofield.rewards >= 18 && tmp.qu.tod.upgrades[1] == undefined && !player.ghostify.reached && !tmp.mod.ngp4V) {
+		if (qu_save.autobuyer.peakTime === undefined) qu_save.autobuyer.peakTime = 0
+		if (qu_save.nanofield.rewards >= 18 && qu_save.tod.upgrades[1] == undefined && !player.ghostify.reached && !tmp.mod.ngp4V) {
 			var newMS = []
 			for (var m = 0; m < player.masterystudies.length; m++) {
 				var d = player.masterystudies[m].split("d")
 				if (d[1] !== undefined) newMS.push(player.masterystudies[m])
 			}
 			player.masterystudies = newMS
-			tmp.qu.nanofield.rewards = 16
+			qu_save.nanofield.rewards = 16
 			forceToQuantumAndRemove = true
 			setTTAfterQuantum = 2e94
 		}
-		if (tmp.qu.bigRip.bestGals == undefined) tmp.qu.bigRip.bestGals = 0
+		if (qu_save.bigRip.bestGals == undefined) qu_save.bigRip.bestGals = 0
 		if (player.ghostify.neutrinos.boosts == undefined|| !player.ghostify.times) player.ghostify.neutrinos.boosts = 0
 		if (player.ghostify.ghostlyPhotons.maxRed == undefined) player.ghostify.ghostlyPhotons.maxRed = 0
 		if (player.ghostify.wzb.unl) giveAchievement("Even Ghostlier than before")
@@ -1685,7 +1685,7 @@ function setConfirmationsDisplay(){
         getEl("eternityconf").style.display = pH.did("eternity") ? "inline-block" : "none"
         getEl("dilationConfirmBtn").style.display = (player.dilation.studies.includes(1) || pH.did("quantum")) ? "inline-block" : "none"
         getEl("quantumConfirmBtn").style.display = pH.did("quantum") ? "inline-block" : "none"
-        getEl("bigRipConfirmBtn").style.display = tmp.ngp3 && tmp.qu.bigRip.times ? "inline-block" : "none"
+        getEl("bigRipConfirmBtn").style.display = tmp.ngp3 && qu_save.bigRip.times ? "inline-block" : "none"
         getEl("ghostifyConfirmBtn").style.display = pH.did("ghostify") ? "inline-block" : "none"
         getEl("leConfirmBtn").style.display = pH.did("ghostify") && player.ghostify.ghostlyPhotons.enpowerments ? "inline-block" : "none"
 
@@ -1698,7 +1698,7 @@ function setConfirmationsDisplay(){
         getEl("dilationConfirmBtn").textContent = "Dilation confirmation: O" + (tmp.mod.dilationConf ? "N" : "FF")
         getEl("exdilationConfirmBtn").textContent = "Reverse dilation confirmation: O" + (player.options.exdilationconfirm ? "N" : "FF")
         getEl("quantumConfirmBtn").textContent = "Quantum confirmation: O" + (tmp.mod.quantumConf ? "N" : "FF")
-        getEl("bigRipConfirmBtn").textContent = "Big Rip confirmation: O" + (tmp.ngp3 && tmp.qu.bigRip.conf ? "N" : "FF")
+        getEl("bigRipConfirmBtn").textContent = "Big Rip confirmation: O" + (tmp.ngp3 && qu_save.bigRip.conf ? "N" : "FF")
         getEl("ghostifyConfirmBtn").textContent = "Ghostify confirmation: O" + (tmp.mod.ghostifyConf ? "N" : "FF")
         getEl("leConfirmBtn").textContent = "Light Empowerment confirmation: O" + (tmp.mod.leNoConf ? "FF" : "N")
 }
@@ -1917,14 +1917,14 @@ function updateNGp3DisplayStuff(){
 	getEl('rebuyupgauto').textContent="Rebuyable upgrade auto: O"+(player.autoEterOptions.rebuyupg?"N":"FF")
 	getEl('dilUpgsauto').textContent="Auto-buy dilation upgrades: O"+(player.autoEterOptions.dilUpgs?"N":"FF")
 	getEl('metaboostauto').textContent="Meta-boost auto: O"+(player.autoEterOptions.metaboost?"N":"FF")
-	getEl('priorityquantum').value=formatValue("Scientific", new Decimal(tmp.qu.autobuyer.limit), 2, 0)
-	getEl("produceQuarkCharge").innerHTML="S" + (tmp.qu.nanofield.producingCharge ? "top" : "tart") + " production of preon charge." + (tmp.qu.nanofield.producingCharge ? "" : "<br>(You will not get preons when you do this.)")
-	getEl("ratio_r").value = tmp.qu.assignAllRatios.r
-	getEl("ratio_g").value = tmp.qu.assignAllRatios.g
-	getEl("ratio_b").value = tmp.qu.assignAllRatios.b
-	getEl('autoAssign').textContent="Auto: O"+(tmp.qu.autoOptions.assignQK?"N":"FF")
-	getEl('autoAssignRotate').textContent="Rotation: "+(tmp.qu.autoOptions.assignQKRotate>1?"Left":tmp.qu.autoOptions.assignQKRotate?"Right":"None")
-	getEl('autoReset').textContent="Auto: O"+(tmp.qu.autoOptions.replicantiReset?"N":"FF")
+	getEl('priorityquantum').value=formatValue("Scientific", new Decimal(qu_save.autobuyer.limit), 2, 0)
+	getEl("produceQuarkCharge").innerHTML="S" + (qu_save.nanofield.producingCharge ? "top" : "tart") + " production of preon charge." + (qu_save.nanofield.producingCharge ? "" : "<br>(You will not get preons when you do this.)")
+	getEl("ratio_r").value = qu_save.assignAllRatios.r
+	getEl("ratio_g").value = qu_save.assignAllRatios.g
+	getEl("ratio_b").value = qu_save.assignAllRatios.b
+	getEl('autoAssign').textContent="Auto: O"+(qu_save.autoOptions.assignQK?"N":"FF")
+	getEl('autoAssignRotate').textContent="Rotation: "+(qu_save.autoOptions.assignQKRotate>1?"Left":qu_save.autoOptions.assignQKRotate?"Right":"None")
+	getEl('autoReset').textContent="Auto: O"+(qu_save.autoOptions.replicantiReset?"N":"FF")
 	getEl("nanofieldtabbtn").style.display=player.masterystudies.includes("d12")?"":"none"
 	getEl("ghostifyAnimBtn").textContent="Ghostify: O"+(player.options.animations.ghostify?"N":"FF")
 	getEl("gphUnl").textContent="To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
@@ -1960,8 +1960,8 @@ function setSomeQuantumAutomationDisplay(){
         }
         getEl('replicantibulkmodetoggle').textContent="Mode: "+(player.galaxyMaxBulk?"Max":"Singles")
         getEl('versionDesc').style.display = tmp.ngp3 ? "" : "none"
-        getEl('toggleautoquantummode').style.display=(player.masterystudies?tmp.qu.reachedInfQK||hasAch("ng3p25"):false)?"":"none"
-        var autoAssignUnl = tmp.ngp3 && (pH.did("ghostify") || tmp.qu.reachedInfQK)
+        getEl('toggleautoquantummode').style.display=(player.masterystudies?qu_save.reachedInfQK||hasAch("ng3p25"):false)?"":"none"
+        var autoAssignUnl = tmp.ngp3 && (pH.did("ghostify") || qu_save.reachedInfQK)
         getEl('autoAssign').style.display = autoAssignUnl ? "" : "none"
         getEl('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
         getEl('autoReset').style.display=hasAch("ng3p47")?"":"none"
@@ -2044,9 +2044,9 @@ function updateNGModeMessage(){
 
 
 function onLoad(noOffline) {
-	tmp.qu = player.quantum
+	qu_save = player.quantum
 	tmp.mod = player.aarexModifications
-	if (tmp.qu == undefined || tmp.mod.newGamePlusPlusVersion == undefined) {
+	if (qu_save == undefined || tmp.mod.newGamePlusPlusVersion == undefined) {
 		tmp.quActive = false
 		tmp.quUnl = false
 		qMs.tmp.amt = 0
@@ -2238,22 +2238,22 @@ function setupNGP31Versions() {
 	else {
 		if (player.ghostify.gds.gdBoosts === undefined) player.ghostify.gds = GDs.setup()
 		if (!hasAch("ng3p111") && tmp.ngpX < 5) delete player.pl
-		if (!tmp.qu.pos) tmp.qu.pos = pos.setup()
+		if (!qu_save.pos) qu_save.pos = pos.setup()
 	}
 	tmp.mod.newGame3PlusVersion = 3
 
 	//NG+3R Builds
 	if (tmp.mod.ngp3Build === undefined) tmp.mod.ngp3Build = 0
 	if (tmp.mod.ngp3Build < 20210517) {
-		delete tmp.qu.challenge
-		delete tmp.qu.challenges
-		delete tmp.qu.challengeRecords
-		delete tmp.qu.pairedChallenges
-		delete tmp.qu.qcDataMods
-		delete tmp.qu.qcDataNoDil
-		delete tmp.qu.nonMAGoalReached
+		delete qu_save.challenge
+		delete qu_save.challenges
+		delete qu_save.challengeRecords
+		delete qu_save.pairedChallenges
+		delete qu_save.qcDataMods
+		delete qu_save.qcDataNoDil
+		delete qu_save.nonMAGoalReached
 	}
-	if (tmp.mod.ngp3Build < 20210519) tmp.qu.quarkEnergy = tmp.qu.bestEnergy || 0
+	if (tmp.mod.ngp3Build < 20210519) qu_save.quarkEnergy = qu_save.bestEnergy || 0
 	if (tmp.mod.ngp3Build < 20210529) QCs_save.qc5 = 0
 	if (tmp.mod.ngp3Build < 20210614 && player.masterystudies.includes("d7")) {
 		alert("Your mastery studies has been respecced due to the rework of Positronic-era studies.")
@@ -2674,13 +2674,13 @@ function conToDeciLateEter(){
                 player.meta[i].amount = new Decimal(player.meta[i].amount);
                 player.meta[i].cost = new Decimal(player.meta[i].cost);
         }
-        if (tmp.qu) {
-                if (tmp.qu.last10) for (i=0;i<10;i++) tmp.qu.last10[i][1] = new Decimal(tmp.qu.last10[i][1])
-                tmp.qu.quarks = new Decimal(tmp.qu.quarks);
-                if (!tmp.ngp3) tmp.qu.gluons = (tmp.qu.gluons ? tmp.qu.gluons.rg !== null : true) ? new Decimal(0) : new Decimal(tmp.qu.gluons);
-                tmp.qu.neutronstar.quarks = new Decimal(tmp.qu.neutronstar.quarks);
-                tmp.qu.neutronstar.metaAntimatter = new Decimal(tmp.qu.neutronstar.metaAntimatter);
-                tmp.qu.neutronstar.dilatedTime = new Decimal(tmp.qu.neutronstar.dilatedTime);
+        if (qu_save) {
+                if (qu_save.last10) for (i=0;i<10;i++) qu_save.last10[i][1] = new Decimal(qu_save.last10[i][1])
+                qu_save.quarks = new Decimal(qu_save.quarks);
+                if (!tmp.ngp3) qu_save.gluons = (qu_save.gluons ? qu_save.gluons.rg !== null : true) ? new Decimal(0) : new Decimal(qu_save.gluons);
+                qu_save.neutronstar.quarks = new Decimal(qu_save.neutronstar.quarks);
+                qu_save.neutronstar.metaAntimatter = new Decimal(qu_save.neutronstar.metaAntimatter);
+                qu_save.neutronstar.dilatedTime = new Decimal(qu_save.neutronstar.dilatedTime);
         }
         }
         player.timeShards = new Decimal(player.timeShards)
@@ -2738,55 +2738,55 @@ function conToDeciMS(){
 	if (player.masterystudies) {
 		player.dbPower = new Decimal(player.dbPower)
 		player.meta.bestOverQuantums = Decimal.max(player.meta.bestOverQuantums, player.meta.bestAntimatter)
-		if (tmp.qu && tmp.qu.usedQuarks) {
-			tmp.qu.usedQuarks.r = new Decimal(tmp.qu.usedQuarks.r)
-			tmp.qu.usedQuarks.g = new Decimal(tmp.qu.usedQuarks.g)
-			tmp.qu.usedQuarks.b = new Decimal(tmp.qu.usedQuarks.b)
-			if (typeof(tmp.qu.colorPowers.r) !== "number") {
-				tmp.qu.colorPowers.r = 0
-				tmp.qu.colorPowers.g = 0
-				tmp.qu.colorPowers.b = 0
+		if (qu_save && qu_save.usedQuarks) {
+			qu_save.usedQuarks.r = new Decimal(qu_save.usedQuarks.r)
+			qu_save.usedQuarks.g = new Decimal(qu_save.usedQuarks.g)
+			qu_save.usedQuarks.b = new Decimal(qu_save.usedQuarks.b)
+			if (typeof(qu_save.colorPowers.r) !== "number") {
+				qu_save.colorPowers.r = 0
+				qu_save.colorPowers.g = 0
+				qu_save.colorPowers.b = 0
 			}
 		}
-		if (tmp.qu ? tmp.mod.newGame3PlusVersion > 1.5 : false) {
-			tmp.qu.gluons.rg = new Decimal(tmp.qu.gluons.rg)
-			tmp.qu.gluons.gb = new Decimal(tmp.qu.gluons.gb)
-			tmp.qu.gluons.br = new Decimal(tmp.qu.gluons.br)
+		if (qu_save ? tmp.mod.newGame3PlusVersion > 1.5 : false) {
+			qu_save.gluons.rg = new Decimal(qu_save.gluons.rg)
+			qu_save.gluons.gb = new Decimal(qu_save.gluons.gb)
+			qu_save.gluons.br = new Decimal(qu_save.gluons.br)
 		}
-		if (tmp.qu ? tmp.qu.autobuyer : false) tmp.qu.autobuyer.limit = new Decimal(tmp.qu.autobuyer.limit)
+		if (qu_save ? qu_save.autobuyer : false) qu_save.autobuyer.limit = new Decimal(qu_save.autobuyer.limit)
 		if (player.dilation.bestTP == undefined) player.dilation.bestTP = hasAch("ng3p18") || hasAch("ng3p37") ? player.dilation.tachyonParticles : 0
 		player.dilation.bestTP = new Decimal(player.dilation.bestTP)
-		if (tmp.qu ? tmp.qu.electrons : false) delete tmp.qu.electrons //RIP positrons
-		if (tmp.qu ? tmp.qu.replicants : false) {
-			tmp.qu.replicants.amount = new Decimal(tmp.qu.replicants.amount)
-			tmp.qu.replicants.requirement = new Decimal(tmp.qu.replicants.requirement)
-			tmp.qu.replicants.quarks = new Decimal(tmp.qu.replicants.quarks)
-			tmp.qu.replicants.quantumFoodCost = new Decimal(tmp.qu.replicants.quantumFoodCost)
-			tmp.qu.replicants.limitCost = new Decimal(tmp.qu.replicants.limitCost)
-			tmp.qu.replicants.eggonProgress = new Decimal(tmp.qu.replicants.eggonProgress)
-			tmp.qu.replicants.eggons = new Decimal(tmp.qu.replicants.eggons)
-			tmp.qu.replicants.hatchSpeedCost = new Decimal(tmp.qu.replicants.hatchSpeedCost)
-			tmp.qu.replicants.babyProgress = new Decimal(tmp.qu.replicants.babyProgress)
-			tmp.qu.replicants.babies = new Decimal(tmp.qu.replicants.babies)
-			tmp.qu.replicants.ageProgress = new Decimal(tmp.qu.replicants.ageProgress)
+		if (qu_save ? qu_save.electrons : false) delete qu_save.electrons //RIP positrons
+		if (qu_save ? qu_save.replicants : false) {
+			qu_save.replicants.amount = new Decimal(qu_save.replicants.amount)
+			qu_save.replicants.requirement = new Decimal(qu_save.replicants.requirement)
+			qu_save.replicants.quarks = new Decimal(qu_save.replicants.quarks)
+			qu_save.replicants.quantumFoodCost = new Decimal(qu_save.replicants.quantumFoodCost)
+			qu_save.replicants.limitCost = new Decimal(qu_save.replicants.limitCost)
+			qu_save.replicants.eggonProgress = new Decimal(qu_save.replicants.eggonProgress)
+			qu_save.replicants.eggons = new Decimal(qu_save.replicants.eggons)
+			qu_save.replicants.hatchSpeedCost = new Decimal(qu_save.replicants.hatchSpeedCost)
+			qu_save.replicants.babyProgress = new Decimal(qu_save.replicants.babyProgress)
+			qu_save.replicants.babies = new Decimal(qu_save.replicants.babies)
+			qu_save.replicants.ageProgress = new Decimal(qu_save.replicants.ageProgress)
 		}
-		if (tmp.qu ? (tmp.qu.emperorDimensions ? tmp.qu.emperorDimensions[1] : false) : false) for (d = 1; d <= 8 ; d++) {
-			tmp.qu.emperorDimensions[d].workers = Decimal.round(tmp.qu.emperorDimensions[d].workers)
-			tmp.qu.emperorDimensions[d].progress = Decimal.round(tmp.qu.emperorDimensions[d].progress)
+		if (qu_save ? (qu_save.emperorDimensions ? qu_save.emperorDimensions[1] : false) : false) for (d = 1; d <= 8 ; d++) {
+			qu_save.emperorDimensions[d].workers = Decimal.round(qu_save.emperorDimensions[d].workers)
+			qu_save.emperorDimensions[d].progress = Decimal.round(qu_save.emperorDimensions[d].progress)
 		}
-		if (tmp.qu && tmp.qu.nanofield) {
-			tmp.qu.nanofield.charge = new Decimal(tmp.qu.nanofield.charge)
-			tmp.qu.nanofield.energy = new Decimal(tmp.qu.nanofield.energy)
-			tmp.qu.nanofield.antienergy = new Decimal(tmp.qu.nanofield.antienergy)
-			tmp.qu.nanofield.powerThreshold = new Decimal(tmp.qu.nanofield.powerThreshold)
+		if (qu_save && qu_save.nanofield) {
+			qu_save.nanofield.charge = new Decimal(qu_save.nanofield.charge)
+			qu_save.nanofield.energy = new Decimal(qu_save.nanofield.energy)
+			qu_save.nanofield.antienergy = new Decimal(qu_save.nanofield.antienergy)
+			qu_save.nanofield.powerThreshold = new Decimal(qu_save.nanofield.powerThreshold)
 		}
-		if (tmp.qu && tmp.qu.tod) {
-			tmp.qu.tod.r.quarks = new Decimal(tmp.qu.tod.r.quarks)
-			tmp.qu.tod.r.spin = new Decimal(tmp.qu.tod.r.spin)
-			tmp.qu.tod.g.quarks = new Decimal(tmp.qu.tod.g.quarks)
-			tmp.qu.tod.g.spin = new Decimal(tmp.qu.tod.g.spin)
-			tmp.qu.tod.b.quarks = new Decimal(tmp.qu.tod.b.quarks)
-			tmp.qu.tod.b.spin = new Decimal(tmp.qu.tod.b.spin)
+		if (qu_save && qu_save.tod) {
+			qu_save.tod.r.quarks = new Decimal(qu_save.tod.r.quarks)
+			qu_save.tod.r.spin = new Decimal(qu_save.tod.r.spin)
+			qu_save.tod.g.quarks = new Decimal(qu_save.tod.g.quarks)
+			qu_save.tod.g.spin = new Decimal(qu_save.tod.g.spin)
+			qu_save.tod.b.quarks = new Decimal(qu_save.tod.b.quarks)
+			qu_save.tod.b.spin = new Decimal(qu_save.tod.b.spin)
 		}
 	}
 	pos.compile()
@@ -2797,10 +2797,10 @@ function conToDeciGhostify(){
 	if (player.ghostify) {
 		player.dilation.bestTPOverGhostifies = Decimal.max(player.dilation.bestTPOverGhostifies, player.dilation.bestTP)
 		player.meta.bestOverGhostifies = Decimal.max(player.meta.bestOverGhostifies, player.meta.bestOverQuantums)
-		tmp.qu.bigRip.bestThisRun = new Decimal(tmp.qu.bigRip.bestThisRun)
-		tmp.qu.bigRip.totalAntimatter = new Decimal(tmp.qu.bigRip.totalAntimatter)
-		tmp.qu.bigRip.spaceShards = new Decimal(tmp.qu.bigRip.spaceShards)
-		tmp.qu.breakEternity.eternalMatter = new Decimal(tmp.qu.breakEternity.eternalMatter)
+		qu_save.bigRip.bestThisRun = new Decimal(qu_save.bigRip.bestThisRun)
+		qu_save.bigRip.totalAntimatter = new Decimal(qu_save.bigRip.totalAntimatter)
+		qu_save.bigRip.spaceShards = new Decimal(qu_save.bigRip.spaceShards)
+		qu_save.breakEternity.eternalMatter = new Decimal(qu_save.breakEternity.eternalMatter)
 		player.ghostify.times = nP(player.ghostify.times)
 		player.ghostify.ghostParticles = new Decimal(player.ghostify.ghostParticles)
 		for (var r=0;r<10;r++) player.ghostify.last10[r][1] = new Decimal(player.ghostify.last10[r][1])
@@ -2882,8 +2882,8 @@ function loadAutoBuyerSettings() {
         }
         if (player.masterystudies) {
                 getEl("prioritydil").value = player.eternityBuyer.dilationPerAmount
-                if (tmp.qu) {
-					let data = tmp.qu.autobuyer
+                if (qu_save) {
+					let data = qu_save.autobuyer
 					if (data) {
                         if (isNaN(break_infinity_js ? data.limit : data.limit.l)) data.limit = new Decimal(1)
                         getEl("priorityquantum").value = data.mode == "amount" || data.mode == "relative" ? formatValue("Scientific", data.limit, 2, 0) : data.limit

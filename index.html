@@ -1571,7 +1571,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 12? - Post-Build 4)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 12? - Post-Build 5)</p>
 			</span>
 			<div class="footer bottom"></div>
 		</div>
@@ -3778,7 +3778,17 @@
 			<br>
 			<table class="table" style="margin: 0 auto">
 				<tr>
-					<td></td>
+					<td id='dilationmode'><div class="autoBuyerDiv" style="display:block">
+						<div>Automatic Dilation</div>
+						Dilate for every X eternities:
+						<input type="text" onchange="updatePriorities()" id="prioritydil"></input>
+						<br>
+						Always dilate on TP upgrade: (not implemented)
+						<input type="checkbox" onchange="updatePriorities()" id="autoalwaysdil"></input>
+						<br><br>
+						<span style="font-size: 80%">Is active</span>
+						<input type="checkbox" onchange="updateAutobuyers()"  id="dilatedeternityison"></input>
+					</div></td>
 					<td id="autoBuyerEter"><div class="autoBuyerDiv" style="display:block">
 						<div>Automatic Eternity</div>
 						<div><span id='eterlimittext'>Amount of EP to wait until reset:</span>
@@ -3786,12 +3796,6 @@
 						<br>
 						<span style="font-size: 80%">Is active</span>
 						<input type="checkbox" onchange="updateAutobuyers()"  id="eternityison"></input>
-						<div id='dilationmode'>
-							<div>Dilate for every X eternities:
-							<input type="text" onchange="updatePriorities()" id="prioritydil"></input></div>
-							<span style="font-size: 80%">Is active</span>
-							<input type="checkbox" onchange="updateAutobuyers()"  id="dilatedeternityison"></input>
-						</div>
 					</div></td>
 					<td id="autoBuyerQuantum"><div class="autoBuyerDiv" style="display:block">
 						<div>Automatic Quantum</div>
@@ -4857,21 +4861,33 @@
 					<b id="enB_pos1_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos1_type"></span>
+					<br><br>
+					<span id="enB_pos1_full"></span>
 					<br>
+					<button id="enB_pos1_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<br><br>
 					Replicantis increase the numerator of quark efficiency by <span id="enB_pos1_eff" style="font-size:35px"></span>.
 				</td>
 				<td id="enB_pos2">
 					<b id="enB_pos2_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos2_type"></span>
+					<br><br>
+					<span id="enB_pos2_full"></span>
 					<br>
+					<button id="enB_pos2_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<br><br>
 					Raise the multiplier per ten normal Dimensions by <span id="enB_pos2_eff" style="font-size:35px"></span>.
 				</td>
 				<td id="enB_pos3">
 					<b id="enB_pos3_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos3_type"></span>
+					<br><br>
+					<span id="enB_pos3_full"></span>
 					<br>
+					<button id="enB_pos3_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<br><br>
 					Quantum requirement is reduced to <span id="enB_pos3_eff" style="font-size:35px"></span>. (<span id="enB_pos3_exp" style="font-size:25px"></span>)
 				</td>
 			<tr>
@@ -4880,21 +4896,33 @@
 					<b id="enB_pos4_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos4_type"></span>
+					<br><br>
+					<span id="enB_pos4_full"></span>
 					<br>
+					<button id="enB_pos4_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<br><br>
 					<span id="enB_pos4_eff" style="font-size: 25px">Unlock Meta-Accelerator.</span><br>(See Meta Dimensions tab)
 				</td>
 				<td id="enB_pos5">
 					<b id="enB_pos5_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos5_type"></span>
+					<br><br>
+					<span id="enB_pos5_full"></span>
 					<br>
+					<button id="enB_pos5_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<br><br>
 					Raise the Infinite Time reward by <span id="enB_pos5_eff" style="font-size:24px"></span>.
 				</td>
 				<td id="enB_pos6">
 					<b id="enB_pos6_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos6_type"></span>
+					<br><br>
+					<span id="enB_pos6_full"></span>
 					<br>
+					<button id="enB_pos6_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<br><br>
 					Reduce the tickspeed cost multiplier increase to <span id="enB_pos6_eff" style="font-size:24px"></span>.
 				</td>
 			<tr>
@@ -4903,21 +4931,33 @@
 					<b id="enB_pos7_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos7_type"></span>
+					<br><br>
+					<span id="enB_pos7_full"></span>
 					<br>
+					<button id="enB_pos7_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<br><br>
 					Add the exponent of EC14 by <span id="enB_pos7_eff" style="font-size:24px"></span>, but also divide the exponent.
 				</td>
 				<td id="enB_pos8">
 					<b id="enB_pos8_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos8_type"></span>
+					<br><br>
+					<span id="enB_pos8_full"></span>
 					<br>
+					<button id="enB_pos8_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<br><br>
 					Meta Accelerator slowdown starts <span id="enB_pos8_eff" style="font-size:24px"></span> later.
 				</td>
 				<td id="enB_pos9">
 					<b id="enB_pos9_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_pos9_type"></span>
+					<br><br>
+					<span id="enB_pos9_full"></span>
 					<br>
+					<button id="enB_pos9_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<br><br>
 					Infinitied stat boosts itself by <span id="enB_pos9_eff" style="font-size:24px"></span> to effect.
 				</td>
 			</tr>
@@ -5767,6 +5807,7 @@
 			<button id="hideCompletedAchs" onclick="toggleCompletedAchs()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="hideSecretAchs" onclick="toggleSecretAchs()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="hideProductionTab" onclick="toggleProductionTab()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
+			<button id="hideFPS" onclick="setFPS(true)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 		</div>
 	</div>
 	<div class="popup optionmenu" id="layervisibilitymenu">
@@ -5884,6 +5925,7 @@
 			<div id="plAniTier">Tier 1 -> 2</div>
 		</div>
 	</div>
+	<div id="fps"></div>
 
 <script type="text/javascript" src="javascripts/autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/break_infinity.min.js"></script>

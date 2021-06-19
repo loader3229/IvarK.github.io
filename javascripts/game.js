@@ -841,7 +841,7 @@ function doNGPlusTwoNewPlayer(){
 		upgrades: []
 	}
 	tmp.mod.quantumConf = true
-	tmp.qu = player.quantum
+	qu_save = player.quantum
 }
 
 function doNGMinusTwoNewPlayer(){
@@ -1037,13 +1037,13 @@ function doNGPlusThreeNewPlayer(){
 	player.dbPower = 1
 	player.dilation.times = 0
 	player.masterystudies = []
-	tmp.qu.reached = false
+	qu_save.reached = false
 	player.options.animations.quarks = true
 	player.meta.bestOverQuantums = 0
-	tmp.qu.usedQuarks = {r: 0, g: 0, b: 0}
-	tmp.qu.colorPowers = {r: 0, g: 0, b: 0}
-	tmp.qu.assignAllRatios = {r: 1, g: 1, b: 1}
-	tmp.qu.gluons = {rg: 0, gb: 0, br: 0}
+	qu_save.usedQuarks = {r: 0, g: 0, b: 0}
+	qu_save.colorPowers = {r: 0, g: 0, b: 0}
+	qu_save.assignAllRatios = {r: 1, g: 1, b: 1}
+	qu_save.gluons = {rg: 0, gb: 0, br: 0}
 	player.eternityBuyer.dilationMode = false
 	player.eternityBuyer.statBeforeDilation = 0
 	player.eternityBuyer.dilationPerAmount = 10
@@ -1053,28 +1053,28 @@ function doNGPlusThreeNewPlayer(){
 	player.eternityBuyer.slowStopped = false
 	player.eternityBuyer.ifAD = false
 	player.eternityBuyer.presets = {on: false, autoDil: false, selected: -1, selectNext: 0, left: 1, order: []}
-	tmp.qu.autobuyer = {enabled: false, limit: 1, mode: "amount", peakTime: 0}
-	tmp.qu.disabledRewards = {}
-	tmp.qu.metaAutobuyerWait = 0
-	tmp.qu.metaAutobuyerSlowWait = 0
-	tmp.qu.multPower = {rg : 0, gb : 0, br : 0, total : 0}
+	qu_save.autobuyer = {enabled: false, limit: 1, mode: "amount", peakTime: 0}
+	qu_save.disabledRewards = {}
+	qu_save.metaAutobuyerWait = 0
+	qu_save.metaAutobuyerSlowWait = 0
+	qu_save.multPower = {rg : 0, gb : 0, br : 0, total : 0}
 	player.eternitiesBank = 0
 	player.dilation.bestTP = 0
 	player.old = true
-	tmp.qu.autoOptions = {}
-	tmp.qu.qc = QCs.setup()
-	tmp.qu.replicants = getBrandNewReplicantsData()
-	tmp.qu.emperorDimensions = {}
-	for (d = 1; d < 9; d++) tmp.qu.emperorDimensions[d] = {workers: 0, progress: 0, perm: 0}
+	qu_save.autoOptions = {}
+	qu_save.qc = QCs.setup()
+	qu_save.replicants = getBrandNewReplicantsData()
+	qu_save.emperorDimensions = {}
+	for (d = 1; d < 9; d++) qu_save.emperorDimensions[d] = {workers: 0, progress: 0, perm: 0}
 	player.dontWant = false
-	tmp.qu.nanofield = getBrandNewNanofieldData()
-	tmp.qu.autoAssign = false
-	tmp.qu.reachedInfQK = false
-	tmp.qu.notrelative = false
-	tmp.qu.wasted = false
-	tmp.qu.tod = getBrandNewTodData()
-	tmp.qu.bigRip = getBrandNewBigRipData() 
-	tmp.qu.breakEternity = getBrandNewBreakEternityData()
+	qu_save.nanofield = getBrandNewNanofieldData()
+	qu_save.autoAssign = false
+	qu_save.reachedInfQK = false
+	qu_save.notrelative = false
+	qu_save.wasted = false
+	qu_save.tod = getBrandNewTodData()
+	qu_save.bigRip = getBrandNewBigRipData() 
+	qu_save.breakEternity = getBrandNewBreakEternityData()
 	player.dilation.bestTPOverGhostifies = 0
 	player.meta.bestOverGhostifies = 0
 	player.ghostify = getBrandNewGhostifyData()
@@ -2271,7 +2271,7 @@ function gainedEternityPoints() {
 	if (hasGalUpg(51)) ret = ret.times(galMults.u51())
 	if (tmp.ngp3) {
 		if (player.quantum.bigRip.active) {
-			if (isBigRipUpgradeActive(5)) ret = ret.times(tmp.qu.bigRip.spaceShards.max(1))
+			if (isBigRipUpgradeActive(5)) ret = ret.times(qu_save.bigRip.spaceShards.max(1))
 			if (isBigRipUpgradeActive(8)) ret = ret.times(tmp.bru[8])
 		}
 		if (tmp.be) ret = ret.times(getBreakUpgMult(7))
@@ -2947,7 +2947,7 @@ function updateAutobuyers() {
 	player.eternityBuyer.dilationPerAmount = Math.max(parseInt(getEl("prioritydil").value), 1)
 	player.eternityBuyer.statBeforeDilation = Math.min(player.eternityBuyer.statBeforeDilation, player.eternityBuyer.dilationPerAmount)
 
-	if (tmp.qu && tmp.qu.autobuyer) tmp.qu.autobuyer.enabled = getEl("quantumison").checked
+	if (qu_save && qu_save.autobuyer) qu_save.autobuyer.enabled = getEl("quantumison").checked
 	priorityOrder()
 }
 
@@ -3158,10 +3158,10 @@ function updatePriorities() {
 		}
 	
 		const quantumValue = fromValue(getEl("priorityquantum").value)
-		if (!isNaN(break_infinity_js ? quantumValue : quantumValue.l) && tmp.qu.autobuyer) tmp.qu.autobuyer.limit = quantumValue
+		if (!isNaN(break_infinity_js ? quantumValue : quantumValue.l) && qu_save.autobuyer) qu_save.autobuyer.limit = quantumValue
 
 		const autoDisableQuantum = parseFloat(getEl("priorityAutoDisableQuantum").value)
-		if (autoDisableQuantum == Math.round(autoDisableQuantum) && autoDisableQuantum >= 0) tmp.qu.autobuyer.autoDisable = autoDisableQuantum
+		if (autoDisableQuantum == Math.round(autoDisableQuantum) && autoDisableQuantum >= 0) qu_save.autobuyer.autoDisable = autoDisableQuantum
 	}
 	priorityOrder()
 }
@@ -3178,7 +3178,7 @@ function updateCheckBoxes() {
 	getEl("eternityison").checked = player.eternityBuyer.isOn
 
 	getEl("dilatedeternityison").checked = player.eternityBuyer.dilationMode
-	if (tmp.qu && tmp.qu.autobuyer) getEl("quantumison").checked = tmp.qu.autobuyer.enabled
+	if (qu_save && qu_save.autobuyer) getEl("quantumison").checked = qu_save.autobuyer.enabled
 }
 
 function updateHotkeys() {
@@ -3317,8 +3317,8 @@ function eternity(force, auto, forceRespec, dilated) {
 	if (player.dilation.active) array = [player.thisEternity, getTPGain().sub(player.dilation.totalTachyonParticles).max(0), "d2"]
 	else if (player.currentEternityChall != "") array.push(player.eternityChallUnlocked)
 	else if (tmp.be) {
-		tmp.qu.breakEternity.eternalMatter = tmp.qu.breakEternity.eternalMatter.add(getEMGain())
-		if (player.ghostify.milestones < 15) tmp.qu.breakEternity.eternalMatter = tmp.qu.breakEternity.eternalMatter.round()
+		qu_save.breakEternity.eternalMatter = qu_save.breakEternity.eternalMatter.add(getEMGain())
+		if (player.ghostify.milestones < 15) qu_save.breakEternity.eternalMatter = qu_save.breakEternity.eternalMatter.round()
 		array = [player.thisEternity, getEMGain(), "b"]
 		updateBreakEternity()
 	}
@@ -3455,7 +3455,7 @@ function challengesCompletedOnEternity() {
 function gainEternitiedStat() {
 	let ret = 1
 	if (pH.did("ghostify")) {
-		if (tmp.quActive && hasNU(9)) ret = nM(ret, tmp.qu.bigRip.spaceShards.max(1).pow(.1))
+		if (tmp.quActive && hasNU(9)) ret = nM(ret, qu_save.bigRip.spaceShards.max(1).pow(.1))
 	}
 	if (hasTS(34) && tmp.ngC) ret = nM(ret, 10)
 	if (hasTS(35) && tmp.ngC) ret = nM(ret, tsMults[35]())
@@ -3681,7 +3681,7 @@ function inEasierMode() {
 }
 
 function doBreakEternityUnlockStuff(){
-	tmp.qu.breakEternity.unlocked = true
+	qu_save.breakEternity.unlocked = true
 	$.notify("Congratulations! You have unlocked Break Eternity!", "success")
 	updateBreakEternity()
 }
@@ -3701,23 +3701,23 @@ function doGhostifyUnlockStuff(){
 }
 
 function doQuantumUnlockStuff(){
-	tmp.qu.reached = true
+	qu_save.reached = true
 	if (getEl("welcome").style.display != "flex") getEl("welcome").style.display = "flex"
 	else tmp.mod.popUpId = ""
 	getEl("welcomeMessage").innerHTML = "Congratulations! You reached " + shorten(getQuantumReq()) + " MA and completed EC14 for the first time! This allows you to go Quantum (the 5th layer), giving you a quark in exchange for everything up to this point, which can be used to get more powerful upgrades. This allows you to get gigantic numbers!"
 }
 
 function doNGP3UnlockStuff(){
-	if (!tmp.qu.reached && isQuantumReached()) doQuantumUnlockStuff()
+	if (!qu_save.reached && isQuantumReached()) doQuantumUnlockStuff()
 
 	var inEasierModeCheck = !inEasierMode()
 	if (player.masterystudies && (hasMTS("d14")||hasAch("ng3p51")) && !metaSave.ngp4 && !inEasierModeCheck) doNGP4UnlockStuff()
-	if (player.eternityPoints.gte("1e1200") && tmp.qu.bigRip.active && !tmp.qu.breakEternity.unlocked) doBreakEternityUnlockStuff()
+	if (player.eternityPoints.gte("1e1200") && qu_save.bigRip.active && !qu_save.breakEternity.unlocked) doBreakEternityUnlockStuff()
 	if (pl.did()) {
 		pl.unlCheck()
 	} else if (tmp.quActive) {
-		if (!player.ghostify.reached && tmp.qu.bigRip.active && tmp.qu.bigRip.bestThisRun.gte(Decimal.pow(10, QCs.getGoalMA(undefined, true)))) doGhostifyUnlockStuff()
-		if (!player.ghostify.ghostlyPhotons.unl && tmp.qu.bigRip.active && tmp.qu.bigRip.bestThisRun.gte(Decimal.pow(10, 6e9))) doPhotonsUnlockStuff()
+		if (!player.ghostify.reached && qu_save.bigRip.active && qu_save.bigRip.bestThisRun.gte(Decimal.pow(10, QCs.getGoalMA(undefined, true)))) doGhostifyUnlockStuff()
+		if (!player.ghostify.ghostlyPhotons.unl && qu_save.bigRip.active && qu_save.bigRip.bestThisRun.gte(Decimal.pow(10, 6e9))) doPhotonsUnlockStuff()
 		if (!player.ghostify.wzb.unl && canUnlockBosonicLab()) doBosonsUnlockStuff()
 		unlockHiggs()
 		GDs.unl()
@@ -3731,7 +3731,7 @@ function updateResetTierButtons(){
 		getEl("GHPAmount").textContent = shortenDimensions(player.ghostify.ghostParticles)
 		var showQuantumed = player.ghostify.times > 0 && player.ghostify.milestones < 16
 		getEl("quantumedBM").style.display = showQuantumed ? "" : "none"
-		if (showQuantumed) getEl("quantumedBMAmount").textContent = getFullExpansion(tmp.qu.times)
+		if (showQuantumed) getEl("quantumedBMAmount").textContent = getFullExpansion(qu_save.times)
 	}
 }
 
@@ -3760,7 +3760,7 @@ function doPerSecondNGP3Stuff(){
 	doNGP3UnlockStuff()
 	notifyGhostifyMilestones()
 	ghostifyAutomationUpdatingPerSecond()
-	if (tmp.qu.autoOptions.assignQK && player.ghostify.milestones >= 8) assignAll(true)
+	if (qu_save.autoOptions.assignQK && player.ghostify.milestones >= 8) assignAll(true)
 
 	givePerSecondNeuts()
 }
@@ -3790,8 +3790,8 @@ function ghostifyAutomationUpdatingPerSecond() {
 	if (isAutoGhostActive(14)) maxBuyBEEPMult()
 	if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode=="t") rotateAutoUnstable()
 	if (isAutoGhostActive(10)) maxBuyLimit()
-	if (isAutoGhostActive(9) && tmp.qu.replicants.quantumFood > 0) {
-		for (d = 1;d < 9; d++) if (canFeedReplicant(d) && (d == tmp.qu.replicants.limitDim || (!tmp.eds[d + 1].perm && tmp.eds[d].workers.lt(11)))) {
+	if (isAutoGhostActive(9) && qu_save.replicants.quantumFood > 0) {
+		for (d = 1;d < 9; d++) if (canFeedReplicant(d) && (d == qu_save.replicants.limitDim || (!tmp.eds[d + 1].perm && tmp.eds[d].workers.lt(11)))) {
 			feedReplicant(d, true);
 			break;
 		} 
@@ -3809,7 +3809,7 @@ function checkGluonRounding(){
 	if (player.quantum.gluons.rg.lt(101)) player.quantum.gluons.rg = player.quantum.gluons.rg.round()
 	if (player.quantum.gluons.gb.lt(101)) player.quantum.gluons.gb = player.quantum.gluons.gb.round()
 	if (player.quantum.gluons.br.lt(101)) player.quantum.gluons.br = player.quantum.gluons.br.round()
-	if (tmp.qu.quarks.lt(101)) tmp.qu.quarks = tmp.qu.quarks.round()
+	if (qu_save.quarks.lt(101)) qu_save.quarks = qu_save.quarks.round()
 }
 
 function doNGm2CorrectPostC3Reward(){
@@ -3887,7 +3887,7 @@ setInterval(function() {
 	if (isNaN(player.totalmoney.e)) player.totalmoney = new Decimal(10)
 	if (!tmp.ngp3 || !pH.did("quantum")) if (player.infinityPoints.lt(100)) player.infinityPoints = player.infinityPoints.round()
 	checkGluonRounding()
-}, 1000)
+}, 100)
 
 function autoPerSecond() {
 	if (isGamePaused()) return
@@ -3919,7 +3919,7 @@ function updateEPminpeak(diff, type) {
 		var oldPoints = player.dilation.totalTachyonParticles
 	} else {
 		var gainedPoints = getEMGain()
-		var oldPoints = tmp.qu.breakEternity.eternalMatter
+		var oldPoints = qu_save.breakEternity.eternalMatter
 	}
 	var newPoints = oldPoints.plus(gainedPoints)
 	var newLog = Math.max(newPoints.log10(),0)
@@ -4001,7 +4001,7 @@ function incrementTimesUpdating(diffStat){
 	player.totalTimePlayed += diffStat
 	if (tmp.ngpX >= 5) pl.save.time += diffStat
 	if (tmp.ngp3) player.ghostify.time += diffStat
-	if (tmp.qu && implosionCheck !== 2) tmp.qu.time += diffStat
+	if (qu_save && implosionCheck !== 2) qu_save.time += diffStat
 	if (player.currentEternityChall == "eterc12") diffStat /= 1e3
 	player.thisEternity += diffStat
    	player.thisInfinityTime += diffStat
@@ -4031,8 +4031,8 @@ function requiredInfinityUpdating(diff){
 
 	if (isInfiniteDetected()) return
 	if (inBigRip()) {
-		tmp.qu.bigRip.totalAntimatter = tmp.qu.bigRip.totalAntimatter.add(amProd)
-		tmp.qu.bigRip.bestThisRun = tmp.qu.bigRip.bestThisRun.max(player.money)
+		qu_save.bigRip.totalAntimatter = qu_save.bigRip.totalAntimatter.add(amProd)
+		qu_save.bigRip.bestThisRun = qu_save.bigRip.bestThisRun.max(player.money)
 	}
 	if (player.totalmoney.gt("1e9000000000000000")) changingDecimalSystemUpdating()
 	tmp.ri=player.money.gte(getLimit()) && ((player.currentChallenge != "" && player.money.gte(player.challengeTarget)) || !onPostBreak())
@@ -4124,9 +4124,9 @@ function ghostifyAutomationUpdating(diff){
 
 	let limit = player.ghostify.automatorGhosts[13].o || 1 / 0
 	if (hasMTS("d13") && isAutoGhostActive(13)) {
-		if (tmp.qu.bigRip.active) {
-			if (tmp.qu.time >= player.ghostify.automatorGhosts[13].u * 10 && tmp.qu.bigRip.times <= limit) quantumReset(true, true)
-		} else if (tmp.qu.time >= player.ghostify.automatorGhosts[13].t * 10 && tmp.qu.bigRip.times < limit) bigRip(true)
+		if (qu_save.bigRip.active) {
+			if (qu_save.time >= player.ghostify.automatorGhosts[13].u * 10 && qu_save.bigRip.times <= limit) quantumReset(true, true)
+		} else if (qu_save.time >= player.ghostify.automatorGhosts[13].t * 10 && qu_save.bigRip.times < limit) bigRip(true)
 	}
 
 	if (!tmp.quUnl || !tmp.quActive) return
@@ -4135,8 +4135,8 @@ function ghostifyAutomationUpdating(diff){
 		let colorShorthands = ["r", "g", "b"]
 		for (let c = 1; c <= 3; c++) {
 			let shorthand = colorShorthands[c - 1]
-			if (isAutoGhostActive(c) && tmp.qu.usedQuarks[shorthand].gt(0) && tmp.qu.tod[shorthand].quarks.eq(0)) unstableQuarks(shorthand)
-			if (isAutoGhostActive(12) && getUnstableGain(shorthand).max(tmp.qu.tod[shorthand].quarks).gte(Decimal.pow(10, Math.pow(2, 50)))) {
+			if (isAutoGhostActive(c) && qu_save.usedQuarks[shorthand].gt(0) && qu_save.tod[shorthand].quarks.eq(0)) unstableQuarks(shorthand)
+			if (isAutoGhostActive(12) && getUnstableGain(shorthand).max(qu_save.tod[shorthand].quarks).gte(Decimal.pow(10, Math.pow(2, 50)))) {
 				unstableQuarks(shorthand)
 				radioactiveDecay(shorthand)
 			}
@@ -4148,8 +4148,8 @@ function ghostifyAutomationUpdating(diff){
 		let ag = player.ghostify.automatorGhosts[11]
 		ag.t = (ag.t || 0) + diff
 
-		let start = tmp.qu.nanofield.producingCharge ? ag.t <= ag.cw : ag.t >= ag.pw
-		if (tmp.qu.nanofield.producingCharge != start) {
+		let start = qu_save.nanofield.producingCharge ? ag.t <= ag.cw : ag.t >= ag.pw
+		if (qu_save.nanofield.producingCharge != start) {
 			startProduceQuarkCharge()
 			if (start) ag.t = 0
 		}
@@ -4193,34 +4193,34 @@ function ghostlyPhotonsUpdating(diff){
 function nanofieldProducingChargeUpdating(diff){
 	var rate = getQuarkChargeProduction()
 	var loss = getQuarkLossProduction()
-	var toSub = loss.times(diff).min(tmp.qu.replicants.quarks)
+	var toSub = loss.times(diff).min(qu_save.replicants.quarks)
 	if (toSub.eq(0)) {
-		tmp.qu.nanofield.producingCharge = false
+		qu_save.nanofield.producingCharge = false
 		getEl("produceQuarkCharge").innerHTML="Start production of preon charge.<br>(You will not get preons when you do this.)"
 	} else if (!hasBosonicUpg(51)) {
-		tmp.qu.replicants.quarks = tmp.qu.replicants.quarks.sub(toSub)
-		tmp.qu.nanofield.charge = tmp.qu.nanofield.charge.add(toSub.div(loss).times(rate))
+		qu_save.replicants.quarks = qu_save.replicants.quarks.sub(toSub)
+		qu_save.nanofield.charge = qu_save.nanofield.charge.add(toSub.div(loss).times(rate))
 	}
 }
 
 function nanofieldUpdating(diff){
 	var AErate = getQuarkAntienergyProduction()
-	var toAddAE = AErate.times(diff).min(getQuarkChargeProductionCap().sub(tmp.qu.nanofield.antienergy))
-	if (tmp.qu.nanofield.producingCharge) nanofieldProducingChargeUpdating(diff)
+	var toAddAE = AErate.times(diff).min(getQuarkChargeProductionCap().sub(qu_save.nanofield.antienergy))
+	if (qu_save.nanofield.producingCharge) nanofieldProducingChargeUpdating(diff)
 	if (hasBosonicUpg(51)) {
-		tmp.qu.nanofield.charge = tmp.qu.nanofield.charge.add(getQuarkChargeProduction().times(diff))
-		tmp.qu.nanofield.energy = tmp.qu.nanofield.energy.add(getQuantumEnergyProduction().times(diff).div(100))
+		qu_save.nanofield.charge = qu_save.nanofield.charge.add(getQuarkChargeProduction().times(diff))
+		qu_save.nanofield.energy = qu_save.nanofield.energy.add(getQuantumEnergyProduction().times(diff).div(100))
 	}
 	if (toAddAE.gt(0)) {
-		tmp.qu.nanofield.antienergy = tmp.qu.nanofield.antienergy.add(toAddAE).min(getQuarkChargeProductionCap())
-		tmp.qu.nanofield.energy = tmp.qu.nanofield.energy.add(toAddAE.div(AErate).times(getQuantumEnergyProduction()))
+		qu_save.nanofield.antienergy = qu_save.nanofield.antienergy.add(toAddAE).min(getQuarkChargeProductionCap())
+		qu_save.nanofield.energy = qu_save.nanofield.energy.add(toAddAE.div(AErate).times(getQuantumEnergyProduction()))
 	}
 	if (toAddAE.gt(0) || hasBosonicUpg(51)) {
 		updateNextPreonEnergyThreshold()
-		if (tmp.qu.nanofield.power > tmp.qu.nanofield.rewards) {
-			tmp.qu.nanofield.rewards = tmp.qu.nanofield.power
-			if (!tmp.qu.nanofield.apgWoke && tmp.qu.nanofield.rewards >= tmp.apgw) {
-				tmp.qu.nanofield.apgWoke = tmp.apgw
+		if (qu_save.nanofield.power > qu_save.nanofield.rewards) {
+			qu_save.nanofield.rewards = qu_save.nanofield.power
+			if (!qu_save.nanofield.apgWoke && qu_save.nanofield.rewards >= tmp.apgw) {
+				qu_save.nanofield.apgWoke = tmp.apgw
 				$.notify("You reached " + getFullExpansion(tmp.apgw) + " rewards... Antipretus has woken up and took over the Nanoverse! Be careful!")
 				if (!hasAch("ng3p91")) {
 					showTab("quantumtab")
@@ -4237,7 +4237,7 @@ function treeOfDecayUpdating(diff){
 	var colorShorthands=["r","g","b"]
 	for (var c = 0; c < 3; c++) {
 		var shorthand = colorShorthands[c]
-		var branch = tmp.qu.tod[shorthand]
+		var branch = qu_save.tod[shorthand]
 		if (branch.quarks.gt(0)) {
 			var decayRate = getDecayRate(shorthand)
 			var decayPower = getRDPower(shorthand)
@@ -4268,8 +4268,8 @@ function emperorDimUpdating(diff){
 				if (!hasNU(2)) {
 					if (dim>2 && toAdd.gt(getWorkerAmount(dim-2))) tmp.eds[dim-2].workers = new Decimal(0)
 					else if (dim>2) tmp.eds[dim-2].workers = tmp.eds[dim-2].workers.sub(toAdd).round()
-					else if (toAdd.gt(tmp.qu.replicants.amount)) tmp.qu.replicants.amount = new Decimal(0)
-					else tmp.qu.replicants.amount = tmp.qu.replicants.amount.sub(toAdd).round()
+					else if (toAdd.gt(qu_save.replicants.amount)) qu_save.replicants.amount = new Decimal(0)
+					else qu_save.replicants.amount = qu_save.replicants.amount.sub(toAdd).round()
 				}
 				if (toAdd.gt(tmp.eds[dim-1].progress)) tmp.eds[dim-1].progress = new Decimal(0)
 				else tmp.eds[dim-1].progress = tmp.eds[dim-1].progress.sub(toAdd)
@@ -4283,39 +4283,39 @@ function emperorDimUpdating(diff){
 function replicantEggonUpdating(diff){
 	var newBabies = tmp.twr.times(getEmperorDimensionMultiplier(1)).times(getSpinToReplicantiSpeed()).times(diff/200)
 	if (hasAch("ng3p35")) newBabies = newBabies.times(10)
-	tmp.qu.replicants.eggonProgress = tmp.qu.replicants.eggonProgress.add(newBabies)
-	var toAdd = tmp.qu.replicants.eggonProgress.floor()
+	qu_save.replicants.eggonProgress = qu_save.replicants.eggonProgress.add(newBabies)
+	var toAdd = qu_save.replicants.eggonProgress.floor()
 	if (toAdd.gt(0)) {
-		if (toAdd.gt(tmp.qu.replicants.eggonProgress)) tmp.qu.replicants.eggonProgress = new Decimal(0)
-		else tmp.qu.replicants.eggonProgress = tmp.qu.replicants.eggonProgress.sub(toAdd)
-		tmp.qu.replicants.eggons = tmp.qu.replicants.eggons.add(toAdd).round()
+		if (toAdd.gt(qu_save.replicants.eggonProgress)) qu_save.replicants.eggonProgress = new Decimal(0)
+		else qu_save.replicants.eggonProgress = qu_save.replicants.eggonProgress.sub(toAdd)
+		qu_save.replicants.eggons = qu_save.replicants.eggons.add(toAdd).round()
 	}
 }
 
 function replicantBabyHatchingUpdating(diff){
-	if (tmp.qu.replicants.eggons.gt(0)) {
-		tmp.qu.replicants.babyProgress = tmp.qu.replicants.babyProgress.add(diff/getHatchSpeed()/10)
-		var toAdd = hasNU(2) ? tmp.qu.replicants.eggons : tmp.qu.replicants.babyProgress.floor().min(tmp.qu.replicants.eggons)
+	if (qu_save.replicants.eggons.gt(0)) {
+		qu_save.replicants.babyProgress = qu_save.replicants.babyProgress.add(diff/getHatchSpeed()/10)
+		var toAdd = hasNU(2) ? qu_save.replicants.eggons : qu_save.replicants.babyProgress.floor().min(qu_save.replicants.eggons)
 		if (toAdd.gt(0)) {
-			if (toAdd.gt(tmp.qu.replicants.eggons)) tmp.qu.replicants.eggons = new Decimal(0)
-			else tmp.qu.replicants.eggons = tmp.qu.replicants.eggons.sub(toAdd).round()
-			if (toAdd.gt(tmp.qu.replicants.babyProgress)) tmp.qu.replicants.babyProgress = new Decimal(0)
-			else tmp.qu.replicants.babyProgress = tmp.qu.replicants.babyProgress.sub(toAdd)
-			tmp.qu.replicants.babies = tmp.qu.replicants.babies.add(toAdd).round()
+			if (toAdd.gt(qu_save.replicants.eggons)) qu_save.replicants.eggons = new Decimal(0)
+			else qu_save.replicants.eggons = qu_save.replicants.eggons.sub(toAdd).round()
+			if (toAdd.gt(qu_save.replicants.babyProgress)) qu_save.replicants.babyProgress = new Decimal(0)
+			else qu_save.replicants.babyProgress = qu_save.replicants.babyProgress.sub(toAdd)
+			qu_save.replicants.babies = qu_save.replicants.babies.add(toAdd).round()
 		}
 	}
 }
 
 function replicantBabiesGrowingUpUpdating(diff){
-	if (tmp.qu.replicants.babies.gt(0)&&tmp.tra.gt(0)) {
-		tmp.qu.replicants.ageProgress = tmp.qu.replicants.ageProgress.add(getGrowupRatePerMinute().div(60).times(diff)).min(tmp.qu.replicants.babies)
-		var toAdd = tmp.qu.replicants.ageProgress.floor()
+	if (qu_save.replicants.babies.gt(0)&&tmp.tra.gt(0)) {
+		qu_save.replicants.ageProgress = qu_save.replicants.ageProgress.add(getGrowupRatePerMinute().div(60).times(diff)).min(qu_save.replicants.babies)
+		var toAdd = qu_save.replicants.ageProgress.floor()
 		if (toAdd.gt(0)) {
-			if (toAdd.gt(tmp.qu.replicants.babies)) tmp.qu.replicants.babies = new Decimal(0)
-			else tmp.qu.replicants.babies = tmp.qu.replicants.babies.sub(toAdd).round()
-			if (toAdd.gt(tmp.qu.replicants.ageProgress)) tmp.qu.replicants.ageProgress = new Decimal(0)
-			else tmp.qu.replicants.ageProgress = tmp.qu.replicants.ageProgress.sub(toAdd)
-			tmp.qu.replicants.amount = tmp.qu.replicants.amount.add(toAdd).round()
+			if (toAdd.gt(qu_save.replicants.babies)) qu_save.replicants.babies = new Decimal(0)
+			else qu_save.replicants.babies = qu_save.replicants.babies.sub(toAdd).round()
+			if (toAdd.gt(qu_save.replicants.ageProgress)) qu_save.replicants.ageProgress = new Decimal(0)
+			else qu_save.replicants.ageProgress = qu_save.replicants.ageProgress.sub(toAdd)
+			qu_save.replicants.amount = qu_save.replicants.amount.add(toAdd).round()
 		}
 	}
 }
@@ -4323,10 +4323,10 @@ function replicantBabiesGrowingUpUpdating(diff){
 function replicantOverallUpdating(diff){
 	replicantEggonUpdating(diff)
 	replicantBabyHatchingUpdating(diff)
-	if (tmp.qu.replicants.eggons.lt(1)) tmp.qu.replicants.babyProgress = new Decimal(0)
+	if (qu_save.replicants.eggons.lt(1)) qu_save.replicants.babyProgress = new Decimal(0)
 	replicantBabiesGrowingUpUpdating(diff)
-	if (tmp.qu.replicants.babies.lt(1)) tmp.qu.replicants.ageProgress = new Decimal(0)
-	if (!tmp.qu.nanofield.producingCharge) tmp.qu.replicants.quarks = tmp.qu.replicants.quarks.add(getGatherRate().total.max(0).times(diff))
+	if (qu_save.replicants.babies.lt(1)) qu_save.replicants.ageProgress = new Decimal(0)
+	if (!qu_save.nanofield.producingCharge) qu_save.replicants.quarks = qu_save.replicants.quarks.add(getGatherRate().total.max(0).times(diff))
 }
 
 function quantumOverallUpdating(diff){
@@ -4336,7 +4336,7 @@ function quantumOverallUpdating(diff){
 
 		//Color Powers
 		var colorShorthands=["r","g","b"]
-		for (var c = 0; c < 3; c++) tmp.qu.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
+		for (var c = 0; c < 3; c++) qu_save.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
 		updateColorPowers()
 
 		if (hasMTS("d10")) replicantOverallUpdating(diff)
@@ -4576,17 +4576,17 @@ function doQuantumButtonDisplayUpdating(diff){
 	if (pH.did("quantum") && isQuantumReached()) {
 		var bigRipped = !tmp.ngp3 ? false : player.quantum.bigRip.active
 		if (!bigRipped) {
-			currentQKmin = quarkGain().dividedBy(tmp.qu.time / 600)
+			currentQKmin = quarkGain().dividedBy(qu_save.time / 600)
 			if (currentQKmin.gt(QKminpeak) && player.meta.antimatter.gte(Decimal.pow(Number.MAX_VALUE,tmp.ngp3 ? 1.2 : 1))) {
 				QKminpeak = currentQKmin
 				QKminpeakValue = quarkGain()
-				tmp.qu.autobuyer.peakTime = 0
-			} else tmp.qu.autobuyer.peakTime += diff
+				qu_save.autobuyer.peakTime = 0
+			} else qu_save.autobuyer.peakTime += diff
 		}
 	}
 	
-	getEl("quantumbtnFlavor").textContent = ((tmp.qu!==undefined?!tmp.qu.times&&(player.ghostify!==undefined?!player.ghostify.milestones:true):false)||QCs.inAny()?(inBR?"I am":!QCs.inAny()?"My computer is":QCs_tmp.in.length>1?"These paired challenges are":"This challenge is")+" not powerful enough... ":"") + "I need to go quantum."
-	var showGain = ((pH.did("quantum") && tmp.qu.times) || (pH.did("ghostify") && player.ghostify.milestones)) && (!QCs.inAny()||player.options.theme=="Aarex's Modifications") ? "QK" : ""
+	getEl("quantumbtnFlavor").textContent = ((qu_save!==undefined?!qu_save.times&&(player.ghostify!==undefined?!player.ghostify.milestones:true):false)||QCs.inAny()?(inBR?"I am":!QCs.inAny()?"My computer is":QCs_tmp.in.length>1?"These paired challenges are":"This challenge is")+" not powerful enough... ":"") + "I need to go quantum."
+	var showGain = ((pH.did("quantum") && qu_save.times) || (pH.did("ghostify") && player.ghostify.milestones)) && (!QCs.inAny()||player.options.theme=="Aarex's Modifications") ? "QK" : ""
 	if (inBR) showGain = "SS"
 	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain "+shortenDimensions(quarkGain())+" anti-quark"+(quarkGain().eq(1)?".":"s.") : ""
 	if (showGain == "SS") getEl("quantumbtnQKGain").textContent = "Gain " + shortenDimensions(getSpaceShardsGain()) + " Space Shards."
@@ -4612,7 +4612,7 @@ function doGhostifyButtonDisplayUpdating(diff){
 	var ghostifyGains = []
 	if (pH.did("ghostify")) {
 		ghostifyGains.push(shortenDimensions(getGHPGain()) + " Ghost Particles")
-		if (hasAch("ng3p78")) ghostifyGains.push(shortenDimensions(Decimal.times(6e3 * tmp.qu.bigRip.bestGals, getGhostifiedGain()).times(getNeutrinoGain())) + " Neutrinos")
+		if (hasAch("ng3p78")) ghostifyGains.push(shortenDimensions(Decimal.times(6e3 * qu_save.bigRip.bestGals, getGhostifiedGain()).times(getNeutrinoGain())) + " Neutrinos")
 		if (hasBosonicUpg(15)) ghostifyGains.push(getFullExpansion(getGhostifiedGain()) + " Ghostifies")
 	}
 	getEl("ghostifybtnFlavor").textContent = ghostifyGains.length > 1 ? "" : (ghostifyGains.length ? "" : "I need to ascend from this broken universe... ") + "I need to become a ghost."
@@ -4824,9 +4824,9 @@ function ECRewardDisplayUpdating(){
 
 function bigRipUpgradeUpdating(){
 	if (player.ghostify.milestones>7) {
-		getEl("spaceShards").textContent=shortenDimensions(tmp.qu.bigRip.spaceShards)
+		getEl("spaceShards").textContent=shortenDimensions(qu_save.bigRip.spaceShards)
 		for (var u=1;u<=getMaxBigRipUpgrades();u++) {
-			getEl("bigripupg"+u).className = tmp.qu.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : tmp.qu.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
+			getEl("bigripupg"+u).className = qu_save.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : qu_save.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
 			getEl("bigripupg"+u+"cost").textContent = shortenDimensions(new Decimal(bigRipUpgCosts[u]))
 		}
 	}
@@ -4948,7 +4948,7 @@ function ngp3DilationUpdating(){
 function setTachyonParticles(x) {
 	player.dilation.tachyonParticles = new Decimal(x)
 	if (!player.dilation.active) player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
-	if (tmp.ngp3) tmp.qu.notrelative = false
+	if (tmp.ngp3) qu_save.notrelative = false
 	if (tmp.quUnl) {
 		player.dilation.bestTP = Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles)
 		player.dilation.bestTPOverGhostifies = player.dilation.bestTPOverGhostifies.max(player.dilation.bestTP)
@@ -4964,18 +4964,18 @@ function passiveQuantumLevelStuff(diff){
 	if ((inBR ? hasAch("ng3p103") : hasAch("ng3p112")) && pH.can("ghostify")) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
 	if (hasAch("ng3p112")) player.ghostify.times = nA(player.ghostify.times, nM(getGhostifiedGain(), diff))
 
-	if (inBR || hasBosonicUpg(24)) tmp.qu.bigRip.spaceShards = tmp.qu.bigRip.spaceShards.add(getSpaceShardsGain().times(diff / 100))
-	if (hasBosonicUpg(51) || (tmp.be && player.ghostify.milestones > 14)) tmp.qu.breakEternity.eternalMatter = tmp.qu.breakEternity.eternalMatter.add(getEMGain().times(diff / 100))
+	if (inBR || hasBosonicUpg(24)) qu_save.bigRip.spaceShards = qu_save.bigRip.spaceShards.add(getSpaceShardsGain().times(diff / 100))
+	if (hasBosonicUpg(51) || (tmp.be && player.ghostify.milestones > 14)) qu_save.breakEternity.eternalMatter = qu_save.breakEternity.eternalMatter.add(getEMGain().times(diff / 100))
 	if (!inBR) {
-		tmp.qu.quarks = tmp.qu.quarks.add(quarkGain().sqrt().times(diff))
+		qu_save.quarks = qu_save.quarks.add(quarkGain().sqrt().times(diff))
 		var p = ["rg", "gb", "br"]
 		for (var i = 0; i < 3; i++) {
-			var r = tmp.qu.usedQuarks[p[i][0]].min(tmp.qu.usedQuarks[p[i][1]])
+			var r = qu_save.usedQuarks[p[i][0]].min(qu_save.usedQuarks[p[i][1]])
 			if (hasAch("ng3p71")) r = r.div(100)
 			else r = r.sqrt()
-			tmp.qu.gluons[p[i]] = tmp.qu.gluons[p[i]].add(r.times(diff))
+			qu_save.gluons[p[i]] = qu_save.gluons[p[i]].add(r.times(diff))
 		}
-		if (player.ghostify.milestones >= 16) tmp.qu.quarks = tmp.qu.quarks.add(quarkGain().times(diff / 100))
+		if (player.ghostify.milestones >= 16) qu_save.quarks = qu_save.quarks.add(quarkGain().times(diff / 100))
 	}
 	updateQuarkDisplay()
 	updateQuantumWorth("quick")
@@ -4992,7 +4992,7 @@ function generateTT(diff){
 }
 
 function thisQuantumTimeUpdating(){
-	setAndMaybeShow("quantumClock", tmp.quUnl && hasAch('ng3p21'), '"Quantum time: <b class=\'QKAmount\'>"+timeDisplay(tmp.qu.time)+"</b>"')
+	setAndMaybeShow("quantumClock", tmp.quUnl && hasAch('ng3p21'), '"Quantum time: <b class=\'QKAmount\'>"+timeDisplay(qu_save.time)+"</b>"')
 }
 
 function updateInfinityTimes(){
@@ -5162,7 +5162,7 @@ function simulateTime(seconds, real, id) {
 	if (player.meta !== undefined) storage.ma = player.meta.antimatter
 	if (tmp.ngp3) {
 		storage.dt = player.dilation.dilatedTime
-		storage.nr = tmp.qu.replicants.amount
+		storage.nr = qu_save.replicants.amount
 		storage.bAm = player.ghostify.bl.am
 	}
 	if (ticks > 1000 && !real) {
@@ -5185,7 +5185,7 @@ function simulateTime(seconds, real, id) {
 	if (storage.bp && player.blackhole.power.gt(storage.bp)) popupString+= ",<br> black hole power increased "+shortenMoney(player.blackhole.power.log10() - (Decimal.max(storage.bp, 1)).log10())+" orders of magnitude"
 	if (storage.ma && player.meta.antimatter.gt(storage.ma) && !pH.did("ghostify")) popupString+= ",<br> meta-antimatter increased "+shortenMoney(player.meta.antimatter.log10() - (Decimal.max(storage.ma, 1)).log10())+" orders of magnitude"
 	if (storage.dt) {
-		if (tmp.qu.replicants.amount.gt(storage.nr) && !pH.did("ghostify")) popupString+= ",<br> normal replicants increased "+shortenMoney(tmp.qu.replicants.amount.log10() - (Decimal.max(storage.nr, 1)).log10())+" orders of magnitude"
+		if (qu_save.replicants.amount.gt(storage.nr) && !pH.did("ghostify")) popupString+= ",<br> normal replicants increased "+shortenMoney(qu_save.replicants.amount.log10() - (Decimal.max(storage.nr, 1)).log10())+" orders of magnitude"
 		if (Decimal.gt(player.ghostify.bl.am, storage.bAm) && pH.did("ghostify")) popupString+= ",<br> Bosonic Antimatter increased "+shortenMoney(player.ghostify.bl.am.log10() - (Decimal.max(storage.bAm, 1)).log10())+" orders of magnitude"
 	}
 	if (player.infinitied > playerStart.infinitied || player.eternities > playerStart.eternities) popupString+= ","
@@ -5204,22 +5204,29 @@ function simulateTime(seconds, real, id) {
 
 var tickWait = 0
 var tickWaitStart = 0
+var tickDiff = 0
+var fps = 0
 function startInterval() {
 	gameLoopIntervalId = setInterval(function() {
-	if (tmp.mod.performanceTicks && new Date().getTime() - tickWaitStart < tickWait) return
-	tickWait = 1/0
+		var tickStart = new Date().getTime()
+		if (tmp.mod.performanceTicks) {
+			if (tickStart - tickWaitStart < tickWait) return
+			tickWait = 1/0
+		}
 
-	var tickStart = new Date().getTime()
-	try {
-		gameLoop()
-	} catch (e) {
-		console.error(e)
-	}
-	var tickEnd = new Date().getTime()
-	var tickDiff = tickEnd - tickStart
+		try {
+			gameLoop()
+		} catch (e) {
+			console.error(e)
+		}
+		var tickEnd = new Date().getTime()
 
-	tickWait = tickDiff * (tmp.mod.performanceTicks * 2)
-	tickWaitStart = tickEnd
+		tickDiff = tickEnd - tickStart
+		fps = 1000 / tickDiff
+		document.getElementById("fps").textContent = fps.toFixed(1) + " fps: " + tickDiff + "ms update"
+
+		tickWait = tickDiff * (tmp.mod.performanceTicks * 2)
+		tickWaitStart = tickEnd
 	}, player.options.updateRate);
 }
 
@@ -5276,15 +5283,15 @@ function dimBoolean() {
 }
 
 function autoQuantumABTick() {
-	let data = tmp.qu.autobuyer
+	let data = qu_save.autobuyer
 
-	if (data.autoDisable && tmp.qu.times >= data.autoDisable) return
+	if (data.autoDisable && qu_save.times >= data.autoDisable) return
 	if (data.mode == "amount") {
 		if (quarkGain().gte(Decimal.round(data.limit))) quantum(true, false, 0)
 	} else if (data.mode == "relative") {
-		if (quarkGain().gte(Decimal.round(data.limit).times(tmp.qu.last10[0][1]))) quantum(true, false, 0)
+		if (quarkGain().gte(Decimal.round(data.limit).times(qu_save.last10[0][1]))) quantum(true, false, 0)
 	} else if (data.mode == "time") {
-		if (tmp.qu.time / 10 >= new Decimal(data.limit).toNumber()) quantum(true, false, 0)
+		if (qu_save.time / 10 >= new Decimal(data.limit).toNumber()) quantum(true, false, 0)
 	} else if (data.mode == "peak") {
 		if (data.peakTime >= new Decimal(data.limit).toNumber()) quantum(true, false, 0)
 	} else if (data.mode == "dilation") {
@@ -5373,7 +5380,7 @@ function dimBoostABTick(){
 
 var timer = 0
 function autoBuyerTick() {
-	if (qMs.tmp.amt >= 18 && tmp.qu.autobuyer.enabled && !inBigRip()) autoQuantumABTick()
+	if (qMs.tmp.amt >= 18 && qu_save.autobuyer.enabled && !inBigRip()) autoQuantumABTick()
 	
 	if (getEternitied() >= 100 && isEterBuyerOn()) autoEternityABTick()
 

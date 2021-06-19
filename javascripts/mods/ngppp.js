@@ -48,9 +48,9 @@ var quantumTabs = {
 }
 
 function updateQuantumTabs() {
-	getEl("quarkEnergy").textContent = shorten(tmp.qu.quarkEnergy)
+	getEl("quarkEnergy").textContent = shorten(qu_save.quarkEnergy)
 	getEl("quarkEnergyMult").textContent = shorten(tmp.qe.mult) + (tmp.qe.div > 1 ? " / " + shorten(tmp.qe.div) : "")
-	getEl("bestQE").textContent = shorten(tmp.qu.bestEnergy)
+	getEl("bestQE").textContent = shorten(qu_save.bestEnergy)
 	getEl("qeEff").textContent = "^" + tmp.qe.exp.toFixed(3)
 	getEl("qeFrac").textContent = shorten(tmp.qe.expNum) + "/" + shorten(tmp.qe.expDen)
 
@@ -73,10 +73,10 @@ function preQuantumAutoNGP3(diff) {
 	//Pre-Quantum Automation
 	let tickPerDiff = qMs.tmp.metaSpeed
 
-	tmp.qu.metaAutobuyerWait += diff
-	if (tmp.qu.metaAutobuyerWait >= tickPerDiff) {
-		doAutoMetaTick(Math.floor(tmp.qu.metaAutobuyerWait / tickPerDiff))
-		tmp.qu.metaAutobuyerWait = tmp.qu.metaAutobuyerWait % tickPerDiff
+	qu_save.metaAutobuyerWait += diff
+	if (qu_save.metaAutobuyerWait >= tickPerDiff) {
+		doAutoMetaTick(Math.floor(qu_save.metaAutobuyerWait / tickPerDiff))
+		qu_save.metaAutobuyerWait = qu_save.metaAutobuyerWait % tickPerDiff
 	}
 
 	if (qMs.tmp.amt >= 23) {
@@ -90,13 +90,13 @@ function doAutoMetaTick(ticks) {
 	let slowSpeed = 5
 	if (qMs.tmp.amt >= 13) slowSpeed = Math.max(5 - (qMs.tmp.amt - 13 + 1), 1)
 
-	let wait = (tmp.qu.metaAutobuyerSlowWait || 0) + ticks
+	let wait = (qu_save.metaAutobuyerSlowWait || 0) + ticks
 	if (wait >= slowSpeed) {
 		var bulk = Math.floor(wait / slowSpeed)
 		wait = wait % slowSpeed
 		for (var d = 1; d <= 8; d++) if (player.autoEterOptions["md" + d] && moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3])) buyMaxMetaDimension(d, bulk)
 	}
-	tmp.qu.metaAutobuyerSlowWait = wait
+	qu_save.metaAutobuyerSlowWait = wait
 
 	//Others
 	var bulk = ticks
@@ -126,11 +126,11 @@ function toggleAllMetaDims() {
 function respecTogglePC() {
 	if (hasNU(16)) {
 		if (!pH.can("quantum")) return
-		tmp.qu.pairedChallenges.respec = true
+		qu_save.pairedChallenges.respec = true
 		quantum(true)
 	} else {
-		tmp.qu.pairedChallenges.respec = !tmp.qu.pairedChallenges.respec
-		getEl("respecPC").className = tmp.qu.pairedChallenges.respec ? "quantumbtn" : "storebtn"
+		qu_save.pairedChallenges.respec = !qu_save.pairedChallenges.respec
+		getEl("respecPC").className = qu_save.pairedChallenges.respec ? "quantumbtn" : "storebtn"
 	}
 }
 
@@ -142,7 +142,7 @@ function respecOptions() {
 
 //v1.998
 function toggleAutoQuantumContent(id) {
-	tmp.qu.autoOptions[id] = !tmp.qu.autoOptions[id]
+	qu_save.autoOptions[id] = !qu_save.autoOptions[id]
 }
 
 //v1.9986
@@ -240,44 +240,44 @@ function maybeShowFillAll() {
 
 //v1.9995
 function updateAutoQuantumMode() {
-	if (tmp.qu.autobuyer.mode == "amount") {
+	if (qu_save.autobuyer.mode == "amount") {
 		getEl("toggleautoquantummode").textContent = "Auto quantum mode: amount"
 		getEl("autoquantumtext").textContent = "Amount of QK to wait until reset:"
-	} else if (tmp.qu.autobuyer.mode == "relative") {
+	} else if (qu_save.autobuyer.mode == "relative") {
 		getEl("toggleautoquantummode").textContent = "Auto quantum mode: X times last quantum"
 		getEl("autoquantumtext").textContent = "X times last quantum:"
-	} else if (tmp.qu.autobuyer.mode == "time") {
+	} else if (qu_save.autobuyer.mode == "time") {
 		getEl("toggleautoquantummode").textContent = "Auto quantum mode: time"
 		getEl("autoquantumtext").textContent = "Seconds between quantums:"
-	} else if (tmp.qu.autobuyer.mode == "peak") {
+	} else if (qu_save.autobuyer.mode == "peak") {
 		getEl("toggleautoquantummode").textContent = "Auto quantum mode: peak"
 		getEl("autoquantumtext").textContent = "Seconds to wait after latest peak gain:"
-	} else if (tmp.qu.autobuyer.mode == "dilation") {
+	} else if (qu_save.autobuyer.mode == "dilation") {
 		getEl("toggleautoquantummode").textContent = "Auto quantum mode: # of dilated"
 		getEl("autoquantumtext").textContent = "Wait until # of dilated stat:"
 	}
 }
 
 function toggleAutoQuantumMode() {
-	if (tmp.qu.reachedInfQK && tmp.qu.autobuyer.mode == "amount") tmp.qu.autobuyer.mode = "relative"
-	else if (tmp.qu.autobuyer.mode == "relative") tmp.qu.autobuyer.mode = "time"
-	else if (tmp.qu.autobuyer.mode == "time") tmp.qu.autobuyer.mode = "peak"
-	else if (hasAch("ng3p25") && tmp.qu.autobuyer.mode != "dilation") tmp.qu.autobuyer.mode = "dilation"
-	else tmp.qu.autobuyer.mode = "amount"
+	if (qu_save.reachedInfQK && qu_save.autobuyer.mode == "amount") qu_save.autobuyer.mode = "relative"
+	else if (qu_save.autobuyer.mode == "relative") qu_save.autobuyer.mode = "time"
+	else if (qu_save.autobuyer.mode == "time") qu_save.autobuyer.mode = "peak"
+	else if (hasAch("ng3p25") && qu_save.autobuyer.mode != "dilation") qu_save.autobuyer.mode = "dilation"
+	else qu_save.autobuyer.mode = "amount"
 	updateAutoQuantumMode()
 }
 
 //v1.9997
 function toggleAutoReset() {
-	tmp.qu.autoOptions.replicantiReset = !tmp.qu.autoOptions.replicantiReset
-	getEl('autoReset').textContent = "Auto: " + (tmp.qu.autoOptions.replicantiReset ? "ON" : "OFF")
+	qu_save.autoOptions.replicantiReset = !qu_save.autoOptions.replicantiReset
+	getEl('autoReset').textContent = "Auto: " + (qu_save.autoOptions.replicantiReset ? "ON" : "OFF")
 }
 
 //v2
 function switchAB() {
-	var bigRip = tmp.qu.bigRip.active
-	tmp.qu.bigRip["savedAutobuyers" + (bigRip ? "" : "No") + "BR"] = {}
-	var data = tmp.qu.bigRip["savedAutobuyers" + (bigRip ? "" : "No") + "BR"]
+	var bigRip = qu_save.bigRip.active
+	qu_save.bigRip["savedAutobuyers" + (bigRip ? "" : "No") + "BR"] = {}
+	var data = qu_save.bigRip["savedAutobuyers" + (bigRip ? "" : "No") + "BR"]
 	for (let d = 1; d < 9; d++) if (player.autobuyers[d-1] % 1 !== 0) data["d" + d] = {
 		priority: player.autobuyers[d-1].priority,
 		perTen: player.autobuyers[d-1].target > 10,
@@ -330,7 +330,7 @@ function switchAB() {
 	}
 	if (data.eternity.presets.dil !== undefined) data.eternity.presets.dil = Object.assign({}, data.eternity.presets.dil)
 	if (data.eternity.presets.grind !== undefined) data.eternity.presets.grind = Object.assign({}, data.eternity.presets.grind)
-	var data = tmp.qu.bigRip["savedAutobuyers" + (bigRip ? "No" : "") + "BR"]
+	var data = qu_save.bigRip["savedAutobuyers" + (bigRip ? "No" : "") + "BR"]
 	for (var d = 1; d < 9; d++) if (data["d" + d]) player.autobuyers[d - 1] = {
 		interval: player.autobuyers[d - 1].interval,
 		cost: player.autobuyers[d - 1].cost,
@@ -421,7 +421,7 @@ function switchAB() {
 		if (player.eternityBuyer.presets.left === undefined) player.eternityBuyer.presets.left = 1
 		player.autoEterMode = data.eternity.mode
 	}
-	tmp.qu.bigRip["savedAutobuyers" + (bigRip ? "No" : "") + "BR"] = {}
+	qu_save.bigRip["savedAutobuyers" + (bigRip ? "No" : "") + "BR"] = {}
 	updateCheckBoxes()
 	loadAutoBuyerSettings()
 	if (player.autoCrunchMode == "amount") {
@@ -438,7 +438,7 @@ function switchAB() {
 }
 
 function getAMforGHPGain(){
-	return inBigRip() ? tmp.qu.bigRip.bestThisRun.log10() : player.money.plus(1).log10() / (tmp.quActive && tmp.qu.breakEternity.upgrades.includes(13) ? 1e6 : 2e6)
+	return inBigRip() ? qu_save.bigRip.bestThisRun.log10() : player.money.plus(1).log10() / (tmp.quActive && qu_save.breakEternity.upgrades.includes(13) ? 1e6 : 2e6)
 }
 
 function getGHPGain() {
@@ -506,7 +506,7 @@ function denyGhostify() {
 function ghostifyReset(implode, gain, amount, force) {
 	var bulk = getGhostifiedGain()
 	if (!force) {
-		if (tmp.qu.times >= 1e3 && player.ghostify.milestones >= 16) giveAchievement("Scared of ghosts?")
+		if (qu_save.times >= 1e3 && player.ghostify.milestones >= 16) giveAchievement("Scared of ghosts?")
 		if (!implode) {
 			var gain = getGHPGain()
 			player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(gain).round()
@@ -515,7 +515,7 @@ function ghostifyReset(implode, gain, amount, force) {
 		player.ghostify.last10[0] = [player.ghostify.time, gain]
 		player.ghostify.times = nA(player.ghostify.times, bulk)
 		player.ghostify.best = Math.min(player.ghostify.best, player.ghostify.time)
-		while (tmp.qu.times <= tmp.bm[player.ghostify.milestones]) player.ghostify.milestones++
+		while (qu_save.times <= tmp.bm[player.ghostify.milestones]) player.ghostify.milestones++
 		if (!pH.did("ghostify")) {
 			pH.onPrestige("ghostify")
 			pH.updateDisplay()
@@ -534,12 +534,12 @@ function ghostifyReset(implode, gain, amount, force) {
 
 	var nBRU = []
 	var nBEU = []
-	for (let u = 20; u > 0; u--) if (nBRU.includes(u + 1) || tmp.qu.bigRip.upgrades.includes(u)) nBRU.push(u)
-	for (let u = 13; u > 0; u--) if (nBEU.includes(u + 1) || tmp.qu.breakEternity.upgrades.includes(u)) nBEU.push(u)
-	if (tmp.qu.bigRip.active) switchAB()
+	for (let u = 20; u > 0; u--) if (nBRU.includes(u + 1) || qu_save.bigRip.upgrades.includes(u)) nBRU.push(u)
+	for (let u = 13; u > 0; u--) if (nBEU.includes(u + 1) || qu_save.breakEternity.upgrades.includes(u)) nBEU.push(u)
+	if (qu_save.bigRip.active) switchAB()
 
 	var bm = player.ghostify.milestones
-	if (bm >= 7 && !force && hasAch("ng3p68")) gainNeutrinos(Decimal.times(2e3 * tmp.qu.bigRip.bestGals, bulk), "all")
+	if (bm >= 7 && !force && hasAch("ng3p68")) gainNeutrinos(Decimal.times(2e3 * qu_save.bigRip.bestGals, bulk), "all")
 	if (bm >= 16) giveAchievement("I rather oppose the theory of everything")
 
 	if (player.eternityPoints.e>=22e4&&player.ghostify.under) giveAchievement("Underchallenged")
@@ -548,7 +548,7 @@ function ghostifyReset(implode, gain, amount, force) {
 	player.ghostify.time = 0
 	doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU)
 	
-	tmp.qu = player.quantum
+	qu_save = player.quantum
 	pH.updateActive()
 	doPreInfinityGhostifyResetStuff()
 	doInfinityGhostifyResetStuff(implode, bm)

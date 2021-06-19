@@ -1223,6 +1223,16 @@ button {
 	font-weight: bold !important
 }
 
+#fps {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 180px;
+	height: 24px;
+	background: rgba(0, 0, 0, 0.25);
+	z-index: 999
+}
+
 #replauto1 {
     margin-top: 3px;
 }

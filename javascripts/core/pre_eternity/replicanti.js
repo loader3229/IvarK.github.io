@@ -36,7 +36,7 @@ function replicantiIncrease(diff) {
 	if (auto && tmp.ngC) ngC.condense.rep.buy()
 	if (auto && canGetReplicatedGalaxy() && (canAutoReplicatedGalaxy() || player.currentEternityChall == "eterc14")) replicantiGalaxy()
 
-	if (tmp.ngp3 && player.masterystudies.includes("d10") && tmp.qu.autoOptions.replicantiReset && player.replicanti.amount.gt(tmp.qu.replicants.requirement)) replicantReset(true)
+	if (tmp.ngp3 && player.masterystudies.includes("d10") && qu_save.autoOptions.replicantiReset && player.replicanti.amount.gt(qu_save.replicants.requirement)) replicantReset(true)
 	if (QCs.data[1].can() && player.replicanti.amount.eq(lim)) {
 		QCs_save.qc1.max++
 		QCs.data[1].boost()

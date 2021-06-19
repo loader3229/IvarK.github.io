@@ -9,9 +9,12 @@ var QCs = {
 	},
 	compile() {
 		QCs_save = undefined
-		if (!tmp.ngp3 || tmp.qu === undefined) return
+		if (!tmp.ngp3 || qu_save === undefined) {
+			this.updateTmp()
+			return
+		}
 
-		let data = tmp.qu.qc
+		let data = qu_save.qc
 		if (data === undefined) data = this.setup()
 		QCs_save = data
 
@@ -297,7 +300,7 @@ var QCs = {
 		getEl("pairedchallenges").style.display = player.masterystudies.includes("d9") ? "" : "none"
 		getEl("respecPC").style.display = player.masterystudies.includes("d9") ? "" : "none"
 		for (var pc = 1; pc <= 4; pc++) {
-			var subChalls = tmp.qu.pairedChallenges.order[pc]
+			var subChalls = qu_save.pairedChallenges.order[pc]
 			if (subChalls) for (var sc = 0; sc < 2; sc++) {
 				var subChall = subChalls[sc]
 				if (subChall) {
@@ -307,20 +310,20 @@ var QCs = {
 			}
 			if (player.masterystudies.includes("d9")) {
 				var property = "pc" + pc
-				var sc1 = tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc][0] : 0
-				var sc2 = (sc1 ? tmp.qu.pairedChallenges.order[pc].length > 1 : false) ? tmp.qu.pairedChallenges.order[pc][1] : 0
+				var sc1 = qu_save.pairedChallenges.order[pc] ? qu_save.pairedChallenges.order[pc][0] : 0
+				var sc2 = (sc1 ? qu_save.pairedChallenges.order[pc].length > 1 : false) ? qu_save.pairedChallenges.order[pc][1] : 0
 				getEl(property+"desc").textContent = "Paired Challenge "+pc+": Both Quantum Challenge " + (sc1 ? sc1 : "?") + " and " + (sc2 ? sc2 : "?") + " are applied."
 				getEl(property+"cost").textContent = "Cost: Still none. ;/"
 				getEl(property+"goal").textContent = "Goal: " + (sc2 ? shortenCosts(Decimal.pow(10, this.getGoalMA(subChalls))) : "???") + " antimatter"
-				getEl(property).textContent = pcFocus == pc ? "Cancel" : (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "Assign" : tmp.qu.pairedChallenges.current == pc ? "Running" : tmp.qu.pairedChallenges.completed >= pc ? "Completed" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Start"
-				getEl(property).className = pcFocus == pc || (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "challengesbtn" : tmp.qu.pairedChallenges.completed >= pc ? "completedchallengesbtn" : tmp.qu.pairedChallenges.completed + 1 <pc ? "lockedchallengesbtn" : tmp.qu.pairedChallenges.current == pc ? "onchallengebtn" : "challengesbtn"
+				getEl(property).textContent = pcFocus == pc ? "Cancel" : (qu_save.pairedChallenges.order[pc] ? qu_save.pairedChallenges.order[pc].length < 2 : true) ? "Assign" : qu_save.pairedChallenges.current == pc ? "Running" : qu_save.pairedChallenges.completed >= pc ? "Completed" : qu_save.pairedChallenges.completed + 1 < pc ? "Locked" : "Start"
+				getEl(property).className = pcFocus == pc || (qu_save.pairedChallenges.order[pc] ? qu_save.pairedChallenges.order[pc].length < 2 : true) ? "challengesbtn" : qu_save.pairedChallenges.completed >= pc ? "completedchallengesbtn" : qu_save.pairedChallenges.completed + 1 <pc ? "lockedchallengesbtn" : qu_save.pairedChallenges.current == pc ? "onchallengebtn" : "challengesbtn"
 
 				var sc1t = Math.min(sc1, sc2)
 				var sc2t = Math.max(sc1, sc2)
 				if (player.masterystudies.includes("d14")) {
 					getEl(property + "br").style.display = ""
-					getEl(property + "br").textContent = sc1t != 6 || sc2t != 8 ? "QC6 & 8" : tmp.qu.bigRip.active ? "Big Ripped" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Big Rip"
-					getEl(property + "br").className = sc1t != 6 || sc2t != 8 ? "lockedchallengesbtn" : tmp.qu.bigRip.active ? "onchallengebtn" : tmp.qu.pairedChallenges.completed + 1 < pc ? "lockedchallengesbtn" : "bigripbtn"
+					getEl(property + "br").textContent = sc1t != 6 || sc2t != 8 ? "QC6 & 8" : qu_save.bigRip.active ? "Big Ripped" : qu_save.pairedChallenges.completed + 1 < pc ? "Locked" : "Big Rip"
+					getEl(property + "br").className = sc1t != 6 || sc2t != 8 ? "lockedchallengesbtn" : qu_save.bigRip.active ? "onchallengebtn" : qu_save.pairedChallenges.completed + 1 < pc ? "lockedchallengesbtn" : "bigripbtn"
 				} else getEl(property + "br").style.display = "none"
 			}
 		}
@@ -330,10 +333,10 @@ var QCs = {
 		getEl("bigrip").style.display = player.masterystudies.includes("d14") ? "" : "none"
 		if (hasMTS("d14")) {
 			var max = getMaxBigRipUpgrades()
-			getEl("spaceShards").textContent = shortenDimensions(tmp.qu.bigRip.spaceShards)
+			getEl("spaceShards").textContent = shortenDimensions(qu_save.bigRip.spaceShards)
 			for (var u = 18; u <= 20; u++) getEl("bigripupg" + u).parentElement.style.display = u > max ? "none" : ""
 			for (var u = 1; u <= max; u++) {
-				getEl("bigripupg" + u).className = tmp.qu.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : tmp.qu.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
+				getEl("bigripupg" + u).className = qu_save.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : qu_save.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
 				getEl("bigripupg" + u + "cost").textContent = shortenDimensions(new Decimal(bigRipUpgCosts[u]))
 			}
 		}

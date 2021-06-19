@@ -115,7 +115,7 @@ var mTs = {
 			return tmp.eds[8].perm >= 10
 		},
 		d13() {
-			return tmp.qu.nanofield.rewards >= 16
+			return qu_save.nanofield.rewards >= 16
 		},
 		d14() {
 			return hasAch("ng3p34")
@@ -195,7 +195,7 @@ var mTs = {
 			let dLog = Math.max(Math.log10(log), 0)
 			let str = Math.pow(Math.max(dLog / 5 + 1, 1), 2)
 
-			return Decimal.pow(10, Math.pow(log, 2 - 1 / str) * Math.pow(10, 5 / str - 5) * str)
+			return Decimal.pow(10, Math.pow(log, 2 - 1 / str) * Math.pow(10, 5 / str - 5) * str).max(tmp.rm)
 		},
 		281() {
 			let x = player.dilation.dilatedTime.add(1).log10()
@@ -593,6 +593,7 @@ function buyingD7Changes() {
 	getEl("positronstabbtn").style.display = ""
 
 	enB.update("pos")
+	pos.updateTmp()
 }
 
 function buyingDilStudyForQC() {

@@ -1,5 +1,5 @@
 function getLogTotalSpin() {
-	return tmp.qu.tod.r.spin.plus(tmp.qu.tod.b.spin).plus(tmp.qu.tod.g.spin).add(1).log10()
+	return qu_save.tod.r.spin.plus(qu_save.tod.b.spin).plus(qu_save.tod.g.spin).add(1).log10()
 }
 
 function updateToDSpeedDisplay(){
@@ -40,7 +40,7 @@ function updateTreeOfDecayTab(){
 	for (var c = 0; c < 3; c++) {
 		var color = colors[c]
 		var shorthand = shorthands[c]
-		var branch = tmp.qu.tod[shorthand]
+		var branch = qu_save.tod[shorthand]
 		var name = color + " " + getUQNameFromBranch(shorthand) + " quarks"
 		var rate = getDecayRate(shorthand)
 		var linear = Decimal.pow(2, getRDPower(shorthand))
@@ -105,7 +105,7 @@ function updateTODStuff() {
 	for (var c = 0; c < 3; c++) {
 		var color = colors[c]
 		var shorthand = shorthands[c]
-		var branch = tmp.qu.tod[shorthand]
+		var branch = qu_save.tod[shorthand]
 		var name = getUQNameFromBranch(shorthand)
 		getEl(shorthand + "UQName").innerHTML = name
 		extra = Decimal.log10(branch.spin) > 200
@@ -143,7 +143,7 @@ function showBranchTab(tabName) {
 }
 
 function getUnstableGain(branch) {
-	let log = tmp.qu.usedQuarks[branch].max(1).log10()
+	let log = qu_save.usedQuarks[branch].max(1).log10()
 	let ret = Math.max(log / 50 - 6, 0)
 	ret = Math.pow(ret, 2) + ret * 2
 
@@ -165,13 +165,13 @@ function getLowerBoundDecays(branch){
 }
 
 function canUnstable(branch) {
-	return tmp.qu.usedQuarks[branch].gt(0) && getUnstableGain(branch).gt(tmp.qu.tod[branch].quarks)
+	return qu_save.usedQuarks[branch].gt(0) && getUnstableGain(branch).gt(qu_save.tod[branch].quarks)
 }
 
 function unstableQuarks(branch) {
 	if (!canUnstable(branch)) return
-	tmp.qu.tod[branch].quarks = tmp.qu.tod[branch].quarks.max(getUnstableGain(branch))
-	if (player.ghostify.milestones < 4) tmp.qu.usedQuarks[branch] = new Decimal(0)
+	qu_save.tod[branch].quarks = qu_save.tod[branch].quarks.max(getUnstableGain(branch))
+	if (player.ghostify.milestones < 4) qu_save.usedQuarks[branch] = new Decimal(0)
 	if (player.ghostify.reference > 0) player.ghostify.reference--
 	if (player.unstableThisGhostify) player.unstableThisGhostify ++
 	else player.unstableThisGhostify = 10
@@ -182,7 +182,7 @@ function getBranchSpeedText(){
 	if (new Decimal(getTreeUpgradeEffect(3)).gt(1)) text += "Tree Upgrade 3: " + shorten(getTreeUpgradeEffect(3)) + "x, "
 	if (new Decimal(getTreeUpgradeEffect(5)).gt(1)) text += "Tree Upgrade 5: " + shorten(getTreeUpgradeEffect(5)) + "x, "
 	if (hasMTS(431)) if (getMTSMult(431).gt(1)) text += "Mastery Study 431: " + shorten(getMTSMult(431)) + "x, "
-	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) text += "19th Big Rip upgrade: " + shorten(tmp.bru[19]) + "x, "
+	if (qu_save.bigRip.active && isBigRipUpgradeActive(19)) text += "19th Big Rip upgrade: " + shorten(tmp.bru[19]) + "x, "
 	if (hasNU(4)) if (tmp.nu[4].gt(1)) text += "Fourth Neutrino Upgrade: " + shorten(tmp.nu[4]) + "x, "
 	if (hasAch("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
 	if (player.ghostify.milestones >= 14) text += "Brave Milestone 14: " + shorten(getMilestone14SpinMult()) + "x, "
@@ -203,7 +203,7 @@ function getBranchSpeedText(){
 function getBranchSpeed() { 
 	let x = Decimal.times(getTreeUpgradeEffect(3), getTreeUpgradeEffect(5))
 	if (hasMTS(431)) x = x.times(getMTSMult(431))
-	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) x = x.times(tmp.bru[19])
+	if (qu_save.bigRip.active && isBigRipUpgradeActive(19)) x = x.times(tmp.bru[19])
 	if (hasNU(4)) x = x.times(tmp.nu[4])
 	if (hasAch("ng3p48")) x = x.times(Math.sqrt(player.meta.resets + 1))
 	if (player.ghostify.milestones >= 14) x = x.times(getMilestone14SpinMult())
@@ -238,12 +238,12 @@ function getMilestone14SpinMult(){
 function getQuarkSpinProduction(branch) {
 	let ret = getBranchUpgMult(branch, 1).times(getBranchFinalSpeed())
 	if (hasNU(4)) ret = ret.times(tmp.nu[4])
-	if (hasAch("ng3p74")) if (tmp.qu.tod[branch].decays) ret = ret.times(1 + tmp.qu.tod[branch].decays)
-	if (tmp.qu.bigRip.active) {
+	if (hasAch("ng3p74")) if (qu_save.tod[branch].decays) ret = ret.times(1 + qu_save.tod[branch].decays)
+	if (qu_save.bigRip.active) {
 		if (isBigRipUpgradeActive(18)) ret = ret.times(tmp.bru[18])
 		if (hasNU(12)) ret = ret.times(tmp.nu[12].normal)
 	}
-	ret = ret.times(Decimal.pow(1.1, tmp.qu.nanofield.rewards - 12))
+	ret = ret.times(Decimal.pow(1.1, qu_save.nanofield.rewards - 12))
 	ret = ret.times(getBranchDevSpeed())
 	return ret
 }
@@ -329,7 +329,7 @@ let TREE_UPGRADES = {
 			if (hasAch("ng3p87")) MA = MA.plus(player.meta.bestOverGhostifies)
 
 			let x = Decimal.pow(Math.log10(MA.add(1).log10() + 1) / 5 + 1, Math.sqrt(lvl))
-			if (!inBigRip() && tmp.qu.breakEternity.upgrades.includes(13)) x = x.max(Decimal.pow(1.1, Math.pow(MA.add(1).log10(), 1/3) * Math.sqrt(lvl)))
+			if (!inBigRip() && qu_save.breakEternity.upgrades.includes(13)) x = x.max(Decimal.pow(1.1, Math.pow(MA.add(1).log10(), 1/3) * Math.sqrt(lvl)))
 			return x
 		}
 	},
@@ -389,25 +389,25 @@ function getTreeUpgradeCost(upg, add) {
 
 function canBuyTreeUpg(upg) {
 	var shorthands = ["r", "g", "b"]
-	return getTreeUpgradeCost(upg).lte(tmp.qu.tod[shorthands[getTreeUpgradeLevel(upg) % 3]].spin)
+	return getTreeUpgradeCost(upg).lte(qu_save.tod[shorthands[getTreeUpgradeLevel(upg) % 3]].spin)
 }
 
 function buyTreeUpg(upg) {
 	if (!canBuyTreeUpg(upg)) return
 	var colors = ["red", "green", "blue"]
 	var shorthands = ["r", "g", "b"]
-	var branch = tmp.qu.tod[shorthands[getTreeUpgradeLevel(upg) % 3]]
+	var branch = qu_save.tod[shorthands[getTreeUpgradeLevel(upg) % 3]]
 	branch.spin = branch.spin.sub(getTreeUpgradeCost(upg))
-	if (!tmp.qu.tod.upgrades[upg]) tmp.qu.tod.upgrades[upg] = 0
-	tmp.qu.tod.upgrades[upg]++
+	if (!qu_save.tod.upgrades[upg]) qu_save.tod.upgrades[upg] = 0
+	qu_save.tod.upgrades[upg]++
 }
 
 function isTreeUpgActive(upg) {
-	return tmp.quActive && player.masterystudies.includes("d13") && tmp.qu.tod.upgrades[upg] >= 1
+	return tmp.quActive && player.masterystudies.includes("d13") && qu_save.tod.upgrades[upg] >= 1
 }
 
 function getTreeUpgradeLevel(upg) {
-	return hasMTS("d12") ? (tmp.qu.tod.upgrades[upg] || 0) : 0
+	return hasMTS("d12") ? (qu_save.tod.upgrades[upg] || 0) : 0
 }
 
 function getEffectiveTreeUpgLevel(upg){
@@ -439,7 +439,7 @@ function getBranchUpgCost(branch, upg) {
 
 function buyBranchUpg(branch, upg) {
 	var colors = {r: "red", g: "green", b: "blue"}
-	var bData = tmp.qu.tod[branch]
+	var bData = qu_save.tod[branch]
 	if (bData.spin.lt(getBranchUpgCost(branch,upg))) return
 	bData.spin = bData.spin.sub(getBranchUpgCost(branch, upg))
 	if (bData.upgrades[upg] == undefined) bData.upgrades[upg] = 0
@@ -452,7 +452,7 @@ function buyBranchUpg(branch, upg) {
 }
 
 function getBranchUpgLevel(branch,upg) {
-	upg = tmp.qu.tod[branch].upgrades[upg]
+	upg = qu_save.tod[branch].upgrades[upg]
 	if (upg) return upg
 	return 0
 }
@@ -460,17 +460,17 @@ function getBranchUpgLevel(branch,upg) {
 var todspeed = 1
 
 function rotateAutoAssign() {
-	tmp.qu.autoOptions.assignQKRotate = tmp.qu.autoOptions.assignQKRotate ? (tmp.qu.autoOptions.assignQKRotate + 1) % 3 : 1
-	getEl('autoAssignRotate').textContent = "Rotation: " + (tmp.qu.autoOptions.assignQKRotate > 1 ? "Left" : tmp.qu.autoOptions.assignQKRotate ? "Right" : "None")
+	qu_save.autoOptions.assignQKRotate = qu_save.autoOptions.assignQKRotate ? (qu_save.autoOptions.assignQKRotate + 1) % 3 : 1
+	getEl('autoAssignRotate').textContent = "Rotation: " + (qu_save.autoOptions.assignQKRotate > 1 ? "Left" : qu_save.autoOptions.assignQKRotate ? "Right" : "None")
 }
 
 function unstableAll() {
 	var colors = ["r", "g", "b"]
 	for (var c = 0; c < 3; c++) {
-		var bData = tmp.qu.tod[colors[c]]
+		var bData = qu_save.tod[colors[c]]
 		if (canUnstable(colors[c])) {
 			bData.quarks = bData.quarks.max(getUnstableGain(colors[c]))
-			if (player.ghostify.milestones < 4) tmp.qu.usedQuarks[colors[c]] = new Decimal(0)
+			if (player.ghostify.milestones < 4) qu_save.usedQuarks[colors[c]] = new Decimal(0)
 		}
 		player.unstableThisGhostify++
 	}
@@ -554,13 +554,13 @@ function getUQName(rds) {
 }
 
 function getUQNameFromBranch(shorthand) {
-	return getUQName(tmp.qu.tod[shorthand].decays || 0)
+	return getUQName(qu_save.tod[shorthand].decays || 0)
 }
 
 function maxTreeUpg() {
 	let update = false
 	let colors = ["r", "g", "b"]
-	let data = tmp.qu.tod
+	let data = qu_save.tod
 	for (let u = 1; u <= 8; u++) {
 		let cost = getTreeUpgradeCost(u)
 		let spins = []
@@ -600,7 +600,7 @@ function maxTreeUpg() {
 
 function maxBranchUpg(branch, weak) {
 	var colors = {r: "red", g: "green", b: "blue"}
-	var bData = tmp.qu.tod[branch]
+	var bData = qu_save.tod[branch]
 	for (var u = (weak ? 2 : 1); u <= 3; u++) {
 		var oldLvl = getBranchUpgLevel(branch, u)
 		var scaleStart = branchUpgCostScales[u - 1][1]
@@ -631,7 +631,7 @@ function maxBranchUpg(branch, weak) {
 }
 
 function radioactiveDecay(shorthand) {
-	let data = tmp.qu.tod[shorthand]
+	let data = qu_save.tod[shorthand]
 	if (!data.quarks.gte(Decimal.pow(10, Math.pow(2, 50)))) return
 	data.quarks = new Decimal(0)
 	data.spin = new Decimal(0)
@@ -642,7 +642,7 @@ function radioactiveDecay(shorthand) {
 }
 
 function maxRadioactiveDecay(shorthand){
-	let data = tmp.qu.tod[shorthand]
+	let data = qu_save.tod[shorthand]
 	if (!data.quarks.max(getUnstableGain(shorthand)).gte(Decimal.pow(10, Math.pow(2, 50)))) return
 	data.quarks = new Decimal(0)
 	data.spin = new Decimal(0)
@@ -663,7 +663,7 @@ function getTotalRadioactiveDecays(){
 }
 
 function getRadioactiveDecays(shorthand) {
-	let data = tmp.qu.tod[shorthand]
+	let data = qu_save.tod[shorthand]
 	return data.decays || 0
 }
 
@@ -671,7 +671,7 @@ function getMinimumUnstableQuarks() {
 	let r={quarks:new Decimal(1/0),decays:1/0}
 	let c=["r","g","b"]
 	for (var i=0;i<3;i++) {
-		let b=tmp.qu.tod[c[i]]
+		let b=qu_save.tod[c[i]]
 		let d=b.decays||0
 		if (r.decays>d||(r.decays==d&&b.quarks.lte(r.quarks))) r={quarks:b.quarks,decays:d}
 	}
@@ -682,7 +682,7 @@ function getMaximumUnstableQuarks() {
 	let r = {quarks:new Decimal(0),decays:0}
 	let c = ["r","g","b"]
 	for (var i = 0; i < 3; i++) {
-		let b = tmp.qu.tod[c[i]]
+		let b = qu_save.tod[c[i]]
 		let d = b.decays || 0
 		if (r.decays < d || (r.decays == d && b.quarks.gte(r.quarks))) r = {quarks: b.quarks, decays: d}
 	}
@@ -691,8 +691,8 @@ function getMaximumUnstableQuarks() {
 
 function getTreeUpgradeEfficiencyText(){
 	let text = ""
-	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasNU(17))) text += "Neutrino Boost 7: +" + shorten(tmp.nb[7]) + ", "
-	if (hasAch("ng3p62") && !tmp.qu.bigRip.active) text += "Finite Time Reward: +10%, "
+	if (player.ghostify.neutrinos.boosts >= 7 && (qu_save.bigRip.active || hasNU(17))) text += "Neutrino Boost 7: +" + shorten(tmp.nb[7]) + ", "
+	if (hasAch("ng3p62") && !qu_save.bigRip.active) text += "Finite Time Reward: +10%, "
 	if (hasBosonicUpg(43)) text += "Bosonic Lab Upgrade 18: " + shorten(tmp.blu[43]) + "x, "
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length-2)
@@ -702,8 +702,8 @@ function getTreeUpgradeEfficiency(mod) {
 	if (!hasMTS("d12")) return 0
 
 	let r = 1
-	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasNU(17) || mod == "br") && mod != "noNB") r += tmp.nb[7]
-	if (hasAch("ng3p62") && !tmp.qu.bigRip.active) r *= 1.1
+	if (player.ghostify.neutrinos.boosts >= 7 && (qu_save.bigRip.active || hasNU(17) || mod == "br") && mod != "noNB") r += tmp.nb[7]
+	if (hasAch("ng3p62") && !qu_save.bigRip.active) r *= 1.1
 	if (hasBosonicUpg(43)) r *= tmp.blu[43]
 	return r
 }

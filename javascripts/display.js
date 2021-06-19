@@ -173,9 +173,9 @@ function bestQuantumDisplay(){
 	if (!pH.shown("quantum")) getEl("quantumStatistics").style.display = "none"
 	else {
 		getEl("quantumStatistics").style.display = ""
-		getEl("quantumed").textContent = "You have gone Quantum " + getFullExpansion(tmp.qu.times) + " times."
-		getEl("thisQuantum").textContent = "You have spent " + timeDisplay(tmp.qu.time) + " in this Quantum."
-		getEl("bestQuantum").textContent = "Your fastest Quantum is in " + timeDisplay(tmp.qu.best) + "."
+		getEl("quantumed").textContent = "You have gone Quantum " + getFullExpansion(qu_save.times) + " times."
+		getEl("thisQuantum").textContent = "You have spent " + timeDisplay(qu_save.time) + " in this Quantum."
+		getEl("bestQuantum").textContent = "Your fastest Quantum is in " + timeDisplay(qu_save.best) + "."
 	}
 }
 
@@ -193,10 +193,10 @@ function ng3p51Display(){
 	if (!hasAch("ng3p51"))  getEl("bigRipStatistics").style.display = "none"
 	else {
 		getEl("bigRipStatistics").style.display = ""
-		setAndMaybeShow("bigRipped", tmp.qu.bigRip.times, '"You have big ripped the universe " + getFullExpansion(tmp.qu.bigRip.times) + " times."')
-		setAndMaybeShow("bestmoneythisrip", tmp.qu.bigRip.active, "'Your best antimatter for this Big Rip is ' + shortenMoney(tmp.qu.bigRip.bestThisRun) + '.'")
-		getEl("totalmoneybigrip").textContent = 'You have made a total of ' + shortenMoney(tmp.qu.bigRip.totalAntimatter) + ' antimatter in all big rips.'
-		getEl("bestgalsbigrip").textContent = 'Your best amount of normal galaxies for all Big Rips is ' + getFullExpansion(tmp.qu.bigRip.bestGals) + "."
+		setAndMaybeShow("bigRipped", qu_save.bigRip.times, '"You have big ripped the universe " + getFullExpansion(qu_save.bigRip.times) + " times."')
+		setAndMaybeShow("bestmoneythisrip", qu_save.bigRip.active, "'Your best antimatter for this Big Rip is ' + shortenMoney(qu_save.bigRip.bestThisRun) + '.'")
+		getEl("totalmoneybigrip").textContent = 'You have made a total of ' + shortenMoney(qu_save.bigRip.totalAntimatter) + ' antimatter in all big rips.'
+		getEl("bestgalsbigrip").textContent = 'Your best amount of normal galaxies for all Big Rips is ' + getFullExpansion(qu_save.bigRip.bestGals) + "."
 	}
 }
 
@@ -576,15 +576,15 @@ function mainDilationDisplay(){
 }
 
 function breakEternityDisplay(){
-	getEl("eternalMatter").textContent = shortenDimensions(tmp.qu.breakEternity.eternalMatter)
+	getEl("eternalMatter").textContent = shortenDimensions(qu_save.breakEternity.eternalMatter)
 	for (var u = 1; u <= (hasAch("ng3p101") ? 13 : player.ghostify.ghostlyPhotons.unl ? 10 : 7); u++) {
-		getEl("breakUpg" + u).className = (tmp.qu.breakEternity.upgrades.includes(u) && u != 7) ? "eternityupbtnbought" : tmp.qu.breakEternity.eternalMatter.gte(getBreakUpgCost(u)) ? "eternityupbtn" : "eternityupbtnlocked"
+		getEl("breakUpg" + u).className = (qu_save.breakEternity.upgrades.includes(u) && u != 7) ? "eternityupbtnbought" : qu_save.breakEternity.eternalMatter.gte(getBreakUpgCost(u)) ? "eternityupbtn" : "eternityupbtnlocked"
 		if (u == 8) getEl("breakUpg" + u + "Mult").textContent = (getBreakUpgMult(u) * 100 - 100).toFixed(1)
 		else if (u != 7 && u <= 10) getEl("breakUpg" + u + "Mult").textContent = shortenMoney(getBreakUpgMult(u))
 		else if (u == 12) getEl("breakUpg" + u + "Mult").textContent = shorten(getBreakUpgMult(u))
 	}
-	if (tmp.qu.bigRip.active) {
-		getEl("eterShortcutEM").textContent=shortenDimensions(tmp.qu.breakEternity.eternalMatter)
+	if (qu_save.bigRip.active) {
+		getEl("eterShortcutEM").textContent=shortenDimensions(qu_save.breakEternity.eternalMatter)
 		getEl("eterShortcutEP").textContent=shortenDimensions(player.eternityPoints)
 		getEl("eterShortcutTP").textContent=shortenMoney(player.dilation.tachyonParticles)
 	}

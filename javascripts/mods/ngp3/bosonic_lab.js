@@ -965,7 +965,7 @@ var bu = {
 		42() {
 			if (!tmp.quActive) return 1
 			let exp = tmp.ngp3_exp ? 1/3 : 1/4
-			return Math.pow(tmp.qu.colorPowers.r / 2e4 + 1, exp)
+			return Math.pow(qu_save.colorPowers.r / 2e4 + 1, exp)
 		},
 		43() {
 			if (!tmp.quActive) return 1
