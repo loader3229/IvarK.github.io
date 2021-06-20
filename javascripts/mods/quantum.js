@@ -298,7 +298,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	// Positrons
 	if (pos.unl()) {
 		pos_save.excite = {...pos_tmp.next_excite}
-		this.updateCloud()
+		pos.updateCloud()
 	}
 
 	// Quantum Challenges
