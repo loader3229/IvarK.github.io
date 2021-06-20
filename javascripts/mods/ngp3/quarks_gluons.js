@@ -952,6 +952,8 @@ var enB = {
 				getEl("enB_" + type + e + "_type").innerHTML = (mastered ? "(formerly " : "(") + (typeData[e].anti ? "anti-" : "") + typeData[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : " - Get " + getFullExpansion(enB.getMastered(type, e)) + " " + typeData.name + " Boosters to master)") + (typeData[e].activeDispReq ? "<br>Requirement: " + typeData[e].activeDispReq() : "")
 			}
 		}
+
+		if (type == "pos") pos.updateCloud()
 	},
 	updateOnTick(type) {
 		var data = this[type]
@@ -961,7 +963,8 @@ var enB = {
 
 		for (var i = 1; i <= data.max; i++) {
 			if (!this.has(type, i)) break
-			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = !enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No full efficiency)" : "Full efficiency at " + shorten(enB.pos.chargeReq(i)) + " charge"
+			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = ("Level: " + data.lvl() + (pos_save.excite[i] ? "(excited by " + pos_save.excite[i] + ")" : "") + " | ") +
+				(!enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No full efficiency)" : "Full efficiency at " + shorten(enB.pos.chargeReq(i)) + " charge")
 			if (tmp_enB[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(tmp_enB[type + i])
 		}
 	}

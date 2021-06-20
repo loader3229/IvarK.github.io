@@ -267,6 +267,10 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	updateQuarkDisplay()
 	updateBankedEter()
 
+	if (player.tickspeedBoosts !== undefined) player.tickspeedBoosts = 0
+	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25);
+	else player.infinityPoints = new Decimal(0);
+
 	// ng-2 display
 	getEl("galaxyPoints2").innerHTML = "You have <span class='GPAmount'>0</span> Galaxy points."
 
@@ -291,9 +295,11 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		if (!bigRip && qu_save.bigRip.active) if (player.galaxies == 9 && player.replicanti.galaxies == 9 && player.timeDimension4.amount.round().eq(9)) giveAchievement("We can really afford 9.")
 	} else qu_save.gluons = 0;
 
-	if (player.tickspeedBoosts !== undefined) player.tickspeedBoosts = 0
-	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25);
-	else player.infinityPoints = new Decimal(0);
+	// Positrons
+	if (pos.unl()) {
+		pos_save.excite = {...pos_tmp.next_excite}
+		this.updateCloud()
+	}
 
 	// Quantum Challenges
 	var isQC = mode == "qc"

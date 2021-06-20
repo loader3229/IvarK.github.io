@@ -1571,7 +1571,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 12? - Post-Build 5)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 12? - Post-Build 6)</p>
 			</span>
 			<div class="footer bottom"></div>
 		</div>
@@ -4856,6 +4856,23 @@
 					<span id="enB_pos_next"></span>
 				</td>
 			</tr>
+			</tr>
+				<td id="pos_cloud1_cell">
+					<b id="pos_cloud1_num" style="font-size: 25px">Tier I: 2/2</b>
+					<br>
+					Reward: +10% Quantum Energy effect
+				</td>
+				<td id="pos_cloud2_cell">
+					<b id="pos_cloud2_num" style="font-size: 25px">Tier II: 4/4</b>
+					<br>
+					Reward: +20% Quantum Energy effect
+				</td>
+				<td id="pos_cloud3_cell">
+					<b id="pos_cloud3_num" style="font-size: 25px">Tier III: 6/6</b>
+					<br>
+					Reward: +30% Quantum Energy effect
+				</td>
+			</tr>
 			<tr>
 				<td id="enB_pos1">
 					<b id="enB_pos1_name" style="font-size: 25px"></b>
@@ -4864,7 +4881,7 @@
 					<br><br>
 					<span id="enB_pos1_full"></span>
 					<br>
-					<button id="enB_pos1_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<button class="storebtn longbtn" id="enB_pos1_excite" onclick="pos.exciteToggle(1)"></button>
 					<br><br>
 					Replicantis increase the numerator of quark efficiency by <span id="enB_pos1_eff" style="font-size:35px"></span>.
 				</td>
@@ -4875,7 +4892,7 @@
 					<br><br>
 					<span id="enB_pos2_full"></span>
 					<br>
-					<button id="enB_pos2_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<button class="storebtn longbtn" id="enB_pos2_excite" onclick="pos.exciteToggle(2)"></button>
 					<br><br>
 					Raise the multiplier per ten normal Dimensions by <span id="enB_pos2_eff" style="font-size:35px"></span>.
 				</td>
@@ -4886,7 +4903,7 @@
 					<br><br>
 					<span id="enB_pos3_full"></span>
 					<br>
-					<button id="enB_pos3_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<button class="storebtn longbtn" id="enB_pos3_excite" onclick="pos.exciteToggle(3)"></button>
 					<br><br>
 					Quantum requirement is reduced to <span id="enB_pos3_eff" style="font-size:35px"></span>. (<span id="enB_pos3_exp" style="font-size:25px"></span>)
 				</td>
@@ -4899,7 +4916,7 @@
 					<br><br>
 					<span id="enB_pos4_full"></span>
 					<br>
-					<button id="enB_pos4_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<button class="storebtn longbtn" id="enB_pos4_excite" onclick="pos.exciteToggle(4)"></button>
 					<br><br>
 					<span id="enB_pos4_eff" style="font-size: 25px">Unlock Meta-Accelerator.</span><br>(See Meta Dimensions tab)
 				</td>
@@ -4910,7 +4927,7 @@
 					<br><br>
 					<span id="enB_pos5_full"></span>
 					<br>
-					<button id="enB_pos5_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<button class="storebtn longbtn" id="enB_pos5_excite" onclick="pos.exciteToggle(5)"></button>
 					<br><br>
 					Raise the Infinite Time reward by <span id="enB_pos5_eff" style="font-size:24px"></span>.
 				</td>
@@ -4921,7 +4938,7 @@
 					<br><br>
 					<span id="enB_pos6_full"></span>
 					<br>
-					<button id="enB_pos6_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<button class="storebtn longbtn" id="enB_pos6_excite" onclick="pos.exciteToggle(6)"></button>
 					<br><br>
 					Reduce the tickspeed cost multiplier increase to <span id="enB_pos6_eff" style="font-size:24px"></span>.
 				</td>
@@ -4934,7 +4951,7 @@
 					<br><br>
 					<span id="enB_pos7_full"></span>
 					<br>
-					<button id="enB_pos7_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<button class="storebtn longbtn" id="enB_pos7_excite" onclick="pos.exciteToggle(7)"></button>
 					<br><br>
 					Add the exponent of EC14 by <span id="enB_pos7_eff" style="font-size:24px"></span>, but also divide the exponent.
 				</td>
@@ -4945,7 +4962,7 @@
 					<br><br>
 					<span id="enB_pos8_full"></span>
 					<br>
-					<button id="enB_pos8_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<button class="storebtn longbtn" id="enB_pos8_excite" onclick="pos.exciteToggle(8)"></button>
 					<br><br>
 					Meta Accelerator slowdown starts <span id="enB_pos8_eff" style="font-size:24px"></span> later.
 				</td>
@@ -4956,7 +4973,7 @@
 					<br><br>
 					<span id="enB_pos9_full"></span>
 					<br>
-					<button id="enB_pos9_excite" class="storebtn longbtn">Excite on next Quantum: OFF</button>
+					<button class="storebtn longbtn" id="enB_pos9_excite" onclick="pos.exciteToggle(9)"></button>
 					<br><br>
 					Infinitied stat boosts itself by <span id="enB_pos9_eff" style="font-size:24px"></span> to effect.
 				</td>

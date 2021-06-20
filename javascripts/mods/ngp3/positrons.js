@@ -102,14 +102,32 @@ var pos = {
 		}
 	},
 	updateTmp() {
-		let data = {}
+		var data = {}
 		pos_tmp = data
 		if (pos_save === undefined) return
 
 		data.next_excite = {...pos_save.excite}
+		for (var i = 1; i <= enB.pos.max; i++) getEl("enB_pos" + i + "_excite").textContent = "Excite on next Quantum: " + (pos_tmp.next_excite[i] ? "ON" : "OFF")
+
+		this.updateCloud()
+	},
+	updateCloud() {
+		var data = {}
+		pos_tmp.cloud = data
+
+		for (var i = 1; i <= enB.pos.max; i++) {
+			var lvl = enB.pos.lvl(i)
+			if (enB.has("pos", i)) pos_tmp.cloud[lvl] = (pos_tmp.cloud[lvl] || 0) + 1
+		}
+
+		for (var i = 1; i <= 3; i++) {
+			getEl("pos_cloud" + i + "_num").textContent = "Tier " + i + ": " + (pos_tmp.cloud[i] || 0) + " / " + i * 2
+			getEl("pos_cloud" + i + "_cell").className = this.isCloudRewardActive(i) ? "green" : ""
+		}
 	},
 	updateTmpOnTick() {
 		if (!this.unl()) return
+		let data = pos_tmp
 
 		//Meta Dimension Boosts or Quantum Energy -> Positrons
 		pos_save.eng = 0
@@ -140,6 +158,17 @@ var pos = {
 		}
 		pos_save.eng = Math.pow(pcSum, 4)
 	},
+
+	exciteToggle(x) {
+		if (pos_tmp.next_excite[x]) delete pos_tmp.next_excite[x]
+		else pos_tmp.next_excite[x] = 1
+
+		getEl("enB_pos" + x + "_excite").textContent = "Excite on next Quantum: " + (pos_tmp.next_excite[x] ? "ON" : "OFF")
+	},
+	isCloudRewardActive(x) {
+		return pos_tmp.cloud[x] >= x * 2
+	},
+
 	updateTab() {
 		enB.update("pos")
 		enB.updateOnTick("pos")
@@ -157,7 +186,7 @@ var pos = {
 		}
 
 		getEl("pos_charge_formula").innerHTML = wordizeList(msg, false, " +<br>", false) + " -> "
-	
+
 		if (enB.has("pos", 3)) getEl("enB_pos3_exp").textContent = "^" + (1 / tmp_enB.pos3).toFixed(Math.floor(3 + Math.log10(tmp_enB.pos3)))
 	}
 }
