@@ -514,7 +514,7 @@ var enB = {
 		},
 
 		activeReq(x) {
-			return enB.colorMatch("glu", x)
+			return enB.mastered("glu", x) || enB.colorMatch("glu", x)
 		},
 
 		max: 12,
@@ -749,13 +749,14 @@ var enB = {
 			var lvl = this.lvl(x)
 			return this[x].chargeReq * lvl
 		},
-		lvl(x) {
-			var lvl = x > 8 ? 3 : x > 2 ? 2 : 1
-			if (pos_save.excite[x]) lvl += pos_save.excite[x]
+		lvl(x, next) {
+			var lvl = x > 6 ? 3 : x > 2 ? 2 : 1
+			var data = next ? pos_tmp.next_excite : pos_save.excite
+			if (data[x]) lvl += data[x]
 			return Math.min(lvl, 3)
 		},
 
-		max: 9,
+		max: 12,
 		1: {
 			req: 1,
 			masReq: 2,
@@ -827,7 +828,7 @@ var enB = {
 				var exp = mdb
 
 				exp += Math.min(mdb, slowStart) * (Math.min(mdb, slowStart) - 1)
-				exp /= 20
+				exp /= 40
 
 				return Decimal.pow(base, exp)
 			},
@@ -921,6 +922,66 @@ var enB = {
 				return "^" + shorten(x)
 			}
 		},
+		10: {
+			req: 1/0,
+			masReq: 1/0,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
+			type: "b",
+			anti: true,
+			eff(x) {
+				var expExp = 1
+				var expDiv = 1
+
+				return Math.pow(Decimal.max(getInfinitied(), 1).log10(), expExp) / expDiv
+			},
+			effDisplay(x) {
+				return "^" + shorten(x)
+			}
+		},
+		11: {
+			req: 1/0,
+			masReq: 1/0,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
+			type: "b",
+			anti: true,
+			eff(x) {
+				var expExp = 1
+				var expDiv = 1
+
+				return Math.pow(Decimal.max(getInfinitied(), 1).log10(), expExp) / expDiv
+			},
+			effDisplay(x) {
+				return "^" + shorten(x)
+			}
+		},
+		12: {
+			req: 1/0,
+			masReq: 1/0,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
+			type: "b",
+			anti: true,
+			eff(x) {
+				var expExp = 1
+				var expDiv = 1
+
+				return Math.pow(Decimal.max(getInfinitied(), 1).log10(), expExp) / expDiv
+			},
+			effDisplay(x) {
+				return "^" + shorten(x)
+			}
+		},
 	},
 
 	update(type) {
@@ -946,10 +1007,10 @@ var enB = {
 			el.parentElement.style.display = has ? "" : "none"
 
 			if (has) {
-				el.parentElement.className = !active ? "red" : mastered ? "yellow" : "green"
-				el.textContent = (active ? "" : "Inactive ") + (mastered ? "Mastered " : "") + " " + typeData.name + " Boost #" + e
+				el.parentElement.className = !active ? "red" : mastered ? "yellow" : enB.colorMatch(type, e) ? "green" : "orange"
+				el.textContent = typeData.name + " Boost #" + e
 
-				getEl("enB_" + type + e + "_type").innerHTML = (mastered ? "(formerly " : "(") + (typeData[e].anti ? "anti-" : "") + typeData[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : " - Get " + getFullExpansion(enB.getMastered(type, e)) + " " + typeData.name + " Boosters to master)") + (typeData[e].activeDispReq ? "<br>Requirement: " + typeData[e].activeDispReq() : "")
+				getEl("enB_" + type + e + "_type").innerHTML = (mastered ? "(Mastered - formerly " : active ? "(" : "(Inactive - ") + (typeData[e].anti ? "anti-" : "") + typeData[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : " - Get " + getFullExpansion(enB.getMastered(type, e)) + " " + typeData.name + " Boosters to master)") + (typeData[e].activeDispReq ? "<br>Requirement: " + typeData[e].activeDispReq() : "")
 			}
 		}
 
@@ -963,8 +1024,7 @@ var enB = {
 
 		for (var i = 1; i <= data.max; i++) {
 			if (!this.has(type, i)) break
-			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = ("Level: " + data.lvl() + (pos_save.excite[i] ? "(excited by " + pos_save.excite[i] + ")" : "") + " | ") +
-				(!enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No full efficiency)" : "Full efficiency at " + shorten(enB.pos.chargeReq(i)) + " charge")
+			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = !enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No full efficiency)" : "Full efficiency is at " + shorten(enB.pos.chargeReq(i)) + " charge"
 			if (tmp_enB[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(tmp_enB[type + i])
 		}
 	}
@@ -1095,6 +1155,7 @@ function updateGluonsTabOnUpdate(mode) {
 	}
 
 	enB.update("glu")
+	enB.update("pos")
 
 	let typeUsed = qu_save.entColor || "rg"
 	let types = ["rg", "gb", "br"]
@@ -1102,7 +1163,7 @@ function updateGluonsTabOnUpdate(mode) {
 		var type = types[i]
 		getEl("entangle_" + type).className = "gluonupgrade " + type
 		getEl("entangle_" + type + "_pos").className = "gluonupgrade " + type
-		getEl("entangle_" + type + "_bonus").textContent = ""
+		getEl("entangle_" + type + "_bonus").innerHTML = "<br>"
 	}
 
 	getEl("entangle_" + typeUsed).className = "gluonupgrade chosenbtn"

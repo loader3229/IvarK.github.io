@@ -2114,7 +2114,7 @@ function calcDifficulty(x) {
 
 function showOptions(id) {
 	closeToolTip();
-	getEl(id).style.display = "flex"
+	getEl(id).style.display = id == "notationmenu" ? "inline" : "flex"
 }
 
 function showNextModeMessage() {
@@ -3483,18 +3483,25 @@ function exitChallenge() {
 	if (inNGM(4) && player.galacticSacrifice.chall) {
 		galacticSacrifice(false, true)
 		showTab("dimensions")
-	} else if (player.currentChallenge !== "") {
-		startChallenge("");
-		updateChallenges();
 		return
-	} else if (player.currentEternityChall !== "") {
+	}
+	if (player.currentChallenge !== "") {
+		startChallenge("")
+		updateChallenges()
+		return
+	}
+	if (player.currentEternityChall !== "") {
 		player.currentEternityChall = ""
 		player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
 		eternity(true)
-		updateEternityChallenges();
+		updateEternityChallenges()
 		return
 	}
-	if (QCs.inAny()) quantum(false, true)
+	if (QCs.inAny()) {
+		QCs_save.in = []
+		quantum(false, true)
+		return
+	}
 }
 
 function onChallengeFail() {
@@ -3887,7 +3894,7 @@ setInterval(function() {
 	if (isNaN(player.totalmoney.e)) player.totalmoney = new Decimal(10)
 	if (!tmp.ngp3 || !pH.did("quantum")) if (player.infinityPoints.lt(100)) player.infinityPoints = player.infinityPoints.round()
 	checkGluonRounding()
-}, 100)
+}, 1000)
 
 function autoPerSecond() {
 	if (isGamePaused()) return
@@ -3984,7 +3991,7 @@ function infinityRespeccedDMUpdating(diff){
 }
 
 function changingDecimalSystemUpdating(){
-	getEl("decimalMode").style.visibility = "hidden"
+	getEl("decimalModeBtn").style.visibility = "hidden"
 	if (break_infinity_js) {
 		player.totalmoney = Decimal.pow(10, 9e15 - 1)
 		player.money = player.totalmoney

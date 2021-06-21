@@ -393,6 +393,7 @@ function setEverythingPreNGp3onLoad(){
 }
 
 function setAarexModIfUndefined(){
+	//First Aarex's Mods option: Decimal Library Toggle
 	if (player.aarexModifications === undefined) {
 		player.aarexModifications = {
 			breakInfinity: false
@@ -400,12 +401,10 @@ function setAarexModIfUndefined(){
 		break_infinity_js = false
 		tmp.mod = player.aarexModifications
 	}
-	
-	if (break_infinity_js != tmp.mod.breakInfinity) {
-		save_game(true)
-		document.location.reload(true)
-		return
-	}
+
+	getEl("decimalMode").innerHTML = tmp.mod.breakInfinity ? "break_infinity.js<br>(slow, up to e9e15)" : "logarithmica_numerus.js<br>(fast, up to e1.79e308)"
+	getEl("decimalModeBtn").style.visibility = Decimal.gt(player.totalmoney,Decimal.pow(10, 9e15)) ? "hidden" : ""
+
 	if (tmp.mod.dilationConf === undefined) tmp.mod.dilationConf = true
 	if (tmp.mod.offlineProgress === undefined)  tmp.mod.offlineProgress = true
 	if (tmp.mod.autoSave === undefined) tmp.mod.autoSave = true
@@ -1733,8 +1732,6 @@ function setOptionsDisplaysStuff1(){
 
         document.getElementsByClassName("hideInMorse").display = player.options.notation == "Morse code" ? "none" : ""
 
-        getEl("decimalMode").textContent = "Big number library: "+(break_infinity_js?"break_infinity (slow)":"logarithmica_numerus (fast)")
-        getEl("decimalMode").style.visibility = Decimal.gt(player.totalmoney,Decimal.pow(10, 9e15)) ? "hidden" : ""
         getEl("hideProductionTab").textContent = (tmp.mod.hideProductionTab?"Show":"Hide")+" production tab"
 		setStatsDisplay()
         getEl("hideRepresentation").textContent=(tmp.mod.hideRepresentation?"Show":"Hide")+" antimatter representation"

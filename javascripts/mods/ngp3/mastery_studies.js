@@ -7,9 +7,9 @@ var mTs = {
 			261: 3e69, 262: 3e69, 263: 3e69, 264: 3e69, 265: 3e69, 266: 3e69,
 
 			//Quantum
-			271: 2e70,
-			281: 1/0, 282: 1/0, 283: 1/0, 284: 1/0,
-			291: 4e74, 292: 4e74,
+			271: 4e70,
+			281: 1/0, 282: 2e74, 283: 2e74, 284: 1/0,
+			291: 2e74, 292: 2e74,
 			301: 1/0, 302: 2e74, 303: 1/0,
 			311: 1/0, 312: 1/0,
 
@@ -47,10 +47,10 @@ var mTs = {
 
 			//Quantum
 			t271: "reset",
-			t281: 5, t282: 3, t283: 3, t284: 5,
-			t291: 4, t292: 4,
-			t301: 8, t302: 1, t303: 8,
-			t311: 1 / 4, t312: 2, t313: 2, t314: 1 / 4,
+			t281: 10, t282: 4 / 5, t283: 4 / 5, t284: 10,
+			t291: 1 / 2, t292: 1 / 2,
+			t301: 2, t302: "reset", t303: 2,
+			t311: 1 / 4, t312: 8, t313: 8, t314: 1 / 4,
 
 			//Beginner Mode
 			t251_bg: 1.5, t252_bg: 1.5, t253_bg: 1.5,
@@ -198,9 +198,7 @@ var mTs = {
 			return Decimal.pow(10, Math.pow(log, 2 - 1 / str) * Math.pow(10, 5 / str - 5) * str).max(tmp.rm)
 		},
 		281() {
-			let x = player.dilation.dilatedTime.add(1).log10()
-			x /= Math.pow(Math.log10(x + 1) + 1, 2) * 8 / 5
-			return x
+			return Math.sqrt(player.dilation.dilatedTime.add(1).log10())
 		},
 		283() {
 			let x = tmp.rep ? tmp.rep.baseChance : 0
@@ -208,12 +206,11 @@ var mTs = {
 			return Math.pow(x / 1e7 + 1, 0.1) - 0.5
 		},
 		284() {
-			let powEff = 1.5
 			let x = Math.pow(
-				Math.pow(player.galaxies, 1 / powEff) +
-				Math.pow(getTotalRGs(), 1 / powEff) +
-				Math.pow(player.dilation.freeGalaxies, 1 / powEff)
-			, powEff) / 300
+				player.galaxies +
+				getTotalRGs() +
+				player.dilation.freeGalaxies
+			, 1.5) / 2500
 			return x
 		},
 		291() {
@@ -767,10 +764,9 @@ function updateMasteryStudyTextDisplay() {
 	}
 }
 
-var occupied
 function drawMasteryBranch(id1, id2) {
-	var type1 = id1.split("ec")[1] ? "c" : id1.split("dil")[1] ? "d" : id1.split("time")[1] ? "t" : undefined
-	var type2 = id2.split("ec")[1] ? "c" : id2.split("dil")[1] ? "d" : id2.split("time")[1] ? "t" : undefined
+	var type1 = id1.split("ec")[1] ? "c" : id1.split("dil")[1] ? "d" : id1.split("mts")[1] ? "t" : undefined
+	var type2 = id2.split("ec")[1] ? "c" : id2.split("dil")[1] ? "d" : id2.split("mts")[1] ? "t" : undefined
 	var start = getEl(id1).getBoundingClientRect();
 	var end = getEl(id2).getBoundingClientRect();
 	var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
@@ -780,8 +776,8 @@ function drawMasteryBranch(id1, id2) {
 	msctx.lineWidth = 15;
 	msctx.beginPath();
 	var drawBoughtLine = true
-	if (type1 == "t" || type1 == "d") drawBoughtLine = player.masterystudies.includes(type1+id1.split("study")[1])
-	if (type2 == "t" || type2 == "d") drawBoughtLine = drawBoughtLine && player.masterystudies.includes(type2 + id2.split("study")[1])
+	if (type1 == "t" || type1 == "d") drawBoughtLine = player.masterystudies.includes(type1 + (id1.split("study")[1] || id1.split("mts")[1]))
+	if (type2 == "t" || type2 == "d") drawBoughtLine = drawBoughtLine && player.masterystudies.includes(type2 + (id2.split("study")[1] || id2.split("mts")[1]))
 	if (type2 == "c") drawBoughtLine = drawBoughtLine && player.eternityChallUnlocked == id2.slice(2,4)
 	if (drawBoughtLine) {
 		if (type2 == "d" && player.options.theme == "Aarex's Modifications") {
@@ -796,15 +792,33 @@ function drawMasteryBranch(id1, id2) {
 	} else msctx.strokeStyle = "#444";
 	msctx.moveTo(x1, y1);
 	msctx.lineTo(x2, y2);
-	msctx.stroke();
-	if (!occupied.includes(id2) && type2 == "t") {
-		occupied.push(id2)
-		if (shiftDown) {
-			var start = getEl(id2).getBoundingClientRect();
+	msctx.stroke()
+}
+
+function drawMasteryTree() {
+	msctx.clearRect(0, 0, msc.width, msc.height);
+	if (player === undefined) return
+	if (getEl("eternitystore").style.display === "none" || getEl("masterystudies").style.display === "none" || player.masterystudies === undefined) return
+
+	drawMasteryBranch("back", "mts241")
+	for (var x = 0; x < mTs.studies.length; x++) {
+		var id = mTs.studies[x]
+		var paths = getMasteryStudyConnections(id)
+		if (!mTs.studyUnl.includes(id)) break
+		if (paths) for (var y = 0; y < paths.length; y++) if (mTs.studyUnl.includes(paths[y])) drawMasteryBranch(convertMasteryStudyIdToDisplay(id), convertMasteryStudyIdToDisplay(paths[y]))
+	}
+
+	if (shiftDown) {
+		for (var x = 0; x < mTs.timeStudies.length; x++) {
+			var id = mTs.timeStudies[x]
+			if (!mTs.studyUnl.includes(id)) break
+
+			var start = getEl("mts" + id).getBoundingClientRect();
 			var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
 			var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
-			var mult = getMasteryStudyCostMult("t" + id2.split("study")[1])
-			var msg = "MS" + (id2.split("study")[1] - 230) + " (" + (mult == "reset" ? "reset" : mult >= 1e3 ? shorten(mult) + "x" : mult.toFixed(2 - Math.floor(Math.log10(mult))) + "x") + ")"
+			var mult = getMasteryStudyCostMult("t" + id)
+			var msg = "MS" + (id - 230) + " (" + (mult == "reset" ? "reset" : mult >= 1e3 ? shorten(mult) + "x" : mult.toFixed(2 - Math.floor(Math.log10(mult))) + "x") + ")"
+
 			msctx.fillStyle = 'white';
 			msctx.strokeStyle = 'black';
 			msctx.lineWidth = 3;
@@ -812,20 +826,6 @@ function drawMasteryBranch(id1, id2) {
 			msctx.strokeText(msg, x1 - start.width / 2, y1 - start.height / 2 - 1);
 			msctx.fillText(msg, x1 - start.width / 2, y1 - start.height / 2 - 1);
 		}
-	}
-}
-
-function drawMasteryTree() {
-	msctx.clearRect(0, 0, msc.width, msc.height);
-	if (player === undefined) return
-	if (getEl("eternitystore").style.display === "none" || getEl("masterystudies").style.display === "none" || player.masterystudies === undefined) return
-	occupied=[]
-	drawMasteryBranch("back", "mts241")
-	for (var x = 0; x < mTs.studies.length; x++) {
-		var id = mTs.studies[x]
-		var paths = getMasteryStudyConnections(id)
-		if (!mTs.studyUnl.includes(id)) return
-		if (paths) for (var y = 0; y < paths.length; y++) if (mTs.studyUnl.includes(paths[y])) drawMasteryBranch(convertMasteryStudyIdToDisplay(id), convertMasteryStudyIdToDisplay(paths[y]))
 	}
 }
 

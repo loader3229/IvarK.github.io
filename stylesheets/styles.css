@@ -1217,9 +1217,15 @@ button {
     background-color: #9E913A;
 }
 
-.softcap {
+.softcap_1 {
 	color: rgba(127, 127, 127, 0.25);
 	text-shadow: 0px 0px 3px #7f7f7f, 1px 1px 0px rgba(0, 0, 0, 0.25), -1px -1px 0px rgba(255, 255, 255, 0.25);
+	font-weight: bold !important
+}
+
+.softcap_2 {
+	color: rgba(0, 0, 0, 0.25);
+	text-shadow: 0px 0px 3px #ff007f, 1px 1px 0px rgba(255, 0, 0, 0.5), -1px -1px 0px rgba(0, 255, 255, 0.5);
 	font-weight: bold !important
 }
 
@@ -2180,24 +2186,31 @@ br {
     position: relative;
 }
 
-.qTable, .qTable_4col {
-	width:100%
+.qTable, .qTable_2col, .qTable_4col {
+	width: 100%
 }
 
 .qTable td {
 	min-width: 33%;
 	width: 33%;
-	max-width: 33%;
-	text-align: center;
-	vertical-align: 0
+	max-width: 33%
+}
+
+.qTable_2col td {
+	min-width: 50%;
+	width: 50%;
+	max-width: 50%
 }
 
 .qTable_4col td {
 	min-width: 25%;
 	width: 25%;
-	max-width: 25%;
+	max-width: 25%
+}
+
+.qTable td, .qTable_2col td, .qTable_4col td {
 	text-align: center;
-	vertical-align: 0
+	vertical-align: middle
 }
 
 .red {
@@ -2355,6 +2368,25 @@ td.grey {
 .timestudybought.elcstudy {
     background: #eeff32;
 	border-color: #8e991e
+}
+
+.posbtn {
+	position: relative;
+	width: 60px;
+	height: 60px;
+}
+
+.posbtn span {
+	position: absolute;
+	left: 0px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 100%;
+	font-size: 8px
+}
+
+.posbtn b {
+	font-size: 12px
 }
 
 #moreQCs {

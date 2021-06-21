@@ -39,7 +39,7 @@ var pos = {
 		this.updateTmp()
 	},
 	unl() {
-		return tmp.quActive && hasMTS("d7")
+		return tmp.ngp3 && player.masterystudies.includes("d7")
 	},
 	on() {
 		return this.unl() && pos_save.on
@@ -107,7 +107,6 @@ var pos = {
 		if (pos_save === undefined) return
 
 		data.next_excite = {...pos_save.excite}
-		for (var i = 1; i <= enB.pos.max; i++) getEl("enB_pos" + i + "_excite").textContent = "Excite on next Quantum: " + (pos_tmp.next_excite[i] ? "ON" : "OFF")
 
 		this.updateCloud()
 	},
@@ -116,8 +115,15 @@ var pos = {
 		pos_tmp.cloud = data
 
 		for (var i = 1; i <= enB.pos.max; i++) {
-			var lvl = enB.pos.lvl(i)
-			if (enB.has("pos", i)) pos_tmp.cloud[lvl] = (pos_tmp.cloud[lvl] || 0) + 1
+			var lvl = enB.pos.lvl(i, true)
+			var has = enB.has("pos", i)
+			getEl("pos_boost" + i + "_btn").className = pos_tmp.next_excite[i] ? "chosenbtn posbtn" : "storebtn posbtn"
+			getEl("pos_boost" + i + "_btn").style.display = has ? "" : "none"
+			if (has) {
+				getEl("pos_cloud" + lvl + "_boosts").appendChild(getEl("pos_boost" + i + "_btn"))
+				getEl("pos_boost" + i + "_excite").textContent = "(Tier " + lvl + ")"
+				pos_tmp.cloud[lvl] = (pos_tmp.cloud[lvl] || 0) + 1
+			}
 		}
 
 		for (var i = 1; i <= 3; i++) {
@@ -159,18 +165,11 @@ var pos = {
 		pos_save.eng = Math.pow(pcSum, 4)
 	},
 
-	exciteToggle(x) {
-		if (pos_tmp.next_excite[x]) delete pos_tmp.next_excite[x]
-		else pos_tmp.next_excite[x] = 1
-
-		getEl("enB_pos" + x + "_excite").textContent = "Excite on next Quantum: " + (pos_tmp.next_excite[x] ? "ON" : "OFF")
-	},
 	isCloudRewardActive(x) {
 		return pos_tmp.cloud[x] >= x * 2
 	},
 
 	updateTab() {
-		enB.update("pos")
 		enB.updateOnTick("pos")
 
 		getEl("pos_formula").textContent = getFullExpansion(pos_tmp.sac_mdb) + " Meta Dimension Boosts + " + shorten(pos_tmp.sac_qe) + " Quantum Energy ->"

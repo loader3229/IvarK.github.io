@@ -363,14 +363,15 @@ function boostReplicateInterval() {
 	let x = new Decimal(1)
 	let data = tmp.rep
 
+	data.baseBaseInt = data.baseInt
 	if (ECComps("eterc14")) {
 		let pow = getECReward(14)
-
 		data.ec14.interval = data.ec14.interval.div(Math.pow(data.speeds.exp / Math.log10(data.speeds.inc), pow))
 		x = x.div(data.ec14.interval)
 	}
 	if (QCs_tmp.qc1) x = x.times(QCs_tmp.qc1.speedMult)
 
+	data.intBoost = x
 	data.baseInt = data.baseInt.div(x)
 	data.baseEst = data.baseEst.times(x)
 }
@@ -395,9 +396,10 @@ function updateReplicantiTemp() {
 
 	data.intUpg = getReplicantiBaseInterval()
 	data.intMult = getReplicantiIntervalMult()
-	data.baseInt = data.intUpg.times(data.intMult)
 
-	data.baseEst = Decimal.div(estChance, data.baseInt)
+	data.baseInt = data.intUpg.times(data.intMult)
+	data.baseBaseEst = Decimal.div(estChance, data.baseInt)
+	data.baseEst = data.baseBaseEst
 
 	data.speeds = getReplSpeed()
 	updateEC14Reward()

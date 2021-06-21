@@ -740,6 +740,25 @@ td .timestudybought.lightstudy {
     filter: none !important;
     box-shadow: inset 0 0 25px #fff7, 0 0 8px #ccc7;
 }
+td .timestudy.elcstudy {
+    background: linear-gradient(#220, #000) !important;
+    color: #ff8 !important;
+    border: 1px solid #775 !important;
+    box-shadow: inset 0 0 25px #ff83;
+    animation: none;
+}
+td .timestudy.elcstudy:hover {
+    background: linear-gradient(#220, #000) !important;
+    color: #ff8 !important;
+    box-shadow: inset 0 0 25px #ff83, 0 0 8px #ff87;
+}
+td .timestudybought.elcstudy {
+    background: linear-gradient(#220, #440) !important;
+    color: #ff8 !important;
+    border: 1px solid #775 !important;
+    filter: none !important;
+    box-shadow: inset 0 0 25px #ff85, 0 0 8px #ff87;
+}
 .timestudylocked, .timestudylocked:hover {
     background: linear-gradient(#000, #000) !important;
     color: #caf7 !important;

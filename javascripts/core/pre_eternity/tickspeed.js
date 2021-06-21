@@ -71,15 +71,16 @@ function getExtraGalaxyPower(noDil) {
 	let replPower = getFullEffRGs()
 	let replGalEff = getReplGalaxyEff()
 
-	let tsReplEff = 0
+	let tsReplEff = 1
 	if (hasTimeStudy(133)) tsReplEff += 0.5
 	if (hasTimeStudy(132)) tsReplEff += 0.4
 
-	let extraReplGalPower = 0
-	extraReplGalPower += replPower * tsReplEff + tmp.extraRG // tmp.extraRG is a constant
-
-	if (hasMTS(291)) replPower = (replPower + extraReplGalPower) * replGalEff
-	else replPower += Math.min(replPower, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
+	if (hasMTS(301)) replPower *= replGalEff * tsReplEff
+	else {
+		let extraReplGalPower = 0
+		extraReplGalPower += replPower * (tsReplEff - 1) + tmp.extraRG // tmp.extraRG is a constant
+		replPower += Math.min(replPower, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
+	}
 
 	x += replPower
 

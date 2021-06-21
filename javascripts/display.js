@@ -665,9 +665,9 @@ function replicantiDisplay() {
 			tmp.ngp3 && player.dilation.upgrades.includes("ngpp1") && player.timestudy.studies.includes(192) && player.replicanti.amount.gte(Number.MAX_VALUE) && (!tmp.mod.nguspV || tmp.mod.nguepV) ? 
 				"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
 				"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
-				"(2x slower per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp * Math.log10(2) / Math.log10(tmp.rep.speeds.inc))) + " OoMs)<br>" +
-				"(The base interval was " + timeDisplayShort(Decimal.div(10, tmp.rep.baseEst), true, 2) + ")" :
+				"(2x slower per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp * Math.log10(2) / Math.log10(tmp.rep.speeds.inc))) + " OoMs)" :
 			"Approximately "+ timeDisplay(Math.max((Math.log(Number.MAX_VALUE) - tmp.rep.ln) / tmp.rep.est.toNumber(), 0) * 10 * tmp.ec12Mult) + " until " + shorten(Number.MAX_VALUE) + " Replicantis."
+		getEl("replicantibaseinterval").innerHTML = ECComps("eterc14") ? "(The base interval was " + timeDisplayShort(Decimal.div(10, tmp.rep.baseBaseEst), true, 2) + (tmp.rep.intBoost.neq(1) ? ", slowed down by " + shorten(tmp.rep.intBoost.pow(-1)) + "x" : "") + ")" : ""
 
 		getEl("replicantichance").className = (player.infinityPoints.gte(player.replicanti.chanceCost) && isChanceAffordable()) ? "storebtn" : "unavailablebtn"
 		getEl("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable()) ? "storebtn" : "unavailablebtn"

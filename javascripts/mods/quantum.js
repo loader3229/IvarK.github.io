@@ -311,7 +311,8 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 			QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, qu_save.best)
 		}
 	}
-	QCs_save.in = isQC ? data : []
+	if (isQC) QCs_save.in = data
+	else if (!player.options.retryChallenge) QCs_save.in = []
 
 	QCs.reset()
 	QCs.updateTmp()

@@ -130,8 +130,22 @@ var softcap_data = {
 			base: 10,
 			pow: 2/3,
 			mul: () => tmp.exMode ? 1.5 : tmp.bgMode ? 1 : 1.25,
-			sub: 68 - Math.log10(2e4),
-			derv: false
+			sub10: 68 - Math.log10(2e4)
+		},
+		2: {
+			func: "dilate",
+			start: new Decimal(1e75),
+			base: 10,
+			pow: 3/4
+		},
+	},
+	rInt: {
+		name: "base replicate interval",
+		1: {
+			func: "log",
+			start: new Decimal(1e20),
+			pow: 10,
+			mul: 5
 		},
 	},
 	ma: {
@@ -631,7 +645,7 @@ var softcap_data = {
 
 var softcap_vars = {
 	pow: ["start", "pow", "derv"],
-	dilate: ["start", "base", "pow", "mul", "sub"],
+	dilate: ["start", "base", "pow", "mul", "sub10"],
 	log: ["pow", "mul", "add"],
 	logshift: ["shift", "pow", "add"]
 }
@@ -666,27 +680,29 @@ var softcap_funcs = {
 		let x2 = Decimal.pow(x.times(shift).log10(), pow).add(add)
 		return Decimal.min(x, x2)
 	},
-	dilate(x, start, base = 10, pow = 1, mul = 1, sub = 0) { 
+	dilate(x, start, base = 10, pow = 1, mul = 1, sub10 = 0) { 
 		if (x <= start) return x
 
-		let x_log = Math.log10(x) / Math.log10(base)
-		let start_log = Math.log10(start) / Math.log10(base)
+		var x_log = Math.log(x) / Math.log(base)
+		var start_log = Math.log(start) / Math.log(base)
 
+		var sub = sub10 / Math.log10(base)
 		x_log -= sub
 		start_log -= sub
 
-		return Math.pow(base, Math.pow(x_log / start_log, pow) * mul * start_log + sub)
+		return Math.pow(base, (Math.pow(x_log / start_log, pow) * mul - mul + 1) * start_log + sub)
 	},
-	dilate_decimal(x, start, base = 10, pow = 1, mul = 1, sub = 0) { 
+	dilate_decimal(x, start, base = 10, pow = 1, mul = 1, sub10 = 0) { 
 		if (x.lte(start)) return x
 
-		let x_log = x.log(base)
-		let start_log = start.log(base)
+		var x_log = x.log(base)
+		var start_log = start.log(base)
 
+		var sub = sub10 / Math.log10(base)
 		x_log -= sub
 		start_log -= sub
 
-		return Decimal.pow(base, Math.pow(x_log / start_log, pow) * mul * start_log + sub)
+		return Decimal.pow(base,(Math.pow(x_log / start_log, pow) * mul - mul + 1) * start_log + sub)
 	},
 }
 
@@ -754,6 +770,7 @@ function getSoftcapAmtFromId(id){
 		ts11_log_big_rip: () => tsMults[11]().log10(),
 		bru1_log: () => tmp.bru[1].max(1).log10(),
 		beu3_log: () => tmp.beu[3].max(1).log10(),
+		rInt: () => tmp.rep.baseEst,
 		it: () => tmp.it.max(1),
 		tt: () => getTTGenPart(player.dilation.tachyonParticles),
 		ma: () => getExtraDimensionBoostPowerUse(),
@@ -938,22 +955,29 @@ function updateSoftcapStatsTab(){
 	let anyActive = false
 
 	for (let i = 0; i < n.length; i++){
-		let elname = names[n[i]]
-		let el = getEl(elname)
-		if (hasAnySoftcapStarted(n[i])) {  
+		var id = n[i]
+		var elname = names[id]
+		var el = getEl(elname)
+		var started = hasAnySoftcapStarted(id)
+		if (started) {  
 			el.style = "display:block"
-			el.innerHTML = getInnerHTMLSoftcap(n[i])
+			el.innerHTML = getInnerHTMLSoftcap(id)
 
 			anyActive = true
 		} else {
 			el.style = "display:none"
 		}
 
-		let elDisp = getEl(elname + "_disp")
-		if (elDisp) {
-			elDisp.className = "softcap"
-			elDisp.textContent = "(softcapped)"
-			elDisp.style.display = hasAnySoftcapStarted(n[i]) ? "" : "none"
+		var elDisp = getEl(elname + "_disp")
+		if (elDisp) elDisp.style.display = started ? "" : "none"
+		if (started) {
+			var sc = 0
+			var amt = getSoftcapAmtFromId(id)
+			for (var j = 1; j <= numSoftcapsTotal(id); j++) {
+				if (hasSoftcapStartedArg(id, j, amt)) sc++
+			}
+			elDisp.className = "softcap_" + sc
+			elDisp.innerHTML = "(softcapped" + (sc >= 2 ? "<sup>" + sc + "</sup>" : "") + ")"
 		}
 	}
 
