@@ -53,7 +53,7 @@ function dimensionTabDisplay(){
 			getEl("A" + tier).textContent = getDimensionDescription(tier)
 		}
 	}
-	setAndMaybeShow("mp10d", tmp.mod.newGameMult, "'Multiplier per 10 Dimensions: '+shorten(getDimensionPowerMultiplier(\"non-random\"))+'x'")
+	setAndMaybeShow("mp10d", aarMod.newGameMult, "'Multiplier per 10 Dimensions: '+shorten(getDimensionPowerMultiplier(\"non-random\"))+'x'")
 	dimShiftDisplay()
 	tickspeedBoostDisplay()
 	galaxyReqDisplay()
@@ -113,7 +113,7 @@ function mainStatsDisplay(){
 	getEl("totalmoney").textContent = 'You have made a total of ' + shortenMoney(player.totalmoney) + ' antimatter.'
 	getEl("totalresets").textContent = 'You have performed ' + getFullExpansion(player.resets) + ' Dimension Boosts/Shifts.'
 	setAndMaybeShow("lostResets", player.pSac && player.pSac.lostResets, '"You have lost a total of " + getFullExpansion(player.pSac.lostResets) + " Dimension Boosts/Shifts after matter resets."')
-	getEl("tdboosts").textContent = tmp.mod.ngmX > 3 ? 'You have performed ' + getFullExpansion(player.tdBoosts) + ' Time Dimension Boosts/Shifts.':""
+	getEl("tdboosts").textContent = tmp.ngmX > 3 ? 'You have performed ' + getFullExpansion(player.tdBoosts) + ' Time Dimension Boosts/Shifts.':""
 	var showBoosts=isTickspeedBoostPossible()
 	getEl("boosts").style.display = showBoosts ? '' : 'none'
 	if (showBoosts) getEl("boosts").textContent = 'You have performed '+getFullExpansion(player.tickspeedBoosts)+' Tickspeed Boosts.'
@@ -355,7 +355,7 @@ function lifetimeTimeDisplay(years){
 }
 
 function infoScaleDisplay(){
-	if (tmp.mod.hideRepresentation) getEl("infoScale").textContent=""
+	if (aarMod.hideRepresentation) getEl("infoScale").textContent=""
 	else if (player.money.gt(Decimal.pow(10, 3 * 86400 * 365.2425 * 79.3 / 10))) {
 		var years = player.money.log10() / 3 / 86400 / 365.2425
 		var thisYear = new Date().getFullYear() || 2020
@@ -429,7 +429,7 @@ function breakInfinityUpgradeDisplay(){
 	getEl("postinfi21").innerHTML = "Normal Dimensions gain a multiplier based on current antimatter<br>Currently: " + shorten(tmp.postinfi21) + "x<br>Cost: "+shortenCosts(5e4)+" IP"
 	if (player.tickSpeedMultDecrease > 2) getEl("postinfi31").innerHTML = "Reduce the tickspeed cost multiplier increase post-" + shorten(Number.MAX_VALUE) + ".<br>" + player.tickSpeedMultDecrease+"x -> "+(player.tickSpeedMultDecrease-1)+"x<br>Cost: "+shortenDimensions(player.tickSpeedMultDecreaseCost) +" IP"
 	else getEl("postinfi31").innerHTML = "Reduce the tickspeed cost multiplier increase post-" + shorten(Number.MAX_VALUE) + ".<br>" + player.tickSpeedMultDecrease.toFixed(player.tickSpeedMultDecrease < 2 ? 2 : 0)+"x"
-	getEl("postinfi22").innerHTML = "Normal Dimensions gain a multiplier based on achievements " + (tmp.mod.ngmX >= 4 ? "and purchased GP upgrades " : "") + "<br>Currently: " + shorten(achievementMult) + "x<br>Cost: " + shortenCosts(1e6) + " IP"
+	getEl("postinfi22").innerHTML = "Normal Dimensions gain a multiplier based on achievements " + (tmp.ngmX >= 4 ? "and purchased GP upgrades " : "") + "<br>Currently: " + shorten(achievementMult) + "x<br>Cost: " + shortenCosts(1e6) + " IP"
 	getEl("postinfi12").innerHTML = "Normal Dimensions gain a multiplier based on your Infinities <br>Currently: "+shorten(getInfinitiedMult())+"x<br>Cost: " + shortenCosts(1e5) + " IP"
 	getEl("postinfi41").innerHTML = "Galaxies are " + Math.round(getPostGalaxyEff() * 100 - 100) + "% stronger <br>Cost: "+shortenCosts(5e11)+" IP"
 	getEl("postinfi32").innerHTML = "Normal Dimensions gain a multiplier based on your slowest Normal Challenge time<br>Currently: "+shorten(worstChallengeBonus)+"x<br>Cost: " + shortenCosts(1e7) + " IP"
@@ -486,7 +486,7 @@ function breakNGm2UpgradeRow5Display(){
 		inf52text = "Galaxy cost increases by 3 less.<br>Currently: " + Math.round(getGalaxyReqMultiplier() * 10) / 10 + (player.infinityUpgrades.includes("postinfi52") ? "" : " -> " + Math.round(getGalaxyReqMultiplier() * 10 - 30) / 10) + "<br>Cost: " + shortenCosts(1e33) + " IP"
 	} else inf52text = "Decrease tickspeed boost cost multiplier to 3.<br>Cost: " + shortenCosts(1e25) + " IP"
 	getEl("postinfi52").innerHTML = inf52text
-	getEl("postinfi53").innerHTML = "Divide all Infinity Dimension cost multipliers by 50" + (tmp.mod.ngmX >= 4 ? ", free tickspeed upgrades multiply GP gain and IC completions boost Time Dimension Cost limit" : "") + ".<br>Cost: "+shortenCosts(player.tickspeedBoosts == undefined ? 1e37 : 1e29) + " IP"
+	getEl("postinfi53").innerHTML = "Divide all Infinity Dimension cost multipliers by 50" + (tmp.ngmX >= 4 ? ", free tickspeed upgrades multiply GP gain and IC completions boost Time Dimension Cost limit" : "") + ".<br>Cost: "+shortenCosts(player.tickspeedBoosts == undefined ? 1e37 : 1e29) + " IP"
 }
 
 function breakNGm2UpgradeRow6Display(){
@@ -515,10 +515,10 @@ function INFINITYUPGRADESDisplay(){
 	} else if (getEl("postinf").style.display == "block" && getEl("breaktable").style.display == "inline-block") {
 		breakInfinityUpgradeDisplay()
 		if (inNGM(2)) breakNGm2UpgradeColumnDisplay()
-		if (inNGM(2) && (player.infinityDimension3.amount.gt(0) || player.eternities > (tmp.mod.newGameMinusVersion? -20 : 0) || pH.did("quantum"))) {
+		if (inNGM(2) && (player.infinityDimension3.amount.gt(0) || player.eternities > (aarMod.newGameMinusVersion? -20 : 0) || pH.did("quantum"))) {
 			breakNGm2UpgradeRow5Display()
 		} else getEl("postinfir5").style.display = "none"
-		if (inNGM(2) && (player.infinityDimension4.amount.gt(0) || player.eternities > (tmp.mod.newGameMinusVersion ? -20 : 0) || pH.did("quantum"))) {
+		if (inNGM(2) && (player.infinityDimension4.amount.gt(0) || player.eternities > (aarMod.newGameMinusVersion ? -20 : 0) || pH.did("quantum"))) {
 			breakNGm2UpgradeRow6Display()
 		} else getEl("postinfir6").style.display = "none"
 		if (tmp.ngC) ngC.breakInfUpgs.display()
@@ -568,7 +568,7 @@ function exdilationDisplay(){
 function mainDilationDisplay(){
 	if (player.dilation.active) uponDilationDisplay()
 	else getEl("enabledilation").textContent = "Dilate time." + (player.eternityBuyer.dilationMode ? " (" + player.eternityBuyer.statBeforeDilation + " Eternity runs left)" : "")
-	if (player.exdilation==undefined||tmp.mod.ngudpV?false:player.blackhole.unl) {
+	if (player.exdilation==undefined||aarMod.ngudpV?false:player.blackhole.unl) {
 		exdilationDisplay()
 	} else getEl("reversedilationdiv").style.display = "none"
 	var fgm=getFreeGalaxyGainMult()
@@ -654,7 +654,7 @@ function replicantiDisplay() {
 		getEl("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(replGal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
 		getEl("replicantireset").innerHTML = (
 			hasAch("ngpp16") ? "Get "
-			: (tmp.mod.ngp3c && ETER_UPGS.has(6)) ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get "
+			: (aarMod.ngp3c && ETER_UPGS.has(6)) ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get "
 			: "Reset replicanti amount, but get "
 		) + "1 free galaxy.<br>" +
 			getFullExpansion(player.replicanti.galaxies) +
@@ -662,7 +662,7 @@ function replicantiDisplay() {
 			" replicated galax" + (getTotalRGs() == 1 ? "y" : "ies") + " created."
 
 		getEl("replicantiapprox").innerHTML = 
-			tmp.ngp3 && player.dilation.upgrades.includes("ngpp1") && player.timestudy.studies.includes(192) && player.replicanti.amount.gte(Number.MAX_VALUE) && (!tmp.mod.nguspV || tmp.mod.nguepV) ? 
+			tmp.ngp3 && player.dilation.upgrades.includes("ngpp1") && player.timestudy.studies.includes(192) && player.replicanti.amount.gte(Number.MAX_VALUE) && (!aarMod.nguspV || aarMod.nguepV) ? 
 				"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
 				"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
 				"(2x slower per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp * Math.log10(2) / Math.log10(tmp.rep.speeds.inc))) + " OoMs)" :
@@ -696,7 +696,7 @@ function initialTimeStudyDisplay(){
 
 	getEl("11desc").textContent = "Currently: " + shortenMoney(tsMults[11]()) + "x"
 	getEl("32desc").textContent = "You gain " + getFullExpansion(Math.ceil(tsMults[32]())) + "x more Infinities (based on Dimension Boosts)"
-	getEl("51desc").textContent = "You gain " + shortenCosts(tmp.mod.newGameExpVersion ? 1e30 : 1e15) + "x more IP"
+	getEl("51desc").textContent = "You gain " + shortenCosts(aarMod.newGameExpVersion ? 1e30 : 1e15) + "x more IP"
 	getEl("71desc").textContent = "Currently: " + shortenMoney(tmp.sacPow.pow(0.25).max(1).min("1e210000")) + "x"
 	getEl("72desc").textContent = "Currently: " + shortenMoney(tmp.sacPow.pow(0.04).max(1).min("1e30000")) + "x"
 	getEl("73desc").textContent = "Currently: " + shortenMoney(tmp.sacPow.pow(0.005).max(1).min("1e1300")) + "x"
@@ -712,9 +712,9 @@ function initialTimeStudyDisplay(){
 	getEl("142desc").textContent = "You gain " + shortenCosts(1e25) + "x more IP"
 	getEl("143desc").textContent = "Currently: " + shortenMoney(Decimal.pow(15, Math.log(player.thisInfinityTime)*Math.pow(player.thisInfinityTime, 0.125))) + "x"
 	getEl("151desc").textContent = shortenCosts(1e4) + "x multiplier on all Time Dimensions"
-	getEl("161desc").textContent = shortenCosts(Decimal.pow(10, (inNGM(2) ? 6660 : 616) *  ( tmp.mod.newGameExpVersion ? 5 : 1))) + "x multiplier on all normal dimensions"
-	getEl("162desc").textContent = shortenCosts(Decimal.pow(10, (inNGM(2) ? 234 : 11) * (tmp.mod.newGameExpVersion ? 5 : 1))) + "x multiplier on all Infinity dimensions"
-	getEl("192desc").textContent = tmp.mod.ngp3c ? "The Replicanti limit is multiplied by your Time Shards." : "You can get beyond " + shortenMoney(Number.MAX_VALUE) + " replicantis, but the interval is increased the more you have"
+	getEl("161desc").textContent = shortenCosts(Decimal.pow(10, (inNGM(2) ? 6660 : 616) *  ( aarMod.newGameExpVersion ? 5 : 1))) + "x multiplier on all normal dimensions"
+	getEl("162desc").textContent = shortenCosts(Decimal.pow(10, (inNGM(2) ? 234 : 11) * (aarMod.newGameExpVersion ? 5 : 1))) + "x multiplier on all Infinity dimensions"
+	getEl("192desc").textContent = aarMod.ngp3c ? "The Replicanti limit is multiplied by your Time Shards." : "You can get beyond " + shortenMoney(Number.MAX_VALUE) + " replicantis, but the interval is increased the more you have"
 	getEl("193desc").textContent = "Currently: " + shortenMoney(Decimal.pow(1.03, Decimal.min(1e7, Decimal.div(getEternitied(), tmp.ngC ? 1e6 : 1))).min("1e13000")) + "x"
 	getEl("212desc").textContent = "Currently: " + ((tsMults[212]() - 1) * 100).toFixed(2) + "%"
 	getEl("214desc").textContent = "Currently: " + shortenMoney(((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1)).div(tmp.sacPow)).max(1).min(new Decimal("1e125000"))) + "x"
@@ -733,7 +733,7 @@ function initialTimeStudyDisplay(){
 }
 
 function eternityChallengeUnlockDisplay(){
-	var ec1Mult=tmp.mod.newGameExpVersion?1e3:2e4
+	var ec1Mult=aarMod.newGameExpVersion?1e3:2e4
 	if (player.etercreq !== 1) getEl("ec1unl").innerHTML = "Eternity Challenge 1<span>Requirement: "+(ECComps("eterc1")+1)*ec1Mult+" Eternities<span>Cost: 30 Time Theorems"
 	else getEl("ec1unl").innerHTML = "Eternity Challenge 1<span>Cost: 30 Time Theorems"
 	if (player.etercreq !== 2) getEl("ec2unl").innerHTML = "Eternity Challenge 2<span>Requirement: "+(1300+(ECComps("eterc2")*150))+" Tickspeed upgrades gained from time dimensions<span>Cost: 35 Time Theorems"
@@ -820,13 +820,13 @@ function replicantiShopABDisplay(){
 }
 
 function setStatsDisplay(toggle) {
-	if (toggle) tmp.mod.hideStats = !tmp.mod.hideStats
-	getEl("showStats").textContent = (tmp.mod.hideStats ? "Show" : "Hide") + " statistics"
+	if (toggle) aarMod.hideStats = !aarMod.hideStats
+	getEl("showStats").textContent = (aarMod.hideStats ? "Show" : "Hide") + " statistics"
 }
 
 function setAchsDisplay(toggle) {
-	if (toggle) tmp.mod.hideAchs = !tmp.mod.hideAchs
-	getEl("showAchs").textContent = (tmp.mod.hideAchs ? "Show" : "Hide") + " achievements"
+	if (toggle) aarMod.hideAchs = !aarMod.hideAchs
+	getEl("showAchs").textContent = (aarMod.hideAchs ? "Show" : "Hide") + " achievements"
 }
 
 function primaryStatsDisplayResetLayers() {
@@ -846,7 +846,7 @@ function primaryStatsDisplayResetLayers() {
 	getEl("brfilter").style.display = showStats
 	getEl("statstabs").style.display = showStats
 
-	var display = tmp.mod.hideSecretAchs ? "none " : ""
+	var display = aarMod.hideSecretAchs ? "none " : ""
 	getEl("achTabButtons").style.display=display
 	getEl("secretachsbtn").style.display=display
 }
@@ -882,18 +882,18 @@ function bankedInfinityDisplay(){
 }
 
 function updateNGM2RewardDisplay(){
-	getEl("postcngmm_1reward").innerHTML = "Reward: Infinity upgrades based on time " + (tmp.mod.ngmX >= 4 ? "" : "or Infinities ") + "are applied post-dilation, and make the GP formula better based on galaxies."
-	getEl("postcngm3_1description").innerHTML = "Multiplier per ten Dimensions is 1x, Dimension Boosts have no effect," + (tmp.mod.ngmX >= 4 ? " have a much lower time dimension cost limit," : "") + " and Tickspeed Boost effect softcap starts immediately."
-	getEl("postcngm3_1reward").innerHTML = "Reward: Tickspeed boost effect softcap is softer" + (tmp.mod.ngmX >= 4 ? ", remote galaxy scaling starts .5 later and triple GP per IC completion" : "") + "."
+	getEl("postcngmm_1reward").innerHTML = "Reward: Infinity upgrades based on time " + (tmp.ngmX >= 4 ? "" : "or Infinities ") + "are applied post-dilation, and make the GP formula better based on galaxies."
+	getEl("postcngm3_1description").innerHTML = "Multiplier per ten Dimensions is 1x, Dimension Boosts have no effect," + (tmp.ngmX >= 4 ? " have a much lower time dimension cost limit," : "") + " and Tickspeed Boost effect softcap starts immediately."
+	getEl("postcngm3_1reward").innerHTML = "Reward: Tickspeed boost effect softcap is softer" + (tmp.ngmX >= 4 ? ", remote galaxy scaling starts .5 later and triple GP per IC completion" : "") + "."
 }
 
 function updateGalaxyUpgradesDisplay(){
-	var text41 = tmp.mod.ngmX >= 4 ? "Square g11, and tickspeed boosts multiply GP gain." : "Galaxy points boost per-10 bought Infinity Dimensions multiplier."
+	var text41 = tmp.ngmX >= 4 ? "Square g11, and tickspeed boosts multiply GP gain." : "Galaxy points boost per-10 bought Infinity Dimensions multiplier."
 	getEl("galaxy41").innerHTML = text41 + "<br>Cost: <span id='galcost41'></span> GP"
-	var text42 = tmp.mod.ngmX >= 4 ? "Buff g12 and make it post dilation." : "Eternity points reduce Infinity Dimension cost multipliers."
+	var text42 = tmp.ngmX >= 4 ? "Buff g12 and make it post dilation." : "Eternity points reduce Infinity Dimension cost multipliers."
 	getEl("galaxy42").innerHTML = text42 + "<br>Cost: <span id='galcost42'></span> GP"
-	var text43 = tmp.mod.ngmX >= 4 ? "Reduce Dimension Boost cost multiplier by 1, and Dimension Boosts multiply GP gain." : "Galaxy points boost Time Dimensions."
-	var curr43 = tmp.mod.ngmX >= 4 ? "" : "<br>Currently: <span id='galspan43'>?</span>x"
+	var text43 = tmp.ngmX >= 4 ? "Reduce Dimension Boost cost multiplier by 1, and Dimension Boosts multiply GP gain." : "Galaxy points boost Time Dimensions."
+	var curr43 = tmp.ngmX >= 4 ? "" : "<br>Currently: <span id='galspan43'>?</span>x"
 	getEl("galaxy43").innerHTML = text43 + curr43 + "<br>Cost: <span id='galcost43'></span> GP"
 }
 
@@ -925,15 +925,15 @@ function showAutoTab(tabName) {
 	}
 
 	autoTab = tabName
-	if (oldTab !== tabName) tmp.mod.tabsSave.tabAuto = tabName
+	if (oldTab !== tabName) aarMod.tabsSave.tabAuto = tabName
 }
 
 function moveAutoTabs() {
 	let autoUnl = pH.did(tmp.ngmX >= 4 ? "galaxy" : "infinity")
-	let autoShown = autoUnl && tmp.mod.showAuto && !isEmptiness
+	let autoShown = autoUnl && aarMod.showAuto && !isEmptiness
 
 	getEl("showAuto").style.display = autoUnl ? "" : "none"
-	getEl("showAuto").textContent = (tmp.mod.showAuto ? "Hide" : "Show") + " general automation tab"
+	getEl("showAuto").textContent = (aarMod.showAuto ? "Hide" : "Show") + " general automation tab"
 
 	getEl("automationbtn").style.display = autoShown ? "" : "none"
 
@@ -944,7 +944,7 @@ function moveAutoTabs() {
 }
 
 function toggleAutoTab() {
-	tmp.mod.showAuto = !tmp.mod.showAuto
+	aarMod.showAuto = !aarMod.showAuto
 	moveAutoTabs()
 }
 

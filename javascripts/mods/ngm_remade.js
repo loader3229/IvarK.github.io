@@ -1,13 +1,13 @@
 let ngmR = {
 	setup() {
 		tmp.ngmR = true
-		tmp.mod.ngmR = 1
+		aarMod.ngmR = 1
 
 		resetNormalDimensionCostMults()
 		resetTickspeed()
 	},
 	compile() {
-		tmp.ngmR = tmp.mod.ngmR !== undefined
+		tmp.ngmR = aarMod.ngmR !== undefined
 	},
 	adjustCostScale(x) {
 		let exp = 1.05

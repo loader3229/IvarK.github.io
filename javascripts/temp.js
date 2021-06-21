@@ -384,7 +384,7 @@ function updateBreakEternityUpgrade5Temp(){
 	let log1 = ep.div("1e2230").add(1).log10()
 	let log2 = ts.div(1e90).add(1).log10()
 	let exp = Math.pow(log1, 1/3) + Math.pow(log2, 1/3)
-	if (tmp.mod.ngudpV && exp > 100) exp = Math.log10(exp) * 50
+	if (aarMod.ngudpV && exp > 100) exp = Math.log10(exp) * 50
 	if (exp > 999) exp = 333 * Math.log10(exp + 1)
 	exp *= 4
 	tmp.beu[5] = Decimal.pow(10, exp)
@@ -410,7 +410,7 @@ function updateBreakEternityUpgrade6Temp(){
 
 function updateBreakEternityUpgrade8Temp(){
 	let x = Math.log10(player.dilation.tachyonParticles.div(1e200).add(1).log10() / 100 + 1) * 3 + 1
-	if (tmp.mod.ngudpV && x > 2.2) x = 1.2 + Math.log10(x + 7.8)
+	if (aarMod.ngudpV && x > 2.2) x = 1.2 + Math.log10(x + 7.8)
 	if (x > 3) x = 1 + Math.log2(x + 1)
 	if (x > 10/3) x = 7/3 + Math.log10(3 * x)
 	tmp.beu[8] = x

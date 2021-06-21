@@ -1,7 +1,7 @@
 function onQuantumAM(){
 	let x = 10
 	if (player.challenges.includes("challenge1")) x = 100
-	if (tmp.mod.ngmX > 3) x = 200
+	if (tmp.ngmX > 3) x = 200
 	if (hasAch("r37")) x = 1000
 	if (hasAch("r54")) x = 2e5
 	if (hasAch("r55")) x = 1e10
@@ -53,7 +53,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	var oheHeadstart = bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 1
 	var keepABnICs = oheHeadstart || hasAch("ng3p12")
 	var turnSomeOn = !bigRip || tmp.bruActive[1]
-	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
+	var bigRipChanged = tmp.ngp3 && bigRip != qu_save.bigRip.active
 
 	player.infinitiedBank = 0
 	if (!headstart) player.eternities = qMs.tmp.amt >= 2 ? 100 * Math.pow(3, qMs.tmp.amt) : oheHeadstart ? 100 : 0
@@ -211,7 +211,7 @@ function resetInfDimensions(full) {
 
 function resetTimeDimensions(full) {
 	let boostPower = getDimensionBoostPower()
-	let ngm4 = tmp.mod.ngmX >= 4
+	let ngm4 = tmp.ngmX >= 4
 	player.timeShards = new Decimal(0)
 	player.tickThreshold = new Decimal(ngm4 ? 0.01 : 1)
 	player.totalTickGained = 0
@@ -394,9 +394,9 @@ function getToDOnGhostifyData(){
 		},
 		upgrades: {}
 	}
-	if (player.quantum.tod.b.decays && hasAch("ng3p86")) ret.b.decays = Math.floor(player.quantum.tod.b.decays * .75)
-	if (player.quantum.tod.r.decays && hasAch("ng3p86")) ret.r.decays = Math.floor(player.quantum.tod.r.decays * .75)
-	if (player.quantum.tod.g.decays && hasAch("ng3p86")) ret.g.decays = Math.floor(player.quantum.tod.g.decays * .75)
+	if (qu_save.tod.b.decays && hasAch("ng3p86")) ret.b.decays = Math.floor(qu_save.tod.b.decays * .75)
+	if (qu_save.tod.r.decays && hasAch("ng3p86")) ret.r.decays = Math.floor(qu_save.tod.r.decays * .75)
+	if (qu_save.tod.g.decays && hasAch("ng3p86")) ret.g.decays = Math.floor(qu_save.tod.g.decays * .75)
 	return ret
 }
 
@@ -616,7 +616,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 		nextThreshold: new Decimal(1000),
 		freeGalaxies: 0,
 		upgrades: bm ? player.dilation.upgrades : [],
-		autoUpgrades: bm ? player.dilation.autoUpgrades : tmp.mod.nguspV ? [] : undefined,
+		autoUpgrades: bm ? player.dilation.autoUpgrades : aarMod.nguspV ? [] : undefined,
 		rebuyables: {
 			1: 0,
 			2: 0,
@@ -625,7 +625,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 		}
 	}
 	resetNGUdData()
-	player.quantum = getQuantumOnGhostifyData(bm, nBRU, nBEU)
+	qu_save = getQuantumOnGhostifyData(bm, nBRU, nBEU)
 	player.old = false
 	player.dontWant = true
 	player.unstableThisGhostify = 0

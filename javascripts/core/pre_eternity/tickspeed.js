@@ -12,7 +12,7 @@ function initialGalaxies() {
 
 	if (pos.on()) g -= pos_save.gals.ng.sac
 	if (tmp.ngC) g *= 2
-	if ((inNC(15) || player.currentChallenge == "postc1") && tmp.mod.ngmX == 3) g = 0
+	if ((inNC(15) || player.currentChallenge == "postc1") && tmp.ngmX == 3) g = 0
 
 	return g
 }
@@ -29,7 +29,7 @@ function getGalaxyPower(ng, bi, noDil) {
 function getGalaxyEff(bi) {
 	let eff = 1
 	if (inNC(6, 3)) eff *= 1.5
-	if (inNGM(2)) if (hasGalUpg(22)) eff *= tmp.mod.ngmX>3?2:5;
+	if (inNGM(2)) if (hasGalUpg(22)) eff *= tmp.ngmX>3?2:5;
 	if (player.infinityUpgrades.includes("galaxyBoost")) eff *= tmp.ngC ? 4 : 2;
 	if (player.infinityUpgrades.includes("postGalaxy")) eff *= getPostGalaxyEff();
 	if (player.challenges.includes("postc5")) eff *= inNGM(2) ? 1.15 : 1.1;
@@ -44,7 +44,7 @@ function getGalaxyEff(bi) {
 			if (x > 4 && player.tickspeedBoosts != undefined) x = Math.sqrt(x - 1) + 2
 			eff += .07 * x
 		}
-		if (tmp.mod.ngmX >= 4) eff *= getNGM4GalaxyEff()
+		if (tmp.ngmX >= 4) eff *= getNGM4GalaxyEff()
 	}
 	if (tmp.ngmR) eff *= 1.2
 	if (inNGM(3) && (inNC(5) || player.currentChallenge == "postcngm3_3")) eff *= 0.75
@@ -53,7 +53,7 @@ function getGalaxyEff(bi) {
 	if (hasTimeStudy(232) && bi) eff *= tsMults[232]()
 	if (tmp.ngC) eff *= getECReward(11) || 1 // yeah this'll be issues
 
-	if (tmp.mod.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1
+	if (aarMod.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1
 	if (tmp.quActive) eff *= colorBoosts.r
 	if (hasBosonicUpg(34)) eff *= tmp.blu[34]
 	return eff
@@ -100,7 +100,7 @@ function getGalaxyTickSpeedMultiplier() {
 	if ((player.currentChallenge == "postc3" || isIC3Trapped()) && !tmp.be) {
 		if (player.currentChallenge == "postcngmm_3" || player.challenges.includes("postcngmm_3")) {
 			let base = player.tickspeedBoosts != undefined ? 0.9995 : 0.998
-			if (tmp.mod.ngmX >= 4 && player.challenges.includes("postcngmm_3")) base = .9998
+			if (tmp.ngmX >= 4 && player.challenges.includes("postcngmm_3")) base = .9998
 			return Decimal.pow(base, getGalaxyPower(g) * getGalaxyEff(true))
 		}
 		return 1
@@ -184,7 +184,7 @@ getEl("tickSpeed").onclick = function () {
 function resetTickspeed() {
 	//Tickspeed
 	let x = 1e3
-	if (tmp.mod.newGameExpVersion) x /= 2
+	if (aarMod.newGameExpVersion) x /= 2
 	if (hasAch("r36")) x *= 0.98
 	if (hasAch("r45")) x *= 0.98
 	if (hasAch("r66")) x *= 0.98
@@ -218,7 +218,7 @@ function getTickSpeedCostMultiplierIncrease() {
 	else if (player.challenges.includes('postcngmm_2')) {
 		let exp = .9 - .02 * ECComps("eterc11")
 		let galeff = (1 + Math.pow(player.galaxies, 0.7) / 10)
-		if (tmp.mod.ngmX >= 4) galeff = Math.pow(galeff, .2)
+		if (tmp.ngmX >= 4) galeff = Math.pow(galeff, .2)
 
 		ret = Math.pow(ret, exp / galeff)
 	}

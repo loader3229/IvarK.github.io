@@ -10,12 +10,12 @@ function getDilationMDMultiplier() {
 	let pow = 0.1
 	let div = 1e40
 	if (enB.active("glu", 8)) pow = tmp_enB.glu8
-	if (tmp.mod.nguspV !== undefined) div = 1e50
+	if (aarMod.nguspV !== undefined) div = 1e50
 
-	if (tmp.mod.ngudpV && !tmp.mod.nguepV) {
+	if (aarMod.ngudpV && !aarMod.nguepV) {
 		let l = qu_save.colorPowers.b.plus(10).log10()
 		let x = 3 - Math.log10(l + 1)
-		if (tmp.mod.ngumuV) {
+		if (aarMod.ngumuV) {
 			if (x < 2) x = 2 - 2 * (2 - x) / (5 - x)
 		} else {
 			x = Math.max(x, 2)
@@ -92,7 +92,7 @@ function getMDRateOfChange(tier) {
 	let toGain = getMDProduction(tier + 1);
 
 	var current = player.meta[tier].amount.max(1);
-	if (tmp.mod.logRateChange) {
+	if (aarMod.logRateChange) {
 		var change = current.add(toGain.div(10)).log10() - current.log10()
 		if (change < 0 || isNaN(change)) change = 0
 	} else var change  = toGain.times(10).dividedBy(current);
@@ -280,7 +280,7 @@ function getExtraDimensionBoostPower(ma) {
 
 	let l2 = ma.log(2)
 	if (l2 > 1024) {
-		if (tmp.mod.nguspV) l2 = Math.pow(l2 * 32, 2/3)
+		if (aarMod.nguspV) l2 = Math.pow(l2 * 32, 2/3)
 		ma = Decimal.pow(2, l2)
 	}
 	return ma
@@ -390,7 +390,7 @@ function getDil15Bonus() {
 	let x = 1
 	let max = 3
 
-	if (tmp.mod.nguspV !== undefined) x = Math.min(Math.max(player.dilation.dilatedTime.max(1).log10() / 10 - 6.25, 2), max)
+	if (aarMod.nguspV !== undefined) x = Math.min(Math.max(player.dilation.dilatedTime.max(1).log10() / 10 - 6.25, 2), max)
 	else x = Math.min(Math.log10(player.dilation.dilatedTime.max(1e10).log(10)) + 1, max)
 
 	return x

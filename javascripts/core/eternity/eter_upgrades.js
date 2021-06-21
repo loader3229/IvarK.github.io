@@ -83,7 +83,7 @@ let ETER_UPGS = {
 		unl: () => true,
 		cost: 1e60,
 		mult() {
-			let ngPlus = (tmp.mod.newGamePlusVersion ? 10368000 : 0)
+			let ngPlus = (aarMod.newGamePlusVersion ? 10368000 : 0)
 			return (player.totalTimePlayed / 10 + ngPlus) / 86400
 		},
 		desc: () => "Time Dimensions gain a multiplier based on days played" + (tmp.ngC ? " and you can buy max RGs." : ".")

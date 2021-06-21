@@ -5,7 +5,7 @@ function getTickspeedBoostRequirement(bulk = 1) {
 		if (hasGalUpg(34)) mult = 4
 		if (player.infinityUpgrades.includes("postinfi52")) mult = 3
 	}
-	return {tier: inNC(4) || player.pSac != undefined ? 6 : 8, amount: resets * mult + (inNC(15) && tmp.mod.ngmX > 3 ? 10 : 30), mult: mult}
+	return {tier: inNC(4) || player.pSac != undefined ? 6 : 8, amount: resets * mult + (inNC(15) && tmp.ngmX > 3 ? 10 : 30), mult: mult}
 }
 
 function tickspeedBoost(bulk) {
@@ -51,7 +51,7 @@ function autoTickspeedBoostBoolean() {
 	if (!player.autobuyers[13].isOn) return false
 	if (player.autobuyers[13].ticks * 100 < player.autobuyers[13].interval) return false
 	if (amount < req.amount) return false
-	if (tmp.mod.ngmX > 3 && inNC(14)) return false
+	if (tmp.ngmX > 3 && inNC(14)) return false
 	if (amount < getTickspeedBoostRequirement(player.autobuyers[13].bulk).amount) return false
 	if (player.overXGalaxiesTickspeedBoost <= player.galaxies) return true
 	if (player.autobuyers[13].priority < req.amount) return false
@@ -65,7 +65,7 @@ function manualTickspeedBoost() {
 	let req=getTickspeedBoostRequirement()
 	let amount=getAmount(req.tier)
 	if (!(amount >= req.amount)) return
-	if ((player.infinityUpgrades.includes("bulkBoost") || hasAch("r28")) && (!inNC(14) || !(tmp.mod.ngmX > 3))) tickspeedBoost(Math.floor((amount - req.amount) / req.mult + 1))
+	if ((player.infinityUpgrades.includes("bulkBoost") || hasAch("r28")) && (!inNC(14) || tmp.ngmX <= 3)) tickspeedBoost(Math.floor((amount - req.amount) / req.mult + 1))
 	else tickspeedBoost(1)
 	if (inNGM(5)) giveAchievement("TICK OVERDRIVE")
 }
@@ -80,7 +80,7 @@ function getInitPostC3Power(){
 	var ic3Power = player.totalTickGained * getECReward(14)
 	if (player.tickspeedBoosts != undefined && player.currentChallenge != "postc5") {
 		let mult = 30
-		if ((inNC(14) && tmp.mod.ngmX == 3) || player.currentChallenge == "postcngm3_3") mult = 20
+		if ((inNC(14) && tmp.ngmX == 3) || player.currentChallenge == "postcngm3_3") mult = 20
 		else if (hasGalUpg(14)) mult = 32
 		if (inNC(6, 2)) mult *= Math.min(player.galaxies / 30, 1)
 		let ic3PowerTB = player.tickspeedBoosts * mult
@@ -89,7 +89,7 @@ function getInitPostC3Power(){
 		if (player.currentChallenge=="postcngm3_1" || player.currentChallenge=="postc1") softCapStart = 0
 		if (player.challenges.includes("postcngm3_1")) frac = 7
 		if (ic3PowerTB > softCapStart) ic3PowerTB = Math.sqrt((ic3PowerTB - softCapStart) / frac + 1024) * 32 + softCapStart - 1024
-		if (inNC(15) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_3") ic3PowerTB *= tmp.mod.ngmX > 3 ? .2 : Math.max(player.galacticSacrifice.galaxyPoints.div(1e3).add(1).log(8),1)
+		if (inNC(15) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_3") ic3PowerTB *= tmp.ngmX > 3 ? .2 : Math.max(player.galacticSacrifice.galaxyPoints.div(1e3).add(1).log(8),1)
 		else if (player.challenges.includes("postcngm3_3")) ic3PowerTB *= Math.max(Math.sqrt(player.galacticSacrifice.galaxyPoints.max(1).log10()) / 15 + .6, 1)
 		if (hasAch("r67")) {
 			let x = tmp.cp
@@ -98,6 +98,6 @@ function getInitPostC3Power(){
 		}
 		ic3Power += ic3PowerTB
 	}
-	if ((inNC(15) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_3") && tmp.mod.ngmX > 3) ic3Power -= (player.resets + player.tdBoosts) * 10
+	if ((inNC(15) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_3") && tmp.ngmX > 3) ic3Power -= (player.resets + player.tdBoosts) * 10
 	return ic3Power
 }

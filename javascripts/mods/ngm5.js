@@ -401,7 +401,7 @@ function getPDDesc(d) {
 function getPDRate(d) {
 	let toGain = getPDProduction(d + 2).div(tmp.ec12Mult)
 	var current = player.pSac.dims[d].amount.max(1)
-	if (tmp.mod.logRateChange) {
+	if (aarMod.logRateChange) {
 		var change = current.add(toGain.div(10)).log10()-current.log10()
 		if (change < 0 || isNaN(change)) change = 0
 	} else var change = toGain.times(10).dividedBy(current)

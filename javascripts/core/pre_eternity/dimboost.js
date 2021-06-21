@@ -146,7 +146,7 @@ function getDimboostCostIncrease () {
 	if (player.currentChallenge=="postcngmm_1") return ret
 	if (inNGM(2)) {
 		if (hasGalUpg(21)) ret -= 10
-		if (hasGalUpg(43) && tmp.mod.ngmX >= 4) {
+		if (hasGalUpg(43) && tmp.ngmX >= 4) {
 			e = hasGalUpg(46) ? galMults["u46"]() : 1
 			if (hasAch("r75")) e *= 2
 			ret -= e

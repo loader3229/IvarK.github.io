@@ -129,9 +129,9 @@ function getTimeDimensionProduction(tier) {
   	if (player.currentEternityChall == "eterc11") return dim.amount
   	let ret = dim.amount
   	ret = ret.times(getTimeDimensionPower(tier))
-  	if (tmp.mod.ngmX>3&&(inNC(2)||player.currentChallenge=="postc1"||player.pSac!=undefined)) ret = ret.times(player.chall2Pow)
+  	if (tmp.ngmX>3&&(inNC(2)||player.currentChallenge=="postc1"||player.pSac!=undefined)) ret = ret.times(player.chall2Pow)
   	if (player.currentEternityChall == "eterc7") ret = dilates(ret.div(tmp.ngC ? 1 : player.tickspeed.div(1000)))
-  	if (tmp.mod.ngmX>3&&(tier>1||!hasAch("r12"))) ret = ret.div(100)
+  	if (tmp.ngmX>3&&(tier>1||!hasAch("r12"))) ret = ret.div(100)
   	if (player.currentEternityChall == "eterc1") return new Decimal(0)
   	return ret
 }
@@ -250,7 +250,7 @@ var TIME_DIM_COSTS = {
 	},
 	5: {
 		cost() {
-			let x = inNGM(4) ? 160 : tmp.mod.newGamePlusVersion ? "1e2300" : "1e2350"
+			let x = inNGM(4) ? 160 : aarMod.newGamePlusVersion ? "1e2300" : "1e2350"
 			if (tmp.ngC) x = Decimal.pow(x, .25)
 			return new Decimal(x)
 		},
@@ -261,7 +261,7 @@ var TIME_DIM_COSTS = {
 	},
 	6: {
 		cost() {
-			let x = inNGM(4) ? 1e8 : tmp.mod.newGamePlusVersion ? "1e2500" : "1e2650"
+			let x = inNGM(4) ? 1e8 : aarMod.newGamePlusVersion ? "1e2500" : "1e2650"
 			if (tmp.ngC) x = Decimal.pow(x, .25)
 			return new Decimal(x)
 		},
@@ -272,7 +272,7 @@ var TIME_DIM_COSTS = {
 	},
 	7: {
 		cost() {
-			let x = inNGM(4) ? 1e12 : tmp.mod.newGamePlusVersion ? "1e2700" : "1e3000"
+			let x = inNGM(4) ? 1e12 : aarMod.newGamePlusVersion ? "1e2700" : "1e3000"
 			if (tmp.ngC) x = Decimal.pow(x, .25)
 			return new Decimal(x)
 		},
@@ -283,7 +283,7 @@ var TIME_DIM_COSTS = {
 	},
 	8: {
 		cost() {
-			let x = inNGM(4) ? 1e18 : tmp.mod.newGamePlusVersion ? "1e3000" : "1e3350"
+			let x = inNGM(4) ? 1e18 : aarMod.newGamePlusVersion ? "1e3000" : "1e3350"
 			if (tmp.ngC) x = Decimal.pow(x, .25)
 			return new Decimal(x)
 		},
@@ -357,7 +357,7 @@ function buyMaxTimeDimension(tier, bulk) {
 	if (!res.gte(dim.cost)) return
 
 	if (inNGM(4) && getAmount(1) < 1) return
-	if (tmp.mod.maxHighestTD && tier < 8 && player["timeDimension" + (tier + 1)].bought > 0) return
+	if (aarMod.maxHighestTD && tier < 8 && player["timeDimension" + (tier + 1)].bought > 0) return
 
 	let toBuy = 0
 

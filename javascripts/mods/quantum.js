@@ -3,17 +3,17 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 	if (tmp.ngp3 && qu_save.bigRip.active) force = true
 	if (!(isQuantumReached()||force)||implosionCheck) return
 
-	var headstart = tmp.mod.newGamePlusVersion >= 1 && !tmp.ngp3
+	var headstart = aarMod.newGamePlusVersion >= 1 && !tmp.ngp3
 	var mode = ""
 	var data
 	if (qc) {
-		if (!QCs.done(1) || player.options.challConf || tmp.mod.quantumConf) {
+		if (!QCs.done(1) || player.options.challConf || aarMod.quantumConf) {
 			if (!confirm("This performs a forced Quantum reset, but you will be brought into a real challenge. All rebuyables will also be resetted. Are you sure you want to take this challenge down?")) return
 		}
 		mode = "qc"
 		data = [qc]
 	}
-	if (tmp.mod.quantumConf && !(auto || force)) if (!confirm(player.masterystudies ? "Quantum will reset everything Eternity resets, and including all Eternity Content. You will gain a quark and unlock various upgrades." + (inNGM(2) ? " WARNING! THIS EXITS NG-- MODE DUE TO BALANCING REASONS!" : ""):"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
+	if (aarMod.quantumConf && !(auto || force)) if (!confirm(player.masterystudies ? "Quantum will reset everything Eternity resets, and including all Eternity Content. You will gain a quark and unlock various upgrades." + (inNGM(2) ? " WARNING! THIS EXITS NG-- MODE DUE TO BALANCING REASONS!" : ""):"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
 	if (!pH.did("quantum")) if (!confirm("Are you sure you want to do this? You will lose everything you have!")) return
 
 	var qcData = []
@@ -70,7 +70,7 @@ function getQCtoQKEffect(){
 function getQKAchBonusLog() {
 	let log = 0
 	if (hasAch("ng3p33")) log += Math.log10(getQCtoQKEffect())
-	if (hasAch("ng3p53")) log += player.quantum.bigRip.spaceShards.plus(1).log10()
+	if (hasAch("ng3p53")) log += qu_save.bigRip.spaceShards.plus(1).log10()
 	if (hasAch("ng3p65")) log += getTotalRadioactiveDecays()
 	if (hasAch("ng3p85")) log += Math.pow(player.ghostify.ghostlyPhotons.enpowerments, 2)
 	if (hasAch("ng3p93")) log += Math.log10(500)
@@ -100,8 +100,8 @@ function quarkGain() {
 }
 
 function toggleQuantumConf() {
-	tmp.mod.quantumConf = !tmp.mod.quantumConf
-	getEl("quantumConfirmBtn").textContent = "Quantum confirmation: " + (tmp.mod.quantumConf ? "ON" : "OFF")
+	aarMod.quantumConf = !aarMod.quantumConf
+	getEl("quantumConfirmBtn").textContent = "Quantum confirmation: " + (aarMod.quantumConf ? "ON" : "OFF")
 }
 
 var averageQk = new Decimal(0)
@@ -206,7 +206,7 @@ function doQuantumProgress() {
 
 //v2.90142
 function quantumReset(force, auto, data, mode, bigRip, implode = false) {
-	var headstart = tmp.mod.newGamePlusVersion > 0 && !tmp.ngp3
+	var headstart = aarMod.newGamePlusVersion > 0 && !tmp.ngp3
 	if (implode && qMs.tmp.amt < 1) {
 		showTab("dimensions")
 		showDimTab("antimatterdimensions")
@@ -336,8 +336,8 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	}
 	var oldMoney = player.money
 	var dilTimes = player.dilation.times
-	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
-	var turnSomeOn = !bigRip || player.quantum.bigRip.upgrades.includes(1)
+	var bigRipChanged = tmp.ngp3 && bigRip != qu_save.bigRip.active
+	var turnSomeOn = !bigRip || qu_save.bigRip.upgrades.includes(1)
 	qMs.update()
 
 	doQuantumResetStuff(5, bigRip, isQC, QCs_save.in)
@@ -361,7 +361,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		getEl("replicantidiv").style.display = "inline-block"
 		getEl("replicantiunlock").style.display = "none"
 	}
-	if (bigRip && player.ghostify.milestones > 9 && tmp.mod.ngudpV) for (var u = 7; u < 10; u++) player.eternityUpgrades.push(u)
+	if (bigRip && player.ghostify.milestones > 9 && aarMod.ngudpV) for (var u = 7; u < 10; u++) player.eternityUpgrades.push(u)
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
 
 	if (tmp.ngp3) {
@@ -404,8 +404,8 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		if (!bigRip || tmp.bruActive[12]) player.dilation.upgrades.push(10)
 		else qu_save.wasted = bigRip && qu_save.bigRip.storedTS === undefined
 		if (bigRip ? tmp.bruActive[12] : qMs.tmp.amt >= 14) {
-			for (let i = (player.exdilation != undefined ? 1 : 3); i < 7; i++) if (i != 2 || !tmp.mod.ngudpV) player.dilation.upgrades.push((i > 2 ? "ngpp" : "ngud") + i)
-			if (tmp.mod.nguspV) {
+			for (let i = (player.exdilation != undefined ? 1 : 3); i < 7; i++) if (i != 2 || !aarMod.ngudpV) player.dilation.upgrades.push((i > 2 ? "ngpp" : "ngud") + i)
+			if (aarMod.nguspV) {
 				for (var i = 1; i < 3; i++) player.dilation.upgrades.push("ngusp" + i)
 				for (var i = 4; i < 23; i++) if (player.dilation.upgrades.includes(getDilUpgId(i))) player.dilation.autoUpgrades.push(i)
 				updateExdilation()

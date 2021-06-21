@@ -1,6 +1,6 @@
 let LIGHT_SPEED = {
 	mult(id) {
-		let data = tmp.mod.ls
+		let data = aarMod.ls
 		return (data && data[id]) || 1
 	},
 	options: ["game", "rep", "dil", "tt", "nf", "tod", "gph", "bl"],
@@ -31,7 +31,7 @@ let LIGHT_SPEED = {
 		},
 	},
 	reset() {
-		let shown = tmp.mod.ls !== undefined
+		let shown = aarMod.ls !== undefined
 		getEl("lstabbtn").style.display = shown ? "" : "none"
 		if (!shown) return
 
@@ -49,13 +49,13 @@ let LIGHT_SPEED = {
 	changeOption(id) {
 		let speed = Math.pow(10, getEl("ls_" + id).value / 10 - 3)
 		getEl("ls_" + id + "_text").textContent = shorten(speed)
-		if (speed == 1) delete tmp.mod.ls[id]
-		else tmp.mod.ls[id] = speed
+		if (speed == 1) delete aarMod.ls[id]
+		else aarMod.ls[id] = speed
 	},
 	resetOptions() {
 		if (!confirm("Are you sure do you want to reset these options? All speeds will go back to normal!")) return
 
-		tmp.mod.ls = {}
+		aarMod.ls = {}
 		this.reset()
 	}
 }

@@ -160,7 +160,7 @@ function getEmperorDimensionMultiplier(dim) {
 	if (player.currentEternityChall == "eterc11") return ret
 	ret = tmp.edgm //Global multiplier of all Emperor Dimensions
 	if (hasNU(7) && dim % 2 == 1) ret = ret.times(tmp.nu[7])
-	if (dim == 8) ret = ret.times(Decimal.pow(1.05, Math.sqrt(Math.max(0, player.quantum.emperorDimensions[8].perm - 9))))
+	if (dim == 8) ret = ret.times(Decimal.pow(1.05, Math.sqrt(Math.max(0, qu_save.emperorDimensions[8].perm - 9))))
 	return dilates(ret, 1)
 }
 
@@ -179,7 +179,7 @@ function getEmperorDimensionRateOfChange(dim) {
 	let toGain = getEmperorDimensionMultiplier(dim + 1).times(tmp.eds[dim + 1].workers).div(20)
 
 	var current = tmp.eds[dim].workers.add(tmp.eds[dim].progress).max(1)
-	if (tmp.mod.logRateChange) {
+	if (aarMod.logRateChange) {
 		var change = current.add(toGain).log10()-current.log10()
 		if (change < 0 || isNaN(change)) change = 0
 	} else var change = toGain.times(10).dividedBy(current)
@@ -395,9 +395,9 @@ function maxBuyLimit() {
 function getSpinToReplicantiSpeed(){
 	// log10(green spins) * log10(blue spins) *log10(red spins) 
 	if (!hasAch("ng3p54")) return 1
-	var r = player.quantum.tod.r.spin.plus(10).log10()
-	var g = player.quantum.tod.g.spin.plus(10).log10()
-	var b = player.quantum.tod.b.spin.plus(10).log10()
+	var r = qu_save.tod.r.spin.plus(10).log10()
+	var g = qu_save.tod.g.spin.plus(10).log10()
+	var b = qu_save.tod.b.spin.plus(10).log10()
 	return r * g * b
 }
 

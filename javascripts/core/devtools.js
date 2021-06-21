@@ -176,27 +176,27 @@ dev.testTDCosts = function() {
 }
 
 dev.giveQuantumStuff = function(n){
-	player.quantum.usedQuarks.r = player.quantum.usedQuarks.r.add(n)
-	player.quantum.usedQuarks.b = player.quantum.usedQuarks.b.add(n)
-	player.quantum.usedQuarks.g = player.quantum.usedQuarks.g.add(n)
-	player.quantum.gluons.rg = player.quantum.gluons.rg.add(n)
-	player.quantum.gluons.gb = player.quantum.gluons.gb.add(n)
-	player.quantum.gluons.br = player.quantum.gluons.br.add(n)
+	qu_save.usedQuarks.r = qu_save.usedQuarks.r.add(n)
+	qu_save.usedQuarks.b = qu_save.usedQuarks.b.add(n)
+	qu_save.usedQuarks.g = qu_save.usedQuarks.g.add(n)
+	qu_save.gluons.rg = qu_save.gluons.rg.add(n)
+	qu_save.gluons.gb = qu_save.gluons.gb.add(n)
+	qu_save.gluons.br = qu_save.gluons.br.add(n)
 	updateColorCharge()
 }
 
 dev.addReward = function(){
-	player.quantum.nanofield.rewards += 1
+	qu_save.nanofield.rewards += 1
 }
 
 dev.setReward = function(n){
-	player.quantum.nanofield.rewards = n
+	qu_save.nanofield.rewards = n
 }
 
 dev.addSpin = function(n){
-	player.quantum.tod.r.spin = player.quantum.tod.r.spin.add(Decimal.pow(10,n))
-	player.quantum.tod.b.spin = player.quantum.tod.b.spin.add(Decimal.pow(10,n))
-	player.quantum.tod.g.spin = player.quantum.tod.g.spin.add(Decimal.pow(10,n))
+	qu_save.tod.r.spin = qu_save.tod.r.spin.add(Decimal.pow(10,n))
+	qu_save.tod.b.spin = qu_save.tod.b.spin.add(Decimal.pow(10,n))
+	qu_save.tod.g.spin = qu_save.tod.g.spin.add(Decimal.pow(10,n))
 }
 
 dev.addGHP = function(n){

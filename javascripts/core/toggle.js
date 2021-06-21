@@ -4,19 +4,19 @@ function toggleChallengeRetry() {
 }
 
 function togglePerformanceTicks() {
-	tmp.mod.performanceTicks = ((tmp.mod.performanceTicks || 0) + 1) % 4
+	aarMod.performanceTicks = ((aarMod.performanceTicks || 0) + 1) % 4
 	updatePerformanceTicks()
 }
 
 function toggleLogRateChange() {
-	tmp.mod.logRateChange=!tmp.mod.logRateChange
-	getEl("toggleLogRateChange").textContent = "Logarithm rate: O" + (tmp.mod.logRateChange ? "N" : "FF")
-	dimDescEnd = (tmp.mod.logRateChange?" OoM":"%")+"/s)"
+	aarMod.logRateChange=!aarMod.logRateChange
+	getEl("toggleLogRateChange").textContent = "Logarithm rate: O" + (aarMod.logRateChange ? "N" : "FF")
+	dimDescEnd = (aarMod.logRateChange?" OoM":"%")+"/s)"
 }
 
 function toggleTabsSave() {
-	tmp.mod.tabsSave.on =! tmp.mod.tabsSave.on
-	getEl("tabsSave").textContent = "Saved tabs: O" + (tmp.mod.tabsSave.on ? "N" : "FF")
+	aarMod.tabsSave.on =! aarMod.tabsSave.on
+	getEl("tabsSave").textContent = "Saved tabs: O" + (aarMod.tabsSave.on ? "N" : "FF")
 }
 
 function infMultAutoToggle() {
@@ -48,13 +48,13 @@ function toggleEternityConf() {
 }
 
 function toggleDilaConf() {
-	tmp.mod.dilationConf = !tmp.mod.dilationConf
-	getEl("dilationConfirmBtn").textContent = "Dilation confirmation: O" + (tmp.mod.dilationConf ? "N" : "FF")
+	aarMod.dilationConf = !aarMod.dilationConf
+	getEl("dilationConfirmBtn").textContent = "Dilation confirmation: O" + (aarMod.dilationConf ? "N" : "FF")
 }
 
 function toggleOfflineProgress() {
-	tmp.mod.offlineProgress = !tmp.mod.offlineProgress
-	getEl("offlineProgress").textContent = "Offline progress: O"+(tmp.mod.offlineProgress?"N":"FF")
+	aarMod.offlineProgress = !aarMod.offlineProgress
+	getEl("offlineProgress").textContent = "Offline progress: O"+(aarMod.offlineProgress?"N":"FF")
 }
 
 function toggleAutoBuyers() {
@@ -98,20 +98,20 @@ function respecToggle() {
 
 function toggleProductionTab() {
 	// 0 == visible, 1 == not visible
-	tmp.mod.hideProductionTab=!tmp.mod.hideProductionTab
-	getEl("hideProductionTab").textContent = (tmp.mod.hideProductionTab?"Show":"Hide")+" production tab"
+	aarMod.hideProductionTab=!aarMod.hideProductionTab
+	getEl("hideProductionTab").textContent = (aarMod.hideProductionTab?"Show":"Hide")+" production tab"
 	if (getEl("production").style.display == "block") showDimTab("antimatterdimensions")
 }
 
 function toggleRepresentation() {
 	// 0 == visible, 1 == not visible
-	tmp.mod.hideRepresentation=!tmp.mod.hideRepresentation
-	getEl("hideRepresentation").textContent=(tmp.mod.hideRepresentation?"Show":"Hide")+" antimatter representation"
+	aarMod.hideRepresentation=!aarMod.hideRepresentation
+	getEl("hideRepresentation").textContent=(aarMod.hideRepresentation?"Show":"Hide")+" antimatter representation"
 }
 
 function toggleProgressBar() {
-	tmp.mod.progressBar=!tmp.mod.progressBar
-	getEl("progressBarBtn").textContent = (tmp.mod.progressBar?"Hide":"Show")+" progress bar"	
+	aarMod.progressBar=!aarMod.progressBar
+	getEl("progressBarBtn").textContent = (aarMod.progressBar?"Hide":"Show")+" progress bar"	
 }
 
 function toggleReplAuto(i) {

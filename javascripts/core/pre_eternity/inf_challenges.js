@@ -67,7 +67,7 @@ function startNormalChallenge(x) {
 		if (player.infinitied < 1 && player.eternities < 1 && !quantumed) return
 		startChallenge("challenge7", Number.MAX_VALUE)
 	}
-	if (tmp.mod.ngmX > 3) galacticSacrifice(false, true, x)
+	if (tmp.ngmX > 3) galacticSacrifice(false, true, x)
 	else startChallenge("challenge" + x, Number.MAX_VALUE)
 }
 
@@ -80,8 +80,8 @@ function inNC(x, n) {
 		if (n == 2) return !tmp.exMode && tmp.ngmX >= 2
 		if (n == 3) return tmp.exMode
 	}
-	if (x == 0) return player.currentChallenge == "" && (!(tmp.mod.ngmX > 3) || !player.galacticSacrifice.chall) && inPxC(0)
-	return player.currentChallenge == "challenge" + x || (tmp.mod.ngmX > 3 && player.galacticSacrifice.chall == x) || inPxC(x)
+	if (x == 0) return player.currentChallenge == "" && (player.galacticSacrifice === undefined || !player.galacticSacrifice.chall) && inPxC(0)
+	return player.currentChallenge == "challenge" + x || (tmp.ngmX > 3 && player.galacticSacrifice.chall == x) || inPxC(x)
 }
 
 function getTotalNormalChallenges() {
@@ -89,7 +89,7 @@ function getTotalNormalChallenges() {
 	if (inNGM(2)) x += 2
 	else if (player.infinityUpgradesRespecced) x++
 	if (player.tickspeedBoosts != undefined) x++
-	if (tmp.mod.ngmX > 3) x++
+	if (tmp.ngmX > 3) x++
 	return x
 }
 
@@ -108,7 +108,7 @@ function updateNCVisuals() {
 	if (isADSCRunning()) getEl("chall13Mult").style.display = "block"
 	else getEl("chall13Mult").style.display = "none"
 
-	if (inNC(14) && tmp.mod.ngmX > 3) getEl("c14Resets").style.display = "block"
+	if (inNC(14) && tmp.ngmX > 3) getEl("c14Resets").style.display = "block"
 	else getEl("c14Resets").style.display = "none"
 
 	if (inNC(6, 3) || inNC(9) || inNC(12) || ((inNC(5) || inNC(14) || chall == "postc4" || chall == "postc5") && tmp.ngmX < 3) || chall == "postc1" || chall == "postc6" || chall == "postc8") getEl("quickReset").style.display = "inline-block"
@@ -173,9 +173,9 @@ function updateWorstChallengeBonus() {
 	updateWorstChallengeTime()
 	var exp = inNGM(2) ? 2 : 1
 	var timeeff = Math.max(33e-6, worstChallengeTime * 0.1)
-	var base = tmp.mod.ngmX >= 4 ? 3e4 : 3e3
+	var base = tmp.ngmX >= 4 ? 3e4 : 3e3
 	var eff = Decimal.max(Math.pow(base / timeeff, exp), 1)
-	if (tmp.mod.ngmX >= 4) eff = eff.times(Decimal.pow(eff.plus(10).log10(), 5)) 
+	if (tmp.ngmX >= 4) eff = eff.times(Decimal.pow(eff.plus(10).log10(), 5)) 
 	worstChallengeBonus = eff
 }
 
@@ -277,7 +277,7 @@ function getNextAt(chall) {
 		let retMod = nextAt[chall+"_ngm3"]
 		if (retMod) ret = retMod
 	}
-	if (tmp.mod.ngmX >= 4){
+	if (tmp.ngmX >= 4){
 		let retMod = nextAt[chall+"_ngm4"]
 		if (retMod) ret = retMod
 	}
@@ -298,7 +298,7 @@ function getGoal(chall) {
 		let retMod = goals[chall+"_ngm3"]
 		if (retMod) ret = retMod
 	}
-	if (tmp.mod.ngmX >= 4){
+	if (tmp.ngmX >= 4){
 		let retMod = goals[chall+"_ngm4"]
 		if (retMod) ret = retMod
 	}
@@ -407,8 +407,8 @@ function getIC3Base() {
 	let g = initialGalaxies()
 	perGalaxy *= getGalaxyEff()
 	let ret = getGalaxyPower(g) * perGalaxy + 1.05
-	if (inNC(6, 2)) ret -= tmp.mod.ngmX >= 3 ? 0.02 : 0.05
-	else if (tmp.mod.ngmX == 3) ret -= 0.03
+	if (inNC(6, 2)) ret -= tmp.ngmX >= 3 ? 0.02 : 0.05
+	else if (tmp.ngmX == 3) ret -= 0.03
 	if (hasPU(23)) ret += puMults[23]()
 	if (tmp.be && ret > 1e8) ret = Math.pow(Math.log10(ret) + 2, 8)
 	return ret
@@ -416,7 +416,7 @@ function getIC3Base() {
 
 function getIC3Exp() {
 	let x = 1
-	if (hasAch("r66") && tmp.mod.ngmX >= 4) {
+	if (hasAch("r66") && tmp.ngmX >= 4) {
 		x *= Decimal.min(5, player.galacticSacrifice.galaxyPoints.div(1e58).max(1).pow(.05)).toNumber()
 		if (x > 1.25) x = Math.log10(8 * x) * 1.25
 		if (x > 4/3) x = 1 + x/4

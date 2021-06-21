@@ -1,5 +1,5 @@
 function inNGM(x) {
-	return tmp.ngmX >= x && tmp.mod.ngmX >= x
+	return tmp.ngmX >= x && aarMod.ngmX >= x
 }
 
 function getGSAmount(offset=0) { 
@@ -795,14 +795,14 @@ function calcNGMX(data) {
 }
 
 function exitNGMM() {
-	delete tmp.mod.ngmX
+	delete tmp.ngmX
 	delete player.galacticSacrifice
 	delete player.tickspeedBoosts
 	delete player.tdBoosts
 	delete player.pSac
 
 	tmp.ngmX = calcNGMX()
-	tmp.mod.ngmX = tmp.ngmX
+	tmp.ngmX = tmp.ngmX
 	getEl("gSacrifice").style.display = "none"
 	pH.reset()
 }

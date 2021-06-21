@@ -31,7 +31,7 @@ function galaxyReset(bulk) {
 }
 
 getEl("secondSoftReset").onclick = function() {
-	let ngm4 = tmp.mod.ngmX ? tmp.mod.ngmX >= 4 : false
+	let ngm4 = tmp.ngmX ? tmp.ngmX >= 4 : false
 	let bool1 = !inNC(11) || ngm4
 	let bool2 = player.currentChallenge != "postc1"
 	let bool3 = player.currentChallenge != "postc5" || player.tickspeedBoosts == undefined
@@ -39,7 +39,7 @@ getEl("secondSoftReset").onclick = function() {
 	let bool5 = (player.currentEternityChall == "eterc6") && !tmp.be
 	var bool = bool1 && bool2  && bool3 && bool4 && !bool5 && !tmp.ri && !cantReset()
 	if (getAmount(inNC(4) || inNGM(5) ? 6 : 8) >= getGalaxyRequirement() && bool) {
-		if ((getEternitied() >= 7 || player.autobuyers[10].bulkBought) && !shiftDown && (!inNC(14) || !(tmp.mod.ngmX > 3))) maxBuyGalaxies(true);
+		if ((getEternitied() >= 7 || player.autobuyers[10].bulkBought) && !shiftDown && (!inNC(14) || tmp.ngmX <= 3)) maxBuyGalaxies(true);
 		else galaxyReset(1)
 	}
 }
@@ -61,7 +61,7 @@ function getGalaxyRequirement(offset = 0, display) {
 	let amount = 80 + base
 	let scaling = 0
 	if (inNGM(2)) amount -= (hasGalUpg(22) && tmp.grd.gals >= 1) ? 80 : 60
-	if (tmp.mod.ngmX > 3) amount -= 10
+	if (tmp.ngmX > 3) amount -= 10
 	if (inNC(4) || inNGM(5)) amount = player.tickspeedBoosts == undefined ? 99 + base : amount + (inNGM(4) ? 20 : -30)
 	if (tmp.be) {
 		amount *= 50
@@ -102,7 +102,7 @@ function getGalaxyRequirement(offset = 0, display) {
 			let remoteStart = getRemoteScalingStart()
 			if (tmp.grd.gals >= remoteStart) {
 				let speed2 = tmp.grd.speed
-				amount *= Math.pow(1 + 2 / (tmp.mod.ngmX > 3 ? 10 : 1e3), (tmp.grd.gals - remoteStart + 1) * speed2)
+				amount *= Math.pow(1 + 2 / (tmp.ngmX > 3 ? 10 : 1e3), (tmp.grd.gals - remoteStart + 1) * speed2)
 				scaling = Math.max(scaling, 3)
 			}
 		}

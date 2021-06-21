@@ -439,7 +439,7 @@ function respecTimeStudies(force) {
 					gotAch = false
 				}
 			}
-			if (player.masterystudies) if (player.timestudy.studies.length>1) player.quantum.wasted = false
+			if (player.masterystudies) if (player.timestudy.studies.length>1) qu_save.wasted = false
 			player.timestudy.studies = bru7activated ? [192] : []
 		}
 
@@ -455,7 +455,7 @@ function respecTimeStudies(force) {
 		mTs.respec()
 
 		if (player.masterystudies.length > oldMS.length) {
-			player.quantum.wasted = false
+			qu_save.wasted = false
 			gotAch = false
 		}
 	}
@@ -708,16 +708,16 @@ function save_preset(id) {
 
 function toggle_preset_reset(load) {
 	if (!load) {
-		tmp.mod.presetReset = !tmp.mod.presetReset
+		aarMod.presetReset = !aarMod.presetReset
 		getEl("toggle_preset_reset").style.display = tmp.ngp3 ? "" : "none"
 	}
-	getEl("toggle_preset_reset").textContent = "Force Eternity: " + (tmp.mod.presetReset ? "ON" : "OFF")
+	getEl("toggle_preset_reset").textContent = "Force Eternity: " + (aarMod.presetReset ? "ON" : "OFF")
 }
 
 function load_preset(id) {
 	let data = getEl("preset_" + id + "_data").value
 
-	if (tmp.mod.presetReset) {
+	if (aarMod.presetReset) {
 		if (!pH.can("eternity")) return
 
 		player.respec = true
@@ -905,27 +905,27 @@ let tsMults = {
 		return Decimal.pow(10, log)
 	},
 	32() {
-		let ret = Math.pow(Math.max(getTotalDBs(), 1), tmp.mod.newGameMult ? 4 : 1)
+		let ret = Math.pow(Math.max(getTotalDBs(), 1), aarMod.newGameMult ? 4 : 1)
 		if (player.timestudy.studies.includes(197) && tmp.ngC) ret = Math.pow(ret, 3)
 		return ret
 	},
 	41() {
 		if (tmp.ngC) return 1.1
-		return tmp.mod.newGameExpVersion ? 1.5 : 1.2
+		return aarMod.newGameExpVersion ? 1.5 : 1.2
 	},
 	42() {
 		if (tmp.ngC) return 29/30
-		return (tmp.mod.newGameExpVersion ? 12 : 13) / 15
+		return (aarMod.newGameExpVersion ? 12 : 13) / 15
 	},
 	51(){
 		if (tmp.ngC) return Decimal.pow((ngC.save.repl + 1) * (getFullEffRGs() + 1), 160)
-		return tmp.mod.newGameExpVersion ? 1e30 : 1e15
+		return aarMod.newGameExpVersion ? 1e30 : 1e15
 	},
 	61() {
 		return tmp.ngC ? Decimal.pow(25, Math.log10(tmp.rmPseudo.log10() / 308.25 + 1) / Math.log10(2)) : (tmp.ngp3_exp ? 100 : 10)
 	},
 	62() {
-		let r = tmp.mod.newGameExpVersion ? 4 : 3
+		let r = aarMod.newGameExpVersion ? 4 : 3
 		if (tmp.exMode) r -= 0.5
 		if (tmp.ngC) r /= 2
 		return r
@@ -942,7 +942,7 @@ let tsMults = {
 	},
 	212() {
 		let r = player.timeShards.max(2).log2()
-		if (tmp.mod.newGameExpVersion || tmp.ngC) return Math.min(Math.pow(r, 0.006), 1.15)
+		if (aarMod.newGameExpVersion || tmp.ngC) return Math.min(Math.pow(r, 0.006), 1.15)
 		return Math.min(Math.pow(r, 0.005), 1.1)
 	},
 	213() {

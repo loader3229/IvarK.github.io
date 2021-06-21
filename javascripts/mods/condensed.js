@@ -1,6 +1,6 @@
 let CONDENSED = {
 	setup() {
-		tmp.mod.ngp3c = 1
+		aarMod.ngp3c = 1
 		player.condensed = {}
 	},
 	compile() {

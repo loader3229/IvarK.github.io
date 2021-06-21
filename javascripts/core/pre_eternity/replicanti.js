@@ -272,7 +272,7 @@ function getReplicantiIntervalMult() {
 
 	interval = new Decimal(interval)
 	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))
-	if (player.dilation.upgrades.includes('ngpp1') && tmp.mod.nguspV && !tmp.mod.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
+	if (player.dilation.upgrades.includes('ngpp1') && aarMod.nguspV && !aarMod.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
 	if (enB.active("pos", 4)) interval = interval.div(tmp_enB.pos4)
 	if (tmp.ngC && ngC.tmp) interval = interval.div(ngC.tmp.rep.eff1)
@@ -297,7 +297,7 @@ function getReplScaleStart() {
 function getReplSpeed() {
 	let inc = .2
 	let exp = Math.floor(Decimal.log10(getReplScaleStart()))
-	if (hasDilationUpg('ngpp1') && (!tmp.mod.nguspV || tmp.mod.nguepV)) {
+	if (hasDilationUpg('ngpp1') && (!aarMod.nguspV || aarMod.nguepV)) {
 		let expDiv = 10
 		if (tmp.ngp3) expDiv = 9
 		let x = 1 + player.dilation.dilatedTime.max(1).log10() / expDiv

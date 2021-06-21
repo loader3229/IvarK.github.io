@@ -431,7 +431,7 @@ function giveAchievement(name, noUpdate) {
 		for (i = 1; i <= 8; i++) getEl("td" + i + 'auto').style.visibility = "visible"
 		getEl('togglealltimedims').style.display = ""
 		getEl('epmultauto').style.display = ""
-		if (tmp.mod.ngudpV) getEl("blackholeAuto").style.display = ""
+		if (aarMod.ngudpV) getEl("blackholeAuto").style.display = ""
 	}
 	if (name == "It will never be enough") getEl('replicantibulkmodetoggle').style.display="inline-block"
 	if (name == "I already got rid of you..." || name == "No dilation means no production.") {
@@ -514,7 +514,7 @@ function updateAchievements() {
 			}
 			if (n == 8) {
 				getEl(rowHTML).className = "completedrow"
-				if (tmp.mod.hideCompletedAchs) shown = false
+				if (aarMod.hideCompletedAchs) shown = false
 				amount++
 			} else getEl(rowHTML).className = ""
 		}
@@ -527,8 +527,8 @@ function updateAchievements() {
 				getEl(rowHTML).insertCell(0).innerHTML = '<div class="achRowInfo" id="' + rowId + 'number"></div>'
 				numberelement = getEl(rowId + "number")
 			}
-			numberelement.parentElement.style.display = tmp.mod.showAchRowNums ? "" : "none"
-			if (tmp.mod.showAchRowNums) numberelement.innerHTML = "Row #" + rowsNum + "<br>" + n + " / 8<br>(" + (n*12.5).toFixed(1) + "%)"
+			numberelement.parentElement.style.display = aarMod.showAchRowNums ? "" : "none"
+			if (aarMod.showAchRowNums) numberelement.innerHTML = "Row #" + rowsNum + "<br>" + n + " / 8<br>(" + (n*12.5).toFixed(1) + "%)"
 		}
 	}
     player.achPow = Decimal.pow(inNGM(5) ? 20 : inNGM(2) ? 5 : 1.5, amount)
@@ -565,7 +565,7 @@ function updateAchievements() {
 			}
 			if (n == 8) {
 				getEl(rowId).className = "completedrow"
-				if (tmp.mod.hideCompletedAchs) shown = false
+				if (aarMod.hideCompletedAchs) shown = false
 				amount++
 			} else getEl(rowId).className = ""
 		}
@@ -577,8 +577,8 @@ function updateAchievements() {
 				getEl(rowId).insertCell(0).innerHTML = '<div class="achRowInfo" id="' + rowId + 'number"></div>'
 				numberelement = getEl(rowId + "number")
 			}
-			numberelement.parentElement.style.display = tmp.mod.showAchRowNums ? "" : "none"
-			if (tmp.mod.showAchRowNums) numberelement.innerHTML = "Secret row #" + rowsNum + "<br>" + n + " / 8<br>(" + Math.round(n * 100 / 8) + "%)"
+			numberelement.parentElement.style.display = aarMod.showAchRowNums ? "" : "none"
+			if (aarMod.showAchRowNums) numberelement.innerHTML = "Secret row #" + rowsNum + "<br>" + n + " / 8<br>(" + Math.round(n * 100 / 8) + "%)"
 		}
 	}
 	getEl("nothingnessSecret").style.display = rowsShown ? "none" : ""
@@ -609,28 +609,28 @@ function getSecretAchAmount() {
 
 function toggleAchRowNums() {
 	// 0 == not visible, 1 == visible
-	tmp.mod.showAchRowNums = !tmp.mod.showAchRowNums;
+	aarMod.showAchRowNums = !aarMod.showAchRowNums;
 	updateAchievements();
-	getEl("showAchRowNums").textContent = (tmp.mod.showAchRowNums ? "Hide" : "Show") + " achievement row info";
+	getEl("showAchRowNums").textContent = (aarMod.showAchRowNums ? "Hide" : "Show") + " achievement row info";
 }
 
 function toggleCompletedAchs() {
 	// 0 == visible, 1 == not visible
-	tmp.mod.hideCompletedAchs = !tmp.mod.hideCompletedAchs;
+	aarMod.hideCompletedAchs = !aarMod.hideCompletedAchs;
 	updateAchievements();
-	getEl("hideCompletedAchs").textContent = (tmp.mod.hideCompletedAchs ? "Show" : "Hide") + " completed achievement rows";
+	getEl("hideCompletedAchs").textContent = (aarMod.hideCompletedAchs ? "Show" : "Hide") + " completed achievement rows";
 }
 
 function toggleSecretAchs() {
 	// 0 == visible, 1 == not visible
-	tmp.mod.hideSecretAchs = !tmp.mod.hideSecretAchs;
+	aarMod.hideSecretAchs = !aarMod.hideSecretAchs;
 	if (getEl("secretachievements").style.display == "block") showAchTab("normalachievements");
-	getEl("hideSecretAchs").textContent = (tmp.mod.hideSecretAchs ? "Show" : "Hide") + " secret achievements";
+	getEl("hideSecretAchs").textContent = (aarMod.hideSecretAchs ? "Show" : "Hide") + " secret achievements";
 }
 
 function achMultLabelUpdate() {
         var labels = []
-        if (hasAch("r72") && tmp.mod.ngmX >= 4) labels.push("Galaxy Points")
+        if (hasAch("r72") && tmp.ngmX >= 4) labels.push("Galaxy Points")
 	labels.push("Normal")
 	if (hasAch("r75")) labels.push("Infinity")
 	if (player.eternityUpgrades.includes(4)) labels.push("Time")

@@ -25,7 +25,7 @@ function showQuantumTab(tabName) {
 		}
 	}
 	if (oldTab != tabName) {
-		tmp.mod.tabsSave.tabQuantum = tabName
+		aarMod.tabsSave.tabQuantum = tabName
 		if (tabName == "uquarks" && getEl("quantumtab").style.display !== "none") {
 			resizeCanvas()
 			requestAnimationFrame(drawQuarkAnimation)
@@ -467,7 +467,7 @@ function getGHPMult() {
 
 function ghostify(auto, force) {
 	if (!force && (implosionCheck || !pH.can("ghostify"))) return
-	if (!auto && !force && tmp.mod.ghostifyConf && !confirm("Becoming a ghost resets everything Quantum resets, and also resets all your Quantum content and banked stats to gain a Ghost Particle. " + (tmp.mod.nguspV ? "You will also exit NGUdS' mode and permanently bring you to NGUd'! " : "") + "Are you ready for this?")) {
+	if (!auto && !force && aarMod.ghostifyConf && !confirm("Becoming a ghost resets everything Quantum resets, and also resets all your Quantum content and banked stats to gain a Ghost Particle. " + (aarMod.nguspV ? "You will also exit NGUdS' mode and permanently bring you to NGUd'! " : "") + "Are you ready for this?")) {
 		denyGhostify()
 		return
 	}
@@ -527,9 +527,9 @@ function ghostifyReset(implode, gain, amount, force) {
 		pH.updateDisplay()
 	}
 
-	if (tmp.mod.nguspV) {
+	if (aarMod.nguspV) {
 		for (let d = 5; d <= 8; d++) delete player["blackholeDimension" + d]
-		delete tmp.mod.nguspV
+		delete aarMod.nguspV
 	}
 
 	var nBRU = []
@@ -565,8 +565,8 @@ function ghostifyReset(implode, gain, amount, force) {
 }
 
 function toggleGhostifyConf() {
-	tmp.mod.ghostifyConf = !tmp.mod.ghostifyConf
-	getEl("ghostifyConfirmBtn").textContent = "Ghostify confirmation: O" + (tmp.mod.ghostifyConf ? "N" : "FF")
+	aarMod.ghostifyConf = !aarMod.ghostifyConf
+	getEl("ghostifyConfirmBtn").textContent = "Ghostify confirmation: O" + (aarMod.ghostifyConf ? "N" : "FF")
 }
 
 function getGHPRate(num) {
@@ -627,7 +627,7 @@ function showGhostifyTab(tabName) {
 			tab.style.display = 'none';
 		}
 	}
-	if (oldTab !== tabName) tmp.mod.tabsSave.tabGhostify = tabName
+	if (oldTab !== tabName) aarMod.tabsSave.tabGhostify = tabName
 }
 
 function updateGhostifyTabs() {
@@ -857,7 +857,7 @@ function showNFTab(tabName) {
 			tab.style.display = 'none';
 		}
 	}
-	if (oldTab !== tabName) tmp.mod.tabsSave.tabNF = tabName
+	if (oldTab !== tabName) aarMod.tabsSave.tabNF = tabName
 	closeToolTip()
 }
 
@@ -868,8 +868,8 @@ function getGhostifiedGain() {
 }
 
 function toggleLEConf() {
-	tmp.mod.leNoConf = !tmp.mod.leNoConf
-	getEl("leConfirmBtn").textContent = "Light Empowerment confirmation: O" + (tmp.mod.leNoConf ? "FF" : "N")
+	aarMod.leNoConf = !aarMod.leNoConf
+	getEl("leConfirmBtn").textContent = "Light Empowerment confirmation: O" + (aarMod.leNoConf ? "FF" : "N")
 }
 
 //v3
@@ -895,7 +895,7 @@ function getNGP3EterMilestones() {
 }
 
 function convertToNGP5(setup) {
-	tmp.mod.ngpX = 5
+	aarMod.ngpX = 5
 	tmp.ngpX = 5
 
 	player.pl = pl.setup()

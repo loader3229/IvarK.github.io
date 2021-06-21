@@ -186,7 +186,7 @@ var pH = {
 		if (id == "eternity" && !tmp.eterUnl) return false
 		if (id == "quantum" && !tmp.quUnl) return false
 
-		return !tmp.mod.layerHidden[id]
+		return !aarMod.layerHidden[id]
 	},
 	onHotkey(layer) {
 		if (!layer) layer = tmp_pH.lastDid
@@ -226,7 +226,7 @@ var pH = {
 			var shown = false
 
 			if (!isEmptiness) {
-				if (pH.can(p) && !tmp.mod.layerHidden[p]) prestigeShown = true
+				if (pH.can(p) && !aarMod.layerHidden[p]) prestigeShown = true
 				if (pH.shown(p)) tabShown = true
 				if (prestigeShown || tabShown) shown = true
 			}
@@ -289,7 +289,7 @@ var pH = {
 		getEl("layerDispOptions").style.display = ""
 		//getEl("resetDispOptions").style.display = ""
 		getEl("hide_" + layer).style.display = ""
-		getEl("hide_" + layer).innerHTML = (tmp.mod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+		getEl("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 		pH.updateActive()
 	},
 	setupHTML(layer) {
@@ -301,12 +301,12 @@ var pH = {
 		getEl("hideLayers").innerHTML = html
 	},
 	hideOption(layer) {
-		if (tmp.mod.layerHidden[layer]) delete tmp.mod.layerHidden[layer]
-		else tmp.mod.layerHidden[layer] = true
+		if (aarMod.layerHidden[layer]) delete aarMod.layerHidden[layer]
+		else aarMod.layerHidden[layer] = true
 
-		getEl("hide_" + layer).innerHTML = (tmp.mod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+		getEl("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 
-		if (!tmp.mod.layerHidden[layer]) return
+		if (!aarMod.layerHidden[layer]) return
 		if (layer == "infinity") {
 			if (getEl("infinitydimensions").style.display == "block") showDimTab("antimatterdimensions")
 			if (getEl("breakchallenges").style.display == "block") showChallengesTab("normalchallenges")

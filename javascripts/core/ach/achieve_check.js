@@ -64,7 +64,7 @@ function checkForEndMe() {
 		temp += player.challengeTimes[i]
 	}
 	if (temp <= 1800) giveAchievement("Not-so-challenging")
-	if (temp <= 20 || (temp <= 50 && tmp.mod.ngmX >= 4)) giveAchievement("End me")
+	if (temp <= 20 || (temp <= 50 && tmp.ngmX >= 4)) giveAchievement("End me")
 	var temp2 = 0
 	for (var i = 0; i < order.length; i++) temp2 += player.infchallengeTimes[i]
 	infchallengeTimes = temp2
@@ -217,8 +217,8 @@ function checkNGp2Achieve() {
 function getTwoDecaysBool(){
 	branches = ['r', 'g', 'b']
 	for (i = 0; i < 3; i++){
-		if (!player.quantum.tod[branches[i]].decays) return false
-		if (player.quantum.tod[branches[i]].decays < 2) return false	
+		if (!qu_save.tod[branches[i]].decays) return false
+		if (qu_save.tod[branches[i]].decays < 2) return false	
 	}
 	return true
 }
@@ -297,7 +297,7 @@ function preHiggsNGp3AchieveCheck() {
 function atHiggsAchCheck(){
 	if (player.ghostify.hb.higgs >= 1) giveAchievement("The Holy Particle")
 	if (player.ghostify.ghostlyPhotons.enpowerments >= 25) giveAchievement("Bright as the Anti-Sun")
-	if (player.quantum.quarks.log10() >= 4e4) giveAchievement("Are these another...")
+	if (qu_save.quarks.log10() >= 4e4) giveAchievement("Are these another...")
 	if (player.ghostify.reference && getMinimumUnstableQuarks().decays >= 2) giveAchievement("... references to EC8?")
 	if (player.ghostify.hb.bosonicSemipowerment && player.ghostify.ghostlyPhotons.lights[7] >= tmp.leReq / 2) giveAchievement("Bosonic Semipowerment")
 	if (player.ghostify.times >= Math.pow(Number.MAX_VALUE, 1/4)) giveAchievement("The Ghostliest Side")

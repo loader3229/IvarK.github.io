@@ -247,7 +247,7 @@ function showBLTab(tabName) {
 			tab.style.display = 'none';
 		}
 	}
-	if (oldTab !== tabName) tmp.mod.tabsSave.tabBL = tabName
+	if (oldTab !== tabName) aarMod.tabsSave.tabBL = tabName
 	closeToolTip()
 }
 

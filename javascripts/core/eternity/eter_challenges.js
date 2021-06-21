@@ -344,7 +344,7 @@ function getECReward(x) {
 		let r=player.timeShards
 		if (r.gt(0)) r = r.pow(c / (m2 ? 2 : 10))
 		if (m2) return r.plus(1).min("1e10000")
-		if (!tmp.mod.newGameExpVersion) return r.plus(1).min("1e400")
+		if (!aarMod.newGameExpVersion) return r.plus(1).min("1e400")
 		if (r.lt("1e400")) return r.plus(1)
 		let log = Math.sqrt(r.log10() * 400)
 		return Decimal.pow(10, Math.min(50000, log))	
@@ -376,7 +376,7 @@ function doCheckECCompletionStuff() {
 		R.I.P. Eternity Challenge Times (Active exploit)
 
 		//Speedruns
-		if (data[ec] == 5) tmp.mod.eternityChallRecords[ecNum] = Math.max(player.thisEternity, tmp.mod.eternityChallRecords[ecNum] || 1/0)
+		if (data[ec] == 5) aarMod.eternityChallRecords[ecNum] = Math.max(player.thisEternity, aarMod.eternityChallRecords[ecNum] || 1/0)
 		*/
 
 		//Special
@@ -398,7 +398,7 @@ function doCheckECCompletionStuff() {
 
 function getECStarts() {
 	let starts = {}
-	starts[1] = tmp.mod.newGameExpVersion?1e3:2e4
+	starts[1] = aarMod.newGameExpVersion?1e3:2e4
 	starts[2] = tmp.ngC?1950:1300
 	starts[3] = tmp.ngC?13100:17300
 	starts[4] = tmp.ngC?5e7:1e8
@@ -413,7 +413,7 @@ function getECStarts() {
 
 function getECMults() {
 	let mults = {}
-	mults[1] = tmp.mod.newGameExpVersion?1e3:2e4
+	mults[1] = aarMod.newGameExpVersion?1e3:2e4
 	mults[2] = tmp.ngC?350:150
 	mults[3] = tmp.ngC?200:1250
 	mults[4] = tmp.ngC?25e6:5e7
