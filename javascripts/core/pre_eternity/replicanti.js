@@ -249,11 +249,11 @@ function replicantiGalaxyAutoToggle() {
 	getEl("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
 }
 
-function getReplicantiBaseInterval(speed) {
+function getReplicantiBaseInterval(speed, debug) {
 	if (speed === undefined) speed = player.replicanti.interval
 	speed = new Decimal(speed)
 
-	var upgs = Math.round(Decimal.div(1e3, speed).log(0.9))
+	var upgs = Math.round(Decimal.div(speed, 1e3).log(0.9))
 	if (enB.active("glu", 6)) upgs *= enB_tmp.glu6
 	speed = Decimal.pow(0.9, upgs).times(1e3)
 
@@ -366,16 +366,20 @@ function boostReplicateInterval() {
 
 	data.baseBaseEst = data.baseEst
 
-	var sclessEst = data.baseEst
-	var scEst = softcap(sclessEst, "rInt")
-	if (sclessEst.gt(scEst)) x = x.div(sclessEst.div(scEst))
-
 	if (ECComps("eterc14")) {
-		let pow = getECReward(14)
-		data.ec14.interval = data.ec14.interval.div(data.speeds.exp / Math.log10(data.speeds.inc)).times(pow)
-		x = x.div(data.ec14.interval)
+		var ec14Pow = getECReward(14)
+		x = x.div(data.baseEst.pow(ec14Pow))
+
+		var sclessEst = data.baseEst
+		var scEst = softcap(sclessEst, "rInt")
+		if (sclessEst.gt(scEst)) x = x.div(sclessEst.div(scEst))
+
+		var ec14Acc = data.speeds.exp / Math.log10(data.speeds.inc) * ec14Pow + 1
+		data.ec14.interval = data.ec14.interval.div(ec14Acc)
+		x = x.times(ec14Acc)
 	}
 	if (QCs_tmp.qc1) x = x.times(QCs_tmp.qc1.speedMult)
+
 
 	data.intBoost = x
 	data.baseInt = data.baseInt.div(x)

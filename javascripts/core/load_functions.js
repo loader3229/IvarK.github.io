@@ -2257,7 +2257,7 @@ function setupNGP31Versions() {
 		alert("Your mastery studies has been respecced due to the rework of Positronic-era studies.")
 		mTs.respec(true)
 	}
-	aarMod.ngp3Build = 20210614
+	aarMod.ngp3Build = 20210622
 }
 
 function checkNGM(imported) {

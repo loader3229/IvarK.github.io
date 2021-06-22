@@ -83,11 +83,11 @@ let qMs = {
 			}
 		}
 
-		getEl('dilationmode').style.display = qMs.tmp.amt >= 5 ? "block" : "none"
+		getEl('dilationmode').style.display = qMs.tmp.amt >= 4 ? "block" : "none"
 		getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 11 ? "" : "none"
 		getEl('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
-		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 18 ? "block" : "none"
-		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 18 ? "" : "none"
+		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 16 ? "block" : "none"
+		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 16 ? "" : "none"
 		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 24 ? "" : "none"
 	},
 	updateDisplayOnTick() {
@@ -141,8 +141,8 @@ let qMs = {
 	},
 	4: {
 		req: 4,
-		eff: () => "Unlock the 'X times eternitied' mode for auto-Eternity",
-		effGot: () => "You have unlocked the 'X times eternitied' mode for auto-Eternity."
+		eff: () => "Unlock the 'X times eternitied' and dilation modes for auto-Eternity",
+		effGot: () => "You have unlocked the 'X times eternitied' and dilation modes for auto-Eternity."
 	},
 	5: {
 		req: 5,
@@ -194,51 +194,51 @@ let qMs = {
 	},
 	14: {
 		req: 14,
-		eff: () => "Unlock the autobuyer for meta-Dimension Boosts",
-		effGot: () => "You now can automatically buy meta-Dimension Boosts."
+		eff: () => "Unlock the autobuyer for meta-Dimension Boosts, and start with 4 MDBs",
+		effGot: () => "You now can automatically buy meta-Dimension Boosts, and you now start with 4 MDBs."
 	},
 	15: {
 		req: 15,
-		eff: () => "Unlock an option for auto-Eternity that automatically dilates for each interval of Eternity runs",
-		effGot: () => "You have unlocked an option for auto-Eternity that automatically dilates for each interval of Eternity runs."
-	},
-	16: {
-		req: 16,
-		eff: () => "Start with " + shortenCosts(1e30) + " meta-antimatter",
-		effGot: () => "You now start with " + shortenCosts(1e30) + " meta-antimatter."
-	},
-	17: {
-		req: 17,
 		eff: () => "All Meta Dimensions are available for purchase on Quantum",
 		effGot: () => "All Meta Dimensions are now available for purchase on Quantum."
 	},
-	18: {
-		req: 18,
+	16: {
+		req: 16,
 		eff: () => "Unlock the autobuyer for Quantum runs",
 		effGot: () => "You can now automatically go Quantum."
 	},
+	17: {
+		req: 18,
+		eff: () => "???",
+		effGot: () => ""
+	},
+	18: {
+		req: 20,
+		eff: () => "???",
+		effGot: () => ""
+	},
 	19: {
-		req: 19,
-		eff: () => "Start with 4 Meta-Dimension Boosts and Meta-Dimension Boosts no longer reset Meta Dimensions",
-		effGot: () => "You now start with 4 Meta-Dimension Boosts and Meta-Dimension Boosts no longer reset Meta Dimensions anymore."
+		req: 25,
+		eff: () => "Meta-Dimension Boosts no longer reset Meta Dimensions",
+		effGot: () => "Meta-Dimension Boosts no longer reset Meta Dimensions anymore."
 	},
 	20: {
-		req: 20,
+		req: 30,
 		eff: () => "Gain banked infinities based on your post-crunch infinitied stat",
 		effGot: () => "Gain banked infinities based on your post-crunch infinitied stat."
 	},
 	21: {
-		req: 25,
+		req: 32,
 		eff: () => "Each milestone greatly reduces the interval of auto-dilation upgrades and MDBs",
 		effGot: () => "Each milestone now greatly reduces the interval of auto-dilation upgrades and MDBs."
 	},
 	22: {
-		req: 30,
+		req: 35,
 		eff: () => "'2 Million Infinities' effect is always applied and is increased to " + shorten(1e3) + "x",
 		effGot: () => "'2 Million Infinities' effect is now always applied and is increased to " + shorten(1e3) + "x."
 	},
 	23: {
-		req: 35,
+		req: 40,
 		eff: () => "All Infinity-related autobuyers fire for each tick",
 		effGot: () => "All Infinity-related autobuyers now fire for each tick"
 	},

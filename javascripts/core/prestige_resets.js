@@ -249,7 +249,7 @@ function resetEternityChallenges(bigRip, ngpp) {
 function doMetaDimensionsReset(bigRip, headstart, isQC) {
 	player.meta.antimatter = getMetaAntimatterStart(bigRip)
 	if (!headstart) player.meta.bestAntimatter = false ? Decimal.max(player.meta.antimatter, player.meta.bestOverQuantums) : player.meta.antimatter
-	player.meta.resets = qMs.tmp.amt >= 19 ? 4 : 0 //(!isQC && player.ghostify.milestones >= 5 && (bigRip !== undefined || bigRip == qu_save.bigRip.active) ? player.meta.resets : 4)
+	player.meta.resets = qMs.tmp.amt >= 14 ? 4 : 0 //(!isQC && player.ghostify.milestones >= 5 && (bigRip !== undefined || bigRip == qu_save.bigRip.active) ? player.meta.resets : 4)
 	clearMetaDimensions()
 }
 

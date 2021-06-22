@@ -515,7 +515,9 @@ function handleDispAndTmpOnQuantum(bigRip, prestige) {
 		if (getEl("masterystudies").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
 	}
 
-	getEl("gluonstabbtn").style.display = enB.glu.unl() ? "" : "none"
+	let gluUnl = enB.glu.unl()
+	getEl("gluon_req").textContent = gluUnl ? "" : "To unlock anti-Gluons, you need to go Quantum with at least 2 colored kinds of anti-Quarks."
+	getEl("gluonstabbtn").style.display = gluUnl ? "" : "none"
 
 	let keepQuantum = tmp.quActive && qMs.tmp.amt >= 16
 	if (tmp.quActive && !bigRip) {

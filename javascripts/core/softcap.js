@@ -770,7 +770,7 @@ function getSoftcapAmtFromId(id){
 		ts11_log_big_rip: () => tsMults[11]().log10(),
 		bru1_log: () => tmp.bru[1].max(1).log10(),
 		beu3_log: () => tmp.beu[3].max(1).log10(),
-		rInt: () => tmp.rep.baseEst,
+		rInt: () => tmp.rep.baseBaseEst.pow(1 - getECReward(14)),
 		it: () => tmp.it.max(1),
 		tt: () => getTTGenPart(player.dilation.tachyonParticles),
 		ma: () => getExtraDimensionBoostPowerUse(),
@@ -812,7 +812,7 @@ function hasSoftcapStarted(id, num){
 		This currently includes: _ngC, _big_rip, _dilation, _ngmX for integers of length 1 X
 		*/
 		idbase: tmp.ngp3,
-		rInt: tmp.ngp3,
+		rInt: ECComps("eterc14"),
 		dt_log: tmp.ngp3 && !tmp.bE50kDT,
 		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined && tmp.quActive,
 		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined && tmp.quActive,

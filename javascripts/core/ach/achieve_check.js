@@ -286,7 +286,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.options.secrets && player.options.secrets.ghostlyNews && !player.options.newsHidden) giveAchievement("Two tickers")
 	if (qu_save.breakEternity.did) giveAchievement("Time Breaker")
 	if (mTs.bought >= 48) giveAchievement("The Theory of Ultimate Studies")
-	if (qu_save.best <= 200) giveAchievement("And the winner is...")
+	if (qu_save.best <= 300) giveAchievement("And the winner is...")
 	if (qMs.tmp.amt >= 21) giveAchievement("Special Relativity")
 	if (qu_save.best <= 10) giveAchievement("Quantum doesn't take so long")
 	if (player.masterystudies.includes("d13")) giveAchievement("Do protons decay?")

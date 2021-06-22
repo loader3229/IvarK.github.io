@@ -116,6 +116,14 @@ var pos = {
 		var data = {}
 		pos_tmp.cloud = data
 
+		//Unlocks
+		var unl = enB.mastered("pos", 2)
+		getEl("pos_boost_div").colspan = unl ? 1 : 2
+		getEl("pos_cloud_div").style.display = unl ? "" : "none"
+		getEl("pos_cloud_req").textContent = unl ? "" : "To unlock Positron Cloud, you need to master 2 Positronic Boosts."
+		if (!unl) return
+
+		//Mechanic
 		for (var i = 1; i <= enB.pos.max; i++) {
 			var lvl = enB.pos.lvl(i)
 			var nextLvl = enB.pos.lvl(i, true)

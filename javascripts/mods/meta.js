@@ -1,8 +1,9 @@
 //meta dimensions
 function getMetaAntimatterStart(bigRip) {
 	let x = 10
-	if (qMs.tmp.amt >= 16 && !bigRip) x = 1e30
-	else if (hasAch("ngpp12")) x = 100
+	if (hasAch("ngpp12")) x = 100
+	if (hasAch("ng3p15")) x = 1e10
+
 	return new Decimal(x)
 }
 
@@ -102,7 +103,7 @@ function getMDRateOfChange(tier) {
 
 function canBuyMetaDimension(tier) {
     if (tier > player.meta.resets + 4) return false;
-    if (qMs.tmp.amt < 17 && tier > 1 && player.meta[tier - 1].amount.eq(0)) return false;
+    if (qMs.tmp.amt < 15 && tier > 1 && player.meta[tier - 1].amount.eq(0)) return false;
     return true;
 }
 

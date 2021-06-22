@@ -2210,7 +2210,8 @@ br {
 
 .qTable td, .qTable_2col td, .qTable_4col td {
 	text-align: center;
-	vertical-align: middle
+	vertical-align: middle;
+	padding: 0
 }
 
 .red {

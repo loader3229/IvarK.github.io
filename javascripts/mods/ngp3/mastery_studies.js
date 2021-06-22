@@ -7,11 +7,11 @@ var mTs = {
 			261: 3e69, 262: 3e69, 263: 3e69, 264: 3e69, 265: 3e69, 266: 3e69,
 
 			//Quantum
-			271: 4e70,
-			281: 1/0, 282: 2e74, 283: 2e74, 284: 1/0,
-			291: 2e74, 292: 2e74,
-			301: 1/0, 302: 2e74, 303: 1/0,
-			311: 1/0, 312: 1/0,
+			271: 0,
+			281: 2e75, 282: 1e75, 283: 1e75, 284: 2e75,
+			291: 2e75, 292: 5e75, 293: 2e75,
+			301: 5e75, 302: 5e75, 303: 5e75,
+			311: 5e75, 312: 5e75, 313: 5e75, 314: 5e75,
 
 			//Beginner Mode
 			bg_251: 2e69, bg_252: 2e69, bg_253: 2e69,
@@ -48,7 +48,7 @@ var mTs = {
 			//Quantum
 			t271: "reset",
 			t281: 10, t282: 4 / 5, t283: 4 / 5, t284: 10,
-			t291: 1 / 2, t292: 1 / 2,
+			t291: 1 / 2, t292: 1 / 2, t293: 1,
 			t301: 2, t302: "reset", t303: 2,
 			t311: 1 / 4, t312: 8, t313: 8, t314: 1 / 4,
 
@@ -59,36 +59,53 @@ var mTs = {
 
 			//Expert Mode
 			t252_ex: 5, t253_ex: 5,
-			t281_ex: 20, t282_ex: 20, t283_ex: 8, t285_ex: 20, t285_ex: 20, t288_ex: 8,
-			t282_ex: 5, t283_ex: 5,
+			t271_ex: 1 / 5e3,
+			t281_ex: 6, t282_ex: 1, t283_ex: 1, t284_ex: 6,
+			t293_ex: 2,
 
 			//Death Mode
 			t251_dt: 5,
 			t261_dt: 10, t262_dt: 10, t263_dt: 10, t264_dt: 16, t265_dt: 16, t266_dt: 10,
+			t271_dt: 1 / 2e4,
+			t282_ex: 2, t283_ex: 2, 
+			t291_dt: 2, t292_dt: 2,
 		},
 		ec: {},
 		dil: {}
 	},
 	costMult: 1,
-	ecReqs: {
+
+	ecReqNums: {
 		13() {
 			let comps = ECComps("eterc13")
 			return (tmp.exMode ? 900000 : tmp.bgMode ? 800000 : 850000) + 4e4 * Math.pow(comps, 2)
 		},
 		14() {
 			let comps = ECComps("eterc14")
-			return Decimal.pow(10, (comps ? 750000 : tmp.exMode ? 225000 : tmp.bgMode ? 125000 : 175000) * Math.pow(1.5, comps))
+			if (tmp.bgMode) return 1/0
+			return Decimal.pow(10, (comps ? 1e6 : tmp.exMode ? 225000 : tmp.bgMode ? 125000 : 175000) * Math.pow(tmp.dtMode ? 1.8 : tmp.exMode ? 1.6 : 1.5, Math.max(comps - 1, 0)))
 		}
 	},
-	ecReqsStored: {},
-	ecReqDisplays: {
+	ecReqNumsStored: {},
+	ecReqs: {
 		13() {
-			return getFullExpansion(mTs.ecReqsStored[13]) + " Dimension Boosts"
+			return player.resets >= mTs.ecReqNumsStored[13]
 		},
 		14() {
-			return shortenCosts(mTs.ecReqsStored[14]) + " replicantis"
+			if (tmp.bgMode) return Math.round(player.replicanti.chance * 100) >= mTs.ecReqNumsStored[14]
+			return player.replicanti.amount.gte(mTs.ecReqNumsStored[14])
 		}
 	},
+	ecReqDisplays: {
+		13() {
+			return getFullExpansion(mTs.ecReqNumsStored[13]) + " Dimension Boosts"
+		},
+		14() {
+			if (tmp.bgMode) return getFullExpansion(mTs.ecReqNumsStored[14]) + "% replicate chance"
+			return shortenCosts(mTs.ecReqNumsStored[14]) + " replicantis"
+		}
+	},
+
 	unlockReqConditions: {
 		241() {
 			return hasAch("ng3p16") || player.dilation.dilatedTime.gte(1e100)
@@ -261,6 +278,7 @@ var mTs = {
 
 		291: () => "Replicantis generate free Dimension Boosts.",
 		292: () => "Replicated Galaxies raise Replicanti multiplier to an exponent instead.",
+		293: () => "Add +25% to red power effect, but divide red power by 5.",
 
 		301: () => "Replicated Galaxies have equal powers instead.",
 		302: () => "Some Replicanti boosts are greatly stronger.",
@@ -322,17 +340,17 @@ var mTs = {
 		ec13: ["d7"], ec14: ["d7"], d7: [271],
 		271: [281, 282, 283, 284],
 		281: [291, 302], 282: [302], 283: [302], 284: [292, 302],
-		291: [311, 312], 292: [313, 314],
+		291: [311, 312], 292: [293, 313, 314], 293: [314],
 		302: [301, "d8", 303],
 
 		//No more mastery studies after that
 		d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"],
-		
+
 		//Expert Mode
-		ex_264: [], ex_282: [], ex_283: [],
-		
+		ex_264: [], ex_282: [], ex_283: [], ex_293: [],
+
 		//Death Mode
-		dt_265: []
+		dt_265: [],
 	},
 	allUnlocks: {
 		d7() {
@@ -427,7 +445,7 @@ function updateMasteryStudyCosts() {
 	for (id = 13; id <= mTs.ecsUpTo; id++) {
 		if (!mTs.studyUnl.includes("ec" + id)) break
 		setMasteryStudyCost(id, "ec")
-		mTs.ecReqsStored[id] = mTs.ecReqs[id]()
+		mTs.ecReqNumsStored[id] = mTs.ecReqNums[id]()
 	}
 	for (id = 7; id <= mTs.unlocksUpTo; id++) {
 		if (!mTs.studyUnl.includes("d" + id)) break
@@ -696,8 +714,7 @@ function canBuyMasteryStudy(type, id) {
 		if (player.timestudy.theorem < mTs.costs.ec[id] || player.eternityChallUnlocked) return false
 		if (!mTs.spentable.includes("ec" + id)) return false
 		if (player.etercreq == id) return true
-		if (id == 13) return player.resets >= mTs.ecReqsStored[13]
-		return player.replicanti.amount.gte(mTs.ecReqsStored[14])
+		return mTs.ecReqs[id]()
 	}
 	return true
 }
@@ -747,7 +764,7 @@ function updateMasteryStudyTextDisplay() {
 		if (!mTs.studyUnl.includes(name)) break
 
 		var req = mTs.unlockReqDisplays[name] && mTs.unlockReqDisplays[name]()
-		getEl("mts" + name + "Cost").textContent = shorten(mTs.costs.time[name])
+		getEl("mts" + name + "Cost").textContent = shortenDimensions(mTs.costs.time[name])
 		if (req) getEl("mts" + name + "Req").innerHTML = "<br>Requirement: " + req
 	}
 	for (id = 13; id <= mTs.ecsUpTo; id++) {

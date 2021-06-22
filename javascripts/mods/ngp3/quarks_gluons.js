@@ -208,6 +208,8 @@ function getColorPowerQuantity(color) {
 	let ret = colorCharge[color] * tmp.glB[color].mult
 	if (tmp.qe) ret = ret * tmp.qe.eff1 + tmp.qe.eff2
 	if (tmp.glB) ret = ret - tmp.glB[color].sub
+
+	if (color == "r" && hasMTS(293)) ret /= 5
 	return Math.max(ret, 0)
 }
 
@@ -220,6 +222,7 @@ colorBoosts = {
 function updateColorPowers() {
 	//Red
 	colorBoosts.r = Math.log10(qu_save.colorPowers.r * 5 + 1) / 3.5 + 1
+	if (hasMTS(293)) colorBoosts.r += 0.25
 
 	//Green
 	colorBoosts.g = Math.log10(qu_save.colorPowers.g * 3 + 1) + 1
