@@ -213,7 +213,7 @@ function updateExtraReplMult() {
 	let x = 1
 	if (QCs.in(1)) x = 0
 	else if (tmp.ngp3) {
-		if (enB.active("glu", 2)) x *= tmp_enB.glu2
+		if (enB.active("glu", 2)) x *= enB_tmp.glu2
 	}
 	extraReplMulti = x
 }
@@ -251,10 +251,11 @@ function replicantiGalaxyAutoToggle() {
 
 function getReplicantiBaseInterval(speed) {
 	if (speed === undefined) speed = player.replicanti.interval
-
 	speed = new Decimal(speed)
-	if (enB.active("glu", 6)) speed = Decimal.div(1000, 3 - speed.log10() * tmp_enB.glu6)
-	if (speed.lt(1)) speed = speed.pow(0.25)
+
+	var upgs = Math.round(Decimal.div(1e3, speed).log(0.9))
+	if (enB.active("glu", 6)) upgs *= enB_tmp.glu6
+	speed = Decimal.pow(0.9, upgs).times(1e3)
 
 	return speed
 }
@@ -274,7 +275,7 @@ function getReplicantiIntervalMult() {
 	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))
 	if (player.dilation.upgrades.includes('ngpp1') && aarMod.nguspV && !aarMod.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
-	if (enB.active("pos", 4)) interval = interval.div(tmp_enB.pos4)
+	if (enB.active("pos", 4)) interval = interval.div(enB_tmp.pos4)
 	if (tmp.ngC && ngC.tmp) interval = interval.div(ngC.tmp.rep.eff1)
 	return interval
 }
@@ -349,7 +350,7 @@ function updateEC14Reward() {
 
 		data.ec14 = {
 			interval: div,
-			ooms: div.max(1).log10() * (1 + ECComps("eterc14") / 10) + 1
+			ooms: div.max(1).log10() * 2 / Math.sqrt(1 - pow) + 1
 		}
 	} else {
 		data.ec14 = {
@@ -363,10 +364,15 @@ function boostReplicateInterval() {
 	let x = new Decimal(1)
 	let data = tmp.rep
 
-	data.baseBaseInt = data.baseInt
+	data.baseBaseEst = data.baseEst
+
+	var sclessEst = data.baseEst
+	var scEst = softcap(sclessEst, "rInt")
+	if (sclessEst.gt(scEst)) x = x.div(sclessEst.div(scEst))
+
 	if (ECComps("eterc14")) {
 		let pow = getECReward(14)
-		data.ec14.interval = data.ec14.interval.div(Math.pow(data.speeds.exp / Math.log10(data.speeds.inc), pow))
+		data.ec14.interval = data.ec14.interval.div(data.speeds.exp / Math.log10(data.speeds.inc)).times(pow)
 		x = x.div(data.ec14.interval)
 	}
 	if (QCs_tmp.qc1) x = x.times(QCs_tmp.qc1.speedMult)
@@ -383,6 +389,7 @@ function updateReplicantiTemp() {
 	data.ln = player.replicanti.amount.ln()
 
 	data.baseChance = Math.round(player.replicanti.chance * 100)
+	if (enB.active("glu", 6)) data.baseChance *= enB_tmp.glu6
 
 	let pow = 1
 	if (hasMTS(265)) pow = getMTSMult(265, "update")
@@ -398,8 +405,7 @@ function updateReplicantiTemp() {
 	data.intMult = getReplicantiIntervalMult()
 
 	data.baseInt = data.intUpg.times(data.intMult)
-	data.baseBaseEst = Decimal.div(estChance, data.baseInt)
-	data.baseEst = data.baseBaseEst
+	data.baseEst = Decimal.div(estChance, data.baseInt)
 
 	data.speeds = getReplSpeed()
 	updateEC14Reward()

@@ -3157,6 +3157,9 @@ function updatePriorities() {
 			return
 		}
 	
+		player.eternityBuyer.alwaysDil = getEl("autoalwaysdil").checked
+		if (!player.eternityBuyer.alwaysDil) player.eternityBuyer.alwaysDilCond = false
+	
 		const quantumValue = fromValue(getEl("priorityquantum").value)
 		if (!isNaN(break_infinity_js ? quantumValue : quantumValue.l) && qu_save.autobuyer) qu_save.autobuyer.limit = quantumValue
 
@@ -3345,11 +3348,17 @@ function eternity(force, auto, forceRespec, dilated) {
 			setTachyonParticles(gain)
 		}
 	}
-	if (!force && !dilated && player.eternityBuyer.dilationMode) {
-		player.eternityBuyer.statBeforeDilation--
-		if (player.eternityBuyer.statBeforeDilation <= 0) dilated = true
+	if (!force && !dilated) {
+		if (player.eternityBuyer.dilationMode) {
+			player.eternityBuyer.statBeforeDilation--
+			if (player.eternityBuyer.statBeforeDilation <= 0) dilated = true
+			if (player.eternityBuyer.alwaysDilCond) dilated = true
+		}
 	}
-	if (dilated) player.eternityBuyer.statBeforeDilation = player.eternityBuyer.dilationPerAmount
+	if (dilated) {
+		player.eternityBuyer.statBeforeDilation = player.eternityBuyer.dilationPerAmount
+		player.eternityBuyer.alwaysDilCond = false
+	}
 
 	doEternityResetStuff(4, dilated ? "dil" : 0)
 	doAfterEternityResetStuff()

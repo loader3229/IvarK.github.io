@@ -211,7 +211,7 @@ function getTickSpeedCostMultiplierIncrease() {
 	let ret = player.tickSpeedMultDecrease;
 
 	//NG+3
-	if (enB.active("pos", 6)) ret = Math.pow(ret, 1 / tmp_enB.pos6)
+	if (enB.active("pos", 6)) ret = Math.pow(ret, 1 / enB_tmp.pos6)
 
 	//NG--
 	if (player.currentChallenge === 'postcngmm_2') ret = Math.pow(ret, .5)

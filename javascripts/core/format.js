@@ -728,7 +728,7 @@ let plTime = 5.391247e-44
 function timeDisplayShort(time, rep, places) {
 	if (Decimal.gt(time, Number.MAX_VALUE)) {
 		if (Decimal.eq(time, 1 / 0)) return 'eternity'
-		return shorten(Decimal.div(time, 31556952e10)) + ' ae'
+		return shorten(Decimal.div(time, 31556952e100)) + ' ae'
 	}
 	if (rep && Decimal.lt(time, 1e-100) && Decimal.gt(time, 0)) {
 		return "1 / " + formatValue(player.options.notation, Decimal.div(10, time), places, 2) + " s"
@@ -756,8 +756,9 @@ function timeDisplayShort(time, rep, places) {
 	if (time < 31556952 && rep) return Math.floor(time / 86400) + ' d & ' + ((time/3600) % 24).toFixed(1) + " h"
 	if (time < 31556952) return Math.floor(time / 86400) + ' d & ' + Math.floor((time/3600) % 24) + ":" + preformat(Math.floor((time / 60) % 60)) + ":" + preformat(Math.floor(time % 60))
 	if (time < 315569520) return Math.floor(time / 31556952) + ' y & ' + ((time / 86400) % 365.2425).toFixed(1) + ' d'
-	if (time < 31556952e9) return shorten(time / 315569520) + ' y'
-	return shorten(time / 31556952e9) + ' ae' //1 ae = 1 aeon = 1B years
+	if (time < 31556952 * 13.8e9) return shorten(time / 315569520) + ' y'
+	if (time < 31556952e100) return shorten(time / 31556952 * 13.8e9) + ' uni' //1 uni = 13.8B years
+	return shorten(time / 31556952e100) + ' ae' //1 ae = 1 aeon = 1 googol years
 }
 
 function formatPercentage(x, digits = 1) {

@@ -1569,7 +1569,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 12? - Post-Build 7)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 12? - Post-Build 8)</p>
 			</span>
 			<div class="footer bottom"></div>
 		</div>
@@ -1681,6 +1681,7 @@
 				<div id="softcap_ts2"></div>
 				<div id="softcap_workts"></div>
 				<div id="softcap_idbase"></div>
+				<div id="softcap_rInt"></div>
 				<div id="softcap_it"></div>
 				<div id="softcap_tt"></div>
 				<div id="softcap_dt"></div>
@@ -3781,7 +3782,7 @@
 						Dilate for every X eternities:
 						<input type="text" onchange="updatePriorities()" id="prioritydil"></input>
 						<br>
-						Always dilate on TP upgrade: (not implemented)
+						Dilate at next Eternity, on TP upgrade:
 						<input type="checkbox" onchange="updatePriorities()" id="autoalwaysdil"></input>
 						<br><br>
 						<span style="font-size: 80%">Is active</span>
@@ -4292,6 +4293,7 @@
 				<br><br><br>
 				<p id="replicantiapprox"></p>
 				<p id="replicantibaseinterval"></p>
+				<span id="softcap_rInt_disp"></span>
 				<br>
 				<button class="storebtn" id="replicantireset" onclick="replicantiGalaxy()" style="width: 200px; height: 90px; font-size: 12px"></button>
 				<button class="storebtn" id="repCompress" onclick="QCs.data[1].boost()" style="width: 200px; height: 90px; font-size: 12px"></button>
@@ -4402,7 +4404,7 @@
 		<table class="table" align="center" style="margin: auto">
 			<tr>
 				<td><button class="secondarytabbtn" onclick="showQuantumTab('uquarks')">Anti-Quarks</button></td>
-				<td><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Anti-Gluonic Boosts</button></td>
+				<td id='gluonstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Anti-Gluons</button></td>
 				<td id='positronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('positrons')">Positrons</button></td>
 				<td id='replicantstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('replicants')">Duplicants</button></td>
 				<td id='nanofieldtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('nanofield')">Nanofield</button></td>
@@ -4855,22 +4857,22 @@
 						<b id="pos_cloud1_num" style="font-size: 15px"></b>
 					</td>
 					<td>
-						Reward: +10% Quantum Energy effect
+						Reward: +5% additive Quantum Energy effect
 					</td>
 				</tr>
 				<tr>
 					<td id="pos_cloud1_boosts" colspan=2>
-						<button id="pos_boost1_btn">
+						<button id="pos_boost1_btn" onclick="pos.swap(1)">
 							<span>
 								<b>PB1</b><br>
-								<span id="pos_boost1_excite">(+0 tiers)</span><br>
+								<p id="pos_boost1_excite">(+0 tiers)</p>
 								Type: Green
 							</span>
 						</button>
-						<button id="pos_boost2_btn">
+						<button id="pos_boost2_btn" onclick="pos.swap(2)">
 							<span>
 								<b>PB2</b><br>
-								<span id="pos_boost2_excite">(+0 tiers)</span><br>
+								<p id="pos_boost2_excite">(+0 tiers)</p>
 								Type: Red
 							</span>
 						</button>
@@ -4881,36 +4883,36 @@
 						<b id="pos_cloud2_num" style="font-size: 15px"></b>
 					</td>
 					<td>
-						Reward: +20% Quantum Energy effect
+						Reward: +10% additive Quantum Energy effect
 					</td>
 				</tr>
 				<tr>
 					<td id="pos_cloud2_boosts" colspan=2>
-						<button id="pos_boost3_btn">
+						<button id="pos_boost3_btn" onclick="pos.swap(3)">
 							<span>
 								<b>PB3</b><br>
-								<span id="pos_boost3_excite">(+0 tiers)</span><br>
+								<p id="pos_boost3_excite">(+0 tiers)</p>
 								Type: Blue
 							</span>
 						</button>
-						<button id="pos_boost4_btn">
+						<button id="pos_boost4_btn" onclick="pos.swap(4)">
 							<span>
 								<b>PB4</b><br>
-								<span id="pos_boost4_excite">(+0 tiers)</span><br>
+								<p id="pos_boost4_excite">(+0 tiers)</p>
 								Type: Blue
 							</span>
 						</button>
-						<button id="pos_boost5_btn">
+						<button id="pos_boost5_btn" onclick="pos.swap(5)">
 							<span>
 								<b>PB5</b><br>
-								<span id="pos_boost5_excite">(+0 tiers)</span><br>
+								<p id="pos_boost5_excite">(+0 tiers)</p>
 								Type: Red
 							</span>
 						</button>
-						<button id="pos_boost6_btn">
+						<button id="pos_boost6_btn" onclick="pos.swap(6)">
 							<span>
 								<b>PB6</b><br>
-								<span id="pos_boost6_excite">(+0 tiers)</span><br>
+								<p id="pos_boost6_excite">(+0 tiers)</p>
 								Type: Anti-Red
 							</span>
 						</button>
@@ -4921,50 +4923,50 @@
 						<b id="pos_cloud3_num" style="font-size: 15px"></b>
 					</td>
 					<td>
-						Reward: +30% Quantum Energy effect
+						Reward: +15% additive Quantum Energy effect
 					</td>
 				</tr>
 				<tr>
 					<td id="pos_cloud3_boosts" colspan=2>
-						<button id="pos_boost7_btn">
+						<button id="pos_boost7_btn" onclick="pos.swap(7)">
 							<span>
 								<b>PB7</b><br>
-								<span id="pos_boost7_excite">(+0 tiers)</span><br>
+								<p id="pos_boost7_excite">(+0 tiers)</p>
 								Type: Green
 							</span>
 						</button>
-						<button id="pos_boost8_btn">
+						<button id="pos_boost8_btn" onclick="pos.swap(8)">
 							<span>
 								<b>PB8</b><br>
-								<span id="pos_boost8_excite">(+0 tiers)</span><br>
+								<p id="pos_boost8_excite">(+0 tiers)</p>
 								Type: Anti-Green
 							</span>
 						</button>
-						<button id="pos_boost9_btn">
+						<button id="pos_boost9_btn" onclick="pos.swap(9)">
 							<span>
 								<b>PB9</b><br>
-								<span id="pos_boost9_excite">(+0 tiers)</span><br>
+								<p id="pos_boost9_excite">(+0 tiers)</p>
 								Type: Anti-Blue
 							</span>
 						</button>
-						<button id="pos_boost10_btn">
+						<button id="pos_boost10_btn" onclick="pos.swap(10)">
 							<span>
 								<b>PB10</b><br>
-								<span id="pos_boost10_excite">(+0 tiers)</span><br>
+								<p id="pos_boost10_excite">(+0 tiers)</p>
 								Type: Anti-Blue
 							</span>
 						</button>
-						<button id="pos_boost11_btn">
+						<button id="pos_boost11_btn" onclick="pos.swap(11)">
 							<span>
 								<b>PB11</b><br>
-								<span id="pos_boost11_excite">(+0 tiers)</span><br>
+								<p id="pos_boost11_excite">(+0 tiers)</p>
 								Type: Anti-Blue
 							</span>
 						</button>
-						<button id="pos_boost12_btn">
+						<button id="pos_boost12_btn" onclick="pos.swap(12)">
 							<span>
 								<b>PB12</b><br>
-								<span id="pos_boost12_excite">(+0 tiers)</span><br>
+								<p id="pos_boost12_excite">(+0 tiers)</p>
 								Type: Anti-Blue
 							</span>
 						</button>

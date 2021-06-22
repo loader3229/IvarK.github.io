@@ -217,6 +217,7 @@ function maxAllDilUpgs() {
 					player.dilation.rebuyables[num] = (player.dilation.rebuyables[num] || 0) + data.toBuy
 					update = true
 
+					if (player.eternityBuyer.alwaysDil) player.eternityBuyer.alwaysDilCond = true
 					if (num == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), data.toBuy * getDilUpg3Mult())))
 				}
 			}
@@ -248,21 +249,17 @@ function updateAutoQuantumMode() {
 		getEl("autoquantumtext").textContent = "X times last quantum:"
 	} else if (qu_save.autobuyer.mode == "time") {
 		getEl("toggleautoquantummode").textContent = "Auto quantum mode: time"
-		getEl("autoquantumtext").textContent = "Seconds between quantums:"
-	} else if (qu_save.autobuyer.mode == "peak") {
-		getEl("toggleautoquantummode").textContent = "Auto quantum mode: peak"
-		getEl("autoquantumtext").textContent = "Seconds to wait after latest peak gain:"
+		getEl("autoquantumtext").textContent = "Minimal seconds between quantums:"
 	} else if (qu_save.autobuyer.mode == "dilation") {
-		getEl("toggleautoquantummode").textContent = "Auto quantum mode: # of dilated"
-		getEl("autoquantumtext").textContent = "Wait until # of dilated stat:"
+		getEl("toggleautoquantummode").textContent = "Auto quantum mode: dilation"
+		getEl("autoquantumtext").textContent = "Amount of dilation runs to wait until reset:"
 	}
 }
 
 function toggleAutoQuantumMode() {
-	if (qu_save.reachedInfQK && qu_save.autobuyer.mode == "amount") qu_save.autobuyer.mode = "relative"
-	else if (qu_save.autobuyer.mode == "relative") qu_save.autobuyer.mode = "time"
-	else if (qu_save.autobuyer.mode == "time") qu_save.autobuyer.mode = "peak"
-	else if (hasAch("ng3p25") && qu_save.autobuyer.mode != "dilation") qu_save.autobuyer.mode = "dilation"
+	if (qu_save.autobuyer.mode == "amount") qu_save.autobuyer.mode = "time"
+	else if (qu_save.autobuyer.mode == "time") qu_save.autobuyer.mode = "relative"
+	else if (qu_save.autobuyer.mode == "relative") qu_save.autobuyer.mode = "dilation"
 	else qu_save.autobuyer.mode = "amount"
 	updateAutoQuantumMode()
 }

@@ -143,9 +143,9 @@ var softcap_data = {
 		name: "base replicate interval",
 		1: {
 			func: "log",
-			start: new Decimal(1e20),
-			pow: 10,
-			mul: 5
+			start: new Decimal(1e5),
+			pow: 5,
+			mul: 2
 		},
 	},
 	ma: {
@@ -812,6 +812,7 @@ function hasSoftcapStarted(id, num){
 		This currently includes: _ngC, _big_rip, _dilation, _ngmX for integers of length 1 X
 		*/
 		idbase: tmp.ngp3,
+		rInt: tmp.ngp3,
 		dt_log: tmp.ngp3 && !tmp.bE50kDT,
 		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined && tmp.quActive,
 		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined && tmp.quActive,
@@ -928,6 +929,7 @@ function updateSoftcapStatsTab(){
 		ts11_log_big_rip: "softcap_ts2",
 		bru1_log: "softcap_bru1",
 		beu3_log: "softcap_beu3",
+		rInt: "softcap_rInt",
 		it: "softcap_it",
 		tt: "softcap_tt",
 		ma: "softcap_ma",
@@ -970,7 +972,7 @@ function updateSoftcapStatsTab(){
 
 		var elDisp = getEl(elname + "_disp")
 		if (elDisp) elDisp.style.display = started ? "" : "none"
-		if (started) {
+		if (started && elDisp) {
 			var sc = 0
 			var amt = getSoftcapAmtFromId(id)
 			for (var j = 1; j <= numSoftcapsTotal(id); j++) {

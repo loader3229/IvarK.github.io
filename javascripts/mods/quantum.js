@@ -39,7 +39,7 @@ function getQuantumReq(base) {
 	let exp = tmp.ngp3 && !tmp.ngp3_mul ? 1.2 : 1
 	if (!base && tmp.ngp3) {
 		if (QCs.inAny()) return QCs.getGoalMA()
-		if (enB.active("pos", 3)) exp /= tmp_enB.pos3
+		if (enB.active("pos", 3)) exp /= enB_tmp.pos3
 	}
 	return Decimal.pow(Number.MAX_VALUE, exp)
 }
@@ -297,7 +297,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 
 	// Positrons
 	if (pos.unl()) {
-		pos_save.excite = {...pos_tmp.next_excite}
+		pos_save.swaps = {...pos_tmp.next_swaps}
 		pos.updateCloud()
 	}
 
@@ -514,6 +514,8 @@ function handleDispAndTmpOnQuantum(bigRip, prestige) {
 		performedTS = false
 		if (getEl("masterystudies").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
 	}
+
+	getEl("gluonstabbtn").style.display = enB.glu.unl() ? "" : "none"
 
 	let keepQuantum = tmp.quActive && qMs.tmp.amt >= 16
 	if (tmp.quActive && !bigRip) {

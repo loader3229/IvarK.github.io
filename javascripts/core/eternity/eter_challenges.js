@@ -358,7 +358,7 @@ function getECReward(x) {
 	if (x == 13) return Math.sqrt(1 + c / 7.5)
 	if (x == 14) {
 		let r = [0, 0.125, 0.25, 0.5, 0.75, 0.875][c]
-		if (enB.active("pos", 7)) r = (r + tmp_enB.pos7) / (tmp_enB.pos7 + 1)
+		if (enB.active("pos", 7)) r = (r + enB_tmp.pos7) / (enB_tmp.pos7 + 1)
 		return r
 	}
 }

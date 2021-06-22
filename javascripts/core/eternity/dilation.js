@@ -51,15 +51,15 @@ function getDilTimeGainPerSecond() {
 	if (hasAch("r137") && tmp.ngp3_boost) {
 		let log = (tmp.rmPseudo || player.replicanti.amount).max(1).log10()
 		let slog = log / 1e4
-		if (hasMTS(302)) slog *= Math.log10(log + 10) * 2
+		if (hasMTS(302)) slog *= Math.log10(Math.log10(slog + 1) + 1) * 2 + 1
 
-		gain = gain.times(Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(slog + 1)))
+		gain = gain.times(Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(slog + 1) - 1))
 	}
 	if (tmp.ngp3) {
 		if (hasAch("r138")) gain = gain.times(tmp.ngp3_exp ? 3 : 2)
 		if (hasAch("ngpp13")) gain = gain.times(2)
 		if (hasAch("ng3p11")) gain = gain.times(Math.min(Math.max(Math.log10(player.eternityPoints.max(1).log10()), 1) / 2, 2.5))
-		if (enB.active("pos", 4)) gain = gain.times(tmp_enB.pos4)
+		if (enB.active("pos", 4)) gain = gain.times(enB_tmp.pos4)
 		if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 	}
 	if (tmp.quActive && tmp.ngp3_mul) gain = gain.times(colorBoosts.b) //Color Powers (NG*+3)
@@ -467,10 +467,10 @@ function getRebuyableDilUpgCost(id, lvl) {
 		if (id == 4 && tmp.ngp3) cost = cost.div(Math.pow(Math.max(10 - lvl, 1), 2))
 		if (player.meta != undefined && lvl >= costGroup[2]) {
 			let exp = 2
-			if (id == 4 && enB.active("glu", 7)) exp = tmp_enB.glu7
+			if (id == 4 && enB.active("glu", 7)) exp = enB_tmp.glu7
 
 			let costSS = Decimal.pow(costGroup[1], (lvl - costGroup[2] + 1) * Math.pow(lvl - costGroup[2] + 2, exp - 1) / 4)
-			if (id == 3 && enB.active("glu", 3)) costSS = costSS.pow(1 / tmp_enB.glu3)
+			if (id == 3 && enB.active("glu", 3)) costSS = costSS.pow(1 / enB_tmp.glu3)
 			return cost.times(costSS)
 		}
 		if (player.exdilation != undefined && !aarMod.ngudpV && cost.gt(1e30)) cost = cost.div(1e30).pow(cost.log(1e30)).times(1e30)
@@ -494,6 +494,7 @@ function buyDilationUpgrade(pos, max, isId) {
 			if (!tmp.ngp3) player.dilation.dilatedTime = new Decimal(0)
 			resetDilationGalaxies()
 		}
+		if (id[1] >= 3 && player.eternityBuyer.alwaysDil) player.eternityBuyer.alwaysDilCond = true
 		if (id[1] == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), getDilUpg3Mult())))
 	} else {
 		// Not rebuyable

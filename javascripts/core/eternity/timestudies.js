@@ -149,7 +149,7 @@ function canBuyStudy(name) {
 	if (name == 181) {
 		return player.eternityChalls.eterc1 !== undefined && player.eternityChalls.eterc2 !== undefined && player.eternityChalls.eterc3 !== undefined && hasTS(171)
 	}
-	if (name == 201) return hasTS(192) && !player.dilation.upgrades.includes(8)
+	if (name == 201) return hasTS(192) && !hasDilationUpg(8)
 	if (name == 211 || name == 212) return hasTS(191)
 	if (name == 213 || name == 214) return hasTS(193)
 
@@ -258,7 +258,7 @@ function canBuyStudy(name) {
 
 		case 7:
 			if (!hasTS(61)) return false
-			if (player.dilation.upgrades.includes(8)) return true
+			if (hasDilationUpg(8)) return true
 			if (ETER_UPGS.has(10) && tmp.ngC) return true
 
 			let have2 = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length
@@ -338,7 +338,7 @@ function setupTimeStudies() {
 
 var performedTS
 function updateTimeStudyButtons(changed, forceupdate = false) {
-	if (!forceupdate && (changed ? player.dilation.upgrades.includes(10) : performedTS && !player.dilation.upgrades.includes(10))) return
+	if (!forceupdate && (changed ? hasDilationUpg(10) : performedTS && !hasDilationUpg(10))) return
 	performedTS = true
 	if (player.boughtDims) {
 		var locked = getTotalTT(player) < 60
@@ -722,8 +722,8 @@ function load_preset(id) {
 
 		player.respec = true
 		if (tmp.ngp3) player.respecMastery = true
-		eternity(false, true, true)
-	}
+		eternity(false, true, true, presets[id].dilation)
+	} else if (presets[id].dilation) dilateTime(true)
 
 	let saved = false
 	if (data != presets[id].preset && id == presets.editing) {
@@ -824,7 +824,7 @@ function openStudyPresets() {
 		}
 		try {
 			var id = poData[loadedPresets]
-			latestRow.innerHTML = getPresetLayout(id)
+			latestRow.innerHTML = getPresetLayout(id, loadedPresets + 1)
 			changePresetTitle(id, loadedPresets + 1)
 			loadedPresets++
 			onLoading = false
@@ -833,28 +833,29 @@ function openStudyPresets() {
 	}, 0)
 }
 
-function focus_preset(id) {
+function focus_preset(id, placement) {
 	if (presets.editing) {
+		changePresetTitle(presets.editing, placement, false)
 		delete presets.editing
-		changePresetTitle(presets.editing, 0, false)
 	}
-	presets.editing = id
-	changePresetTitle(id, 0, true)
+	presets[id].dilation = getEl("preset_" + id + "_dilation").checked
+	presets.editing = placement
+	changePresetTitle(id, placement, true)
 }
 
-function getPresetLayout(id) {
-	return "<b id='preset_" + id + "_title'>Preset #" + (loadedPresets + 1) + "</b><br>" +
-		"<span id='preset_" + id + "_dilation_div'>Dilation run (not implemented): <input id='preset_" + id + "_dilation' type='checkbox'></span><br>" +
-		"<input id='preset_" + id +"_data' style='width: 75%' onchange='focus_preset(" + id + ")'><br>" +
+function getPresetLayout(id, placement) {
+	return "<b id='preset_" + id + "_title'>Preset #" + placement + "</b><br>" +
+		"<span id='preset_" + id + "_dilation_div'>Dilation run: <input id='preset_" + id + "_dilation' type='checkbox' onchange='focus_preset(" + id + ", " + placement + ")'></span><br>" +
+		"<input id='preset_" + id +"_data' style='width: 75%' onchange='focus_preset(" + id + ", " + placement + ")'><br>" +
 
-		"<button class='storebtn' onclick='save_preset(" + id + ")'>Save</button>" +
-		"<button class='storebtn' onclick='load_preset(" + id + ")'>Load</button>" +
-		"<button class='storebtn' onclick='rename_preset(" + id + ")'>Rename</button>" +
-		"<button class='storebtn' onclick='delete_preset(" + id + ")'>Delete</button>" +
+		"<button class='storebtn' onclick='save_preset(" + id + ", " + placement + ")'>Save</button>" +
+		"<button class='storebtn' onclick='load_preset(" + id + ", " + placement + ")'>Load</button>" +
+		"<button class='storebtn' onclick='rename_preset(" + id + ", " + placement + ")'>Rename</button>" +
+		"<button class='storebtn' onclick='delete_preset(" + id + ", " + placement + ")'>Delete</button>" +
 
 		"<span class='metaOpts'>" +
-			"<button class='storebtn' onclick='move_preset(" + id + ",-1)'>⭡</button>" +
-			"<button class='storebtn' onclick='move_preset(" + id + ",1)'>⭣</button>" +
+			"<button class='storebtn' onclick='move_preset(" + id + ", -1)'>⭡</button>" +
+			"<button class='storebtn' onclick='move_preset(" + id + ", -1)'>⭣</button>" +
 		"</span>"
 }
 
@@ -877,7 +878,7 @@ function changePresetTitle(id, placement, editing) {
 			presets[id] = {preset: "|0", title: "Deleted preset #" + placement, dilation: false}
 			localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
 		} else presets[id] = JSON.parse(atob(preset))
-		getEl("preset_" + id + "_dilation").value = presets[id].dilation
+		getEl("preset_" + id + "_dilation").checked = presets[id].dilation
 	}
 	getEl("preset_" + id + "_title").textContent = presets[id].title ? presets[id].title : "Preset #" + placement
 	getEl("preset_" + id + "_data").value = presets[id].preset
@@ -971,7 +972,7 @@ let tsMults = {
 	231() {
 		let db = getTotalDBs()
 		let x = Decimal.pow(Math.max(db, 1), 0.3)
-		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(2, db / 1e5 * Math.log2(db / 1e5 + 1)))
+		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(2, db / 3e5 * (db / 1e6 + 1)))
 		return x
 	},
 	232() {

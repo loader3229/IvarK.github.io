@@ -85,6 +85,11 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 		limit: new Decimal(0),
 		isOn: false
 	}
+	if (tmp.ngp3) {
+		player.eternityBuyer.autoDilCond = false
+		player.eternityBuyer.statBeforeDilation = player.eternityBuyer.dilationPerAmount || 0
+	}
+
 	player.eterc8ids = 50
 	player.eterc8repl = 40
 	player.dimlife = true

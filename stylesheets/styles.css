@@ -2372,8 +2372,8 @@ td.grey {
 
 .posbtn {
 	position: relative;
-	width: 60px;
-	height: 60px;
+	width: 72px !important;
+	height: 72px !important;
 }
 
 .posbtn span {

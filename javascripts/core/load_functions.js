@@ -1959,7 +1959,6 @@ function setSomeQuantumAutomationDisplay(){
         }
         getEl('replicantibulkmodetoggle').textContent="Mode: "+(player.galaxyMaxBulk?"Max":"Singles")
         getEl('versionDesc').style.display = tmp.ngp3 ? "" : "none"
-        getEl('toggleautoquantummode').style.display=(player.masterystudies?qu_save.reachedInfQK||hasAch("ng3p25"):false)?"":"none"
         var autoAssignUnl = tmp.ngp3 && (pH.did("ghostify") || qu_save.reachedInfQK)
         getEl('autoAssign').style.display = autoAssignUnl ? "" : "none"
         getEl('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
@@ -2880,15 +2879,16 @@ function loadAutoBuyerSettings() {
                 getEl("requireIPPeak").checked = player.autobuyers[11].requireIPPeak;
         }
         if (player.masterystudies) {
-                getEl("prioritydil").value = player.eternityBuyer.dilationPerAmount
-                if (qu_save) {
-					let data = qu_save.autobuyer
-					if (data) {
-                        if (isNaN(break_infinity_js ? data.limit : data.limit.l)) data.limit = new Decimal(1)
-                        getEl("priorityquantum").value = data.mode == "amount" || data.mode == "relative" ? formatValue("Scientific", data.limit, 2, 0) : data.limit
-                        getEl("priorityAutoDisableQuantum").value = data.autoDisable || 0
-					}
-                }
+			getEl("prioritydil").value = player.eternityBuyer.dilationPerAmount
+			getEl("autoalwaysdil").checked = player.eternityBuyer.alwaysDil
+			if (qu_save) {
+				let data = qu_save.autobuyer
+				if (data) {
+					if (isNaN(break_infinity_js ? data.limit : data.limit.l)) data.limit = new Decimal(1)
+					getEl("priorityquantum").value = data.mode == "amount" || data.mode == "relative" ? formatValue("Scientific", data.limit, 2, 0) : data.limit
+					getEl("priorityAutoDisableQuantum").value = data.autoDisable || 0
+				}
+			}
         }
 }
 

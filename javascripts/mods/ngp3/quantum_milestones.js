@@ -83,10 +83,11 @@ let qMs = {
 			}
 		}
 
-		getEl('dilationmode').style.display = qMs.tmp.amt >= 5 ? "" : "none"
+		getEl('dilationmode').style.display = qMs.tmp.amt >= 5 ? "block" : "none"
 		getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 11 ? "" : "none"
 		getEl('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
-		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 18 ? "" : "none"
+		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 18 ? "block" : "none"
+		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 18 ? "" : "none"
 		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 24 ? "" : "none"
 	},
 	updateDisplayOnTick() {

@@ -9,7 +9,7 @@ function getMetaAntimatterStart(bigRip) {
 function getDilationMDMultiplier() {
 	let pow = 0.1
 	let div = 1e40
-	if (enB.active("glu", 8)) pow = tmp_enB.glu8
+	if (enB.active("glu", 8)) pow = enB_tmp.glu8
 	if (aarMod.nguspV !== undefined) div = 1e50
 
 	if (aarMod.ngudpV && !aarMod.nguepV) {
@@ -38,7 +38,7 @@ function getMDMultiplier(tier) {
 	if (tier <= 3 && hasAch("ng3p17")) ret = ret.times(Decimal.pow(1.001, Math.pow(player.totalmoney.plus(10).log10(), 0.25)))
 
 	//Positronic Boosts:
-	if (tier == 1 && enB.active("pos", 4)) ret = ret.times(tmp_enB.pos4)
+	if (tier == 1 && enB.active("pos", 4)) ret = ret.times(enB_tmp.pos4)
 
 	//Dilation Upgrades:
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
@@ -73,7 +73,7 @@ function getMetaBoostPower() {
 
 	let exp = 1
 	if (tmp.ngp3 && hasAch("ngpp14")) exp = 1.05
-	if (enB.active("glu", 5) && pos.on()) exp *= tmp_enB.glu5
+	if (enB.active("glu", 5) && pos.on()) exp *= enB_tmp.glu5
 	if (hasAch("ng3p26")) exp = 1.5 - 0.5 / Math.log2(player.meta.resets / 100 + 2)
 	return Math.pow(r, exp)
 }
@@ -324,7 +324,7 @@ function getDil17Bonus() {
 }
 
 function getDil17Exp() {
-	if (enB.active("glu", 4)) return tmp_enB.glu4
+	if (enB.active("glu", 4)) return enB_tmp.glu4
 	return 0.0045
 }
 
@@ -383,7 +383,7 @@ function updateMetaDimensions () {
 	getEl("quantum").textContent = message
 	if (getEl("quantum").className !== newClassName) getEl("quantum").className = newClassName
 
-	getEl("metaAccelerator").textContent = enB.active("pos", 4) ? "Meta Accelerator: " + shorten(tmp_enB.pos4) + "x to MA, DT, and replicate interval" : ""
+	getEl("metaAccelerator").textContent = enB.active("pos", 4) ? "Meta Accelerator: " + shorten(enB_tmp.pos4) + "x to MA, DT, and replicate interval" : ""
 }
 
 function getDil15Bonus() {

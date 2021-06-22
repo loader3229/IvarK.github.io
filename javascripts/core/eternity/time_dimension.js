@@ -79,7 +79,7 @@ function updateInfiniteTimeTemp() {
 	}
 	var x = (3 - getTickspeed().log10()) * 5e-6
 	if (tmp.ngp3) {
-		if (enB.active("pos", 5)) x *= tmp_enB.pos5
+		if (enB.active("pos", 5)) x *= enB_tmp.pos5
 
 		x = softcap(Decimal.pow(10, x), "it").log10()
 	}

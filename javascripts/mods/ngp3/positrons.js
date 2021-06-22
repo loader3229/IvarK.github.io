@@ -30,11 +30,12 @@ var pos = {
 			eg: {sac: 0, qe: 0, pc: 0},
 			tg: {sac: 0, qe: 0, pc: 0}
 		}
-		if (!data.excite) data.excite = {}
+		if (!data.swaps) data.swaps = {}
 
 		if (data.consumedQE) delete data.consumedQE
 		if (data.sacGals) delete data.sacGals
 		if (data.sacBoosts) delete data.sacBoosts
+		if (data.excite) delete data.excite
 
 		this.updateTmp()
 	},
@@ -106,7 +107,8 @@ var pos = {
 		pos_tmp = data
 		if (pos_save === undefined) return
 
-		data.next_excite = {...pos_save.excite}
+		data.next_swaps = {...pos_save.swaps}
+		data.cloud_div = {}
 
 		this.updateCloud()
 	},
@@ -115,13 +117,19 @@ var pos = {
 		pos_tmp.cloud = data
 
 		for (var i = 1; i <= enB.pos.max; i++) {
-			var lvl = enB.pos.lvl(i, true)
-			var has = enB.has("pos", i)
-			getEl("pos_boost" + i + "_btn").className = pos_tmp.next_excite[i] ? "chosenbtn posbtn" : "storebtn posbtn"
+			var lvl = enB.pos.lvl(i)
+			var nextLvl = enB.pos.lvl(i, true)
+			var has = enB.mastered("pos", i)
 			getEl("pos_boost" + i + "_btn").style.display = has ? "" : "none"
 			if (has) {
-				getEl("pos_cloud" + lvl + "_boosts").appendChild(getEl("pos_boost" + i + "_btn"))
-				getEl("pos_boost" + i + "_excite").textContent = "(Tier " + lvl + ")"
+				if (pos_tmp.cloud_div[i] != nextLvl) getEl("pos_cloud" + nextLvl + "_boosts").appendChild(getEl("pos_boost" + i + "_btn"))
+				pos_tmp.cloud_div[i] = nextLvl
+
+				getEl("pos_boost" + i + "_btn").className = pos_tmp.chosen ?
+					(pos_tmp.chosen == i ? "chosenbtn posbtn" : this.canSwap(i) ? "storebtn posbtn" : "unavailablebtn posbtn") :
+					(pos_tmp.next_swaps[i] ? "chosenbtn posbtn" : "storebtn posbtn")
+				getEl("pos_boost" + i + "_excite").textContent = "(Tier " + lvl + (lvl != nextLvl ? " -> " + nextLvl : "") + ")"
+
 				pos_tmp.cloud[lvl] = (pos_tmp.cloud[lvl] || 0) + 1
 			}
 		}
@@ -168,6 +176,28 @@ var pos = {
 	isCloudRewardActive(x) {
 		return pos_tmp.cloud[x] >= x * 2
 	},
+	canSwap(x) {
+		return !pos_tmp.next_swaps[x] && Math.abs(enB.pos.lvl(pos_tmp.chosen, true) - enB.pos.lvl(x, true)) == 1
+	},
+	swap(x) {
+		if (!pos_tmp.chosen) {
+			if (pos_tmp.next_swaps[x]) {
+				var y = pos_tmp.next_swaps[x]
+				delete pos_tmp.next_swaps[x]
+				delete pos_tmp.next_swaps[y]
+			} else {
+				pos_tmp.chosen = x
+			}
+		} else if (pos_tmp.chosen == x) {
+			delete pos_tmp.chosen
+		} else {
+			if (!this.canSwap(x)) return
+			pos_tmp.next_swaps[x] = pos_tmp.chosen
+			pos_tmp.next_swaps[pos_tmp.chosen] = x
+			delete pos_tmp.chosen
+		}
+		this.updateCloud()
+	},
 
 	updateTab() {
 		enB.updateOnTick("pos")
@@ -186,7 +216,7 @@ var pos = {
 
 		getEl("pos_charge_formula").innerHTML = wordizeList(msg, false, " +<br>", false) + " -> "
 
-		if (enB.has("pos", 3)) getEl("enB_pos3_exp").textContent = "^" + (1 / tmp_enB.pos3).toFixed(Math.floor(3 + Math.log10(tmp_enB.pos3)))
+		if (enB.has("pos", 3)) getEl("enB_pos3_exp").textContent = "^" + (1 / enB_tmp.pos3).toFixed(Math.floor(3 + Math.log10(enB_tmp.pos3)))
 	}
 }
 var pos_save = undefined

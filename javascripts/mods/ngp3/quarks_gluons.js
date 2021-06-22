@@ -227,8 +227,8 @@ function updateColorPowers() {
 	//Blue
 	colorBoosts.b_base = qu_save.colorPowers.b * 1.5 + 1
 	colorBoosts.b_exp = 2
-	if (enB.active("glu", 9)) colorBoosts.b_base *= tmp_enB.glu9
-	if (enB.active("glu", 11)) colorBoosts.b_exp += tmp_enB.glu11
+	if (enB.active("glu", 9)) colorBoosts.b_base *= enB_tmp.glu9
+	if (enB.active("glu", 11)) colorBoosts.b_exp += enB_tmp.glu11
 
 	colorBoosts.b_base2 = Decimal.pow(colorBoosts.b_base, colorBoosts.b_exp)
 	if (hasMTS(313)) colorBoosts.b_exp *= getMTSMult(313, "update")
@@ -260,7 +260,7 @@ function getQEGluonsPortion() {
 
 function getQuantumEnergyMult() {
 	let x = 1
-	if (enB.active("glu", 1)) x += tmp_enB.glu1
+	if (enB.active("glu", 1)) x += enB_tmp.glu1
 	if (tmp.ngp3_mul && tmp.glb) x += (tmp.glB.r.mult + tmp.glB.g.mult + tmp.glB.b.mult) / 15
 	return x
 }
@@ -281,7 +281,7 @@ function updateQEGainTmp() {
 	if (tmp.ngp3_mul) data.expDen *= 0.8
 
 	data.expNum = 1
-	if (enB.active("pos", 1)) data.expNum += tmp_enB.pos1
+	if (enB.active("pos", 1)) data.expNum += enB_tmp.pos1
 	if (data.expNum > data.expDen - 1) {
 		let sc = data.expDen - 1
 		let scEff = data.expNum / sc
@@ -302,9 +302,15 @@ function updateQEGainTmp() {
 function updateQuarkEnergyEffects() {
 	if (!tmp.quActive) return
 
-	let exp = 4 / 3
-	tmp.qe.eff1 = Math.pow(Math.log10(qu_save.quarkEnergy / 1.7 + 1) + 1, exp)
-	tmp.qe.eff2 = Math.pow(qu_save.quarkEnergy, exp) * tmp.qe.eff1 / 4
+	var engMult = 1
+	if (pos.isCloudRewardActive(1)) engMult += 0.05
+	if (pos.isCloudRewardActive(2)) engMult += 0.1
+	if (pos.isCloudRewardActive(3)) engMult += 0.15
+
+	var eng = qu_save.quarkEnergy * engMult
+	var exp = 4 / 3
+	tmp.qe.eff1 = Math.pow(Math.log10(eng / 1.7 + 1) + 1, exp)
+	tmp.qe.eff2 = Math.pow(eng, exp) * tmp.qe.eff1 / 4
 }
 
 function buyQuarkMult(name) {
@@ -415,7 +421,7 @@ var enB = {
 	active(type, x) {
 		var data = this[type][x]
 
-		if (tmp_enB[type + x] === undefined) return false
+		if (enB_tmp[type + x] === undefined) return false
 
 		if (!this.has(type, x)) return false
 		if (!this[type].activeReq(x)) return false
@@ -455,7 +461,7 @@ var enB = {
 
 	updateTmp() {
 		var data = {}
-		tmp_enB = data
+		enB_tmp = data
 
 		for (var x = 0; x < this.priorities.length; x++) {
 			var boost = this.priorities[x]
@@ -480,7 +486,7 @@ var enB = {
 	glu: {
 		name: "Entangled",
 		unl() {
-			return tmp.quActive
+			return tmp.quActive && qu_save.gluons.rg.max(qu_save.gluons.gb).max(qu_save.gluons.br).gt(0)
 		},
 
 		cost(x) {
@@ -594,10 +600,6 @@ var enB = {
 			req: 1/0,
 			masReq: 1/0,
 
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
-
 			type: "r",
 			eff(x) {
 				return 1
@@ -609,10 +611,6 @@ var enB = {
 		7: {
 			req: 1/0,
 			masReq: 1/0,
-
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			type: "r",
 			eff(x) {
@@ -626,10 +624,6 @@ var enB = {
 			req: 1/0,
 			masReq: 1/0,
 
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
-
 			type: "r",
 			eff(x) {
 				return 0.1
@@ -641,10 +635,6 @@ var enB = {
 		9: {
 			req: 1/0,
 			masReq: 1/0,
-
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			type: "r",
 			eff(x) {
@@ -658,10 +648,6 @@ var enB = {
 			req: 1/0,
 			masReq: 1/0,
 
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
-
 			type: "r",
 			eff(x) {
 				return 1
@@ -674,13 +660,9 @@ var enB = {
 			req: 1/0,
 			masReq: 1/0,
 
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
-
 			type: "r",
 			eff(x) {
-				return 1
+				return 0
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -689,10 +671,6 @@ var enB = {
 		12: {
 			req: 1/0,
 			masReq: 1/0,
-
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			type: "r",
 			anti: true,
@@ -741,7 +719,7 @@ var enB = {
 		},
 		masEff(x) {
 			x /= 2
-			if (enB.active("glu", 5) && !pos.on()) x += tmp_enB.glu5
+			if (enB.active("glu", 5) && !pos.on()) x += enB_tmp.glu5
 			return x
 		},
 
@@ -750,9 +728,10 @@ var enB = {
 			return this[x].chargeReq * lvl
 		},
 		lvl(x, next) {
+			var swaps = next ? pos_tmp.next_swaps : pos_save.swaps
+			if (swaps[x]) x = swaps[x]
+
 			var lvl = x > 6 ? 3 : x > 2 ? 2 : 1
-			var data = next ? pos_tmp.next_excite : pos_save.excite
-			if (data[x]) lvl += data[x]
 			return Math.min(lvl, 3)
 		},
 
@@ -766,9 +745,7 @@ var enB = {
 
 			type: "g",
 			eff(x) {
-				if (enB.mastered("pos", 1)) x = Math.max(x, enB.pos.masEff(enB.pos[1].chargeReq))
 				var rep = (tmp.rmPseudo || player.replicanti.amount).max(1)
-
 				return Math.log10(rep.log10() + 1) * Math.log10(x + 1)
 			},
 			effDisplay(x) {
@@ -784,7 +761,6 @@ var enB = {
 
 			type: "r",
 			eff(x) {
-				if (enB.mastered("pos", 2)) x = Math.max(x, enB.pos.masEff(enB.pos[2].chargeReq))
 				return Math.pow(x, 1/6) * 1e3 + 1
 			},
 			effDisplay(x) {
@@ -800,20 +776,17 @@ var enB = {
 
 			type: "b",
 			eff(x) {
-				if (enB.mastered("pos", 3)) x = Math.max(x, enB.pos.masEff(enB.pos[3].chargeReq))
-				x = Math.log10(x / 4e3 + 1) + 1
-				if (x > 2) x = 3 - 2 / x
-				return x
+				return 2 - 1 / (Math.log2(x + 1) / 2 + 1)
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
 			}
 		},
 		4: {
-			req: 1/0,
+			req: 5,
 			masReq: 1/0,
 
-			chargereq: 1/0,
+			chargeReq: 0,
 
 			type: "b",
 			eff(x) {
@@ -821,8 +794,8 @@ var enB = {
 
 				var slowStart = 4
 				var slowSpeed = 1
-				if (enB.active("pos", 8)) slowStart += tmp_enB.pos8
-				if (enB.active("glu", 10)) slowSpeed /= tmp_enB.glu10
+				if (enB.active("pos", 8)) slowStart += enB_tmp.pos8
+				if (enB.active("glu", 10)) slowSpeed /= enB_tmp.glu10
 
 				var base = player.meta.antimatter.max(10).log10()
 				var exp = mdb
@@ -840,10 +813,6 @@ var enB = {
 			req: 1/0,
 			masReq: 1/0,
 
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
-
 			type: "r",
 			eff(x) {
 				return 1
@@ -855,10 +824,6 @@ var enB = {
 		6: {
 			req: 1/0,
 			masReq: 1/0,
-
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			type: "r",
 			anti: true,
@@ -873,13 +838,9 @@ var enB = {
 			req: 1/0,
 			masReq: 1/0,
 
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
-
 			type: "g",
 			eff(x) {
-				return 1
+				return 0
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -889,10 +850,6 @@ var enB = {
 			req: 1/0,
 			masReq: 1/0,
 			anti: true,
-
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			type: "g",
 			eff(x) {
@@ -906,17 +863,13 @@ var enB = {
 			req: 1/0,
 			masReq: 1/0,
 
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
-
 			type: "b",
 			anti: true,
 			eff(x) {
 				var expExp = 1
 				var expDiv = 1
 
-				return Math.pow(Decimal.max(getInfinitied(), 1).log10(), expExp) / expDiv
+				return Math.pow(Decimal.max(getInfinitied(), 10).log10(), expExp) / expDiv
 			},
 			effDisplay(x) {
 				return "^" + shorten(x)
@@ -925,10 +878,6 @@ var enB = {
 		10: {
 			req: 1/0,
 			masReq: 1/0,
-
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			type: "b",
 			anti: true,
@@ -946,10 +895,6 @@ var enB = {
 			req: 1/0,
 			masReq: 1/0,
 
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
-
 			type: "b",
 			anti: true,
 			eff(x) {
@@ -965,10 +910,6 @@ var enB = {
 		12: {
 			req: 1/0,
 			masReq: 1/0,
-
-			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
 
 			type: "b",
 			anti: true,
@@ -1025,11 +966,11 @@ var enB = {
 		for (var i = 1; i <= data.max; i++) {
 			if (!this.has(type, i)) break
 			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = !enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No full efficiency)" : "Full efficiency is at " + shorten(enB.pos.chargeReq(i)) + " charge"
-			if (tmp_enB[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(tmp_enB[type + i])
+			if (enB_tmp[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(enB_tmp[type + i])
 		}
 	}
 }
-var tmp_enB = {}
+var enB_tmp = {}
 let ENTANGLED_BOOSTS = enB
 
 function gainQKOnQuantum(qkGain) {
@@ -1037,6 +978,8 @@ function gainQKOnQuantum(qkGain) {
 		qu_save.quarks = qu_save.quarks.add(qkGain)
 		if (!tmp.ngp3 || player.ghostify.milestones < 8) qu_save.quarks = qu_save.quarks.round()
 	}
+
+	var oldGluUnl = enB.glu.unl()
 
 	var u = qu_save.usedQuarks
 	var g = qu_save.gluons
@@ -1053,6 +996,8 @@ function gainQKOnQuantum(qkGain) {
 
 	updateQEGainTmp()
 	gainQuantumEnergy()
+
+	if (enB.glu.unl() && !oldGluUnl) $.notify("Congratulations, you have unlocked Anti-Gluons!")
 }
 
 //Display
