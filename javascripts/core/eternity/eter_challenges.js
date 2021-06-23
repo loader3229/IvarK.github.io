@@ -384,7 +384,7 @@ function doCheckECCompletionStuff() {
 			player.etercreq = 0
 			if (ecNum > 12) {
 				getEl("ec" + ecNum + "Req").style.display = "block"
-				mTs.ecReqsStored[ecNum] = mTs.ecReqs[ecNum]()
+				mTs.ecReqNumsStored[ecNum] = mTs.ecReqNums[ecNum]()
 				updateMasteryStudyTextDisplay()
 			}
 			resetEternityChallUnlocks()

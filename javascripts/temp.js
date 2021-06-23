@@ -65,7 +65,7 @@ function updateTmp(init) {
 	if (tmp.ngC) ngC.updateTmp()
 
 	tmp.rm = getReplMult()
-	tmp.rmPseudo = QCs.data[1].convert(player.replicanti.amount).max(hasMTS(292) ? tmp.rm.pow(1 / 0.032) : 1)
+	tmp.rmPseudo = QCs.data[1].convert(player.replicanti.amount).max(hasMTS(303) ? tmp.rm.pow(1 / 0.032) : 1)
 
 	updateExtraReplMult()
 	updateExtraReplBase()

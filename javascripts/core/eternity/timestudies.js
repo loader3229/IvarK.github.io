@@ -972,7 +972,7 @@ let tsMults = {
 	231() {
 		let db = getTotalDBs()
 		let x = Decimal.pow(Math.max(db, 1), 0.3)
-		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(2, db / 3e5 * (db / 1e6 + 1)))
+		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(2, db / 3e5 * Math.pow(Math.log2(db / 2e6 + 2), 2.5)))
 		return x
 	},
 	232() {

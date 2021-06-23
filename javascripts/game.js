@@ -3451,11 +3451,11 @@ function challengesCompletedOnEternity() {
 	if (!keepABs) player.autobuyers[0] = 1
 
 	player.postChallUnlocked = 0
-	if (hasAch("r133")) {
+	if (hasAch("r133") && (!tmp.ngp3 || tmp.bgMode || player.currentEternityChall == "")) {
 		player.postChallUnlocked = order.length
 		for (i = 0; i < order.length; i++) {
 			var ic = order[i]
-			if (!tmp.ngp3 || tmp.bgMode || player.currentEternityChall == "") array.push(ic)
+			array.push(ic)
 		}
 	}
 	return array

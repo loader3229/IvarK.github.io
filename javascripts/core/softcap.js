@@ -134,7 +134,7 @@ var softcap_data = {
 		},
 		2: {
 			func: "dilate",
-			start: new Decimal(1e75),
+			start: new Decimal(1e72),
 			base: 10,
 			pow: 3/4
 		},
@@ -646,7 +646,7 @@ var softcap_data = {
 var softcap_vars = {
 	pow: ["start", "pow", "derv"],
 	dilate: ["start", "base", "pow", "mul", "sub10"],
-	log: ["pow", "mul", "add"],
+	log: ["start", "pow", "mul", "add"],
 	logshift: ["shift", "pow", "add"]
 }
 
@@ -663,12 +663,15 @@ var softcap_funcs = {
 		x = x.times(start)
 		return x
 	},
-	log(x, pow = 1, mul = 1, add = 0) {
+	log(x, start, pow = 1, mul = 1, add = 0) {
+		if (x <= start) return x
+
 		let x2 = Math.pow(Math.log10(x) * mul + add, pow)
 		return Math.min(x, x2)
 	},
-	log_decimal(x, pow = 1, mul = 1, add = 0) { 
-		//dont we want to return a Decimal since x is a Decimal
+	log_decimal(x, start, pow = 1, mul = 1, add = 0) { 
+		if (x.lte(start)) return x
+
 		let x2 = Decimal.pow(x.log10() * mul + add, pow)
 		return Decimal.min(x, x2)
 	},
@@ -891,17 +894,15 @@ function getSoftcapStringEffect(id, num, amt, namenum){
 		let inside = "Start: " + softcapShorten(v[0]) + ", Exponent: " + softcapShorten(v[0]) + ", Base (log): " + softcapShorten(v[1])
 		return "Softcap of " + name + " " + inside + "."
 	}
-	if (func == "log") { // vars ["pow", "mul", "add"]
-		let mult = (v[1] != undefined && Decimal.neq(v[1], 1)) ? ", Times: " + softcapShorten(v[1]) : ""
+	if (func == "log") { // vars ["start", "pow", "mul", "add"]
+		let mult = (v[2] != undefined && Decimal.neq(v[2], 1)) ? ", Times: " + softcapShorten(v[2]) : ""
 		let add = ""
-		if (v[2] != undefined) {
-			if (typeof v[2] != "number" || v[2] > 0) add = (v[2] != undefined && Decimal.neq(v[2], 0)) ? ", Plus: " + softcapShorten(v[2]) : ""
-			else add = (v[2] != undefined) ? ", Minus: " + softcapShorten(-1*v[2]) : ""
+		if (v[3] != undefined) {
+			if (typeof v[3] != "number" || v[3] > 0) add = (v[3] != undefined && Decimal.neq(v[3], 0)) ? ", Plus: " + softcapShorten(v[3]) : ""
+			else add = (v[3] != undefined) ? ", Minus: " + softcapShorten(-1*v[3]) : ""
 		}
-		let inside = "Log base 10" + mult + add + ", to the Power of " + softcapShorten(v[0])
-		end = " "
-		if (data.start) end = " Start: " + softcapShorten(data.start) + ", "
-		return "Softcap of " + name + end + inside + "."
+		let inside = "Start: " + softcapShorten(v[0]) + ", log (base of 10): " + mult + add + ", to the Power of " + softcapShorten(v[1])
+		return "Softcap of " + name + " " + inside + "."
 	} 
 	return "oops someone messed up"
 }

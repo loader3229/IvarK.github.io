@@ -82,7 +82,7 @@ function getReplMult(next) {
 		let base = new Decimal(replmult)
 
 		replmult = base.times(Decimal.pow(5, rg))
-		if (hasMTS(303)) replmult = replmult.max(base.pow(getMTSMult(303)))
+		if (hasMTS(292)) replmult = replmult.max(base.pow(getMTSMult(292)))
 	}
 	return replmult
 }
@@ -256,6 +256,7 @@ function getReplicantiBaseInterval(speed, debug) {
 	var upgs = Math.round(Decimal.div(speed, 1e3).log(0.9))
 	if (enB.active("glu", 6)) upgs *= enB_tmp.glu6
 	speed = Decimal.pow(0.9, upgs).times(1e3)
+	if (speed.lt(1)) speed = speed.pow(0.25)
 
 	return speed
 }
@@ -350,7 +351,7 @@ function updateEC14Reward() {
 
 		data.ec14 = {
 			interval: div,
-			ooms: div.max(1).log10() * 2 / Math.sqrt(1 - pow) + 1
+			ooms: div.max(1).log10() * Math.sqrt(Math.log2(1 / (1 - pow) + 16)) / 2 + 1
 		}
 	} else {
 		data.ec14 = {
@@ -368,15 +369,13 @@ function boostReplicateInterval() {
 
 	if (ECComps("eterc14")) {
 		var ec14Pow = getECReward(14)
-		x = x.div(data.baseEst.pow(ec14Pow))
-
-		var sclessEst = data.baseEst
-		var scEst = softcap(sclessEst, "rInt")
-		if (sclessEst.gt(scEst)) x = x.div(sclessEst.div(scEst))
-
 		var ec14Acc = data.speeds.exp / Math.log10(data.speeds.inc) * ec14Pow + 1
 		data.ec14.interval = data.ec14.interval.div(ec14Acc)
-		x = x.times(ec14Acc)
+		x = x.div(data.ec14.interval)
+
+		var sclessEst = data.baseEst.pow(1 - ec14Pow)
+		var scEst = softcap(sclessEst, "rInt")
+		if (sclessEst.gt(scEst)) x = x.div(sclessEst.div(scEst))
 	}
 	if (QCs_tmp.qc1) x = x.times(QCs_tmp.qc1.speedMult)
 
