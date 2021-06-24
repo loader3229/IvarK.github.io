@@ -342,22 +342,25 @@ function boostReplSpeedExp(exp) {
 	return exp
 }
 
-function updateEC14Reward() {
-	let data = tmp.rep
-	if (data.baseEst && ECComps("eterc14")) {
-		//Sub-1ms reduction -> Lower replicanti scaling
-		let pow = getECReward(14)
-		let div = data.baseEst.pow(pow)
+function updateEC14BaseReward() {
+	var data = {}
+	var est = tmp.rep.baseEst
+	tmp.rep.ec14 = data
 
-		data.ec14 = {
-			interval: div,
-			ooms: div.max(1).log10() * Math.sqrt(Math.log2(1 / (1 - pow) + 16)) / 2 + 1
-		}
+	if (est && ECComps("eterc14")) {
+		//Sub-1ms reduction -> Lower replicanti scaling
+		var pow = getECReward(14)
+		var div = est.max(1).pow(pow)
+
+		data.baseInt = div
+		data.interval = data.baseInt
+		data.acc = 1 / Math.sqrt(1 - pow) / 3
+		data.ooms = div.max(1).log10() * data.acc + 1
 	} else {
-		data.ec14 = {
-			interval: new Decimal(1),
-			ooms: 1
-		}
+		data.baseInt = new Decimal(1)
+		data.interval = data.baseInt
+		data.acc = 0
+		data.ooms = 1
 	}
 }
 
@@ -369,11 +372,12 @@ function boostReplicateInterval() {
 
 	if (ECComps("eterc14")) {
 		var ec14Pow = getECReward(14)
-		var ec14Acc = data.speeds.exp / Math.log10(data.speeds.inc) * ec14Pow + 1
-		data.ec14.interval = data.ec14.interval.div(ec14Acc)
+		var ec14Int = data.ec14.baseInt
+		var ec14Acc = data.speeds.exp / Math.log10(data.speeds.inc) * 10 * ec14Pow + 1
+		data.ec14.interval = ec14Int.div(ec14Acc)
 		x = x.div(data.ec14.interval)
 
-		var sclessEst = data.baseEst.pow(1 - ec14Pow)
+		var sclessEst = data.baseEst.div(ec14Int)
 		var scEst = softcap(sclessEst, "rInt")
 		if (sclessEst.gt(scEst)) x = x.div(sclessEst.div(scEst))
 	}
@@ -411,7 +415,7 @@ function updateReplicantiTemp() {
 	data.baseEst = Decimal.div(estChance, data.baseInt)
 
 	data.speeds = getReplSpeed()
-	updateEC14Reward()
+	updateEC14BaseReward()
 	data.speeds.exp = boostReplSpeedExp(data.speeds.exp)
 	boostReplicateInterval()
 

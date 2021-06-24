@@ -209,7 +209,7 @@ function getColorPowerQuantity(color) {
 	if (tmp.qe) ret = ret * tmp.qe.eff1 + tmp.qe.eff2
 	if (tmp.glB) ret = ret - tmp.glB[color].sub
 
-	if (color == "r" && hasMTS(293)) ret /= 5
+	if (color == "r" && hasMTS(272)) ret /= 5
 	return Math.max(ret, 0)
 }
 
@@ -222,7 +222,7 @@ colorBoosts = {
 function updateColorPowers() {
 	//Red
 	colorBoosts.r = Math.log10(qu_save.colorPowers.r * 5 + 1) / 3.5 + 1
-	if (hasMTS(293)) colorBoosts.r += 0.25
+	if (hasMTS(272)) colorBoosts.r += 0.25
 
 	//Green
 	colorBoosts.g = Math.log10(qu_save.colorPowers.g * 3 + 1) + 1
@@ -693,10 +693,10 @@ var enB = {
 
 		cost(x) {
 			if (x === undefined) x = this.amt()
-			return Math.pow(x + 1, 1.5)
+			return Math.pow(x / 2 + 1, 1.5)
 		},
 		target() {
-			return Math.pow(this.engAmt(), 1 / 1.5)
+			return Math.pow(this.engAmt(), 1 / 1.5) * 2
 		},
 
 		amt() {
@@ -741,7 +741,7 @@ var enB = {
 		max: 12,
 		1: {
 			req: 1,
-			masReq: 2,
+			masReq: 3,
 			masReqExpert: 3,
 
 			chargeReq: 1,
@@ -756,7 +756,7 @@ var enB = {
 			}
 		},
 		2: {
-			req: 2,
+			req: 3,
 			masReq: 5,
 			masReqExpert: 6,
 
@@ -771,7 +771,7 @@ var enB = {
 			}
 		},
 		3: {
-			req: 3,
+			req: 1/0,
 			masReq: 5,
 			masReqExpert: 6,
 
@@ -786,7 +786,7 @@ var enB = {
 			}
 		},
 		4: {
-			req: 5,
+			req: 1/0,
 			masReq: 1/0,
 
 			chargeReq: 0,

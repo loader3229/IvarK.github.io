@@ -4816,28 +4816,6 @@ function progressBarUpdating(){
 	else preQuantumNormalProgress()
 }
 
-function ECRewardDisplayUpdating(){
-	getEl("ec1reward").textContent = "Reward: "+shortenMoney(getECReward(1))+"x on all Time Dimensions (based on time spent this Eternity)"
-	getEl("ec2reward").textContent = "Reward: Infinity Power affects the 1st Infinity Dimension with reduced effect. Currently: " + shortenMoney(getECReward(2)) + "x"
-	getEl("ec3reward").textContent = "Reward: Increase the multiplier for buying 10 Dimensions. Currently: " + shorten(getDimensionPowerMultiplier("no-QC5")) + "x"
-	getEl("ec4reward").textContent = "Reward: Infinity Dimensions gain a multiplier from unspent IP. Currently: " + shortenMoney(getECReward(4)) + "x"
-	getEl("ec5reward").textContent = "Reward: Galaxy cost scaling starts " + getECReward(5) + " galaxies later."
-	getEl("ec6reward").textContent = "Reward: Further reduce the dimension cost multiplier increase. Currently: " + player.dimensionMultDecrease.toFixed(1) + "x "
-	getEl("ec7reward").textContent = "Reward: First Time Dimensions produce Eighth Infinity Dimensions. Currently: " + shortenMoney(infDimensionProduction(9)) + " per second. "
-	getEl("ec8reward").textContent = "Reward: Infinity Power powers up replicanti galaxies. Currently: " + (getECReward(8) * 100 - 100).toFixed(2) + "%"
-	getEl("ec9reward").textContent = "Reward: Infinity Dimensions gain a " + (inNGM(2) ? "post dilation " : "") + " multiplier based on your Time Shards. Currently: "+shortenMoney(getECReward(9))+"x "
-	getEl("ec10reward").textContent = "Reward: Time Dimensions gain a multiplier from your Infinities. Currently: " + shortenMoney(getECReward(10)) + "x "
-	getEl("ec11reward").textContent = "Reward: Further reduce the tickspeed cost multiplier increase. Currently: " + player.tickSpeedMultDecrease.toFixed(2) + "x" + (tmp.ngC ? ", and galaxies are " + shorten((getECReward(11) - 1) * 100) + "% stronger (based on free tickspeed upgrades)":" ")
-	getEl("ec12reward").textContent = "Reward: Infinity Dimension cost multipliers are reduced. (x^" + getECReward(12) + ")"
-	getEl("ec13reward").textContent = "Reward: For boosting dimension boosts, everything except meta-antimatter boosts them more. (x^1 -> ^" + getECReward(13).toFixed(2) + ")"
-
-	let ec14Div = tmp.rep.ec14 ? tmp.rep.ec14.interval : new Decimal(1)
-	getEl("ec14reward").textContent = "Reward: " + (ec14Div.lt(1) ? "Speed up the base replicate interval by " + shorten(Decimal.div(1, ec14Div)) : "Slow down the base replicate interval by " + shorten(ec14Div)) + "x, but also slow down the replicanti scaling by " + shorten(tmp.rep.ec14 ? tmp.rep.ec14.ooms : 1) + "x OoMs."
-
-	getEl("ec10span").textContent = shortenMoney(ec10bonus) + "x"
-	getEl("eterc7ts").textContent = tmp.ngC ? "does nothing" : "affects all dimensions normally"
-}
-
 function bigRipUpgradeUpdating(){
 	if (player.ghostify.milestones>7) {
 		getEl("spaceShards").textContent=shortenDimensions(qu_save.bigRip.spaceShards)

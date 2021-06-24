@@ -487,7 +487,9 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
+						<td style="visibility: hidden"><button class="timestudy"></button></td>
 						<td><button id="mts271" style='width: 240px; height: 100px' onclick='buyMasteryStudy("t", 271)'></button></td>
+						<td><button id="mts272" style='font-size:8px' onclick='buyMasteryStudy("t", 272)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -505,7 +507,6 @@
 						<td style="visibility: hidden"><button class="timestudy"></button></td>
 						<td style="visibility: hidden"><button class="timestudy"></button></td>
 						<td><button id="mts292" style='font-size:8px' onclick='buyMasteryStudy("t", 292)'></button></td>
-						<td><button id="mts293" style='font-size:8px' onclick='buyMasteryStudy("t", 293)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -1515,34 +1516,34 @@
 				<table>
 					<tr>
 						<td>
-							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Game speed: <span id="ls_game_text">1.00</span>x</b><input id="ls_game" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('game')"></div>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Game speed: <span id="ls_game_text">1.00</span>x</b><input id="ls_game" style="width: 170px;" type="range" min="0" max="70" value="30" class="slider" onchange="ls.changeOption('game')"></div>
 						</td>
 						<td>
-							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Replicate speed: <span id="ls_rep_text">1.00</span>x</b><input id="ls_rep" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('rep')"></div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>DT production: <span id="ls_dil_text">1.00</span>x</b><input id="ls_dil" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('dil')"></div>
-						</td>
-						<td>
-							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>TT production: <span id="ls_tt_text">1.00</span>x</b><input id="ls_tt" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('tt')"></div>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Replicate speed: <span id="ls_rep_text">1.00</span>x</b><input id="ls_rep" style="width: 170px;" type="range" min="0" max="70" value="30" class="slider" onchange="ls.changeOption('rep')"></div>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Nanospeed: <span id="ls_nf_text">1.00</span>x</b><input id="ls_nf" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('nf')"></div>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>DT production: <span id="ls_dil_text">1.00</span>x</b><input id="ls_dil" style="width: 170px;" type="range" min="0" max="70" value="30" class="slider" onchange="ls.changeOption('dil')"></div>
 						</td>
 						<td>
-							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Branch speed: <span id="ls_tod_text">1.00</span>x</b><input id="ls_tod" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('tod')"></div>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>TT production: <span id="ls_tt_text">1.00</span>x</b><input id="ls_tt" style="width: 170px;" type="range" min="0" max="70" value="30" class="slider" onchange="ls.changeOption('tt')"></div>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Photonic Flow: <span id="ls_gph_text">1.00</span>x</b><input id="ls_gph" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('gph')"></div>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Nanospeed: <span id="ls_nf_text">1.00</span>x</b><input id="ls_nf" style="width: 170px;" type="range" min="0" max="70" value="30" class="slider" onchange="ls.changeOption('nf')"></div>
 						</td>
 						<td>
-							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Bosonic Speed: <span id="ls_bl_text">1.00</span>x</b><input id="ls_bl" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('bl')"></div>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Branch speed: <span id="ls_tod_text">1.00</span>x</b><input id="ls_tod" style="width: 170px;" type="range" min="0" max="70" value="30" class="slider" onchange="ls.changeOption('tod')"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Photonic Flow: <span id="ls_gph_text">1.00</span>x</b><input id="ls_gph" style="width: 170px;" type="range" min="0" max="70" value="30" class="slider" onchange="ls.changeOption('gph')"></div>
+						</td>
+						<td>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Bosonic Speed: <span id="ls_bl_text">1.00</span>x</b><input id="ls_bl" style="width: 170px;" type="range" min="0" max="70" value="30" class="slider" onchange="ls.changeOption('bl')"></div>
 						</td>
 					</tr>
 				</table>
@@ -1570,7 +1571,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - 6/22/2021 Build)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - 6/23/2021 Build)</p>
 			</span>
 			<div class="footer bottom"></div>
 		</div>

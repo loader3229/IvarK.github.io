@@ -7,9 +7,9 @@ var mTs = {
 			261: 3e69, 262: 3e69, 263: 3e69, 264: 3e69, 265: 3e69, 266: 3e69,
 
 			//Quantum
-			271: 0,
+			271: 0, 272: 1e75,
 			281: 1e76, 282: 1e75, 283: 1e75, 284: 1e76,
-			291: 2e75, 292: 5e75, 293: 2e75,
+			291: 2e75, 292: 5e75,
 			301: 5e75, 302: 1e76, 303: 5e75,
 			311: 5e75, 312: 5e75, 313: 5e75, 314: 5e75,
 
@@ -46,9 +46,9 @@ var mTs = {
 			t261: 9, t262: 9, t263: 5, t265: 2, t265: 2, t266: 5,
 
 			//Quantum
-			t271: "reset",
-			t281: 3, t282: 4 / 5, t283: 4 / 5, t284: 3,
-			t291: 4 / 5, t292: 4 / 5, t293: 1,
+			t271: "reset", t272: 1,
+			t281: 3, t282: 2, t283: 2, t284: 3,
+			t291: 4 / 5, t292: 4 / 5,
 			t301: 2, t302: "reset", t303: 2,
 			t311: 1 / 4, t312: 8, t313: 8, t314: 1 / 4,
 
@@ -59,9 +59,8 @@ var mTs = {
 
 			//Expert Mode
 			t252_ex: 5, t253_ex: 5,
-			t271_ex: 1 / 5e3,
+			t271_ex: 1 / 5e3, t272_ex: 2,
 			t281_ex: 6, t282_ex: 1, t283_ex: 1, t284_ex: 6,
-			t293_ex: 2,
 
 			//Death Mode
 			t251_dt: 5,
@@ -270,6 +269,7 @@ var mTs = {
 		266: () => "Reduce the post-400 max replicated galaxy cost scaling.",
 
 		271: () => "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
+		272: () => "Add +25% to red power effect, but divide red power by 5.",
 
 		281: () => "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
 		282: () => "You can upgrade replicate interval below 1ms, but the cost scales extremely higher.",
@@ -278,7 +278,6 @@ var mTs = {
 
 		291: () => "Replicantis generate free Dimension Boosts.",
 		292: () => "Replicated Galaxies raise Replicanti multiplier to an exponent instead.",
-		293: () => "Add +25% to red power effect, but divide red power by 5.",
 
 		301: () => "Replicated Galaxies have equal powers instead.",
 		302: () => "Some Replicanti boosts are greatly stronger.",
@@ -338,16 +337,16 @@ var mTs = {
 
 		//Quantum
 		ec13: ["d7"], ec14: ["d7"], d7: [271],
-		271: [281, 282, 283, 284],
+		271: [272, 281, 282, 283, 284],
 		281: [291, 302], 282: [302], 283: [302], 284: [292, 302],
-		291: [311, 312], 292: [293, 313, 314], 293: [314],
+		291: [311, 312], 292: [313, 314],
 		302: [301, "d8", 303],
 
 		//No more mastery studies after that
 		d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"],
 
 		//Expert Mode
-		ex_264: [], ex_282: [], ex_283: [], ex_293: [],
+		ex_264: [], ex_282: [], ex_283: [],
 
 		//Death Mode
 		dt_265: [],

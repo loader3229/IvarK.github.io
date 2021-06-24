@@ -134,7 +134,7 @@ var softcap_data = {
 		},
 		2: {
 			func: "dilate",
-			start: new Decimal(1e72),
+			start: new Decimal(1e100),
 			base: 10,
 			pow: 3/4
 		},

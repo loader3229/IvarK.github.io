@@ -62,7 +62,7 @@ var pos = {
 				return Math.min(player.galaxies / 4, x)
 			},
 			basePcGain(x) {
-				return Math.sqrt(x / 30)
+				return x / 125
 			}
 		},
 		rg: {
@@ -159,7 +159,7 @@ var pos = {
 
 			data.sac_mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
 			data.sac_qe = qu_save.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)
-			pos_save.amt = Math.floor(Math.min(Math.pow(data.sac_mdb, 2), data.sac_qe) * 100)
+			pos_save.amt = Math.sqrt(Math.min(data.sac_mdb, Math.pow(data.sac_qe * 1.5, 2))) * 250
 		} else {
 			data.sac_mdb = 0
 			data.sac_qe = 0
