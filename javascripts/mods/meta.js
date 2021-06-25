@@ -39,7 +39,7 @@ function getMDMultiplier(tier) {
 	if (tier <= 3 && hasAch("ng3p17")) ret = ret.times(Decimal.pow(1.001, Math.pow(player.totalmoney.plus(10).log10(), 0.25)))
 
 	//Positronic Boosts:
-	if (tier == 1 && enB.active("pos", 4)) ret = ret.times(enB_tmp.pos4)
+	if (tier == 1 && enB.active("pos", 2)) ret = ret.times(enB_tmp.pos2)
 
 	//Dilation Upgrades:
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
@@ -384,7 +384,7 @@ function updateMetaDimensions () {
 	getEl("quantum").textContent = message
 	if (getEl("quantum").className !== newClassName) getEl("quantum").className = newClassName
 
-	getEl("metaAccelerator").textContent = enB.active("pos", 4) ? "Meta Accelerator: " + shorten(enB_tmp.pos4) + "x to MA, DT, and replicate interval" : ""
+	getEl("metaAccelerator").textContent = enB.active("pos", 2) ? "Meta Accelerator: " + shorten(enB_tmp.pos2) + "x to MA, DT, and replicate interval" : ""
 }
 
 function getDil15Bonus() {

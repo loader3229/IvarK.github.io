@@ -117,10 +117,10 @@ var pos = {
 		pos_tmp.cloud = data
 
 		//Unlocks
-		var unl = enB.mastered("pos", 2)
+		var unl = enB.mastered("pos", 3)
 		getEl("pos_boost_div").colspan = unl ? 1 : 2
 		getEl("pos_cloud_div").style.display = unl ? "" : "none"
-		getEl("pos_cloud_req").textContent = unl ? "" : "To unlock Positron Cloud, you need to master 2 Positronic Boosts."
+		getEl("pos_cloud_req").textContent = unl ? "" : "To unlock Positron Cloud, you need to master 3 Positronic Boosts."
 		if (!unl) return
 
 		//Mechanic
@@ -224,7 +224,7 @@ var pos = {
 
 		getEl("pos_charge_formula").innerHTML = wordizeList(msg, false, " +<br>", false) + " -> "
 
-		if (enB.has("pos", 3)) getEl("enB_pos3_exp").textContent = "^" + (1 / enB_tmp.pos3).toFixed(Math.floor(3 + Math.log10(enB_tmp.pos3)))
+		if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "^" + (1 / enB_tmp.pos4).toFixed(Math.floor(3 + Math.log10(enB_tmp.pos4)))
 	}
 }
 var pos_save = undefined

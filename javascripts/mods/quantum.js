@@ -39,7 +39,7 @@ function getQuantumReq(base) {
 	let exp = tmp.ngp3 && !tmp.ngp3_mul ? 1.2 : 1
 	if (!base && tmp.ngp3) {
 		if (QCs.inAny()) return QCs.getGoalMA()
-		if (enB.active("pos", 3)) exp /= enB_tmp.pos3
+		if (enB.active("pos", 4)) exp /= enB_tmp.pos4
 	}
 	return Decimal.pow(Number.MAX_VALUE, exp)
 }

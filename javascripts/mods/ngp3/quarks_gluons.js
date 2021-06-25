@@ -483,7 +483,7 @@ var enB = {
 		["glu", 5], ["glu", 10],
 		["pos", 8], 
 
-		["pos", 1], ["pos", 2], ["pos", 3], ["pos", 4], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 9],
+		["pos", 1], ["pos", 4], ["pos", 3], ["pos", 2], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 9],
 		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 4], ["glu", 6], ["glu", 7], ["glu", 8], ["glu", 9], ["glu", 11], ["glu", 12],
 	],
 	glu: {
@@ -583,13 +583,13 @@ var enB = {
 		},
 		5: {
 			req: 10,
-			masReq: 20,
+			masReq: 14,
 			masReqExpert: 25,
 			type: "g",
 
 			eff(x) {
 				if (pos.on()) {
-					return 1.25 - 0.25 / Math.sqrt(x + 1)
+					return Math.min(Math.cbrt(x / 20 + 1), 1.25)
 				} else {
 					return Math.sqrt(x)
 				}
@@ -600,36 +600,36 @@ var enB = {
 			}
 		},
 		6: {
-			req: 1/0,
+			req: 12,
 			masReq: 1/0,
 
 			type: "r",
 			eff(x) {
-				return 1
+				return Math.log10(x / 2 + 1) / 2 + 1
 			},
 			effDisplay(x) {
 				return formatPercentage(x - 1) + "%"
 			}
 		},
 		7: {
-			req: 1/0,
+			req: 12,
 			masReq: 1/0,
 
-			type: "r",
+			type: "g",
 			eff(x) {
-				return 2
+				return Math.max(2 - Math.log10(x + 1) / 5, 1.3)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
 			}
 		},
 		8: {
-			req: 1/0,
+			req: 12,
 			masReq: 1/0,
 
-			type: "r",
+			type: "b",
 			eff(x) {
-				return 0.1
+				return Math.log10(x + 1) / 50 + 0.1
 			},
 			effDisplay(x) {
 				return "x^" + x.toFixed(3)
@@ -742,7 +742,7 @@ var enB = {
 		1: {
 			req: 1,
 			masReq: 3,
-			masReqExpert: 3,
+			masReqExpert: 5,
 
 			chargeReq: 1,
 
@@ -757,21 +757,33 @@ var enB = {
 		},
 		2: {
 			req: 3,
-			masReq: 5,
-			masReqExpert: 6,
+			masReq: 3,
 
-			chargeReq: 1,
+			chargeReq: 0,
 
-			type: "r",
+			type: "b",
 			eff(x) {
-				return Math.pow(x, 1/6) * 1e3 + 1
+				var mdb = player.meta.resets
+
+				var slowStart = 4
+				var slowSpeed = 1
+				if (enB.active("pos", 8)) slowStart += enB_tmp.pos8
+				if (enB.active("glu", 10)) slowSpeed /= enB_tmp.glu10
+
+				var base = player.meta.antimatter.add(1).log10() / 10 + 1
+				var exp = mdb
+
+				exp += Math.min(mdb, slowStart) * (Math.min(mdb, slowStart) - 1)
+				exp /= 40
+
+				return Decimal.pow(base, exp)
 			},
 			effDisplay(x) {
-				return "^" + shorten(x)
+				return "Unlock Meta-Accelerator."
 			}
 		},
 		3: {
-			req: 1/0,
+			req: 4,
 			masReq: 5,
 			masReqExpert: 6,
 
@@ -787,29 +799,17 @@ var enB = {
 		},
 		4: {
 			req: 1/0,
-			masReq: 1/0,
+			masReq: 5,
+			masReqExpert: 6,
 
-			chargeReq: 0,
+			chargeReq: 1,
 
-			type: "b",
+			type: "r",
 			eff(x) {
-				var mdb = player.meta.resets
-
-				var slowStart = 4
-				var slowSpeed = 1
-				if (enB.active("pos", 8)) slowStart += enB_tmp.pos8
-				if (enB.active("glu", 10)) slowSpeed /= enB_tmp.glu10
-
-				var base = player.meta.antimatter.max(10).log10()
-				var exp = mdb
-
-				exp += Math.min(mdb, slowStart) * (Math.min(mdb, slowStart) - 1)
-				exp /= 40
-
-				return Decimal.pow(base, exp)
+				return Math.pow(x, 1/6) + 1
 			},
 			effDisplay(x) {
-				return "Unlock Meta-Accelerator."
+				return "^" + shorten(x)
 			}
 		},
 		5: {

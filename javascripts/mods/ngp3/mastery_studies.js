@@ -7,10 +7,10 @@ var mTs = {
 			261: 3e69, 262: 3e69, 263: 3e69, 264: 3e69, 265: 3e69, 266: 3e69,
 
 			//Quantum
-			271: 0, 272: 1e75,
-			281: 1e76, 282: 1e75, 283: 1e75, 284: 1e76,
-			291: 2e75, 292: 5e75,
-			301: 5e75, 302: 1e76, 303: 5e75,
+			271: 0, 272: 5e75,
+			281: 8e75, 282: 2e75, 283: 2e75, 284: 8e75,
+			291: 1/0, 292: 1/0,
+			301: 5e75, 302: 5e75, 303: 5e75,
 			311: 5e75, 312: 5e75, 313: 5e75, 314: 5e75,
 
 			//Beginner Mode
@@ -47,7 +47,7 @@ var mTs = {
 
 			//Quantum
 			t271: "reset", t272: 1,
-			t281: 3, t282: 2, t283: 2, t284: 3,
+			t281: 2, t282: 6, t283: 6, t284: 2,
 			t291: 4 / 5, t292: 4 / 5,
 			t301: 2, t302: "reset", t303: 2,
 			t311: 1 / 4, t312: 8, t313: 8, t314: 1 / 4,
@@ -214,19 +214,19 @@ var mTs = {
 			return Decimal.pow(10, Math.pow(log, 2 - 1 / str) * Math.pow(10, 5 / str - 5) * str).max(tmp.rm)
 		},
 		281() {
-			return Math.sqrt(player.dilation.dilatedTime.add(1).log10())
+			return Math.sqrt(player.dilation.dilatedTime.add(1).log10()) * 1.5
 		},
 		283() {
 			let x = tmp.rep ? tmp.rep.baseChance : 0
 			let log = Math.max(Math.log10(x), 0)
-			return Math.pow(x / 1e7 + 1, 0.1) - 0.5
+			return Math.pow(x / 2e7 + 1, 0.1) - 0.5
 		},
 		284() {
 			let x = Math.pow(
 				player.galaxies +
 				getTotalRGs() +
 				player.dilation.freeGalaxies
-			, 1.5) / 2500
+			, 1.5) / 2000
 			return x
 		},
 		291() {

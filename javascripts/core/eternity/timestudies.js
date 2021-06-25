@@ -698,7 +698,7 @@ var poData
 
 function save_preset(id) {
 	let data = getEl("preset_" + id +"_data").value
-	presets[id].preset = data != presets[id].preset ? data : getStudyTreeStr()
+	presets[id].preset = presets.editing && data != presets[id].preset ? data : getStudyTreeStr()
 	localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
 	delete presets.editing
 
