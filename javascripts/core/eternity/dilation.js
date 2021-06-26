@@ -51,7 +51,7 @@ function getDilTimeGainPerSecond() {
 	if (hasAch("r137") && tmp.ngp3_boost) {
 		let log = (tmp.rmPseudo || player.replicanti.amount).max(1).log10()
 		let slog = log / 1e4
-		if (hasMTS(302)) slog *= Math.log10(Math.log10(slog + 1) + 1) * 2 + 1
+		if (hasMTS(302)) slog *= Math.log10(Math.log10(slog + 1) + 1) + 1
 
 		gain = gain.times(Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(slog + 1) - 1))
 	}
@@ -59,7 +59,7 @@ function getDilTimeGainPerSecond() {
 		if (hasAch("r138")) gain = gain.times(tmp.ngp3_exp ? 3 : 2)
 		if (hasAch("ngpp13")) gain = gain.times(2)
 		if (hasAch("ng3p11")) gain = gain.times(Math.min(Math.max(Math.log10(player.eternityPoints.max(1).log10()), 1) / 2, 2.5))
-		if (enB.active("pos", 2)) gain = gain.times(enB_tmp.pos2)
+		if (enB.active("pos", 2)) gain = gain.times(enB_tmp.pos2.acc)
 		if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 	}
 	if (tmp.quActive && tmp.ngp3_mul) gain = gain.times(colorBoosts.b) //Color Powers (NG*+3)
@@ -494,8 +494,8 @@ function buyDilationUpgrade(pos, max, isId) {
 			if (!tmp.ngp3) player.dilation.dilatedTime = new Decimal(0)
 			resetDilationGalaxies()
 		}
-		if (id[1] >= 3 && player.eternityBuyer.alwaysDil) player.eternityBuyer.alwaysDilCond = true
 		if (id[1] == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), getDilUpg3Mult())))
+		else if (id[1] >= 3 && player.eternityBuyer.alwaysDil) player.eternityBuyer.alwaysDilCond = true
 	} else {
 		// Not rebuyable
 		if (hasDilationUpg(id)) return

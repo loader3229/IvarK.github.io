@@ -1959,10 +1959,10 @@ function setSomeQuantumAutomationDisplay(){
         }
         getEl('replicantibulkmodetoggle').textContent="Mode: "+(player.galaxyMaxBulk?"Max":"Singles")
         getEl('versionDesc').style.display = tmp.ngp3 ? "" : "none"
-        var autoAssignUnl = tmp.ngp3 && (pH.did("ghostify") || qu_save.reachedInfQK)
+        var autoAssignUnl = qMs.tmp.amt >= 22
         getEl('autoAssign').style.display = autoAssignUnl ? "" : "none"
         getEl('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
-        getEl('autoReset').style.display=hasAch("ng3p47")?"":"none"
+        getEl('autoReset').style.display = hasAch("ng3p47") ? "" : "none"
 }
 
 function setReplAutoDisplay(){
@@ -2257,7 +2257,8 @@ function setupNGP31Versions() {
 		alert("Your mastery studies has been respecced due to the rework of Positronic-era studies.")
 		mTs.respec(true)
 	}
-	aarMod.ngp3Build = 20210622
+	if (aarMod.ngp3Build < 20210625 && (player.masterystudies.includes("t241") || player.masterystudies.includes("t282"))) resetReplicantiUpgrades()
+	aarMod.ngp3Build = 20210625
 }
 
 function checkNGM(imported) {

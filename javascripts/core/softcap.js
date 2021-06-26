@@ -144,8 +144,17 @@ var softcap_data = {
 		1: {
 			func: "log",
 			start: new Decimal(1e5),
-			pow: 5,
-			mul: 2
+			pow: 2.5,
+			mul: 20
+		},
+	},
+	ec14: {
+		name: "EC14 base interval",
+		1: {
+			func: "log",
+			start: new Decimal(1e12),
+			pow: 6,
+			mul: 100 / 12
 		},
 	},
 	ma: {
@@ -775,6 +784,7 @@ function getSoftcapAmtFromId(id){
 		beu3_log: () => tmp.beu[3].max(1).log10(),
 		rInt: () => tmp.rep.baseBaseEst.pow(1 - getECReward(14)),
 		it: () => tmp.it.max(1),
+		ec14: () => tmp.rep.ec14.baseInt,
 		tt: () => getTTGenPart(player.dilation.tachyonParticles),
 		ma: () => getExtraDimensionBoostPowerUse(),
 		ig_log_high: () => tmp.ig.max(1).log10(),
@@ -895,13 +905,13 @@ function getSoftcapStringEffect(id, num, amt, namenum){
 		return "Softcap of " + name + " " + inside + "."
 	}
 	if (func == "log") { // vars ["start", "pow", "mul", "add"]
-		let mult = (v[2] != undefined && Decimal.neq(v[2], 1)) ? ", Times: " + softcapShorten(v[2]) : ""
+		let mult = (v[2] != undefined && Decimal.neq(v[2], 1)) ? ", times: " + softcapShorten(v[2]) : ""
 		let add = ""
 		if (v[3] != undefined) {
-			if (typeof v[3] != "number" || v[3] > 0) add = (v[3] != undefined && Decimal.neq(v[3], 0)) ? ", Plus: " + softcapShorten(v[3]) : ""
-			else add = (v[3] != undefined) ? ", Minus: " + softcapShorten(-1*v[3]) : ""
+			if (typeof v[3] != "number" || v[3] > 0) add = (v[3] != undefined && Decimal.neq(v[3], 0)) ? ", plus: " + softcapShorten(v[3]) : ""
+			else add = (v[3] != undefined) ? ", Mminus: " + softcapShorten(-1*v[3]) : ""
 		}
-		let inside = "Start: " + softcapShorten(v[0]) + ", log (base of 10): " + mult + add + ", to the Power of " + softcapShorten(v[1])
+		let inside = "Start: " + softcapShorten(v[0]) + ", log (base 10) // " + "to the Power of " + softcapShorten(v[1]) + mult + add 
 		return "Softcap of " + name + " " + inside + "."
 	} 
 	return "oops someone messed up"
@@ -933,6 +943,7 @@ function updateSoftcapStatsTab(){
 		rInt: "softcap_rInt",
 		it: "softcap_it",
 		tt: "softcap_tt",
+		ec14: "softcap_ec14",
 		ma: "softcap_ma",
 		ig_log_high: "softcap_ig",
 		bam: "softcap_bam",

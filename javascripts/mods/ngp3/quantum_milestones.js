@@ -61,7 +61,7 @@ let qMs = {
 			else delete qu_save.disabledRewards[i]
 		}
 
-		if (qMs.tmp.amt >= 12) data.metaSpeed *= Math.pow(0.9, Math.pow(qMs.tmp.amt - 12 + 1, 1 + Math.max(qMs.tmp.amt - 20, 0) / 15))
+		if (qMs.tmp.amt >= 12) data.metaSpeed *= Math.pow(0.9, Math.pow(qMs.tmp.amt - 12 + 1, 1 + Math.max(qMs.tmp.amt - 16, 0) / 15))
 	},
 	updateDisplay() {
 		if (tmp.quUnl) {
@@ -122,7 +122,7 @@ let qMs = {
 		getEl("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
 	},
 
-	max: 32,
+	max: 30,
 	1: {
 		req: 1,
 		eff: () => "Start with 100 Eternities, and EC completions no longer respec studies",
@@ -209,66 +209,66 @@ let qMs = {
 	},
 	17: {
 		req: 18,
-		eff: () => "???",
-		effGot: () => ""
+		eff: () => "Each milestone greatly reduces the interval of auto-dilation upgrades and MDBs",
+		effGot: () => "Each milestone now greatly reduces the interval of auto-dilation upgrades and MDBs."
 	},
 	18: {
 		req: 20,
-		eff: () => "???",
-		effGot: () => ""
+		eff: () => "'2 Million Infinities' effect is always applied and is increased to " + shorten(1e3) + "x",
+		effGot: () => "'2 Million Infinities' effect is now always applied and is increased to " + shorten(1e3) + "x."
 	},
 	19: {
-		req: 25,
+		req: 22,
 		eff: () => "Meta-Dimension Boosts no longer reset Meta Dimensions",
 		effGot: () => "Meta-Dimension Boosts no longer reset Meta Dimensions anymore."
 	},
 	20: {
-		req: 30,
-		eff: () => "Gain banked infinities based on your post-crunch infinitied stat",
-		effGot: () => "Gain banked infinities based on your post-crunch infinitied stat."
-	},
-	21: {
-		req: 32,
-		eff: () => "Each milestone greatly reduces the interval of auto-dilation upgrades and MDBs",
-		effGot: () => "Each milestone now greatly reduces the interval of auto-dilation upgrades and MDBs."
-	},
-	22: {
-		req: 35,
-		eff: () => "'2 Million Infinities' effect is always applied and is increased to " + shorten(1e3) + "x",
-		effGot: () => "'2 Million Infinities' effect is now always applied and is increased to " + shorten(1e3) + "x."
-	},
-	23: {
-		req: 40,
+		req: 25,
 		eff: () => "All Infinity-related autobuyers fire for each tick",
 		effGot: () => "All Infinity-related autobuyers now fire for each tick"
 	},
+	21: {
+		req: 28,
+		eff: () => "Gain banked infinities based on your post-crunch infinitied stat",
+		effGot: () => "Gain banked infinities based on your post-crunch infinitied stat."
+	},
+	22: {
+		req: 30,
+		eff: () => "Unlock the automation feature for quark assortion.",
+		effGot: () => "You can now automatically assort quarks."
+	},
+	23: {
+		req: 60,
+		eff: () => "Able to purchase all time studies without blocking",
+		effGot: () => "You now can buy every single time study."
+	},
 	24: {
-		req: 45,
+		req: 70,
 		disablable: true,
 		eff: () => "Auto-dilation upgrades maximize all repeatable dilation upgrades",
 		effGot: () => "Auto-dilation upgrades now can maximize all repeatable dilation upgrades."
 	},
 	25: {
-		req: 55,
+		req: 80,
 		forceDisable: () => QCs.inAny(),
 		disablable: true,
-		eff: () => "Each Quantum reduces Replicantis by ^0.95.",
-		effGot: () => "Each following Quantum run now reduces Replicantis by ^0.95."
+		eff: () => "Each Quantum dilates Replicantis by ^0.95.",
+		effGot: () => "Each following Quantum run now dilates Replicantis by ^0.95."
 	},
 	26: {
-		req: 70,
+		req: 90,
 		disablable: true,
 		eff: () => "Start with one dilation worth of TP at same antimatter as total",
 		effGot: () => "You now start with one dilation worth of TP at same antimatter as total."
 	},
 	27: {
-		req: 80,
+		req: 100,
 		disablable: true,
 		eff: () => "Some achievement rewards are disabled when turned off",
 		effGot: () => "Some achievement rewards are disabled when turned off."
 	},
 	28: {
-		req: 100,
+		req: 110,
 		eff: () => "Unlock the autobuyer for Entangled Boosters (not implemented)",
 		effGot: () => "You now can automatically get Entangled Boosters."
 	},
@@ -281,16 +281,5 @@ let qMs = {
 		req: 150,
 		eff: () => "Able to maximize Meta-Dimension Boosts",
 		effGot: () => "You now can maximize Meta-Dimension Boosts."
-	},
-	31: {
-		req: 175,
-		disablable: true,
-		eff: () => "Start with exactly 4 completions of EC14.",
-		effGot: () => "You now start with exactly 4 completions of EC14."
-	},
-	32: {
-		req: 200,
-		eff: () => "Able to purchase all time studies without blocking",
-		effGot: () => "You now can buy every single time study."
 	}
 }

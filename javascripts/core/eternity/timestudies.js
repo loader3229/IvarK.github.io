@@ -216,7 +216,7 @@ function canBuyStudy(name) {
 	}
 
 	if (row > 1 && (
-		qMs.tmp.amt >= 32 || //NG+3
+		qMs.tmp.amt >= 23 || //NG+3
 		(tmp.ngp3_mul && player.eternityUpgrades.includes(15)) //NG*+3
 	)) return hasRow(row - 1) 
 	if (tmp.ngC) {
@@ -981,7 +981,7 @@ let tsMults = {
 	233() {
 		let rep = (tmp.rmPseudo || player.replicanti.amount).max(1).log10()
 		rep *= 0.3
-		if (hasMTS(302)) rep *= rep / 1e3 + 1
+		if (hasMTS(302)) rep *= rep / 1e5 + 1
 
 		return Decimal.pow(10, rep)
 	},

@@ -230,7 +230,7 @@ function updateColorPowers() {
 	//Blue
 	colorBoosts.b_base = qu_save.colorPowers.b * 1.5 + 1
 	colorBoosts.b_exp = 2
-	if (enB.active("glu", 9)) colorBoosts.b_base *= enB_tmp.glu9
+	if (enB.active("glu", 10)) colorBoosts.b_base *= enB_tmp.glu10
 	if (enB.active("glu", 11)) colorBoosts.b_exp += enB_tmp.glu11
 
 	colorBoosts.b_base2 = Decimal.pow(colorBoosts.b_base, colorBoosts.b_exp)
@@ -282,16 +282,18 @@ function updateQEGainTmp() {
 	//Quark Efficiency
 	data.expDen = hasAch("ng3p14") ? 2 : 3
 	if (tmp.ngp3_mul) data.expDen *= 0.8
+	if (enB.active("pos", 1)) data.expDen = 1
 
 	data.expNum = 1
-	if (enB.active("pos", 1)) data.expNum += enB_tmp.pos1
+	if (enB.active("pos", 1)) data.expNum = enB_tmp.pos1
 	if (data.expNum > data.expDen - 1) {
 		let sc = data.expDen - 1
-		let scEff = data.expNum / sc
+		let scEff = data.expNum / Math.max(sc, 1)
 		data.expNum = data.expDen - 1 / Math.log2(scEff + 1)
 	}
 
 	data.exp = data.expNum / data.expDen
+	qu_save.expEnergy = data.exp
 
 	//Multiplier
 	data.mult = getQuantumEnergyMult()
@@ -435,7 +437,7 @@ var enB = {
 	},
 	mastered(type, x) {
 		var data = this[type]
-		return data.amt() >= this.getMastered(type, x)
+		return data.amt() >= this.getMastered(type, x) && data.amt() >= data[x].req
 	},
 	getMastered(type, x) {
 		var data = this[type]
@@ -480,11 +482,11 @@ var enB = {
 
 	types: ["glu", "pos"],
 	priorities: [
-		["glu", 5], ["glu", 10],
-		["pos", 8], 
+		["glu", 5], ["glu", 9],
+		["pos", 8], ["pos", 10], ["pos", 11], ["pos", 12],
 
-		["pos", 1], ["pos", 4], ["pos", 3], ["pos", 2], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 9],
-		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 4], ["glu", 6], ["glu", 7], ["glu", 8], ["glu", 9], ["glu", 11], ["glu", 12],
+		["pos", 1], ["pos", 2], ["pos", 3], ["pos", 3], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 9],
+		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 4], ["glu", 6], ["glu", 7], ["glu", 8], ["glu", 10], ["glu", 11], ["glu", 12],
 	],
 	glu: {
 		name: "Entangled",
@@ -531,8 +533,9 @@ var enB = {
 			req: 1,
 			masReq: 7,
 			masReqExpert: 9,
-			type: "r",
 
+			title: "Quantum Tesla",
+			type: "r",
 			eff(x) {
 				return Math.cbrt(x) * 0.75
 			},
@@ -544,8 +547,9 @@ var enB = {
 			req: 3,
 			masReq: 9,
 			masReqExpert: 11,
-			type: "g",
 
+			title: "Extraclusters",
+			type: "g",
 			eff(x) {
 				return Math.log10(x * 2 + 1) + 1
 			},
@@ -557,8 +561,9 @@ var enB = {
 			req: 6,
 			masReq: 10,
 			masReqExpert: 13,
-			type: "b",
 
+			title: "Dilation Overflow",
+			type: "b",
 			eff(x) {
 				return Math.sqrt(x / 2 + 1, 0.5)
 			},
@@ -570,11 +575,11 @@ var enB = {
 			req: 8,
 			masReq: 11,
 			masReqExpert: 12,
-			type: "r",
 
+			title: "Meta Resynergizer",
+			type: "r",
 			eff(x) {
-				x = (1 + Math.log10(x / 5 + 1))
-				if (x > 2) x = 4 - 4 / x
+				x = Math.pow(1 + Math.log10(Math.log10(x + 1) + 1) / 2, 1.5)
 				return 0.0045 * x
 			},
 			effDisplay(x) {
@@ -584,14 +589,14 @@ var enB = {
 		5: {
 			req: 10,
 			masReq: 14,
-			masReqExpert: 25,
-			type: "g",
 
+			title: "Energy Lever",
+			type: "g",
 			eff(x) {
 				if (pos.on()) {
-					return Math.min(Math.cbrt(x / 20 + 1), 1.25)
+					return Math.min(Math.pow(x / 10 + 1, 0.1), 1.25)
 				} else {
-					return Math.sqrt(x)
+					return Math.sqrt(x / 2)
 				}
 			},
 			effDisplay(x) {
@@ -600,9 +605,10 @@ var enB = {
 			}
 		},
 		6: {
-			req: 12,
+			req: 11,
 			masReq: 1/0,
 
+			title: "Otherworldly Galaxies",
 			type: "r",
 			eff(x) {
 				return Math.log10(x / 2 + 1) / 2 + 1
@@ -612,33 +618,50 @@ var enB = {
 			}
 		},
 		7: {
-			req: 12,
+			req: 11,
 			masReq: 1/0,
 
+			title: "Dilation Overflow II",
 			type: "g",
 			eff(x) {
-				return Math.max(2 - Math.log10(x + 1) / 5, 1.3)
+				return Math.max(2 - Math.log10(x + 1) / 10, 1.5)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
 			}
 		},
 		8: {
-			req: 12,
+			req: 11,
 			masReq: 1/0,
 
+			title: "Meta Resynergizer II",
 			type: "b",
 			eff(x) {
-				return Math.log10(x + 1) / 50 + 0.1
+				return 0.15 - 0.05 / Math.pow(x + 1, 0.1)
 			},
 			effDisplay(x) {
 				return "x^" + x.toFixed(3)
 			}
 		},
 		9: {
+			req: 12,
+			masReq: 1/0,
+
+			title: "Inflation Resistor",
+			type: "g",
+			anti: true,
+			eff(x) {
+				return Math.pow(x + 1, 0.1)
+			},
+			effDisplay(x) {
+				return formatReductionPercentage(x, 3) + "%"
+			}
+		},
+		10: {
 			req: 1/0,
 			masReq: 1/0,
 
+			title: "Blue Saturation",
 			type: "r",
 			eff(x) {
 				return 1
@@ -647,22 +670,11 @@ var enB = {
 				return shorten(x) + "x"
 			}
 		},
-		10: {
-			req: 1/0,
-			masReq: 1/0,
-
-			type: "r",
-			eff(x) {
-				return 1
-			},
-			effDisplay(x) {
-				return formatReductionPercentage(x, 3) + "%"
-			}
-		},
 		11: {
 			req: 1/0,
 			masReq: 1/0,
 
+			title: "Blue Unseeming",
 			type: "r",
 			eff(x) {
 				return 0
@@ -675,6 +687,7 @@ var enB = {
 			req: 1/0,
 			masReq: 1/0,
 
+			title: "Color Subcharge",
 			type: "r",
 			anti: true,
 			eff(x) {
@@ -710,20 +723,16 @@ var enB = {
 		},
 
 		activeReq(x) {
-			return true
+			return tmp.bgMode || enB.mastered("pos", x) || pos.on()
 		},
 
 		eff(x) {
 			var eng = this.engAmt()
 			var lvl = this.lvl(x)
-	
-			if ((enB.mastered("pos", x) || enB.colorMatch("pos", x)) && eng >= this.chargeReq(x)) eng *= 1.8 * Math.sqrt(lvl)
+
+			if (!pos.on() && enB.active("glu", 5)) eng += enB_tmp.glu5
+			if ((enB.mastered("pos", x) || enB.colorMatch("pos", x)) && eng >= this.chargeReq(x)) eng *= Math.sqrt(lvl + 4)
 			return eng
-		},
-		masEff(x) {
-			x /= 2
-			if (enB.active("glu", 5) && !pos.on()) x += enB_tmp.glu5
-			return x
 		},
 
 		chargeReq(x) {
@@ -742,80 +751,93 @@ var enB = {
 		1: {
 			req: 1,
 			masReq: 3,
-			masReqExpert: 5,
-
 			chargeReq: 1,
 
+			title: "Replicanti Launch",
 			type: "g",
 			eff(x) {
 				var rep = (tmp.rmPseudo || player.replicanti.amount).max(1)
-				return Math.log10(rep.log10() + 1) * Math.log10(x + 1)
+				return Math.log10(rep.log10() + 1) * Math.cbrt(x)
 			},
 			effDisplay(x) {
-				return "+" + shorten(x)
+				return shorten(x)
 			}
 		},
 		2: {
 			req: 3,
-			masReq: 3,
-
+			masReq: 5,
 			chargeReq: 0,
 
+			title: "Meta Accelerator",
 			type: "b",
 			eff(x) {
-				var mdb = player.meta.resets
+				var timeMult = Math.min(qu_save.time / 9000, 1)
+				if (enB.active("pos", 11)) timeMult *= enB_tmp.pos11
 
+				var baseMult = timeMult
 				var slowStart = 4
 				var slowSpeed = 1
+				if (enB.active("glu", 9)) slowSpeed /= enB_tmp.glu9
 				if (enB.active("pos", 8)) slowStart += enB_tmp.pos8
-				if (enB.active("glu", 10)) slowSpeed /= enB_tmp.glu10
+				if (enB.active("pos", 12)) baseMult += enB_tmp.pos12
+				if (enB.active("pos", 10)) baseMult *= enB_tmp.pos10
 
-				var base = player.meta.antimatter.add(1).log10() / 10 + 1
+				var mdb = player.meta.resets
+				var base = player.meta.antimatter.add(1).log10() * baseMult + 1
 				var exp = mdb
 
-				exp += Math.min(mdb, slowStart) * (Math.min(mdb, slowStart) - 1)
-				exp /= 40
+				var pre_slow_mdb = Math.min(mdb, slowStart)
+				exp += pre_slow_mdb * (pre_slow_mdb - 1)
 
-				return Decimal.pow(base, exp)
+				if (mdb > slowStart) {
+					var post_slow_mdb = Math.min(mdb - slowStart, (slowStart - 1) / slowSpeed)
+					exp += Math.pow(post_slow_mdb, 2) / slowSpeed + post_slow_mdb * (slowStart - post_slow_mdb / slowSpeed)
+				}
+
+				exp /= 30
+				return {
+					acc: Decimal.pow(base, exp),
+					baseMult: baseMult
+				}
 			},
 			effDisplay(x) {
-				return "Unlock Meta-Accelerator."
+				return x.baseMult.toFixed(3) + "x"
 			}
 		},
 		3: {
 			req: 4,
-			masReq: 5,
-			masReqExpert: 6,
+			masReq: 1/0,
+			chargeReq: 2,
 
-			chargeReq: 350,
-
-			type: "b",
-			eff(x) {
-				return 2 - 1 / (Math.log2(x + 1) / 2 + 1)
-			},
-			effDisplay(x) {
-				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
-			}
-		},
-		4: {
-			req: 1/0,
-			masReq: 5,
-			masReqExpert: 6,
-
-			chargeReq: 1,
-
+			title: "Classical Positrons",
 			type: "r",
 			eff(x) {
-				return Math.pow(x, 1/6) + 1
+				return 1
 			},
 			effDisplay(x) {
 				return "^" + shorten(x)
 			}
 		},
+		4: {
+			req: 5,
+			masReq: 1/0,
+			chargeReq: 4,
+
+			title: "Quantum Scope",
+			type: "b",
+			eff(x) {
+				return 1
+			},
+			effDisplay(x) {
+				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
+			}
+		},
 		5: {
 			req: 1/0,
 			masReq: 1/0,
+			chargeReq: 3,
 
+			title: "Transfinite Time",
 			type: "r",
 			eff(x) {
 				return 1
@@ -827,7 +849,9 @@ var enB = {
 		6: {
 			req: 1/0,
 			masReq: 1/0,
+			chargeReq: 4,
 
+			title: "Tickspeed Flux",
 			type: "r",
 			anti: true,
 			eff(x) {
@@ -839,8 +863,10 @@ var enB = {
 		},
 		7: {
 			req: 1/0,
-			masReq: 1/0,
+			masReq: 0,
+			chargeReq: 5,
 
+			title: "308% Completionist",
 			type: "g",
 			eff(x) {
 				return 0
@@ -851,10 +877,12 @@ var enB = {
 		},
 		8: {
 			req: 1/0,
-			masReq: 1/0,
-			anti: true,
+			masReq: 0,
+			chargeReq: 6,
 
+			title: "MT-Force Preservation",
 			type: "g",
+			anti: true,
 			eff(x) {
 				return 0
 			},
@@ -864,8 +892,10 @@ var enB = {
 		},
 		9: {
 			req: 1/0,
-			masReq: 1/0,
+			masReq: 0,
+			chargeReq: 7,
 
+			title: "Overpowered Infinities",
 			type: "b",
 			anti: true,
 			eff(x) {
@@ -880,50 +910,47 @@ var enB = {
 		},
 		10: {
 			req: 1/0,
-			masReq: 1/0,
+			masReq: 0,
+			chargeReq: 0,
 
-			type: "b",
+			title: "Looped Dimensionality",
+			type: "r",
 			anti: true,
 			eff(x) {
-				var expExp = 1
-				var expDiv = 1
-
-				return Math.pow(Decimal.max(getInfinitied(), 1).log10(), expExp) / expDiv
+				return 1 + Math.pow(qu_save.expEnergy, 4)
 			},
 			effDisplay(x) {
-				return "^" + shorten(x)
+				return x.toFixed(3)
 			}
 		},
 		11: {
 			req: 1/0,
-			masReq: 1/0,
+			masReq: 0,
+			chargeReq: 0,
 
+			title: "8th Shade of Blue",
 			type: "b",
 			anti: true,
 			eff(x) {
-				var expExp = 1
-				var expDiv = 1
-
-				return Math.pow(Decimal.max(getInfinitied(), 1).log10(), expExp) / expDiv
+				return 0
 			},
 			effDisplay(x) {
-				return "^" + shorten(x)
+				return x.toFixed(3)
 			}
 		},
 		12: {
 			req: 1/0,
-			masReq: 1/0,
+			masReq: 0,
+			chargeReq: 0,
 
-			type: "b",
+			title: "Timeless Capability",
+			type: "g",
 			anti: true,
 			eff(x) {
-				var expExp = 1
-				var expDiv = 1
-
-				return Math.pow(Decimal.max(getInfinitied(), 1).log10(), expExp) / expDiv
+				return 0
 			},
 			effDisplay(x) {
-				return "^" + shorten(x)
+				return x.toFixed(3)
 			}
 		},
 	},
@@ -968,8 +995,9 @@ var enB = {
 
 		for (var i = 1; i <= data.max; i++) {
 			if (!this.has(type, i)) break
-			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = !enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No full efficiency)" : "Full efficiency is at " + shorten(enB.pos.chargeReq(i)) + " charge"
 			if (enB_tmp[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(enB_tmp[type + i])
+			getEl("enB_" + type + i + "_name").textContent = shiftDown ? (data[i].title || "Unknown title.") : (data.name + " Boost #" + i)
+			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = !enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No full efficiency)" : "Full efficiency is at " + shorten(enB.pos.chargeReq(i)) + " charge"
 		}
 	}
 }

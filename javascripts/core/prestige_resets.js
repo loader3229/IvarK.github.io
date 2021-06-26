@@ -238,7 +238,6 @@ function resetEternityChallenges(bigRip, ngpp) {
 
 	let kept = ngpp || (bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 2)
 	if (kept) for (let ec = 1; ec <= ecUpTo; ec++) data['eterc' + ec] = player.eternityChalls['eterc' + ec]
-	if (qMs.isOn(31)) data.eterc14 = 4
 	player.eternityChalls = data
 
 
@@ -326,13 +325,13 @@ function doEternityResetStuff(layer = 4, chall) {
 	}
 
 	player.replicanti.unl = getEternitied() >= 50
-	if (chall == "dil" || !hasAch("ng3p67")) resetReplicantiUpgrades()
+	resetReplicantiUpgrades()
 	player.replicanti.galaxies = 0
 	player.replicanti.galaxybuyer = (getEternitied() > 2) ? player.replicanti.galaxybuyer : undefined
 
 	if (chall == 14) player.replicanti.kept = player.replicanti.amount
 	player.replicanti.amount = layer >= 5 ? (
-		qMs.isOn(25) ? Decimal.pow(player.replicanti.kept || player.replicanti.amount, 0.9) :
+		qMs.isOn(25) ? Decimal.pow(10, Math.pow(Decimal.log10(player.replicanti.kept || player.replicanti.amount), 0.95)) :
 		new Decimal(getEternitied() >= 50 ? 1 : 0)
 	) : (
 		moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[2] && (chall == 0 || chall == "dil") ? Decimal.pow(player.replicanti.kept || player.replicanti.amount, 0.995).floor().max(1) :

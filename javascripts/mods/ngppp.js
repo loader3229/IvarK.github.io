@@ -79,7 +79,7 @@ function preQuantumAutoNGP3(diff) {
 		qu_save.metaAutobuyerWait = qu_save.metaAutobuyerWait % tickPerDiff
 	}
 
-	if (qMs.tmp.amt >= 23) {
+	if (qMs.tmp.amt >= 20) {
 		replicantiShopABRun()
 		runIDBuyersTick()
 	}
@@ -217,8 +217,8 @@ function maxAllDilUpgs() {
 					player.dilation.rebuyables[num] = (player.dilation.rebuyables[num] || 0) + data.toBuy
 					update = true
 
-					if (player.eternityBuyer.alwaysDil) player.eternityBuyer.alwaysDilCond = true
 					if (num == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), data.toBuy * getDilUpg3Mult())))
+					else if (player.eternityBuyer.alwaysDil) player.eternityBuyer.alwaysDilCond = true
 				}
 			}
 		}

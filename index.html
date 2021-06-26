@@ -724,7 +724,7 @@
 					</tr>
 					<tr id='mdmilestonesrow1b'>
 						<td><button class="milestonerewardlocked" id="reward24">Dimension Boosts no longer reset anything</button></td>
-						<td><button class="milestonerewardlocked" id="reward25">Start Eternities with 100% replicanti chance, and 1 ms replicanti interval upgrades</button></td>
+						<td><button class="milestonerewardlocked" id="reward25">Eternity only resets Replicanti upgrades that bypass the limits</button></td>
 					</tr>
 					<tr id='mdmilestonesrow2a'>
 						<td class="milestoneText" id='milestone26'></td>
@@ -1571,7 +1571,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - 6/24/2021 Build)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - 6/25/2021 Build)</p>
 			</span>
 			<div class="footer bottom"></div>
 		</div>
@@ -1686,6 +1686,7 @@
 				<div id="softcap_rInt"></div>
 				<div id="softcap_it"></div>
 				<div id="softcap_tt"></div>
+				<div id="softcap_ec14"></div>
 				<div id="softcap_dt"></div>
 				<div id="softcap_ma"></div>
 				<div id="softcap_ig"></div>
@@ -2259,7 +2260,7 @@
 						</tr>
 						<tr id="achRowng3p2">
 							<td>
-								<div id="Special Relativity" class="achievement achievementlocked" style="background-image: url(images/113.png)" ach-tooltip="Get the first 21 Quantum Milestones. Reward: 1st Meta Dimensions are stronger based on your best meta antimatter."><br></div>
+								<div id="Special Relativity" class="achievement achievementlocked" style="background-image: url(images/113.png)" ach-tooltip="Get the first 25 Quantum Milestones. Reward: 1st Meta Dimensions are stronger based on your best meta antimatter."><br></div>
 							</td>
 							<td>
 								<div id="We are not going squared." class="achievement achievementlocked" style="background-image: url(images/114.png)"><br></div>
@@ -3386,7 +3387,8 @@
 									<br>
 									<span id="eterc14completed"></span><br>
 									<span id="eterc14goal"></span><br>
-									<span id="ec14reward"></span>
+									<span id="ec14reward"></span><br>
+									<span id="softcap_ec14_disp"></span>
 								</div>
 							</div>
 						</td>
@@ -4646,7 +4648,7 @@
 					<br>
 					<span id="enB_glu9_type"></span>
 					<br><br>
-					Before exponents, multiply the blue power effect by <span id="enB_glu9_eff" style="font-size:24px"></span>.
+					Reduce the slowdown of Meta Accelerator by <span id="enB_glu9_eff" style="font-size:24px"></span>.
 				</td>
 			</tr>
 			<tr>
@@ -4655,7 +4657,7 @@
 					<br>
 					<span id="enB_glu10_type"></span>
 					<br>
-					Reduce the slowdown of Meta Accelerator by <span id="enB_glu10_eff" style="font-size:24px"></span>.
+					Before exponents, multiply the blue power effect by <span id="enB_glu10_eff" style="font-size:24px"></span>.
 				</td>
 				<td id="enB_glu11">
 					<b id="enB_glu11_name" style="font-size: 25px"></b>
@@ -4811,14 +4813,10 @@
 				<tr>
 					<td class="milestoneText" id="qMs_req_29"></td>
 					<td class="milestoneText" id="qMs_req_30"></td>
-					<td class="milestoneText" id="qMs_req_31"></td>
-					<td class="milestoneText" id="qMs_req_32"></td>
 				</tr>
 				<tr>
 					<td><button class="qMs_locked" id="qMs_reward_29" onclick="qMs.toggle(29)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_30" onclick="qMs.toggle(30)"></button></td>
-					<td><button class="qMs_locked" id="qMs_reward_31" onclick="qMs.toggle(31)"></button></td>
-					<td><button class="qMs_locked" id="qMs_reward_32" onclick="qMs.toggle(32)"></button></td>
 				</tr>
 			</table>
 		</div>
@@ -4996,7 +4994,7 @@
 						<br>
 						<span id="enB_pos1_full"></span>
 						<br><br>
-						Replicantis increase the numerator of quark efficiency by <span id="enB_pos1_eff" style="font-size:25px"></span>.
+						The numerator of quark efficiency is based on Replicantis (<span id="enB_pos1_eff" style="font-size:25px"></span>), but the denominator is decreased to 1.
 					</td>
 					<td id="enB_pos2">
 						<b id="enB_pos2_name" style="font-size: 25px"></b>
@@ -5005,7 +5003,11 @@
 						<br>
 						<span id="enB_pos2_full"></span>
 						<br><br>
-						<span id="enB_pos2_eff" style="font-size: 25px">Unlock Meta-Accelerator.</span><br>(See Meta Dimensions tab)
+						<span style="font-size:25px">Unlock Meta-Accelerator.</span>
+						<br>
+						(with a base multiplier of <span id="enB_pos2_eff" style="font-size: 15px"></span>, based on time since quantum)
+						<br>
+						(See Meta Dimensions tab)
 					</td>
 				</tr>
 				<tr>
@@ -5085,7 +5087,7 @@
 						<br>
 						<span id="enB_pos10_full"></span>
 						<br><br>
-						Boosts something by <span id="enB_pos10_eff" style="font-size:25px"></span>x.
+						Quark efficiency multiplies Meta Accelerator by <span id="enB_pos10_eff" style="font-size:25px"></span>x.
 					</td>
 				</tr>
 				</tr>
@@ -5096,7 +5098,7 @@
 						<br>
 						<span id="enB_pos11_full"></span>
 						<br><br>
-						Infinitied stat boosts itself by <span id="enB_pos11_eff" style="font-size:25px"></span> to effect.
+						Blue power effect speeds up time in Meta Accelerator. (by <span id="enB_pos11_eff" style="font-size:25px"></span>x)
 					</td>
 					<td id="enB_pos12">
 						<b id="enB_pos12_name" style="font-size: 25px"></b>
@@ -5105,7 +5107,7 @@
 						<br>
 						<span id="enB_pos12_full"></span>
 						<br><br>
-						Boosts something by <span id="enB_pos12_eff" style="font-size:25px"></span>x.
+						Before multipliers, Replicantis add <span id="enB_pos12_eff" style="font-size:25px"></span>x to Meta Accelerator base.
 					</td>
 				</tr>
 			</table></td>

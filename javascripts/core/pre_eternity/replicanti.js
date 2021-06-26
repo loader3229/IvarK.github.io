@@ -112,7 +112,7 @@ function upgradeReplicantiInterval() {
 	if (player.replicanti.interval < 1) {
 		let x = 1 / player.replicanti.interval
 		// if (x > 1e10) x = Math.pow(x / 1e5, 2)
-		player.replicanti.intervalCost = Decimal.pow("1e800", x)
+		player.replicanti.intervalCost = Decimal.pow(10, Math.pow(x, 4) * 800)
 	} else player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
 
 	if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
@@ -256,7 +256,6 @@ function getReplicantiBaseInterval(speed, debug) {
 	var upgs = Math.round(Decimal.div(speed, 1e3).log(0.9))
 	if (enB.active("glu", 6)) upgs *= enB_tmp.glu6
 	speed = Decimal.pow(0.9, upgs).times(1e3)
-	if (speed.lt(1)) speed = speed.pow(0.25)
 
 	return speed
 }
@@ -276,7 +275,7 @@ function getReplicantiIntervalMult() {
 	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))
 	if (player.dilation.upgrades.includes('ngpp1') && aarMod.nguspV && !aarMod.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
-	if (enB.active("pos", 2)) interval = interval.div(enB_tmp.pos2)
+	if (enB.active("pos", 2)) interval = interval.div(enB_tmp.pos2.acc)
 	if (tmp.ngC && ngC.tmp) interval = interval.div(ngC.tmp.rep.eff1)
 	return interval
 }
@@ -353,9 +352,9 @@ function updateEC14BaseReward() {
 		var div = est.max(1).pow(pow)
 
 		data.baseInt = div
-		data.interval = data.baseInt
+		data.interval = div
 		data.acc = 1 / Math.sqrt(1 - pow) / 3
-		data.ooms = div.max(1).log10() * data.acc + 1
+		data.ooms = softcap(div, "ec14").max(1).log10() * data.acc + 1
 	} else {
 		data.baseInt = new Decimal(1)
 		data.interval = data.baseInt

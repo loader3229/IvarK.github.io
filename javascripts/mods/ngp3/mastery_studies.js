@@ -7,11 +7,11 @@ var mTs = {
 			261: 3e69, 262: 3e69, 263: 3e69, 264: 3e69, 265: 3e69, 266: 3e69,
 
 			//Quantum
-			271: 0, 272: 5e75,
-			281: 8e75, 282: 2e75, 283: 2e75, 284: 8e75,
-			291: 1/0, 292: 1/0,
-			301: 5e75, 302: 5e75, 303: 5e75,
-			311: 5e75, 312: 5e75, 313: 5e75, 314: 5e75,
+			271: 0, 272: 2e76,
+			281: 8e76, 282: 2e76, 283: 2e76, 284: 8e76,
+			291: 3e77, 292: 3e77,
+			301: 2e78, 302: 1e77, 303: 2e78,
+			311: 1e79, 312: 1e80, 313: 1e80, 314: 1e79,
 
 			//Beginner Mode
 			bg_251: 2e69, bg_252: 2e69, bg_253: 2e69,
@@ -34,7 +34,7 @@ var mTs = {
 			ex_13: 5e69
 		},
 		dil: {
-			7: 2e74, 8: 3e76, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
+			7: 2e74, 8: 1e78, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
 		}
 	},
 	costs: {
@@ -48,9 +48,9 @@ var mTs = {
 			//Quantum
 			t271: "reset", t272: 1,
 			t281: 2, t282: 6, t283: 6, t284: 2,
-			t291: 4 / 5, t292: 4 / 5,
+			t291: 3, t292: 2,
 			t301: 2, t302: "reset", t303: 2,
-			t311: 1 / 4, t312: 8, t313: 8, t314: 1 / 4,
+			t311: 1 / 4, t312: 16, t313: 16, t314: 1 / 4,
 
 			//Beginner Mode
 			t251_bg: 1.5, t252_bg: 1.5, t253_bg: 1.5,
@@ -116,7 +116,7 @@ var mTs = {
 			return enB.glu.engAmt() >= (tmp.exMode ? 5.9 : tmp.bgMode ? 5.3 : 5.5)
 		},
 		d8() {
-			return enB.pos.engAmt() >= 900
+			return enB.pos.engAmt() >= 3.1
 		},
 		d9() {
 			return false
@@ -148,7 +148,7 @@ var mTs = {
 			return (tmp.exMode ? 5.9 : tmp.bgMode ? 5.3 : 5.5) + " quantum energy"
 		},
 		d8() {
-			return shorten(900) + " positronic charge"
+			return "3.1 positronic charge"
 		},
 		d9() {
 			return "COMING IN BETA V0.5"
@@ -223,16 +223,15 @@ var mTs = {
 		},
 		284() {
 			let x = Math.pow(
-				player.galaxies +
-				getTotalRGs() +
-				player.dilation.freeGalaxies
-			, 1.5) / 2000
+				Math.pow(player.galaxies, 0.75) +
+				Math.pow(getTotalRGs(), 0.75) +
+				Math.pow(player.dilation.freeGalaxies, 0.75)
+			, 2) / 2500
 			return x
 		},
 		291() {
-			let rep = (tmp.rmPseudo || player.replicanti.amount).log10()
-			let exp = (4 - 1 / (Math.log10(rep + 1) / 10 + 1)) / 3
-			return Math.pow(rep / 3e5, exp) * 3e3
+			let rep = (tmp.rmPseudo || player.replicanti.amount).max(1).log10()
+			return Math.log10(rep / 1e5 + 1) / 20 + 1
 		},
 		292() {
 			let rg = getFullEffRGs()
@@ -240,7 +239,7 @@ var mTs = {
 		},
 
 		311() {
-			return 1
+			return Math.min(Math.log10(qu_save.colorPowers.r + 1) / 2, 1)
 		},
 		312() {
 			return 1
@@ -249,7 +248,7 @@ var mTs = {
 			let tpLog = player.dilation.tachyonParticles.max(1).log10()
 			let bpLog = colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0
 
-			return Math.pow(tpLog + 1, 0.125) * Math.sqrt(bpLog) / 5 + 1
+			return Math.pow(tpLog / 100, 0.125) * Math.sqrt(bpLog) / 4 + 1
 		},
 	},
 	eff(id, uses = "") {
@@ -276,7 +275,7 @@ var mTs = {
 		283: () => "Replicate chance gradually increases faster above 100%.",
 		284: () => "After boosts, total galaxies increase the OoMs of replicate interval scaling.",
 
-		291: () => "Replicantis generate free Dimension Boosts.",
+		291: () => "Replicantis multiply Dimension Boosts.",
 		292: () => "Replicated Galaxies raise Replicanti multiplier to an exponent instead.",
 
 		301: () => "Replicated Galaxies have equal powers instead.",
@@ -287,6 +286,16 @@ var mTs = {
 		312: () => "Green power shares Replicated Galaxies' strength to Tachyonic Galaxies.",
 		313: () => "Tachyon Particles and Blue Power raise Blue Power's effect to an exponent.",
 		314: () => "Each color power boosts the next color at a cyclical order."
+	},
+	timeStudyTitles: {
+		241: "Multiplier Overcharge",
+		251: "Meta-Energetic Galaxies", 252: "Time Channelling", 253: "Replicanti Radar",
+		261: "Dimension Superboost", 262: "Meta Mastery", 263: "Tachyonic Mastery", 264: "Tachyonic Boost", 265: "Replicanti Luck", 266: "Galactic Overseer",
+		271: "Replicanti Takeover", 272: "Knowledge of Quarks",
+		281: "Time Augment-RP", 282: "Rep. Augment-TM", 283: "Replicanti Self-Luck", 284: "Type-IV Goo",
+		291: "Dimensional Acknowledge", 292: "Galactic Insurance",
+		301: "Replicanti Equality", 302: "Replicanti Foam", 303: "Multiplier Based",
+		311: "Study Code: Red", 312: "Lucidious Jump", 313: "Blue Condenser", 314: "Color Circuit"
 	},
 	hasStudyEffect: [251, 252, 253, 265, 271, 281, 283, 284, 291, 292, 311, 312, 313],
 	studyEffectDisplays: {
@@ -310,9 +319,6 @@ var mTs = {
 		},
 		284(x) {
 			return "+" + shorten(x) + " OoMs"
-		},
-		291(x) {
-			return "+" + getFullExpansion(Math.floor(x))
 		},
 		292(x) {
 			return "^" + x.toFixed(3)
@@ -493,7 +499,6 @@ function setupMasteryStudiesHTML() {
 	for (id = 0; id < mTs.timeStudies.length; id++) {
 		var name = mTs.timeStudies[id]
 		var html = "<span id='mts" + name + "Desc'></span>"
-		var d = mTs.timeStudyDescs[name]
 
 		if (mTs.hasStudyEffect.includes(name)) html += "<br>Currently: <span id='mts" + name + "Current'></span>"
 		html += "<br>Cost: <span id='mts" + name + "Cost'></span> Time Theorems"
@@ -501,7 +506,6 @@ function setupMasteryStudiesHTML() {
 
 		getEl("mts" + name).innerHTML = html
 		getEl("mts" + name).className = "timestudy"
-		getEl("mts" + name + "Desc").innerHTML = (typeof(d)=="function" ? d() : d) || "Unknown desc."
 	}
 }
 
@@ -668,8 +672,10 @@ function buyMasteryStudy(type, id, quick=false) {
 	if (type == "t") {
 		addSpentableMasteryStudies(id)
 		if (quick) {
-			mTs.costMult *= getMasteryStudyCostMult("t" + id)
+			var mult = getMasteryStudyCostMult("t" + id)
+			mTs.costMult = mult == "reset" ? mTs.baseCostMult : mTs.costMult * mult
 			mTs.latestBoughtRow = Math.max(mTs.latestBoughtRow, Math.floor(id / 10))
+			mTs.bought++
 		}
 		if (id == 241) bumpInfMult()
 		if (id == 266 && player.replicanti.gal >= 400) {
@@ -682,8 +688,7 @@ function buyMasteryStudy(type, id, quick=false) {
 	}
 	if (type == "d") buyingDilationStudy(id)
 	if (!quick) {
-		if (type == "t") mTs.bought++
-		else if (type == "ec") {
+		if (type == "ec") {
 			showTab("challenges")
 			showChallengesTab("eternitychallenges")
 		} else if (type == "d") {
@@ -824,9 +829,12 @@ function drawMasteryTree() {
 		if (paths) for (var y = 0; y < paths.length; y++) if (mTs.studyUnl.includes(paths[y])) drawMasteryBranch(convertMasteryStudyIdToDisplay(id), convertMasteryStudyIdToDisplay(paths[y]))
 	}
 
-	if (shiftDown) {
-		for (var x = 0; x < mTs.timeStudies.length; x++) {
-			var id = mTs.timeStudies[x]
+	for (var x = 0; x < mTs.timeStudies.length; x++) {
+		var id = mTs.timeStudies[x]
+		var d = mTs[shiftDown ? "timeStudyTitles" : "timeStudyDescs"][id]
+		getEl("mts" + id + "Desc").innerHTML = (typeof(d)=="function" ? d() : d) || (shiftDown ? "Unknown title." : "Unknown desc.")
+
+		if (shiftDown) {
 			if (!mTs.studyUnl.includes(id)) break
 
 			var start = getEl("mts" + id).getBoundingClientRect();

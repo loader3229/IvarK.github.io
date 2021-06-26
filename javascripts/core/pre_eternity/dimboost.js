@@ -214,6 +214,6 @@ function getTotalDBs() {
 
 function getExtraDBs() {
 	let x = 0
-	if (hasMTS(291)) x += getMTSMult(291)
+	if (hasMTS(291)) x += player.resets * (getMTSMult(291) - 1)
 	return x
 }

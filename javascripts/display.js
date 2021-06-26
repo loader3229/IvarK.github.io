@@ -643,7 +643,7 @@ function replicantiDisplay() {
 		let interval = Decimal.div(tmp.rep.interval, 1e3).times(10)
 		getEl("replicantiinterval").innerHTML = "Interval: " + timeDisplayShort(interval, true, 3) +
 			(isIntervalAffordable() ?
-				"<br> -> " + timeDisplayShort(interval.div(getReplicantiBaseInterval(baseInt * 0.9).div(getReplicantiBaseInterval(baseInt))), true, 3) + 
+				"<br> -> " + timeDisplayShort(interval.times(getReplicantiBaseInterval(baseInt * 0.9).div(getReplicantiBaseInterval(baseInt))), true, 3) + 
 				" Cost: " + shortenCosts(player.replicanti.intervalCost)+" IP"
 			: "")
 

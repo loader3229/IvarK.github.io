@@ -3480,7 +3480,7 @@ function gainEternitiedStat() {
 function gainBankedInf() {
 	let ret = 0 
 	let numerator = player.infinitied
-	if (qMs.tmp.amt >= 20 || hasAch("ng3p73")) numerator = nA(getInfinitiedGain(), player.infinitied)
+	if (qMs.tmp.amt >= 21 || hasAch("ng3p73")) numerator = nA(getInfinitiedGain(), player.infinitied)
 	let frac = 0.05
 	if (hasTimeStudy(191)) ret = nM(numerator, frac)
 	if (hasAch("r131")) ret = nA(nM(numerator, frac), ret)
@@ -3908,7 +3908,7 @@ setInterval(function() {
 function autoPerSecond() {
 	if (isGamePaused()) return
 
-	if (qMs.tmp.amt < 23) {
+	if (qMs.tmp.amt < 20) {
 		replicantiShopABRun()
 		runIDBuyersTick()
 	}
