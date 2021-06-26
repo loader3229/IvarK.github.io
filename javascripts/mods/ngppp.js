@@ -155,7 +155,6 @@ function respecMasteryToggle() {
 var bankedEterGain
 function updateBankedEter(updateHtml = true) {
 	bankedEterGain = 0
-	if (hasAch("ng3p15")) bankedEterGain = player.eternities
 	if (hasAch("ng3p73")) bankedEterGain = nA(bankedEterGain, gainEternitiedStat())
 	bankedEterGain = nD(bankedEterGain, 20)
 	if (updateHtml) {

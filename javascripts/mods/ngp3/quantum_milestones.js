@@ -238,7 +238,7 @@ let qMs = {
 		effGot: () => "You can now automatically assort quarks."
 	},
 	23: {
-		req: 60,
+		req: 40,
 		eff: () => "Able to purchase all time studies without blocking",
 		effGot: () => "You now can buy every single time study."
 	},

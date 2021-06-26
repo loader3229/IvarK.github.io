@@ -333,16 +333,17 @@ function setR15Tooltip() {
 	//ng3p12/////
 	//ng3p13/////
 	//ng3p14/////
+	let noTax = getEl("No more tax fraud!")
 	let winner = getEl("And the winner is...")
 	let old = getEl("Old age")
 	let rid = getEl("I already got rid of you...")
-	//ng3p18/////
 
 	//ACHIEVEMENT ROW 15
 	notenough.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter. Reward: Eternity points boost DT, TP, and MA, up to 2.5x.")
+	noTax.setAttribute('ach-tooltip', "Have 1,100 galaxies without unlocking Time Dilation. Reward: Start with " + shortenCosts(1e50) + " dilated time.")
 	winner.setAttribute('ach-tooltip', "Go quantum in under 30 seconds. Reward: Start with " + shortenCosts(1e10) + " meta-antimatter.") 
 	old.setAttribute('ach-tooltip', "Reach " + shortenCosts(getOldAgeRequirement()) + " antimatter. Reward: Get a multiplier to first 3 Meta Dimensions based on total antimatter.") 
-	rid.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e400000")) + " IP while dilated, without having time studies. (not including mastery studies)")
+	rid.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e300000")) + " IP while dilated, without having time studies, not including mastery studies." + (tmp.bgMode ? "" : " Reward: TT softcap is 25% faster."))
 }
 
 function setR16Tooltip() {

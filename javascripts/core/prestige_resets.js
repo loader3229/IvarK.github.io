@@ -614,7 +614,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 		active: false,
 		times: 0,
 		tachyonParticles: player.ghostify.milestones >= 16 ? player.dilation.bestTPOverGhostifies : new Decimal(0),
-		dilatedTime: new Decimal(bm ? 1e100 : 0),
+		dilatedTime: new Decimal(hasAch("ng3p15") ? 1e50 : 0),
 		bestTP: player.ghostify.milestones >= 16 ? player.dilation.bestTPOverGhostifies : new Decimal(0),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
 		nextThreshold: new Decimal(1000),

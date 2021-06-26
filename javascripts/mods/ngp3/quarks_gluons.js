@@ -204,12 +204,15 @@ function updateColorCharge() {
 	updateQuarksTabOnUpdate()
 }
 
-function getColorPowerQuantity(color) {
+function getColorPowerQuantity(color, base) {
 	let ret = colorCharge[color] * tmp.glB[color].mult
 	if (tmp.qe) ret = ret * tmp.qe.eff1 + tmp.qe.eff2
 	if (tmp.glB) ret = ret - tmp.glB[color].sub
 
-	if (color == "r" && hasMTS(272)) ret /= 5
+	if (!base) {
+		if (hasMTS(314)) ret += getColorPowerQuantity(color == "r" ? "g" : color == "g" ? "b" : "r", true) / 5
+		if (color == "r" && hasMTS(272)) ret /= 5
+	}
 	return Math.max(ret, 0)
 }
 
@@ -485,7 +488,7 @@ var enB = {
 		["glu", 5], ["glu", 9],
 		["pos", 8], ["pos", 10], ["pos", 11], ["pos", 12],
 
-		["pos", 1], ["pos", 2], ["pos", 3], ["pos", 3], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 9],
+		["pos", 1], ["pos", 2], ["pos", 3], ["pos", 4], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 9],
 		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 4], ["glu", 6], ["glu", 7], ["glu", 8], ["glu", 10], ["glu", 11], ["glu", 12],
 	],
 	glu: {
@@ -594,7 +597,7 @@ var enB = {
 			type: "g",
 			eff(x) {
 				if (pos.on()) {
-					return Math.min(Math.pow(x / 10 + 1, 0.1), 1.25)
+					return Math.min(Math.pow(x / 10 + 1, 0.1), 4 / 3)
 				} else {
 					return Math.sqrt(x / 2)
 				}
@@ -645,7 +648,7 @@ var enB = {
 		},
 		9: {
 			req: 12,
-			masReq: 1/0,
+			masReq: 15,
 
 			title: "Inflation Resistor",
 			type: "g",
@@ -806,13 +809,13 @@ var enB = {
 		},
 		3: {
 			req: 4,
-			masReq: 1/0,
-			chargeReq: 2,
+			masReq: 6,
+			chargeReq: 4,
 
 			title: "Classical Positrons",
 			type: "r",
 			eff(x) {
-				return 1
+				return Math.sqrt(x * 100) + 1
 			},
 			effDisplay(x) {
 				return "^" + shorten(x)
@@ -821,12 +824,13 @@ var enB = {
 		4: {
 			req: 5,
 			masReq: 1/0,
-			chargeReq: 4,
+			chargeReq: 6,
 
 			title: "Quantum Scope",
 			type: "b",
+			anti: true,
 			eff(x) {
-				return 1
+				return 2 - 1 / Math.pow(x / 10 + 1, 0.1)
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))

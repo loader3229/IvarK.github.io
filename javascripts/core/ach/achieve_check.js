@@ -245,7 +245,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.meta.bestAntimatter.gte(Number.MAX_VALUE)) giveAchievement("I don't have enough fuel!")
 	if (player.galaxies >= 1100 && !player.dilation.studies.includes(1)) giveAchievement("No more tax fraud!")
 	if (player.money.gte(getOldAgeRequirement())) giveAchievement("Old age")
-	if (player.infinityPoints.log10() >= 4e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
+	if (player.infinityPoints.log10() >= 3e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
 	if (player.money.gte(Number.MAX_VALUE) && QCs.in(3)) giveAchievement("Infinity Morals")
 	if (player.eightBought >= 4e6 && (getTotalRGs() + player.dilation.freeGalaxies) < 1) giveAchievement("Intergalactic")
 	if (player.infinityPoints.log10() >= 3.54e5 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")

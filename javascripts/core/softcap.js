@@ -129,7 +129,7 @@ var softcap_data = {
 			start: new Decimal(1e69 / 2e4),
 			base: 10,
 			pow: 2/3,
-			mul: () => tmp.exMode ? 1.5 : tmp.bgMode ? 1 : 1.25,
+			mul: () => (tmp.exMode ? 1.5 : tmp.bgMode ? 1 : 1.25) * (!tmp.bgMode && hasAch("ng3p18") ? 1.25 : 1),
 			sub10: 68 - Math.log10(2e4)
 		},
 		2: {

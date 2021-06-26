@@ -2,7 +2,7 @@
 function getMetaAntimatterStart(bigRip) {
 	let x = 10
 	if (hasAch("ngpp12")) x = 100
-	if (hasAch("ng3p15")) x = 1e10
+	if (hasAch("ng3p16")) x = 1e10
 
 	return new Decimal(x)
 }
@@ -54,7 +54,7 @@ function getMDGlobalMult() {
 	if (tmp.ngp3) {
 		//Achievement Rewards
 		if (hasAch("ng3p11")) ret = ret.times(Math.min(Math.max(Math.log10(player.eternityPoints.max(1).log10()), 1) / 2, 2.5))
-		if (hasAch("ng3p13")) ret = ret.times(Decimal.pow(8, Math.pow(Decimal.plus(quantumWorth, 1).log10(), 0.25)))
+		if (hasAch("ng3p13")) ret = ret.times(Decimal.plus(quantumWorth, 1).log10() * 5 + 1)
 		if (hasAch("ng3p57")) ret = ret.times(1 + player.timeShards.plus(1).log10())
 	}
 	return ret

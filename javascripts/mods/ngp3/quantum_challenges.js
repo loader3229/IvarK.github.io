@@ -201,7 +201,7 @@ var QCs = {
 		if (!this.unl()) return
 		for (let x = 1; x <= this.data.max; x++) {
 			if (this.data[x].unl()) {
-				if (this.save.in.includes(x)) data.in.push(x)
+				if (QCs_save.in.includes(x)) data.in.push(x)
 				data.unl.push(x)
 				if (!this.done(x)) break
 			}
@@ -222,7 +222,7 @@ var QCs = {
 	},
 
 	unl() {
-		return tmp.quActive && hasMTS("d8") && this.save !== undefined
+		return tmp.ngp3 && player.masterystudies.includes("d8")
 	},
 	in(x) {
 		return QCs_tmp.in.includes(x)
@@ -231,7 +231,7 @@ var QCs = {
 		return QCs_tmp.in.length >= 1
 	},
 	done(x) {
-		return this.unl() && this.save.comps >= x
+		return this.unl() && QCs_save.comps >= x
 	},
 	isRewardOn(x) {
 		return this.done(x) && QCs_tmp.rewards[x]
@@ -266,7 +266,7 @@ var QCs = {
 	divTemp: (x) =>
 		'<td><div class="quantumchallengediv" id="qc_' + x + '_div">' +
 		'<span id="qc_' + x + '_desc"></span><br><br>' +
-		'<div class="outer"><button id="qc_' + x + '_btn" class="challengesbtn" onclick="this.start(' + x + ')">Start</button><br>' +
+		'<div class="outer"><button id="qc_' + x + '_btn" class="challengesbtn" onclick="QCs.start(' + x + ')">Start</button><br>' +
 		'Goal: <span id="qc_' + x + '_goal"></span><br>' +
 		'Reward: <span id="qc_' + x + '_reward"></span>' +
 		'</div></div></td>',

@@ -155,11 +155,11 @@ var pos = {
 		pos_save.eng = 0
 		if (this.on()) {
 			let mdbStart = 0
-			let mdbMult = 0.25
+			let mdbMult = 1 / 3
 
 			data.sac_mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
 			data.sac_qe = qu_save.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)
-			pos_save.amt = Math.sqrt(Math.min(data.sac_mdb, Math.pow(data.sac_qe * 1.5, 2))) * 250
+			pos_save.amt = Math.sqrt(Math.min(data.sac_mdb, Math.pow(data.sac_qe * (tmp.bgMode ? 2 : 1.5), 2))) * 250
 		} else {
 			data.sac_mdb = 0
 			data.sac_qe = 0

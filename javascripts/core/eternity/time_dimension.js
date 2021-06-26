@@ -68,7 +68,7 @@ function calcVanillaTSTDMult(tier){
 }
 
 function getRepToTDExp() {
-	let x = hasMTS(302) ? 0.15 : 0.1
+	let x = hasMTS(302) ? 0.125 : 0.1
 	return x
 }
 

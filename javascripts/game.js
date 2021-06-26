@@ -24,20 +24,19 @@ function setupFooterHTML() {
 	var html = "<table id='footer' style='display: table !important'><tr><td><div style='text-align: center'>" + 
 			"<a href='howto.html' target='_newtab'>How to play</a> | " + 
 			"<a href='about.html' target='_newtab'>About</a> | " +  
+			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
+			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a> |-| " + 
 			"<a href='http://ng-plus-plus-plus.fandom.com' target='_newtab'>Wiki</a> | " +  
+			"<a href='http://discord.gg/KsjcgskgTj' target='_newtab'>Discord</a> | " +
 			(betaId != "" ?
 				(
 					betaId != correctBetaId ?
-					"<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Correct test server</a> | " :
-					"<a>Test server</a> (You are currently here.) | "
-				) +
-				"<a href='http://discord.gg/7v82CAX'>TS: Discord</a> | "
+					"<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Correct Test Server</a>" :
+					"<a href='http://discord.gg/7v82CAX'>Test Server: Discord</a>"
+				)
 			: 
-				"<a href='http://discord.gg/KsjcgskgTj' target='_newtab'>Discord</a> | " +
-				"<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Test server</a> | "
+				"<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Test server</a>"
 			) + 
-			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
-			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a>" + 
 		"</div></tr></td></table>"
 
 	var footers = document.getElementsByClassName("footer")
@@ -3348,7 +3347,8 @@ function eternity(force, auto, forceRespec, dilated) {
 			setTachyonParticles(gain)
 		}
 	}
-	if (!force && !dilated) {
+	if (!hasDilationStudy(1)) dilated = false
+	else if (!force && !dilated) {
 		if (player.eternityBuyer.dilationMode) {
 			player.eternityBuyer.statBeforeDilation--
 			if (player.eternityBuyer.statBeforeDilation <= 0) dilated = true

@@ -7,11 +7,11 @@ var mTs = {
 			261: 3e69, 262: 3e69, 263: 3e69, 264: 3e69, 265: 3e69, 266: 3e69,
 
 			//Quantum
-			271: 0, 272: 2e76,
-			281: 8e76, 282: 2e76, 283: 2e76, 284: 8e76,
-			291: 3e77, 292: 3e77,
-			301: 2e78, 302: 1e77, 303: 2e78,
-			311: 1e79, 312: 1e80, 313: 1e80, 314: 1e79,
+			271: 0, 272: 5e76,
+			281: 2e77, 282: 1e76, 283: 1e76, 284: 2e77,
+			291: 5e77, 292: 5e77,
+			301: 1e78, 302: 2e77, 303: 1e78,
+			311: 1e78, 312: 1e80, 313: 1e80, 314: 1e78,
 
 			//Beginner Mode
 			bg_251: 2e69, bg_252: 2e69, bg_253: 2e69,
@@ -46,11 +46,11 @@ var mTs = {
 			t261: 9, t262: 9, t263: 5, t265: 2, t265: 2, t266: 5,
 
 			//Quantum
-			t271: "reset", t272: 1,
+			t271: "reset", t272: 1.5,
 			t281: 2, t282: 6, t283: 6, t284: 2,
-			t291: 3, t292: 2,
-			t301: 2, t302: "reset", t303: 2,
-			t311: 1 / 4, t312: 16, t313: 16, t314: 1 / 4,
+			t291: 2, t292: 2,
+			t301: 3, t302: "reset", t303: 3,
+			t311: 1 / 6, t312: 36, t313: 36, t314: 1 / 6,
 
 			//Beginner Mode
 			t251_bg: 1.5, t252_bg: 1.5, t253_bg: 1.5,
@@ -116,7 +116,7 @@ var mTs = {
 			return enB.glu.engAmt() >= (tmp.exMode ? 5.9 : tmp.bgMode ? 5.3 : 5.5)
 		},
 		d8() {
-			return enB.pos.engAmt() >= 3.1
+			return enB.pos.engAmt() >= 6
 		},
 		d9() {
 			return false
@@ -148,7 +148,7 @@ var mTs = {
 			return (tmp.exMode ? 5.9 : tmp.bgMode ? 5.3 : 5.5) + " quantum energy"
 		},
 		d8() {
-			return "3.1 positronic charge"
+			return "6 positronic charge"
 		},
 		d9() {
 			return "COMING IN BETA V0.5"
@@ -214,7 +214,7 @@ var mTs = {
 			return Decimal.pow(10, Math.pow(log, 2 - 1 / str) * Math.pow(10, 5 / str - 5) * str).max(tmp.rm)
 		},
 		281() {
-			return Math.sqrt(player.dilation.dilatedTime.add(1).log10()) * 1.5
+			return Math.sqrt(player.dilation.dilatedTime.add(1).log10()) * 1.2
 		},
 		283() {
 			let x = tmp.rep ? tmp.rep.baseChance : 0
@@ -226,7 +226,7 @@ var mTs = {
 				Math.pow(player.galaxies, 0.75) +
 				Math.pow(getTotalRGs(), 0.75) +
 				Math.pow(player.dilation.freeGalaxies, 0.75)
-			, 2) / 2500
+			, 2) / 3500
 			return x
 		},
 		291() {
@@ -242,13 +242,13 @@ var mTs = {
 			return Math.min(Math.log10(qu_save.colorPowers.r + 1) / 2, 1)
 		},
 		312() {
-			return 1
+			return Math.min(Math.pow(qu_save.colorPowers.g + 1, 0.15) - 1, 1)
 		},
 		313() {
 			let tpLog = player.dilation.tachyonParticles.max(1).log10()
 			let bpLog = colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0
 
-			return Math.pow(tpLog / 100, 0.125) * Math.sqrt(bpLog) / 4 + 1
+			return Math.pow(tpLog / 100, 0.75) * Math.pow(bpLog, 0.25) / 4 + 1
 		},
 	},
 	eff(id, uses = "") {
@@ -352,10 +352,12 @@ var mTs = {
 		d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"],
 
 		//Expert Mode
-		ex_264: [], ex_282: [], ex_283: [],
+		ex_264: [],
+		ex_282: [], ex_283: [], ex_284: [292],
 
 		//Death Mode
 		dt_265: [],
+		dt_281: [291], dt_282: [302], dt_283: [302],
 	},
 	allUnlocks: {
 		d7() {
