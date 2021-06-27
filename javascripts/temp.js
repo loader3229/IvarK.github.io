@@ -618,6 +618,6 @@ function resetPowers() {
 }
 
 function resetUP() {
-	resetPowers()
 	updateTmp(true)
+	resetPowers()
 }

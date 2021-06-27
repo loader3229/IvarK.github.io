@@ -1988,7 +1988,7 @@ function setReplAutoDisplay(){
 function updateNGModeMessage(){
 	let condensed = player.condensed !== undefined
 
-	ngModeMessages=[]
+	ngModeMessages = []
 
 	//Difficulties
 	if (tmp.bgMode) ngModeMessages.push("Welcome to Beginner Mode! This is a easy version of Antimatter Dimensions. I don't recommend you to play this mode if you experience incremental games.")
@@ -2070,7 +2070,6 @@ function onLoad(noOffline) {
 	if (tmp.ngmX) aarMod.ngmX = tmp.ngmX
 	ngC.compile()
 	ngSg.compile()
-
 
 	pH.reset()
 	ls.reset()
@@ -2180,21 +2179,25 @@ function onLoad(noOffline) {
 
 	updateConvertSave(eligibleConvert())
 	pauseGame(true)
-	if (aarMod.offlineProgress && !aarMod.pause && !noOffline) {
-		let diff = new Date().getTime() - player.lastUpdate
-		simulateTime(diff/1000)
-	} else player.lastUpdate = new Date().getTime()
+
+	getEl("welcome").style.display = "none"
+	getEl("ghostlyNewsTicker").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?24:0)+"px"
+	getEl("ghostlyNewsTickerBlock").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?16:0)+"px"
+	resetUP()
+	updateAchievements()
+
 	if (player.totalTimePlayed < 1 || inflationCheck || forceToQuantumAndRemove) {
 		updateNGModeMessage()
 		inflationCheck = false
 		infiniteCheck = false
 		closeToolTip()
 		showNextModeMessage()
-	} else if (aarMod.popUpId!="STD") showNextModeMessage()
-	getEl("ghostlyNewsTicker").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?24:0)+"px"
-	getEl("ghostlyNewsTickerBlock").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?16:0)+"px"
-	resetUP()
-	updateAchievements()
+	}
+
+	if (aarMod.offlineProgress && !aarMod.pause && !noOffline) {
+		let diff = new Date().getTime() - player.lastUpdate
+		if (diff > 1e6) simulateTime(diff / 1000)
+	} else player.lastUpdate = new Date().getTime()
 }
 
 
@@ -2304,7 +2307,6 @@ function load_game(noOffline, init) {
 function reload() {
 	clearInterval(gameLoopIntervalId)
 	updateNewPlayer()
-	closeToolTip()
 	load_game(true)
 }
 
@@ -2358,7 +2360,6 @@ function change_save(id) {
 	changeSaveDesc(oldId, savePlacement)
 	updateNewPlayer()
 	infiniteCheck2 = false
-	closeToolTip()
 	load_game(shiftDown)
 	savePlacement=1
 	while (metaSave.saveOrder[savePlacement-1]!=id) savePlacement++
@@ -2501,13 +2502,11 @@ function new_game(type) {
 	changeSaveDesc(metaSave.current, loadedSaves)
 	savePlacement = loadedSaves
 
-	closeToolTip()
 	onLoad()
 	startInterval()
 	
 	$.notify("Save created", "info")
-	localStorage.setItem(metaSaveId,btoa(JSON.stringify(metaSave)))
-	closeToolTip()
+	localStorage.setItem(metaSaveId, btoa(JSON.stringify(metaSave)))
 
 	showDimTab('antimatterdimensions')
 	showStatsTab('stats')

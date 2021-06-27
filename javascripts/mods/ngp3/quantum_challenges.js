@@ -56,7 +56,7 @@ var QCs = {
 					req: new Decimal("1e1000000"),
 					limit: new Decimal("1e10000000"),
 
-					speedMult: Math.pow(2, -boosts / 2),
+					speedMult: Decimal.pow(2, -boosts / 2),
 					scalingMult: Math.pow(2, maxBoosts / 40 + Math.max(boosts - 20, 0) / 20),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 

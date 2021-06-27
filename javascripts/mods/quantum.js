@@ -306,13 +306,13 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	if (!force) {
 		let qcData = QCs_save.in
 		if (qcData.length == 1) {
-			let qc = qcData2[0]
+			let qc = qcData[0]
 			QCs_save.comps = Math.max(QCs_save.comps, qc)
 			QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, qu_save.best)
 		}
 	}
 	if (isQC) QCs_save.in = data
-	else if (!player.options.retryChallenge) QCs_save.in = []
+	else if (force || !player.options.retryChallenge) QCs_save.in = []
 
 	QCs.reset()
 	QCs.updateTmp()

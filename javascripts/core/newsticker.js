@@ -255,14 +255,14 @@ amNewsArray = [
 ["Defeat antimatter to gain quarks!", "player.masterystudies !== undefined", "am41"],
 ["Oh no! Someone beat my antimatter amount! I was going to develop a side project, but I must catch up!", "player.masterystudies !== undefined", "am42"],
 ["Ghostify means Ghostify. It's actually a prestige layer.", "player.masterystudies !== undefined", "am43"],
-["A brave man said 'When will gamers reach the singularity of this game?' But the game said 'There is insufficient data for the answer'.", "player.masterystudies !== undefined", "am45"],
+["A brave man said 'When will gamers reach the singularity of this game?' But the game said 'There is insufficient data for the answer'.", "tmp.ngp3", "am45"],
 ["If you want to time travel, you need to learn how to pass time first. To do that, you need to become a ghost too.", "player.masterystudies !== undefined", "am46"],
 ["If you are a ghost, try to click me!", "player.masterystudies !== undefined", "am47"],
-["Soon(TM)", "(player.masterystudies !== undefined ? qu_save.bigRip.bestAntimatter.gte(Decimal.pow(10, 155887875)) : false)", "am48"],
+["Soon(TM)", "isAtEndGame()", "am48"],
 ["Reality actually contains everything (including celestials).", "player.masterystudies !== undefined", "am49"],
 ["New prestige layer coming soon, Police-ize! When you prestige, you unlock officer dimensions. They behave like all other dimensions except they produce anti-anti-antimatter. This anti-anti-antimatter can be used to purchase more officer dimensions. The anti-anti-antimatter also makes your galaxies feel more safer, providing a boost in galaxy efficiency, based on your highest reached AAAM.", "player.masterystudies !== undefined", "am50"],
 ['"THERE WILL BE NO NG+4. NG+3 ALWAYS HAVE UPDATES." - Aarex', "pH.did('ghostify')", "am51"],
-["No. You are not really at current end-game.", "(player.masterystudies !== undefined ? qu_save.bigRip.bestAntimatter.gte(Decimal.pow(10, 1e9)) : false)", "am52"],
+["No. You are not really at current end-game.", "!isAtEndGame()", "am52"],
 ["Congratulations for beating NG+3! (for now...) A secret is unlocked in Ghostly News Ticker...", "player.totalmoney.gte(Decimal.pow(10, 2e17))", "am53"],
 ["You're reading news too much.", "player.newsArray.length >= 215", "am54"],
 ["You're addicted to news.", "player.newsArray.length >= 230", "am55"],
@@ -280,7 +280,7 @@ amNewsArray = [
 ["BREAKING NEWS: In NG++++, there are over 69 rows of achievements", "player.masterystudies !== undefined", "am67"],
 ["I was making 'Big Rip' the first descension layer, but the community voted to allow us to get more antimatter. If Big Rip was a descension layer, then there would be no new upgrades that boost outside of Big Rips.", "player.totalmoney.gte(Decimal.pow(10, 32e14))", "am68"],
 ["How much replicanti would a replicanti replicate if a replicanti could replicate replicanti?", "player.replicanti.unl", "am69"],
-["Nice try. Ninth dimension aren't real.", "(player.masterystudies !== undefined ? eds[8].perm : false)", "am70"],
+["Nice try. Ninth dimension aren't real.", "tmp.ngp3 && qu_save.emperorDimensions[8].perm >= 10", "am70"],
 ["The year is 2120. Aarex is somehow still alive. However, the next update isn't out. Aarex is supposed to be working on the 8th prestige layer, but has invented approximately 72423985051 other mods and games, so he can't. Updates only come out approximately ever 5 years. (And you thought the 5 hours meme was funny.)", "player.masterystudies !== undefined", "am71"],
 ["Breaking News: Aarex has announced NG-9. It includes you starting with the ability to purchase IDs, ubt everything starts 1e308x slower! Estimated time to complete: 10,000 years.", "player.tickspeedBoosts !== undefined", "am72"],
 ["There are a lot of news tickers, how did you find this one?", true, "am73"],
@@ -398,7 +398,7 @@ amNewsArray = [
 ['The further meta you reach, the further power tower you go.', true, "am185"],
 ['Later, I will finally implement original ideas from future NG+3 updates.', "tmp.ngp3", "am186"],
 ['Also later, I will implement ideas that have different gameplay than other mechanics.', "tmp.ngp3", "am187"],
-["This news ticker has been softcapped so you can't read the re-.", true, "am188"]
+["This news ticker has been softcapped so you can't read the re-.", true, "am188"],
 ["After all, I do build up speed for 5 hours. But to answer that, we need to talk about parallel dimensions. And if you thought my other mechanics were complicated, just you wait. Ok, so Mario's antimatter is a floating point logarithm, but it's converted to sci notation when the game uses break_infinity.js. In other words, Mario's antimatter can basically be any logarithm number, but it's converted to sci notation between negative 9ee15, and positive 9ee15 inclusive. So, any fractional antimatter is truncated, and any numbers too big or too small will break break_infinity.js. Graphically, that means the antimatter you used for break_infinity.js is always inside of The Box, so if the antimatter's in The Box, then its logarithmica_lite.js value and the value used for break_infinity.js are the same. Albeit, maybe off by a single fraction due to the library switch. But if the antimatter leaves The Box, then its logarithmica_lite.js value and its break_infinity.js value will separate, since break_infinity.js will just break...", true, "am189"],
 ["The next news ticker is sponsored by the anti-store. Get your daily anti-cinnamon toast crunch!", true, "am190"],
 ["The photons wall seems to be gone, but there's only the bricks of it left. We should maybe do stuff with those bricks, except they might be made out of concentrated time, so that's a bad idea... Only a while later, did we realize, something's wrong. It stood still once more.", true, "am191"],
@@ -409,7 +409,7 @@ amNewsArray = [
 ["'The Power of Relativity'", "GDs.unlocked()", "am196"],
 ["Gravity Well is basically the time part of dilation, but better.", "GDs.unlocked()", "am197"],
 ["Can you please stop having too many types of Dimensions?", "GDs.unlocked()", "am198"],
-["As you go deeper in scale, we don't see you anymore.", "pH.on()", "am199"],
+["As you go deeper in scale, we don't see you anymore.", "pl.on()", "am199"],
 ["You have played a lot of time in Bosonic Lab. Congratulations!", "hasAch('ng3p81') && tmp.bl.ticks.log10() >= 100", "am200"],
 ["Scientists discovered a brand new universe which is made of Replicantis!", "hasAch('ng3p113')", "am201"],
 ["Matter Decay goes brrr!", "true", "am202"],
@@ -479,11 +479,11 @@ function scrollNextMessage() {
 				nextMsgId = array[nextMsgIndex][2];
 			}
         } catch(e) {
-                console.log("Newsarray doesn't work at idx " + nextMsgIndex)
+			console.log("Newsarray doesn't work at idx " + nextMsgIndex)
         }
         scrollTimeouts.forEach(function(v) {clearTimeout(v);});
         scrollTimeouts = [];
-        
+
         //set the text
         var m = array[nextMsgIndex][0];
         if (nextMsgId == "am37") {

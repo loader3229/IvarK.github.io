@@ -318,7 +318,7 @@ function updateQuarkEnergyEffects() {
 	var eng = qu_save.quarkEnergy * engMult
 	var exp = 4 / 3
 	tmp.qe.eff1 = Math.pow(Math.log10(eng / 1.7 + 1) + 1, exp)
-	tmp.qe.eff2 = Math.pow(eng, exp) * tmp.qe.eff1 / 4
+	tmp.qe.eff2 = QCs.inAny() ? 0 : Math.pow(eng, exp) * tmp.qe.eff1 / 4
 }
 
 function buyQuarkMult(name) {

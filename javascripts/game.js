@@ -1486,12 +1486,12 @@ function showTab(tabName, init) {
 		else getEl("progress").style.display = "none"
 		if ((getEl("timestudies").style.display != "none" || getEl("ers_timestudies").style.display != "none" || getEl("masterystudies").style.display != "none") && tabName=="eternitystore") getEl("TTbuttons").style.display = "block";
 		else getEl("TTbuttons").style.display = "none"
-		if (tabName=="eternitystore") {
+		if (tabName == "eternitystore") {
 			if (getEl('timestudies') !== "none" || getEl('masterystudies') !== "none" || getEl('dilation') !== "none" || getEl("blackhole") !== "none") resizeCanvas()
 			if (getEl("dilation") !== "none") requestAnimationFrame(drawAnimations)
 			if (getEl("blackhole") !== "none") requestAnimationFrame(drawBlackhole)
 		}
-		if (tabName=="quantumtab") {
+		if (tabName == "quantumtab") {
 			if (getEl('uquarks') !== "none") resizeCanvas()
 			if (getEl("uquarks") !== "none") requestAnimationFrame(drawQuarkAnimation)
 		}
@@ -2116,12 +2116,12 @@ function showOptions(id) {
 	getEl(id).style.display = id == "notationmenu" ? "inline" : "flex"
 }
 
-function showNextModeMessage() {
+function showNextModeMessage(click) {
 	if (ngModeMessages.length > 0) {
 		getEl("welcome").style.display = "flex"
-		getEl("welcomeMessage").innerHTML = ngModeMessages[ngModeMessages.length-1]
+		getEl("welcomeMessage").innerHTML = ngModeMessages[ngModeMessages.length - 1]
 		ngModeMessages.pop()
-	} else getEl("welcome").style.display = "none"
+	} else if (click) getEl("welcome").style.display = "none"
 }
 
 function verify_save(obj) {
@@ -4471,7 +4471,7 @@ function bigCrunchButtonUpdating(){
 	getEl("postInfinityButton").style.display = 'none'
 	if (tmp.ri) {
 		getEl("bigcrunch").style.display = 'inline-block';
-		if ((player.bestInfinityTime > 600 && player.bestEternityTime > 600) || (!player.options.retryChallenge && (player.currentChallenge != "" || (inNGM(4) && player.galacticSacrifice.chall > 0)))) {
+		if ((player.bestInfinityTime > 600 && player.bestEternity > 600) || (!player.options.retryChallenge && (player.currentChallenge != "" || (inNGM(4) && player.galacticSacrifice.chall > 0)))) {
 			isEmptiness = true
 			showTab('emptiness')
 			pH.updateDisplay()
@@ -5172,24 +5172,24 @@ function simulateTime(seconds, real, id) {
 
 	closeToolTip()
 	var popupString = "While you were away"
-	if (player.money.gt(playerStart.money)) popupString+= ",<br> your antimatter increased "+shortenMoney(player.money.log10() - (playerStart.money).log10())+" orders of magnitude"
-	if (player.infinityPower.gt(playerStart.infinityPower) && !pH.did("quantum")) popupString+= ",<br> infinity power increased "+shortenMoney(player.infinityPower.log10() - (Decimal.max(playerStart.infinityPower, 1)).log10())+" orders of magnitude"
-	if (player.timeShards.gt(playerStart.timeShards) && !pH.did("quantum")) popupString+= ",<br> time shards increased "+shortenMoney(player.timeShards.log10() - (Decimal.max(playerStart.timeShards, 1)).log10())+" orders of magnitude"
-	if (storage.dt && player.dilation.dilatedTime.gt(storage.dt)) popupString+= ",<br> dilated time increased "+shortenMoney(player.dilation.dilatedTime.log10() - (Decimal.max(storage.dt, 1)).log10())+" orders of magnitude"
-	if (storage.bp && player.blackhole.power.gt(storage.bp)) popupString+= ",<br> black hole power increased "+shortenMoney(player.blackhole.power.log10() - (Decimal.max(storage.bp, 1)).log10())+" orders of magnitude"
-	if (storage.ma && player.meta.antimatter.gt(storage.ma) && !pH.did("ghostify")) popupString+= ",<br> meta-antimatter increased "+shortenMoney(player.meta.antimatter.log10() - (Decimal.max(storage.ma, 1)).log10())+" orders of magnitude"
+	if (player.money.gt(playerStart.money)) popupString += ",<br> your antimatter increased "+shortenMoney(player.money.log10() - (playerStart.money).log10())+" orders of magnitude"
+	if (player.infinityPower.gt(playerStart.infinityPower) && !pH.did("quantum")) popupString += ",<br> infinity power increased "+shortenMoney(player.infinityPower.log10() - (Decimal.max(playerStart.infinityPower, 1)).log10())+" orders of magnitude"
+	if (player.timeShards.gt(playerStart.timeShards) && !pH.did("quantum")) popupString += ",<br> time shards increased "+shortenMoney(player.timeShards.log10() - (Decimal.max(playerStart.timeShards, 1)).log10())+" orders of magnitude"
+	if (storage.dt && player.dilation.dilatedTime.gt(storage.dt)) popupString += ",<br> dilated time increased "+shortenMoney(player.dilation.dilatedTime.log10() - (Decimal.max(storage.dt, 1)).log10())+" orders of magnitude"
+	if (storage.bp && player.blackhole.power.gt(storage.bp)) popupString += ",<br> black hole power increased "+shortenMoney(player.blackhole.power.log10() - (Decimal.max(storage.bp, 1)).log10())+" orders of magnitude"
+	if (storage.ma && player.meta.antimatter.gt(storage.ma) && !pH.did("ghostify")) popupString += ",<br> meta-antimatter increased "+shortenMoney(player.meta.antimatter.log10() - (Decimal.max(storage.ma, 1)).log10())+" orders of magnitude"
 	if (storage.dt) {
-		if (qu_save.replicants.amount.gt(storage.nr) && !pH.did("ghostify")) popupString+= ",<br> normal replicants increased "+shortenMoney(qu_save.replicants.amount.log10() - (Decimal.max(storage.nr, 1)).log10())+" orders of magnitude"
-		if (Decimal.gt(player.ghostify.bl.am, storage.bAm) && pH.did("ghostify")) popupString+= ",<br> Bosonic Antimatter increased "+shortenMoney(player.ghostify.bl.am.log10() - (Decimal.max(storage.bAm, 1)).log10())+" orders of magnitude"
+		if (qu_save.replicants.amount.gt(storage.nr) && !pH.did("ghostify")) popupString += ",<br> normal replicants increased "+shortenMoney(qu_save.replicants.amount.log10() - (Decimal.max(storage.nr, 1)).log10())+" orders of magnitude"
+		if (Decimal.gt(player.ghostify.bl.am, storage.bAm) && pH.did("ghostify")) popupString += ",<br> Bosonic Antimatter increased "+shortenMoney(player.ghostify.bl.am.log10() - (Decimal.max(storage.bAm, 1)).log10())+" orders of magnitude"
 	}
-	if (player.infinitied > playerStart.infinitied || player.eternities > playerStart.eternities) popupString+= ","
-	else popupString+= "."
-	if (player.infinitied > playerStart.infinitied) popupString+= "<br>you infinitied "+getFullExpansion(player.infinitied-playerStart.infinitied)+" times."
-	if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied "+getFullExpansion(player.eternities-playerStart.eternities)+" times."
+	if (player.infinitied > playerStart.infinitied || player.eternities > playerStart.eternities) popupString += ","
+	else popupString += "."
+	if (player.infinitied > playerStart.infinitied) popupString += "<br>you infinitied "+getFullExpansion(player.infinitied-playerStart.infinitied)+" times."
+	if (player.eternities > playerStart.eternities) popupString += " <br>you eternitied "+getFullExpansion(player.eternities-playerStart.eternities)+" times."
 	if (popupString.length == 20) {
 		popupString = popupString.slice(0, -1);
-		popupString+= "... Nothing happened."
-		if (id == "lair") popupString+= "<br><br>I told you so."
+		popupString += "... Nothing happened."
+		if (id == "lair") popupString += "<br><br>I told you so."
 		giveAchievement("While you were away... Nothing happened.")
 	}
 	getEl("offlineprogress").style.display = "block"

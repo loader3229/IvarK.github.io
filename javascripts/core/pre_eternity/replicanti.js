@@ -330,7 +330,7 @@ function getRepSlowdownBase2(x) {
 }
 
 function getRepSlowdownBase10(x) {
-	return x * Math.log10(tmp.rep.speeds.inc)
+	return x / Math.log10(tmp.rep.speeds.inc)
 }
 
 function boostReplSpeedExp(exp) {

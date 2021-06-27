@@ -1,5 +1,5 @@
 body {
-	background: #00171f
+	background: linear-gradient(#001f2f, #002f2f, #001f2f)
 }
 
 .container, div, b, input {
@@ -24,21 +24,21 @@ button:hover {
 .tabbtn {
 	background: rgba(127, 223, 255, 0.125) !important;
 	border-color: transparent transparent #7fdfff transparent !important;
-	box-shadow: 0px 3px 3px rgba(127, 223, 255, 0.5), 0px 6px 6px rgba(127, 223, 255, 0.25), inset 0px 0px 12px rgba(127, 223, 255, 0.25);
+	box-shadow: 0px 3px 6px rgba(127, 223, 255, 0.5), inset 0px 0px 12px rgba(127, 223, 255, 0.25);
 	color: #bfefff !important
 }
 
 .secondarytabbtn {
 	background: rgba(255, 223, 127, 0.125) !important;
 	border-color: transparent transparent #ffdf7f transparent !important;
-	box-shadow: 0px 3px 3px rgba(255, 223, 127, 0.5), 0px 6px 6px rgba(255, 223, 127, 0.25), inset 0px 0px 12px rgba(255, 223, 127, 0.25);
+	box-shadow: 0px 3px 6px rgba(255, 223, 127, 0.5), inset 0px 0px 12px rgba(255, 223, 127, 0.25);
 	color: #ffefbf !important
 }
 
 .storebtn {
 	background: rgba(159, 255, 127, 0.125) !important;
 	border-color: transparent transparent #9fff7f transparent !important;
-	box-shadow: 0px 3px 3px rgba(159, 255, 127, 0.5), 0px 6px 6px rgba(159, 255, 127, 0.25), inset 0px 0px 12px rgba(159, 255, 127, 0.25);
+	box-shadow: 0px 3px 6px rgba(159, 255, 127, 0.5), inset 0px 0px 12px rgba(159, 255, 127, 0.25);
 	color: #cfffbf !important
 }
 
@@ -49,11 +49,11 @@ button:hover {
 .unavailablebtn,
 .infinistorebtnlocked,
 .newdimlocked,
-.timestudylocked, .eternityupbtnlocked {
+.eternityupbtnlocked {
 	transform: scale(1) !important;
 	background: rgba(127, 127, 127, 0.25) !important;
 	border-color: transparent transparent #ff7f7f transparent !important;
-	box-shadow: 0px 0px 0px transparent, 0px 0px 0px transparent, inset 0px 0px 12px rgba(127, 127, 127, 0.25);
+	box-shadow: 0px 0px 0px transparent, inset 0px 0px 12px rgba(127, 127, 127, 0.25);
 	color: #ffbfbf !important
 }
 
@@ -71,7 +71,7 @@ button:hover {
 .popup .storebtn {
 	background: rgba(79, 127, 63, 0.5) !important;
 	border-color: transparent transparent #4f7f3f transparent !important;
-	box-shadow: 0px 3px 3px rgba(159, 255, 127, 0.5), 0px 6px 6px rgba(159, 255, 127, 0.25), inset 0px 0px 12px rgba(159, 255, 127, 0.25);
+	box-shadow: 0px 3px 6px rgba(159, 255, 127, 0.5), inset 0px 0px 12px rgba(159, 255, 127, 0.25);
 }
 
 .chosenbtn {
@@ -174,7 +174,7 @@ button:hover {
 	border: 2px solid !important;
 	border-color: transparent transparent #003fff transparent !important;
 	text-shadow: 2px 2px 1px rgba(0, 127, 255, 0.5);
-	box-shadow: 0px 3px 3px rgba(0, 63, 255, 0.5), 0px 6px 6px rgba(0, 63, 255, 0.25), inset 0px 0px 12px rgba(127, 159, 255, 0.5);
+	box-shadow: 0px 3px 6px rgba(0, 63, 255, 0.5), inset 0px 0px 12px rgba(127, 159, 255, 0.5);
 	color: #7f9fff !important
 }
 
@@ -186,7 +186,7 @@ button:hover {
 	border: 2px solid !important;
 	border-color: transparent transparent #ffbf00 transparent !important;
 	text-shadow: 2px 2px 1px rgba(255, 127, 0, 0.5);
-	box-shadow: 0px 3px 3px rgba(255, 191, 0, 0.5), 0px 6px 6px rgba(255, 191, 0, 0.25), inset 0px 0px 12px rgba(255, 223, 127, 0.5);
+	box-shadow: 0px 3px 6px rgba(255, 191, 0, 0.5), inset 0px 0px 12px rgba(255, 223, 127, 0.5);
 	color: #ffdf7f !important
 }
 
@@ -194,7 +194,7 @@ button:hover {
 	transform: scale(1) !important;
 	background: rgba(255, 191, 0, 0.5) !important;
 	border-color: transparent !important;
-	box-shadow: 0px 0px 0px transparent, 0px 0px 0px transparent, inset 0px 0px 12px rgba(255, 223, 127, 0.5);
+	box-shadow: 0px 0px 0px transparent, inset 0px 0px 12px rgba(255, 223, 127, 0.5);
 	color: #ffdf7f !important
 }
 
@@ -212,7 +212,7 @@ button:hover {
 	border: 2px solid !important;
 	border-color: transparent transparent #3f00ff transparent !important;
 	text-shadow: 2px 2px 1px rgba(191, 0, 255, 0.5);
-	box-shadow: 0px 3px 3px rgba(63, 0, 255, 0.5), 0px 6px 6px rgba(63, 0, 255, 0.25), inset 0px 0px 12px rgba(159, 127, 255, 0.5);
+	box-shadow: 0px 3px 6px rgba(63, 0, 255, 0.5), inset 0px 0px 12px rgba(159, 127, 255, 0.5);
 	color: #9f7fff !important
 }
 
@@ -225,15 +225,39 @@ button:hover {
 	border: 2px solid !important;
 	border-color: transparent transparent #3f00ff transparent !important;
 	text-shadow: 2px 2px 1px rgba(191, 0, 255, 0.5);
-	box-shadow: 0px 3px 3px rgba(63, 0, 255, 0.5), 0px 6px 6px rgba(63, 0, 255, 0.25), inset 0px 0px 12px rgba(159, 127, 255, 0.5);
+	box-shadow: 0px 3px 6px rgba(63, 0, 255, 0.5), inset 0px 0px 12px rgba(159, 127, 255, 0.5);
 	color: #9f7fff !important
+}
+
+.timestudylocked {
+	transform: scale(1) !important;
+	background: #7f7f7f !important;
+	border-color: transparent transparent #ff7f7f transparent !important;
+	box-shadow: 0px 0px 0px transparent, inset 0px 0px 12px rgba(127, 127, 127, 0.25);
+	color: #ffbfbf !important
+}
+
+.timestudybought {
+	transform: scale(1) !important;
+	background: #bf00ff !important;
+	border-color: transparent !important;
+	box-shadow: 0px 0px 0px transparent, inset 0px 0px 12px rgba(159, 127, 255, 0.5);
+	color: #df7fff !important
+}
+
+.eternityupbtnbought {
+	transform: scale(1) !important;
+	background: rgba(191, 0, 255, 0.5) !important;
+	border-color: transparent !important;
+	box-shadow: 0px 0px 0px transparent, inset 0px 0px 12px rgba(159, 127, 255, 0.5);
+	color: #df7fff !important
 }
 
 /* Meta */
 #mdtabbtn button {
 	background: rgba(0, 255, 255, 0.25) !important;
 	border-color: transparent transparent #00ffff transparent !important;
-	box-shadow: 0px 3px 3px rgba(0, 255, 255, 0.5), 0px 6px 6px rgba(0, 255, 255, 0.25), inset 0px 0px 12px rgba(0, 255, 255, 0.25);
+	box-shadow: 0px 3px 6px rgba(0, 255, 255, 0.5), inset 0px 0px 12px rgba(0, 255, 255, 0.25);
 	color: #7fffff !important
 }
 
@@ -244,7 +268,7 @@ button:hover {
 	border: 2px solid !important;
 	border-color: transparent transparent #7fff00 transparent !important;
 	text-shadow: 2px 2px 1px rgba(191, 255, 0, 0.5);
-	box-shadow: 0px 3px 3px rgba(127, 255, 0, 0.5), 0px 6px 6px rgba(127, 255, 0, 0.25), inset 0px 0px 12px rgba(191, 255, 127, 0.5);
+	box-shadow: 0px 3px 6px rgba(127, 255, 0, 0.5), inset 0px 0px 12px rgba(191, 255, 127, 0.5);
 	color: #bfff7f !important
 }
 
@@ -271,7 +295,7 @@ button:hover {
 	border: 1px solid !important;
 	border-color: transparent transparent #9fff7f transparent !important;
 	border-radius: 3px !important;
-	box-shadow: 0px 3px 3px rgba(159, 255, 127, 0.5), 0px 6px 6px rgba(159, 255, 127, 0.25), inset 0px 0px 12px rgba(159, 255, 127, 0.25);
+	box-shadow: 0px 3px 6px rgba(159, 255, 127, 0.5), inset 0px 0px 12px rgba(159, 255, 127, 0.25);
 	color: #cfffbf !important
 }
 

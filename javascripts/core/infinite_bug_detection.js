@@ -16,9 +16,7 @@ function isInfiniteDetected() { // todo: make better infinite detection system
 		reload()
 		infiniteDetected = false
 		if (getEl("welcome").style.display != "flex") getEl("welcome").style.display = "flex"
-		else {
-			getEl("welcomeMessage").innerHTML = "I'm sorry, but you got an Infinite bug. Because of this, your save is reverted to your last saved progress. It is recommended to post how did you got this bug. Thanks! :)"
-		}
+		getEl("welcomeMessage").innerHTML = "I'm sorry, but you got an Infinite bug. Because of this, your save is reverted to your last saved progress. It is recommended to post how did you got this bug. Thanks! :)"
 		return true
 	}
 }

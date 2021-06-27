@@ -134,12 +134,6 @@ function respecTogglePC() {
 	}
 }
 
-//v1.99799
-function respecOptions() {
-	closeToolTip()
-	getEl("respecoptions").style.display="flex"
-}
-
 //v1.998
 function toggleAutoQuantumContent(id) {
 	qu_save.autoOptions[id] = !qu_save.autoOptions[id]
@@ -915,4 +909,8 @@ function doubleMSMult(x) {
 		else x = Decimal.times(x, 2)
 	}
 	return x
+}
+
+function isAtEndGame() {
+	return tmp.ngp3 && QCs_save.comps >= 1
 }
