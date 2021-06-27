@@ -37,9 +37,9 @@ var QCs = {
 		1: {
 			unl: () => true,
 			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and Mastery Study cost multipliers are higher.",
-			goal: () => false,
-			goalDisp: () => "(partly implemented)",
-			goalMA: new Decimal("1e355"),
+			goal: () => QCs_save.qc1.boosts >= 5,
+			goalDisp: () => "5 Replicated Compressors",
+			goalMA: new Decimal("1e480"),
 			rewardDesc: (x) => "You can keep Replicated Compressors.",
 			rewardEff(str) {
 				return 0.1
@@ -53,22 +53,20 @@ var QCs = {
 				let maxBoosts = QCs_save.qc1.max
 
 				let data = {
-					req: new Decimal("1e500000"),
+					req: new Decimal("1e1000000"),
 					limit: new Decimal("1e10000000"),
 
-					speedMult: Decimal.pow(2, -boosts / 4),
-					scalingMult: 1 / (1 + maxBoosts / 40),
+					speedMult: Math.pow(2, -boosts / 2),
+					scalingMult: Math.pow(2, maxBoosts / 40 + Math.max(boosts - 20, 0) / 20),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
-					effMult: 1 + maxBoosts / 40,
+					effMult: Math.pow(0.5, maxBoosts / 40 + Math.max(boosts - 20, 0) / 20),
 					effExp: Math.min(1 + boosts / 20, 2)
 				}
 				QCs_tmp.qc1 = data
 
 				if (QCs.in(1)) {
-					data.req = data.req.pow(0.01)
-					data.limit = data.limit.pow(0.02)
-					data.speedMult = data.speedMult.times(0.01)
+					data.limit = data.limit.pow(tmp.exMode ? 0.2 : tmp.bgMode ? 0.1 : 0.15)
 				}
 
 				let qc5 = QCs_tmp.qc5

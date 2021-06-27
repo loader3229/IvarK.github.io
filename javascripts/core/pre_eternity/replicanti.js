@@ -325,6 +325,14 @@ function getReplSpeedExpMult() {
 	return exp
 }
 
+function getRepSlowdownBase2(x) {
+	return x / Math.log2(tmp.rep.speeds.inc)
+}
+
+function getRepSlowdownBase10(x) {
+	return x * Math.log10(tmp.rep.speeds.inc)
+}
+
 function boostReplSpeedExp(exp) {
 	//Pre-Boosts
 	if (hasMTS(281)) exp += mTs_tmp[281]
@@ -372,7 +380,7 @@ function boostReplicateInterval() {
 	if (ECComps("eterc14")) {
 		var ec14Pow = getECReward(14)
 		var ec14Int = data.ec14.baseInt
-		var ec14Acc = data.speeds.exp / Math.log10(data.speeds.inc) * 10 * ec14Pow + 1
+		var ec14Acc = getRepSlowdownBase10(data.speeds.exp) * 10 * ec14Pow + 1
 		data.ec14.interval = ec14Int.div(ec14Acc)
 		x = x.div(data.ec14.interval)
 

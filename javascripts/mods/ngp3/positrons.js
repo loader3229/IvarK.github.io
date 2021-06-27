@@ -117,10 +117,10 @@ var pos = {
 		pos_tmp.cloud = data
 
 		//Unlocks
-		var unl = enB.mastered("pos", 3)
+		var unl = enB.mastered("pos", 2)
 		getEl("pos_boost_div").colspan = unl ? 1 : 2
 		getEl("pos_cloud_div").style.display = unl ? "" : "none"
-		getEl("pos_cloud_req").textContent = unl ? "" : "To unlock Positron Cloud, you need to master 3 Positronic Boosts."
+		getEl("pos_cloud_req").textContent = unl ? "" : "To unlock Positron Cloud, you need to master 2 Positronic Boosts."
 		if (!unl) return
 
 		//Mechanic

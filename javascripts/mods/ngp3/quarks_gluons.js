@@ -731,10 +731,8 @@ var enB = {
 
 		eff(x) {
 			var eng = this.engAmt()
-			var lvl = this.lvl(x)
-
 			if (!pos.on() && enB.active("glu", 5)) eng += enB_tmp.glu5
-			if ((enB.mastered("pos", x) || enB.colorMatch("pos", x)) && eng >= this.chargeReq(x)) eng *= Math.sqrt(lvl + 4)
+			if ((enB.mastered("pos", x) || enB.colorMatch("pos", x)) && eng >= this.chargeReq(x)) eng *= 2 * this.lvl(x)
 			return eng
 		},
 
@@ -745,9 +743,7 @@ var enB = {
 		lvl(x, next) {
 			var swaps = next ? pos_tmp.next_swaps : pos_save.swaps
 			if (swaps[x]) x = swaps[x]
-
-			var lvl = x > 6 ? 3 : x > 2 ? 2 : 1
-			return Math.min(lvl, 3)
+			return this[x].tier
 		},
 
 		max: 12,
@@ -757,6 +753,7 @@ var enB = {
 			chargeReq: 1,
 
 			title: "Replicanti Launch",
+			tier: 1,
 			type: "g",
 			eff(x) {
 				var rep = (tmp.rmPseudo || player.replicanti.amount).max(1)
@@ -772,6 +769,7 @@ var enB = {
 			chargeReq: 0,
 
 			title: "Meta Accelerator",
+			tier: 2,
 			type: "b",
 			eff(x) {
 				var timeMult = Math.min(qu_save.time / 9000, 1)
@@ -813,6 +811,7 @@ var enB = {
 			chargeReq: 4,
 
 			title: "Classical Positrons",
+			tier: 1,
 			type: "r",
 			eff(x) {
 				return Math.sqrt(x * 100) + 1
@@ -827,6 +826,7 @@ var enB = {
 			chargeReq: 6,
 
 			title: "Quantum Scope",
+			tier: 3,
 			type: "b",
 			anti: true,
 			eff(x) {
@@ -842,6 +842,7 @@ var enB = {
 			chargeReq: 3,
 
 			title: "Transfinite Time",
+			tier: 2,
 			type: "r",
 			eff(x) {
 				return 1
@@ -856,6 +857,7 @@ var enB = {
 			chargeReq: 4,
 
 			title: "Tickspeed Flux",
+			tier: 3,
 			type: "r",
 			anti: true,
 			eff(x) {
@@ -871,6 +873,7 @@ var enB = {
 			chargeReq: 5,
 
 			title: "308% Completionist",
+			tier: 2,
 			type: "g",
 			eff(x) {
 				return 0
@@ -885,6 +888,7 @@ var enB = {
 			chargeReq: 6,
 
 			title: "MT-Force Preservation",
+			tier: 3,
 			type: "g",
 			anti: true,
 			eff(x) {
@@ -900,6 +904,7 @@ var enB = {
 			chargeReq: 7,
 
 			title: "Overpowered Infinities",
+			tier: 2,
 			type: "b",
 			anti: true,
 			eff(x) {
@@ -918,6 +923,7 @@ var enB = {
 			chargeReq: 0,
 
 			title: "Looped Dimensionality",
+			tier: 3,
 			type: "r",
 			anti: true,
 			eff(x) {
@@ -933,6 +939,7 @@ var enB = {
 			chargeReq: 0,
 
 			title: "8th Shade of Blue",
+			tier: 3,
 			type: "b",
 			anti: true,
 			eff(x) {
@@ -948,6 +955,7 @@ var enB = {
 			chargeReq: 0,
 
 			title: "Timeless Capability",
+			tier: 3,
 			type: "g",
 			anti: true,
 			eff(x) {
@@ -1001,7 +1009,7 @@ var enB = {
 			if (!this.has(type, i)) break
 			if (enB_tmp[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(enB_tmp[type + i])
 			getEl("enB_" + type + i + "_name").textContent = shiftDown ? (data[i].title || "Unknown title.") : (data.name + " Boost #" + i)
-			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = !enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No full efficiency)" : "Full efficiency is at " + shorten(enB.pos.chargeReq(i)) + " charge"
+			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = "Tier " + enB.pos.lvl(i) + " - " + (!enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No self-boost)" : "Self-boost is at " + shorten(enB.pos.chargeReq(i)) + " charge")
 		}
 	}
 }
