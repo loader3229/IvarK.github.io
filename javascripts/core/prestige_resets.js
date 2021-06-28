@@ -66,6 +66,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 		epcost: new Decimal(1),
 		studies: [],
 	}
+	if (isQC) player.timestudy.theorem = 0
 
 	if (!qMs.isOn(3)) player.eternityUpgrades = []
 	player.epmult = new Decimal(1)
@@ -125,11 +126,11 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	resetEternityChallenges(bigRip, !tmp.ngp3)
 	resetNGUdData(true)
 	doMetaDimensionsReset(bigRip, headstart, isQC)
+	resetMasteryStudies()
+
+	doEternityResetStuff(layer)
 	player.old = tmp.ngp3 ? !QCs.inAny() : undefined
 	player.dontWant = tmp.ngp3 || undefined
-	if (tmp.ngp3) resetMasteryStudies(bigRip)
-
-	doEternityResetStuff(5)
 }
 
 function resetDimensions() {
@@ -252,8 +253,8 @@ function doMetaDimensionsReset(bigRip, headstart, isQC) {
 	clearMetaDimensions()
 }
 
-function resetMasteryStudies(bigRip) {
-	if (bigRip ? !tmp.bruActive[12] : qMs.tmp.amt < 10) {
+function resetMasteryStudies() {
+	if (!qMs.isOn(10)) {
 		let respeccedMS = []
 		for (var d = 7; d <= 13; d++) if (player.masterystudies.includes("d" + d)) respeccedMS.push("d" + d)
 		player.masterystudies = respeccedMS

@@ -309,10 +309,23 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 			let qc = qcData[0]
 			QCs_save.comps = Math.max(QCs_save.comps, qc)
 			QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, qu_save.best)
+			QCs_save.best_exclusion[qc] = Math.max(QCs_save.best_exclusion[qc] || 1/0, pos_tmp.cloud[QCs_save.disable_cloud])
 		}
 	}
-	if (isQC) QCs_save.in = data
-	else if (force || !player.options.retryChallenge) QCs_save.in = []
+	if (isQC) {
+		QCs_save.in = data
+		if (!QCs.inAny()) QCs_save.kept = {
+			tt: player.timestudy.theorem,
+			ms: [...player.masterystudies]
+		}
+	} else if (force || !player.options.retryChallenge) {
+		QCs_save.in = []
+		if (QCs_save.kept) {
+			player.timestudy.theorem = QCs_save.kept.tt
+			player.masterystudies = QCs_save.kept.ms
+			delete QCs_save.kept
+		}
+	}
 
 	QCs.reset()
 	QCs.updateTmp()

@@ -1115,7 +1115,7 @@ button {
 }
 
 .longbtn {
-	width: 257.5px
+	width: 257.5px !important
 }
 
 .scrollablemenu {

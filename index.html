@@ -3396,6 +3396,10 @@
 				</table>
 			</div>
 			<div id="quantumchallenges" class="challengeTab">
+				All quantum mechanics will change, when entering a Quantum Challenge:
+				<br>
+				No global quark energy bonus, no gluon nerfs, and mastered boosts only work, but 1 tier must be excluded.
+				<br>
 				<table class="table" id="qcs_div" style="margin: 0 auto"></table>
 				<!--
 				<div id="autoCS">
@@ -4858,7 +4862,7 @@
 						<b id="pos_cloud1_num" style="font-size: 15px"></b>
 					</td>
 					<td>
-						Reward: +5% additive Quantum Energy effect
+						<button class="storebtn longbtn" id="pos_cloud1_toggle" onclick="QCs.switchDisability(1)">Disable on challenge</button>
 					</td>
 				</tr>
 				<tr>
@@ -4884,7 +4888,7 @@
 						<b id="pos_cloud2_num" style="font-size: 15px"></b>
 					</td>
 					<td>
-						Reward: +10% additive Quantum Energy effect
+						<button class="storebtn longbtn" id="pos_cloud2_toggle" onclick="QCs.switchDisability(2)">Disable on challenge</button>
 					</td>
 				</tr>
 				<tr>
@@ -4924,7 +4928,7 @@
 						<b id="pos_cloud3_num" style="font-size: 15px"></b>
 					</td>
 					<td>
-						Reward: +15% additive Quantum Energy effect
+						<button class="storebtn longbtn" id="pos_cloud3_toggle" onclick="QCs.switchDisability(3)">Disable on challenge</button>
 					</td>
 				</tr>
 				<tr>

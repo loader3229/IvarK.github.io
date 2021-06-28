@@ -3,7 +3,9 @@ var QCs = {
 		QCs_save = {
 			in: [],
 			comps: 0,
-			best: {}
+			best: {},
+			best_exclusion: {},
+			cloud_disable: 1
 		}
 		return QCs_save
 	},
@@ -18,6 +20,11 @@ var QCs = {
 		if (data === undefined) data = this.setup()
 		QCs_save = data
 
+		if (QCs_save.cloud_disable === undefined) {
+			QCs_save.cloud_disable = 1
+			QCs_save.best_exclusion = {}
+			QCs_save.in = []
+		}
 		if (QCs_save.qc1 === undefined) this.reset()
 		this.updateTmp()
 		this.updateDisp()
@@ -37,9 +44,9 @@ var QCs = {
 		1: {
 			unl: () => true,
 			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and Mastery Study cost multipliers are higher.",
-			goal: () => QCs_save.qc1.boosts >= 5,
-			goalDisp: () => "5 Replicated Compressors",
-			goalMA: new Decimal("1e480"),
+			goal: () => QCs_save.qc1.boosts >= (tmp.bgMode ? 4 : 5),
+			goalDisp: () => (tmp.bgMode ? 4 : 5) + " Replicated Compressors",
+			goalMA: new Decimal("1e435"),
 			rewardDesc: (x) => "You can keep Replicated Compressors.",
 			rewardEff(str) {
 				return 0.1
@@ -60,7 +67,7 @@ var QCs = {
 					scalingMult: Math.pow(2, maxBoosts / 40 + Math.max(boosts - 20, 0) / 20),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
-					effMult: Math.pow(0.5, maxBoosts / 40 + Math.max(boosts - 20, 0) / 20),
+					effMult: (maxBoosts + boosts) / 20 + 1,
 					effExp: Math.min(1 + boosts / 20, 2)
 				}
 				QCs_tmp.qc1 = data
@@ -77,9 +84,9 @@ var QCs = {
 			},
 			convert(x) {
 				if (!QCs_tmp.qc1) return x
-				let div = Math.log10(Number.MAX_VALUE) / Math.log10(1.01)
-				x = Decimal.pow(10, Math.pow(x.log10() / div, QCs_tmp.qc1.effExp) * div * QCs_tmp.qc1.effMult).max(x)
-				return x
+				let dilMult = Math.log2(1.01) / 1024
+				var x2 = Decimal.pow(10, Math.pow(x.log10() * dilMult, QCs_tmp.qc1.effExp) / dilMult * QCs_tmp.qc1.effMult).max(x)
+				return x2
 			},
 
 			can: () => QCs_tmp.qc1 && pH.can("eternity") && player.replicanti.amount.gte(QCs_tmp.qc1.req) && QCs_save.qc1.boosts < 20,
@@ -251,6 +258,11 @@ var QCs = {
 	start(x) {
 		quantum(false, true, x)
 	},
+	switchDisability(x) {
+		if (QCs.inAny()) return
+		QCs_save.cloud_disable = x
+		this.updateCloudDisp()
+	},
 
 	setupDiv() {
 		if (this.divInserted) return
@@ -271,12 +283,16 @@ var QCs = {
 	divInserted: false,
 
 	updateDisp() {
+		let unl = this.divInserted && this.unl()
+
 		//In Quantum Challenges
 		getEl("repCompress").style.display = QCs_tmp.qc1 ? "" : "none"
 		getEl("repExpand").style.display = QCs_tmp.qc5 ? "" : "none"
 
+		//Positrons: HTML
+		this.updateCloudDisp()
+		
 		//Quantum Challenges
-		let unl = this.divInserted && this.unl()
 		if (!unl) return
 
 		for (let qc = 1; qc <= this.data.max; qc++) {
@@ -337,6 +353,13 @@ var QCs = {
 				getEl("bigripupg" + u).className = qu_save.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : qu_save.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
 				getEl("bigripupg" + u + "cost").textContent = shortenDimensions(new Decimal(bigRipUpgCosts[u]))
 			}
+		}
+	},
+	updateCloudDisp() {
+		let unl = QCs.unl()
+		for (let t = 1; t <= 3; t++) {
+			getEl("pos_cloud" + t + "_toggle").style.display = unl && pos_tmp.cloud[t] ? "" : "none"
+			if (unl) getEl("pos_cloud" + t + "_toggle").className = (QCs_save.cloud_disable == t ? "chosenbtn" : QCs.inAny() ? "unavailablebtn" : "storebtn") + " longbtn"
 		}
 	},
 	updateDispOnTick() {

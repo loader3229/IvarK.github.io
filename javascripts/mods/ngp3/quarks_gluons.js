@@ -310,12 +310,7 @@ function updateQEGainTmp() {
 function updateQuarkEnergyEffects() {
 	if (!tmp.quActive) return
 
-	var engMult = 1
-	if (pos.isCloudRewardActive(1)) engMult += 0.05
-	if (pos.isCloudRewardActive(2)) engMult += 0.1
-	if (pos.isCloudRewardActive(3)) engMult += 0.15
-
-	var eng = qu_save.quarkEnergy * engMult
+	var eng = qu_save.quarkEnergy
 	var exp = 4 / 3
 	tmp.qe.eff1 = Math.pow(Math.log10(eng / 1.7 + 1) + 1, exp)
 	tmp.qe.eff2 = QCs.inAny() ? 0 : Math.pow(eng, exp) * tmp.qe.eff1 / 4
@@ -394,6 +389,8 @@ function getGluonEffBuff(x) {
 }
 
 function getGluonEffNerf(x, color) {
+	if (QCs.inAny()) return 0
+
 	let r = Math.max(Math.pow(Decimal.add(x, 1).log10(), tmp.exMode ? 1.8 : 1.5) - colorCharge.subCancel, 0)
 	if (tmp.ngp3_mul) r *= 0.5
 
@@ -726,7 +723,7 @@ var enB = {
 		},
 
 		activeReq(x) {
-			return tmp.bgMode || enB.mastered("pos", x) || pos.on()
+			return QCs.inAny() ? pos.on() && enB.mastered("pos", x) && this.lvl(x) != QCs_save.cloud_disable : tmp.bgMode || enB.mastered("pos", x) || pos.on()
 		},
 
 		eff(x) {

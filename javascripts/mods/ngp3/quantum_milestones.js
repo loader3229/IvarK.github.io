@@ -174,6 +174,7 @@ let qMs = {
 	},
 	10: {
 		req: 10,
+		forceDisable: () => QCs.inAny(),
 		eff: () => "Keep all your mastery studies",
 		effGot: () => "You now can keep all your mastery studies."
 	},

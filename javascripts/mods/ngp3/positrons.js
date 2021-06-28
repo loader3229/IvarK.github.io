@@ -144,7 +144,7 @@ var pos = {
 
 		for (var i = 1; i <= 3; i++) {
 			getEl("pos_cloud" + i + "_num").textContent = "Tier " + i + ": " + (pos_tmp.cloud[i] || 0) + " / " + i * 2
-			getEl("pos_cloud" + i + "_cell").className = this.isCloudRewardActive(i) ? "green" : ""
+			getEl("pos_cloud" + i + "_cell").className = pos_tmp.cloud[i] >= i * 2 ? "green" : ""
 		}
 	},
 	updateTmpOnTick() {
@@ -181,9 +181,6 @@ var pos = {
 		pos_save.eng = Math.pow(pcSum, 4)
 	},
 
-	isCloudRewardActive(x) {
-		return pos_tmp.cloud[x] >= x * 2
-	},
 	canSwap(x) {
 		return !pos_tmp.next_swaps[x] && Math.abs(enB.pos.lvl(pos_tmp.chosen, true) - enB.pos.lvl(x, true)) == 1
 	},
