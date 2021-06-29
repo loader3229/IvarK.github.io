@@ -4600,19 +4600,18 @@ function doQuantumButtonDisplayUpdating(diff){
 			} else qu_save.autobuyer.peakTime += diff
 		}
 	}
-	
-	getEl("quantumbtnFlavor").textContent = ((qu_save!==undefined?!qu_save.times&&(player.ghostify!==undefined?!player.ghostify.milestones:true):false)||QCs.inAny()?(inBR?"I am":!QCs.inAny()?"My computer is":QCs_tmp.in.length>1?"These paired challenges are":"This challenge is")+" not powerful enough... ":"") + "I need to go quantum."
-	var showGain = ((pH.did("quantum") && qu_save.times) || (pH.did("ghostify") && player.ghostify.milestones)) && (!QCs.inAny()||player.options.theme=="Aarex's Modifications") ? "QK" : ""
-	if (inBR) showGain = "SS"
-	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain "+shortenDimensions(quarkGain())+" anti-quark"+(quarkGain().eq(1)?".":"s.") : ""
+
+	var showGain = (QCs.inAny() ? QCs_save.comps >= QCs_save.in[0] : tmp.quUnl) ? "QK" : ""
+	getEl("quantumbtnFlavor").textContent = showGain != "" ? "" : QCs.inAny() ? "The unseening has been detected... Complete this challenging experiment!" : "The spacetime has been conceptualized... It's time to go quantum!"
+	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain " + shortenDimensions(quarkGain()) + " anti-quark" + (quarkGain().eq(1) ? "." : "s.") : ""
 	if (showGain == "SS") getEl("quantumbtnQKGain").textContent = "Gain " + shortenDimensions(getSpaceShardsGain()) + " Space Shards."
 	if (showGain == "QK" && currentQKmin.gt(Decimal.pow(10, 1e5))) {
 		getEl("quantumbtnRate").textContent = ''
 		getEl("quantumbtnPeak").textContent = ''
 	} else {
-		getEl("quantumbtnRate").textContent = showGain == "QK" ? shortenMoney(currentQKmin)+" QK/min" : ""
+		getEl("quantumbtnRate").textContent = showGain == "QK" ? shortenMoney(currentQKmin)+" aQs/min" : ""
 		var showQKPeakValue = QKminpeakValue.lt(1e30) || player.options.theme=="Aarex's Modifications"
-		getEl("quantumbtnPeak").textContent = showGain == "QK" ? (showQKPeakValue ? "" : "Peaked at ") + shortenMoney(QKminpeak)+" QK/min" + (showQKPeakValue ? " at " + shortenDimensions(QKminpeakValue) + " QK" : "") : ""
+		getEl("quantumbtnPeak").textContent = showGain == "QK" ? (showQKPeakValue ? "" : "Peaked at ") + shortenMoney(QKminpeak)+" aQs/min" + (showQKPeakValue ? " at " + shortenDimensions(QKminpeakValue) + " aQs" : "") : ""
 	}
 }
 
@@ -4986,7 +4985,7 @@ function generateTT(diff){
 }
 
 function thisQuantumTimeUpdating(){
-	setAndMaybeShow("quantumClock", tmp.quUnl && hasAch('ng3p21'), '"Quantum time: <b class=\'QKAmount\'>"+timeDisplay(qu_save.time)+"</b>"')
+	setAndMaybeShow("quantumClock", tmp.quUnl && !QCs.unl(), '"Quantum time: <b class=\'QKAmount\'>"+timeDisplay(qu_save.time)+"</b>"')
 }
 
 function updateInfinityTimes(){

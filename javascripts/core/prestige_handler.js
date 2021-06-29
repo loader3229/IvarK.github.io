@@ -25,14 +25,10 @@ var pH = {
 			return ngSg.can()
 		},
 		quantum() {
-			return Decimal.gte(
-					getQuantumReqSource(), 
-					getQuantumReq(true)
-				)
-				&& (!tmp.ngp3 || (
-					QCs.inAny() ? QCs.getGoal() :
-					(tmp.ngp3_mul || ECComps("eterc14")) && quarkGain().gt(0)
-				))
+			return QCs.inAny() ? QCs.getGoal() :
+				Decimal.gte(getQuantumReqSource(), getQuantumReq(true)) &&
+				(!tmp.ngp3 || tmp.ngp3_mul || ECComps("eterc14") >= 1) &&
+				getQuarkGain().gte(1)
 		},
 		ghostify() {
 			return qu_save.bigRip.active ? this.quantum() : false //hasNU(16) || pl.on()

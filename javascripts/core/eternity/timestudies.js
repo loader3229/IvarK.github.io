@@ -923,7 +923,7 @@ let tsMults = {
 		return aarMod.newGameExpVersion ? 1e30 : 1e15
 	},
 	61() {
-		return tmp.ngC ? Decimal.pow(25, Math.log10(tmp.rmPseudo.log10() / 308.25 + 1) / Math.log10(2)) : (tmp.ngp3_exp ? 100 : 10)
+		return tmp.ngC ? Decimal.pow(25, Math.log10(getReplEff().log10() / 308.25 + 1) / Math.log10(2)) : (tmp.ngp3_exp ? 100 : 10)
 	},
 	62() {
 		let r = aarMod.newGameExpVersion ? 4 : 3
@@ -956,10 +956,8 @@ let tsMults = {
 		return Decimal.pow(1.0025, getTotalDBs())
 	},
 	225() {
-		let x = Math.floor(tmp.rmPseudo.e / 1e3)
-
-		let softcapEff = 2
-		if (x > 100) x = Math.pow(x * 1e6, 1/4)
+		let x = Math.floor(getReplEff().e / 1e3)
+		if (tmp.ngp3) x = softcap(x, "ts225")
 		return Math.floor(x)
 	},
 	226() {
@@ -979,7 +977,7 @@ let tsMults = {
 		return Math.pow(1 + player.galaxies / 1000, 0.2)
 	},
 	233() {
-		let rep = (tmp.rmPseudo || player.replicanti.amount).max(1).log10()
+		let rep = getReplEff().max(1).log10()
 		rep *= 0.3
 		if (hasMTS(302)) rep *= rep / 1e5 + 1
 

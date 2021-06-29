@@ -19,7 +19,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 	var qcData = []
 	var QCType = 0
 
-	var implode = !auto && !force && !pH.did("ghostify") && (qu_save.best >= 100 || !tmp.quUnl)
+	var implode = !auto && !force && !pH.did("ghostify") && tmp.quUnl && !QCs.unl()
 	if (implode) {
 		implosionCheck = 2
 		dev.implode()
@@ -48,7 +48,7 @@ function isQuantumReached() {
 	return pH.can("quantum")
 }
 
-function getQuarkGain(){
+function getQuarkGain() {
 	return quarkGain()
 }
 
@@ -82,7 +82,6 @@ function getQuantumReqSource() {
 }
 
 function quarkGain() {
-	if (QCs.inAny()) return new Decimal(0)
 	if (!pH.did("quantum")) return new Decimal(1)
 
 	let ma = getQuantumReqSource().max(1)
@@ -277,6 +276,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	// ng+3
 	if (tmp.ngp3) {
 		qMs.update()
+		qu_save.quarkEnergy = 0
 
 		// big rip tracking
 		if (bigRip && !tmp.bruActive[12]) {

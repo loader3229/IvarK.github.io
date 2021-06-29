@@ -65,6 +65,14 @@ function isReplicantiLimitBroken() {
 	return hasTimeStudy(192) && !tmp.ngC
 }
 
+function getReplEff() {
+	return Decimal.max(tmp.rmPseudo || getReplBaseEff(), 1)
+}
+
+function getReplBaseEff() {
+	return QCs.data[1].convert(player.replicanti.amount)
+}
+
 function getReplMult(next) {
 	let exp = 2
 	if (inNGM(2)) exp = Math.max(2, Math.pow(player.galaxies, .4))
@@ -74,7 +82,7 @@ function getReplMult(next) {
 	}
 	if (tmp.ngC && ngC.tmp) exp *= ngC.tmp.rep.eff2 * 2.5
 
-	let repl = QCs.data[1].convert(player.replicanti.amount)
+	let repl = getReplBaseEff()
 	let replmult = Decimal.max(repl.log(2), 1).pow(exp)
 	if (hasTimeStudy(21) && !tmp.ngC) replmult = replmult.plus(repl.pow(0.032))
 	if (hasTimeStudy(102)) {

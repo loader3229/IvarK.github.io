@@ -199,7 +199,7 @@ function feedBlackHole(i, bulk) {
 	} else if (i == 3) {
 		let cost = Decimal.pow(10, 1e3 * player.blackhole.upgrades.replicanti + 2e4)
 		if (bulk) {
-			let toBuy = Math.floor(tmp.rmPseudo.div(cost).log10() / 1e3 + 1)
+			let toBuy = Math.floor(getReplEff().div(cost).log10() / 1e3 + 1)
 			let toSpend = Decimal.pow(10, 1e3 * toBuy - 1).times(cost)
 			player.replicanti.amount = player.replicanti.amount.minus(player.replicanti.amount.min(toSpend)).max(1)
 			player.blackhole.upgrades.replicanti += toBuy
@@ -375,7 +375,7 @@ function boostDilationUpgrade(x) {
 
 //v1.1
 function getD18Bonus() {
-	let x = player.replicanti.amount.max(1).log10() / 1e3
+	let x = getReplEff().log10() / 1e3
 	if (aarMod.nguspV) return Decimal.max(x / 20 + 1, 1)
 	if (x > 100 && aarMod.ngudpV) x = Math.log(x) * 50 //NGUd'
 	return Decimal.pow(1.05, x)

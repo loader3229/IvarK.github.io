@@ -37,7 +37,7 @@ function updateTmp(init) {
 	}
 
 	tmp.nrm = 1
-	if (hasTimeStudy(101)) tmp.nrm = (tmp.rmPseudo || QCs.data[1].convert(player.replicanti.amount)).max(1)
+	if (hasTimeStudy(101)) tmp.nrm = (tmp.rmPseudo || getReplBaseEff()).max(1)
 
 	tmp.rg4 = false
 	if (tmp.ngpX >= 5) pl.updateTmp()
@@ -65,7 +65,7 @@ function updateTmp(init) {
 	if (tmp.ngC) ngC.updateTmp()
 
 	tmp.rm = getReplMult()
-	tmp.rmPseudo = QCs.data[1].convert(player.replicanti.amount).max(hasMTS(303) ? tmp.rm.pow(1 / 0.032) : 1)
+	tmp.rmPseudo = getReplBaseEff().max(hasMTS(303) ? tmp.rm.pow(1 / 0.032) : 1)
 
 	updateExtraReplMult()
 	updateExtraReplBase()

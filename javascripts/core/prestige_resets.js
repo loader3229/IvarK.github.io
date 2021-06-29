@@ -55,6 +55,9 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	var turnSomeOn = !bigRip || tmp.bruActive[1]
 	var bigRipChanged = tmp.ngp3 && bigRip != qu_save.bigRip.active
 
+	player.bestEternity = 9999999999
+	player.lastTenEternities = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
+
 	player.infinitiedBank = 0
 	if (!headstart) player.eternities = qMs.tmp.amt >= 2 ? 100 * Math.pow(3, qMs.tmp.amt) : oheHeadstart ? 100 : 0
 	player.eternityPoints = new Decimal(0)
@@ -311,6 +314,7 @@ function doEternityResetStuff(layer = 4, chall) {
 	player.autoIP = new Decimal(0)
 	player.autoTime = 1e300
 
+	player.thisEternity = 0
 	player.bestInfinityTime = 9999999999
 	player.lastTenRuns = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
 
@@ -342,9 +346,8 @@ function doEternityResetStuff(layer = 4, chall) {
 
 	player.dilation.active = chall == "dil"
 
+	delete tmp.rmPseudo
 	tmp.rm = new Decimal(1)
-	tmp.rmPseudo = new Decimal(1)
-	tmp.extraRG = 0
 
 	player.eterc8ids = 50
 	player.eterc8repl = 40

@@ -1,5 +1,5 @@
 * {
-    font-family: "Segoe UI", "Roboto", Arial, sans-serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", Helvetica, Arial, sans-serif !important;
     letter-spacing: 0.5px;
 }
 * {
@@ -31,6 +31,7 @@ body {
 #progress {
     border: 1px solid #445;
     background: linear-gradient(#112, #223);
+    bottom: 40px;
 }
 #progressbar {
     border: 1px solid #6c6;
@@ -40,14 +41,23 @@ body {
     height: 18px;
 }
 .quantumProgress {
-    background: linear-gradient(#030, #010) !important;
-    box-shadow: inset 0 0 5px #7f77;
+    background: linear-gradient(#040, #010) !important;
+    box-shadow: inset 0 0 5px #7f73;
     border: 1px solid #474 !important;
 }
 .ghostifyProgress {
-    background: linear-gradient(#204, #100) !important;
-    box-shadow: inset 0 0 5px #a4f7;
+    background: linear-gradient(#516, #100) !important;
+    box-shadow: inset 0 0 5px #a4f3;
     border: 1px solid #a4f !important;
+}
+
+/*=============
+  F O O T E R
+=============*/
+
+#footer {
+    text-shadow: 0 0 8px #0f0f10, 0 0 6px #0f0f10, 0 0 6px #0f0f10, 0 0 6px #0f0f10,
+        0 0 8px #0f0f10, 0 0 6px #0f0f10, 0 0 6px #0f0f10, 0 0 6px #0f0f10;
 }
 
 /*=============
@@ -88,19 +98,130 @@ input[type=text], input[type=number], input:not([type]) {
     border-radius: 4px;
     color: #fff;
 }
-input::-webkit-outer-spin-button,
+... (1,653 lines left)
+Collapse
+theme-Aero.css
+48 KB
+dshamlin — Today at 11:48 AM
+2047 = 2^11 - 1, smallest composite number of the form 2^n - 1 for prime n.
+﻿
+* {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", Helvetica, Arial, sans-serif !important;
+    letter-spacing: 0.5px;
+}
+* {
+    font-weight: normal !important;
+}
+#news, #container, #statistics, #galaxyPoints, #infinityPoints1, #timetheorems, .popup {
+    color: #fff9 !important;
+}
+
+body {
+    background: #070710;
+}
+
+/*======================
+  N E W S  T I C K E R
+======================*/
+
+#game {
+    padding: 0;
+    margin-bottom: 10px;
+    border: 1px solid #445;
+    background: linear-gradient(#112, #223);
+}
+
+/*========================
+  P R O G R E S S  B A R
+========================*/
+
+#progress {
+    border: 1px solid #445;
+    background: linear-gradient(#112, #223);
+    bottom: 40px;
+}
+#progressbar {
+    border: 1px solid #6c6;
+    margin: -1px;
+    background: linear-gradient(#5a5, #363);
+    font-size: 12px;
+    height: 18px;
+}
+.quantumProgress {
+    background: linear-gradient(#040, #010) !important;
+    box-shadow: inset 0 0 5px #7f73;
+    border: 1px solid #474 !important;
+}
+.ghostifyProgress {
+    background: linear-gradient(#516, #100) !important;
+    box-shadow: inset 0 0 5px #a4f3;
+    border: 1px solid #a4f !important;
+}
+
+/*=============
+  F O O T E R
+=============*/
+
+#footer {
+    text-shadow: 0 0 8px #0f0f10, 0 0 6px #0f0f10, 0 0 6px #0f0f10, 0 0 6px #0f0f10,
+        0 0 8px #0f0f10, 0 0 6px #0f0f10, 0 0 6px #0f0f10, 0 0 6px #0f0f10;
+}
+
+/*=============
+  I N P U T S
+=============*/
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 1px solid #445;
+    background: linear-gradient(#112, #223);
+    height: 4px;
+    border-radius: 4px;
+    overflow-x: visible;
+    overflow-y: visible;
+}
+.slider::-moz-range-thumb {
+    border: 1px solid #bbf;
+    background: linear-gradient(#99b, #77c);
+    box-shadow: 0 1px 5px #000;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 1px solid #bbf;
+    background: linear-gradient(#99b, #77c);
+    box-shadow: 0 1px 5px #000;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+}
+input[type=text], input[type=number], input:not([type]) {
+    border: 1px solid #445;
+    background: linear-gradient(#112, #223);
+    border-radius: 4px;
+    color: #fff;
+}
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     appearance: none;
     margin: -1px -2px -2px 0;
     width: 0px;
     border-left: 0px solid #445;
-    background: linear-gradient(#334, #223 50%, #334 50%, #223);
+    background: 
+        conic-gradient(#0000 37.5%, #778 37.5% 62.5%, #0000 62.5%) no-repeat content-box,
+        conic-gradient(#778 12.5%, #0000 12.5% 87.5%, #778 87.5%) no-repeat content-box,
+        linear-gradient(#334, #223 50%, #334 50%, #223);
+    background-size: 8px 8px, 8px 8px, 100% 100%;
+    background-position: 2px calc(25% - 4px), 2px calc(75% + 4px), 0% 0%;
     opacity: 1;
     transition-duration: .5s !important;
 }
-input:hover::-webkit-outer-spin-button,
-input:hover::-webkit-inner-spin-button {
+input:hover::-webkit-inner-spin-button,
+input:focus::-webkit-inner-spin-button {
     width: 12px;
     border-left: 1px solid #445;
     transition-duration: .1s !important;
@@ -162,7 +283,111 @@ option {
     background-color: #334;
 }
 
+/*=====================
+  S C R O L L B A R S
+=====================*/
 
+::-webkit-scrollbar {
+    background: #112;
+    width: 18px;
+    height: 18px;
+    box-shadow: inset 0 0 10px #0007;
+    border: 1px solid #2241;
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #556, #223) no-repeat content-box;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 1px #778;
+}
+::-webkit-scrollbar-thumb:horizontal {
+    background: linear-gradient(#556, #223) no-repeat content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, #99b, #556) no-repeat content-box;
+    box-shadow: inset 0 0 0 1px #aac;
+}
+::-webkit-scrollbar-thumb:hover:horizontal {
+    background: linear-gradient(#99b, #557) no-repeat content-box;
+}
+::-webkit-scrollbar-button {
+    width: 18px;
+    height: 18px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 1px #778;
+}
+::-webkit-scrollbar-button:hover {
+    box-shadow: inset 0 0 0 1px #aac;
+}
+::-webkit-scrollbar-button:vertical:decrement {
+    background: 
+        conic-gradient(#0000 37.5%, #778 37.5% 62.5%, #0000 62.5%) no-repeat content-box,
+        linear-gradient(90deg, #556, #223) no-repeat content-box;
+    background-size: 50% 50%, 100% 100%;
+    background-position: 50% 25%, 0% 0%;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+}
+::-webkit-scrollbar-button:vertical:decrement:hover {
+    background: 
+        conic-gradient(#0000 37.5%, #dde 37.5% 62.5%, #0000 62.5%) no-repeat content-box,
+        linear-gradient(90deg, #99b, #557) no-repeat content-box;
+    background-size: 50% 50%, 100% 100%;
+    background-position: 50% 25%, 0% 0%;
+}
+::-webkit-scrollbar-button:vertical:increment {
+    background: 
+        conic-gradient(#778 12.5%, #0000 12.5% 87.5%, #778 87.5%) no-repeat content-box,
+        linear-gradient(90deg, #556, #223) no-repeat content-box;
+    background-size: 50% 50%, 100% 100%;
+    background-position: 50% 75%, 0% 0%;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+}
+::-webkit-scrollbar-button:vertical:increment:hover {
+    background: 
+        conic-gradient(#dde 12.5%, #0000 12.5% 87.5%, #dde 87.5%) no-repeat content-box,
+        linear-gradient(90deg, #99b, #557) no-repeat content-box;
+    background-size: 50% 50%, 100% 100%;
+    background-position: 50% 75%, 0% 0%;
+}
+::-webkit-scrollbar-button:horizontal:decrement {
+    background: 
+        conic-gradient(#0000 12.5%, #778 12.5% 37.5%, #0000 37.5%) no-repeat content-box,
+        linear-gradient(#556, #223) no-repeat content-box;
+    background-size: 50% 50%, 100% 100%;
+    background-position: 25% 50%, 0% 0%;
+    border-right: none;
+    border-radius: 5px 0 0 5px;
+}
+::-webkit-scrollbar-button:horizontal:decrement:hover {
+    background: 
+        conic-gradient(#0000 12.5%, #dde 12.5% 37.5%, #0000 37.5%) no-repeat content-box,
+        linear-gradient(#99b, #557) no-repeat content-box;
+    background-size: 50% 50%, 100% 100%;
+    background-position: 25% 50%, 0% 0%;
+}
+::-webkit-scrollbar-button:horizontal:increment {
+    background: 
+        conic-gradient(#0000 62.5%, #778 62.5% 87.5%, #0000 87.5%) no-repeat content-box,
+        linear-gradient(#556, #223) no-repeat content-box;
+    background-size: 50% 50%, 100% 100%;
+    background-position: 75% 50%, 0% 0%;
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+}
+::-webkit-scrollbar-button:horizontal:increment:hover {
+    background: 
+        conic-gradient(#0000 62.5%, #dde 62.5% 87.5%, #0000 87.5%) no-repeat content-box,
+        linear-gradient(#99b, #557) no-repeat content-box;
+    background-size: 50% 50%, 100% 100%;
+    background-position: 75% 50%, 0% 0%;
+}
+
+::-webkit-scrollbar-corner {
+    background: #070710;
+}
 
 /*===================
   R E S O U R C E S
@@ -252,96 +477,6 @@ option {
 .QKAmount, .SSAmount {
     color: #bf7;
     text-shadow: 0 0 5px #bf7;
-}
-td.red {
-    background: linear-gradient(#f775, #f773)
-}
-td.orange {
-    background: linear-gradient(#fa75, #fa73)
-}
-td.yellow {
-    background: linear-gradient(#ff75, #ff73)
-}
-td.dark_yellow {
-    background: linear-gradient(#bb55, #bb53)
-}
-td.lime {
-    background: linear-gradient(#bf75, #bf73)
-}
-td.green {
-    background: linear-gradient(#7f75, #7f73)
-}
-td.blue {
-    background: linear-gradient(#77f5, #77f3)
-}
-td.indigo {
-    background: linear-gradient(#97f5, #97f3)
-}
-td.violet {
-    background: linear-gradient(#c7f5, #c7f3)
-}
-td.uv {
-    background: linear-gradient(#f7f7, #f7f3)
-}
-td.red.light {
-    background: linear-gradient(#f777, #f775)
-}
-td.orange.light {
-    background: linear-gradient(#fa77, #fa75)
-}
-td.yellow.light {
-    background: linear-gradient(#ff77, #ff75)
-}
-td.dark_yellow.light {
-    background: linear-gradient(#bb57, #bb55)
-}
-td.lime.light {
-    background: linear-gradient(#bf77, #bf75)
-}
-td.green.light {
-    background: linear-gradient(#7f77, #7f75)
-}
-td.blue.light {
-    background: linear-gradient(#77f7, #77f5)
-}
-td.indigo.light {
-    background: linear-gradient(#97f7, #97f5)
-}
-td.violet.light {
-    background: linear-gradient(#c7f7, #c7f5)
-}
-td.uv.light {
-    background: linear-gradient(#f7f7, #f7f5)
-}
-.red {
-    color: #f77;
-}
-.orange {
-    color: #fa7;
-}
-.yellow {
-    color: #ff7;
-}
-.dark_yellow {
-    color: #bb5;
-}
-.lime {
-    color: #bf7;
-}
-.green {
-    color: #7f7;
-}
-.blue {
-    color: #77f;
-}
-.indigo {
-    color: #97f;
-}
-.violet {
-    color: #c7f;
-}
-.uv {
-    color: #f7f;
 }
 #rg {
     border: none !important;
@@ -519,14 +654,41 @@ newdim:hover {
     box-shadow: 0 0 8px #ccf7;
 }
 
+.unavailablebtn, .unavailablebtn:hover,
+.lockedchallengesbtn, .newdimlocked, .newdimlocked:hover {
+    background: linear-gradient(#112, #112);
+    filter: none !important;
+    color: #fff4 !important;
+    border: 1px solid #778 !important;
+    transition-duration: .5s;
+}
+
+.onchallengebtn, .chosenbtn {
+    background: linear-gradient(#131, #131);
+    filter: none !important;
+    color: #7f7 !important;
+    border: 1px solid #7f7 !important;
+    transition-duration: .5s;
+}
+
+.completedchallengesbtn {
+    background: linear-gradient(#363, #131) !important;
+    color: #fff9 !important;
+    border: 1px solid #686 !important;
+}
+.completedchallengesbtn:hover {
+    box-shadow: 0 0 8px #6867;
+}
+
 .pupg {
     background: linear-gradient(#636, #313) !important;
     color: #f8f !important;
     border: 1px solid #f8f !important;
-    box-shadow: inset 0 0 15px #f8f5;
+    text-shadow: 0 0 3px #000, 0 0 5px #f07;
+    box-shadow: inset 0 0 15px #f075;
 }
 .pupg:hover {
-    box-shadow: inset 0 0 15px #f8f5, 0 0 8px #88f7;
+    box-shadow: inset 0 0 15px #f075, 0 0 8px #f8f7;
 }
 #paradox .infinistorebtnlocked,
 #paradox .infinistorebtnlocked:hover {
@@ -540,25 +702,22 @@ newdim:hover {
     color: #f8f !important;
     border: 1px solid #f8f !important;
     filter: none !important;
-    box-shadow: inset 0 0 25px #f8f5, 0 0 8px #f8f7;
+    box-shadow: inset 0 0 25px #f8f5, inset 0 0 15px #f075, 0 0 8px #f8f7;
 }
 
-#galaxy .infinistorebtn1, 
-#galaxy .infinistorebtn2,
-#galaxy .infinistorebtn3, 
-#galaxy .infinistorebtn4 {
+#galaxy .infinistorebtn1, #galaxy .infinistorebtn2,
+#galaxy .infinistorebtn3, #galaxy .infinistorebtn4 {
     background: linear-gradient(#336, #113) !important;
     color: #99f !important;
     border: 1px solid #99f !important;
 }
-#galaxy .infinistorebtn1:hover, 
-#galaxy .infinistorebtn2:hover, 
-#galaxy .infinistorebtn3:hover, 
-#galaxy .infinistorebtn4:hover {
+#galaxy .infinistorebtn1:hover, #galaxy .infinistorebtn2:hover, 
+#galaxy .infinistorebtn3:hover, #galaxy .infinistorebtn4:hover {
     box-shadow: 0 0 8px #99f7 !important;
 }
 #galaxy .infinistorebtnbought,
-#galaxy .infinistorebtnbought:hover {
+#galaxy .infinistorebtnbought:hover,
+.galStonereward, .galStonereward:hover {
     background: linear-gradient(#447, #558) !important;
     color: #99f !important;
     border: 1px solid #99f !important;
@@ -566,28 +725,24 @@ newdim:hover {
     box-shadow: inset 0 0 25px #99f5, 0 0 8px #99f7;
 }
 #galaxy .infinistorebtnlocked,
-#galaxy .infinistorebtnlocked:hover {
+#galaxy .infinistorebtnlocked:hover,
+.galStonerewardlocked, .galStonerewardlocked:hover {
     background: linear-gradient(#001, #001) !important;
     color: #99f7 !important;
+    filter: none !important;
     border: 1px solid #99f !important;
 }
 
-.infinistorebtn1, 
-.infinistorebtn2,
-.infinistorebtn3, 
-.infinistorebtn4, 
-.infinimultbtn, 
-.infiniautobuyerbtn {
+.infinistorebtn1, .infinistorebtn2,
+.infinistorebtn3, .infinistorebtn4, 
+.infinimultbtn, .infiniautobuyerbtn {
     background: linear-gradient(#642, #321) !important;
     color: #fa7 !important;
     border: 1px solid #fa7 !important;
 }
-.infinistorebtn1:hover, 
-.infinistorebtn2:hover, 
-.infinistorebtn3:hover, 
-.infinistorebtn4:hover, 
-.infinimultbtn:hover, 
-.inifiniautobuyerbtn:hover {
+.infinistorebtn1:hover, .infinistorebtn2:hover, 
+.infinistorebtn3:hover, .infinistorebtn4:hover, 
+.infinimultbtn:hover, .inifiniautobuyerbtn:hover {
     box-shadow: 0 0 8px #fa77 !important;
 }
 .infinistorebtnlocked,
@@ -631,7 +786,7 @@ newdim:hover {
 }
 
 .timetheorembtn {
-    background: linear-gradient(#102, #000) !important;
+    background: linear-gradient(#204, #000) !important;
     color: #caf !important;
     border: 1px solid #657 !important;
     box-shadow: inset 0 0 5px #caf3;
@@ -646,195 +801,195 @@ newdim:hover {
     filter: none !important;
 }
 
-.timestudy {
-    background: linear-gradient(#102, #000) !important;
+.timestudy, #respec.timestudybought {
+    background: linear-gradient(#204, #000) !important;
     color: #caf !important;
     border: 1px solid #657 !important;
     box-shadow: inset 0 0 5px #caf3;
     animation: none;
 }
-.timestudy:hover {
+.timestudy:hover, #respec.timestudybought:hover {
     box-shadow: inset 0 0 5px #caf3, 0 0 8px #caf7;
 }
-.timestudybought, .timestudybought:hover {
-    background: linear-gradient(#002, #204) !important;
-    color: #caf !important;
-    border: 1px solid #657 !important;
+.timestudybought:not(#respec), .timestudybought:not(#respec):hover {
+    background: linear-gradient(#102, #306);
+    color: #caf;
+    border: 1px solid #657;
     filter: none !important;
     box-shadow: inset 0 0 15px #caf5, 0 0 8px #caf7;
 }
 td .timestudy.normaldimstudy {
-    background: linear-gradient(#020, #000) !important;
+    background: linear-gradient(#040, #000) !important;
     color: #8c8 !important;
     border: 1px solid #575 !important;
     box-shadow: inset 0 0 25px #8c83;
     animation: none;
 }
 td .timestudy.normaldimstudy:hover {
-    background: linear-gradient(#020, #000) !important;
+    background: linear-gradient(#040, #000) !important;
     color: #8c8 !important;
     box-shadow: inset 0 0 25px #8c83, 0 0 8px #8c87;
 }
 td .timestudybought.normaldimstudy {
-    background: linear-gradient(#020, #040) !important;
+    background: linear-gradient(#020, #060) !important;
     color: #8c8 !important;
     border: 1px solid #575 !important;
     filter: none !important;
-    box-shadow: inset 0 0 25px #8c85, 0 0 8px #8c87;
+    box-shadow: inset 0 0 25px #8c85, 0 0 8px #8c87 !important;
 }
 td .timestudy.infdimstudy {
-    background: linear-gradient(#210, #000) !important;
+    background: linear-gradient(#420, #000) !important;
     color: #fa7 !important;
     border: 1px solid #765 !important;
     box-shadow: inset 0 0 25px #fa73;
     animation: none;
 }
 td .timestudy.infdimstudy:hover {
-    background: linear-gradient(#210, #000) !important;
+    background: linear-gradient(#420, #000) !important;
     color: #fa7 !important;
     box-shadow: inset 0 0 25px #fa73, 0 0 8px #fa77;
 }
 td .timestudybought.infdimstudy {
-    background: linear-gradient(#210, #420) !important;
+    background: linear-gradient(#210, #630) !important;
     color: #fa7 !important;
     border: 1px solid #765 !important;
     filter: none !important;
-    box-shadow: inset 0 0 25px #fa75, 0 0 8px #fa77;
+    box-shadow: inset 0 0 25px #fa75, 0 0 8px #fa77 !important;
 }
 td .timestudy.timedimstudy {
-    background: linear-gradient(#102, #000) !important;
+    background: linear-gradient(#204, #000) !important;
     color: #caf !important;
     border: 1px solid #657 !important;
     box-shadow: inset 0 0 25px #caf3;
     animation: none;
 }
 td .timestudy.timedimstudy:hover {
-    background: linear-gradient(#102, #000) !important;
+    background: linear-gradient(#204, #000) !important;
     color: #caf !important;
     box-shadow: inset 0 0 25px #caf3, 0 0 8px #caf7;
 }
 td .timestudybought.timedimstudy {
-    background: linear-gradient(#102, #204) !important;
+    background: linear-gradient(#102, #306) !important;
     color: #caf !important;
     border: 1px solid #657 !important;
     filter: none !important;
-    box-shadow: inset 0 0 25px #caf5, 0 0 8px #caf7;
+    box-shadow: inset 0 0 25px #caf5, 0 0 8px #caf7 !important;
 }
 td .timestudy.activestudy {
-    background: linear-gradient(#200, #000) !important;
+    background: linear-gradient(#400, #000) !important;
     color: #f88 !important;
     border: 1px solid #755 !important;
     box-shadow: inset 0 0 25px #f883;
     animation: none;
 }
 td .timestudy.activestudy:hover {
-    background: linear-gradient(#200, #000) !important;
+    background: linear-gradient(#400, #000) !important;
     color: #f88 !important;
     box-shadow: inset 0 0 25px #f883, 0 0 8px #f887;
 }
 td .timestudybought.activestudy {
-    background: linear-gradient(#200, #400) !important;
+    background: linear-gradient(#200, #600) !important;
     color: #f88 !important;
     border: 1px solid #755 !important;
     filter: none !important;
-    box-shadow: inset 0 0 25px #f885, 0 0 8px #f887;
+    box-shadow: inset 0 0 25px #f885, 0 0 8px #f887 !important;
 }
 td .timestudy.passivestudy {
-    background: linear-gradient(#202, #000) !important;
+    background: linear-gradient(#404, #000) !important;
     color: #f8f !important;
     border: 1px solid #557 !important;
     box-shadow: inset 0 0 25px #f8f3;
     animation: none;
 }
 td .timestudy.passivestudy:hover {
-    background: linear-gradient(#202, #000) !important;
+    background: linear-gradient(#404, #000) !important;
     color: #f8f !important;
     box-shadow: inset 0 0 25px #f8f3, 0 0 8px #f8f7;
 }
 td .timestudybought.passivestudy {
-    background: linear-gradient(#202, #404) !important;
+    background: linear-gradient(#202, #606) !important;
     color: #f8f !important;
     border: 1px solid #557 !important;
     filter: none !important;
-    box-shadow: inset 0 0 25px #f8f5, 0 0 8px #f8f7;
+    box-shadow: inset 0 0 25px #f8f5, 0 0 8px #f8f7 !important;
 }
 td .timestudy.idlestudy {
-    background: linear-gradient(#002, #000) !important;
+    background: linear-gradient(#004, #000) !important;
     color: #88f !important;
     border: 1px solid #557 !important;
     box-shadow: inset 0 0 25px #88f3;
     animation: none;
 }
 td .timestudy.idlestudy:hover {
-    background: linear-gradient(#002, #000) !important;
+    background: linear-gradient(#004, #000) !important;
     color: #88f !important;
     box-shadow: inset 0 0 25px #88f3, 0 0 8px #88f7;
 }
 td .timestudybought.idlestudy {
-    background: linear-gradient(#002, #004) !important;
+    background: linear-gradient(#002, #006) !important;
     color: #88f !important;
     border: 1px solid #557 !important;
     filter: none !important;
-    box-shadow: inset 0 0 25px #88f5, 0 0 8px #88f7;
+    box-shadow: inset 0 0 25px #88f5, 0 0 8px #88f7 !important;
 }
 td .timestudy.darkstudy {
     background: linear-gradient(#222, #000) !important;
     color: #ccc !important;
     border: 1px solid #666 !important;
-    box-shadow: inset 0 0 25px #0007;
+    box-shadow: inset 0 0 25px #fff1;
     animation: none;
 }
 td .timestudy.darkstudy:hover {
     background: linear-gradient(#222, #000) !important;
     color: #ccc !important;
     border: 1px solid #666 !important;
-    box-shadow: inset 0 0 25px #0007, 0 0 8px #ccc7;
+    box-shadow: inset 0 0 25px #fff1, 0 0 8px #ccc7;
 }
 td .timestudybought.darkstudy {
-    background: linear-gradient(#222, #333) !important;
+    background: linear-gradient(#111, #333) !important;
     color: #ccc !important;
     border: 1px solid #666 !important;
     filter: none !important;
-    box-shadow: inset 0 0 25px #000f, 0 0 8px #ccc7;
+    box-shadow: inset 0 0 25px #fff2, 0 0 8px #ccc7 !important;
 }
 td .timestudy.lightstudy {
-    background: linear-gradient(#222, #000) !important;
+    background: linear-gradient(#333, #000) !important;
     color: #ccc !important;
     border: 1px solid #666 !important;
     box-shadow: inset 0 0 25px #fff3;
     animation: none;
 }
 td .timestudy.lightstudy:hover {
-    background: linear-gradient(#222, #000) !important;
+    background: linear-gradient(#333, #000) !important;
     color: #ccc !important;
     border: 1px solid #666 !important;
     box-shadow: inset 0 0 25px #fff3, 0 0 8px #ccc7;
 }
 td .timestudybought.lightstudy {
-    background: linear-gradient(#222, #333) !important;
+    background: linear-gradient(#222, #444) !important;
     color: #ccc !important;
     border: 1px solid #666 !important;
     filter: none !important;
-    box-shadow: inset 0 0 25px #fff7, 0 0 8px #ccc7;
+    box-shadow: inset 0 0 25px #fff7, 0 0 8px #ccc7 !important;
 }
 td .timestudy.elcstudy {
-    background: linear-gradient(#220, #000) !important;
+    background: linear-gradient(#330, #000) !important;
     color: #ff8 !important;
     border: 1px solid #775 !important;
     box-shadow: inset 0 0 25px #ff83;
     animation: none;
 }
 td .timestudy.elcstudy:hover {
-    background: linear-gradient(#220, #000) !important;
+    background: linear-gradient(#330, #000) !important;
     color: #ff8 !important;
     box-shadow: inset 0 0 25px #ff83, 0 0 8px #ff87 !important;
 }
 td .timestudybought.elcstudy {
-    background: linear-gradient(#220, #440) !important;
+    background: linear-gradient(#220, #550) !important;
     color: #ff8 !important;
     border: 1px solid #775 !important;
     filter: none !important;
-    box-shadow: inset 0 0 25px #ff85, 0 0 8px #ff87;
+    box-shadow: inset 0 0 25px #ff85, 0 0 8px #ff87 !important;
 }
 .timestudylocked, .timestudylocked:hover {
     background: linear-gradient(#000, #000) !important;
@@ -936,6 +1091,7 @@ td .timestudybought.elcstudy {
     background: linear-gradient(#010, #010) !important;
     color: #9f77 !important;
     border: 1px solid #9f7 !important;
+    filter: none !important;
 }
 .gluonupgradebought,
 .qMs_reward {
@@ -1208,28 +1364,84 @@ td .timestudybought.elcstudy {
     filter: none !important;
 }
 
+/*===============================
+  M A I N  T A B  B U T T O N S
+===============================*/
 
-#paradoxbtn,
-#pSac {
-    background: linear-gradient(#424, #212) !important;
+#dimensionsbtn, #dimensionsbtn ~ button {
+    margin-top: 4px;
+    /* for testing purposes */
+    //display: inline-block !important;
+}
+
+.acceleratebtn {
+    background: 
+        linear-gradient(#0007, #000), 
+        linear-gradient(90deg, #770 25%, #ff0 45%, #ff0 55%, #770 75%);
+    background-size: 100% 100%, 200% 100%;
+    color: #cc0 !important;
+    text-shadow: 0 0 3px #000, 0 0 5px #ff0 !important;
+    border: 1px solid #663 !important;
+    animation: 15s accel ease-in-out infinite !important;
+    box-shadow: inset 0 0 5px #cc03;
+}
+.acceleratebtn:hover {
+    box-shadow: inset 0 0 5px #cc03, 0 0 8px #cc07;
+}
+#accTabBtn {
+    position: relative;
+    overflow: hidden;
+}
+#accTabBtn::before {
+    content: "α";
+    top: -80px; left: 0; right: 0;
+    font-size: 6em;
+    font-weight: 100;
+    opacity: .1;
+    position: absolute;
+    transform: rotate(-20deg);
+}
+@keyframes accel {
+	0% {
+		background-position: 0% 0%, 0% 0%;
+	}
+	100% {
+		background-position: 0% 0%, 2000% 0%;
+	}
+}
+
+.paradoxbtn {
+    background: linear-gradient(#424, #000) !important;
     color: #f8f !important;
     border: 1px solid #557 !important;
-    box-shadow: inset 0 0 15px #f8f5;
+    box-shadow: inset 0 0 10px #f075;
+    text-shadow: 0 0 3px #000, 0 0 5px #f07;
 }
-#paradoxbtn:hover,
-#pSac:hover {
-    box-shadow: inset 0 0 15px #f8f5, 0 0 8px #88f7;
+.paradoxbtn:hover {
+    box-shadow: inset 0 0 10px #f075, 0 0 8px #88f7;
+}
+#paradoxbtn {
+    position: relative;
+    overflow: hidden;
+}
+#paradoxbtn::before {
+    content: "ξ";
+    top: -70px; left: 0; right: 0;
+    font-size: 6em;
+    font-weight: 100;
+    opacity: .1;
+    position: absolute;
+    transform: rotate(-20deg);
 }
 
-#galaxybtn,
-#sacrificebtn {
-    background: linear-gradient(#002, #000) !important;
+.galaxybtn {
+    background: 
+        linear-gradient(#114, #000) !important;
     color: #99f !important;
     border: 1px solid #557 !important;
     box-shadow: inset 0 0 5px #99f3;
 }
-#galaxybtn:hover,
-#sacrificebtn:hover {
+.galaxybtn:hover {
     box-shadow: inset 0 0 5px #99f3, 0 0 8px #99f7;
 }
 #galaxybtn {
@@ -1246,17 +1458,15 @@ td .timestudybought.elcstudy {
     transform: rotate(-20deg);
 }
 
-#bigcrunch,
-#infinitybtn,
-#postInfinityButton {
-    background: linear-gradient(#210, #000) !important;
+.infinitybtn,
+#bigcrunch {
+    background: linear-gradient(#420, #000) !important;
     color: #fa7 !important;
     border: 1px solid #765 !important;
     box-shadow: inset 0 0 5px #fa73;
 }
-#bigcrunch:hover,
-#infinitybtn:hover,
-#postInfinityButton:hover {
+.infinitybtn:hover,
+#bigcrunch:hover {
     box-shadow: inset 0 0 5px #fa73, 0 0 8px #fa77;
 }
 #infinitybtn {
@@ -1272,16 +1482,20 @@ td .timestudybought.elcstudy {
     position: absolute;
     transform: rotate(-20deg);
 }
+#repMajorBtn {
+    background: linear-gradient(#630, #310) !important;
+    border: 1px solid #754 !important;
+    color: #fa0 !important;
+    overflow: hidden;
+}
 
-#eternitybtn,
-#eternitystorebtn {
-    background: linear-gradient(#102, #000) !important;
+.eternitybtn, .eternitytabbtn {
+    background: linear-gradient(#204, #000) !important;
     color: #caf !important;
     border: 1px solid #657 !important;
     box-shadow: inset 0 0 5px #caf3;
 }
-#eternitybtn:hover,
-#eternitystorebtn:hover {
+.eternitybtn:hover, .eternitytabbtn:hover {
     box-shadow: inset 0 0 5px #caf3, 0 0 8px #caf7;
 }
 #eternitystorebtn {
@@ -1298,15 +1512,69 @@ td .timestudybought.elcstudy {
     transform: rotate(-20deg);
 }
 
-#quantumbtn, .quantumbtn,
-#quantumtabbtn {
-    background: linear-gradient(#020, #000) !important;
+.interrealitybtn {
+    background: linear-gradient(#000b, #000f), linear-gradient(90deg, #0f0, #39f) !important;
+    animation: irAnim 15s linear infinite alternate !important;
+    text-shadow: none !important;
+    box-shadow: inset 0 0 5px #7fc3;
+}
+.interrealitybtn:hover {
+    box-shadow: inset 0 0 5px #7fc3, 0 0 8px #7fc7;
+}
+#irTabBtn {
+    position: relative;
+    overflow: hidden;
+}
+#irTabBtn::before {
+    content: "δ";
+    top: -60px; left: 0; right: 0;
+    font-size: 6em;
+    font-weight: 100;
+    opacity: .1;
+    position: absolute;
+    transform: rotate(-20deg);
+}
+@keyframes irAnim {
+    from {
+        color: #7f7;
+        border: 1px solid #474;
+    }
+    to {
+        color: #7af;
+        border: 1px solid #357;
+    }
+}
+
+.singularitybtn {
+    background: linear-gradient(#444, #000) !important;
+    color: #ccc !important;
+    border: 1px solid #555;
+    box-shadow: inset 0 0 15px #000a, inset 0 0 5px #ccc7;
+}
+.singularitybtn:hover {
+    box-shadow: inset 0 0 15px #000a, inset 0 0 5px #ccc7, 0 0 8px #ccc7;
+}
+#sgTabBtn {
+    position: relative;
+    overflow: hidden;
+}
+#sgTabBtn::before {
+    content: "σ";
+    top: -65px; left: 0; right: 0;
+    font-size: 6em;
+    font-weight: 100;
+    opacity: .1;
+    position: absolute;
+    transform: rotate(-20deg);
+}
+
+.quantumbtn {
+    background: linear-gradient(#040, #000) !important;
     color: #bf7 !important;
     border: 1px solid #674 !important;
     box-shadow: inset 0 0 5px #bf73;
 }
-#quantumbtn:hover, .quantumbtn:hover,
-#quantumtabbtn:hover {
+.quantumbtn:hover {
     box-shadow: inset 0 0 5px #bf73, 0 0 8px #bf77;
 }
 #quantumtabbtn {
@@ -1323,17 +1591,15 @@ td .timestudybought.elcstudy {
     transform: rotate(-20deg);
 }
 
-#ghostifybtn, .ghostifybtn,
-#ghostifytabbtn {
-    background: linear-gradient(#204, #100) !important;
+.ghostifybtn {
+    background: linear-gradient(#516, #100) !important;
     color: #a4f !important;
     text-shadow: 0 0 5px #a4f;
     border: 1px solid #72f !important;
     animation: ghostifytext 15s linear infinite !important;
     box-shadow: inset 0 0 5px #7007;
 }
-#ghostifybtn:hover, .ghostifybtn:hover,
-#ghostifytabbtn:hover {
+.ghostifybtn:hover {
     box-shadow: inset 0 0 5px #7007, 0 0 8px #7f77;
 }
 #ghostifytabbtn {
@@ -1355,42 +1621,44 @@ td .timestudybought.elcstudy {
 @keyframes ghostifytext { 
 	from {
 		color: #a4f;
-		text-shadow: 0px 0px 3px #fff7, 0px 0px 6px #a4f7;
+		text-shadow: 0px 0px 3px #000, 0px 0px 3px #fff7, 0px 0px 8px #a4f7;
 	}
 	50% {
 		color: #f47;
-		text-shadow: 0px 0px 6px #fff7, 0px 0px 6px #f477;
+		text-shadow: 0px 0px 3px #000, 0px 0px 6px #fff7, 0px 0px 8px #f477;
 	}
 	to {
 		color: #a4f;
-		text-shadow: 0px 0px 3px #fff7, 0px 0px 6px #a4f7;
+		text-shadow: 0px 0px 3px #000, 0px 0px 3px #fff7, 0px 0px 8px #a4f7;
 	}
 }
 
-.unavailablebtn, .unavailablebtn:hover,
-.lockedchallengesbtn, .newdimlocked, .newdimlocked:hover {
-    background: linear-gradient(#112, #112);
-    filter: none !important;
-    color: #fff4 !important;
-    border: 1px solid #778 !important;
-    transition-duration: .5s;
+.planckbtn {
+    background: 
+        linear-gradient(#340c, #000),
+        repeating-conic-gradient(#cf0 0% 25%, #000 0% 50%) 50% !important;
+    background-size: 100% 100%, 2.71828px 2.71828px !important;
+    color: #cf0 !important;
+    text-shadow: 0px 0px 3px #000, 0 0 8px #cf0 !important;
+    border: 1px solid #673 !important;
+    box-shadow: inset 0 0 10px #cf03;
 }
-
-.onchallengebtn, .chosenbtn {
-    background: linear-gradient(#131, #131);
-    filter: none !important;
-    color: #7f7 !important;
-    border: 1px solid #7f7 !important;
-    transition-duration: .5s;
+.planckbtn:hover {
+    box-shadow: inset 0 0 10px #cf03, 0 0 8px #cf07;
+    background-size: 100% 100%, 2.71828px 2.71828px !important;
 }
-
-.completedchallengesbtn {
-    background: linear-gradient(#363, #131) !important;
-    color: #fff9 !important;
-    border: 1px solid #686 !important;
+#plancktabbtn {
+    position: relative;
+    overflow: hidden;
 }
-.completedchallengesbtn:hover {
-    box-shadow: 0 0 8px #6867;
+#plancktabbtn::before {
+    content: "κ";
+    top: -80px; left: 0; right: 0;
+    font-size: 6em;
+    font-weight: 100;
+    opacity: .1;
+    position: absolute;
+    transform: rotate(-20deg);
 }
 
 /*=============
@@ -1454,8 +1722,138 @@ td .timestudybought.elcstudy {
     box-shadow: inset 0 0 15px #373, 0 0 25px #7f7;
 }
 
+/*=================
+  S O F T C A P S
+=================*/
 
+.softcap_1 {
+    color: #886;
+    text-shadow: 1px 1px 1px #aa87, 0 0 5px #f007, 0 0 8px #000;
+}
+.softcap_2 {
+    color: #886;
+    text-shadow: 1px 1px 1px #aa87, 0 0 10px #f00c, 0 0 8px #300;
+}
+
+/*=============
+  T A B L E S
+=============*/
 
 .tab > table td {
     padding: 5px 2px;
+}
+
+td.red {
+    background: linear-gradient(#f775, #f773)
+}
+td.orange {
+    background: linear-gradient(#fa75, #fa73)
+}
+td.yellow {
+    background: linear-gradient(#ff75, #ff73)
+}
+td.dark_yellow {
+    background: linear-gradient(#bb55, #bb53)
+}
+td.lime {
+    background: linear-gradient(#bf75, #bf73)
+}
+td.green {
+    background: linear-gradient(#7f75, #7f73)
+}
+td.blue {
+    background: linear-gradient(#77f5, #77f3)
+}
+td.indigo {
+    background: linear-gradient(#97f5, #97f3)
+}
+td.violet {
+    background: linear-gradient(#c7f5, #c7f3)
+}
+td.uv {
+    background: linear-gradient(#f7f7, #f7f3)
+}
+
+td.red.light {
+    background: linear-gradient(#f777, #f775)
+}
+td.orange.light {
+    background: linear-gradient(#fa77, #fa75)
+}
+td.yellow.light {
+    background: linear-gradient(#ff77, #ff75)
+}
+td.dark_yellow.light {
+    background: linear-gradient(#bb57, #bb55)
+}
+td.lime.light {
+    background: linear-gradient(#bf77, #bf75)
+}
+td.green.light {
+    background: linear-gradient(#7f77, #7f75)
+}
+td.blue.light {
+    background: linear-gradient(#77f7, #77f5)
+}
+td.indigo.light {
+    background: linear-gradient(#97f7, #97f5)
+}
+td.violet.light {
+    background: linear-gradient(#c7f7, #c7f5)
+}
+td.uv.light {
+    background: linear-gradient(#f7f7, #f7f5)
+}
+
+#control tr:nth-child(1) td:nth-child(1) {
+    background: linear-gradient(#642, #431);
+    color: #fa7;
+}
+#control tr:nth-child(1) td:nth-child(2) {
+    background: linear-gradient(#426, #314);
+    color: #caf;
+}
+#control tr:nth-child(1) td:nth-child(3) {
+    background: linear-gradient(#363, #242);
+    color: #bf7;
+}
+#control tr:nth-child(3) td:nth-child(1) {
+    background: linear-gradient(#516, #301);
+    animation: ghostifytext 15s linear infinite;
+    text-shadow: none !important;
+}
+
+/*=============
+  C O L O R S
+=============*/
+
+.red {
+    color: #f77;
+}
+.orange {
+    color: #fa7;
+}
+.yellow {
+    color: #ff7;
+}
+.dark_yellow {
+    color: #bb5;
+}
+.lime {
+    color: #bf7;
+}
+.green {
+    color: #7f7;
+}
+.blue {
+    color: #77f;
+}
+.indigo {
+    color: #97f;
+}
+.violet {
+    color: #c7f;
+}
+.uv {
+    color: #f7f;
 }

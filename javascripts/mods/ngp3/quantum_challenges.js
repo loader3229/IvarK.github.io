@@ -43,7 +43,7 @@ var QCs = {
 		max: 8,
 		1: {
 			unl: () => true,
-			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and Mastery Study cost multipliers are higher.",
+			desc: () => "There are Replicated Compressors instead of Replicated Galaxies.",
 			goal: () => QCs_save.qc1.boosts >= (tmp.bgMode ? 4 : 5),
 			goalDisp: () => (tmp.bgMode ? 4 : 5) + " Replicated Compressors",
 			goalMA: new Decimal("1e435"),
@@ -63,11 +63,11 @@ var QCs = {
 					req: new Decimal("1e1000000"),
 					limit: new Decimal("1e10000000"),
 
-					speedMult: Decimal.pow(2, -boosts / 2),
-					scalingMult: Math.pow(2, maxBoosts / 40 + Math.max(boosts - 20, 0) / 20),
+					speedMult: Decimal.pow(2, -Math.sqrt(boosts)),
+					scalingMult: Math.pow(2, Math.max(boosts - 20, 0) / 20),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
-					effMult: (maxBoosts + boosts) / 20 + 1,
+					effMult: maxBoosts / 20 + boosts / 20 + 1,
 					effExp: Math.min(1 + boosts / 20, 2)
 				}
 				QCs_tmp.qc1 = data
@@ -84,9 +84,10 @@ var QCs = {
 			},
 			convert(x) {
 				if (!QCs_tmp.qc1) return x
-				let dilMult = Math.log2(1.01) / 1024
-				var x2 = Decimal.pow(10, Math.pow(x.log10() * dilMult, QCs_tmp.qc1.effExp) / dilMult * QCs_tmp.qc1.effMult).max(x)
-				return x2
+
+				var dilMult = Math.log2(1.01) / 1024
+				x = Decimal.pow(2, Math.pow(x.log(2) * dilMult * QCs_tmp.qc1.effMult, QCs_tmp.qc1.effExp) / dilMult)
+				return x
 			},
 
 			can: () => QCs_tmp.qc1 && pH.can("eternity") && player.replicanti.amount.gte(QCs_tmp.qc1.req) && QCs_save.qc1.boosts < 20,
@@ -101,18 +102,18 @@ var QCs = {
 		},
 		2: {
 			unl: () => true,
-			desc: () => "There is a limit on every Positronic Boost level.",
-			goal: () => false,
-			goalDisp: () => "(not implemented)",
-			goalMA: new Decimal(1),
-			rewardDesc: (x) => "Color charge multiplies color powers instead, at a really reduced rate. (not implemented)",
+			desc: () => (tmp.dtMode ? "" : "Color Powers and ") + "Entangled Boosts do nothing, and quantum energy multiplier is replaced with quark efficiency increment.",
+			goal: () => pos_save.boosts >= 7,
+			goalDisp: () => "7 Positronic Boosters",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 1.1),
+			rewardDesc: (x) => "Color charge also multiply a color power that's used by it. (" + shorten(x) + "x)",
 			rewardEff(str) {
-				return 1
+				return Math.log10(colorCharge.normal.charge + 1) / 2 + 1
 			}
 		},
 		3: {
 			unl: () => true,
-			desc: () => "There are only Meta Dimensions, but they also produce antimatter. Unlock a new set of Mastery Studies.",
+			desc: () => "There are only Meta Dimensions that produce antimatter, but successfully dilating reduces antimatter production.",
 			goal: () => false,
 			goalDisp: () => "(partly implemented)",
 			goalMA: new Decimal(1),
@@ -242,7 +243,7 @@ var QCs = {
 		return this.done(x) && QCs_tmp.rewards[x]
 	},
 	getGoal() {
-		return QCs_tmp.in.length >= 2 ? true : this.data[QCs_tmp.in[0]].goal()
+		return QCs_tmp.in.length >= 2 ? true : player.meta.bestAntimatter.gte(this.getGoalMA()) && this.data[QCs_tmp.in[0]].goal()
 	},
 	getGoalDisp() {
 		return QCs_tmp.in.length >= 2 ? "" : " and " + this.data[QCs_tmp.in[0]].goalDisp()

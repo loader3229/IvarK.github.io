@@ -148,6 +148,15 @@ var softcap_data = {
 			mul: 20
 		},
 	},
+	ts225: {
+		name: "base TS225 galaxies",
+		1: {
+			func: "pow",
+			start: 100,
+			pow: 1/4,
+			derv: false
+		}
+	},
 	ec14: {
 		name: "EC14 base interval",
 		1: {
@@ -786,6 +795,7 @@ function getSoftcapAmtFromId(id){
 		it: () => tmp.it.max(1),
 		ec14: () => tmp.rep ? tmp.rep.ec14.baseInt : new Decimal(1),
 		tt: () => getTTGenPart(player.dilation.tachyonParticles),
+		ts225: () => tsMults[225](),
 		ma: () => getExtraDimensionBoostPowerUse(),
 		ig_log_high: () => tmp.ig.max(1).log10(),
 		bam: () => getBosonicAMProduction(),
@@ -826,6 +836,7 @@ function hasSoftcapStarted(id, num){
 		*/
 		idbase: tmp.ngp3,
 		rInt: ECComps("eterc14"),
+		ts225: true,
 		dt_log: tmp.ngp3 && !tmp.bE50kDT,
 		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined && tmp.quActive,
 		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined && tmp.quActive,
@@ -943,6 +954,7 @@ function updateSoftcapStatsTab(){
 		rInt: "softcap_rInt",
 		it: "softcap_it",
 		tt: "softcap_tt",
+		ts225: "softcap_ts225",
 		ec14: "softcap_ec14",
 		ma: "softcap_ma",
 		ig_log_high: "softcap_ig",

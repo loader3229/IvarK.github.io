@@ -49,7 +49,7 @@ function getDilTimeGainPerSecond() {
 
 	//NG+3
 	if (hasAch("r137") && tmp.ngp3_boost) {
-		let log = (tmp.rmPseudo || player.replicanti.amount).max(1).log10()
+		let log = getReplEff().max(1).log10()
 		let slog = log / 1e4
 		if (hasMTS(302)) slog *= Math.log10(Math.log10(slog + 1) + 1) + 1
 

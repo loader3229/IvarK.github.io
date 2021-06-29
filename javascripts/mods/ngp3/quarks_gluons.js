@@ -189,8 +189,8 @@ function updateColorCharge() {
 			Decimal.add(usedQuarks[sorted[0]], 1)
 		)
 	}
-	if (QCs.isRewardOn(2)) colorCharge[sorted[0]] = colorCharge.normal.charge
-	if (player.ghostify.milestones <= 2) colorCharge[sorted[0]] = colorCharge.normal.charge
+	colorCharge[sorted[0]] = colorCharge.normal.charge
+	if (QCs.isRewardOn(2)) colorCharge[sorted[0]] *= QCs_tmp.rewards[2]
 	if (usedQuarks[sorted[0]] > 0 && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
 
 	colorCharge.subCancel = hasAch("ng3p13") ? Math.pow(colorCharge.normal.charge * 3, 1.25) : 0
@@ -205,6 +205,8 @@ function updateColorCharge() {
 }
 
 function getColorPowerQuantity(color, base) {
+	if (QCs.in(2) && !tmp.dtMode) return 0
+
 	let ret = colorCharge[color] * tmp.glB[color].mult
 	if (tmp.qe) ret = ret * tmp.qe.eff1 + tmp.qe.eff2
 	if (tmp.glB) ret = ret - tmp.glB[color].sub
@@ -250,7 +252,7 @@ function gainQuantumEnergy() {
 	if (isNaN(xNoDiv)) xNoDiv = 0
 	if (isNaN(x)) x = 0
 
-	qu_save.quarkEnergy = x
+	qu_save.quarkEnergy = Math.max(qu_save.quarkEnergy || 0, x)
 	qu_save.bestEnergy = Math.max(qu_save.bestEnergy || 0, xNoDiv)
 }
 
@@ -265,6 +267,8 @@ function getQEGluonsPortion() {
 }
 
 function getQuantumEnergyMult() {
+	if (QCs.in(2)) return 1
+
 	let x = 1
 	if (enB.active("glu", 1)) x += enB_tmp.glu1
 	if (tmp.ngp3_mul && tmp.glb) x += (tmp.glB.r.mult + tmp.glB.g.mult + tmp.glB.b.mult) / 15
@@ -272,6 +276,8 @@ function getQuantumEnergyMult() {
 }
 
 function getQuantumEnergyDiv() {
+	if (QCs.in(2)) return 1
+
 	let x = 1
 	if (pos.on()) x = tmp.ngp3_mul ? 10 / 9 : 4 / 3
 	return x
@@ -289,11 +295,12 @@ function updateQEGainTmp() {
 
 	data.expNum = 1
 	if (enB.active("pos", 1)) data.expNum = enB_tmp.pos1
-	if (data.expNum > data.expDen - 1) {
+	if (data.expNum > 0 && data.expNum > data.expDen - 1) {
 		let sc = data.expDen - 1
 		let scEff = data.expNum / Math.max(sc, 1)
-		data.expNum = data.expDen - 1 / Math.log2(scEff + 1)
+		data.expNum = Math.max(data.expDen - 1 / Math.log2(scEff + 1), 0)
 	}
+	if (QCs.in(2)) data.expNum += 0.75
 
 	data.exp = data.expNum / data.expDen
 	qu_save.expEnergy = data.exp
@@ -441,7 +448,7 @@ var enB = {
 	},
 	getMastered(type, x) {
 		var data = this[type]
-		return (tmp.exMode && data[x].masReqExpert) || data[x].masReq
+		return (tmp.dtMode && data[x].masReqDeath) || (tmp.exMode && data[x].masReqExpert) || data[x].masReq
 	},
 
 	colorMatch(type, x) {
@@ -525,7 +532,7 @@ var enB = {
 		},
 
 		activeReq(x) {
-			return enB.mastered("glu", x) || enB.colorMatch("glu", x)
+			return (enB.mastered("glu", x) || enB.colorMatch("glu", x)) && !QCs.in(2)
 		},
 
 		max: 12,
@@ -589,6 +596,7 @@ var enB = {
 		5: {
 			req: 10,
 			masReq: 14,
+			masReqExpert: 15,
 
 			title: "Energy Lever",
 			type: "g",
@@ -619,7 +627,9 @@ var enB = {
 		},
 		7: {
 			req: 11,
-			masReq: 1/0,
+			masReq: 20,
+			masReqExpert: 30,
+			masReqDeath: 1/0,
 
 			title: "Dilation Overflow II",
 			type: "g",
@@ -645,7 +655,7 @@ var enB = {
 		},
 		9: {
 			req: 12,
-			masReq: 15,
+			masReq: 16,
 
 			title: "Inflation Resistor",
 			type: "g",
@@ -658,20 +668,20 @@ var enB = {
 			}
 		},
 		10: {
-			req: 1/0,
+			req: 21,
 			masReq: 1/0,
 
 			title: "Blue Saturation",
 			type: "r",
 			eff(x) {
-				return 1
+				return Math.pow(x + 1, 0.1)
 			},
 			effDisplay(x) {
 				return shorten(x) + "x"
 			}
 		},
 		11: {
-			req: 1/0,
+			req: 50,
 			masReq: 1/0,
 
 			title: "Blue Unseeming",
@@ -684,7 +694,7 @@ var enB = {
 			}
 		},
 		12: {
-			req: 1/0,
+			req: 75,
 			masReq: 1/0,
 
 			title: "Color Subcharge",
@@ -735,7 +745,7 @@ var enB = {
 
 		chargeReq(x) {
 			var lvl = this.lvl(x)
-			return this[x].chargeReq * lvl
+			return this[x].chargeReq * Math.pow(lvl, 2)
 		},
 		lvl(x, next) {
 			var swaps = next ? pos_tmp.next_swaps : pos_save.swaps
@@ -753,7 +763,7 @@ var enB = {
 			tier: 1,
 			type: "g",
 			eff(x) {
-				var rep = (tmp.rmPseudo || player.replicanti.amount).max(1)
+				var rep = getReplEff()
 				return Math.log10(rep.log10() + 1) * Math.cbrt(x)
 			},
 			effDisplay(x) {
@@ -804,8 +814,8 @@ var enB = {
 		},
 		3: {
 			req: 4,
-			masReq: 6,
-			chargeReq: 4,
+			masReq: 7,
+			chargeReq: 6,
 
 			title: "Classical Positrons",
 			tier: 1,
@@ -819,8 +829,10 @@ var enB = {
 		},
 		4: {
 			req: 5,
-			masReq: 1/0,
-			chargeReq: 6,
+			masReq: 9,
+			masReqExpert: 10,
+			masReqDeath: 1/0,
+			chargeReq: 7,
 
 			title: "Quantum Scope",
 			tier: 3,
@@ -834,7 +846,7 @@ var enB = {
 			}
 		},
 		5: {
-			req: 1/0,
+			req: 100,
 			masReq: 1/0,
 			chargeReq: 3,
 

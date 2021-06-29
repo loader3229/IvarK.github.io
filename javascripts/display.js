@@ -719,10 +719,7 @@ function initialTimeStudyDisplay(){
 	getEl("212desc").textContent = "Currently: " + ((tsMults[212]() - 1) * 100).toFixed(2) + "%"
 	getEl("214desc").textContent = "Currently: " + shortenMoney(((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1)).div(tmp.sacPow)).max(1).min(new Decimal("1e125000"))) + "x"
 	getEl("221desc").textContent = "Currently: " + shorten(tsMults[221]()) + "x"
-
-	let ts225 = tsMults[225]()
-	getEl("225desc").textContent = "Currently: +" + getFullExpansion(Math.floor(ts225 * extraReplMulti)) + " extra RGs" + (ts225 > 100 ? " (softcapped)" : "")
-
+	getEl("225desc").textContent = "Currently: +" + getFullExpansion(Math.floor(tsMults[225]() * extraReplMulti)) + " extra RGs" 
 	getEl("226desc").textContent = "Currently: +" + getFullExpansion(Math.floor(tsMults[226]() * extraReplMulti)) + " extra RGs"
 	getEl("227desc").textContent = "Currently: " + shorten(tsMults[227]()) + "x"
 	getEl("231desc").textContent = "Currently: " + shorten(tsMults[231]().pow(dbExp)) + "x power"

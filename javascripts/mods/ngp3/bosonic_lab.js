@@ -185,7 +185,7 @@ function getBosonicAMProduction() {
 	let exp = player.money.max(1).log10() / 15e15 - 3
 	let ret = Decimal.pow(10, exp).times(tmp.wzb.wbp)
 
-	if (hasAch("ng3p113")) ret = ret.times(Math.log10(tmp.rmPseudo.max(1e10).log10()))
+	if (hasAch("ng3p113")) ret = ret.times(Math.log10(getReplEff().max(1e10).log10()))
 
 	ret = softcap(ret, "bam")
 	return ret
@@ -954,7 +954,7 @@ var bu = {
 			return ret / 5 + 1
 		},
 		35() {
-			return Decimal.pow(tmp.ngp3_exp ? 10 : 20, Math.pow((tmp.rmPseudo || player.replicanti.amount).log10(), 2/3) / 15e3)
+			return Decimal.pow(tmp.ngp3_exp ? 10 : 20, Math.pow(getReplEff().log10(), 2/3) / 15e3)
 		},
 		41() {
 			return {
