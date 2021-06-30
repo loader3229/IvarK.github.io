@@ -732,7 +732,7 @@ var enB = {
 		},
 
 		activeReq(x) {
-			return QCs.inAny() ? pos.on() && enB.mastered("pos", x) && this.lvl(x) != QCs_save.qc2 : tmp.bgMode || enB.mastered("pos", x) || pos.on()
+			return QCs.inAny() ? pos.on() && enB.mastered("pos", x) && (!QCs.in(2) || this.lvl(x) != QCs_save.qc2) : tmp.bgMode || enB.mastered("pos", x) || pos.on()
 		},
 
 		eff(x) {
