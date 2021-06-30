@@ -73,7 +73,7 @@ function assignQuark(color) {
 
 function assignAll(auto) {
 	var ratios = qu_save.assignAllRatios
-	var sum = ratios.r+ratios.g+ratios.b
+	var sum = ratios.r + ratios.g + ratios.b
 	var oldQuarks = getAssortAmount()
 	var colors = ['r','g','b']
 	var mult = getQuarkAssignMult()
@@ -129,7 +129,7 @@ function changeRatio(color) {
 function toggleAutoAssign() {
 	qu_save.autoOptions.assignQK = !qu_save.autoOptions.assignQK
 	getEl('autoAssign').textContent="Auto: O"+(qu_save.autoOptions.assignQK?"N":"FF")
-	if (qu_save.autoOptions.assignQK && qu_save.quarks.gt(0)) assignAll(true)
+	if (qu_save.autoOptions.assignQK) assignAll(true)
 }
 
 function rotateAutoAssign() {
@@ -205,7 +205,7 @@ function updateColorCharge() {
 }
 
 function getColorPowerQuantity(color, base) {
-	if (QCs.in(2) && !tmp.dtMode) return 0
+	if (QCs.in(2)) return 0
 
 	let ret = colorCharge[color] * tmp.glB[color].mult
 	if (tmp.qe) ret = ret * tmp.qe.eff1 + tmp.qe.eff2
@@ -276,8 +276,6 @@ function getQuantumEnergyMult() {
 }
 
 function getQuantumEnergyDiv() {
-	if (QCs.in(2)) return 1
-
 	let x = 1
 	if (pos.on()) x = tmp.ngp3_mul ? 10 / 9 : 4 / 3
 	return x
@@ -532,7 +530,7 @@ var enB = {
 		},
 
 		activeReq(x) {
-			return (enB.mastered("glu", x) || enB.colorMatch("glu", x)) && !QCs.in(2)
+			return enB.mastered("glu", x) || enB.colorMatch("glu", x)
 		},
 
 		max: 12,
@@ -595,14 +593,15 @@ var enB = {
 		},
 		5: {
 			req: 10,
-			masReq: 14,
-			masReqExpert: 15,
+			masReq: 13,
+			masReqExpert: 14,
+			masReqDeath: 15,
 
 			title: "Energy Lever",
 			type: "g",
 			eff(x) {
 				if (pos.on()) {
-					return Math.min(Math.pow(x / 10 + 1, 0.1), 4 / 3)
+					return Math.min(Math.pow(x / 10 + 1, 0.1), pos.mdbSacMult() + 1)
 				} else {
 					return Math.sqrt(x / 2)
 				}
@@ -647,7 +646,7 @@ var enB = {
 			title: "Meta Resynergizer II",
 			type: "b",
 			eff(x) {
-				return 0.15 - 0.05 / Math.pow(x + 1, 0.1)
+				return 0.125 - 0.025 / Math.pow(x + 1, 0.2)
 			},
 			effDisplay(x) {
 				return "x^" + x.toFixed(3)
@@ -733,7 +732,7 @@ var enB = {
 		},
 
 		activeReq(x) {
-			return QCs.inAny() ? pos.on() && enB.mastered("pos", x) && this.lvl(x) != QCs_save.cloud_disable : tmp.bgMode || enB.mastered("pos", x) || pos.on()
+			return QCs.inAny() ? pos.on() && enB.mastered("pos", x) && this.lvl(x) != QCs_save.qc2 : tmp.bgMode || enB.mastered("pos", x) || pos.on()
 		},
 
 		eff(x) {
@@ -1001,8 +1000,6 @@ var enB = {
 			if (has) {
 				el.parentElement.className = !active ? "red" : mastered ? "yellow" : enB.colorMatch(type, e) ? "green" : "orange"
 				el.textContent = typeData.name + " Boost #" + e
-
-				getEl("enB_" + type + e + "_type").innerHTML = (mastered ? "(Mastered - formerly " : active ? "(" : "(Inactive - ") + (typeData[e].anti ? "anti-" : "") + typeData[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : " - Get " + getFullExpansion(enB.getMastered(type, e)) + " " + typeData.name + " Boosters to master)") + (typeData[e].activeDispReq ? "<br>Requirement: " + typeData[e].activeDispReq() : "")
 			}
 		}
 
@@ -1016,8 +1013,14 @@ var enB = {
 
 		for (var i = 1; i <= data.max; i++) {
 			if (!this.has(type, i)) break
-			if (enB_tmp[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(enB_tmp[type + i])
+
+			var active = this.active(type, i)
+			var mastered = this.mastered(type, i)
+
 			getEl("enB_" + type + i + "_name").textContent = shiftDown ? (data[i].title || "Unknown title.") : (data.name + " Boost #" + i)
+			getEl("enB_" + type + i + "_type").innerHTML = "(" + (active ? "" : "Inactive - ") + (mastered ? "Mastered" + (shiftDown ? " - " : "") : "") + (!mastered || shiftDown ? (data[i].anti ? "anti-" : "") + data[i].type.toUpperCase() + "-type boost" : "") + (mastered ? ")" : " - Get " + getFullExpansion(enB.getMastered(type, i)) + " " + data.name + " Boosters to master)") + (data[i].activeDispReq ? "<br>Requirement: " + data[i].activeDispReq() : "")
+
+			if (enB_tmp[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(enB_tmp[type + i])
 			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = "Tier " + enB.pos.lvl(i) + " - " + (!enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No self-boost)" : "Self-boost is at " + shorten(enB.pos.chargeReq(i)) + " charge")
 		}
 	}
@@ -1026,13 +1029,13 @@ var enB_tmp = {}
 let ENTANGLED_BOOSTS = enB
 
 function gainQKOnQuantum(qkGain) {
-	if (!QCs.inAny()) {
-		qu_save.quarks = qu_save.quarks.add(qkGain)
-		if (!tmp.ngp3 || player.ghostify.milestones < 8) qu_save.quarks = qu_save.quarks.round()
-	}
-
 	var oldGluUnl = enB.glu.unl()
 
+	//Nothing -> Quarks
+	qu_save.quarks = qu_save.quarks.add(qkGain)
+	if (!tmp.ngp3 || player.ghostify.milestones < 8) qu_save.quarks = qu_save.quarks.round()
+
+	//Quarks -> Gluons
 	var u = qu_save.usedQuarks
 	var g = qu_save.gluons
 	var p = ["rg", "gb", "br"]
@@ -1042,14 +1045,16 @@ function gainQKOnQuantum(qkGain) {
 		g[p[c]] = g[p[c]].add(d[c]).round()
 		u[p[c][0]] = u[p[c][0]].sub(d[c]).round()
 	}
+	if (enB.glu.unl() && !oldGluUnl) $.notify("Congratulations, you have unlocked Anti-Gluons!")
 
-	updateQuantumWorth()
+	//Quarks -> Colors
+	if (qu_save.autoOptions.assignQK) assignAll(true)
 	updateColorCharge()
 
+	//Quarks & Gluons -> Energy
+	updateQuantumWorth()
 	updateQEGainTmp()
 	gainQuantumEnergy()
-
-	if (enB.glu.unl() && !oldGluUnl) $.notify("Congratulations, you have unlocked Anti-Gluons!")
 }
 
 //Display

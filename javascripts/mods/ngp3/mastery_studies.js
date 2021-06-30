@@ -34,7 +34,7 @@ var mTs = {
 			ex_13: 5e69
 		},
 		dil: {
-			7: 2e74, 8: 1e78, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
+			7: 2e74, 8: 1e81, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
 		}
 	},
 	costs: {
@@ -47,9 +47,9 @@ var mTs = {
 
 			//Quantum
 			t271: "reset", t272: 1.5,
-			t281: 2, t282: 6, t283: 6, t284: 2,
-			t291: 3, t292: 3,
-			t301: 3, t302: "reset", t303: 3,
+			t281: 2.5, t282: 5, t283: 5, t284: 2.5,
+			t291: 4, t292: 4,
+			t301: 10, t302: "reset", t303: 10,
 			t311: 1 / 2, t312: 16, t313: 16, t314: 1 / 2,
 
 			//Beginner Mode
@@ -116,7 +116,7 @@ var mTs = {
 			return enB.glu.engAmt() >= (tmp.exMode ? 5.9 : tmp.bgMode ? 5.3 : 5.5)
 		},
 		d8() {
-			return enB.pos.engAmt() >= 6
+			return enB.pos.engAmt() >= 5
 		},
 		d9() {
 			return false
@@ -148,7 +148,7 @@ var mTs = {
 			return (tmp.exMode ? 5.9 : tmp.bgMode ? 5.3 : 5.5) + " quantum energy"
 		},
 		d8() {
-			return "6 positronic charge"
+			return "5 positronic charge"
 		},
 		d9() {
 			return "COMING IN BETA V0.5"
@@ -248,7 +248,7 @@ var mTs = {
 			let tpLog = player.dilation.tachyonParticles.max(1).log10()
 			let bpLog = colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0
 
-			return Math.pow(tpLog / 100, 0.75) * Math.pow(bpLog, 0.25) / 4 + 1
+			return Math.pow(tpLog / 100, 0.75) * Math.pow(bpLog, 0.25) / 8 + 1
 		},
 	},
 	eff(id, uses = "") {
@@ -429,7 +429,7 @@ function convertMasteryStudyIdToDisplay(x) {
 function updateMasteryStudyCosts() {
 	var oldBought = mTs.bought
 	mTs.latestBoughtRow = 0
-	mTs.baseCostMult = QCs.in(3) ? 1e-32 : hasAch("ng3p12") ? 0.5 : 1
+	mTs.baseCostMult = hasAch("ng3p12") ? 0.5 : 1
 	mTs.costMult = mTs.baseCostMult
 	mTs.bought = 0
 	mTs.ttSpent = 0

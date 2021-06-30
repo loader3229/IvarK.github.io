@@ -168,12 +168,22 @@ button:hover {
 	color: #ffff7f !important
 }
 
+/* Paradox */
+.paradoxbtn {
+	background: rgba(255, 0, 191, 0.25) linear-gradient(transparent, #ff1f7f, transparent) !important;
+	border: 2px solid !important;
+	border-color: transparent transparent #ff00bf transparent !important;
+	text-shadow: 2px 2px 1px rgba(255, 31, 127, 0.5) !important;
+	box-shadow: 0px 3px 6px rgba(255, 0, 191, 0.5), inset 0px 0px 12px rgba(255, 127, 223, 0.5) !important;
+	color: #ff7fdf !important
+}
+
 /* Galaxy */
 .galaxybtn, #gSacrifice.storebtn {
-	background: rgba(0, 63, 255, 0.25) linear-gradient(transparent, #003f7f, transparent) !important;
+	background: rgba(0, 63, 255, 0.25) linear-gradient(transparent, #005f7f, transparent) !important;
 	border: 2px solid !important;
 	border-color: transparent transparent #003fff transparent !important;
-	text-shadow: 2px 2px 1px rgba(0, 127, 255, 0.5);
+	text-shadow: 2px 2px 1px rgba(0, 191, 255, 0.5);
 	box-shadow: 0px 3px 6px rgba(0, 63, 255, 0.5), inset 0px 0px 12px rgba(127, 159, 255, 0.5);
 	color: #7f9fff !important
 }

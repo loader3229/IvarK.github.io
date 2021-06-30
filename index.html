@@ -95,6 +95,7 @@
 		<div id="chall13Mult"></div>
 		<div id="c14Resets"></div>
 		<div id="ec12Mult"></div>
+		<div id="qc3Mult"></div>
 		<div>
 			<p>You have <span id="coinAmount" onclick="onAntimatterClick()" style="font-size:25px; color: black">0</span> antimatter.</p>
 		</div>
@@ -1571,7 +1572,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - 6/28/2021 Build)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - 6/29/2021 Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -3399,7 +3400,7 @@
 			<div id="quantumchallenges" class="challengeTab">
 				All quantum mechanics will change, when entering a Quantum Challenge:
 				<br>
-				No global quark energy bonus, no gluon nerfs, and mastered boosts only work, but 1 tier must be excluded.
+				No global quark energy bonus, no gluon nerfs, and mastered boosts only work.
 				<br>
 				<table class="table" id="qcs_div" style="margin: 0 auto"></table>
 				<!--
@@ -4630,7 +4631,7 @@
 					<br>
 					<span id="enB_glu6_type"></span>
 					<br><br>
-					Strengthen replicate interval upgrades by <span id="enB_glu6_eff" style="font-size:24px"></span>.
+					Strengthen replicanti upgrades by <span id="enB_glu6_eff" style="font-size:24px"></span>. (except Replicated Galaxies)
 				</td>
 			</tr>
 			<tr>
@@ -4863,7 +4864,7 @@
 						<b id="pos_cloud1_num" style="font-size: 15px"></b>
 					</td>
 					<td>
-						<button class="storebtn longbtn" id="pos_cloud1_toggle" onclick="QCs.switchDisability(1)">Disable on challenge</button>
+						<button class="storebtn longbtn" id="pos_cloud1_toggle" onclick="QCs.data[2].switch(1)">Disable on challenge</button>
 					</td>
 				</tr>
 				<tr>
@@ -4889,7 +4890,7 @@
 						<b id="pos_cloud2_num" style="font-size: 15px"></b>
 					</td>
 					<td>
-						<button class="storebtn longbtn" id="pos_cloud2_toggle" onclick="QCs.switchDisability(2)">Disable on challenge</button>
+						<button class="storebtn longbtn" id="pos_cloud2_toggle" onclick="QCs.data[2].switch(2)">Disable on challenge</button>
 					</td>
 				</tr>
 				<tr>
@@ -4929,7 +4930,7 @@
 						<b id="pos_cloud3_num" style="font-size: 15px"></b>
 					</td>
 					<td>
-						<button class="storebtn longbtn" id="pos_cloud3_toggle" onclick="QCs.switchDisability(3)">Disable on challenge</button>
+						<button class="storebtn longbtn" id="pos_cloud3_toggle" onclick="QCs.data[2].switch(3)">Disable on challenge</button>
 					</td>
 				</tr>
 				<tr>

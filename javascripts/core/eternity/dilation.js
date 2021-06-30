@@ -200,7 +200,7 @@ function getReqForTPGain() {
 
 	let log = tp.div(getTPMult()).pow(1 / getTPExp()).div(getAMEffToTP())
 	if (log.gt(player.totalmoney.log10())) return 0
-	return Decimal.pow(10, log.toNumber())
+	return Decimal.pow(10, log.toNumber()).max("1e400")
 }
 
 function getReqForTPGainDisp() {
@@ -629,8 +629,10 @@ function getFreeGalaxyThresholdIncrease() {
 
 	if (tmp.ngp3 && dil2 > 30) thresholdMult = Math.pow(thresholdMult, 1 / Math.sqrt(Math.log10(dil2 / 3)))
 
-	if (player.exdilation != undefined) thresholdMult -= Math.min(.1 * exDilationUpgradeStrength(2), 0.2)
-	if (thresholdMult < 1.15 && aarMod.nguspV !== undefined) thresholdMult = 1.05 + 0.1 / (2.15 - thresholdMult)
+	if (player.exdilation != undefined) {
+		thresholdMult -= Math.min(.1 * exDilationUpgradeStrength(2), 0.2)
+		if (tmp.ngp3 && thresholdMult < 1.15) thresholdMult = 1.05 + 0.1 / (2.15 - thresholdMult)
+	}
 	return thresholdMult
 }
 

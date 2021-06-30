@@ -7,7 +7,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 	var mode = ""
 	var data
 	if (qc) {
-		if (!QCs.done(1) || player.options.challConf || aarMod.quantumConf) {
+		if ((!QCs.done(1) || player.options.challConf || aarMod.quantumConf) && !quick) {
 			if (!confirm("This performs a forced Quantum reset, but you will be brought into a real challenge. All rebuyables will also be resetted. Are you sure you want to take this challenge down?")) return
 		}
 		mode = "qc"
@@ -379,7 +379,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 
 	if (tmp.ngp3) {
 		if (!force) {
-			if (qu_save.autoOptions.assignQK) assignAll(true)
 			if (pH.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode != "t") rotateAutoUnstable()
 		} //bounds if (!force)
@@ -409,7 +408,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 			if (pH.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			qu_save.bigRip.active = bigRip
 		}
-		player.eternityBuyer.statBeforeDilation = 0
 		if ((player.autoEterMode=="replicanti"||player.autoEterMode=="peak")&&qMs.tmp.amt<18) {
 			player.autoEterMode="amount"
 			updateAutoEterMode()

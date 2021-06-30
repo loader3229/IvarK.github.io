@@ -141,8 +141,8 @@ let qMs = {
 	},
 	4: {
 		req: 4,
-		eff: () => "Unlock the 'X times eternitied' and dilation modes for auto-Eternity",
-		effGot: () => "You have unlocked the 'X times eternitied' and dilation modes for auto-Eternity."
+		eff: () => "Unlock 'X times eternities' mode of auto-Eternity, and unlock Auto-Dilation",
+		effGot: () => "You have unlocked the 'X times eternitied' mode for auto-Eternity... And you can now automatically dilate time!"
 	},
 	5: {
 		req: 5,
@@ -239,7 +239,7 @@ let qMs = {
 		effGot: () => "You can now automatically assort quarks."
 	},
 	23: {
-		req: 40,
+		req: 50,
 		eff: () => "Able to purchase all time studies without blocking",
 		effGot: () => "You now can buy every single time study."
 	},

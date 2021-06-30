@@ -1067,7 +1067,6 @@ function doNGPlusThreeNewPlayer(){
 	for (d = 1; d < 9; d++) qu_save.emperorDimensions[d] = {workers: 0, progress: 0, perm: 0}
 	player.dontWant = false
 	qu_save.nanofield = getBrandNewNanofieldData()
-	qu_save.autoAssign = false
 	qu_save.reachedInfQK = false
 	qu_save.notrelative = false
 	qu_save.wasted = false
@@ -1516,6 +1515,7 @@ function updateMoney() {
 	}
 	if (inNC(14) && inNGM(4)) getEl("c14Resets").textContent = "You have "+getFullExpansion(10-getTotalResets())+" resets left."
 	getEl("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult) + "x" : ""
+	getEl("qc3Mult").textContent = QCs.in(3) ? "Antimatter exponent: " + QCs.data[3].amExp().toFixed(2) : ""
 }
 
 function updateCoinPerSec() {
@@ -3342,7 +3342,7 @@ function eternity(force, auto, forceRespec, dilated) {
 		let gain = getTPGain()
 		if (gain.gte(player.dilation.totalTachyonParticles)) {
 			if (player.dilation.totalTachyonParticles.gt(0) && gain.div(player.dilation.totalTachyonParticles).lt(2)) player.eternityBuyer.slowStopped = true
-			if (tmp.ngp3) player.dilation.times++
+			if (tmp.ngp3) player.dilation.times = (player.dilation.times || 0) + 1
 			player.dilation.totalTachyonParticles = gain
 			setTachyonParticles(gain)
 		}
@@ -4040,7 +4040,7 @@ function requiredInfinityUpdating(diff){
 		if (tmp.ngp3 && player.firstAmount.gt(0)) player.dontWant = false
 	}
 
-	var amProd = QCs.in(3) ? getMDProduction(1) : getDimensionProductionPerSecond(1)
+	var amProd = QCs.in(3) ? QCs.data[3].amProd() : getDimensionProductionPerSecond(1)
 	amProd = amProd.times(diff)
 	player.money = player.money.plus(amProd)
 	player.totalmoney = player.totalmoney.plus(amProd)

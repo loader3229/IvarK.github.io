@@ -49,8 +49,8 @@ var pos = {
 		pos_save.on = !pos_save.on
 		quantum(false, true)
 	},
-	maxSacMult() {
-		return 0.25
+	mdbSacMult() {
+		return QCs.done(3) ? 0.4 : 1 / 3
 	},
 	types: {
 		ng: {
@@ -155,7 +155,7 @@ var pos = {
 		pos_save.eng = 0
 		if (this.on()) {
 			let mdbStart = 0
-			let mdbMult = 1 / 3
+			let mdbMult = pos.mdbSacMult()
 
 			data.sac_mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
 			data.sac_qe = qu_save.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)

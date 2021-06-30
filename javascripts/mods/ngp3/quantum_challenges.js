@@ -20,18 +20,13 @@ var QCs = {
 		if (data === undefined) data = this.setup()
 		QCs_save = data
 
-		if (QCs_save.cloud_disable === undefined) {
-			QCs_save.cloud_disable = 1
-			QCs_save.best_exclusion = {}
-			QCs_save.in = []
-		}
 		if (QCs_save.qc1 === undefined) this.reset()
+		if (typeof(QCs_save.qc2) !== "number") QCs_save.qc2 = QCs_save.cloud_disable || 1
 		this.updateTmp()
 		this.updateDisp()
 	},
 	reset() {
 		QCs_save.qc1 = {boosts: 0, max: 0}
-		QCs_save.qc2 = [0, 0]
 		QCs_save.qc3 = undefined
 		QCs_save.qc4 = undefined
 		QCs_save.qc5 = 0
@@ -102,24 +97,45 @@ var QCs = {
 		},
 		2: {
 			unl: () => true,
-			desc: () => (tmp.dtMode ? "" : "Color Powers and ") + "Entangled Boosts do nothing, and quantum energy multiplier is replaced with quark efficiency increment.",
+			desc: () => "Gain extra quark efficiency, but color powers and quantum energy multiplier are useless; and you must exclude 1 tier from Positron Cloud.",
 			goal: () => pos_save.boosts >= 7,
 			goalDisp: () => "7 Positronic Boosters",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.1),
 			rewardDesc: (x) => "Color charge also multiply a color power that's used by it. (" + shorten(x) + "x)",
 			rewardEff(str) {
 				return Math.log10(colorCharge.normal.charge + 1) / 2 + 1
+			},
+
+			updateCloudDisp() {
+				let unl = QCs.in(2)
+				for (let t = 1; t <= 3; t++) {
+					getEl("pos_cloud" + t + "_toggle").style.display = unl && pos_tmp.cloud[t] ? "" : "none"
+					if (unl) getEl("pos_cloud" + t + "_toggle").className = (QCs_save.qc2 == t ? "chosenbtn" : "storebtn") + " longbtn"
+				}
+			},
+			switch(x) {
+				if (QCs_save.qc2 == x) return
+				if (!confirm("This will restart your run. Are you sure?")) return
+				QCs_save.qc2 = x
+				quantum(false, true, 2, false, false, true)
 			}
 		},
 		3: {
 			unl: () => true,
 			desc: () => "There are only Meta Dimensions that produce antimatter, but successfully dilating reduces antimatter production.",
-			goal: () => false,
-			goalDisp: () => "(partly implemented)",
-			goalMA: new Decimal(1),
-			rewardDesc: (x) => "You can keep that new set of Mastery Studies.",
+			goal: () => player.dilation.times >= 3,
+			goalDisp: () => "3 successful dilation runs",
+			goalMA: new Decimal(1e50),
+			rewardDesc: (x) => "You sacrifice 40% of Meta Dimension Boosts instead of 33%.",
 			rewardEff(str) {
 				return 1
+			},
+
+			amProd() {
+				return getMDProduction(1).max(1).pow(this.amExp())
+			},
+			amExp() {
+				return 20 / Math.sqrt((player.dilation.times || 0) / 3 + 1)
 			}
 		},
 		4: {
@@ -259,11 +275,6 @@ var QCs = {
 	start(x) {
 		quantum(false, true, x)
 	},
-	switchDisability(x) {
-		if (QCs.inAny()) return
-		QCs_save.cloud_disable = x
-		this.updateCloudDisp()
-	},
 
 	setupDiv() {
 		if (this.divInserted) return
@@ -291,7 +302,7 @@ var QCs = {
 		getEl("repExpand").style.display = QCs_tmp.qc5 ? "" : "none"
 
 		//Positrons: HTML
-		this.updateCloudDisp()
+		this.data[2].updateCloudDisp()
 		
 		//Quantum Challenges
 		if (!unl) return
@@ -354,13 +365,6 @@ var QCs = {
 				getEl("bigripupg" + u).className = qu_save.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : qu_save.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
 				getEl("bigripupg" + u + "cost").textContent = shortenDimensions(new Decimal(bigRipUpgCosts[u]))
 			}
-		}
-	},
-	updateCloudDisp() {
-		let unl = QCs.unl()
-		for (let t = 1; t <= 3; t++) {
-			getEl("pos_cloud" + t + "_toggle").style.display = unl && pos_tmp.cloud[t] ? "" : "none"
-			if (unl) getEl("pos_cloud" + t + "_toggle").className = (QCs_save.cloud_disable == t ? "chosenbtn" : QCs.inAny() ? "unavailablebtn" : "storebtn") + " longbtn"
 		}
 	},
 	updateDispOnTick() {
