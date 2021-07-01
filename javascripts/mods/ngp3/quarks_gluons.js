@@ -316,9 +316,13 @@ function updateQuarkEnergyEffects() {
 	if (!tmp.quActive) return
 
 	var eng = qu_save.quarkEnergy
+
 	var exp = 4 / 3
+	var exp2 = 4 / 3
+	if (QCs.inAny()) exp2 *= tmp.exMode ? 0 : tmp.bgMode ? 1 : 0.5
+
 	tmp.qe.eff1 = Math.pow(Math.log10(eng / 1.7 + 1) + 1, exp)
-	tmp.qe.eff2 = QCs.inAny() ? 0 : Math.pow(eng, exp) * tmp.qe.eff1 / 4
+	tmp.qe.eff2 = Math.pow(eng, exp2) * tmp.qe.eff1 / 4 * exp2 / exp
 }
 
 function buyQuarkMult(name) {
@@ -593,8 +597,8 @@ var enB = {
 		},
 		5: {
 			req: 10,
-			masReq: 13,
-			masReqExpert: 14,
+			masReq: 12,
+			masReqExpert: 13,
 			masReqDeath: 15,
 
 			title: "Energy Lever",

@@ -38,15 +38,19 @@ var QCs = {
 		max: 8,
 		1: {
 			unl: () => true,
-			desc: () => "There are Replicated Compressors instead of Replicated Galaxies.",
-			goal: () => QCs_save.qc1.boosts >= (tmp.bgMode ? 4 : 5),
-			goalDisp: () => (tmp.bgMode ? 4 : 5) + " Replicated Compressors",
-			goalMA: new Decimal("1e435"),
+			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and TT softcap is " + formatReductionPercentage(QCs.data[1].ttScaling()) + "% faster.",
+			goal: () => QCs_save.qc1.boosts >= (tmp.dtMode ? 5 : 4),
+			goalDisp: () => (tmp.dtMode ? 5 : 4) + " Replicated Compressors",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 1.3),
+			hint: "Figure out how to get more Replicanti Chance (MS35), and to minimize the spending of TT.",
 			rewardDesc: (x) => "You can keep Replicated Compressors.",
 			rewardEff(str) {
 				return 0.1
 			},
 
+			ttScaling() {
+				return tmp.dtMode ? 2 : tmp.exMode ? 1.75 : 1.5
+			},
 			updateTmp() {
 				delete QCs_tmp.qc1
 				if (!QCs.in(1) && !QCs.done(1)) return
@@ -56,19 +60,19 @@ var QCs = {
 
 				let data = {
 					req: new Decimal("1e1000000"),
-					limit: new Decimal("1e10000000"),
+					limit: new Decimal("1e5000000"),
 
-					speedMult: Decimal.pow(2, -Math.sqrt(boosts)),
+					speedMult: Decimal.pow(boosts + 1, 2),
 					scalingMult: Math.pow(2, Math.max(boosts - 20, 0) / 20),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
-					effMult: maxBoosts / 20 + boosts / 20 + 1,
+					effMult: maxBoosts / 20 + boosts / 15 + 1,
 					effExp: Math.min(1 + boosts / 20, 2)
 				}
 				QCs_tmp.qc1 = data
 
 				if (QCs.in(1)) {
-					data.limit = data.limit.pow(tmp.exMode ? 0.2 : tmp.bgMode ? 0.1 : 0.15)
+					data.limit = data.limit.pow(tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3)
 				}
 
 				let qc5 = QCs_tmp.qc5
@@ -290,7 +294,7 @@ var QCs = {
 		'<span id="qc_' + x + '_desc"></span><br><br>' +
 		'<div class="outer"><button id="qc_' + x + '_btn" class="challengesbtn" onclick="QCs.start(' + x + ')">Start</button><br>' +
 		'Goal: <span id="qc_' + x + '_goal"></span><br>' +
-		'Reward: <span id="qc_' + x + '_reward"></span>' +
+		'<span id="qc_' + x + '_reward"></span>' +
 		'</div></div></td>',
 	divInserted: false,
 
@@ -307,6 +311,7 @@ var QCs = {
 		//Quantum Challenges
 		if (!unl) return
 
+		getEl("qc_effects").textContent = (tmp.bgMode ? "No" : (tmp.exMode ? "No" : "Reduced") + " global quark energy bonus, no") + " gluon nerfs, and mastered boosts only work."
 		for (let qc = 1; qc <= this.data.max; qc++) {
 			var cUnl = QCs_tmp.unl.includes(qc)
 
@@ -371,7 +376,7 @@ var QCs = {
 		if (!this.divInserted) return
 
 		for (let qc = 1; qc <= this.data.max; qc++) {
-			if (QCs_tmp.unl.includes(qc)) getEl("qc_" + qc + "_reward").textContent = this.data[qc].rewardDesc(QCs_tmp.rewards[qc])
+			if (QCs_tmp.unl.includes(qc)) getEl("qc_" + qc + "_reward").textContent = shiftDown ? "Hint: " + this.data[qc].hint : "Reward: " + this.data[qc].rewardDesc(QCs_tmp.rewards[qc])
 		}
 	},
 	updateBest() {
