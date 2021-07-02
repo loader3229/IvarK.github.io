@@ -139,7 +139,7 @@ let ETER_UPGS = {
 	},
 	15: {
 		unl: () => tmp.ngp3,
-		cost: "1e2500000",
+		cost: "1e2400000",
 		desc: () => tmp.ngp3_mul ? "You can buy all possible time studies." : "You can buy up to 2 paths from second split."
 	},
 

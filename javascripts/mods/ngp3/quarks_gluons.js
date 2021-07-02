@@ -540,8 +540,9 @@ var enB = {
 		max: 12,
 		1: {
 			req: 1,
-			masReq: 7,
-			masReqExpert: 9,
+			masReq: 6,
+			masReqExpert: 7,
+			masReqDeath: 10,
 
 			title: "Quantum Tesla",
 			type: "r",
@@ -553,7 +554,7 @@ var enB = {
 			}
 		},
 		2: {
-			req: 3,
+			req: 4,
 			masReq: 9,
 			masReqExpert: 11,
 
@@ -574,14 +575,14 @@ var enB = {
 			title: "Dilation Overflow",
 			type: "b",
 			eff(x) {
-				return Math.sqrt(x / 2 + 1, 0.5)
+				return Math.sqrt(x / 2.5 + 1, 0.5)
 			},
 			effDisplay(x) {
 				return formatReductionPercentage(x, 2, 3)
 			}
 		},
 		4: {
-			req: 8,
+			req: 7,
 			masReq: 11,
 			masReqExpert: 12,
 
@@ -605,7 +606,7 @@ var enB = {
 			type: "g",
 			eff(x) {
 				if (pos.on()) {
-					return Math.min(Math.pow(x / 10 + 1, 0.1), pos.mdbSacMult() + 1)
+					return Math.min(Math.pow(x / 20 + 1, 0.2), pos.mdbSacMult() + 1)
 				} else {
 					return Math.sqrt(x / 2)
 				}
@@ -658,7 +659,7 @@ var enB = {
 		},
 		9: {
 			req: 12,
-			masReq: 16,
+			masReq: 1/0,
 
 			title: "Inflation Resistor",
 			type: "g",
@@ -671,7 +672,7 @@ var enB = {
 			}
 		},
 		10: {
-			req: 21,
+			req: 1/0,
 			masReq: 1/0,
 
 			title: "Blue Saturation",
@@ -775,7 +776,7 @@ var enB = {
 		},
 		2: {
 			req: 3,
-			masReq: 5,
+			masReq: 6,
 			chargeReq: 0,
 
 			title: "Meta Accelerator",
@@ -1009,6 +1010,11 @@ var enB = {
 
 		if (type == "pos") pos.updateCloud()
 	},
+	updateUnlock() {
+		let gluUnl = enB.glu.unl()
+		getEl("gluon_req").textContent = gluUnl ? "" : "To unlock anti-Gluons, you need to go Quantum with at least 2 colored kinds of anti-Quarks."
+		getEl("gluonstabbtn").style.display = gluUnl ? "" : "none"
+	},
 	updateOnTick(type) {
 		var data = this[type]
 
@@ -1049,7 +1055,10 @@ function gainQKOnQuantum(qkGain) {
 		g[p[c]] = g[p[c]].add(d[c]).round()
 		u[p[c][0]] = u[p[c][0]].sub(d[c]).round()
 	}
-	if (enB.glu.unl() && !oldGluUnl) $.notify("Congratulations, you have unlocked Anti-Gluons!")
+	if (enB.glu.unl() && !oldGluUnl) {
+		$.notify("Congratulations, you have unlocked Anti-Gluons!")
+		enB.updateUnlock()
+	}
 
 	//Quarks -> Colors
 	if (qu_save.autoOptions.assignQK) assignAll(true)

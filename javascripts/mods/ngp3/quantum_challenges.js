@@ -60,7 +60,7 @@ var QCs = {
 
 				let data = {
 					req: new Decimal("1e1000000"),
-					limit: new Decimal("1e5000000"),
+					limit: new Decimal("1e6000000"),
 
 					speedMult: Decimal.pow(boosts + 1, 2),
 					scalingMult: Math.pow(2, Math.max(boosts - 20, 0) / 20),
@@ -72,7 +72,7 @@ var QCs = {
 				QCs_tmp.qc1 = data
 
 				if (QCs.in(1)) {
-					data.limit = data.limit.pow(tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3)
+					data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
 				}
 
 				let qc5 = QCs_tmp.qc5
@@ -101,10 +101,11 @@ var QCs = {
 		},
 		2: {
 			unl: () => true,
-			desc: () => "Gain extra quark efficiency, but color powers and quantum energy multiplier are useless; and you must exclude 1 tier from Positron Cloud.",
+			desc: () => "Some quantum content are based on one, but quantum energy multiplier. color powers, and gluons are useless; and you must exclude 1 tier from Positron Cloud.",
 			goal: () => pos_save.boosts >= 7,
 			goalDisp: () => "7 Positronic Boosters",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.1),
+			hint: "Mess around Positronic Cloud by swapping and excluding.",
 			rewardDesc: (x) => "Color charge also multiply a color power that's used by it. (" + shorten(x) + "x)",
 			rewardEff(str) {
 				return Math.log10(colorCharge.normal.charge + 1) / 2 + 1
@@ -128,8 +129,9 @@ var QCs = {
 			unl: () => true,
 			desc: () => "There are only Meta Dimensions that produce antimatter, but successfully dilating reduces antimatter production.",
 			goal: () => player.dilation.times >= 3,
-			goalDisp: () => "3 successful dilation runs",
+			goalDisp: () => "4 successful dilation runs",
 			goalMA: new Decimal(1e50),
+			hint: "Do not dilate time too many times.",
 			rewardDesc: (x) => "You sacrifice 40% of Meta Dimension Boosts instead of 33%.",
 			rewardEff(str) {
 				return 1
@@ -144,10 +146,11 @@ var QCs = {
 		},
 		4: {
 			unl: () => true,
-			desc: () => "You must exclude one type of galaxy for non-dilation and dilation runs. Changing the exclusion requires a forced Eternity reset.",
+			desc: () => "You must exclude one type of galaxy for a single run. Changing the exclusion requires a forced Eternity reset.",
 			goal: () => false,
 			goalDisp: () => "(not implemented)",
 			goalMA: new Decimal(1),
+			hint: "Test every single combination of this exclusion.",
 			rewardDesc: (x) => "Dilated time timelapses Replicantis by 1 second per OoM.",
 			rewardEff(str) {
 				return
@@ -155,10 +158,11 @@ var QCs = {
 		},
 		5: {
 			unl: () => true,
-			desc: () => "Replicantis only produces Replicanti Energy, but you can’t gain Quantum Energy normally.",
+			desc: () => "Replicantis only produce Replicanti Energy by gaining, which increases effective Quantum Energy and Positronic Charge.",
 			goal: () => false,
 			goalDisp: () => "(not implemented)",
 			goalMA: new Decimal(1),
+			hint: "Grind.",
 			rewardDesc: (x) => "Replicated Galaxies contribute to Positronic Charge. (not implemented)",
 			rewardEff(str) {
 				return 1
@@ -191,29 +195,32 @@ var QCs = {
 			goal: () => false,
 			goalDisp: () => "(not implemented)",
 			goalMA: new Decimal(1),
-			rewardDesc: (x) => "Replicanti Energy contributes to Positrons. (not implemented)",
+			hint: "Quick, automatic big crunches.",
+			rewardDesc: (x) => "Replicantis also produce Replicanti Energy by gaining. (not implemented)",
 			rewardEff(str) {
 				return str
 			}
 		},
 		7: {
 			unl: () => true,
-			desc: () => "Dilation gets more severe as you dilate time more.",
+			desc: () => "Unlock a new set of Mastery Studies, but color charge subtracts color powers instead of the main catches.",
 			goal: () => false,
 			goalDisp: () => "(not implemented)",
 			goalMA: new Decimal(1),
-			rewardDesc: (x) => "The 3rd rebuyable dilation upgrade is 10% stronger, and unlock Paired Challenges.",
+			hint: "It's a tricky puzzle.",
+			rewardDesc: (x) => "You keep that set of Mastery Studies, and unlock Paired Challenges. (not implemented)",
 			rewardEff(str) {
 				return 1
 			}
 		},
 		8: {
 			unl: () => true,
-			desc: () => "QC4, but you can't change the exclusion.",
+			desc: () => "You must exclude one type of galaxy in each type of run: normal and dilated Eternity runs.",
 			goal: () => false,
 			goalDisp: () => "(not implemented)",
 			goalMA: new Decimal(1),
-			rewardDesc: (x) => "???",
+			hint: "Trial and error.",
+			rewardDesc: (x) => "In dilation runs, strengthen the base formulas of RGs, but remove multipliers. (not implemented)",
 			rewardEff(str) {
 				return 1
 			}

@@ -140,7 +140,7 @@ let ecExpData = {
 		eterc10: 3000,
 		eterc11: 500,
 		eterc12: 110000,
-		eterc13: 285000000,
+		eterc13: 270000000,
 		eterc14: 315000000,
 		eterc14_bg: 295000000,
 		eterc14_ex: 325000000,
@@ -240,7 +240,8 @@ function getECGoal(x) {
 	}
 	let exp = expInit + expIncrease * completions
 
-	if (x == "eterc14" && completions >= 2) exp *= Math.pow(1.5, completions / 2)
+	if (x == "eterc13" && completions >= 3) exp += Math.pow(completions, 4) * 5e5
+	if (x == "eterc14" && completions >= 1) exp *= Math.pow(1.5, completions / 2)
 
 	return Decimal.pow(10, exp)
 }

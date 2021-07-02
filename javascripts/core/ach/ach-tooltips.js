@@ -343,7 +343,7 @@ function setR15Tooltip() {
 	noTax.setAttribute('ach-tooltip', "Have 1,100 galaxies without unlocking Time Dilation. Reward: Start with " + shortenCosts(1e50) + " dilated time.")
 	winner.setAttribute('ach-tooltip', "Go quantum in under 30 seconds. Reward: Start with " + shortenCosts(1e10) + " meta-antimatter.") 
 	old.setAttribute('ach-tooltip', "Reach " + shortenCosts(getOldAgeRequirement()) + " antimatter. Reward: Get a multiplier to first 3 Meta Dimensions based on total antimatter.") 
-	rid.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e300000")) + " IP while dilated, without having time studies, not including mastery studies." + (tmp.bgMode ? "" : " Reward: TT softcap is 25% faster."))
+	rid.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e300000")) + " IP while dilated, without having time studies, not including mastery studies.")
 }
 
 function setR16Tooltip() {

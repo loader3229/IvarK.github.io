@@ -102,13 +102,6 @@ function getDilUpgPower(x) {
 
 	if (player.dilation.upgrades.includes("ngp3c8") && tmp.ngC && x != 3) r *= getDil85Mult()
 	if (tmp.ngp3_mul && x == 4) r *= 1.1
-	if (x == 3) r *= getDilUpg3Mult()
-	return r
-}
-
-function getDilUpg3Mult(x) {
-	let r = 1
-	if (QCs.isRewardOn(7)) r *= 1.1
 	return r
 }
 
@@ -494,7 +487,7 @@ function buyDilationUpgrade(pos, max, isId) {
 			if (!tmp.ngp3) player.dilation.dilatedTime = new Decimal(0)
 			resetDilationGalaxies()
 		}
-		if (id[1] == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), getDilUpg3Mult())))
+		if (id[1] == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(getDil3Power()))
 		else if (id[1] >= 3 && player.eternityBuyer.alwaysDil) player.eternityBuyer.alwaysDilCond = true
 	} else {
 		// Not rebuyable
@@ -621,7 +614,6 @@ function canBuyGalaxyThresholdUpg() {
 
 function getFreeGalaxyThresholdIncrease() {
 	let thresholdMult = 1.35
-	if (QCs.isRewardOn(8)) thresholdMult = QCs_tmp.rewards[8]
 
 	let dil2 = getDilUpgPower(2)
 	if (dil2 > 0) thresholdMult += (5 - thresholdMult) * Math.pow(0.8, dil2)

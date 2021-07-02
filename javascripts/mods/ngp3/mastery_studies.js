@@ -3,14 +3,14 @@ var mTs = {
 		time: {
 			//Eternity
 			241: 1e69,
-			251: 5e69, 252: 5e69, 253: 5e69,
-			261: 3e69, 262: 3e69, 263: 3e69, 264: 3e69, 265: 3e69, 266: 3e69,
+			251: 1e70, 252: 1e70, 253: 1e70,
+			261: 1.5e69, 262: 1.5e69, 263: 1.5e69, 264: 1.5e69, 265: 1.5e69, 266: 1.5e69,
 
 			//Quantum
 			271: 0, 272: 5e76,
 			281: 2e77, 282: 1e76, 283: 1e76, 284: 2e77,
 			291: 5e77, 292: 5e77,
-			301: 1e78, 302: 2e77, 303: 1e78,
+			301: 1e78, 302: 5e77, 303: 1e78,
 			311: 1e80, 312: 1e82, 313: 1e82, 314: 1e80,
 
 			//Beginner Mode
@@ -28,10 +28,7 @@ var mTs = {
 			dt_265: 3e70
 		},
 		ec: {
-			13: 1e69, 14: 5e69,
-	
-			//Beginner Mode
-			ex_13: 5e69
+			13: 5e69, 14: 5e69
 		},
 		dil: {
 			7: 2e74, 8: 1e81, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
@@ -42,13 +39,13 @@ var mTs = {
 		mults: {
 			//Eternity
 			t241: 1,
-			t251: 2, t252: 2, t253: 2,
-			t261: 9, t262: 9, t263: 5, t265: 2, t265: 2, t266: 5,
+			t251: 3, t252: 3, t253: 3,
+			t261: 12, t262: 12, t263: 4, t264: 1, t265: 4, t266: 4,
 
 			//Quantum
 			t271: "reset", t272: 1.5,
-			t281: 2.5, t282: 5, t283: 5, t284: 2.5,
-			t291: 4, t292: 4,
+			t281: 3, t282: 5, t283: 5, t284: 3,
+			t291: 5, t292: 5,
 			t301: 10, t302: "reset", t303: 10,
 			t311: 1 / 2, t312: 16, t313: 16, t314: 1 / 2,
 
@@ -58,7 +55,9 @@ var mTs = {
 			t281_bg: 3, t282_bg: 2, t283_bg: 2, t284_bg: 3,
 
 			//Expert Mode
-			t252_ex: 5, t253_ex: 5,
+			t241_ex: 1,
+			t251_ex: 6, t252: 3, t253: 3,
+			t261_ex: 12, t262_ex: 12, t263_ex: 6, t264_ex: 2, t265_ex: 8, t266_ex: 6,
 			t271_ex: 1 / 5e3, t272_ex: 2,
 			t281_ex: 6, t282_ex: 1, t283_ex: 1, t284_ex: 6,
 
@@ -77,12 +76,12 @@ var mTs = {
 	ecReqNums: {
 		13() {
 			let comps = ECComps("eterc13")
-			return (tmp.exMode ? 900000 : tmp.bgMode ? 800000 : 850000) + 4e4 * Math.pow(comps, 2)
+			return (tmp.bgMode ? 850000 : 900000) + (tmp.exMode ? 5e4 : 4.5e4) * Math.pow(comps, 2)
 		},
 		14() {
 			let comps = ECComps("eterc14")
 			if (tmp.bgMode) return 1/0
-			return Decimal.pow(10, (comps ? 1e6 : tmp.exMode ? 225000 : tmp.bgMode ? 125000 : 175000) * Math.pow(tmp.dtMode ? 1.8 : tmp.exMode ? 1.6 : 1.5, Math.max(comps - 1, 0)))
+			return Decimal.pow(10, (comps ? 1e6 : 250000) * Math.pow(tmp.dtMode ? 1.8 : tmp.exMode ? 1.6 : 1.5, Math.max(comps - 1, 0)))
 		}
 	},
 	ecReqNumsStored: {},
@@ -264,28 +263,28 @@ var mTs = {
 		262: () => "The power of meta-antimatter effect is increased by ^" + doubleMSMult(0.5) + ".",
 		263: () => "Tachyonic Galaxies are " + doubleMSMult(25) + "% stronger.",
 		264: () => "You gain " + doubleMSMult(5) + "x more Tachyon Particles.",
-		265: () => "You can upgrade replicate chance after 100%, with a greatly boost.",
-		266: () => "Reduce the post-400 max replicated galaxy cost scaling.",
+		265: () => "Replicate chance can go above 100%, with a bonus.",
+		266: () => "Reduce the post-400 replicated galaxy scaling.",
 
-		271: () => "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
+		271: () => "Replicantis boost Infinity Dimensions greatly more.",
 		272: () => "Add +25% to red power effect, but divide red power by 5.",
 
-		281: () => "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
-		282: () => "You can upgrade replicate interval below 1ms, but the cost scales extremely higher.",
-		283: () => "Replicate chance gradually increases faster above 100%.",
-		284: () => "After boosts, total galaxies increase the OoMs of replicate interval scaling.",
+		281: () => "Before boosts, dilated time adds OoMs to replicate interval slowdown.",
+		282: () => "Replicate interval can go below 1ms, but starts to scale faster.",
+		283: () => "Replicate chance above 100% has a greater bonus to itself.",
+		284: () => "Total galaxies add OoMs to replicate interval slowdown.",
 
 		291: () => "Replicantis multiply Dimension Boosts.",
 		292: () => "Replicated Galaxies raise Replicanti multiplier to an exponent instead.",
 
-		301: () => "Replicated Galaxies have equal powers instead.",
-		302: () => "Some Replicanti boosts are greatly stronger.",
+		301: () => "Replicated Galaxies work effective equally.",
+		302: () => "Strengthen some Replicanti boosts.",
 		303: () => "All Replicanti boosts are based on replicanti multiplier instead.",
 
-		311: () => "Red power shares TS232's power to all galaxies.",
-		312: () => "Green power shares Replicated Galaxies' strength to Tachyonic Galaxies.",
-		313: () => "Tachyon Particles and Blue Power raise Blue Power's effect to an exponent.",
-		314: () => "Each color power boosts the next color at a cyclical order."
+		311: () => "Red power boosts Replicated and Tachyonic Galaxies with TS232's power.",
+		312: () => "Green power boosts Tachyonic Galaxies with Replicated Galaxies' strength.",
+		313: () => "Blue power effect boosts itself; but Tachyonic Particles also boost it.",
+		314: () => "Every color power adds the suceeding color power."
 	},
 	timeStudyTitles: {
 		241: "Multiplier Overcharge",

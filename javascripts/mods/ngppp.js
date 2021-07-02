@@ -210,7 +210,7 @@ function maxAllDilUpgs() {
 					player.dilation.rebuyables[num] = (player.dilation.rebuyables[num] || 0) + data.toBuy
 					update = true
 
-					if (num == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), data.toBuy * getDilUpg3Mult())))
+					if (num == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), data.toBuy)))
 					else if (player.eternityBuyer.alwaysDil) player.eternityBuyer.alwaysDilCond = true
 				}
 			}

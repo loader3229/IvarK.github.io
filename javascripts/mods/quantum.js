@@ -36,7 +36,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 }
 
 function getQuantumReq(base) {
-	let exp = tmp.ngp3 && !tmp.ngp3_mul ? 1.2 : 1
+	let exp = tmp.ngp3_mul ? 1 : tmp.exMode ? 1.3 : tmp.ngp3 ? 1.25 : 1
 	if (!base && tmp.ngp3) {
 		if (QCs.inAny()) return QCs.getGoalMA()
 		if (enB.active("pos", 4)) exp /= enB_tmp.pos4
@@ -526,9 +526,7 @@ function handleDispAndTmpOnQuantum(bigRip, prestige) {
 		if (getEl("masterystudies").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
 	}
 
-	let gluUnl = enB.glu.unl()
-	getEl("gluon_req").textContent = gluUnl ? "" : "To unlock anti-Gluons, you need to go Quantum with at least 2 colored kinds of anti-Quarks."
-	getEl("gluonstabbtn").style.display = gluUnl ? "" : "none"
+	enB.updateUnlock()
 
 	let keepQuantum = tmp.quActive && qMs.tmp.amt >= 16
 	if (tmp.quActive && !bigRip) {
