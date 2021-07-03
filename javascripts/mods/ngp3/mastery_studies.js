@@ -7,8 +7,8 @@ var mTs = {
 			261: 1.5e69, 262: 1.5e69, 263: 1.5e69, 264: 1.5e69, 265: 1.5e69, 266: 1.5e69,
 
 			//Quantum
-			271: 0, 272: 5e76,
-			281: 2e77, 282: 1e76, 283: 1e76, 284: 2e77,
+			271: 0, 272: 1e77,
+			281: 2e77, 282: 5e76, 283: 5e76, 284: 2e77,
 			291: 5e77, 292: 5e77,
 			301: 1e78, 302: 5e77, 303: 1e78,
 			311: 1e80, 312: 1e82, 313: 1e82, 314: 1e80,
@@ -112,7 +112,7 @@ var mTs = {
 			return mTs.bought >= (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10)
 		},
 		d7() {
-			return enB.glu.engAmt() >= (tmp.exMode ? 5.9 : tmp.bgMode ? 5.3 : 5.5)
+			return enB.glu.engAmt() >= 5.3
 		},
 		d8() {
 			return enB.pos.engAmt() >= 5
@@ -144,7 +144,7 @@ var mTs = {
 			return (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10) + " bought mastery studies"
 		},
 		d7() {
-			return (tmp.exMode ? 5.9 : tmp.bgMode ? 5.3 : 5.5) + " quantum energy"
+			return "5.3 quantum energy"
 		},
 		d8() {
 			return "5 positronic charge"
@@ -202,7 +202,7 @@ var mTs = {
 		},
 		265() {
 			let x = doubleMSMult(tmp.rep ? tmp.rep.baseChance : 0)
-			return Decimal.pow(x, hasMTS(283) ? getMTSMult(283, "update") : 0.5)
+			return Decimal.pow(x, hasMTS(283) ? getMTSMult(283, "update") : 0.6)
 		},
 
 		271() {
@@ -218,7 +218,7 @@ var mTs = {
 		283() {
 			let x = tmp.rep ? tmp.rep.baseChance : 0
 			let log = Math.max(Math.log10(x), 0)
-			return Math.pow(x / 2e7 + 1, 0.1) - 0.5
+			return Math.pow(x / 1e7 + 1, 0.1) - 0.5
 		},
 		284() {
 			let x = Math.pow(
@@ -314,7 +314,7 @@ var mTs = {
 			return "+" + shorten(x * getReplSpeedExpMult()) + " OoMs"
 		},
 		283(x) {
-			return "^x^0.5 -> ^x^" + shorten(x)
+			return "^x^0.6 -> ^x^" + shorten(x)
 		},
 		284(x) {
 			return "+" + shorten(x) + " OoMs"
@@ -740,7 +740,7 @@ function updateMasteryStudyButtons() {
 			if (div.className !== className) div.className = className
 			if (mTs.hasStudyEffect.includes(name)) {
 				var mult = getMTSMult(name)
-				getEl("mts" + name + "Current").textContent = (mTs.studyEffectDisplays[name] !== undefined ? mTs.studyEffectDisplays[name](mult) : shorten(mult) + "x")
+				if (mult) getEl("mts" + name + "Current").textContent = (mTs.studyEffectDisplays[name] !== undefined ? mTs.studyEffectDisplays[name](mult) : shorten(mult) + "x")
 			}
 		}
 	}

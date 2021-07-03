@@ -555,13 +555,14 @@ var enB = {
 		},
 		2: {
 			req: 4,
-			masReq: 9,
-			masReqExpert: 11,
+			masReq: 8,
+			masReqExpert: 9,
+			masReqDeath: 11,
 
 			title: "Extraclusters",
 			type: "g",
 			eff(x) {
-				return Math.log10(x * 2 + 1) + 1
+				return Math.log10(x + 1) * 1.5 + 1
 			},
 			effDisplay(x) {
 				return x.toFixed(3)
@@ -569,13 +570,14 @@ var enB = {
 		},
 		3: {
 			req: 6,
-			masReq: 10,
-			masReqExpert: 13,
+			masReq: 9,
+			masReqExpert: 10,
+			masReqDeath: 11,
 
 			title: "Dilation Overflow",
 			type: "b",
 			eff(x) {
-				return Math.sqrt(x / 2.5 + 1, 0.5)
+				return Math.sqrt(x / 1.5 + 1, 0.5)
 			},
 			effDisplay(x) {
 				return formatReductionPercentage(x, 2, 3)
@@ -583,8 +585,9 @@ var enB = {
 		},
 		4: {
 			req: 7,
-			masReq: 11,
-			masReqExpert: 12,
+			masReq: 10,
+			masReqExpert: 11,
+			masReqDeath: 13,
 
 			title: "Meta Resynergizer",
 			type: "r",
@@ -597,6 +600,19 @@ var enB = {
 			}
 		},
 		5: {
+			req: 9,
+			masReq: 1/0,
+
+			title: "Otherworldly Galaxies",
+			type: "b",
+			eff(x) {
+				return Math.log10(x / 2 + 1) / 2 + 1
+			},
+			effDisplay(x) {
+				return formatPercentage(x - 1) + "%"
+			}
+		},
+		6: {
 			req: 10,
 			masReq: 12,
 			masReqExpert: 13,
@@ -616,21 +632,8 @@ var enB = {
 				: "Positrons off: Add +<span style='font-size:25px'>" + shorten(x) + "</span> Positronic Charge to all mastered Positronic Boosts."
 			}
 		},
-		6: {
-			req: 11,
-			masReq: 1/0,
-
-			title: "Otherworldly Galaxies",
-			type: "r",
-			eff(x) {
-				return Math.log10(x / 2 + 1) / 2 + 1
-			},
-			effDisplay(x) {
-				return formatPercentage(x - 1) + "%"
-			}
-		},
 		7: {
-			req: 11,
+			req: 12,
 			masReq: 20,
 			masReqExpert: 30,
 			masReqDeath: 1/0,
@@ -645,11 +648,11 @@ var enB = {
 			}
 		},
 		8: {
-			req: 11,
+			req: 12,
 			masReq: 1/0,
 
 			title: "Meta Resynergizer II",
-			type: "b",
+			type: "r",
 			eff(x) {
 				return 0.125 - 0.025 / Math.pow(x + 1, 0.2)
 			},
@@ -658,7 +661,7 @@ var enB = {
 			}
 		},
 		9: {
-			req: 12,
+			req: 13,
 			masReq: 1/0,
 
 			title: "Inflation Resistor",
@@ -742,7 +745,7 @@ var enB = {
 
 		eff(x) {
 			var eng = this.engAmt()
-			if (!pos.on() && enB.active("glu", 5)) eng += enB_tmp.glu5
+			if (!pos.on() && enB.active("glu", 6)) eng += enB_tmp.glu6
 			if ((enB.mastered("pos", x) || enB.colorMatch("pos", x)) && eng >= this.chargeReq(x)) eng *= 2 * this.lvl(x)
 			return eng
 		},
@@ -760,7 +763,7 @@ var enB = {
 		max: 12,
 		1: {
 			req: 1,
-			masReq: 3,
+			masReq: 4,
 			chargeReq: 1,
 
 			title: "Replicanti Launch",
@@ -775,7 +778,7 @@ var enB = {
 			}
 		},
 		2: {
-			req: 3,
+			req: 4,
 			masReq: 6,
 			chargeReq: 0,
 

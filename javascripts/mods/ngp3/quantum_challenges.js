@@ -132,7 +132,7 @@ var QCs = {
 			goalDisp: () => "4 successful dilation runs",
 			goalMA: new Decimal(1e50),
 			hint: "Do not dilate time too many times.",
-			rewardDesc: (x) => "You sacrifice 40% of Meta Dimension Boosts instead of 33%.",
+			rewardDesc: (x) => "You sacrifice 30% of Meta Dimension Boosts instead of 25%.",
 			rewardEff(str) {
 				return 1
 			},

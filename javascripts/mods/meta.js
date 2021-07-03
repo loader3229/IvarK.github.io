@@ -74,7 +74,7 @@ function getMetaBoostPower() {
 
 	let exp = 1
 	if (tmp.ngp3 && hasAch("ngpp14")) exp = 1.05
-	if (enB.active("glu", 5) && pos.on()) exp *= enB_tmp.glu5
+	if (enB.active("glu", 6) && pos.on()) exp *= enB_tmp.glu6
 	if (hasAch("ng3p26")) exp = 1.5 - 0.5 / Math.log2(player.meta.resets / 100 + 2)
 	return Math.pow(r, exp)
 }

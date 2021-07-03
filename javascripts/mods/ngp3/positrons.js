@@ -50,7 +50,7 @@ var pos = {
 		quantum(false, true)
 	},
 	mdbSacMult() {
-		return QCs.done(3) ? 0.4 : 0.25
+		return QCs.done(3) ? 0.3 : 0.25
 	},
 	types: {
 		ng: {

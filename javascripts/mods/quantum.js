@@ -90,7 +90,7 @@ function quarkGain() {
 	if (!tmp.ngp3) return Decimal.pow(10, ma.log(10) / Math.log10(Number.MAX_VALUE) - 1).floor()
 
 	let log = Math.max(ma.log10() / maReq.log10() - 1, 0) / 2
-	let logBoostExp = 4
+	let logBoostExp = 3
 	log = Math.pow(log + 1, logBoostExp) - 1
 
 	log += getQKAchBonusLog()

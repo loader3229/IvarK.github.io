@@ -262,7 +262,7 @@ function getReplicantiBaseInterval(speed, debug) {
 	speed = new Decimal(speed)
 
 	var upgs = Math.round(Decimal.div(speed, 1e3).log(0.9))
-	if (enB.active("glu", 6)) upgs *= enB_tmp.glu6
+	if (enB.active("glu", 5)) upgs *= enB_tmp.glu5
 	speed = Decimal.pow(0.9, upgs).times(1e3)
 
 	return speed
@@ -311,7 +311,7 @@ function getReplSpeed() {
 		if (tmp.ngp3) expDiv = 9
 		let x = 1 + player.dilation.dilatedTime.max(1).log10() / expDiv
 
-		inc /= Math.min(x, 20)
+		inc /= Math.min(x, 25)
 	}
 	inc = inc + 1
 
@@ -411,7 +411,6 @@ function updateReplicantiTemp() {
 	data.ln = player.replicanti.amount.ln()
 
 	data.baseChance = Math.round(player.replicanti.chance * 100)
-	if (enB.active("glu", 6)) data.baseChance *= enB_tmp.glu6
 
 	let pow = 1
 	if (hasMTS(265)) pow = getMTSMult(265, "update")
