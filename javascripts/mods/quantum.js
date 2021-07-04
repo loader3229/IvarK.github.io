@@ -36,7 +36,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 }
 
 function getQuantumReq(base) {
-	let exp = tmp.ngp3_mul ? 1 : tmp.exMode ? 1.3 : tmp.ngp3 ? 1.25 : 1
+	let exp = tmp.ngp3_mul ? 1 : tmp.ngp3 ? 1.25 : 1
 	if (!base && tmp.ngp3) {
 		if (QCs.inAny()) return QCs.getGoalMA()
 		if (enB.active("pos", 4)) exp /= enB_tmp.pos4
@@ -89,13 +89,17 @@ function quarkGain() {
 
 	if (!tmp.ngp3) return Decimal.pow(10, ma.log(10) / Math.log10(Number.MAX_VALUE) - 1).floor()
 
-	let log = Math.max(ma.log10() / maReq.log10() - 1, 0) / 2
-	let logBoostExp = 3
-	log = Math.pow(log + 1, logBoostExp) - 1
+	let log = Math.max(ma.div(maReq).log(2) / 2048, 0)
+	log = Math.pow(log + 1, 4) - 1
 
-	log += getQKAchBonusLog()
+	return softcap(Decimal.pow(10, log), "aqs").max(1)
+}
 
-	return Decimal.pow(10, log).floor()
+function quarkGainNextAt(qk) {
+	if (!qk) qk = quarkGain()
+	qk = Decimal.add(qk, 1).log10() - getQKAchBonusLog()
+	qk = Math.pow(qk + 1, 1 / 4) - 1
+	return Decimal.pow(Number.MAX_VALUE, qk * 2).times(getQuantumReq())
 }
 
 function toggleQuantumConf() {

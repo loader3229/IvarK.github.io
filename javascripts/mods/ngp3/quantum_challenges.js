@@ -66,7 +66,7 @@ var QCs = {
 					scalingMult: Math.pow(2, Math.max(boosts - 20, 0) / 20),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
-					effMult: maxBoosts / 20 + boosts / 15 + 1,
+					effMult: maxBoosts / 30 + boosts / 15 + 1,
 					effExp: Math.min(1 + boosts / 20, 2)
 				}
 				QCs_tmp.qc1 = data
@@ -84,7 +84,7 @@ var QCs = {
 			convert(x) {
 				if (!QCs_tmp.qc1) return x
 
-				var dilMult = Math.log2(1.01) / 1024
+				var dilMult = Math.log2(getReplSpeedLimit()) / 1024
 				x = Decimal.pow(2, Math.pow(x.log(2) * dilMult * QCs_tmp.qc1.effMult, QCs_tmp.qc1.effExp) / dilMult)
 				return x
 			},

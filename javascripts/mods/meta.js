@@ -371,18 +371,12 @@ function updateMetaDimensions () {
 	var req = getQuantumReq()
 	var reqGotten = isQuantumReached()
 	var newClassName = reqGotten ? (bigRipped && player.options.theme == "Aarex's Modifications" ? "" : "storebtn ") + (bigRipped ? "aarexmodsghostifybtn" : "") : 'unavailablebtn'
-	var message = 'Lose all your previous progress, but '
-	getEl("quantumResetLabel").textContent = (bigRipped ? 'Ghostify' : 'Quantum') + ': requires ' + shorten(req) + (tmp.ngp3 ? " best" : "") + ' meta-antimatter'
+
+	getEl("quantumResetLabel").textContent =
+		'Quantum: requires ' + shorten(req) + (tmp.ngp3 ? " best" : "") + ' meta-antimatter'
 		+ (QCs.inAny() ? QCs.getGoalDisp() : tmp.ngp3 && !tmp.ngp3_mul ? " and an EC14 completion" : "")
-	if (reqGotten && bigRipped && pH.did("ghostify")) {
-		var GS = getGHPGain()
-		message += "gain " + shortenDimensions(GS) + " Ghost Particle" + (GS.lt(2) ? "" : "s")
-	} else if (reqGotten && !bigRipped && pH.did("quantum")) {
-		var QS = quarkGain()
-		message += "gain " + shortenDimensions(QS) + " quark" + (QS.lt(2) ? "" : "s") + " for boosts"
-	} else message += "get a boost"
-	getEl("quantum").textContent = message
-	if (getEl("quantum").className !== newClassName) getEl("quantum").className = newClassName
+	getEl("quantum").innerHTML = tmp.quUnl ? "Gain " + shortenDimensions(quarkGain()) + " aQs." : 'Reset your progress for a new layer...'
+	getEl("quantum").className = pH.can("quantum") ? 'quantumbtn storebtn' : 'unavailablebtn'
 
 	getEl("metaAccelerator").textContent = enB.active("pos", 2) ? "Meta Accelerator: " + shorten(enB_tmp.pos2.acc) + "x to MA, DT, and replicate interval" : ""
 }

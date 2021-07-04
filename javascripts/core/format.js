@@ -718,8 +718,8 @@ function timeDisplay(time) {
 }
 
 function preformat(int) {
-  if (int.toString().length == 1) return "0"+int
-  else return int
+	if (int.toString().length == 1) return "0"+int
+	else return int
 }
 
 let small = ['', 'm', 'μ', 'n', 'p', 'f', 'a', 'z', 'y', 'r', 'q']
@@ -759,6 +759,22 @@ function timeDisplayShort(time, rep, places) {
 	if (time < 31556952 * 13.8e9) return shorten(time / 315569520) + ' y'
 	if (time < 31556952e100) return shorten(time / 31556952 * 13.8e9) + ' uni' //1 uni = 13.8B years
 	return shorten(time / 31556952e100) + ' ae' //1 ae = 1 aeon = 1 googol years
+}
+
+function rateFormat(apm, unit) {
+	let time = "min"
+	if (apm.lt(1)) {
+		apm = apm.times(60)
+		time = "hour"
+	} else if (apm.gt(60)) {
+		apm = apm.div(60)
+		time = "sec"
+	}
+	if (apm.lt(1)) {
+		apm = apm.times(24)
+		time = "day"
+	}
+	return shorten(apm) + (unit ? " " + unit : "") + "/" + time
 }
 
 function formatPercentage(x, digits = 1) {

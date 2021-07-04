@@ -182,7 +182,7 @@ var softcap_data = {
 		name: "Infinite Time reward",
 		1: {
 			func: "dilate",
-			start: Decimal.pow(10, 1e5),
+			start: Decimal.pow(10, 90000),
 			base: 10,
 			pow: 0.5
 		},
@@ -208,6 +208,15 @@ var softcap_data = {
 			pow: 0.1,
 			derv: false
 		}
+	},
+	aqs: {
+		name: "Anti-Quark gain",
+		1: {
+			func: "dilate",
+			start: new Decimal(1/0),
+			base: 10,
+			pow: 0.75
+		},
 	},
 	bam: {
 		name: "Bosonic Antimatter gain per second",
@@ -797,6 +806,7 @@ function getSoftcapAmtFromId(id){
 		tt: () => getTTGenPart(player.dilation.tachyonParticles),
 		ts225: () => tsMults[225](),
 		ma: () => getExtraDimensionBoostPowerUse(),
+		aqs: () => quarkGain(),
 		ig_log_high: () => tmp.ig.max(1).log10(),
 		bam: () => getBosonicAMProduction(),
 		idbase: () => getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).max(1).log10(),
@@ -840,6 +850,7 @@ function hasSoftcapStarted(id, num){
 		dt_log: tmp.ngp3 && !tmp.bE50kDT,
 		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined && tmp.quActive,
 		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined && tmp.quActive,
+		aqs: tmp.ngp3,
 		bam: tmp.ngp3,
 		bu45: tmp.ngp3,
 		tt: tmp.ngp3,
@@ -957,6 +968,7 @@ function updateSoftcapStatsTab(){
 		ts225: "softcap_ts225",
 		ec14: "softcap_ec14",
 		ma: "softcap_ma",
+		aqs: "softcap_aqs",
 		ig_log_high: "softcap_ig",
 		bam: "softcap_bam",
 		idbase: "softcap_idbase",

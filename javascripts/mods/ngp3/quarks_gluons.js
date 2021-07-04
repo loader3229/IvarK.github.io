@@ -212,7 +212,7 @@ function getColorPowerQuantity(color, base) {
 	if (tmp.glB) ret = ret - tmp.glB[color].sub
 
 	if (!base) {
-		if (hasMTS(314)) ret += getColorPowerQuantity(color == "r" ? "g" : color == "g" ? "b" : "r", true) / 5
+		if (hasMTS(314)) ret += getColorPowerQuantity(color == "r" ? "g" : color == "g" ? "b" : "r", true) / 3
 		if (color == "r" && hasMTS(272)) ret /= 5
 	}
 	return Math.max(ret, 0)
@@ -577,7 +577,7 @@ var enB = {
 			title: "Dilation Overflow",
 			type: "b",
 			eff(x) {
-				return Math.sqrt(x / 1.5 + 1, 0.5)
+				return Math.sqrt(x / 2 + 1, 0.5)
 			},
 			effDisplay(x) {
 				return formatReductionPercentage(x, 2, 3)
@@ -635,13 +635,13 @@ var enB = {
 		7: {
 			req: 12,
 			masReq: 20,
-			masReqExpert: 30,
-			masReqDeath: 1/0,
+			masReqExpert: 22,
+			masReqDeath: 25,
 
 			title: "Dilation Overflow II",
 			type: "g",
 			eff(x) {
-				return Math.max(2 - Math.log10(x + 1) / 10, 1.5)
+				return Math.max(2 - Math.log10(x / 2 + 1) / 10, 1.5)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -661,11 +661,11 @@ var enB = {
 			}
 		},
 		9: {
-			req: 13,
-			masReq: 1/0,
+			req: 14,
+			masReq: 22,
 
 			title: "Inflation Resistor",
-			type: "g",
+			type: "b",
 			anti: true,
 			eff(x) {
 				return Math.pow(x + 1, 0.1)
@@ -752,7 +752,7 @@ var enB = {
 
 		chargeReq(x) {
 			var lvl = this.lvl(x)
-			return this[x].chargeReq * Math.pow(lvl, 2)
+			return this[x].chargeReq * (tmp.exMode ? 1.25 : 1) * Math.pow(lvl, tmp.dtMode ? 2.5 : 2)
 		},
 		lvl(x, next) {
 			var swaps = next ? pos_tmp.next_swaps : pos_save.swaps
@@ -763,7 +763,8 @@ var enB = {
 		max: 12,
 		1: {
 			req: 1,
-			masReq: 4,
+			masReq: 5,
+			masReqExpert: 6,
 			chargeReq: 1,
 
 			title: "Replicanti Launch",
@@ -778,7 +779,7 @@ var enB = {
 			}
 		},
 		2: {
-			req: 4,
+			req: 3,
 			masReq: 6,
 			chargeReq: 0,
 
@@ -786,7 +787,7 @@ var enB = {
 			tier: 2,
 			type: "b",
 			eff(x) {
-				var timeMult = Math.min(qu_save.time / 9000, 1)
+				var timeMult = Math.min(qu_save.time / 12000, 1)
 				if (enB.active("pos", 11)) timeMult *= enB_tmp.pos11
 
 				var baseMult = timeMult
@@ -820,9 +821,9 @@ var enB = {
 			}
 		},
 		3: {
-			req: 4,
+			req: 5,
 			masReq: 7,
-			chargeReq: 6,
+			chargeReq: 4,
 
 			title: "Classical Positrons",
 			tier: 1,
@@ -835,8 +836,8 @@ var enB = {
 			}
 		},
 		4: {
-			req: 5,
-			masReq: 9,
+			req: 7,
+			masReq: 8,
 			masReqExpert: 10,
 			masReqDeath: 1/0,
 			chargeReq: 7,
@@ -853,7 +854,7 @@ var enB = {
 			}
 		},
 		5: {
-			req: 100,
+			req: 8,
 			masReq: 1/0,
 			chargeReq: 3,
 

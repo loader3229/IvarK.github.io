@@ -120,7 +120,7 @@ function upgradeReplicantiInterval() {
 	if (player.replicanti.interval < 1) {
 		let x = 1 / player.replicanti.interval
 		// if (x > 1e10) x = Math.pow(x / 1e5, 2)
-		player.replicanti.intervalCost = Decimal.pow(10, Math.pow(x, 4) * 800)
+		player.replicanti.intervalCost = Decimal.pow(10, Math.pow(x, 4) * 1200)
 	} else player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
 
 	if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
@@ -311,11 +311,15 @@ function getReplSpeed() {
 		if (tmp.ngp3) expDiv = 9
 		let x = 1 + player.dilation.dilatedTime.max(1).log10() / expDiv
 
-		inc /= Math.min(x, 25)
+		inc /= Math.min(x, tmp.ngp3 ? 15 : 1/0)
 	}
 	inc = inc + 1
 
 	return {inc: inc, exp: exp}
+}
+
+function getReplSpeedLimit() {
+	return .2 / 15 + 1
 }
 
 function getReplSpeedExpMult() {

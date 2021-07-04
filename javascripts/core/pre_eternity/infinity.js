@@ -121,8 +121,7 @@ function updateLastTenRuns() {
 		if (player.lastTenRuns[i][1].gt(0)) {
 			var ippm = player.lastTenRuns[i][1].dividedBy(player.lastTenRuns[i][0]/600)
 			if (ippm.gt(tempBest)) tempBest = ippm
-			var tempstring = "(" + shorten(ippm) + " IP/min)"
-			if (ippm<1) tempstring = "(" + shorten(ippm * 60) + " IP/hour)"
+			var tempstring = "(" + rateFormat(ippm, "IP") + ")"
 			var msg = "The infinity " + (i == 0 ? '1 infinity' : (i + 1) + ' infinities') + " ago took " + timeDisplayShort(player.lastTenRuns[i][0], false, 3)
 			if (player.lastTenRuns[i][2]) msg += " in " + getNCName(player.lastTenRuns[i][2])
 			msg += " and gave " + shortenDimensions(player.lastTenRuns[i][1]) +" IP. "+ tempstring
@@ -136,9 +135,8 @@ function updateLastTenRuns() {
 		tempTime = tempTime.dividedBy(listed)
 		tempIP = tempIP.dividedBy(listed)
 		var ippm = tempIP.dividedBy(tempTime/600)
-		var tempstring = "(" + shorten(ippm) + " IP/min)"
+		var tempstring = "(" + rateFormat(ippm, "IP") + ")"
 		averageIP = tempIP
-		if (ippm < 1) tempstring = "(" + shorten(ippm * 60) + " IP/hour)"
 		getEl("averagerun").textContent = "Average time of the last " + listed + " Infinities: " + timeDisplayShort(tempTime, false, 3) + " | Average IP gain: " + shortenDimensions(tempIP) + " IP. " + tempstring
 		
 		if (tempBest.gte(1e8)) giveAchievement("Oh hey, you're still here");

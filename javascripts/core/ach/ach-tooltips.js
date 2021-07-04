@@ -340,7 +340,7 @@ function setR15Tooltip() {
 
 	//ACHIEVEMENT ROW 15
 	notenough.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter. Reward: Eternity points boost DT, TP, and MA, up to 2.5x.")
-	noTax.setAttribute('ach-tooltip', "Have 1,100 galaxies without unlocking Time Dilation. Reward: Start with " + shortenCosts(1e50) + " dilated time.")
+	noTax.setAttribute('ach-tooltip', "Have 1,100 galaxies without unlocking Time Dilation.")
 	winner.setAttribute('ach-tooltip', "Go quantum in under 30 seconds. Reward: Start with " + shortenCosts(1e10) + " meta-antimatter.") 
 	old.setAttribute('ach-tooltip', "Reach " + shortenCosts(getOldAgeRequirement()) + " antimatter. Reward: Get a multiplier to first 3 Meta Dimensions based on total antimatter.") 
 	rid.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e300000")) + " IP while dilated, without having time studies, not including mastery studies.")

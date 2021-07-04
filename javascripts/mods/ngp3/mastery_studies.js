@@ -8,9 +8,9 @@ var mTs = {
 
 			//Quantum
 			271: 0, 272: 1e77,
-			281: 2e77, 282: 5e76, 283: 5e76, 284: 2e77,
-			291: 5e77, 292: 5e77,
-			301: 1e78, 302: 5e77, 303: 1e78,
+			281: 1e78, 282: 5e76, 283: 5e76, 284: 1e78,
+			291: 2e78, 292: 2e78,
+			301: 1e80, 302: 1e78, 303: 1e80,
 			311: 1e80, 312: 1e82, 313: 1e82, 314: 1e80,
 
 			//Beginner Mode
@@ -31,7 +31,7 @@ var mTs = {
 			13: 5e69, 14: 5e69
 		},
 		dil: {
-			7: 2e74, 8: 1e81, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
+			7: 2e75, 8: 1e81, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
 		}
 	},
 	costs: {
@@ -44,7 +44,7 @@ var mTs = {
 
 			//Quantum
 			t271: "reset", t272: 1.5,
-			t281: 3, t282: 5, t283: 5, t284: 3,
+			t281: 4, t282: 6, t283: 6, t284: 4,
 			t291: 5, t292: 5,
 			t301: 10, t302: "reset", t303: 10,
 			t311: 1 / 2, t312: 16, t313: 16, t314: 1 / 2,
@@ -218,14 +218,14 @@ var mTs = {
 		283() {
 			let x = tmp.rep ? tmp.rep.baseChance : 0
 			let log = Math.max(Math.log10(x), 0)
-			return Math.pow(x / 1e7 + 1, 0.1) - 0.5
+			return Math.pow(x / 2e7 + 1, 0.1) - 0.4
 		},
 		284() {
 			let x = Math.pow(
 				Math.pow(player.galaxies, 0.75) +
 				Math.pow(getTotalRGs(), 0.75) +
 				Math.pow(player.dilation.freeGalaxies, 0.75)
-			, 2) / 3500
+			, 2) / 4000
 			return x
 		},
 		291() {

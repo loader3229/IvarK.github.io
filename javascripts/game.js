@@ -3232,8 +3232,7 @@ function updateLastTenEternities() {
 		if (player.lastTenEternities[i][1].gt(0)) {
 			var eppm = player.lastTenEternities[i][1].dividedBy(player.lastTenEternities[i][0]/600)
 			var unit = player.lastTenEternities[i][2] ? player.lastTenEternities[i][2] == "b" ? "EM" : player.lastTenEternities[i][2] == "d2" ? "TP" : "EP" : "EP"
-			var tempstring = "(" + shorten(eppm) + " " + unit + "/min)"
-			if (eppm<1) tempstring = "(" + shorten(eppm * 60) + " " + unit + "/hour)"
+			var tempstring = "(" + rateFormat(eppm, unit) + ")"
 			msg = "The Eternity " + (i == 0 ? '1 eternity' : (i+1) + ' eternities') + " ago took " + timeDisplayShort(player.lastTenEternities[i][0], false, 3)
 			if (player.lastTenEternities[i][2]) {
 				if (player.lastTenEternities[i][2] == "b") msg += " while it was broken"
@@ -3252,9 +3251,8 @@ function updateLastTenEternities() {
 		tempTime = tempTime.dividedBy(listed)
 		tempEP = tempEP.dividedBy(listed)
 		var eppm = tempEP.dividedBy(tempTime/600)
-		var tempstring = "(" + shorten(eppm) + " EP/min)"
+		var tempstring = "(" + rateFormat(eppm, "EP") + ")"
 		averageEp = tempEP
-		if (eppm < 1) tempstring = "(" + shorten(eppm * 60) + " EP/hour)"
 		getEl("averageEternityRun").textContent = "Average time of the last " + listed + " Eternities: " + timeDisplayShort(tempTime, false, 3) + " | Average EP gain: " + shortenDimensions(tempEP) + " EP. " + tempstring
 	} else getEl("averageEternityRun").textContent = ""
 }
@@ -3940,7 +3938,7 @@ function updateEPminpeak(diff, type) {
 	var newPoints = oldPoints.plus(gainedPoints)
 	var newLog = Math.max(newPoints.log10(),0)
 	var minutes = player.thisEternity / 600
-	if (newLog > 1000 && EPminpeakType == 'normal' && isSmartPeakActivated) {
+	if (newLog > 1000 && EPminpeakType == 'normal') {
 		EPminpeakType = 'logarithm'
 		EPminpeak = new Decimal(0)
 	}
@@ -4559,25 +4557,26 @@ function IPMultBuyUpdating() {
 }
 
 function doEternityButtonDisplayUpdating(diff){
-	var isSmartPeakActivated = tmp.ngp3 && getEternitied() >= 1e13 && player.dilation.upgrades.includes("ngpp6")
-	var EPminpeakUnits = isSmartPeakActivated ? (player.dilation.active ? 'TP' : tmp.be ? 'EM' : 'EP') : 'EP'
+	var isSmartPeakActivated = tmp.ngp3
+	var EPminUnits = isSmartPeakActivated ? (player.dilation.active ? 'TP' : tmp.be ? 'EM' : 'EP') : 'EP'
+	var EPminpeakUnits = EPminUnits
 	var currentEPmin = updateEPminpeak(diff, EPminpeakUnits)
-	EPminpeakUnits = (EPminpeakType == 'logarithm' ? ' log(' + EPminpeakUnits + ')' : ' ' + EPminpeakUnits) + '/min'
+	EPminpeakUnits = (EPminpeakType == 'logarithm' ? ' log(' + EPminpeakUnits + ')' : ' ' + EPminpeakUnits)
 	if (getEl("eternitybtn").style.display != "none") {
 		getEl("eternitybtnFlavor").textContent = (((!player.dilation.active&&gainedEternityPoints().lt(1e6))||player.eternities<1||player.currentEternityChall!==""||(player.options.theme=="Aarex's Modifications"&&player.options.notation!="Morse code"))
 									    ? ((player.currentEternityChall!=="" ? "Other challenges await..." : player.eternities>0 ? "" : "Other times await...") + " I need to become Eternal.") : "")
 		if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getTPGain())) getEl("eternitybtnEPGain").innerHTML = getReqForTPGainDisp()
 		else {
 			getEl("eternitybtnEPGain").innerHTML = ((player.eternities > 0 && (player.currentEternityChall == "" || player.options.theme == "Aarex's Modifications")) ?
-				(EPminpeak.gte(1e9) && EPminpeakType == "logarithm") || (EPminpeakType == 'normal' && EPminpeak.gte(Decimal.pow(10, 1e9))) ? "<b>Other times await... I need to become Eternal.</b>" :
-				"Gain <b>" + (player.dilation.active?shortenMoney(getTPGain().sub(player.dilation.totalTachyonParticles)):shortenDimensions(gainedEternityPoints()))+"</b> "+(player.dilation.active?"Tachyon particles.": tmp.be ?"EP and <b>"+shortenDimensions(getEMGain())+"</b> Eternal Matter." : "Eternity points.")
+				(moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[5] && EPminUnits == "EP") || (EPminpeak.gte(1e9) && EPminpeakType == "logarithm") || (EPminpeakType == 'normal' && EPminpeak.gte(Decimal.pow(10, 1e9))) ? "<b>Other times await... I need to become Eternal.</b>" :
+				"Gain <b>" + (player.dilation.active?shortenMoney(getTPGain().sub(player.dilation.totalTachyonParticles)):shortenDimensions(gainedEternityPoints()))+"</b> "+(EPminpeakType == "logarithm" ? EPminUnits + "." : player.dilation.active?"Tachyon particles.": tmp.be ?"EP and <b>"+shortenDimensions(getEMGain())+"</b> Eternal Matter." : "Eternity points.")
 			: "")
 		}
 		var showEPmin=(player.currentEternityChall===""||player.options.theme=="Aarex's Modifications")&&EPminpeak>0&&player.eternities>0&&player.options.notation!='Morse code'&&player.options.notation!='Spazzy'&&(!(player.dilation.active||tmp.be)||isSmartPeakActivated)
-		if (EPminpeak.log10() < 1e5) {
-			getEl("eternitybtnRate").textContent = (showEPmin&&(EPminpeak.lt("1e30003")||player.options.theme=="Aarex's Modifications")
-										  ? (EPminpeakType == "normal" ? shortenDimensions(currentEPmin) : shorten(currentEPmin))+EPminpeakUnits : "")
-			getEl("eternitybtnPeak").textContent = showEPmin ? "Peaked at "+(EPminpeakType == "normal" ? shortenDimensions(EPminpeak) : shorten(EPminpeak))+EPminpeakUnits : ""
+		if (EPminUnits != "TP" && EPminpeak.log10() < 1e9 && (!moreEMsUnlocked() || getEternitied() <= tmp.ngp3_em[5])) {
+			getEl("eternitybtnRate").textContent = (showEPmin
+										  ? rateFormat(currentEPmin, EPminpeakUnits) : "")
+			getEl("eternitybtnPeak").textContent = showEPmin ? "Peaked at " + rateFormat(EPminpeak, EPminpeakUnits) : ""
 		} else {
 			getEl("eternitybtnRate").textContent = ''
 			getEl("eternitybtnPeak").textContent = ''
@@ -4604,14 +4603,16 @@ function doQuantumButtonDisplayUpdating(diff){
 	var showGain = (QCs.inAny() ? QCs_save.comps >= QCs_save.in[0] : tmp.quUnl) ? "QK" : ""
 	getEl("quantumbtnFlavor").textContent = showGain != "" ? "" : QCs.inAny() ? "The unseening has been detected... Complete this challenging experiment!" : "The spacetime has been conceptualized... It's time to go quantum!"
 	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain " + shortenDimensions(quarkGain()) + " anti-quark" + (quarkGain().eq(1) ? "." : "s.") : ""
-	if (showGain == "SS") getEl("quantumbtnQKGain").textContent = "Gain " + shortenDimensions(getSpaceShardsGain()) + " Space Shards."
-	if (showGain == "QK" && currentQKmin.gt(Decimal.pow(10, 1e5))) {
+	getEl("quantumbtnQKNextAt").textContent = showGain == "QK" && currentQKmin.lt(1) ? "Next at " + shorten(getQuantumReqSource()) + " / " + shorten(quarkGainNextAt()) + " MA" : ""
+	if (showGain != "QK" || currentQKmin.gt(Decimal.pow(10, 1e5))) {
 		getEl("quantumbtnRate").textContent = ''
 		getEl("quantumbtnPeak").textContent = ''
+	} else if (currentQKmin.gt("1e30")) {
+		getEl("quantumbtnRate").textContent = ''
+		getEl("quantumbtnPeak").textContent = 'Peaked at ' + rateFormat(QKminpeak, "aQs")
 	} else {
-		getEl("quantumbtnRate").textContent = showGain == "QK" ? shortenMoney(currentQKmin)+" aQs/min" : ""
-		var showQKPeakValue = QKminpeakValue.lt(1e30) || player.options.theme=="Aarex's Modifications"
-		getEl("quantumbtnPeak").textContent = showGain == "QK" ? (showQKPeakValue ? "" : "Peaked at ") + shortenMoney(QKminpeak)+" aQs/min" + (showQKPeakValue ? " at " + shortenDimensions(QKminpeakValue) + " aQs" : "") : ""
+		getEl("quantumbtnRate").textContent = rateFormat(currentQKmin, "aQs")
+		getEl("quantumbtnPeak").textContent = "(" + rateFormat(QKminpeak) + " at " + shortenDimensions(QKminpeakValue) + " aQs)"
 	}
 }
 
