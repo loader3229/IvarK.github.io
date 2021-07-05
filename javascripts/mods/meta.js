@@ -31,7 +31,7 @@ function getDilationMDMultiplier() {
 function getMDMultiplier(tier) {
 	if (player.currentEternityChall === "eterc11") return new Decimal(1)
 	let ret = Decimal.pow(getPerTenMetaPower(), Math.floor(player.meta[tier].bought / 10))
-	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(Math.max(player.meta.resets - (pos.on() ? pos_tmp.sac_mdb : 0), 0) + 1 - tier, 0)))
+	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(player.meta.resets + 1 - tier - (pos.on() ? pos_tmp.sac_mdb : 0), 0)))
 	ret = ret.times(tmp.mdGlobalMult) //Global multiplier of all Meta Dimensions
 
 	//Achievements:
@@ -70,12 +70,12 @@ function getPerTenMetaPower() {
 function getMetaBoostPower() {
 	let r = 2
 	if (hasDilationUpg("ngpp4")) r = getDil15Bonus()
-	if (hasAch("ngpp14") && !tmp.ngp3) r *= 1.01
+	if (!tmp.ngp3 && hasAch("ngpp14")) r *= 1.01
 
 	let exp = 1
 	if (tmp.ngp3 && hasAch("ngpp14")) exp = 1.05
 	if (enB.active("glu", 6) && pos.on()) exp *= enB_tmp.glu6
-	if (hasAch("ng3p26")) exp = 1.5 - 0.5 / Math.log2(player.meta.resets / 100 + 2)
+	//if (hasAch("ng3p26")) exp = 1.5 - 0.5 / Math.log2(player.meta.resets / 100 + 2)
 	return Math.pow(r, exp)
 }
 

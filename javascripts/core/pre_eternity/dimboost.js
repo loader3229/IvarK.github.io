@@ -22,7 +22,7 @@ function getDimensionBoostPower(next, focusOn) {
 	if (ECComps("eterc13") > 0) ret = Decimal.pow(ret, getECReward(13))
 	if (hasDilationStudy(6)) ret = getExtraDimensionBoostPower().times(ret)
 
-	if (player.currentEternityChall == "eterc13") ret = Decimal.pow(10, Math.sqrt(ret.log10() * (player.galaxies + getTotalRGs() + player.dilation.freeGalaxies)))
+	if (player.currentEternityChall == "eterc13") ret = Decimal.pow(10, Math.sqrt(ret.log10() * (player.galaxies + getTotalRGs() + getEffectiveTGs())))
 
 	return new Decimal(ret)
 }

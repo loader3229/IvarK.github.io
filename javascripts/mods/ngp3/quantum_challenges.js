@@ -28,7 +28,7 @@ var QCs = {
 	reset() {
 		QCs_save.qc1 = {boosts: 0, max: 0}
 		QCs_save.qc3 = undefined
-		QCs_save.qc4 = undefined
+		QCs_save.qc4 = "ng"
 		QCs_save.qc5 = 0
 		QCs_save.qc6 = new Decimal(1) //Best-in-this-quantum replicantis
 		QCs_save.qc7 = 0
@@ -131,7 +131,7 @@ var QCs = {
 			goal: () => player.dilation.times >= 3,
 			goalDisp: () => "4 successful dilation runs",
 			goalMA: new Decimal(1e50),
-			hint: "Do not dilate time too many times.",
+			hint: "Try not to automate dilation, and also not to dilate time frequently.",
 			rewardDesc: (x) => "You sacrifice 30% of Meta Dimension Boosts instead of 25%.",
 			rewardEff(str) {
 				return 1
@@ -147,13 +147,31 @@ var QCs = {
 		4: {
 			unl: () => true,
 			desc: () => "You must exclude one type of galaxy for a single run. Changing the exclusion requires a forced Eternity reset.",
-			goal: () => false,
-			goalDisp: () => "(not implemented)",
-			goalMA: new Decimal(1),
+			goal: () => player.dilation.freeGalaxies >= 2800,
+			goalDisp: () => getFullExpansion(2800) + " Tachyonic Galaxies",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 1.8),
 			hint: "Test every single combination of this exclusion.",
-			rewardDesc: (x) => "Dilated time timelapses Replicantis by 1 second per OoM.",
+			rewardDesc: (x) => "Replicated Galaxies contribute to Positronic Charge.",
 			rewardEff(str) {
 				return
+			},
+
+			updateDisp() {		
+				getEl("qc4_div").style.display = QCs.in(4) ? "" : "none"
+				getEl("coinsPerSec").style.display = QCs.in(4) || QCs.done(4) ? "none" : ""
+				getEl("tickSpeedRow").style.display = QCs.in(4) || QCs.done(4) ? "none" : ""
+
+				if (!QCs.in(4)) return
+				var types = ["ng", "rg", "eg", "tg"]
+				for (var t = 0; t < types.length; t++) {
+					var type = types[t]
+					getEl("qc4_" + type).className = (QCs_save.qc4 == type ? "chosenbtn" : "storebtn")
+				}
+			},
+			switch(x) {
+				QCs_save.qc4 = x
+				eternity(true)
+				this.updateDisp()
 			}
 		},
 		5: {
@@ -163,7 +181,7 @@ var QCs = {
 			goalDisp: () => "(not implemented)",
 			goalMA: new Decimal(1),
 			hint: "Grind.",
-			rewardDesc: (x) => "Replicated Galaxies contribute to Positronic Charge. (not implemented)",
+			rewardDesc: (x) => "Boost Positronic Charge, but you sacrifice way less galaxies",
 			rewardEff(str) {
 				return 1
 			},
@@ -312,8 +330,9 @@ var QCs = {
 		getEl("repCompress").style.display = QCs_tmp.qc1 ? "" : "none"
 		getEl("repExpand").style.display = QCs_tmp.qc5 ? "" : "none"
 
-		//Positrons: HTML
+		//Outside of Quantum Challenges
 		this.data[2].updateCloudDisp()
+		this.data[4].updateDisp()
 		
 		//Quantum Challenges
 		if (!unl) return

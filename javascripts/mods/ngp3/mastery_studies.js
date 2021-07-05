@@ -31,7 +31,7 @@ var mTs = {
 			13: 5e69, 14: 5e69
 		},
 		dil: {
-			7: 2e75, 8: 1e81, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
+			7: 2e75, 8: 2e80, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97,
 		}
 	},
 	costs: {
@@ -189,7 +189,7 @@ var mTs = {
 		252() {
 			if (hasNU(6)) return 0
 
-			let x = Math.floor(player.dilation.freeGalaxies / 9)
+			let x = Math.floor(getEffectiveTGs() / 9)
 			if (tmp.ngp3_mul) x *= 1.25
 			return x
 		},
@@ -224,7 +224,7 @@ var mTs = {
 			let x = Math.pow(
 				Math.pow(player.galaxies, 0.75) +
 				Math.pow(getTotalRGs(), 0.75) +
-				Math.pow(player.dilation.freeGalaxies, 0.75)
+				Math.pow(getEffectiveTGs(), 0.75)
 			, 2) / 4000
 			return x
 		},
@@ -238,10 +238,10 @@ var mTs = {
 		},
 
 		311() {
-			return Math.min(Math.log10(qu_save.colorPowers.r + 1) / 2, 1)
+			return Math.min(Math.log10(Math.log10(qu_save.colorPowers.r / 10 + 1) * 2 + 1), 1)
 		},
 		312() {
-			return Math.min(Math.pow(qu_save.colorPowers.g + 1, 0.15) - 1, 1)
+			return Math.min(Math.log10(Math.log10(qu_save.colorPowers.g / 50 + 1) * 2 + 1), 1)
 		},
 		313() {
 			let tpLog = player.dilation.tachyonParticles.max(1).log10()

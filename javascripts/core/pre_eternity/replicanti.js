@@ -227,14 +227,21 @@ function updateExtraReplMult() {
 }
 
 function getTotalRGs() {
-	return player.replicanti.galaxies + tmp.extraRG
+	return getEffectiveRGs("rg") + getEffectiveRGs("eg")
+}
+
+function getEffectiveRGs(type = "rg") {
+	let rg = type == "eg" ? tmp.extraRG || 0 : player.replicanti.galaxies
+	if (pos.on()) rg -= pos_save.gals[type].sac
+	if (QCs.in(4) && QCs_save.qc4 == type) rg = 0
+	return rg
 }
 
 function getFullEffRGs(min) {
 	if (QCs.in(1)) return 0
 
-	let x = player.replicanti.galaxies
-	if (hasMTS(301)) x = getTotalRGs()
+	let x = getEffectiveRGs("rg")
+	if (hasMTS(301)) x += getEffectiveRGs("eg")
 	else if (min) x = Math.min(x, player.replicanti.gal)
 
 	return x

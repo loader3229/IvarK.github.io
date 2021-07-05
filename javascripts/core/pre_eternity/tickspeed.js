@@ -11,6 +11,7 @@ function initialGalaxies() {
 	let g = player.galaxies
 
 	if (pos.on()) g -= pos_save.gals.ng.sac
+	if (QCs.in(4) && QCs_save.qc4 == "ng") g = 0
 	if (tmp.ngC) g *= 2
 	if ((inNC(15) || player.currentChallenge == "postc1") && tmp.ngmX == 3) g = 0
 
@@ -78,7 +79,7 @@ function getExtraGalaxyPower(noDil) {
 	if (hasMTS(301)) replPower *= replGalEff * tsReplEff
 	else {
 		let extraReplGalPower = 0
-		extraReplGalPower += replPower * (tsReplEff - 1) + tmp.extraRG // tmp.extraRG is a constant
+		extraReplGalPower += replPower * (tsReplEff - 1) + getEffectiveRGs("eg")
 		replPower += Math.min(replPower, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
 	}
 
@@ -90,7 +91,7 @@ function getExtraGalaxyPower(noDil) {
 		dilGalEff = getBaseDilGalaxyEff()
 		if (hasMTS(312)) dilGalEff *= Math.pow(replGalEff, getMTSMult(312))
 
-		x += Math.floor(player.dilation.freeGalaxies) * dilGalEff
+		x += Math.floor(getEffectiveTGs()) * dilGalEff
 	}
 	return x
 }
@@ -113,7 +114,7 @@ function getGalaxyTickSpeedMultiplier() {
 		baseMultiplier = 0.83
 		linearGalaxies += 2
 	}
-	let useLinear = g + player.replicanti.galaxies + player.dilation.freeGalaxies <= linearGalaxies
+	let useLinear = g + getEffectiveRGs("rg") + getEffectiveTGs() <= linearGalaxies
 	if (inRS) {
 		linearGalaxies = Math.min(galaxies, linearGalaxies + 3)
 		useLinear = true

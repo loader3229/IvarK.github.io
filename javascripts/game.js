@@ -1367,7 +1367,7 @@ function wordizeList(list, caseFirst, prefix, useAnd = true) {
 	}
 	let ret = ""
 	for (var i=0; i < length; i++) {
-		if (i > 0 && length > 2) {
+		if (i > 0 && length >= 2) {
 			ret += prefix || ", "
 			if (useAnd && i == length - 1) ret += "and "
 		} else if (useAnd && i > 0) ret += " and "
@@ -5042,7 +5042,6 @@ function gameLoop(diff) {
 			let gain = getDilTimeGainPerSecond()
 			player.dilation.dilatedTime = old.plus(gain.times(diff))
 			gainDilationGalaxies()
-			if (QCs.isRewardOn(4)) replicantiIncrease(player.dilation.dilatedTime.max(1).div(old.max(1)).log10())
 		}
 
 		if (tmp.ngp3) {

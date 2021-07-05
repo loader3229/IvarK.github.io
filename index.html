@@ -103,12 +103,20 @@
 		</div>
 		<div id="coinsPerSec">You are getting 0 antimatter per second.</div>
 
-		<tr id="tickSpeedRow" style="visibility: hidden">
+		<div id="tickSpeedRow">
 			<div id="tickLabel" style="visibility: hidden">Make the game 10% faster.</div>
 			<button id="tickSpeed" style="color:black; visibility: hidden; height: 25px;width: 200px; font-size: 12px" class="storebtn">Cost: 1000</button>
 			<button id="tickSpeedMax" onclick="buyMaxTickSpeed()" style="color:black; visibility: hidden; height: 25px; font-size: 12px" class="storebtn">Buy Max</button>
 			<div id="tickSpeedAmount" style="visibility: hidden">Tickspeed: 1000</div>
-		</tr>
+		</div>
+		<div id="qc4_div">
+			Select below to exclude one type of galaxies:
+			<br>
+			<button class="storebtn" id="qc4_ng" onclick="QCs.data[4].switch('ng')">Antimatter</button>
+			<button class="storebtn" id="qc4_rg" onclick="QCs.data[4].switch('rg')">Replicated</button>
+			<button class="storebtn" id="qc4_eg" onclick="QCs.data[4].switch('eg')">Extra RG</button>
+			<button class="storebtn" id="qc4_tg" onclick="QCs.data[4].switch('tg')">Tachyonic</button>
+		</div>
 		<p></p>
 		<div style="position:absolute; left: 0; right: 0; margin-left: auto; margin-right: auto; width: 360px; top: 19px">
 			<button id="bigcrunch" style="font-family: Typewriter; font-size: 50px; width: 360px; height: 100px;" class="tabbtn infinitybtn" onclick="bigCrunch()">Big Crunch</button>

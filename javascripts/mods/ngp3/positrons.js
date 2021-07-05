@@ -52,6 +52,12 @@ var pos = {
 	mdbSacMult() {
 		return QCs.done(3) ? 0.3 : 0.25
 	},
+	galSacMult() {
+		return QCs.done(5) ? 0.1 : 0.25
+	},
+	pcMult() {
+		return QCs.done(5) ? 1 / 75 : 1 / 125
+	},
 	types: {
 		ng: {
 			galName: "Antimatter Galaxies",
@@ -59,46 +65,46 @@ var pos = {
 				return x / 4
 			},
 			sacGals(x) {
-				return Math.min(player.galaxies / 4, x)
+				return Math.min(player.galaxies * pos.galSacMult(), x)
 			},
 			basePcGain(x) {
-				return x / 125
+				return Math.pow(x * pos.pcMult(), 2)
 			}
 		},
 		rg: {
 			galName: "base Replicated Galaxies",
 			pow(x) {
-				return 0
+				return QCs.done(4) ? x / 10 : 0
 			},
 			sacGals(x) {
-				return 0
+				return Math.min(player.replicanti.galaxies * pos.galSacMult(), x)
 			},
 			basePcGain(x) {
-				return x
+				return Math.pow(x * pos.pcMult(), 2)
 			}
 		},
 		eg: {
 			galName: "extra Replicated Galaxies",
 			pow(x) {
-				return 0
+				return 0 //x / 4
 			},
 			sacGals(x) {
-				return 0
+				return Math.min(tmp.extraRG * pos.galSacMult(), x)
 			},
 			basePcGain(x) {
-				return x
+				return Math.pow(x * pos.pcMult(), 2)
 			}
 		},
 		tg: {
 			galName: "Tachyonic Galaxies",
 			pow(x) {
-				return 0
+				return 0 //x / 4
 			},
 			sacGals(x) {
-				return 0
+				return Math.min(player.dilation.freeGalaxies * pos.galSacMult(), x)
 			},
 			basePcGain(x) {
-				return x
+				return Math.pow(x * pos.pcMult(), 2)
 			}
 		}
 	},
@@ -178,7 +184,7 @@ var pos = {
 			save_data.pc = this.types[type].basePcGain(save_data.sac)
 			pcSum += save_data.pc
 		}
-		pos_save.eng = Math.pow(pcSum, 4)
+		pos_save.eng = Math.pow(pcSum, 2)
 	},
 
 	canSwap(x) {

@@ -660,6 +660,13 @@ function resetDilationGalaxies() {
 	gainDilationGalaxies()
 }
 
+function getEffectiveTGs() {
+	let tg = player.dilation.freeGalaxies
+	if (pos.on()) tg -= pos_save.gals.tg.sac
+	if (QCs.in(4) && QCs_save.qc4 == "tg") tg = 0
+	return tg
+}
+
 function getBaseDilGalaxyEff() {
 	let x = 1
 

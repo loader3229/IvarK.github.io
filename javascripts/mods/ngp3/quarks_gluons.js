@@ -212,7 +212,7 @@ function getColorPowerQuantity(color, base) {
 	if (tmp.glB) ret = ret - tmp.glB[color].sub
 
 	if (!base) {
-		if (hasMTS(314)) ret += getColorPowerQuantity(color == "r" ? "g" : color == "g" ? "b" : "r", true) / 3
+		if (hasMTS(314)) ret += getColorPowerQuantity(color == "r" ? "g" : color == "g" ? "b" : "r", true) / 5
 		if (color == "r" && hasMTS(272)) ret /= 5
 	}
 	return Math.max(ret, 0)
@@ -491,11 +491,11 @@ var enB = {
 
 	types: ["glu", "pos"],
 	priorities: [
-		["glu", 5], ["glu", 9],
+		["glu", 6], ["glu", 9],
 		["pos", 8], ["pos", 10], ["pos", 11], ["pos", 12],
 
 		["pos", 1], ["pos", 2], ["pos", 3], ["pos", 4], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 9],
-		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 4], ["glu", 6], ["glu", 7], ["glu", 8], ["glu", 10], ["glu", 11], ["glu", 12],
+		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 4], ["glu", 5], ["glu", 7], ["glu", 8], ["glu", 10], ["glu", 11], ["glu", 12],
 	],
 	glu: {
 		name: "Entangled",
@@ -562,7 +562,7 @@ var enB = {
 			title: "Extraclusters",
 			type: "g",
 			eff(x) {
-				return Math.log10(x + 1) * 1.5 + 1
+				return Math.sqrt(Math.log10(x + 1) * 1.5 + 1)
 			},
 			effDisplay(x) {
 				return x.toFixed(3)
@@ -622,7 +622,7 @@ var enB = {
 			type: "g",
 			eff(x) {
 				if (pos.on()) {
-					return Math.min(Math.pow(x / 20 + 1, 0.2), pos.mdbSacMult() + 1)
+					return Math.min(Math.pow(x / 20 + 1, 0.2), 1 / (1 - pos.mdbSacMult()))
 				} else {
 					return Math.sqrt(x / 2)
 				}
@@ -641,7 +641,7 @@ var enB = {
 			title: "Dilation Overflow II",
 			type: "g",
 			eff(x) {
-				return Math.max(2 - Math.log10(x / 2 + 1) / 10, 1.5)
+				return Math.max(2 - 0.5 / (Math.log10(x / 2 + 1) / 10 + 1), 1.5)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -662,7 +662,7 @@ var enB = {
 		},
 		9: {
 			req: 14,
-			masReq: 22,
+			masReq: 1/0,
 
 			title: "Inflation Resistor",
 			type: "b",
@@ -837,32 +837,32 @@ var enB = {
 		},
 		4: {
 			req: 7,
-			masReq: 8,
-			masReqExpert: 10,
+			masReq: 10,
+			masReqExpert: 11,
 			masReqDeath: 1/0,
-			chargeReq: 7,
+			chargeReq: 2,
 
 			title: "Quantum Scope",
 			tier: 3,
 			type: "b",
 			anti: true,
 			eff(x) {
-				return 2 - 1 / Math.pow(x / 10 + 1, 0.1)
+				return Math.min(Math.log10(x / 20 + 1) / 5 + 1, 2)
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
 			}
 		},
 		5: {
-			req: 8,
+			req: 1/0,
 			masReq: 1/0,
-			chargeReq: 3,
+			chargeReq: 1/0,
 
 			title: "Transfinite Time",
 			tier: 2,
 			type: "r",
 			eff(x) {
-				return 1
+				return Math.min(Math.sqrt(Math.log10(x / 20 + 1) + 1), 3)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)

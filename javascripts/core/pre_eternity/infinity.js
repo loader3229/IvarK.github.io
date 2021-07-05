@@ -75,7 +75,7 @@ function getIPMult() {
 		if (hasAch("r55")) mult = mult.times(Math.min(Math.log10(Math.max(6000 / player.bestInfinityTime, 10)), 10))
 		if (hasAch("r41")) mult = mult.times(Math.pow(Math.log10(Math.max(player.spreadingCancer, 10)), .05))
 		if (hasAch("r51")) {
-			let galaxies = Math.max((player.galaxies + getFullEffRGs() + player.dilation.freeGalaxies), 0) // just in case
+			let galaxies = Math.max((player.galaxies + getFullEffRGs() + getEffectiveTGs()), 0) // just in case
 			if (galaxies < 5) mult = mult.times(Math.max(galaxies, 1))
 			else if (galaxies < 50) mult = mult.times(Decimal.pow(galaxies + 5, 0.5).plus(2))
 			else mult = mult.times(Decimal.pow(galaxies, 0.3).plus(7))
