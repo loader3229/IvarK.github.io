@@ -641,7 +641,7 @@ var enB = {
 			title: "Dilation Overflow II",
 			type: "g",
 			eff(x) {
-				return Math.max(2 - 0.5 / (Math.log10(x / 2 + 1) / 10 + 1), 1.5)
+				return Math.max(1.5 + 0.5 / (Math.log10(x / 2 + 1) / 10 + 1), 1.5)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
