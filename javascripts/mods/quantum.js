@@ -554,16 +554,16 @@ function handleDispAndTmpOnQuantum(bigRip, prestige) {
 function handleDispAndTmpOutOfQuantum(bigRip) {
 	if (!bigRip) bigRip = inBigRip()
 
-	let keepQuantum = tmp.quActive && qMs.tmp.amt >= 16
-	let keepQCs = pH.shown("quantum") && keepQuantum && QCs.unl()
-	let keepEDs = pH.shown("quantum") && keepQuantum && player.masterystudies.includes("d11")
-	let keepBE = tmp.ngp3 && (bigRip || qu_save.breakEternity.unlocked || pH.did("ghostify"))
+	let keepQuantum = pH.shown("quantum")
+	let keepQCs = keepQuantum && QCs.unl()
+	let keepEDs = keepQuantum && player.masterystudies.includes("d11")
+	let keepBE = false
 
 	if (!keepQCs && getEl("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
 	if (!keepEDs && getEl("emperordimensions").style.display == "block") showDimTab("antimatterdimensions")
 	if (!keepBE && getEl("breakEternity").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
 
-	getEl("qctabbtn").style.display = keepQCs ? "" : "none"
+	getEl("qctabbtn").parentElement.style.display = keepQCs ? "" : "none"
 	getEl("edtabbtn").style.display = keepEDs ? "" : "none"
 	getEl("breakEternityTabbtn").style.display = keepBE? "" : "none"
 }

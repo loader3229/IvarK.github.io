@@ -116,6 +116,8 @@
 			<button class="storebtn" id="qc4_rg" onclick="QCs.data[4].switch('rg')">Replicated</button>
 			<button class="storebtn" id="qc4_eg" onclick="QCs.data[4].switch('eg')">Extra RG</button>
 			<button class="storebtn" id="qc4_tg" onclick="QCs.data[4].switch('tg')">Tachyonic</button>
+			<br>
+			<span id="qc4_boost"></span>
 		</div>
 		<p></p>
 		<div style="position:absolute; left: 0; right: 0; margin-left: auto; margin-right: auto; width: 360px; top: 19px">
@@ -534,24 +536,6 @@
 						<td><button id="dilstudy8" onclick='buyMasteryStudy("d", 8)' style='font-size:8px'>Unlock Quantum Challenges<br><span id="ds8Cost"></span><span id="ds8Req"></span></button></td>
 						<td><button id="mts313" style='font-size:8px' onclick='buyMasteryStudy("t", 313)'></button></td>
 						<td><button id="mts314" style='font-size:8px' onclick='buyMasteryStudy("t", 314)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button id="dilstudy9" onclick='buyMasteryStudy("d", 9)'>Unlock Paired Challenges<br><span id="ds9Cost"></span><span id="ds9Req"></span></button></td>
-						<td><button id="dilstudy10" onclick='buyMasteryStudy("d", 10)'>Unlock Duplicants<br><span id="ds10Cost"></span><span id="ds10Req"></span></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button id="dilstudy11" onclick='buyMasteryStudy("d", 11)'>Unlock Emperor Dimensions<br><span id="ds11Cost"></span><span id="ds11Req"></span></button></td>
-						<td><button id="dilstudy12" onclick='buyMasteryStudy("d", 12)'>Unlock Nanofield<br><span id="ds12Cost"></span><span id="ds12Req"></span></button></td>
-						<td><button id="dilstudy13" onclick='buyMasteryStudy("d", 13)'>Unlock Tree of Decay<br><span id="ds13Cost"></span><span id="ds13Req"></span></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button id="dilstudy14" style='width: 200px; height: 100px' onclick='buyMasteryStudy("d", 14)'>Unlock Big Rip<br><span id="ds14Cost"></span><span id="ds14Req"></span></button></td>
 					</tr>
 				</table>
 				<div style="height: 60px;"></div>
@@ -1311,7 +1295,7 @@
 					  <td id="quantumResetLabel">
 					  </td>
 					  <td>
-						  <button id="quantum" style="color:black; width: 200px; height: 35px; font-size: 9px" class="storebtn" onclick="metaReset2()"></button>
+						  <button id="quantum" style="width: 200px; height: 25px; font-size: 9px" class="storebtn" onclick="metaReset2()"></button>
 					  </td>
 				  </tr>
 				</table>
@@ -1582,7 +1566,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - 7/2/2021 Build)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - 7/5/2021 Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -2288,7 +2272,7 @@
 								<div id="Twice in a row" class="achievement achievementlocked" style="background-image: url(images/117.png)" ach-tooltip="Complete Paired Challenge 4. Reward: Unlock the '# of dilated' mode for the Quantum autobuyer."><br></div>
 							</td>
 							<td>
-								<div id="Infinity Morals" class="achievement achievementlocked" style="background-image: url(images/118.png)" ach-tooltip="Reach Infinity in Quantum Challenge 1. Reward: Meta Dimension Boosts boost itself at a greatly reduced rate."><br></div>
+								<div id="Infinity Morals" class="achievement achievementlocked" style="background-image: url(images/118.png)"><br></div>
 							</td>
 							<td>
 								<div id="Intergalactic" class="achievement achievementlocked" style="background-image: url(images/119.png)" ach-tooltip="Reach 4,000,000 Eighth Dimensions without any replicated or Tachyonic Galaxies. Reward: Eighth Dimensions are stronger based on your normal galaxies."><br></div>
@@ -2680,7 +2664,7 @@
 			<table class="table" align="center" style="margin: auto; display: none" id="challTabButtons">
 				<tr>
 					<td><button class="secondarytabbtn" onclick="showChallengesTab('normalchallenges')">Challenges</button></td>
-					<td><button class="secondarytabbtn" onclick="showChallengesTab('breakchallenges')">Infinity Challenges</button></td>
+					<td><button id="postctabbtn" class="secondarytabbtn" onclick="showChallengesTab('breakchallenges')">Infinity Challenges</button></td>
 					<td><button id="eterctabbtn" class="secondarytabbtn" onclick="showChallengesTab('eternitychallenges')">Eternity Challenges</button></td>
 					<td><button id="qctabbtn" class="secondarytabbtn" onclick="showChallengesTab('quantumchallenges')">Quantum Challenges</button></td>
 				</tr>
@@ -4303,6 +4287,7 @@
 			<div id="replicantidiv" style="display: none; width: 1000px">
 				<div id="eterc8repl" style="display: none;"></div>
 				<p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti, translated to <span id="replicantimult" style="font-size:23px; color: black">0</span>x <span id="replDesc"></span></p>
+				<p id="qc5_div">During this quantum, Replicantis also produced <span id="qc5_eng" style="font-size: 15px">0</span> energy in total,<br>which translated to +<span id="qc5_eff" style="font-size: 15px">0</span> effective quantum energy and positronic charge.</p>
 				<br>
 				<button class="storebtn" id="replicantichance" onclick="upgradeReplicantiChance()" style="width:180px; height: 50px; font-size: 10px">Replicate chance: 1%<br>+1% Costs: 1e6969 IP</button>
 				<button class="storebtn" id="replicantiinterval" onclick="upgradeReplicantiInterval()" style="width:180px; height: 50px; font-size: 10px">Interval: 1000ms<br>-> 900 Costs: 1e6969 IP</button>
@@ -4318,7 +4303,6 @@
 				<br>
 				<button class="storebtn" id="replicantireset" onclick="replicantiGalaxy()" style="width: 200px; height: 90px; font-size: 12px"></button>
 				<button class="storebtn" id="repCompress" onclick="QCs.data[1].boost()" style="width: 200px; height: 90px; font-size: 12px"></button>
-				<button class="storebtn" id="repExpand" onclick="QCs.data[5].boost()" style="width: 200px; height: 90px; font-size: 12px"></button>
 				<br>
 				<button class="storebtn" id="replicantiresettoggle" onclick="replicantiGalaxyAutoToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Auto galaxy OFF</button><br>
 				<button class="storebtn" id="replicantibulkmodetoggle" onclick="replicantiGalaxyBulkModeToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Galaxy bulk mode: single</button>
@@ -4717,7 +4701,7 @@
 						<b style="font-size: 25px">Challenging</b><br>
 						You have completed a total of <span id="qMs_ch_target" style="font-size: 15px">0</span> unique paired challenges,<br>
 						which giving you <span id="qMs_ch_points" style="font-size: 25px">0</span> Milestone Points.<br>
-						(Next Milestone Point is at <span id="qMs_ch_next">0</span> paired challenge completions)
+						(Next Milestone Point is at <span id="qMs_ch_next">0</span> completions)
 					</td>
 				</tr>
 				<tr>
@@ -4816,24 +4800,10 @@
 				<tr>
 					<td class="milestoneText" id="qMs_req_25"></td>
 					<td class="milestoneText" id="qMs_req_26"></td>
-					<td class="milestoneText" id="qMs_req_27"></td>
-					<td class="milestoneText" id="qMs_req_28"></td>
 				</tr>
 				<tr>
 					<td><button class="qMs_locked" id="qMs_reward_25" onclick="qMs.toggle(25)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_26" onclick="qMs.toggle(26)"></button></td>
-					<td><button class="qMs_locked" id="qMs_reward_27" onclick="qMs.toggle(27)"></button></td>
-					<td><button class="qMs_locked" id="qMs_reward_28" onclick="qMs.toggle(28)"></button></td>
-				</tr>
-
-				<!-- NEXT ROW -->
-				<tr>
-					<td class="milestoneText" id="qMs_req_29"></td>
-					<td class="milestoneText" id="qMs_req_30"></td>
-				</tr>
-				<tr>
-					<td><button class="qMs_locked" id="qMs_reward_29" onclick="qMs.toggle(29)"></button></td>
-					<td><button class="qMs_locked" id="qMs_reward_30" onclick="qMs.toggle(30)"></button></td>
 				</tr>
 			</table>
 		</div>
@@ -4841,7 +4811,8 @@
 		If Positrons are on, then Meta-Dimension Boosts and Quantum Energy are sacrificed for Positrons...
 		<br>
 		which allow Galaxies to be sacrificed for Positronic Charge!
-		<br>
+		<br><br>
+		Note: Toggling Positrons restarts your Quantum run!
 		<table class="qTable">
 			<tr>
 				<td class="yellow">

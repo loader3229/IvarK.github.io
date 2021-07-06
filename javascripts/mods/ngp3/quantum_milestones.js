@@ -75,11 +75,17 @@ let qMs = {
 			}
 
 			for (var i = 1; i <= qMs.max; i++) {
-				getEl("qMs_req_" + i).textContent = "Milestone Point #" + getFullExpansion(qMs[i].req)
-				getEl("qMs_reward_" + i).className = qMs.tmp.amt < i || qMs.forceOff(i) ? "qMs_locked" :
-					!this[i].disablable ? "qMs_reward" :
-					"qMs_toggle_" + (!qu_save.disabledRewards[i] ? "on" : "off")
-				getEl("qMs_reward_" + i).textContent = qMs[i].eff()
+				var shown = qMs.tmp.amt >= i - 2
+				getEl("qMs_req_" + i).style.display = shown ? "" : "none"
+				getEl("qMs_reward_" + i).style.display = shown ? "" : "none"
+
+				if (shown) {
+					getEl("qMs_req_" + i).textContent = "Milestone Point #" + getFullExpansion(qMs[i].req)
+					getEl("qMs_reward_" + i).className = qMs.tmp.amt < i || qMs.forceOff(i) ? "qMs_locked" :
+						!this[i].disablable ? "qMs_reward" :
+						"qMs_toggle_" + (!qu_save.disabledRewards[i] ? "on" : "off")
+					getEl("qMs_reward_" + i).textContent = qMs[i].eff()
+				}
 			}
 		}
 
@@ -88,7 +94,7 @@ let qMs = {
 		getEl('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
 		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 16 ? "block" : "none"
 		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 16 ? "" : "none"
-		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 24 ? "" : "none"
+		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 23 ? "" : "none"
 	},
 	updateDisplayOnTick() {
 		let types = qMs.data.types
@@ -122,7 +128,7 @@ let qMs = {
 		getEl("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
 	},
 
-	max: 30,
+	max: 26,
 	1: {
 		req: 1,
 		eff: () => "Start with 100 Eternities, and EC completions no longer respec studies",
@@ -239,48 +245,26 @@ let qMs = {
 		effGot: () => "You can now automatically assort quarks."
 	},
 	23: {
-		req: 50,
-		eff: () => "Able to purchase all time studies without blocking",
-		effGot: () => "You now can buy every single time study."
-	},
-	24: {
-		req: 70,
+		req: 40,
 		disablable: true,
 		eff: () => "Auto-dilation upgrades maximize all repeatable dilation upgrades",
 		effGot: () => "Auto-dilation upgrades now can maximize all repeatable dilation upgrades."
 	},
-	25: {
-		req: 80,
+	24: {
+		req: 50,
 		forceDisable: () => QCs.inAny(),
 		disablable: true,
 		eff: () => "Each Quantum dilates Replicantis by ^0.95.",
 		effGot: () => "Each following Quantum run now dilates Replicantis by ^0.95."
 	},
-	26: {
-		req: 90,
-		disablable: true,
-		eff: () => "Start with one dilation worth of TP at same antimatter as total",
-		effGot: () => "You now start with one dilation worth of TP at same antimatter as total."
-	},
-	27: {
-		req: 100,
-		disablable: true,
-		eff: () => "Some achievement rewards are disabled when turned off",
-		effGot: () => "Some achievement rewards are disabled when turned off."
-	},
-	28: {
-		req: 110,
-		eff: () => "Unlock the autobuyer for Entangled Boosters (not implemented)",
-		effGot: () => "You now can automatically get Entangled Boosters."
-	},
-	29: {
-		req: 125,
-		eff: () => "Unlock the autobuyer for Positronic Boosters (not implemented)",
-		effGot: () => "You now can automatically get Positronic Boosters."
-	},
-	30: {
-		req: 150,
+	25: {
+		req: 75,
 		eff: () => "Able to maximize Meta-Dimension Boosts",
 		effGot: () => "You now can maximize Meta-Dimension Boosts."
-	}
+	},
+	26: {
+		req: 100,
+		eff: () => "Able to purchase all time studies without blocking",
+		effGot: () => "You now can buy every single time study."
+	},
 }

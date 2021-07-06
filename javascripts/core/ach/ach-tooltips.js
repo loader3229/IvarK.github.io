@@ -354,12 +354,13 @@ function setR16Tooltip() {
 	let memories = getEl("Old memories come true")
 	//ng3p25/////
 	//ng3p26/////
-	//ng3p27/////
+	let morals = getEl("Infinity Morals")
 	let seriously = getEl("Seriously, I already got rid of you.")
 
 	//ACHIEVEMENT ROW 16
 	memories.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter without having at least " + shorten(Number.MAX_VALUE) + " of 5th - 8th Dimensions for every type. (Not implemented)")
 	squared.setAttribute('ach-tooltip', "Quantum with at most "+shorten(Number.MAX_VALUE)+" best meta-antimatter. Reward: 1st Meta Dimensions generate the rest of Meta Dimensions except 8th Meta Dimensions, at a reduced rate.")
+	morals.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e85) + " TT in any Quantum Challenge.")
 	seriously.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e354000")) + " IP without having time studies, while dilated and running QC2. Reward: The Eternity Points boost to Quark gain is 1% stronger.")
 }
 

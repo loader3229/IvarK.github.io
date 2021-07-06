@@ -167,7 +167,7 @@ function getTPGain(reset, amLog) {
 	if (amLog < 1 / amLogEff) return new Decimal(0)
 
 	//Base TP
-	let gain = reset && !qMs.isOn(26) ? new Decimal(qMs.tmp.amt >= 5 ? 1 : 0) : Decimal.pow(amLog * amLogEff, getTPExp())
+	let gain = reset && !qMs.isOn(25) ? new Decimal(qMs.tmp.amt >= 5 ? 1 : 0) : Decimal.pow(amLog * amLogEff, getTPExp())
 	gain = gain.times(reset ? Decimal.pow(3, player.dilation.rebuyables[3]) : getTPMult())
 
 	//NG Condensed

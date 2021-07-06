@@ -175,14 +175,22 @@ dev.testTDCosts = function() {
 	}
 }
 
-dev.giveQuantumStuff = function(n){
+dev.giveQuantumStuff = function(n, quick) {
 	qu_save.usedQuarks.r = qu_save.usedQuarks.r.add(n)
 	qu_save.usedQuarks.b = qu_save.usedQuarks.b.add(n)
 	qu_save.usedQuarks.g = qu_save.usedQuarks.g.add(n)
 	qu_save.gluons.rg = qu_save.gluons.rg.add(n)
 	qu_save.gluons.gb = qu_save.gluons.gb.add(n)
 	qu_save.gluons.br = qu_save.gluons.br.add(n)
-	updateColorCharge()
+	if (!quick) updateColorCharge()
+}
+
+dev.quickQuantum = function(n, quick) {
+	if (!n) n = quarkGain()
+	dev.giveQuantumStuff(Decimal.div(n, 3), true)
+	gainQKOnQuantum(n, true)
+	assignAll(true)
+	if (!quick) updateColorCharge()
 }
 
 dev.addReward = function(){

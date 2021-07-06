@@ -56,6 +56,7 @@ function getGalaxyEff(bi) {
 
 	if (aarMod.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1
 	if (tmp.quActive) eff *= colorBoosts.r
+	if (QCs.in(4)) eff *= QCs_tmp.qc4.boost
 	if (hasBosonicUpg(34)) eff *= tmp.blu[34]
 	return eff
 }

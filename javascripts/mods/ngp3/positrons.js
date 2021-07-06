@@ -53,10 +53,10 @@ var pos = {
 		return QCs.done(3) ? 0.3 : 0.25
 	},
 	galSacMult() {
-		return QCs.done(5) ? 0.1 : 0.25
+		return QCs.done(5) ? 0.125 : 0.25
 	},
 	pcMult() {
-		return QCs.done(5) ? 1 / 75 : 1 / 125
+		return (QCs.done(5) ? 1.5 : 1) / 125
 	},
 	types: {
 		ng: {
@@ -165,7 +165,7 @@ var pos = {
 
 			data.sac_mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
 			data.sac_qe = qu_save.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)
-			pos_save.amt = Math.sqrt(Math.min(data.sac_mdb, Math.pow(data.sac_qe * (tmp.bgMode ? 2 : 1.5), 2))) * 300
+			pos_save.amt = Math.sqrt(Math.min(data.sac_mdb * (QCs.done(5) ? 1.5 : 1), Math.pow(data.sac_qe * (tmp.bgMode ? 2 : 1.5), 2))) * 300
 		} else {
 			data.sac_mdb = 0
 			data.sac_qe = 0
@@ -184,7 +184,8 @@ var pos = {
 			save_data.pc = this.types[type].basePcGain(save_data.sac)
 			pcSum += save_data.pc
 		}
-		pos_save.eng = Math.pow(pcSum, 2)
+		if (!pos.on() && enB.active("glu", 6)) pos_save.eng = enB_tmp.glu6
+		else pos_save.eng = Math.pow(pcSum, 2)
 	},
 
 	canSwap(x) {

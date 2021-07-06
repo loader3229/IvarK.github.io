@@ -1516,6 +1516,7 @@ function updateMoney() {
 	if (inNC(14) && inNGM(4)) getEl("c14Resets").textContent = "You have "+getFullExpansion(10-getTotalResets())+" resets left."
 	getEl("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult) + "x" : ""
 	getEl("qc3Mult").textContent = QCs.in(3) ? "Antimatter exponent: " + QCs.data[3].amExp().toFixed(2) : ""
+	if (QCs.in(4)) getEl("qc4_boost").textContent = "Exclusion bonus: Strengthen all galaxies by " + formatPercentage(QCs_tmp.qc4.boost - 1) + "% (" + shortenMoney(QCs_tmp.qc4.diff) + ")"
 }
 
 function updateCoinPerSec() {
@@ -4091,7 +4092,7 @@ function dimensionButtonDisplayUpdating() {
 	getEl("pdtabbtn").style.display = pH.shown("paradox") && player.galacticSacrifice.times >= 25 ? "" : "none"
    	getEl("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || pH.did("eternity")) && (inNGM(5) || pH.shown("infinity"))) ? "" : "none"
 	getEl("tdtabbtn").style.display = ((pH.shown("eternity") || inNGM(4)) && (!QCs.in(8) || tmp.be)) ? "" : "none"
-	getEl("mdtabbtn").style.display = pH.shown("eternity") && hasDilationStudy(6) ? "" : "none"
+	getEl("mdtabbtn").style.display = (!pH.did("quantum") || pH.shown("quantum")) && hasDilationStudy(6) ? "" : "none"
 	getEl('toggleallmetadims').style.display = moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3]) ? "" : "none"
 }
 
@@ -4600,14 +4601,14 @@ function doQuantumButtonDisplayUpdating(diff){
 		}
 	}
 
-	var showGain = (QCs.inAny() ? QCs_save.comps >= QCs_save.in[0] : tmp.quUnl) ? "QK" : ""
+	var showGain = (QCs.inAny() ? QCs_save.comps >= QCs_save.in[0] : tmp.quUnl) && currentQKmin.lte(Number.MAX_VALUE) ? "QK" : ""
 	getEl("quantumbtnFlavor").textContent = showGain != "" ? "" : QCs.inAny() ? "The unseening has been detected... Complete this challenging experiment!" : "The spacetime has been conceptualized... It's time to go quantum!"
 	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain " + shortenDimensions(quarkGain()) + " anti-quark" + (quarkGain().eq(1) ? "." : "s.") : ""
 	getEl("quantumbtnQKNextAt").textContent = showGain == "QK" && currentQKmin.lt(1) ? "Next at " + shorten(getQuantumReqSource()) + " / " + shorten(quarkGainNextAt()) + " MA" : ""
-	if (showGain != "QK" || currentQKmin.gt(Decimal.pow(10, 1e5))) {
+	if (showGain != "QK" || currentQKmin.gt(1e30)) {
 		getEl("quantumbtnRate").textContent = ''
 		getEl("quantumbtnPeak").textContent = ''
-	} else if (currentQKmin.gt("1e30")) {
+	} else if (currentQKmin.gt(1e6)) {
 		getEl("quantumbtnRate").textContent = ''
 		getEl("quantumbtnPeak").textContent = 'Peaked at ' + rateFormat(QKminpeak, "aQs")
 	} else {

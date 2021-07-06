@@ -1064,15 +1064,15 @@ td .timestudybought.elcstudy {
 }
 
 .qMs_toggle_on {
-    background: linear-gradient(#464, #232) !important;
-    color: #9f7;
-    border: 1px solid #9f7;
+    background: linear-gradient(#cdb, #9b7) !important;
+    color: #570;
+    border: 1px solid #9b7;
     box-shadow: inset 0 0 25px #9f75, 0 0 8px #9f77;
 }
 .qMs_toggle_off {
-    background: linear-gradient(#644, #322) !important;
-    color: #f79;
-    border: 1px solid #f79;
+    background: linear-gradient(#dbb, #b77) !important;
+    color: #700;
+    border: 1px solid #b77;
     box-shadow: inset 0 0 25px #f795, 0 0 8px #f797;
 }
 

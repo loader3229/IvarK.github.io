@@ -515,7 +515,9 @@ var enB = {
 			return qu_save.entBoosts || 0
 		},
 		engAmt(noBest) {
-			return noBest ? qu_save.quarkEnergy : qu_save.bestEnergy
+			var x = noBest ? qu_save.quarkEnergy : qu_save.bestEnergy
+			if (noBest && QCs_tmp.qc5) x += QCs_tmp.qc5.eff
+			return x
 		},
 		set(x) {
 			qu_save.entBoosts = x
@@ -634,14 +636,12 @@ var enB = {
 		},
 		7: {
 			req: 12,
-			masReq: 20,
-			masReqExpert: 22,
-			masReqDeath: 25,
+			masReq: 1/0,
 
 			title: "Dilation Overflow II",
 			type: "g",
 			eff(x) {
-				return Math.max(1.5 + 0.5 / (Math.log10(x / 2 + 1) / 10 + 1), 1.5)
+				return 1.5 + 0.5 / (Math.log10(x + 1) / 10 + 1)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -662,7 +662,7 @@ var enB = {
 		},
 		9: {
 			req: 14,
-			masReq: 1/0,
+			masReq: 36,
 
 			title: "Inflation Resistor",
 			type: "b",
@@ -675,11 +675,11 @@ var enB = {
 			}
 		},
 		10: {
-			req: 1/0,
+			req: 36,
 			masReq: 1/0,
 
 			title: "Blue Saturation",
-			type: "r",
+			type: "g",
 			eff(x) {
 				return Math.pow(x + 1, 0.1)
 			},
@@ -688,24 +688,24 @@ var enB = {
 			}
 		},
 		11: {
-			req: 50,
+			req: 100,
 			masReq: 1/0,
 
 			title: "Blue Unseeming",
 			type: "r",
 			eff(x) {
-				return 0
+				return Math.log10(Math.log10(x + 1) / 2 + 1)
 			},
 			effDisplay(x) {
 				return shorten(x)
 			}
 		},
 		12: {
-			req: 75,
+			req: 1/0,
 			masReq: 1/0,
 
 			title: "Color Subcharge",
-			type: "r",
+			type: "b",
 			anti: true,
 			eff(x) {
 				return 0
@@ -745,7 +745,7 @@ var enB = {
 
 		eff(x) {
 			var eng = this.engAmt()
-			if (!pos.on() && enB.active("glu", 6)) eng += enB_tmp.glu6
+			if (QCs_tmp.qc5) eng += QCs_tmp.qc5.eff
 			if ((enB.mastered("pos", x) || enB.colorMatch("pos", x)) && eng >= this.chargeReq(x)) eng *= 2 * this.lvl(x)
 			return eng
 		},
@@ -847,7 +847,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return Math.min(Math.log10(x / 20 + 1) / 5 + 1, 2)
+				return Math.log10(x / 20 + 1) / 5 * Math.pow(x + 1, 0.1) + 1
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
@@ -1042,7 +1042,7 @@ var enB = {
 var enB_tmp = {}
 let ENTANGLED_BOOSTS = enB
 
-function gainQKOnQuantum(qkGain) {
+function gainQKOnQuantum(qkGain, quick) {
 	var oldGluUnl = enB.glu.unl()
 
 	//Nothing -> Quarks
@@ -1064,14 +1064,16 @@ function gainQKOnQuantum(qkGain) {
 		enB.updateUnlock()
 	}
 
-	//Quarks -> Colors
-	if (qu_save.autoOptions.assignQK) assignAll(true)
-	updateColorCharge()
+	if (!quick) {
+		//Quarks -> Colors
+		if (qu_save.autoOptions.assignQK) assignAll(true)
+		updateColorCharge()
 
-	//Quarks & Gluons -> Energy
-	updateQuantumWorth()
-	updateQEGainTmp()
-	gainQuantumEnergy()
+		//Quarks & Gluons -> Energy
+		updateQuantumWorth()
+		updateQEGainTmp()
+		gainQuantumEnergy()
+	}
 }
 
 //Display

@@ -238,10 +238,10 @@ var mTs = {
 		},
 
 		311() {
-			return Math.min(Math.log10(Math.log10(qu_save.colorPowers.r / 10 + 1) * 2 + 1), 1)
+			return Math.min(Math.log10(Math.log10(qu_save.colorPowers.r / 10 + 1) + 1), 1)
 		},
 		312() {
-			return Math.min(Math.log10(Math.log10(qu_save.colorPowers.g / 50 + 1) * 2 + 1), 1)
+			return Math.min(Math.log10(Math.log10(qu_save.colorPowers.g / 50 + 1) + 1), 1)
 		},
 		313() {
 			let tpLog = player.dilation.tachyonParticles.max(1).log10()
@@ -347,9 +347,6 @@ var mTs = {
 		291: [311], 292: [314],
 		302: [301, "d8", 303],
 		311: [312], 314: [313],
-
-		//No more mastery studies after that
-		d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"],
 
 		//Expert Mode
 		ex_264: [],

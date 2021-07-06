@@ -22,6 +22,7 @@ function replicantiIncrease(diff) {
 		return
 	}
 
+	let old = player.replicanti.amount
 	let lim = getReplicantiLimit(true)
 	if (player.replicanti.amount.gt(0)) replicantiTicks += diff
 	if (player.replicanti.amount.lt(lim)) {
@@ -31,6 +32,7 @@ function replicantiIncrease(diff) {
 
 	player.replicanti.amount = player.replicanti.amount.min(lim)
 	if (player.replicanti.amount.eq(lim)) replicantiTicks = 0
+	if (QCs.in(5)) QCs_save.qc5 += player.replicanti.amount.div(old).log10() / Math.log2(QCs_save.qc1.boosts + 2)
 
 	let auto = player.replicanti.galaxybuyer
 	if (auto && tmp.ngC) ngC.condense.rep.buy()
@@ -69,11 +71,13 @@ function getReplEff() {
 	return Decimal.max(tmp.rmPseudo || getReplBaseEff(), 1)
 }
 
-function getReplBaseEff() {
-	return QCs.data[1].convert(player.replicanti.amount)
+function getReplBaseEff(x) {
+	return QCs.in(5) ? new Decimal(1) : QCs.data[1].convert(x || player.replicanti.amount)
 }
 
 function getReplMult(next) {
+	if (QCs.in(5)) return new Decimal(1)
+
 	let exp = 2
 	if (inNGM(2)) exp = Math.max(2, Math.pow(player.galaxies, .4))
 	if (player.boughtDims) {
@@ -506,7 +510,7 @@ function useContinuousRep() {
 }
 
 function handleReplTabs() {
-	let major = QCs_tmp.qc1 !== undefined
+	let major = QCs_tmp.qc1 !== undefined && pH.shown("quantum")
 
 	if (major != (tmp.repMajor || false)) {
 		getEl("replicantitabbtn").style.display = major || player.infinityUpgradesRespecced ? "none" : ""

@@ -268,6 +268,7 @@ function updateEternityChallenges() {
 		getEl(property).textContent=onchallenge?"Running":"Start"
 		getEl(property).className=onchallenge?"onchallengebtn":"challengesbtn"
 	}
+	if (pH.did("quantum")) locked = false
 	getEl("eterctabbtn").parentElement.style.display = pH.shown("eternity") && !locked ? "" : "none"
 }
 

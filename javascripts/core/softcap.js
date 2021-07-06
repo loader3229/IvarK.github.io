@@ -134,7 +134,7 @@ var softcap_data = {
 		},
 		2: {
 			func: "dilate",
-			start: new Decimal(1e100),
+			start: new Decimal(3e79),
 			base: 10,
 			pow: 3/4
 		},
@@ -213,9 +213,10 @@ var softcap_data = {
 		name: "Anti-Quark gain",
 		1: {
 			func: "dilate",
-			start: new Decimal(1/0),
+			start: new Decimal(1e3),
 			base: 10,
-			pow: 0.75
+			pow: 0.75,
+			mul: 2/3
 		},
 	},
 	bam: {

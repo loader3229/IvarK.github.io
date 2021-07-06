@@ -74,12 +74,6 @@ var QCs = {
 				if (QCs.in(1)) {
 					data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
 				}
-
-				let qc5 = QCs_tmp.qc5
-				if (qc5) {
-					data.limit = data.limit.pow(qc5.mult)
-					data.speedMult = data.speedMult.pow(1 / qc5.mult)
-				}
 			},
 			convert(x) {
 				if (!QCs_tmp.qc1) return x
@@ -101,7 +95,7 @@ var QCs = {
 		},
 		2: {
 			unl: () => true,
-			desc: () => "Some quantum content are based on one, but quantum energy multiplier. color powers, and gluons are useless; and you must exclude 1 tier from Positron Cloud.",
+			desc: () => "Some quantum contents are based on one, but quantum energy multiplier. color powers, and gluons are useless; and you must exclude 1 tier from Positron Cloud.",
 			goal: () => pos_save.boosts >= 7,
 			goalDisp: () => "7 Positronic Boosters",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.1),
@@ -130,7 +124,7 @@ var QCs = {
 			desc: () => "There are only Meta Dimensions that produce antimatter, but successfully dilating reduces antimatter production.",
 			goal: () => player.dilation.times >= 3,
 			goalDisp: () => "4 successful dilation runs",
-			goalMA: new Decimal(1e50),
+			goalMA: Decimal.pow(Number.MAX_VALUE, 0.15),
 			hint: "Try not to automate dilation, and also not to dilate time frequently.",
 			rewardDesc: (x) => "You sacrifice 30% of Meta Dimension Boosts instead of 25%.",
 			rewardEff(str) {
@@ -147,13 +141,31 @@ var QCs = {
 		4: {
 			unl: () => true,
 			desc: () => "You must exclude one type of galaxy for a single run. Changing the exclusion requires a forced Eternity reset.",
-			goal: () => player.dilation.freeGalaxies >= 2800,
-			goalDisp: () => getFullExpansion(2800) + " Tachyonic Galaxies",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 1.8),
-			hint: "Test every single combination of this exclusion.",
+			goal: () => player.dilation.freeGalaxies >= 2900,
+			goalDisp: () => getFullExpansion(2900) + " Tachyonic Galaxies",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
+			hint: "Test every single combination of this exclusion, and try to minimize galaxies.",
 			rewardDesc: (x) => "Replicated Galaxies contribute to Positronic Charge.",
 			rewardEff(str) {
 				return
+			},
+
+			updateTmp() {
+				delete QCs_tmp.qc4
+				if (!QCs.in(4)) return
+
+				var gals = {
+					ng: player.galaxies,
+					rg: player.replicanti.galaxies,
+					eg: tmp.extraRG || 0,
+					tg: player.dilation.freeGalaxies,
+				}
+				var sum = gals.ng + gals.rg + gals.eg + gals.tg
+				
+				QCs_tmp.qc4 = {
+					diff: Math.abs(gals[QCs_save.qc4] - (sum - gals[QCs_save.qc4]) / 3)
+				}
+				QCs_tmp.qc4.boost = Math.log2(QCs_tmp.qc4.diff / 500 + 1) / 5 + 1
 			},
 
 			updateDisp() {		
@@ -177,35 +189,29 @@ var QCs = {
 		5: {
 			unl: () => true,
 			desc: () => "Replicantis only produce Replicanti Energy by gaining, which increases effective Quantum Energy and Positronic Charge.",
-			goal: () => false,
-			goalDisp: () => "(not implemented)",
-			goalMA: new Decimal(1),
-			hint: "Grind.",
-			rewardDesc: (x) => "Boost Positronic Charge, but you sacrifice way less galaxies",
+			goal: () => player.eternityPoints.gte(Decimal.pow(10, 2.4e6)),
+			goalDisp: () => shortenCosts(Decimal.pow(10, 2.4e6)) + " Eternity Points",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 1.7),
+			hint: "Do sub-1 Eternity runs before getting Compressors.",
+			rewardDesc: (x) => "Sacrificed things are stronger for Positrons, but you sacrifice less galaxies.",
 			rewardEff(str) {
 				return 1
 			},
 
 			updateTmp() {
 				delete QCs_tmp.qc5
-				if (!QCs.in(5) && !QCs.done(5)) return
+				if (!QCs.in(5)) return
 
-				QCs_tmp.qc5 = {
-					req: new Decimal(1),
-					mult: QCs_save.qc5 / 4 + 1
-				}
-				QCs_tmp.qc5.req = QCs_tmp.qc5.req.pow(Math.sqrt(QCs_tmp.qc5.mult))
+				QCs_tmp.qc5 = { eff: Math.pow(Math.log2(QCs_save.qc5 / 1e6 + 1), 2) }
 			},
 
-			can: () => QCs_tmp.qc5 && pH.can("eternity") && player.replicanti.amount.gt(1) && player.replicanti.amount.lt(QCs_tmp.qc5.req),
-			boost() {
-				if (!QCs.data[5].can()) return false
-
-				QCs_save.qc5++
-				player.replicanti.amount = player.replicanti.amount.pow(1.25)
-				eternity(true)
-				return true
-			}
+			updateDisp() {		
+				getEl("qc5_div").style.display = QCs.in(5) ? "" : "none"
+			},
+			updateDispOnTick() {		
+				getEl("qc5_eng").textContent = shorten(QCs_save.qc5)
+				getEl("qc5_eff").textContent = shorten(QCs_tmp.qc5.eff)
+			},
 		},
 		6: {
 			unl: () => true,
@@ -324,16 +330,14 @@ var QCs = {
 	divInserted: false,
 
 	updateDisp() {
-		let unl = this.divInserted && this.unl()
+		let unl = this.divInserted && this.unl() && pH.shown("quantum")
 
 		//In Quantum Challenges
 		getEl("repCompress").style.display = QCs_tmp.qc1 ? "" : "none"
-		getEl("repExpand").style.display = QCs_tmp.qc5 ? "" : "none"
-
-		//Outside of Quantum Challenges
 		this.data[2].updateCloudDisp()
 		this.data[4].updateDisp()
-		
+		this.data[5].updateDisp()
+
 		//Quantum Challenges
 		if (!unl) return
 
@@ -402,7 +406,7 @@ var QCs = {
 		if (!this.divInserted) return
 
 		for (let qc = 1; qc <= this.data.max; qc++) {
-			if (QCs_tmp.unl.includes(qc)) getEl("qc_" + qc + "_reward").textContent = shiftDown ? "Hint: " + this.data[qc].hint : "Reward: " + this.data[qc].rewardDesc(QCs_tmp.rewards[qc])
+			if (QCs_tmp.unl.includes(qc)) getEl("qc_" + qc + "_reward").textContent = shiftDown || QCs.in(qc) ? "Hint: " + this.data[qc].hint : "Reward: " + this.data[qc].rewardDesc(QCs_tmp.rewards[qc])
 		}
 	},
 	updateBest() {

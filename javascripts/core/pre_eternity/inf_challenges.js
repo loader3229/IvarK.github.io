@@ -218,7 +218,8 @@ function updateChallenges() {
 	}
 
 	if (player.postChallUnlocked > 0 || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) getEl("challTabButtons").style.display = "table"
-	for (c = 0; c < order.length; c++) getEl(order[c]).parentElement.parentElement.style.display = player.postChallUnlocked >= c+1 ? "" : "none"
+	for (c = 0; c < order.length; c++) getEl(order[c]).parentElement.parentElement.style.display = player.postChallUnlocked >= c + 1 ? "" : "none"
+	getEl("postctabbtn").parentElement.style.display = pH.shown("infinity") && (player.postChallUnlocked >= 1 || pH.did("eternity")) ? "" : "none"
 
 	resetIC1Reward()
 	updateInChallenges()
@@ -236,6 +237,12 @@ function updateInChallenges() {
 
 var infchallengeTimes = 999999999
 function updateChallengeTimes() {
+	if (!pH.shown("infinity")) {
+		getEl("challengetimesbtn").style.display = "none"
+		getEl("infchallengesbtn").style.display = "none"
+		return
+	}
+
 	//Normal Challenges
 	var counter = 0
 	var totalTime = 0

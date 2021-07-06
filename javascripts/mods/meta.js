@@ -138,7 +138,7 @@ function metaBoost() {
 	if (!(player.meta[req.tier].bought >= req.amount)) return
 
 	let isNU1ReductionActive = hasNU(1) ? !qu_save.bigRip.active : false
-	if (qMs.tmp.amt >= 30) {
+	if (qMs.tmp.amt >= 25) {
 		if (isNU1ReductionActive && player.meta.resets < 110) {
 			player.meta.resets = Math.min(player.meta.resets + Math.floor((player.meta[8].bought - req.amount) / (req.mult + 1)) + 1, 110)
 			req = getMetaShiftRequirement()
@@ -376,7 +376,7 @@ function updateMetaDimensions () {
 		'Quantum: requires ' + shorten(req) + (tmp.ngp3 ? " best" : "") + ' meta-antimatter'
 		+ (QCs.inAny() ? QCs.getGoalDisp() : tmp.ngp3 && !tmp.ngp3_mul ? " and an EC14 completion" : "")
 	getEl("quantum").innerHTML = tmp.quUnl ? "Gain " + shortenDimensions(quarkGain()) + " aQs." : 'Reset your progress for a new layer...'
-	getEl("quantum").className = pH.can("quantum") ? 'quantumbtn storebtn' : 'unavailablebtn'
+	getEl("quantum").className = pH.can("quantum") ? 'quantumbtn' : 'unavailablebtn'
 
 	getEl("metaAccelerator").textContent = enB.active("pos", 2) ? "Meta Accelerator: " + shorten(enB_tmp.pos2.acc) + "x to MA, DT, and replicate interval" : ""
 }

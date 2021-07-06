@@ -242,10 +242,13 @@ var pH = {
 		}
 
 		//Blockages
-		var haveBlock = tmp_pH.shown >= 3
-		getEl("bigcrunch").parentElement.style.top = haveBlock ? (Math.floor(tmp_pH.shown / 3) * 120 + 19) + "px" : "19px"
+		var blockRank = tmp_pH.shown
+		if (!isEmptiness && (QCs.in(4) || QCs.done(4))) blockRank = blockRank + 2
+
+		var haveBlock = blockRank >= 3
+		getEl("bigcrunch").parentElement.style.top = haveBlock ? (Math.floor(blockRank / 3) * 120 + 19) + "px" : "19px"
 		getEl("quantumBlock").style.display = haveBlock ? "" : "none"
-		getEl("quantumBlock").style.height = haveBlock ? (Math.floor(tmp_pH.shown / 3) * 120 + 12) + "px" : "120px"
+		getEl("quantumBlock").style.height = haveBlock ? (Math.floor(blockRank / 3) * 120 + 12) + "px" : "120px"
 
 		//Infinity Dimension unlocks
 		if (player.break && !player.infDimensionsUnlocked[7] && getEternitied() < 25) {
@@ -302,7 +305,9 @@ var pH = {
 
 		getEl("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 
+		if (layer == "quantum") handleDispAndTmpOutOfQuantum()
 		if (!aarMod.layerHidden[layer]) return
+
 		if (layer == "infinity") {
 			if (getEl("infinitydimensions").style.display == "block") showDimTab("antimatterdimensions")
 			if (getEl("breakchallenges").style.display == "block") showChallengesTab("normalchallenges")
@@ -311,7 +316,6 @@ var pH = {
 			if (getEl("timedimensions").style.display == "block" || getEl("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
 			if (getEl("eternitychallenges").style.display == "block") showChallengesTab("normalchallenges")
 		}
-		if (layer == "quantum") handleDispAndTmpOutOfQuantum()
 	}
 }
 var tmp_pH = {}

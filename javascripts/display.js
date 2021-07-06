@@ -680,10 +680,7 @@ function replicantiDisplay() {
 			getEl("repCompress").innerHTML = "Do a Eternity reset to compress.<br>Requirement: " + shortenCosts(QCs_tmp.qc1.req) + "<br>" + QCs_save.qc1.boosts + " / 20 Compressors" + (QCs_save.qc1.max ? "<br>(" + QCs_save.qc1.max + " max boosts)" : "")
 			getEl("repCompress").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
 		}
-		if (QCs_tmp.qc5) {
-			getEl("repExpand").innerHTML = "Do a Eternity reset to expand.<br>Requirement: < " + shortenCosts(QCs_tmp.qc5.req) + "<br>" + QCs_save.qc5 + " Expanders"
-			getEl("repExpand").className = QCs.data[5].can() ? "storebtn" : "unavailablebtn"
-		}
+		if (QCs_tmp.qc5) QCs.data[5].updateDispOnTick()
 	} else {
 		let cost = getReplUnlCost()
 		getEl("replicantiunlock").innerHTML = "Unlock Replicantis<br>Cost: " + shortenCosts(cost) + " IP"
