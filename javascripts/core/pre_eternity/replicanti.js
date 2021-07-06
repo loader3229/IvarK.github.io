@@ -32,7 +32,7 @@ function replicantiIncrease(diff) {
 
 	player.replicanti.amount = player.replicanti.amount.min(lim)
 	if (player.replicanti.amount.eq(lim)) replicantiTicks = 0
-	if (QCs.in(5)) QCs_save.qc5 += player.replicanti.amount.div(old).log10() / Math.log2(QCs_save.qc1.boosts + 2)
+	if (QCs_tmp.qc5) QCs_save.qc5 += player.replicanti.amount.div(old).log10() * QCs_tmp.qc5.mult
 
 	let auto = player.replicanti.galaxybuyer
 	if (auto && tmp.ngC) ngC.condense.rep.buy()

@@ -1214,6 +1214,8 @@ function doNGp3v21tov221(){
                 if (oldBRUpg20Bought != 20) qu_save.bigRip.upgrades.push(oldBRUpg20Bought)
         }
         if (tmp.ngp3) setupNGP31Versions()
+
+		//To-do: move this
         if (aarMod.newGameMinusMinusVersion === undefined && !player.meta) {
                 if (player.exdilation == undefined && player.version == 13) player.version = 12
                 if (inNGM(2)) {
@@ -2261,7 +2263,8 @@ function setupNGP31Versions() {
 		mTs.respec(true)
 	}
 	if (aarMod.ngp3Build < 20210625 && (player.masterystudies.includes("t241") || player.masterystudies.includes("t282"))) resetReplicantiUpgrades()
-	if (aarMod.ngp3Build < 20210705 && Decimal.log10(player.totalmoney) >= 4e12) {
+	console.log(player.totalmoney)
+	if (aarMod.ngp3Build < 20210705 && Decimal.log10(player.money) >= 4e12) {
 		player.totalMoney = new Decimal(1)
 		qu_save.quarks = new Decimal(0)
 		qu_save.gluons = {
@@ -2804,8 +2807,8 @@ function conToDeciMS(){
 			qu_save.tod.b.spin = new Decimal(qu_save.tod.b.spin)
 		}
 	}
-	pos.compile()
 	QCs.compile()
+	pos.compile()
 }
 
 function conToDeciGhostify(){

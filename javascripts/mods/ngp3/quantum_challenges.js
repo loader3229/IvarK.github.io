@@ -13,6 +13,7 @@ var QCs = {
 		QCs_save = undefined
 		if (!tmp.ngp3 || qu_save === undefined) {
 			this.updateTmp()
+			this.updateDisp()
 			return
 		}
 
@@ -22,6 +23,7 @@ var QCs = {
 
 		if (QCs_save.qc1 === undefined) this.reset()
 		if (typeof(QCs_save.qc2) !== "number") QCs_save.qc2 = QCs_save.cloud_disable || 1
+
 		this.updateTmp()
 		this.updateDisp()
 	},
@@ -89,7 +91,7 @@ var QCs = {
 
 				QCs_save.qc1.boosts++
 				player.replicanti.amount = Decimal.pow(10, Math.pow(player.replicanti.amount.log10(), 0.9))
-				eternity(true)
+				eternity(false, true)
 				return true
 			}
 		},
@@ -200,29 +202,34 @@ var QCs = {
 
 			updateTmp() {
 				delete QCs_tmp.qc5
-				if (!QCs.in(5)) return
+				if (!QCs.in(5) && !QCs.done(6)) return
 
-				QCs_tmp.qc5 = { eff: Math.pow(Math.log2(QCs_save.qc5 / 1e6 + 1), 2) }
+				QCs_tmp.qc5 = {
+					mult: 1 / Math.log2(QCs_save.qc1.boosts + 2),
+					eff: Math.pow(Math.log2(QCs_save.qc5 / 2e6 + 1), 2),
+				}
+				if (QCs.isRewardOn(6)) QCs_tmp.qc5.mult *= QCs_tmp.rewards[6]
 			},
 
 			updateDisp() {		
-				getEl("qc5_div").style.display = QCs.in(5) ? "" : "none"
+				getEl("qc5_div").style.display = QCs_tmp.qc5 ? "" : "none"
 			},
 			updateDispOnTick() {		
 				getEl("qc5_eng").textContent = shorten(QCs_save.qc5)
+				getEl("qc5_eng_mult").textContent = shiftDown ? " (+" + shorten(Math.max(QCs_tmp.qc5.mult, 1)) + " per " + shorten(Decimal.pow(10, 1 / Math.min(QCs_tmp.qc5.mult, 1))) + "x)" : ""
 				getEl("qc5_eff").textContent = shorten(QCs_tmp.qc5.eff)
 			},
 		},
 		6: {
 			unl: () => true,
-			desc: () => "Replicantis divide Dimensions instead, but each Replicated Galaxy divides the amount instead.",
+			desc: () => "There is a increasing variable, which gives different boosts; but eternitying subtracts it, and dilating reduces the gain.",
 			goal: () => false,
 			goalDisp: () => "(not implemented)",
 			goalMA: new Decimal(1),
-			hint: "Quick, automatic big crunches.",
-			rewardDesc: (x) => "Replicantis also produce Replicanti Energy by gaining. (not implemented)",
+			hint: "Do long Eternity runs.",
+			rewardDesc: (x) => "Replicantis also produce Replicanti Energy; but also boosted by time since Eternity. (" + shorten(QCs_tmp.rewards[6]) + "x)",
 			rewardEff(str) {
-				return str
+				return (9 / (Math.abs(50 - player.thisEternity) + 1) + 1) * Math.log2(player.thisEternity / 10 + 2)
 			}
 		},
 		7: {

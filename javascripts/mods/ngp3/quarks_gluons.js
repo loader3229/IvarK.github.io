@@ -624,7 +624,7 @@ var enB = {
 			type: "g",
 			eff(x) {
 				if (pos.on()) {
-					return Math.min(Math.pow(x / 20 + 1, 0.2), 1 / (1 - pos.mdbSacMult()))
+					return Math.min(Math.pow(x / 20 + 1, 0.2), 1 / (1 - pos_tmp.mults.mdb))
 				} else {
 					return Math.sqrt(x / 2)
 				}

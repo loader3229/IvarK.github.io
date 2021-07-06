@@ -49,15 +49,6 @@ var pos = {
 		pos_save.on = !pos_save.on
 		quantum(false, true)
 	},
-	mdbSacMult() {
-		return QCs.done(3) ? 0.3 : 0.25
-	},
-	galSacMult() {
-		return QCs.done(5) ? 0.125 : 0.25
-	},
-	pcMult() {
-		return (QCs.done(5) ? 1.5 : 1) / 125
-	},
 	types: {
 		ng: {
 			galName: "Antimatter Galaxies",
@@ -65,10 +56,10 @@ var pos = {
 				return x / 4
 			},
 			sacGals(x) {
-				return Math.min(player.galaxies * pos.galSacMult(), x)
+				return Math.min(player.galaxies * pos_tmp.mults.gal, x)
 			},
 			basePcGain(x) {
-				return Math.pow(x * pos.pcMult(), 2)
+				return Math.pow(x * pos_tmp.mults.base_pc, 2)
 			}
 		},
 		rg: {
@@ -77,10 +68,10 @@ var pos = {
 				return QCs.done(4) ? x / 10 : 0
 			},
 			sacGals(x) {
-				return Math.min(player.replicanti.galaxies * pos.galSacMult(), x)
+				return Math.min(player.replicanti.galaxies * pos_tmp.mults.gal, x)
 			},
 			basePcGain(x) {
-				return Math.pow(x * pos.pcMult(), 2)
+				return Math.pow(x * pos_tmp.mults.base_pc, 2)
 			}
 		},
 		eg: {
@@ -89,10 +80,10 @@ var pos = {
 				return 0 //x / 4
 			},
 			sacGals(x) {
-				return Math.min(tmp.extraRG * pos.galSacMult(), x)
+				return Math.min(tmp.extraRG * pos_tmp.mults.gal, x)
 			},
 			basePcGain(x) {
-				return Math.pow(x * pos.pcMult(), 2)
+				return Math.pow(x * pos_tmp.mults.base_pc, 2)
 			}
 		},
 		tg: {
@@ -101,10 +92,10 @@ var pos = {
 				return 0 //x / 4
 			},
 			sacGals(x) {
-				return Math.min(player.dilation.freeGalaxies * pos.galSacMult(), x)
+				return Math.min(player.dilation.freeGalaxies * pos_tmp.mults.gal, x)
 			},
 			basePcGain(x) {
-				return Math.pow(x * pos.pcMult(), 2)
+				return Math.pow(x * pos_tmp.mults.base_pc, 2)
 			}
 		}
 	},
@@ -115,6 +106,12 @@ var pos = {
 
 		data.next_swaps = {...pos_save.swaps}
 		data.cloud_div = {}
+
+		data.mults = {
+			mdb: !pos.on() ? 0 : QCs.done(3) ? 0.3 : 0.25,
+			gal: !pos.on() ? 0 : QCs.done(5) ? 0.125 : 0.25,
+			base_pc: !pos.on() ? 0 : QCs.done(5) ? 1 / 75 : 1 / 125
+		}
 
 		this.updateCloud()
 	},
@@ -161,7 +158,7 @@ var pos = {
 		pos_save.eng = 0
 		if (this.on()) {
 			let mdbStart = 0
-			let mdbMult = pos.mdbSacMult()
+			let mdbMult = pos_tmp.mults.mdb
 
 			data.sac_mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
 			data.sac_qe = qu_save.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)

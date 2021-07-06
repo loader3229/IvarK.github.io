@@ -4593,11 +4593,10 @@ function doQuantumButtonDisplayUpdating(diff){
 		var bigRipped = !tmp.ngp3 ? false : player.quantum.bigRip.active
 		if (!bigRipped) {
 			currentQKmin = quarkGain().dividedBy(qu_save.time / 600)
-			if (currentQKmin.gt(QKminpeak) && player.meta.antimatter.gte(Decimal.pow(Number.MAX_VALUE,tmp.ngp3 ? 1.2 : 1))) {
+			if (currentQKmin.gt(QKminpeak) && pH.can("quantum")) {
 				QKminpeak = currentQKmin
 				QKminpeakValue = quarkGain()
-				qu_save.autobuyer.peakTime = 0
-			} else qu_save.autobuyer.peakTime += diff
+			}
 		}
 	}
 
@@ -4605,12 +4604,12 @@ function doQuantumButtonDisplayUpdating(diff){
 	getEl("quantumbtnFlavor").textContent = showGain != "" ? "" : QCs.inAny() ? "The unseening has been detected... Complete this challenging experiment!" : "The spacetime has been conceptualized... It's time to go quantum!"
 	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain " + shortenDimensions(quarkGain()) + " anti-quark" + (quarkGain().eq(1) ? "." : "s.") : ""
 	getEl("quantumbtnQKNextAt").textContent = showGain == "QK" && currentQKmin.lt(1) ? "Next at " + shorten(getQuantumReqSource()) + " / " + shorten(quarkGainNextAt()) + " MA" : ""
-	if (showGain != "QK" || currentQKmin.gt(1e30)) {
+	if (showGain != "QK") {
 		getEl("quantumbtnRate").textContent = ''
 		getEl("quantumbtnPeak").textContent = ''
 	} else if (currentQKmin.gt(1e6)) {
 		getEl("quantumbtnRate").textContent = ''
-		getEl("quantumbtnPeak").textContent = 'Peaked at ' + rateFormat(QKminpeak, "aQs")
+		getEl("quantumbtnPeak").textContent = 'Peaked at ' + rateFormat(QKminpeak) + " at " + shortenDimensions(QKminpeakValue) + " aQs"
 	} else {
 		getEl("quantumbtnRate").textContent = rateFormat(currentQKmin, "aQs")
 		getEl("quantumbtnPeak").textContent = "(" + rateFormat(QKminpeak) + " at " + shortenDimensions(QKminpeakValue) + " aQs)"
