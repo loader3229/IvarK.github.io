@@ -143,7 +143,7 @@ var softcap_data = {
 		name: "base replicanti effect",
 		1: {
 			func: "pow",
-			start: () => QCs_tmp.qc1.limit.pow(2.5),
+			start: () => Decimal.pow(QCs_tmp.qc1.limit || "1e6000000", 2.5),
 			pow(x) {
 				return 1 / (Math.log2(x.log10() / softcap_data.rep[1].start().log10() + 1) + 1)
 			},
