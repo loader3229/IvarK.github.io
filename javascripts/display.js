@@ -677,7 +677,7 @@ function replicantiDisplay() {
 		if (tmp.ngC) ngC.condense.rep.update()
 
 		if (QCs_tmp.qc1) {
-			getEl("repCompress").innerHTML = "Do a Eternity reset to compress.<br>Requirement: " + shortenCosts(QCs_tmp.qc1.req) + "<br>" + QCs_save.qc1.boosts + " / 20 Compressors" + (QCs_save.qc1.max ? "<br>(" + QCs_save.qc1.max + " max boosts)" : "")
+			getEl("repCompress").innerHTML = (QCs_save.qc1.boosts > QCs.data[1].compressScaling() ? "Compress." : "Do a Eternity reset to compress.") + "<br>Requirement: " + shortenCosts(QCs_tmp.qc1.req) + "<br>" + QCs_save.qc1.boosts + " / 20 " + (QCs_save.qc1.boosts > QCs.data[1].compressScaling() ? "Distant " : "") + "Compressors" + (QCs_save.qc1.max ? "<br>(" + QCs_save.qc1.max + " max boosts)" : "")
 			getEl("repCompress").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
 		}
 		if (QCs_tmp.qc5) QCs.data[5].updateDispOnTick()

@@ -680,6 +680,7 @@ var enB = {
 
 			title: "Blue Saturation",
 			type: "g",
+			anti: true,
 			eff(x) {
 				return Math.pow(x + 1, 0.1)
 			},
@@ -688,13 +689,13 @@ var enB = {
 			}
 		},
 		11: {
-			req: 100,
+			req: 45,
 			masReq: 1/0,
 
 			title: "Blue Unseeming",
 			type: "r",
 			eff(x) {
-				return Math.log10(Math.log10(x + 1) / 2 + 1)
+				return Math.log10(Math.log10(x + 1) / 5 + 1)
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -706,7 +707,6 @@ var enB = {
 
 			title: "Color Subcharge",
 			type: "b",
-			anti: true,
 			eff(x) {
 				return 0
 			},

@@ -32,7 +32,7 @@ var QCs = {
 		QCs_save.qc3 = undefined
 		QCs_save.qc4 = "ng"
 		QCs_save.qc5 = 0
-		QCs_save.qc6 = new Decimal(1) //Best-in-this-quantum replicantis
+		QCs_save.qc6 = 0
 		QCs_save.qc7 = 0
 		QCs_save.qc8 = undefined //Same as QC5
 	},
@@ -53,22 +53,26 @@ var QCs = {
 			ttScaling() {
 				return tmp.dtMode ? 2 : tmp.exMode ? 1.75 : 1.5
 			},
+			compressScaling() {
+				return 5
+			},
 			updateTmp() {
 				delete QCs_tmp.qc1
 				if (!QCs.in(1) && !QCs.done(1)) return
 
 				let boosts = QCs_save.qc1.boosts
 				let maxBoosts = QCs_save.qc1.max
+				let brokenBoosts = Math.max(QCs_save.qc1.boosts - this.compressScaling(), 0)
 
 				let data = {
-					req: new Decimal("1e1000000"),
+					req: Decimal.pow(10, 1e6 + 2e5 * Math.max(boosts - 5, 0)),
 					limit: new Decimal("1e6000000"),
 
-					speedMult: Decimal.pow(boosts + 1, 2),
+					speedMult: Decimal.pow(boosts + 1, 2 + brokenBoosts / 2),
 					scalingMult: Math.pow(2, Math.max(boosts - 20, 0) / 20),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
-					effMult: maxBoosts / 30 + boosts / 15 + 1,
+					effMult: maxBoosts / 30 + (boosts - brokenBoosts) / 15 + 1,
 					effExp: Math.min(1 + boosts / 20, 2)
 				}
 				QCs_tmp.qc1 = data
@@ -223,10 +227,18 @@ var QCs = {
 		6: {
 			unl: () => true,
 			desc: () => "There is a increasing variable, which gives different boosts; but eternitying subtracts it, and dilating reduces the gain.",
-			goal: () => false,
-			goalDisp: () => "(not implemented)",
-			goalMA: new Decimal(1),
+			goal: () => player.replicanti.amount.e >= 1e6 && QCs_save.qc1.boosts >= 5,
+			goalDisp: () => shortenCosts(Decimal.pow(10, 1e6)) + " Replicantis + 5 Replicanti Compressors",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
 			hint: "Do long Eternity runs.",
+
+			updateTmp() {
+				delete QCs_tmp.qc6
+				if (!QCs.in(6)) return
+
+				QCs_tmp.qc6 = Math.log2(Math.max(-QCs_save.qc6, 0) / 100 + 1) + 2
+			},
+
 			rewardDesc: (x) => "Replicantis also produce Replicanti Energy; but also boosted by time since Eternity. (" + shorten(QCs_tmp.rewards[6]) + "x)",
 			rewardEff(str) {
 				return (9 / (Math.abs(50 - player.thisEternity) + 1) + 1) * Math.log2(player.thisEternity / 10 + 2)

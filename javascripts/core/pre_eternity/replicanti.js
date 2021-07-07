@@ -72,7 +72,9 @@ function getReplEff() {
 }
 
 function getReplBaseEff(x) {
-	return QCs.in(5) ? new Decimal(1) : QCs.data[1].convert(x || player.replicanti.amount)
+	x = QCs.in(5) ? new Decimal(1) : QCs.data[1].convert(x || player.replicanti.amount)
+	if (tmp.ngp3) x = softcap(x, "rep")
+	return x
 }
 
 function getReplMult(next) {
@@ -341,6 +343,7 @@ function getReplSpeedExpMult() {
 
 	//Quantum
 	if (tmp.quActive) exp *= colorBoosts.g
+	if (QCs.in(6)) exp /= QCs_tmp.qc6
 
 	//Ghostify
 	if (GDs.boostUnl('rep')) exp *= GDs.tmp.rep

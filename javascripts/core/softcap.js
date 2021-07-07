@@ -139,6 +139,17 @@ var softcap_data = {
 			pow: 3/4
 		},
 	},
+	rep: {
+		name: "base replicanti effect",
+		1: {
+			func: "pow",
+			start: () => QCs_tmp.qc1.limit.pow(2.5),
+			pow(x) {
+				return 1 / (Math.log2(x.log10() / softcap_data.rep[1].start().log10() + 1) + 1)
+			},
+			derv: false
+		},
+	},
 	rInt: {
 		name: "base replicate interval",
 		1: {
@@ -801,6 +812,7 @@ function getSoftcapAmtFromId(id){
 		ts11_log_big_rip: () => tsMults[11]().log10(),
 		bru1_log: () => tmp.bru[1].max(1).log10(),
 		beu3_log: () => tmp.beu[3].max(1).log10(),
+		rep: () => getReplBaseEff(),
 		rInt: () => tmp.rep ? tmp.rep.baseBaseEst.pow(1 - getECReward(14)) : new Decimal(1),
 		it: () => tmp.it.max(1),
 		ec14: () => tmp.rep ? tmp.rep.ec14.baseInt : new Decimal(1),
@@ -846,8 +858,9 @@ function hasSoftcapStarted(id, num){
 		This currently includes: _ngC, _big_rip, _dilation, _ngmX for integers of length 1 X
 		*/
 		idbase: tmp.ngp3,
+		rep: tmp.ngp3,
 		rInt: ECComps("eterc14"),
-		ts225: true,
+		ts225: tmp.ngp3,
 		dt_log: tmp.ngp3 && !tmp.bE50kDT,
 		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined && tmp.quActive,
 		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined && tmp.quActive,
@@ -963,6 +976,7 @@ function updateSoftcapStatsTab(){
 		ts11_log_big_rip: "softcap_ts2",
 		bru1_log: "softcap_bru1",
 		beu3_log: "softcap_beu3",
+		rep: "softcap_rep",
 		rInt: "softcap_rInt",
 		it: "softcap_it",
 		tt: "softcap_tt",

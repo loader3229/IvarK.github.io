@@ -1516,6 +1516,7 @@ function updateMoney() {
 	if (inNC(14) && inNGM(4)) getEl("c14Resets").textContent = "You have "+getFullExpansion(10-getTotalResets())+" resets left."
 	getEl("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult) + "x" : ""
 	getEl("qc3Mult").textContent = QCs.in(3) ? "Antimatter exponent: " + QCs.data[3].amExp().toFixed(2) : ""
+	getEl("qc6Mult").textContent = QCs.in(6) ? "t = " + (QCs_save.qc6 < 0 ? "-" : "") + timeDisplayShort(Math.abs(QCs_save.qc6) * 10) + "; Replicate interval slowdown scales " + formatPercentage(QCs_tmp.qc6 - 1) + "% faster" : ""
 	if (QCs.in(4)) getEl("qc4_boost").textContent = "Exclusion bonus: Strengthen all galaxies by " + formatPercentage(QCs_tmp.qc4.boost - 1) + "% (" + shortenMoney(QCs_tmp.qc4.diff) + ")"
 }
 
@@ -3368,6 +3369,7 @@ function eternity(force, auto, forceRespec, dilated) {
 		loadAutoBuyerSettings()
 	}
 	doAutoEterTick()
+	if (QCs.in(6)) QCs_save.qc6 = Math.max(QCs_save.qc6 - 30 / (player.dilation.active ? 2 : 1), -30)
 	if (tmp.ngp3) updateBreakEternity()
 }
 
@@ -4346,6 +4348,9 @@ function replicantOverallUpdating(diff){
 
 function quantumOverallUpdating(diff){
 	if (tmp.quActive) {
+		//Quantum Challenges
+		if (QCs.in(6)) QCs_save.qc6 = Math.min(QCs_save.qc6 + diff / (player.dilation.active ? 2 : 1), 60)
+
 		//Quantum Energy
 		gainQuantumEnergy()
 
