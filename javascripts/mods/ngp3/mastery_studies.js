@@ -111,6 +111,9 @@ var mTs = {
 		271() {
 			return mTs.bought >= (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10)
 		},
+		322() {
+			return false //QCs.in(7) || QCs.done(7)
+		},
 		d7() {
 			return enB.glu.engAmt() >= 5.3
 		},
@@ -143,6 +146,9 @@ var mTs = {
 		271() {
 			return (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10) + " bought mastery studies"
 		},
+		322() {
+			return QCs.done(7) ? undefined : "In Quantum Challenge 7"
+		},
 		d7() {
 			return "5.3 quantum energy"
 		},
@@ -166,7 +172,7 @@ var mTs = {
 		},
 		d14() {
 			return "Get 'The Challenging Day' achievement"
-		}
+		},
 	},
 	types: {t: "time", ec: "ec", d: "dil"},
 	studies: [],
@@ -348,6 +354,10 @@ var mTs = {
 		302: [301, "d8", 303],
 		311: [312], 314: [313],
 
+		//QC7
+		d8: [322],
+		321: [331, 332], 322: [321, 323, 333], 323: [334, 335],
+
 		//Expert Mode
 		ex_264: [],
 		ex_282: [], ex_283: [], ex_284: [292],
@@ -362,6 +372,9 @@ var mTs = {
 		},
 		r27() {
 			return pos.unl()
+		},
+		r32() {
+			return QCs.unl()
 		}
 	},
 	studyUnl: [],

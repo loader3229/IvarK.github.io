@@ -539,6 +539,22 @@
 						<td><button id="mts314" style='font-size:8px' onclick='buyMasteryStudy("t", 314)'></button></td>
 					</tr>
 				</table>
+				<table class="table" id="studytable">
+					<tr class="wideRow">
+						<td style="visibility: hidden"><button class="timestudy"></button></td>
+						<td><button id="mts321" onclick='buyMasteryStudy("t", 321)'></button></td>
+						<td><button id="mts322" onclick='buyMasteryStudy("t", 322)'></button></td>
+						<td><button id="mts323" onclick='buyMasteryStudy("t", 323)'></button></td>
+						<td style="visibility: hidden"><button class="timestudy"></button></td>
+					</tr>
+					<tr class="wideRow">
+						<td><button id="mts331" onclick='buyMasteryStudy("t", 331)'></button></td>
+						<td><button id="mts332" onclick='buyMasteryStudy("t", 332)'></button></td>
+						<td><button id="mts333" onclick='buyMasteryStudy("t", 333)'></button></td>
+						<td><button id="mts334" onclick='buyMasteryStudy("t", 334)'></button></td>
+						<td><button id="mts335" onclick='buyMasteryStudy("t", 335)'></button></td>
+					</tr>
+				</table>
 				<div style="height: 60px;"></div>
 				<div class="footer"></div>
 			</div>
@@ -1108,9 +1124,6 @@
 						<td>
 							<button id="secondSoftReset" style="color:black; width: 200px; height: 35px; font-size: 9px" class="storebtn">Lose all your previous progress, but get a tickspeed boost</button>
 						</td>
-					</tr>
-					<tr style="font-size: 15px">
-						<td id="intergalacticLabel" colspan=2></td>
 					</tr>
 				</table>
 				<button id="quickReset" style="color:black; width: 200px; height: 50px; font-size: 12px; display: none" class="storebtn" onclick="quickReset()">Lose a reset, returning to the start of the reset</button>
@@ -2259,7 +2272,7 @@
 						</tr>
 						<tr id="achRowng3p2">
 							<td>
-								<div id="Special Relativity" class="achievement achievementlocked" style="background-image: url(images/113.png)" ach-tooltip="Get the first 25 Quantum Milestones. Reward: 1st Meta Dimensions are stronger based on your best meta antimatter."><br></div>
+								<div id="Special Relativity" class="achievement achievementlocked" style="background-image: url(images/113.png)" ach-tooltip="Get the first 24 Quantum Milestones. Reward: 1st Meta Dimensions are stronger based on your best meta antimatter."><br></div>
 							</td>
 							<td>
 								<div id="We are not going squared." class="achievement achievementlocked" style="background-image: url(images/114.png)"><br></div>
@@ -2271,13 +2284,13 @@
 								<div id="Old memories come true" class="achievement achievementlocked" style="background-image: url(images/116.png)"><br></div>
 							</td>
 							<td>
-								<div id="Twice in a row" class="achievement achievementlocked" style="background-image: url(images/117.png)" ach-tooltip="Complete Paired Challenge 4. Reward: Unlock the '# of dilated' mode for the Quantum autobuyer."><br></div>
+								<div id="Twice in a row" class="achievement achievementlocked" style="background-image: url(images/117.png)" ach-tooltip="Complete at least ??? Paired Challenge combinations. Reward: Levelling up requirement is reduced by 1."><br></div>
 							</td>
 							<td>
 								<div id="Infinity Morals" class="achievement achievementlocked" style="background-image: url(images/118.png)"><br></div>
 							</td>
 							<td>
-								<div id="Intergalactic" class="achievement achievementlocked" style="background-image: url(images/119.png)" ach-tooltip="Reach 4,000,000 Eighth Dimensions without any replicated or Tachyonic Galaxies. Reward: Eighth Dimensions are stronger based on your normal galaxies."><br></div>
+								<div id="Intergalactic" class="achievement achievementlocked" style="background-image: url(images/119.png)"><br></div>
 							</td>
 							<td>
 								<div id="Seriously, I already got rid of you." class="achievement achievementlocked" style="background-image: url(images/120.png)"><br></div>
@@ -4678,7 +4691,7 @@
 					<br>
 					<span id="enB_glu12_type"></span>
 					<br>
-					Color Subcharge adds color powers, but reduced to <span id="enB_glu12_eff" style="font-size:24px"></span>. (not implemented)
+					Color Subcharge multiplies Color Charge, but the effect is raised to <span id="enB_glu12_eff" style="font-size:24px"></span>. (not implemented)
 				</td>
 			</tr>
 		</table></div>

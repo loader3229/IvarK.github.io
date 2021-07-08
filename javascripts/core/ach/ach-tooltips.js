@@ -353,15 +353,16 @@ function setR16Tooltip() {
 	//ng3p23/////
 	let memories = getEl("Old memories come true")
 	//ng3p25/////
-	//ng3p26/////
 	let morals = getEl("Infinity Morals")
+	let intergal = getEl("Intergalactic")
 	let seriously = getEl("Seriously, I already got rid of you.")
 
 	//ACHIEVEMENT ROW 16
-	memories.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter without having at least " + shorten(Number.MAX_VALUE) + " of 5th - 8th Dimensions for every type. (Not implemented)")
+	memories.setAttribute('ach-tooltip', "Reach " + shorten(Decimal.pow(Number.MAX_VALUE, 3)) + " meta-antimatter without having at least " + shorten(Math.sqrt(Number.MAX_VALUE)) + " of 5th Meta Dimensions. Reward: Even Meta Dimensions boost odd Meta Dimensions.")
 	squared.setAttribute('ach-tooltip', "Quantum with at most "+shorten(Number.MAX_VALUE)+" best meta-antimatter. Reward: 1st Meta Dimensions generate the rest of Meta Dimensions except 8th Meta Dimensions, at a reduced rate.")
-	morals.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e85) + " TT in any Quantum Challenge.")
-	seriously.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e354000")) + " IP without having time studies, while dilated and running QC2. Reward: The Eternity Points boost to Quark gain is 1% stronger.")
+	morals.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e85) + " TT in any Quantum Challenge, except in QC7. Reward: You can buy all Mastery Studies that you have missed.")
+	intergal.setAttribute('ach-tooltip', "Get " + getFullExpansion(1/0) + " Eighth Dimensions without Replicated Galaxies. Reward: First " + getFullExpansion(100) + " sacrificed galaxies don't get nullified.")
+	seriously.setAttribute('ach-tooltip', "Get " + shortenCosts(1/0) + " Eternity Points with at least 3 excluded Positronic Boosts. Reward: You can unexclude one Positronic Boost.")
 }
 
 function setR17Tooltip() {

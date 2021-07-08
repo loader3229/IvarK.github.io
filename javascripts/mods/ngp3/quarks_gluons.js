@@ -189,8 +189,17 @@ function updateColorCharge() {
 			Decimal.add(usedQuarks[sorted[0]], 1)
 		)
 	}
+
 	colorCharge[sorted[0]] = colorCharge.normal.charge
+	if (enB.active("glu", 12)) {
+		colorCharge.sub = Math.pow(colorPowers[sorted[1]] * Decimal.div(
+			Decimal.sub(usedQuarks[sorted[1]], usedQuarks[sorted[2]]),
+			Decimal.add(usedQuarks[sorted[1]], 1)
+		) + 1, enB_tmp.glu12)
+		colorCharge[sorted[0]] *= colorCharge.sub
+	}
 	if (QCs.isRewardOn(2)) colorCharge[sorted[0]] *= QCs_tmp.rewards[2]
+	if (QCs.in(7)) colorCharge[sorted[0]] *= -1
 	if (usedQuarks[sorted[0]] > 0 && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
 
 	colorCharge.subCancel = hasAch("ng3p13") ? Math.pow(colorCharge.normal.charge * 3, 1.25) : 0
@@ -209,13 +218,15 @@ function getColorPowerQuantity(color, base) {
 
 	let ret = colorCharge[color] * tmp.glB[color].mult
 	if (tmp.qe) ret = ret * tmp.qe.eff1 + tmp.qe.eff2
-	if (tmp.glB) ret = ret - tmp.glB[color].sub
+	if (tmp.glB) ret -= tmp.glB[color].sub
+	ret = Math.max(ret, 0)
 
 	if (!base) {
 		if (hasMTS(314)) ret += getColorPowerQuantity(color == "r" ? "g" : color == "g" ? "b" : "r", true) / 5
 		if (color == "r" && hasMTS(272)) ret /= 5
+		if (color == "r" && QCs.in(7)) ret = 0
 	}
-	return Math.max(ret, 0)
+	return ret
 }
 
 colorBoosts = {
@@ -227,7 +238,7 @@ colorBoosts = {
 function updateColorPowers() {
 	//Red
 	colorBoosts.r = Math.log10(qu_save.colorPowers.r * 5 + 1) / 3.5 + 1
-	if (hasMTS(272)) colorBoosts.r += 0.25
+	if (hasMTS(272) && !QCs.in(7)) colorBoosts.r += 0.25
 
 	//Green
 	colorBoosts.g = Math.log10(qu_save.colorPowers.g * 3 + 1) + 1
@@ -319,7 +330,7 @@ function updateQuarkEnergyEffects() {
 
 	var exp = 4 / 3
 	var exp2 = 4 / 3
-	if (QCs.inAny()) exp2 *= tmp.exMode ? 0 : tmp.bgMode ? 1 : 0.5
+	if (!QCs.isntCatched()) exp2 *= tmp.exMode ? 0 : tmp.bgMode ? 1 : 0.5
 
 	tmp.qe.eff1 = Math.pow(Math.log10(eng / 1.7 + 1) + 1, exp)
 	tmp.qe.eff2 = Math.pow(eng, exp2) * tmp.qe.eff1 / 4 * exp2 / exp
@@ -398,7 +409,7 @@ function getGluonEffBuff(x) {
 }
 
 function getGluonEffNerf(x, color) {
-	if (QCs.inAny()) return 0
+	if (!QCs.isntCatched()) return 0
 
 	let r = Math.max(Math.pow(Decimal.add(x, 1).log10(), tmp.exMode ? 1.8 : 1.5) - colorCharge.subCancel, 0)
 	if (tmp.ngp3_mul) r *= 0.5
@@ -702,13 +713,13 @@ var enB = {
 			}
 		},
 		12: {
-			req: 1/0,
+			req: 50,
 			masReq: 1/0,
 
 			title: "Color Subcharge",
 			type: "b",
 			eff(x) {
-				return 0
+				return 1 - 1 / (Math.log10(x + 1) / 5 + 1)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -740,7 +751,7 @@ var enB = {
 		},
 
 		activeReq(x) {
-			return QCs.inAny() ? pos.on() && enB.mastered("pos", x) && (!QCs.in(2) || this.lvl(x) != QCs_save.qc2) : tmp.bgMode || enB.mastered("pos", x) || pos.on()
+			return !QCs.isntCatched() ? pos.on() && enB.mastered("pos", x) && (!QCs.in(2) || this.lvl(x) != QCs_save.qc2) : tmp.bgMode || enB.mastered("pos", x) || pos.on()
 		},
 
 		eff(x) {
@@ -1127,7 +1138,7 @@ function updateQuarksTabOnUpdate(mode) {
 	} else {
 		var color = colorShorthands[colorCharge.normal.color]
 		getEl("colorCharge").innerHTML =
-			'<span class="' + color + '">' + color + '</span> charge of <span class="'+color+'" style="font-size:35px">' + shorten(colorCharge.normal.charge * tmp.qe.eff1) + "</span>" +
+			'<span class="' + color + '">' + color + '</span> charge of <span class="' + color + '" style="font-size:35px">' + shorten(colorCharge.normal.charge * tmp.qe.eff1) + (enB.active("glu", 12) ? " x " + shorten(colorCharge.sub) : "") + "</span>" +
 			(hasAch("ng3p13") ? ", which cancelling the subtraction of gluon effects by " + shorten(colorCharge.subCancel) : "")
 		getEl("colorChargeAmt").innerHTML = shortenDimensions(colorCharge.normal.chargeAmt) + " " + color + " anti-quarks"
 		getEl("colorChargeColor").className = color
@@ -1245,6 +1256,7 @@ function drawQuarkAnimation(ts){
 	}
 }
 
+/*
 //Quantum Tiers: Strong boosts to Color Powers
 let QT = {
 	effs: {
@@ -1291,3 +1303,4 @@ let QT = {
 		return QT.funcs[tier](x, eff)
 	}
 }
+*/

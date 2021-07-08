@@ -193,40 +193,9 @@ function updateFixedLightTemp() {
 function updateIntergalacticTemp() {
 	if (!tmp.ngp3) return
 
-	let x = Math.max(player.galaxies, 1)
-	if (isLEBoostUnlocked(3) && !inBigRip()) x *= tmp.leBonus[3]
-	if (tmp.be && player.dilation.active && qu_save.breakEternity.upgrades.includes(10)) x *= getBreakUpgMult(10)
-	if (pl.on()) x *= fNu.tmp.buffNeutral
-	if (hasBosonicUpg(52)) x = Decimal.pow(x, tmp.blu[52].ig)
-	if (hasAch("ng3p114")) x = Decimal.times(x, 1.3)
-	tmp.igg = x
-
-	let igLog = Decimal.pow(x, Math.min(Math.sqrt(Decimal.max(x, 1).log10()) * 2, 2.5)) //Log10 of reward
-	tmp.igs = 0 //Intergalactic Scaling: Used in the display text
-
-	if (inBigRip()) { //Big Rip
-		if (igLog.gt(1e9)) { //Distant
-			igLog = igLog.times(1e3).pow(.75)
-			tmp.igs++
-		}
-		if (igLog.gt(1e10)) { //Further
-			igLog = Math.pow(igLog.log10() / 2 + 5, 10)
-			tmp.igs++
-		}
-	} else {
-		if (igLog.gt(1e15)) { //Distant
-			igLog = Math.pow(10 + 6 * igLog.log10(), 7.5)
-			tmp.igs++
-		}
-	}
-	/*if (igLog > 1e20) { //Further / Remote and beyond
-		igLog = softcap(igLog, "ig_log_high")
-		tmp.igs += Math.floor(Math.log10(igLog) - 20) + 1
-		if (igLog > 1e24) igLog = Math.pow(Math.pow(Math.log10(igLog), 2) + 424, 8)
-	}*/
-
-	if (igLog + 0 !== igLog) igLog = igLog.toNumber() 
-	tmp.ig = Decimal.pow(10, igLog)
+	tmp.igg = 0
+	tmp.ig = new Decimal(1)
+	tmp.igs = 0
 }
 
 function updateTS431ExtraGalTemp() {

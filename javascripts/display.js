@@ -26,22 +26,6 @@ function getGalaxyScaleName(x) {
 	return galaxyScalings[x]
 }
 
-function intergalacticDisplay(){
-	if (hasAch("ng3p27") && getShiftRequirement().tier == 8) {
-		getEl("intergalacticLabel").parentElement.style.display = ""
-		let extra = Decimal.sub(tmp.igg, player.galaxies)
-		let nanopart = 1
-		if (isNanoEffectUsed("dil_effect_exp")) nanopart = tmp.nf.effects["dil_effect_exp"] || 1
-		getEl("intergalacticLabel").innerHTML = 
-			getGalaxyScaleName(tmp.igs) + 'Intergalactic Boost ' + 
-			(player.dilation.active || inNGM(2) ? " (estimated)" : "") +
-			" (" + getFullExpansion(player.galaxies) + (extra.gt(0) ? " + " + 
-			getFullExpansion(extra.lt(1e12) ? Math.floor(extra.round().toNumber()) : extra) : "") + "): " + 
-			shorten(dilates(tmp.ig).pow(player.dilation.active ? nanopart : 1)) + 
-			'x to Eighth Dimensions'
-	} else getEl("intergalacticLabel").parentElement.style.display = "none"
-}
-
 function dimensionTabDisplay(){
 	var shown
 	for (let tier = 8; tier > 0; tier--) {
@@ -57,7 +41,6 @@ function dimensionTabDisplay(){
 	dimShiftDisplay()
 	tickspeedBoostDisplay()
 	galaxyReqDisplay()
-	intergalacticDisplay()
 }
 
 function tickspeedDisplay(){
@@ -677,7 +660,7 @@ function replicantiDisplay() {
 		if (tmp.ngC) ngC.condense.rep.update()
 
 		if (QCs_tmp.qc1) {
-			getEl("repCompress").innerHTML = (QCs_save.qc1.boosts > QCs.data[1].compressScaling() ? "Compress." : "Do a Eternity reset to compress.") + "<br>Requirement: " + shortenCosts(QCs_tmp.qc1.req) + "<br>" + QCs_save.qc1.boosts + " / 20 " + (QCs_save.qc1.boosts > QCs.data[1].compressScaling() ? "Distant " : "") + "Compressors" + (QCs_save.qc1.max ? "<br>(" + QCs_save.qc1.max + " max boosts)" : "")
+			getEl("repCompress").innerHTML = (QCs_save.qc1.boosts > QCs.data[1].compressScaling() ? "Compress." : "Do a Eternity reset to compress.") + "<br>Requirement: " + shortenCosts(QCs_tmp.qc1.req) + "<br>" + getFullExpansion(QCs_save.qc1.boosts) + " / " + getFullExpansion(QCs.data[1].max()) + " " + (QCs_save.qc1.boosts > QCs.data[1].compressScaling() ? "Distant " : "") + "Compressors" + (QCs_save.qc1.max ? "<br>(" + QCs_save.qc1.max + " max boosts)" : "")
 			getEl("repCompress").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
 		}
 		if (QCs_tmp.qc5) QCs.data[5].updateDispOnTick()

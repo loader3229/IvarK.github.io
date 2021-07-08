@@ -238,17 +238,20 @@ function preHiggsNGp3AchieveCheck() {
 	//Able to get "Rid of you"
 	let ableToGetRid2 = checkEmpty && player.dilation.active
 	let ableToGetRid3 = ableToGetRid2
-	let ableToGetRid4 = ableToGetRid2 && QCs.in(2)
-	let ableToGetRid5 = ableToGetRid4 && player.dontWant
+	let ableToGetRid4 = false
+	let ableToGetRid5 = ableToGetRid2 && QCs.in(2) && player.dontWant
 	let ableToGetRid6 = ableToGetRid2 && QCs.in(6) && QCs.in(8)
 
 	if (player.meta.bestAntimatter.gte(Number.MAX_VALUE)) giveAchievement("I don't have enough fuel!")
 	if (player.galaxies >= 1100 && !player.dilation.studies.includes(1)) giveAchievement("No more tax fraud!")
 	if (player.money.gte(getOldAgeRequirement())) giveAchievement("Old age")
 	if (player.infinityPoints.log10() >= 3e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
-	if (player.money.gte(Number.MAX_VALUE) && QCs.in(3)) giveAchievement("Infinity Morals")
-	if (player.eightBought >= 4e6 && (getTotalRGs() + player.dilation.freeGalaxies) < 1) giveAchievement("Intergalactic")
-	if (player.infinityPoints.log10() >= 3.54e5 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
+
+	if (player.meta.bestAntimatter.gte(Decimal.pow(Number.MAX_VALUE, 3)) && player.meta[5].amount.lt(Math.sqrt(Number.MAX_VALUE))) giveAchievement("Old memories come true")
+	if (player.timestudy.theorem >= 1e85 && !QCs.isntCatched()) giveAchievement("Infinity Morals")
+	if (player.eightBought >= 1/0 && (player.replicanti.galaxies + tmp.extraRG) == 0) giveAchievement("Intergalactic")
+	if (player.eternityPoints.e >= 1/0 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
+
 	if (player.meta.bestAntimatter.log10() >= 333 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
 	if (player.money.log10() >= 6.2e11 && player.currentEternityChall == "eterc11") giveAchievement("I can’t get my multipliers higher!")
 	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")
@@ -287,7 +290,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (qu_save.breakEternity.did) giveAchievement("Time Breaker")
 	if (mTs.bought >= 48) giveAchievement("The Theory of Ultimate Studies")
 	if (qu_save.best <= 300) giveAchievement("And the winner is...")
-	if (qMs.tmp.amt >= 25) giveAchievement("Special Relativity")
+	if (qMs.tmp.amt >= 24) giveAchievement("Special Relativity")
 	if (qu_save.best <= 10) giveAchievement("Quantum doesn't take so long")
 	if (player.masterystudies.includes("d13")) giveAchievement("Do protons decay?")
 	if (getTotalRadioactiveDecays() >= 10) giveAchievement("Radioactive Decaying to the max!")

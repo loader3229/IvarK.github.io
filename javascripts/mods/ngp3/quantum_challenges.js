@@ -54,7 +54,9 @@ var QCs = {
 				return tmp.dtMode ? 2 : tmp.exMode ? 1.75 : 1.5
 			},
 			compressScaling() {
-				return 5
+				let x = 5
+				if (hasAch("ng3p27")) x += 0.5
+				return x
 			},
 			updateTmp() {
 				delete QCs_tmp.qc1
@@ -89,7 +91,8 @@ var QCs = {
 				return x
 			},
 
-			can: () => QCs_tmp.qc1 && pH.can("eternity") && player.replicanti.amount.gte(QCs_tmp.qc1.req) && QCs_save.qc1.boosts < 20,
+			can: () => QCs_tmp.qc1 && pH.can("eternity") && player.replicanti.amount.gte(QCs_tmp.qc1.req) && QCs_save.qc1.boosts < QCs.data[1].max(),
+			max: () => QCs.in(6) ? 6 : 20,
 			boost() {
 				if (!QCs.data[1].can()) return false
 
@@ -227,9 +230,9 @@ var QCs = {
 		6: {
 			unl: () => true,
 			desc: () => "There is a increasing variable, which gives different boosts; but eternitying subtracts it, and dilating reduces the gain.",
-			goal: () => player.replicanti.amount.e >= 1e6 && QCs_save.qc1.boosts >= 5,
-			goalDisp: () => shortenCosts(Decimal.pow(10, 1e6)) + " Replicantis + 5 Replicanti Compressors",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
+			goal: () => player.replicanti.amount.e >= 1e6 && QCs_save.qc1.boosts >= 6,
+			goalDisp: () => shortenCosts(Decimal.pow(10, 1e6)) + " Replicantis + " + getFullExpansion(6) + " Replicanti Compressors",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 2.7),
 			hint: "Do long Eternity runs.",
 
 			updateTmp() {
@@ -246,7 +249,7 @@ var QCs = {
 		},
 		7: {
 			unl: () => true,
-			desc: () => "Unlock a new set of Mastery Studies, but color charge subtracts color powers instead of the main catches.",
+			desc: () => "Unlock a new set of Mastery Studies, but color charge subtracts color powers instead of the main catches, and disable red power.",
 			goal: () => false,
 			goalDisp: () => "(not implemented)",
 			goalMA: new Decimal(1),
@@ -305,6 +308,9 @@ var QCs = {
 	},
 	inAny() {
 		return QCs_tmp.in.length >= 1
+	},
+	isntCatched() {
+		return QCs_tmp.in.length != 1 || QCs_tmp.in[0] == 7
 	},
 	done(x) {
 		return this.unl() && QCs_save.comps >= x
