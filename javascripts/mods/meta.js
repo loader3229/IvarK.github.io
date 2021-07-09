@@ -35,7 +35,7 @@ function getMDMultiplier(tier) {
 	ret = ret.times(tmp.mdGlobalMult) //Global multiplier of all Meta Dimensions
 
 	//Achievements:
-	if (tier <= 3 && hasAch("ng3p17")) ret = ret.times(Decimal.pow(1.001, Math.pow(player.totalmoney.plus(10).log10(), 0.25)))
+	if (tier <= 3 && hasAch("ng3p17")) ret = ret.times(Math.sqrt(player.totalmoney.max(1).log10() / 1e10 + 1, 0.5))
 	if (tier == 1 && hasAch("ng3p21")) ret = ret.times(player.meta.bestAntimatter.max(1).log10() / 5 + 1)
 	if (tier % 2 == 1 && hasAch("ng3p24")) ret = ret.times(player.meta[tier + 1].amount.add(1).pow(0.01))
 

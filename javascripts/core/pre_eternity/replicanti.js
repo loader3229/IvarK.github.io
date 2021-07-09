@@ -68,12 +68,11 @@ function isReplicantiLimitBroken() {
 }
 
 function getReplEff() {
-	return Decimal.max(tmp.rmPseudo || getReplBaseEff(), 1)
+	return Decimal.max(tmp.rmPseudo || getReplBaseEff(), player.replicanti.amount)
 }
 
 function getReplBaseEff(x) {
 	x = QCs.in(5) ? new Decimal(1) : QCs.data[1].convert(x || player.replicanti.amount)
-	if (tmp.ngp3) x = softcap(x, "rep")
 	return x
 }
 
@@ -98,6 +97,7 @@ function getReplMult(next) {
 		replmult = base.times(Decimal.pow(5, rg))
 		if (hasMTS(292)) replmult = replmult.max(base.pow(getMTSMult(292)))
 	}
+	if (tmp.ngp3) replmult = softcap(replmult, "repMult")
 	return replmult
 }
 

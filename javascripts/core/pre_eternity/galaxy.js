@@ -69,7 +69,7 @@ function getGalaxyRequirement(offset = 0, display) {
 		if (player.currentEternityChall == "eterc10" && qu_save.breakEternity.upgrades.includes(9)) amount /= getBreakUpgMult(9)
 	}
 	if (!player.boughtDims) {
-		tmp.grd.speed = 1
+		/*tmp.grd.speed = 1
 		if (tmp.ngp3) {
 			let ghostlySpeed = tmp.be ? 55 : 1
 			let div = 1e4
@@ -83,12 +83,11 @@ function getGalaxyRequirement(offset = 0, display) {
 				tmp.grd.speed = Math.pow(2, (tmp.grd.gals + 1 - 302500 / ghostlySpeed) * ghostlySpeed / div)
 				scaling = Math.max(scaling, 4)
 			}
-		}
+		}*/
 
 		let distantStart = getDistantScalingStart()
 		if (tmp.grd.gals >= distantStart) {
-			let speed = tmp.grd.speed
-			speed *= getDistantScalingEffect()
+			let speed = getDistantScalingEffect()
 			amount += getDistantAdd(tmp.grd.gals - distantStart + 1) * speed
 			if (tmp.grd.gals >= distantStart * 2.5 && inNGM(2)) {
 				// 5 times worse scaling
@@ -97,21 +96,23 @@ function getGalaxyRequirement(offset = 0, display) {
 			} else scaling = Math.max(scaling, 1)
 		}
 
+		let darkStart = getDarkScalingStart()
+		if (tmp.grd.gals >= darkStart) scaling = Math.max(scaling, 4)
+
 		let hasRemote = !tmp.be && !hasNU(6) && !hasAch("ng3p117")
 		if (hasRemote) {
 			let remoteStart = getRemoteScalingStart()
 			if (tmp.grd.gals >= remoteStart) {
-				let speed2 = tmp.grd.speed
-				amount *= Math.pow(1 + 2 / (tmp.ngmX > 3 ? 10 : 1e3), (tmp.grd.gals - remoteStart + 1) * speed2)
+				let speed2 = 1
+				if (display) amount = Decimal.pow(getRemoteScalingBase(), (tmp.grd.gals - remoteStart + 1) * speed2).times(amount)
+				else amount *= Math.pow(getRemoteScalingBase(), (tmp.grd.gals - remoteStart + 1) * speed2)
 				scaling = Math.max(scaling, 3)
 			}
 		}
 	}
-	amount = Math.ceil(amount)
+	if (amount + 0 === amount) amount = Math.ceil(amount - getGalaxyReqSub())
+	else amount = amount.sub(getGalaxyReqSub()).ceil()
 
-	if (player.infinityUpgrades.includes("resetBoost")) amount -= 9
-	if (player.challenges.includes("postc5")) amount -= 1
-	if (player.infinityUpgradesRespecced != undefined) amount -= getInfUpgPow(6)
 	if (display) return {amount: amount, scaling: scaling}
 	return amount
 }
@@ -129,6 +130,14 @@ function getGalaxyReqMultiplier() {
 	if (hasDilationUpg("ngmm12")) ret -= 10
 	if (inNGM(2) && hasTimeStudy(42)) ret *= tsMults[42]()
 	return ret
+}
+
+function getGalaxyReqSub() {
+	let sub = 0
+	if (player.infinityUpgrades.includes("resetBoost")) sub += 9
+	if (player.challenges.includes("postc5")) sub += 1
+	if (player.infinityUpgradesRespecced != undefined) sub += getInfUpgPow(6)
+	return sub
 }
 
 function getDistantScalingStart() {
@@ -160,20 +169,34 @@ function getDistantAdd(x) {
 }
 
 function getRemoteScalingStart(galaxies) {
-	let n = tmp.ngC ? 150 : 800
+	let n_init = tmp.ngC ? 150 : 800
+	let n = 0
 	if (inNGM(4)) {
-		n = 6
+		n_init = 6
 		if (player.challenges.includes("postcngm3_1")) n += tmp.cp / 2
-	}
-	else if (inNGM(2)) n += 1e7
-	if (hasDilationUpg(5) && tmp.ngC) n += 25;
+	} else if (inNGM(2)) n += 1e7
+	n += n_init
+
+	if (hasDilationUpg(5) && tmp.ngC) n += 25
+
 	if (tmp.ngp3) {
+		let darkStart = getDarkScalingStart()
+		if (galaxies > darkStart) n -= galaxies - darkStart
+
 		for (var t = 251; t <= 253; t++) if (hasMTS(t)) n += getMTSMult(t)
 
 		if (isNanoEffectUsed("remote_start")) n += tmp.nf.effects.remote_start
-		if (galaxies > 1/0 && !tmp.be) n -= galaxies - 1/0 
+		if (galaxies > 1/0 && !tmp.be) n -= galaxies
 	}
 	return n
+}
+
+function getRemoteScalingBase() {
+	return 1 + 2 / (tmp.ngmX > 3 ? 10 : 1e3)
+}
+
+function getDarkScalingStart() {
+	return 1/0
 }
 
 function maxBuyGalaxies(manual) {

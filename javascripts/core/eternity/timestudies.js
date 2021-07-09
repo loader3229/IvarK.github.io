@@ -932,7 +932,9 @@ let tsMults = {
 		return r
 	},
 	83() {
-		return Decimal.pow(1.0004, player.totalTickGained)
+		let x = Decimal.pow(1.0004, player.totalTickGained)
+		if (tmp.ngp3) x = softcap(x, "ts83")
+		return x
 	},
 	141() {
 		if (hasAch("r137") && tmp.ngp3_boost && !tmp.exMode) return new Decimal(1e40)
@@ -970,7 +972,7 @@ let tsMults = {
 	231() {
 		let db = getTotalDBs()
 		let x = Decimal.pow(Math.max(db, 1), 0.3)
-		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(2, db / 3e5 * Math.pow(Math.log2(db / 2e6 + 2), 2.5)))
+		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(2, db * Math.min(Math.pow(Math.log2(db / 2e6 + 2), 2.5) / 3e5, 3e-5)))
 		return x
 	},
 	232() {

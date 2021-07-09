@@ -67,14 +67,14 @@ var QCs = {
 				let brokenBoosts = Math.max(QCs_save.qc1.boosts - this.compressScaling(), 0)
 
 				let data = {
-					req: Decimal.pow(10, 1e6 + 2e5 * Math.max(boosts - 5, 0)),
+					req: Decimal.pow(10, 1e6 + 2e5 * brokenBoosts),
 					limit: new Decimal("1e6000000"),
 
-					speedMult: Decimal.pow(boosts + 1, 2 + brokenBoosts / 2),
+					speedMult: Decimal.pow(4, -brokenBoosts).times(Math.pow(boosts / 2 + 1, 2)),
 					scalingMult: Math.pow(2, Math.max(boosts - 20, 0) / 20),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
-					effMult: maxBoosts / 30 + (boosts - brokenBoosts) / 15 + 1,
+					effMult: maxBoosts / 30 + boosts / 15 + 1,
 					effExp: Math.min(1 + boosts / 20, 2)
 				}
 				QCs_tmp.qc1 = data
@@ -212,7 +212,7 @@ var QCs = {
 				if (!QCs.in(5) && !QCs.done(6)) return
 
 				QCs_tmp.qc5 = {
-					mult: 1 / Math.log2(QCs_save.qc1.boosts + 2),
+					mult: 1 / (Math.log10(QCs_save.qc1.boosts + 1) + 1),
 					eff: Math.pow(Math.log2(QCs_save.qc5 / 2e6 + 1), 2),
 				}
 				if (QCs.isRewardOn(6)) QCs_tmp.qc5.mult *= QCs_tmp.rewards[6]
@@ -250,9 +250,9 @@ var QCs = {
 		7: {
 			unl: () => true,
 			desc: () => "Unlock a new set of Mastery Studies, but color charge subtracts color powers instead of the main catches, and disable red power.",
-			goal: () => false,
-			goalDisp: () => "(not implemented)",
-			goalMA: new Decimal(1),
+			goal: () => player.timestudy.theorem >= 5e86,
+			goalDisp: () => shortenDimensions(5e86) + " Time Theorems",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 3.7),
 			hint: "It's a tricky puzzle.",
 			rewardDesc: (x) => "You keep that set of Mastery Studies, and unlock Paired Challenges. (not implemented)",
 			rewardEff(str) {
@@ -310,7 +310,7 @@ var QCs = {
 		return QCs_tmp.in.length >= 1
 	},
 	isntCatched() {
-		return QCs_tmp.in.length != 1 || QCs_tmp.in[0] == 7
+		return QCs_tmp.in.length != 1 || this.in(7)
 	},
 	done(x) {
 		return this.unl() && QCs_save.comps >= x
@@ -442,3 +442,45 @@ var QCs_save = undefined
 var QCs_tmp = { unl: [], in: [], rewards: {} }
 
 let QUANTUM_CHALLENGES = QCs
+
+
+//PAIRED CHALLENGES
+var PCs = {
+	setup() {
+		PCs_save = undefined
+		return PCs_save
+	},
+	compile() {
+		PCs_save = undefined
+		if (!tmp.ngp3 || qu_save === undefined) {
+			this.updateTmp()
+			this.updateDisp()
+			return
+		}
+
+		let data = qu_save.pc
+		if (data === undefined) data = this.setup()
+		PCs_save = data
+
+		this.updateTmp()
+		this.updateDisp()
+	},
+
+	unl() {
+		return qu_save.qc && qu_save.qc.comps >= 7
+	},
+	updateTmp() {
+		let data = { unl: PCs.unl }
+		PCs_tmp = data
+
+		this.updateTmpOnTick()
+	},
+	updateTmpOnTick() {
+	},
+
+	updateDisp() {
+		
+	}
+}
+var PCs_save = undefined
+var PCs_tmp = { unl: false }

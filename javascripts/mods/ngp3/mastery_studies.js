@@ -13,6 +13,10 @@ var mTs = {
 			301: 1e80, 302: 1e78, 303: 1e80,
 			311: 1e80, 312: 1e82, 313: 1e82, 314: 1e80,
 
+			//QC7
+			321: 0, 322: 0, 323: 0,
+			331: 1e85, 332: 3e86, 333: 5e86, 334: 3e86, 335: 1e85,
+
 			//Beginner Mode
 			bg_251: 2e69, bg_252: 2e69, bg_253: 2e69,
 			bg_261: 2e69, bg_262: 2e69, bg_263: 2e69, bg_264: 2e69, bg_265: 2e69, bg_266: 2e69,
@@ -48,6 +52,10 @@ var mTs = {
 			t291: 5, t292: 5,
 			t301: 10, t302: "reset", t303: 10,
 			t311: 1 / 2, t312: 16, t313: 16, t314: 1 / 2,
+
+			//QC7
+			t321: 1 / 4, t322: "reset", t323: 1 / 4,
+			t331: 1 / 4, t332: 16, t333: 1024, t334: 16, t335: 1 / 4,
 
 			//Beginner Mode
 			t251_bg: 1.5, t252_bg: 1.5, t253_bg: 1.5,
@@ -112,7 +120,7 @@ var mTs = {
 			return mTs.bought >= (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10)
 		},
 		322() {
-			return false //QCs.in(7) || QCs.done(7)
+			return mTs.bought >= 25 && (QCs.in(7) || QCs.done(7))
 		},
 		d7() {
 			return enB.glu.engAmt() >= 5.3
@@ -147,7 +155,7 @@ var mTs = {
 			return (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10) + " bought mastery studies"
 		},
 		322() {
-			return QCs.done(7) ? undefined : "In Quantum Challenge 7"
+			return QCs.in(7) || QCs.done(7) ? "25 bought mastery studies" : "In Quantum Challenge 7"
 		},
 		d7() {
 			return "5.3 quantum energy"
@@ -236,7 +244,7 @@ var mTs = {
 		},
 		291() {
 			let rep = getReplEff().max(1).log10()
-			return Math.log10(rep / 1e5 + 1) / 20 + 1
+			return Math.log10(rep / 5e5 + 1) / 10 + 1
 		},
 		292() {
 			let rg = getFullEffRGs()
@@ -252,8 +260,45 @@ var mTs = {
 		313() {
 			let tpLog = player.dilation.tachyonParticles.max(1).log10()
 			let bpLog = colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0
+			let x = Math.pow(tpLog / 100, 0.75) * Math.pow(bpLog, 0.25)
+			x = x * (1 - 1 / (x + 1)) / 4 + Math.min(x, 1)
+			return x
+		},
 
-			return Math.pow(tpLog / 100, 0.75) * Math.pow(bpLog, 0.25) / 8 + 1
+		321() {
+			let x = 0.25 - Math.log10(player.timestudy.theorem / 1e85 + 1) / 25
+			return Math.max(x, 0)
+		},
+		323() {
+			let x = 0.25 - Math.log10(player.timestudy.theorem / 1e88 + 1) / 25
+			return Math.max(x, 0)
+		},
+		331() {
+			let x = 1.5 - Math.log10(player.timestudy.theorem / 1e90 + 1) / 20
+			return Math.max(x, 1)
+		},
+		332() {
+			return Math.pow(player.galaxies + player.replicanti.galaxies + tmp.extraRG + player.dilation.freeGalaxies, 2 / 5) / 100
+		},
+		333() {
+			let x = 1
+			if (mTs.has(322)) x += 0.5
+			if (mTs.has(332)) x += getMTSMult(332, "update")
+			if (mTs.has(334)) x += getMTSMult(334, "update")
+
+			//Nerfs
+			if (mTs.has(321)) x -= getMTSMult(321, "update")
+			if (mTs.has(323)) x -= getMTSMult(323, "update")
+			if (mTs.has(331)) x /= getMTSMult(331, "update")
+			return Math.max(x, 1)
+		},
+		334() {
+			let x = Math.pow(getReplBaseEff().max(1).log10(), 0.1) / 10
+			if (mTs.has(335)) x = Math.pow(x + 1, getMTSMult(335, "update")) - 1
+			return x
+		},
+		335() {
+			return Math.min(0.5 + Math.log10(player.timestudy.theorem / 1e90 + 1) / 10, 1)
 		},
 	},
 	eff(id, uses = "") {
@@ -290,7 +335,17 @@ var mTs = {
 		311: () => "Red power boosts Replicated and Tachyonic Galaxies with TS232's power.",
 		312: () => "Green power boosts Tachyonic Galaxies with Replicated Galaxies' strength.",
 		313: () => "Blue power effect boosts itself; but Tachyonic Particles also boost it.",
-		314: () => "Every color power adds the suceeding color power."
+		314: () => "Every color power adds the suceeding color power.",
+
+		321: () => "Subtract MS103 effect, but TT reverts it.",
+		322: () => "Add +50% into a study below it.",
+		323: () => "Subtract MS103 effect, but TT reverts it.",
+
+		331: () => "Divide MS103 effect, but TT reverts it.",
+		332: () => "Total galaxies add the MS103 effect.",
+		333: () => "Slow down Meta Accelerator.",
+		334: () => "Replicantis add the MS103 effect.",
+		335: () => "Reduce a study on the left, but TT reverts it.",
 	},
 	timeStudyTitles: {
 		241: "Multiplier Overcharge",
@@ -300,9 +355,13 @@ var mTs = {
 		281: "Time Augment-RP", 282: "Rep. Augment-TM", 283: "Replicanti Self-Luck", 284: "Type-IV Goo",
 		291: "Dimensional Acknowledge", 292: "Galactic Insurance",
 		301: "Replicanti Equality", 302: "Replicanti Foam", 303: "Multiplier Based",
-		311: "Study Code: Red", 312: "Lucidious Jump", 313: "Blue Condenser", 314: "Color Circuit"
+		311: "Study Code: Red", 312: "Lucidious Jump", 313: "Blue Condenser", 314: "Color Circuit",
+
+		//QC7
+		321: "Puzzled", 322: "Final Ceremony", 323: "Jigsawed",
+		331: "Nerfed", 332: "Knowledge of Timeless", 333: "The Final Mastery...", 334: "Knowledge of Spaceless", 335: "Unbuffed"
 	},
-	hasStudyEffect: [251, 252, 253, 265, 271, 281, 283, 284, 291, 292, 311, 312, 313],
+	hasStudyEffect: [251, 252, 253, 265, 271, 281, 283, 284, 291, 292, 311, 312, 313, 321, 323, 331, 332, 333, 334, 335],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -337,6 +396,27 @@ var mTs = {
 		313(x) {
 			return "^" + shorten(x)
 		},
+		321(x) {
+			return "-" + formatPercentage(x) + "%"
+		},
+		323(x) {
+			return "-" + formatPercentage(x) + "%"
+		},
+		331(x) {
+			return "/" + x.toFixed(3)
+		},
+		332(x) {
+			return "+" + formatPercentage(x) + "%"
+		},
+		333(x) {
+			return formatReductionPercentage(x) + "%"
+		},
+		334(x) {
+			return "+" + formatPercentage(x) + "%"
+		},
+		335(x) {
+			return "^" + x.toFixed(3)
+		},
 	},
 	ecsUpTo: 14,
 	unlocksUpTo: 14,
@@ -356,7 +436,7 @@ var mTs = {
 
 		//QC7
 		d8: [322],
-		321: [331, 332], 322: [321, 323, 333], 323: [334, 335],
+		322: [321, 323, 332, 333, 334], 332: [331], 334: [335],
 
 		//Expert Mode
 		ex_264: [],
@@ -716,7 +796,7 @@ function buyMasteryStudy(type, id, quick=false) {
 function canBuyMasteryStudy(type, id) {
 	if (type == 't') {
 		if (player.timestudy.theorem < mTs.costs.time[id] || player.masterystudies.includes('t' + id) || player.eternityChallUnlocked > 12 || !mTs.timeStudies.includes(id)) return false
-		if (mTs.latestBoughtRow - (tmp.bgMode || tmp.ngp3_mul && !tmp.exMode ? 1 : 0) > Math.floor(id / 10)) return false
+		if (!hasAch("ng3p26") && mTs.latestBoughtRow - (tmp.bgMode || tmp.ngp3_mul && !tmp.exMode ? 1 : 0) > Math.floor(id / 10)) return false
 		if (!mTs.spentable.includes(id)) return false
 		if (mTs.unlockReqConditions[id] && !mTs.unlockReqConditions[id]()) return false
 
@@ -745,7 +825,7 @@ function updateMasteryStudyButtons() {
 			if (!hasMTS(name) && !canBuyMasteryStudy('t', name)) className = "timestudylocked"
 			else {
 				if (hasMTS(name)) className += "bought"
-				if (name > 270) className += " elcstudy"
+				if (name > 270 && name < 320) className += " elcstudy"
 			}
 			if (div.className !== className) div.className = className
 			if (mTs.hasStudyEffect.includes(name)) {

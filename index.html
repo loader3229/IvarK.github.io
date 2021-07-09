@@ -496,7 +496,7 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button id="dilstudy7" onclick='buyMasteryStudy("d", 7)'>Unlock Positrons</span><br><span id="ds7Cost"></span><span id="ds7Req"></span></button></td>
+						<td><button id="dilstudy7" style='width: 200px; height: 100px' onclick='buyMasteryStudy("d", 7)'>Unlock Positrons</span><br><span id="ds7Cost"></span><span id="ds7Req"></span></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -534,7 +534,7 @@
 					<tr class="wideRow">
 						<td><button id="mts311" style='font-size:7px' onclick='buyMasteryStudy("t", 311)'></button></td>
 						<td><button id="mts312" style='width: 180px; font-size:9px' onclick='buyMasteryStudy("t", 312)'></button></td>
-						<td><button id="dilstudy8" onclick='buyMasteryStudy("d", 8)' style='font-size:8px'>Unlock Quantum Challenges<br><span id="ds8Cost"></span><span id="ds8Req"></span></button></td>
+						<td><button id="dilstudy8" onclick='buyMasteryStudy("d", 8)' style='width: 200px; height: 100px'>Unlock Quantum Challenges<br><span id="ds8Cost"></span><span id="ds8Req"></span></button></td>
 						<td><button id="mts313" style='font-size:8px' onclick='buyMasteryStudy("t", 313)'></button></td>
 						<td><button id="mts314" style='font-size:8px' onclick='buyMasteryStudy("t", 314)'></button></td>
 					</tr>
@@ -543,14 +543,14 @@
 					<tr class="wideRow">
 						<td style="visibility: hidden"><button class="timestudy"></button></td>
 						<td><button id="mts321" onclick='buyMasteryStudy("t", 321)'></button></td>
-						<td><button id="mts322" onclick='buyMasteryStudy("t", 322)'></button></td>
+						<td><button id="mts322" style='width: 200px; height: 100px' onclick='buyMasteryStudy("t", 322)'></button></td>
 						<td><button id="mts323" onclick='buyMasteryStudy("t", 323)'></button></td>
 						<td style="visibility: hidden"><button class="timestudy"></button></td>
 					</tr>
 					<tr class="wideRow">
 						<td><button id="mts331" onclick='buyMasteryStudy("t", 331)'></button></td>
 						<td><button id="mts332" onclick='buyMasteryStudy("t", 332)'></button></td>
-						<td><button id="mts333" onclick='buyMasteryStudy("t", 333)'></button></td>
+						<td><button id="mts333" style='width: 200px' onclick='buyMasteryStudy("t", 333)'></button></td>
 						<td><button id="mts334" onclick='buyMasteryStudy("t", 334)'></button></td>
 						<td><button id="mts335" onclick='buyMasteryStudy("t", 335)'></button></td>
 					</tr>
@@ -1580,7 +1580,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - 7/7/2021 Build)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -1696,6 +1696,7 @@
 				<div id="softcap_rInt"></div>
 				<div id="softcap_it"></div>
 				<div id="softcap_tt"></div>
+				<div id="softcap_ts83"></div>
 				<div id="softcap_ts225"></div>
 				<div id="softcap_ec14"></div>
 				<div id="softcap_dt"></div>
@@ -2682,6 +2683,7 @@
 					<td><button id="postctabbtn" class="secondarytabbtn" onclick="showChallengesTab('breakchallenges')">Infinity Challenges</button></td>
 					<td><button id="eterctabbtn" class="secondarytabbtn" onclick="showChallengesTab('eternitychallenges')">Eternity Challenges</button></td>
 					<td><button id="qctabbtn" class="secondarytabbtn" onclick="showChallengesTab('quantumchallenges')">Quantum Challenges</button></td>
+					<td><button id="pctabbtn" class="secondarytabbtn" onclick="showChallengesTab('pairedChalls')">Paired Challenges</button></td>
 				</tr>
 			</table>
 			<div id="inchall"></div>
@@ -3534,6 +3536,7 @@
 					</table>
 				</div>
 			</div>
+			<div id="pairedChalls" class="challengeTab">You have currently reached the end-game! Wait until Beta v0.5 comes...</div>
 			<div class="footer"></div>
 		</div>
 		<div id="automation" class="tab">
@@ -4439,10 +4442,14 @@
 		<div class='quantumtab' id='uquarks'>
 			<canvas id="quarkCanvas"></canvas>
 			<span id="gluon_req"></span>
-			<table class='qTable'><tr>
+			<table class='qTable'>
 				<!-- Color charge -->
 				<tr>
-					<td colspan=2></td>
+					<td></td>
+					<td id="colorSubchargeDiv">
+						Your colored anti-quarks also have a <span id='colorSubcharge'></span>,<br>
+						which is translated to <span id='colorSubchargeEff'></span>x color charge.
+					</td>
 					<td id="colorChargeColor" style="vertical-align: middle">
 						Your colored anti-quarks have a net <span id='colorCharge'></span>.
 						<br>

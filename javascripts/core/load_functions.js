@@ -2806,6 +2806,7 @@ function conToDeciMS(){
 			qu_save.tod.b.spin = new Decimal(qu_save.tod.b.spin)
 		}
 	}
+	PCs.compile()
 	QCs.compile()
 	pos.compile()
 }

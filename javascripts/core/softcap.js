@@ -139,12 +139,12 @@ var softcap_data = {
 			pow: 3/4
 		},
 	},
-	rep: {
-		name: "base replicanti effect",
+	repMult: {
+		name: "base replicanti multiplier",
 		1: {
 			func: "dilate",
-			start: () => Decimal.pow((QCs_tmp.qc1 && QCs_tmp.qc1.limit) || "1e6000000", 2),
-			base: () => Decimal.pow((QCs_tmp.qc1 && QCs_tmp.qc1.limit) || "1e6000000", 0.5),
+			start: Decimal.pow(10, 5e5),
+			base: Math.pow(10, 0.032),
 			pow: 4/5
 		},
 	},
@@ -156,6 +156,16 @@ var softcap_data = {
 			pow: 2.5,
 			mul: 20
 		},
+	},
+	ts83: {
+		name: "TS83 multiplier",
+		1: {
+			func: "dilate",
+			start: new Decimal("1e5000"),
+			base: Math.sqrt(10),
+			pow: 3/4,
+			derv: false
+		}
 	},
 	ts225: {
 		name: "base TS225 galaxies",
@@ -810,11 +820,12 @@ function getSoftcapAmtFromId(id){
 		ts11_log_big_rip: () => tsMults[11]().log10(),
 		bru1_log: () => tmp.bru[1].max(1).log10(),
 		beu3_log: () => tmp.beu[3].max(1).log10(),
-		rep: () => getReplBaseEff(),
+		repMult: () => getReplMult(),
 		rInt: () => tmp.rep ? tmp.rep.baseBaseEst.pow(1 - getECReward(14)) : new Decimal(1),
 		it: () => tmp.it.max(1),
 		ec14: () => tmp.rep ? tmp.rep.ec14.baseInt : new Decimal(1),
 		tt: () => getTTGenPart(player.dilation.tachyonParticles),
+		ts83: () => tsMults[83](),
 		ts225: () => tsMults[225](),
 		ma: () => getExtraDimensionBoostPowerUse(),
 		aqs: () => quarkGain(),
@@ -856,8 +867,9 @@ function hasSoftcapStarted(id, num){
 		This currently includes: _ngC, _big_rip, _dilation, _ngmX for integers of length 1 X
 		*/
 		idbase: tmp.ngp3,
-		rep: tmp.ngp3,
+		repMult: tmp.ngp3,
 		rInt: ECComps("eterc14"),
+		ts83: tmp.ngp3,
 		ts225: tmp.ngp3,
 		dt_log: tmp.ngp3 && !tmp.bE50kDT,
 		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined && tmp.quActive,
@@ -912,7 +924,7 @@ function numSoftcapsTotal(id){
 
 function softcapShorten(x){
 	if (typeof x == "number" && x < 1000 && x % 1 == 0) return x
-	if (x > 1) return formatValue(player.options.notation, x, 3, 3)
+	if (x < 1) return formatValue(player.options.notation, x, 3, 3)
 	if (x == 1) return 1
 	else return shorten(x)
 }
@@ -935,7 +947,7 @@ function getSoftcapStringEffect(id, num, amt, namenum){
 		return "Softcap of " + name + " " + inside + "."
 	}
 	if (func == "dilate") { // vars ["base", "pow", ...]
-		let inside = "Start: " + softcapShorten(v[0]) + ", Exponent: " + softcapShorten(v[0]) + ", Base (log): " + softcapShorten(v[1])
+		let inside = "Start: " + softcapShorten(v[0]) + ", Dilate: ^" + softcapShorten(v[2]) + ", Base (log): " + softcapShorten(v[1])
 		return "Softcap of " + name + " " + inside + "."
 	}
 	if (func == "log") { // vars ["start", "pow", "mul", "add"]
@@ -974,10 +986,11 @@ function updateSoftcapStatsTab(){
 		ts11_log_big_rip: "softcap_ts2",
 		bru1_log: "softcap_bru1",
 		beu3_log: "softcap_beu3",
-		rep: "softcap_rep",
+		repMult: "softcap_rep",
 		rInt: "softcap_rInt",
 		it: "softcap_it",
 		tt: "softcap_tt",
+		ts83: "softcap_ts83",
 		ts225: "softcap_ts225",
 		ec14: "softcap_ec14",
 		ma: "softcap_ma",

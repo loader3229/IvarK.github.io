@@ -192,11 +192,15 @@ function updateColorCharge() {
 
 	colorCharge[sorted[0]] = colorCharge.normal.charge
 	if (enB.active("glu", 12)) {
-		colorCharge.sub = Math.pow(colorPowers[sorted[1]] * Decimal.div(
-			Decimal.sub(usedQuarks[sorted[1]], usedQuarks[sorted[2]]),
-			Decimal.add(usedQuarks[sorted[1]], 1)
-		) + 1, enB_tmp.glu12)
-		colorCharge[sorted[0]] *= colorCharge.sub
+		colorCharge.sub = {
+			color: sorted[1],
+			charge: colorPowers[sorted[1]] * Decimal.div(
+				Decimal.sub(usedQuarks[sorted[1]], usedQuarks[sorted[2]]),
+				Decimal.add(usedQuarks[sorted[1]], 1)
+			)
+		}
+		colorCharge.sub.eff = Math.pow(colorCharge.sub.charge + 1, enB_tmp.glu12)
+		colorCharge[sorted[0]] *= colorCharge.sub.eff
 	}
 	if (QCs.isRewardOn(2)) colorCharge[sorted[0]] *= QCs_tmp.rewards[2]
 	if (QCs.in(7)) colorCharge[sorted[0]] *= -1
@@ -224,7 +228,7 @@ function getColorPowerQuantity(color, base) {
 	if (!base) {
 		if (hasMTS(314)) ret += getColorPowerQuantity(color == "r" ? "g" : color == "g" ? "b" : "r", true) / 5
 		if (color == "r" && hasMTS(272)) ret /= 5
-		if (color == "r" && QCs.in(7)) ret = 0
+		if (color == "r" && QCs.in(7)) ret = Math.sqrt(ret)
 	}
 	return ret
 }
@@ -238,7 +242,7 @@ colorBoosts = {
 function updateColorPowers() {
 	//Red
 	colorBoosts.r = Math.log10(qu_save.colorPowers.r * 5 + 1) / 3.5 + 1
-	if (hasMTS(272) && !QCs.in(7)) colorBoosts.r += 0.25
+	if (hasMTS(272)) colorBoosts.r += 0.25
 
 	//Green
 	colorBoosts.g = Math.log10(qu_save.colorPowers.g * 3 + 1) + 1
@@ -485,6 +489,7 @@ var enB = {
 	},
 
 	updateTmp() {
+		var glu12 = enB_tmp.glu12 !== undefined
 		var data = {}
 		enB_tmp = data
 
@@ -498,6 +503,7 @@ var enB = {
 				if (eff !== undefined) data[type + num] = eff(this[type].eff(num))
 			}
 		}
+		if (this.active("glu", 12) && !glu12 && enB_tmp.glu12 !== undefined) updateColorCharge()
 	},
 
 	types: ["glu", "pos"],
@@ -543,7 +549,8 @@ var enB = {
 			return r
 		},
 		gluonEff(x) {
-			return Decimal.add(x, 1).log10()
+			let l = Decimal.add(x, 1).log10()
+			return Math.sqrt(l * Math.max(10 - 10 / l, 1))
 		},
 
 		activeReq(x) {
@@ -647,12 +654,12 @@ var enB = {
 		},
 		7: {
 			req: 12,
-			masReq: 1/0,
+			masReq: 60,
 
 			title: "Dilation Overflow II",
 			type: "g",
 			eff(x) {
-				return 1.5 + 0.5 / (Math.log10(x + 1) / 10 + 1)
+				return 1.5 + 0.5 / (Math.log10(x / 10 + 1) / 5 + 1)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -660,7 +667,7 @@ var enB = {
 		},
 		8: {
 			req: 12,
-			masReq: 1/0,
+			masReq: 100,
 
 			title: "Meta Resynergizer II",
 			type: "r",
@@ -687,7 +694,7 @@ var enB = {
 		},
 		10: {
 			req: 36,
-			masReq: 1/0,
+			masReq: 100,
 
 			title: "Blue Saturation",
 			type: "g",
@@ -701,7 +708,7 @@ var enB = {
 		},
 		11: {
 			req: 45,
-			masReq: 1/0,
+			masReq: 100,
 
 			title: "Blue Unseeming",
 			type: "r",
@@ -714,12 +721,12 @@ var enB = {
 		},
 		12: {
 			req: 50,
-			masReq: 1/0,
+			masReq: 100,
 
 			title: "Color Subcharge",
 			type: "b",
 			eff(x) {
-				return 1 - 1 / (Math.log10(x + 1) / 5 + 1)
+				return 1 - 1 / (Math.log10(x / 10 + 1) / 5 + 1)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -804,6 +811,7 @@ var enB = {
 				var baseMult = timeMult
 				var slowStart = 4
 				var slowSpeed = 1
+				if (mTs.has(333)) slowSpeed /= getMTSMult(333)
 				if (enB.active("glu", 9)) slowSpeed /= enB_tmp.glu9
 				if (enB.active("pos", 8)) slowStart += enB_tmp.pos8
 				if (enB.active("pos", 12)) baseMult += enB_tmp.pos12
@@ -858,22 +866,22 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return Math.log10(x / 20 + 1) / 5 * Math.pow(x + 1, 0.1) + 1
+				return Math.log10(x / 20 + 1) / 5 * Math.pow(x / 10 + 1, 0.1) + 1
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
 			}
 		},
 		5: {
-			req: 1/0,
+			req: 50,
 			masReq: 1/0,
-			chargeReq: 1/0,
+			chargeReq: 100,
 
 			title: "Transfinite Time",
 			tier: 2,
 			type: "r",
 			eff(x) {
-				return Math.min(Math.sqrt(Math.log10(x / 20 + 1) + 1), 3)
+				return Math.min(Math.sqrt(Math.log10(x / 100 + 1) / 2 + 1), 3)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -1138,13 +1146,21 @@ function updateQuarksTabOnUpdate(mode) {
 	} else {
 		var color = colorShorthands[colorCharge.normal.color]
 		getEl("colorCharge").innerHTML =
-			'<span class="' + color + '">' + color + '</span> charge of <span class="' + color + '" style="font-size:35px">' + shorten(colorCharge.normal.charge * tmp.qe.eff1) + (enB.active("glu", 12) ? " x " + shorten(colorCharge.sub) : "") + "</span>" +
+			'<span class="' + color + '">' + color + '</span> charge of <span style="font-size:35px">' + shorten(colorCharge.normal.charge * tmp.qe.eff1) + "</span>" +
 			(hasAch("ng3p13") ? ", which cancelling the subtraction of gluon effects by " + shorten(colorCharge.subCancel) : "")
 		getEl("colorChargeAmt").innerHTML = shortenDimensions(colorCharge.normal.chargeAmt) + " " + color + " anti-quarks"
 		getEl("colorChargeColor").className = color
 
 		getEl("neutralize_req").innerHTML = shortenDimensions(colorCharge.neutralize.total)
 		getEl("neutralize_quarks").className = qu_save.quarks.gte(colorCharge.neutralize.total) ? "storebtn" : "unavailablebtn"
+	}
+
+	getEl("colorSubchargeDiv").style.display = colorCharge.sub ? "" : "none"
+	if (colorCharge.sub) {
+		var color = colorShorthands[colorCharge.sub.color]
+		getEl("colorSubchargeDiv").className = colorCharge.sub.charge == 0 ? "black" : color + " light"
+		getEl("colorSubcharge").innerHTML= colorCharge.sub.charge == 0 ? "neutral subcharge" : color + " subcharge of <span style='font-size:35px'>" + shorten(colorCharge.sub.charge) + "</span>"
+		getEl("colorSubchargeEff").textContent = shorten(colorCharge.sub.eff)
 	}
 
 	getEl("redQuarks").textContent = shortenDimensions(qu_save.usedQuarks.r)

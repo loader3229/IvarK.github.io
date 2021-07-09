@@ -556,14 +556,17 @@ function handleDispAndTmpOutOfQuantum(bigRip) {
 
 	let keepQuantum = pH.shown("quantum")
 	let keepQCs = keepQuantum && QCs.unl()
+	let keepPCs = keepQuantum && PCs.unl()
 	let keepEDs = keepQuantum && player.masterystudies.includes("d11")
 	let keepBE = false
 
 	if (!keepQCs && getEl("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
+	if (!keepPCs && getEl("pairedChalls").style.display == "block") showChallengesTab("normalchallenges")
 	if (!keepEDs && getEl("emperordimensions").style.display == "block") showDimTab("antimatterdimensions")
 	if (!keepBE && getEl("breakEternity").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
 
 	getEl("qctabbtn").parentElement.style.display = keepQCs ? "" : "none"
+	getEl("pctabbtn").parentElement.style.display = keepPCs ? "" : "none"
 	getEl("edtabbtn").style.display = keepEDs ? "" : "none"
 	getEl("breakEternityTabbtn").style.display = keepBE? "" : "none"
 }

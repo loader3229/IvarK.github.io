@@ -187,9 +187,12 @@ dev.giveQuantumStuff = function(n, quick) {
 
 dev.quickQuantum = function(n, quick) {
 	if (!n) n = quarkGain()
-	qu_save.gluons.rg = qu_save.gluons.rg.add(Decimal.div(n, 3))
-	qu_save.gluons.gb = qu_save.gluons.gb.add(Decimal.div(n, 3))
-	qu_save.gluons.br = qu_save.gluons.br.add(Decimal.div(n, 3))
+	qu_save.usedQuarks.r = new Decimal(0)
+	qu_save.usedQuarks.b = new Decimal(0)
+	qu_save.usedQuarks.g = new Decimal(0)
+	qu_save.gluons.rg = Decimal.div(n, 3)
+	qu_save.gluons.gb = Decimal.div(n, 3)
+	qu_save.gluons.br = Decimal.div(n, 3)
 	gainQKOnQuantum(n, true)
 	assignAll(true)
 	if (!quick) updateColorCharge()
