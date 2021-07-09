@@ -49,7 +49,7 @@ var quantumTabs = {
 
 function updateQuantumTabs() {
 	getEl("quarkEnergy").textContent = shorten(qu_save.quarkEnergy)
-	getEl("quarkEnergyMult").textContent = shorten(tmp.qe.mult) + (tmp.qe.div > 1 ? " / " + shorten(tmp.qe.div) : "")
+	getEl("quarkEnergyMult").textContent = "(" + shorten(tmp.qe.mult) + (tmp.qe.div > 1 ? " / " + shorten(tmp.qe.div) : "") + ")"
 	getEl("bestQE").textContent = shorten(qu_save.bestEnergy)
 	getEl("qeEff").textContent = "^" + tmp.qe.exp.toFixed(3)
 	getEl("qeFrac").textContent = shorten(tmp.qe.expNum) + "/" + shorten(tmp.qe.expDen)

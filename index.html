@@ -1580,7 +1580,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects - 7/9/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -3414,6 +3414,9 @@
 				<br>
 				<span id="qc_effects"></span>
 				<br>
+				<button class="storebtn" id="qc_perks" style="width: 200px" onclick="QCs.viewPerks()">View perks</button>
+				<br>
+				<span id="qc_perks_note"></span>
 				<table class="table" id="qcs_div" style="margin: 0 auto"></table>
 				<!--
 				<div id="autoCS">
@@ -4423,11 +4426,11 @@
 		<br>
 		<div>Your quantum worth (sum of anti-quarks, colored anti-quarks, and anti-gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.</div>
 		<br>
-		You have <span class="QKAmount" id="quarkEnergy" style="font-size:35px">0.0</span> quantum energy.
-		(<span id="quarkEnergyMult" style="font-size: 25px">0.0</span>x)
+		<span style="font-size: 15px">You have <span class="QKAmount" id="quarkEnergy" style="font-size:30px">0.0</span> quantum energy.</span>
+		<span id="quarkEnergyMult" style="font-size: 15px">(1.00x)</span>
 		<br>You have made a best-ever of <span id="bestQE" style="font-size:15px">0.0</span> energy. (no divisors)
 		<br>Quark Efficiency: <span id="qeEff" style="font-size:15px"></span> (<span id="qeFrac"></span>)
-		<br>
+		<br><button id="qc_restart" class="storebtn" style="font-size: 100%; width:200px" onclick="QCs.restart()">Restart Challenge</button>
 		<table class="table" align="center" style="margin: auto">
 			<tr>
 				<td><button class="secondarytabbtn" onclick="showQuantumTab('uquarks')">Anti-Quarks</button></td>
@@ -4453,25 +4456,25 @@
 					<td id="colorChargeColor" style="vertical-align: middle">
 						Your colored anti-quarks have a net <span id='colorCharge'></span>.
 						<br>
-						<span style="font-size: 10px">(net worth of <span id='colorChargeAmt'></span>)</span>
+						(net worth of <span id='colorChargeAmt'></span>)
 					</td>
 				</tr>
 
 				<!-- Red -->
 				<tr>
-					<td class="red light">
-						<span id="redQuarks" style="font-size:35px">0</span> red anti-quarks.
+					<td class="red light" style="font-size: 15px">
+						<span id="redQuarks" style="font-size: 30px">0</span> red
 					</td>
 					<td class="red">
-						You have <span id="redPower" style="font-size:35px">0.0</span> red power.
+						You have <span id="redPower" style="font-size: 25px">0.0</span> red power.
 					</td>
-					<td>
-						Translated to +<span class="red" id="redTranslation" style="font-size:35px"></span>% stronger galaxies.
+					<td rowspan=2>
+						Translated to +<span class="red" id="redTranslation" style="font-size: 25px"></span>% stronger galaxies.
 					</td>
 				</tr>
 				<tr>
 					<td class="red light" style="vertical-align: middle">
-						<button class='storebtn' id='redAssort' onclick='assignQuark("r")'>Assort</button>
+						<button class='storebtn' id='redAssort' onclick='assignQuark("r")' style="width: 120px; height: 36px">Assort</button>
 					</td>
 					<td class="red light">
 						Ratio: <input id="ratio_r" type="number" min=0 onchange="changeRatio('r')"></input>
@@ -4480,49 +4483,51 @@
 
 				<!-- Green -->
 				<tr>
-					<td class="green light">
-						<span id="greenQuarks" style="font-size:35px">0</span> green anti-quarks.
+					<td class="green light" style="font-size: 15px">
+						<span id="greenQuarks" style="font-size: 30px">0</span> green
 					</td>
 					<td class="green">
-						You have <span id="greenPower" style="font-size:35px">0.0</span> green power.
+						You have <span id="greenPower" style="font-size: 25px">0.0</span> green power.
 					</td>
-					<td>
-						Translated to +<span class="green" id="greenTranslation" style="font-size:35px"></span>x slower replicanti interval scaling.
+					<td rowspan=2>
+						Translated to +<span class="green" id="greenTranslation" style="font-size: 25px"></span>x slower replicanti interval scaling.
 					</td>
-					<td></td>
 				</tr>
 				<tr>
 					<td class="green light" style="vertical-align: middle">
-						<button class='storebtn' id='greenAssort' onclick='assignQuark("g")'>Assort</button>
+						<button class='storebtn' id='greenAssort' onclick='assignQuark("g")' style="width: 120px; height: 36px">Assort</button>
 					</td>
 					<td class="green light">
 						Ratio: <input id="ratio_g" type="number" min=0 onchange="changeRatio('g')"></input>
 					</td>
-					<td></td>
 				</tr>
 
 				<!-- Blue -->
 				<tr>
-					<td class="blue light">
-						<span id="blueQuarks" style="font-size:35px">0</span> blue anti-quarks.
+					<td class="blue light" style="font-size: 15px">
+						<span id="blueQuarks" style="font-size: 30px">0</span> blue
 					</td>
 					<td class="blue">
-						You have <span id="bluePower" style="font-size:35px">0.0</span> blue power.
+						You have <span id="bluePower" style="font-size: 25px">0.0</span> blue power.
 					</td>
-					<td>
-						Translated to +<span class="blue" id="blueTranslation" style="font-size:35px"></span>x multiplier to Tachyon particles.<br>
+					<td rowspan=2>
+						Translated to +<span class="blue" id="blueTranslation" style="font-size: 25px"></span>x multiplier to Tachyon particles.<br>
 						<span id="blueTransInfo"></span>
 					</td>
 				</tr>
 				<tr>
 					<td class="blue light" style="vertical-align: middle">
-						<button class='storebtn' id='blueAssort' onclick='assignQuark("b")'>Assort</button>
+						<button class='storebtn' id='blueAssort' onclick='assignQuark("b")' style="width: 120px; height: 36px">Assort</button>
 					</td>
 					<td class="blue light">
 						Ratio: <input id="ratio_b" type="number" min=0 onchange="changeRatio('b')"></input>
 					</td>
-					<td class="grey">
-						<button class='storebtn' id="neutralize_quarks" style="width: 360px" onclick='neutralize_quarks()'>Neutralize (requires <span id="neutralize_req"></span> anti-quarks)</button>
+				</tr>
+
+				<!-- Quantum Energy -->
+				<tr>
+					<td class="lime" colspan=3>
+						Your quantum energy is giving a +<span id="quarkEnergyEffect1" style="font-size:35px">0.0</span>% more color powers and +<span id="quarkEnergyEffect2" style="font-size:35px">0.0</span> total extra color powers.
 					</td>
 				</tr>
 
@@ -4541,8 +4546,9 @@
 						<br>
 						<input id="assort_percentage" type="number" min=1 max=100 onchange="changeAssortPercentage()">%
 					</td>
-					<td class="lime" rowspan=2>
-						Your quantum energy is giving a +<span id="quarkEnergyEffect1" style="font-size:35px">0.0</span>% more color powers and +<span id="quarkEnergyEffect2" style="font-size:35px">0.0</span> total extra color powers.
+					<td class="grey" rowspan=2>
+						<button class='storebtn' id="neutralize_quarks" style="width: 180px; height: 36px" onclick='neutralizeQuarks()'>Neutralize<br>(Cost: <span id="neutralize_req"></span> aQs)</button>
+						<button class='storebtn' id="respec_quarks" style="width: 180px; height: 36px" onclick='respecQuarks()'>Respec Quarks</button>
 					</td>
 				</tr>
 				<tr>
@@ -4558,46 +4564,56 @@
 		<div class='quantumtab' id='gluons'><table class="qTable">
 			<tr>
 				<td class="red">
-					You have <span id="rg" style="font-size:35px">0</span> red-green anti-gluons,
-					<br>
-					which multiply the red power by <span class="red" id="rPowerBuff" style="font-size:15px">1.00</span>x, but subtract the green power by -<span class="green" id="gPowerNerf" style="font-size:15px">0.00</span>.
-					<br>
-					(+<span id='rg_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='rg_prev'></span> to <span id='rg_next'>0</span>.)
-					<br><br>
-					<button id="entangle_rg" style="width: 180px; height: 36px" onclick="ENTANGLED_BOOSTS.choose('rg')">Use RG gluons to activate some boosts</button>
+					<span style="font-size: 15px"><span id="rg" style="font-size: 30px">0</span> red-green</span>
 					<br>
 					<span id="entangle_rg_bonus"></span>
+					<br>
+					<button id="entangle_rg" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('rg')">Use boosts with RG</button>
 				</td>
 				<td class="green">
-					You have <span id="gb" style="font-size:35px">0</span> green-blue anti-gluons,
-					<br>
-					which multiply the green power by <span class="green" id="gPowerBuff" style="font-size:15px">1.00</span>x, but subtract the blue power by -<span class="blue" id="bPowerNerf" style="font-size:15px">0.00</span>.
-					<br>
-					(+<span id='gb_gain'>0</span> on next quantum, but reduce your green anti-quarks from <span id='gb_prev'></span> to <span id='gb_next'>0</span>.)
-					<br><br>
-					<button id="entangle_gb" style="width: 180px; height: 36px" onclick="ENTANGLED_BOOSTS.choose('gb')">Use GB gluons to activate some boosts</button>
+					<span style="font-size: 15px"><span id="gb" style="font-size: 30px">0</span> green-blue</span>
 					<br>
 					<span id="entangle_gb_bonus"></span>
+					<br>
+					<button id="entangle_gb" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('gb')">Use boosts with GB</button>
 				</td>
 				<td class="blue">
-					You have <span id="br" style="font-size:35px">0</span> blue-red anti-gluons,
-					<br>
-					which multiply the blue power by <span class="blue" id="bPowerBuff" style="font-size:15px">1.00</span>x, but subtract the red power by -<span class="red" id="rPowerNerf" style="font-size:15px">0.00</span>.
-					<br>
-					(+<span id='br_gain'>0</span> on next quantum, but reduce your blue anti-quarks from <span id='br_prev'></span> to <span id='br_next'>0</span>.)
-					<br><br>
-					<button id="entangle_br" style="width: 180px; height: 36px" onclick="ENTANGLED_BOOSTS.choose('br')">Use BR gluons to activate some boosts</button>
+					<span style="font-size: 15px"><span id="br" style="font-size: 30px">0</span> blue-red</span>
 					<br>
 					<span id="entangle_br_bonus"></span>
+					<br>
+					<button id="entangle_br" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('br')">Use boosts with BR</button>
+				</td>
+			</tr>
+			<tr>
+				<td class="green">
+					(<span class="red" id="rPowerBuff" style="font-size:15px">1.00</span>x to red power, -<span class="green" id="gPowerNerf" style="font-size:15px">0.00</span> to green power)
+				</td>
+				<td class="blue">
+					(<span class="green" id="gPowerBuff" style="font-size:15px">1.00</span>x to green power, -<span class="blue" id="bPowerNerf" style="font-size:15px">0.00</span> to blue power)
+				</td>
+				<td class="red">
+					(<span class="blue" id="bPowerBuff" style="font-size:15px">1.00</span>x to blue power, -<span class="red" id="rPowerNerf" style="font-size:15px">0.00</span> to red power)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					(+<span id='rg_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='rg_prev'></span> to <span id='rg_next'>0</span>.)
+				</td>
+				<td>
+					(+<span id='gb_gain'>0</span> on next quantum, but reduce your green anti-quarks from <span id='gb_prev'></span> to <span id='gb_next'>0</span>.)
+				</td>
+				<td>
+					(+<span id='br_gain'>0</span> on next quantum, but reduce your blue anti-quarks from <span id='br_prev'></span> to <span id='br_next'>0</span>.)
 				</td>
 			</tr>
 			<tr>
 				<td colspan=3>
 					You have <span id="enB_glu_amt" style="font-size:35px">0</span> Entangled Boosters.
 					<br>
-					<button class="storebtn" id="enB_glu_buy" style="width: 360px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1: Requires <span id="enB_glu_cost">1</span> best Quantum Energy</button>
+					<button class="storebtn" id="enB_glu_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1 Entangled Booster<br>(requires <span id="enB_glu_cost">1</span> best Quantum Energy)</button>
 					<br>
-					<button class='storebtn' style="width: 360px" onclick="ENTANGLED_BOOSTS.maxBuy('glu')">Max buy Entangled Boosters</button>
+					<button class='storebtn' style="width: 180px" onclick="ENTANGLED_BOOSTS.maxBuy('glu')">Max buy</button>
 				</td>
 			</tr>
 			<tr>
@@ -4698,7 +4714,7 @@
 					<br>
 					<span id="enB_glu12_type"></span>
 					<br>
-					Color Subcharge multiplies Color Charge, but the effect is raised to <span id="enB_glu12_eff" style="font-size:24px"></span>. (not implemented)
+					Color Subcharge multiplies Color Charge, but the effect is raised to <span id="enB_glu12_eff" style="font-size:24px"></span>.
 				</td>
 			</tr>
 		</table></div>
@@ -4846,7 +4862,7 @@
 					<br>
 					<span id="pos_amt" style="font-size:25px">0</span> Positrons
 					<br>
-					<button class="storebtn" id="pos_toggle" onclick="pos.toggle()"></button>
+					<button class="storebtn" id="pos_toggle" style="width: 180px" onclick="pos.toggle()"></button>
 				</td>
 				<td class="dark_yellow">
 					<span id="pos_charge_formula"></span>
@@ -4856,9 +4872,9 @@
 				<td>
 					<span id="enB_pos_amt" style="font-size:25px">0</span> Positronic Boosters
 					<br>
-					<button class="storebtn" id="enB_pos_buy" style="width: 360px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> charge</button>
+					<button class="storebtn" id="enB_pos_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> Positronic Charge</button>
 					<br>
-					<button class='storebtn' style="width: 360px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy Positronic Boosters</button>
+					<button class='storebtn' style="width: 180px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy</button>
 				</td>
 			</tr>
 		</table>
@@ -4987,11 +5003,15 @@
 						</button>
 					</td>
 				</tr>
+				<tr>
+					<td id="pos_cloud_total"></td>
+					<td><button class="storebtn" id="pos_toggle" style="width: 180px" onclick="pos.apply()">Apply changes</button></td>
+				</tr>
 			</table></td>
 			<td id="pos_boost_div" style="vertical-align: top"><b style="font-size: 15px">Boost Overview</b><br>
-			<button id="entangle_rg_pos" style="width: 36px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('rg')">RG</button>
-			<button id="entangle_gb_pos" style="width: 36px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('gb')">GB</button>
-			<button id="entangle_br_pos" style="width: 36px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('br')">BR</button>
+			<button id="entangle_rg_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('rg')">RG</button>
+			<button id="entangle_gb_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('gb')">GB</button>
+			<button id="entangle_br_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('br')">BR</button>
 			<br>
 			<span id="enB_pos_next"></span><br>
 			<span id="pos_cloud_req"></span>

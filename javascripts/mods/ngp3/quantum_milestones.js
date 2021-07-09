@@ -95,6 +95,7 @@ let qMs = {
 		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 16 ? "block" : "none"
 		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 16 ? "" : "none"
 		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 23 ? "" : "none"
+		getEl('respec_quarks').style.display = qMs.tmp.amt >= 24 ? "" : "none"
 	},
 	updateDisplayOnTick() {
 		let types = qMs.data.types
@@ -245,20 +246,18 @@ let qMs = {
 		effGot: () => "You can now automatically assort quarks."
 	},
 	23: {
-		req: 40,
+		req: 35,
 		disablable: true,
 		eff: () => "Auto-dilation upgrades maximize all repeatable dilation upgrades",
 		effGot: () => "Auto-dilation upgrades now can maximize all repeatable dilation upgrades."
 	},
 	24: {
-		req: 50,
-		forceDisable: () => QCs.inAny(),
-		disablable: true,
-		eff: () => "Each Quantum dilates Replicantis by ^0.95.",
-		effGot: () => "Each following Quantum run now dilates Replicantis by ^0.95."
+		req: 40,
+		eff: () => "You can respec all your colored quarks anytime",
+		effGot: () => "You can now respec all your colored quarks anytime."
 	},
 	25: {
-		req: 75,
+		req: 50,
 		eff: () => "Able to maximize Meta-Dimension Boosts",
 		effGot: () => "You now can maximize Meta-Dimension Boosts."
 	},

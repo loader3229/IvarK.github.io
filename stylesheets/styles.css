@@ -145,8 +145,8 @@ button {
 .quantumchallengediv {
 	display:table;
 	text-align:center;
-	width: 450px;
-	height: 120px;
+	width: 350px;
+	height: 140px;
 	color: #32c832;
 	background: #0a640a;
 	font-weight: bold;
@@ -159,8 +159,6 @@ button {
 	margin: 3px 8px;
 	position: relative;
 }
-
-#pairedchallenges .quantumchallengediv { height: 90px }
 
 .completedchallengesbtn {
   width:150px;
@@ -2224,6 +2222,14 @@ td.red.light {
 	background: rgba(255, 127, 127, 0.25)
 }
 
+.red_anti {
+	color: rgba(127, 255, 255, 0.75);
+	text-shadow: 1px 1px 0px #00ffff
+}
+td.red_anti {
+	background: rgba(0, 63, 63, 0.75)
+}
+
 .orange {
 	color: #bf5f00
 }
@@ -2262,6 +2268,21 @@ td.green.light {
 	background: rgba(127, 255, 127, 0.25)
 }
 
+.green_anti {
+	color: rgba(255, 127, 255, 0.75);
+	text-shadow: 1px 1px 0px #ff00ff
+}
+td.green_anti {
+	background: rgba(63, 0, 63, 0.75)
+}
+
+.cyan {
+	color: #00bfbf
+}
+td.cyan {
+	background: rgba(0, 191, 191, 0.25)
+}
+
 .blue {
 	color: #0000bf
 }
@@ -2270,6 +2291,14 @@ td.blue {
 }
 td.blue.light {
 	background: rgba(127, 127, 255, 0.25)
+}
+
+.blue_anti {
+	color: rgba(255, 255, 127, 0.75);
+	text-shadow: 1px 1px 0px #ffff00
+}
+td.blue_anti {
+	background: rgba(63, 63, 0, 0.75)
 }
 
 .indigo {
@@ -2287,10 +2316,17 @@ td.violet {
 }
 
 .uv {
-	color: #8f00bf
+	color: #9f00bf
 }
 td.uv {
-	background: rgba(143, 0, 191, 0.25)
+	background: rgba(159, 0, 191, 0.25)
+}
+
+.magenta {
+	color: #bf00bf
+}
+td.magenta {
+	background: rgba(191, 0, 191, 0.25)
 }
 
 .black {

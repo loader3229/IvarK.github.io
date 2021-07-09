@@ -40,7 +40,7 @@ function getMDMultiplier(tier) {
 	if (tier % 2 == 1 && hasAch("ng3p24")) ret = ret.times(player.meta[tier + 1].amount.add(1).pow(0.01))
 
 	//Positronic Boosts:
-	if (tier == 2 && enB.active("pos", 2)) ret = ret.times(enB_tmp.pos2.acc)
+	if (tier == 1 && enB.active("pos", 2)) ret = ret.times(enB_tmp.pos2.acc)
 
 	//Dilation Upgrades:
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
@@ -379,7 +379,7 @@ function updateMetaDimensions () {
 	getEl("quantum").innerHTML = tmp.quUnl ? "Gain " + shortenDimensions(quarkGain()) + " aQs." : 'Reset your progress for a new layer...'
 	getEl("quantum").className = pH.can("quantum") ? 'quantumbtn' : 'unavailablebtn'
 
-	getEl("metaAccelerator").textContent = enB.active("pos", 2) ? "Meta Accelerator: " + shorten(enB_tmp.pos2.acc) + "x to MD2, DT, and replicate interval" : ""
+	getEl("metaAccelerator").textContent = enB.active("pos", 2) ? "Meta Accelerator: " + shorten(enB_tmp.pos2.acc) + "x to MA, DT, and replicate interval" : ""
 }
 
 function getDil15Bonus() {

@@ -336,7 +336,6 @@ function doEternityResetStuff(layer = 4, chall) {
 
 	if (chall == 14) player.replicanti.kept = player.replicanti.amount
 	player.replicanti.amount = layer >= 5 ? (
-		qMs.isOn(24) ? Decimal.pow(10, Math.pow(Decimal.log10(player.replicanti.kept || player.replicanti.amount), 0.95)) :
 		new Decimal(getEternitied() >= 50 ? 1 : 0)
 	) : (
 		moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[2] && (chall == 0 || chall == "dil") ? Decimal.pow(player.replicanti.kept || player.replicanti.amount, 0.995).floor().max(1) :

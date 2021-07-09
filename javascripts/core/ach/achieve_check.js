@@ -248,7 +248,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.infinityPoints.log10() >= 3e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
 
 	if (player.meta.bestAntimatter.gte(Decimal.pow(Number.MAX_VALUE, 3)) && player.meta[5].amount.lt(Math.sqrt(Number.MAX_VALUE))) giveAchievement("Old memories come true")
-	if (player.timestudy.theorem >= 1e85 && !QCs.isntCatched()) giveAchievement("Infinity Morals")
+	if (player.timestudy.theorem >= 1e90 && !QCs.isntCatched()) giveAchievement("Infinity Morals")
 	if (player.eightBought >= 1/0 && (player.replicanti.galaxies + tmp.extraRG) == 0) giveAchievement("Intergalactic")
 	if (player.eternityPoints.e >= 1/0 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 

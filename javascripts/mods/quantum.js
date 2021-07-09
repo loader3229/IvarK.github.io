@@ -11,7 +11,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 			if (!confirm("This performs a forced Quantum reset, but you will be brought into a real challenge. All rebuyables will also be resetted. Are you sure you want to take this challenge down?")) return
 		}
 		mode = "qc"
-		data = [qc]
+		data = typeof(qc) == "number" ? [qc] : qc
 	}
 	if (aarMod.quantumConf && !(auto || force)) if (!confirm(player.masterystudies ? "Quantum will reset everything Eternity resets, and including all Eternity Content. You will gain a quark and unlock various upgrades." + (inNGM(2) ? " WARNING! THIS EXITS NG-- MODE DUE TO BALANCING REASONS!" : ""):"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
 	if (!pH.did("quantum")) if (!confirm("Are you sure you want to do this? You will lose everything you have!")) return
@@ -313,7 +313,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 			let qc = qcData[0]
 			QCs_save.comps = Math.max(QCs_save.comps, qc)
 			QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, qu_save.best)
-			QCs_save.best_exclusion[qc] = Math.max(QCs_save.best_exclusion[qc] || 1/0, pos_tmp.cloud[QCs_save.disable_cloud])
 		}
 	}
 	if (isQC) {

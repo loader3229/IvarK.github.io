@@ -2263,7 +2263,7 @@ function setupNGP31Versions() {
 		mTs.respec(true)
 	}
 	if (aarMod.ngp3Build < 20210625 && (player.masterystudies.includes("t241") || player.masterystudies.includes("t282"))) resetReplicantiUpgrades()
-	if (aarMod.ngp3Build < 20210705 && Decimal.log10(player.money) >= 4e12) {
+	if (aarMod.ngp3Build < 20210709 && Decimal.log10(player.money) >= 4e12) {
 		player.totalMoney = new Decimal(1)
 		qu_save.quarks = new Decimal(0)
 		qu_save.gluons = {
@@ -2280,7 +2280,7 @@ function setupNGP31Versions() {
 		forceToQuantumAndRemove = true
 		setTTAfterQuantum = 1e80
 	}
-	aarMod.ngp3Build = 20210705
+	aarMod.ngp3Build = 20210709
 }
 
 function checkNGM(imported) {

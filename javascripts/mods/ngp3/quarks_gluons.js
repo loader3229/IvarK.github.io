@@ -77,6 +77,7 @@ function assignAll(auto) {
 	var oldQuarks = getAssortAmount()
 	var colors = ['r','g','b']
 	var mult = getQuarkAssignMult()
+	if (oldQuarks.eq(0)) return
 	for (c = 0; c < 3; c++) {
 		var toAssign = oldQuarks.times(ratios[colors[c]]/sum).round()
 		if (toAssign.gt(0)) {
@@ -137,7 +138,7 @@ function rotateAutoAssign() {
 	getEl('autoAssignRotate').textContent="Rotation: "+(qu_save.autoOptions.assignQKRotate>1?"Left":qu_save.autoOptions.assignQKRotate?"Right":"None")
 }
 
-function neutralize_quarks() {
+function neutralizeQuarks() {
 	if (colorCharge.normal.chargeAmt.eq(0) || !qu_save.quarks.gte(colorCharge.neutralize.total)) return
 
 	var sum = 0
@@ -150,6 +151,22 @@ function neutralize_quarks() {
 
 	updateColorCharge()
 	if (player.ghostify.another > 0) player.ghostify.another--
+}
+
+function respecQuarks() {
+	if (!confirm("Are you sure you want to respec your colored quarks? This will restart your Quantum run!")) return
+
+	var sum = 0
+	var colors = ['r','g','b']
+	for (var c = 0; c < 3; c++) {
+		var color = colors[c]
+		sum = qu_save.usedQuarks[color].add(sum)
+		qu_save.usedQuarks[color] = new Decimal(0)
+	}
+	qu_save.quarks = qu_save.quarks.add(sum)
+	quantum(false, true)
+
+	if (qu_save.autoOptions.assignQK) assignAll(true)
 }
 
 //Color Charge
@@ -215,6 +232,9 @@ function updateColorCharge() {
 	colorCharge.neutralize.total = colorCharge.neutralize[sorted[1]].add(colorCharge.neutralize[sorted[2]]).round()
 
 	updateQuarksTabOnUpdate()
+
+	//Death Mode
+	if (tmp.dtMode) qu_save.entColor = usedQuarks[sorted[0]].gte(0) && usedQuarks[sorted[1]].gte(0) ? sorted[0] + sorted[1] : ""
 }
 
 function getColorPowerQuantity(color, base) {
@@ -278,7 +298,7 @@ function getQEQuarksPortion() {
 
 function getQEGluonsPortion() {
 	let exp = tmp.qe.exp
-	return Math.pow(qu_save.gluons[qu_save.entColor || "rg"].add(1).log10(), exp) * (tmp.exMode ? 0 : tmp.ngp3_mul ? 1 : 0.25)
+	return enB.colorUsed() ? Math.pow(qu_save.gluons[enB.colorUsed()].add(1).log10(), exp) * (tmp.exMode ? 0 : tmp.ngp3_mul ? 1 : 0.25) : 0
 }
 
 function getQuantumEnergyMult() {
@@ -399,7 +419,7 @@ function updateGluonicBoosts() {
 	data.g = { mult: getGluonEffBuff(gluons.gb), sub: getGluonEffNerf(gluons.rg, "g") } //x -> x * [GB effect] - [RG effect]
 	data.b = { mult: getGluonEffBuff(gluons.br), sub: getGluonEffNerf(gluons.gb, "b") } //x -> x * [BR effect] - [GB effect]
 
-	let type = qu_save.entColor || "rg"
+	let type = enB.colorUsed()
 	data.enAmt = enBData.glu.gluonEff(gluons[type])
 	data.masAmt = enBData.glu.gluonEff(tmp.exMode ? gluons[type].times(3) : gluons.rg.add(gluons.gb).add(gluons.br))
 
@@ -418,7 +438,7 @@ function getGluonEffNerf(x, color) {
 	let r = Math.max(Math.pow(Decimal.add(x, 1).log10(), tmp.exMode ? 1.8 : 1.5) - colorCharge.subCancel, 0)
 	if (tmp.ngp3_mul) r *= 0.5
 
-	let gluon = qu_save.entColor || "rg"
+	let gluon = enB.colorUsed()
 	if (color == gluon[0] || color == gluon[1]) r *= tmp.exMode ? 0.5 : 0
 	return r
 }
@@ -468,9 +488,14 @@ var enB = {
 		return (tmp.dtMode && data[x].masReqDeath) || (tmp.exMode && data[x].masReqExpert) || data[x].masReq
 	},
 
+	colorUsed(x) {
+		if (qu_save.entColor === undefined) qu_save.entColor = "rg"
+		return qu_save.entColor
+	},
 	colorMatch(type, x) {
 		var data = this[type][x]
-		var gluon = qu_save.entColor || "rg"
+		var gluon = enB.colorUsed()
+		if (!gluon) return
 
 		var r = data.type == gluon[0] || data.type == gluon[1]
 		if (data.anti) r = !r
@@ -478,7 +503,7 @@ var enB = {
 	},
 
 	choose(x) {
-		if ((qu_save.entColor || "rg") == x) return
+		if ((enB.colorUsed()) == x) return
 		if (!qu_save.entBoosts || qu_save.gluons.rg.max(qu_save.gluons.gb).max(qu_save.gluons.br).eq(0)) {
 			alert("You need to get at least 1 Entangled Boost and have gluons before choosing a type!")
 			return
@@ -550,7 +575,7 @@ var enB = {
 		},
 		gluonEff(x) {
 			let l = Decimal.add(x, 1).log10()
-			return Math.sqrt(l * Math.max(10 - 10 / l, 1))
+			return Math.pow(Math.log2(l + 1), 1.5)
 		},
 
 		activeReq(x) {
@@ -621,7 +646,7 @@ var enB = {
 		},
 		5: {
 			req: 9,
-			masReq: 1/0,
+			masReq: 100,
 
 			title: "Otherworldly Galaxies",
 			type: "b",
@@ -758,7 +783,7 @@ var enB = {
 		},
 
 		activeReq(x) {
-			return !QCs.isntCatched() ? pos.on() && enB.mastered("pos", x) && (!QCs.in(2) || this.lvl(x) != QCs_save.qc2) : tmp.bgMode || enB.mastered("pos", x) || pos.on()
+			return !QCs.isntCatched() ? pos.on() && enB.mastered("pos", x) && !pos.excluded(x) : tmp.bgMode || enB.mastered("pos", x) || pos.on()
 		},
 
 		eff(x) {
@@ -874,7 +899,7 @@ var enB = {
 		},
 		5: {
 			req: 50,
-			masReq: 1/0,
+			masReq: 70,
 			chargeReq: 100,
 
 			title: "Transfinite Time",
@@ -888,8 +913,8 @@ var enB = {
 			}
 		},
 		6: {
-			req: 1/0,
-			masReq: 1/0,
+			req: 100,
+			masReq: 0,
 			chargeReq: 4,
 
 			title: "Tickspeed Flux",
@@ -979,7 +1004,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return 0
+				return 1
 			},
 			effDisplay(x) {
 				return x.toFixed(3)
@@ -1006,13 +1031,17 @@ var enB = {
 	update(type) {
 		var data = enB
 		var typeData = data[type]
+		var colors = {
+			r: "red",
+			g: "green",
+			b: "blue"
+		}
 
 		getEl("enB_" + type + "_amt").textContent = getFullExpansion(typeData.amt() || 0)
 		getEl("enB_" + type + "_cost").textContent = shorten(typeData.cost())
 		getEl("enB_" + type + "_next").textContent = ""
 
 		var has = true
-
 		for (var e = 1; e <= typeData.max; e++) {
 			var active = data.active(type, e)
 			var mastered = data.mastered(type, e)
@@ -1026,7 +1055,7 @@ var enB = {
 			el.parentElement.style.display = has ? "" : "none"
 
 			if (has) {
-				el.parentElement.className = !active ? "red" : mastered ? "yellow" : enB.colorMatch(type, e) ? "green" : "orange"
+				el.parentElement.className = !active ? "black" : mastered ? "lime" : enB.colorMatch(type, e) ? colors[typeData[e].type] + (typeData[e].anti ? "_anti" : "") : "grey"
 				el.textContent = typeData.name + " Boost #" + e
 			}
 		}
@@ -1146,7 +1175,7 @@ function updateQuarksTabOnUpdate(mode) {
 	} else {
 		var color = colorShorthands[colorCharge.normal.color]
 		getEl("colorCharge").innerHTML =
-			'<span class="' + color + '">' + color + '</span> charge of <span style="font-size:35px">' + shorten(colorCharge.normal.charge * tmp.qe.eff1) + "</span>" +
+			'<span class="' + color + '">' + color + '</span> charge of <span style="font-size: 25px">' + shorten(colorCharge.normal.charge * tmp.qe.eff1) + "</span>" +
 			(hasAch("ng3p13") ? ", which cancelling the subtraction of gluon effects by " + shorten(colorCharge.subCancel) : "")
 		getEl("colorChargeAmt").innerHTML = shortenDimensions(colorCharge.normal.chargeAmt) + " " + color + " anti-quarks"
 		getEl("colorChargeColor").className = color
@@ -1159,7 +1188,7 @@ function updateQuarksTabOnUpdate(mode) {
 	if (colorCharge.sub) {
 		var color = colorShorthands[colorCharge.sub.color]
 		getEl("colorSubchargeDiv").className = colorCharge.sub.charge == 0 ? "black" : color + " light"
-		getEl("colorSubcharge").innerHTML= colorCharge.sub.charge == 0 ? "neutral subcharge" : color + " subcharge of <span style='font-size:35px'>" + shorten(colorCharge.sub.charge) + "</span>"
+		getEl("colorSubcharge").innerHTML= colorCharge.sub.charge == 0 ? "neutral subcharge" : color + " subcharge of <span style='font-size: 25px'>" + shorten(colorCharge.sub.charge) + "</span>"
 		getEl("colorSubchargeEff").textContent = shorten(colorCharge.sub.eff)
 	}
 
@@ -1205,18 +1234,22 @@ function updateGluonsTabOnUpdate(mode) {
 	enB.update("glu")
 	enB.update("pos")
 
-	let typeUsed = qu_save.entColor || "rg"
+	let typeUsed = enB.colorUsed()
 	let types = ["rg", "gb", "br"]
 	for (var i = 0; i < types.length; i++) {
 		var type = types[i]
+		getEl("entangle_" + type).style.display = tmp.dtMode ? "none" : ""
 		getEl("entangle_" + type).className = "gluonupgrade " + type
+		getEl("entangle_" + type + "_pos").style.display = tmp.dtMode ? "none" : ""
 		getEl("entangle_" + type + "_pos").className = "gluonupgrade " + type
-		getEl("entangle_" + type + "_bonus").innerHTML = "<br>"
+		getEl("entangle_" + type + "_bonus").textContent = ""
 	}
 
-	getEl("entangle_" + typeUsed).className = "gluonupgrade chosenbtn"
-	getEl("entangle_" + typeUsed + "_pos").className = "gluonupgrade  chosenbtn"
-	getEl("entangle_" + typeUsed + "_bonus").textContent = "Entanglement Bonus: +" + shorten(getQEGluonsPortion() * tmp.qe.mult / tmp.qe.div) + " quantum energy"
+	if (typeUsed != "") {
+		getEl("entangle_" + typeUsed).className = "gluonupgrade chosenbtn"
+		getEl("entangle_" + typeUsed + "_pos").className = "gluonupgrade  chosenbtn"
+		getEl("entangle_" + typeUsed + "_bonus").textContent = "Entanglement Bonus: +" + shorten(getQEGluonsPortion() * tmp.qe.mult / tmp.qe.div) + " quantum energy"
+	}
 
 	getEl("masterNote").style.display = enB.mastered("glu", 1) ? "" : "none"
 }

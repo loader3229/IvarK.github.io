@@ -4,7 +4,7 @@ var QCs = {
 			in: [],
 			comps: 0,
 			best: {},
-			best_exclusion: {},
+			perks_unl: {},
 			cloud_disable: 1
 		}
 		return QCs_save
@@ -23,6 +23,11 @@ var QCs = {
 
 		if (QCs_save.qc1 === undefined) this.reset()
 		if (typeof(QCs_save.qc2) !== "number") QCs_save.qc2 = QCs_save.cloud_disable || 1
+
+		if (QCs_save.best_exclusion) {
+			QCs_save.perks_unl = {}
+			delete QCs_save.best_exclusion
+		}
 
 		this.updateTmp()
 		this.updateDisp()
@@ -45,9 +50,17 @@ var QCs = {
 			goalDisp: () => (tmp.dtMode ? 5 : 4) + " Replicated Compressors",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.3),
 			hint: "Figure out how to get more Replicanti Chance (MS35), and to minimize the spending of TT.",
+
 			rewardDesc: (x) => "You can keep Replicated Compressors.",
 			rewardEff(str) {
 				return 0.1
+			},
+
+			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkReqs: [0, 0],
+			perkMasReqs: [0, 0],
+			perkEff() {
+				return 1
 			},
 
 			ttScaling() {
@@ -109,15 +122,26 @@ var QCs = {
 			goalDisp: () => "7 Positronic Boosters",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.1),
 			hint: "Mess around Positronic Cloud by swapping and excluding.",
+
 			rewardDesc: (x) => "Color charge also multiply a color power that's used by it. (" + shorten(x) + "x)",
 			rewardEff(str) {
 				return Math.log10(colorCharge.normal.charge + 1) / 2 + 1
 			},
 
+			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkReqs: [0, 0],
+			perkMasReqs: [0, 0],
+			perkEff() {
+				return 1
+			},
+
 			updateCloudDisp() {
+				if (!pos_tmp.cloud) return
+
 				let unl = QCs.in(2)
 				for (let t = 1; t <= 3; t++) {
-					getEl("pos_cloud" + t + "_toggle").style.display = unl && pos_tmp.cloud[t] ? "" : "none"
+					getEl("pos_cloud" + t + "_toggle").parentElement.style.display = unl && pos_tmp.cloud[t] ? "" : "none"
+					getEl("pos_cloud" + t + "_cell").colspan = unl && pos_tmp.cloud[t] ? 1 : 2
 					if (unl) getEl("pos_cloud" + t + "_toggle").className = (QCs_save.qc2 == t ? "chosenbtn" : "storebtn") + " longbtn"
 				}
 			},
@@ -135,8 +159,16 @@ var QCs = {
 			goalDisp: () => "4 successful dilation runs",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 0.15),
 			hint: "Try not to automate dilation, and also not to dilate time frequently.",
+
 			rewardDesc: (x) => "You sacrifice 30% of Meta Dimension Boosts instead of 25%.",
 			rewardEff(str) {
+				return 1
+			},
+
+			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkReqs: [0, 0],
+			perkMasReqs: [0, 0],
+			perkEff() {
 				return 1
 			},
 
@@ -154,9 +186,17 @@ var QCs = {
 			goalDisp: () => getFullExpansion(2900) + " Tachyonic Galaxies",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
 			hint: "Test every single combination of this exclusion, and try to minimize galaxies.",
+
 			rewardDesc: (x) => "Replicated Galaxies contribute to Positronic Charge.",
 			rewardEff(str) {
 				return
+			},
+
+			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkReqs: [0, 0],
+			perkMasReqs: [0, 0],
+			perkEff() {
+				return 1
 			},
 
 			updateTmp() {
@@ -202,8 +242,16 @@ var QCs = {
 			goalDisp: () => shortenCosts(Decimal.pow(10, 2.4e6)) + " Eternity Points",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.7),
 			hint: "Do sub-1 Eternity runs before getting Compressors.",
+
 			rewardDesc: (x) => "Sacrificed things are stronger for Positrons, but you sacrifice less galaxies.",
 			rewardEff(str) {
+				return 1
+			},
+
+			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkReqs: [0, 0],
+			perkMasReqs: [0, 0],
+			perkEff() {
 				return 1
 			},
 
@@ -235,16 +283,23 @@ var QCs = {
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.7),
 			hint: "Do long Eternity runs.",
 
+			rewardDesc: (x) => "Replicantis also produce Replicanti Energy; but also boosted by time since Eternity. (" + shorten(QCs_tmp.rewards[6]) + "x)",
+			rewardEff(str) {
+				return (9 / (Math.abs(50 - player.thisEternity) + 1) + 1) * Math.log2(player.thisEternity / 10 + 2)
+			},
+
+			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkReqs: [0, 0],
+			perkMasReqs: [0, 0],
+			perkEff() {
+				return 1
+			},
+
 			updateTmp() {
 				delete QCs_tmp.qc6
 				if (!QCs.in(6)) return
 
 				QCs_tmp.qc6 = Math.log2(Math.max(-QCs_save.qc6, 0) / 100 + 1) + 2
-			},
-
-			rewardDesc: (x) => "Replicantis also produce Replicanti Energy; but also boosted by time since Eternity. (" + shorten(QCs_tmp.rewards[6]) + "x)",
-			rewardEff(str) {
-				return (9 / (Math.abs(50 - player.thisEternity) + 1) + 1) * Math.log2(player.thisEternity / 10 + 2)
 			}
 		},
 		7: {
@@ -254,6 +309,14 @@ var QCs = {
 			goalDisp: () => shortenDimensions(5e86) + " Time Theorems",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 3.7),
 			hint: "It's a tricky puzzle.",
+
+			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkReqs: [0, 0],
+			perkMasReqs: [0, 0],
+			perkEff() {
+				return 1
+			},
+
 			rewardDesc: (x) => "You keep that set of Mastery Studies, and unlock Paired Challenges. (not implemented)",
 			rewardEff(str) {
 				return 1
@@ -266,6 +329,14 @@ var QCs = {
 			goalDisp: () => "(not implemented)",
 			goalMA: new Decimal(1),
 			hint: "Trial and error.",
+
+			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkReqs: [0, 0],
+			perkMasReqs: [0, 0],
+			perkEff() {
+				return 1
+			},
+
 			rewardDesc: (x) => "In dilation runs, strengthen the base formulas of RGs, but remove multipliers. (not implemented)",
 			rewardEff(str) {
 				return 1
@@ -274,7 +345,7 @@ var QCs = {
 	},
 
 	updateTmp() {
-		let data = { unl: [], in: [], rewards: {} }
+		let data = { unl: [], in: [], rewards: {}, perks: {}, show_perks: QCs_tmp.show_perks }
 		QCs_tmp = data
 
 		if (!this.unl()) return
@@ -295,6 +366,7 @@ var QCs = {
 		for (let x = this.data.max; x; x--) {
 			if (data.unl.includes(x)) {
 				data.rewards[x] = this.data[x].rewardEff(1)
+				if (PCs.unl()) data.perks[x] = this.data[x].perkEff(1)
 			}
 			if (this.data[x].updateTmp) this.data[x].updateTmp()
 		}
@@ -315,9 +387,6 @@ var QCs = {
 	done(x) {
 		return this.unl() && QCs_save.comps >= x
 	},
-	isRewardOn(x) {
-		return this.done(x) && QCs_tmp.rewards[x]
-	},
 	getGoal() {
 		return QCs_tmp.in.length >= 2 ? true : player.meta.bestAntimatter.gte(this.getGoalMA()) && this.data[QCs_tmp.in[0]].goal()
 	},
@@ -327,6 +396,27 @@ var QCs = {
 	getGoalMA() {
 		return this.data[QCs_tmp.in[0]].goalMA
 	},
+	isRewardOn(x) {
+		return this.done(x) && QCs_tmp.rewards[x]
+	},
+
+	perkUnl(x) {
+		return PCs.unl() && QCs_save.perks_unl[x]
+	},
+	perkCan(x) {
+		var data = this.data[x]
+		if (!PCs.unl()) return
+		if (pos_tmp.cloud == undefined) return
+		if (this.perkMastered(x)) return
+		if (this.perkUnl(x)) return pos_tmp.cloud.total >= data.perkMasReqs[0] && pos_tmp.cloud.exclude >= data.perkMasReqs[1]
+		return pos_tmp.cloud.total >= data.perkReqs[0] && pos_tmp.cloud.exclude >= data.perkReqs[1]
+	},
+	perkMastered(x) {
+		return QCs_save.perks_unl[x] == 2
+	},
+	perkActive(x) {
+		return QCs_tmp.perks[x] && this.perkUnl(x) && (this.perkMastered(x) ? this.inAny() : this.in(x))
+	},
 
 	tp() {
 		showTab("challenges")
@@ -334,6 +424,9 @@ var QCs = {
 	},
 	start(x) {
 		quantum(false, true, x)
+	},
+	restart(x) {
+		quantum(false, true, QCs_save.in)
 	},
 
 	setupDiv() {
@@ -349,7 +442,7 @@ var QCs = {
 		'<td><div class="quantumchallengediv" id="qc_' + x + '_div">' +
 		'<span id="qc_' + x + '_desc"></span><br><br>' +
 		'<div class="outer"><button id="qc_' + x + '_btn" class="challengesbtn" onclick="QCs.start(' + x + ')">Start</button><br>' +
-		'Goal: <span id="qc_' + x + '_goal"></span><br>' +
+		'<span id="qc_' + x + '_goal"></span><br>' +
 		'<span id="qc_' + x + '_reward"></span>' +
 		'</div></div></td>',
 	divInserted: false,
@@ -358,6 +451,7 @@ var QCs = {
 		let unl = this.divInserted && this.unl() && pH.shown("quantum")
 
 		//In Quantum Challenges
+		getEl("qc_restart").style.display = QCs.in(2) || QCs.in(8) ? "" : "none"
 		getEl("repCompress").style.display = QCs_tmp.qc1 ? "" : "none"
 		this.data[2].updateCloudDisp()
 		this.data[4].updateDisp()
@@ -371,13 +465,29 @@ var QCs = {
 			var cUnl = QCs_tmp.unl.includes(qc)
 
 			getEl("qc_" + qc + "_div").style.display = cUnl ? "" : "none"
-			if (cUnl) {
+			if (QCs_tmp.show_perks) {
+				var reqs = this.data[qc][this.perkUnl(qc) ? "perkMasReqs" : "perkReqs"]
+				getEl("qc_" + qc + "_desc").textContent = "Quantum Challenge " + qc + " Perk: " + this.data[qc].perkDesc(QCs_tmp.perks[qc])
+				getEl("qc_" + qc + "_goal").textContent = (this.perkUnl(qc) ? "Mastery" : "Requires") + ": Complete QC" + qc + " + " + reqs[0] + " used Positronic Boosts + " + reqs[1] + " excluded Positronic Boosts"
+				getEl("qc_" + qc + "_btn").textContent = this.perkCan(qc) ? "Can " + (this.perkUnl(qc) ? "master!" : "unlock!") :
+					!this.perkUnl(qc) ? "Locked" :
+					this.inAny() ? (this.perkActive(qc) ? "Active" : "Inactive") :
+					this.perkMastered(qc) ? "Mastered" : "Obtained"
+				getEl("qc_" + qc + "_btn").className = this.perkCan(qc) ? (this.in(qc) ? "onchallengebtn" : "challengesbtn") :
+					!this.perkUnl(qc) ? "lockedchallengesbtn" :
+					this.inAny() ? (this.perkActive(qc) ? "onchallengebtn" : "lockedchallengesbtn") :
+					this.perkMastered(qc) ? "completedchallengesbtn" : "onchallengebtn"
+			} else if (cUnl) {
 				getEl("qc_" + qc + "_desc").textContent = this.data[qc].desc()
-				getEl("qc_" + qc + "_goal").textContent = shorten(this.data[qc].goalMA) + " meta-antimatter and " + this.data[qc].goalDisp()
+				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.data[qc].goalMA) + " meta-antimatter and " + this.data[qc].goalDisp()
 				getEl("qc_" + qc + "_btn").textContent = this.in(qc) ? "Running" : this.done(qc) ? "Completed" : "Start"
 				getEl("qc_" + qc + "_btn").className = this.in(qc) ? "onchallengebtn" : this.done(qc) ? "completedchallengesbtn" : "challengesbtn"
 			}
 		}
+
+		getEl("qc_perks").style.display = PCs.unl() ? "" : "none"
+		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : "View perks"
+		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? "Note: Perks only work in specific Quantum Challenge. However, mastered Perks work in any Quantum Challenge!" : ""
 
 		//Paired Challenges
 		/*
@@ -436,10 +546,14 @@ var QCs = {
 	},
 	updateBest() {
 		//Rework coming soon
+	},
+	viewPerks() {
+		QCs_tmp.show_perks = !QCs_tmp.show_perks
+		QCs.updateDisp()
 	}
 }
 var QCs_save = undefined
-var QCs_tmp = { unl: [], in: [], rewards: {} }
+var QCs_tmp = { unl: [], in: [], rewards: {}, perks: {}, show_perks: false }
 
 let QUANTUM_CHALLENGES = QCs
 
@@ -476,6 +590,10 @@ var PCs = {
 		this.updateTmpOnTick()
 	},
 	updateTmpOnTick() {
+	},
+
+	in(x) {
+		return QCs_tmp.in.length >= 2
 	},
 
 	updateDisp() {

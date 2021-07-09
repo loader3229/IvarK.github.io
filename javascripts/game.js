@@ -3777,7 +3777,7 @@ function doPerSecondNGP3Stuff(){
 	doNGP3UnlockStuff()
 	notifyGhostifyMilestones()
 	ghostifyAutomationUpdatingPerSecond()
-	if (qu_save.autoOptions.assignQK && player.ghostify.milestones >= 8) assignAll(true)
+	if (qu_save.autoOptions.assignQK) assignAll(true)
 
 	givePerSecondNeuts()
 }
