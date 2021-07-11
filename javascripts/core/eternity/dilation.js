@@ -701,7 +701,7 @@ function updateDilationDisplay() {
 }
 
 function getDilationTotalTTReq() {
-	return tmp.ngC ? 13500 : 13000
+	return tmp.ngp3 ? 0 : tmp.ngC ? 13500 : 13000
 }
 
 function getDil26Mult() {

@@ -610,7 +610,7 @@ var PCs = {
 	},
 
 	unl() {
-		return qu_save.qc && qu_save.qc.comps >= 7
+		return qu_save && qu_save.qc && qu_save.qc.comps >= 7
 	},
 	updateTmp() {
 		if (!PCs_tmp.unl) return
