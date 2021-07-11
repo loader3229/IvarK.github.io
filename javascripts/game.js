@@ -3481,7 +3481,7 @@ function gainEternitiedStat() {
 function gainBankedInf() {
 	let ret = 0 
 	let numerator = player.infinitied
-	if (qMs.tmp.amt >= 21 || hasAch("ng3p73")) numerator = nA(getInfinitiedGain(), player.infinitied)
+	if (qMs.tmp.amt >= 22 || hasAch("ng3p73")) numerator = nA(getInfinitiedGain(), player.infinitied)
 	let frac = 0.05
 	if (hasTimeStudy(191)) ret = nM(numerator, frac)
 	if (hasAch("r131")) ret = nA(nM(numerator, frac), ret)
@@ -3670,7 +3670,13 @@ function dilationStuffABTick(){
 	var canAutoUpgs = canAutoDilUpgs()
 	getEl('dilUpgsauto').style.display = canAutoUpgs ? "" : "none"
 	getEl('distribEx').style.display = hasAch("ngud14") && aarMod.nguspV !== undefined ? "" : "none"
+
 	if (canAutoUpgs && player.autoEterOptions.dilUpgs) autoBuyDilUpgs()
+
+	if (qMs.tmp.amt >= 23 && player.dilation.active && getTPGain().gt(player.dilation.tachyonParticles)) {
+		setTachyonParticles(getTPGain())
+		player.eternityBuyer.alwaysDilCond = false
+	}
 }
 
 function doBosonsUnlockStuff() {
@@ -5275,12 +5281,11 @@ function setFPSDisplay(toggle) {
 function dimBoolean() {
 	var req = getShiftRequirement()
 	var amount = getAmount(req.tier)
-	if (QCs.in(6)) return false
 	if (!player.autobuyers[9].isOn) return false
 	if (player.autobuyers[9].ticks*100 < player.autobuyers[9].interval) return false
 	if (amount < req.amount) return false
 	if (inNGM(4) && inNC(14)) return false
-	if (getEternitied() < 10 && !player.autobuyers[9].bulkBought && amount < getNextShiftReq(player.autobuyers[9].bulk - 1).amount) return false
+	if (getEternitied() < 10 && !player.autobuyers[9].bulkBought && amount < getNextShiftReq(player.autobuyers[9].bulk - 1)) return false
 	if (player.overXGalaxies <= player.galaxies) return true
 	if (player.autobuyers[9].priority < req.amount && req.tier == ((inNC(4) || player.currentChallenge == "postc1") ? 6 : 8)) return false
 	return true
@@ -5558,6 +5563,7 @@ function showChallengesTab(tabName) {
 			tab.style.display = 'none';
 		}
 	}
+	if (tabName == "pairedChalls") PCs.setupHTML()
 	aarMod.tabsSave.tabChalls = tabName
 }
 

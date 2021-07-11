@@ -37,6 +37,7 @@ var pos = {
 		if (data.sacBoosts) delete data.sacBoosts
 		if (data.excite) delete data.excite
 
+		pos_tmp.tab = enB.mastered("pos", 2) ? "cloud" : "boost"
 		this.updateTmp()
 	},
 	unl() {
@@ -101,7 +102,7 @@ var pos = {
 		}
 	},
 	updateTmp() {
-		var data = {}
+		var data = { tab: pos_tmp.tab }
 		pos_tmp = data
 		if (pos_save === undefined) return
 
@@ -122,9 +123,11 @@ var pos = {
 
 		//Unlocks
 		var unl = enB.mastered("pos", 2)
-		getEl("pos_boost_div").colspan = unl ? 1 : 2
-		getEl("pos_cloud_div").style.display = unl ? "" : "none"
-		getEl("pos_cloud_req").textContent = unl ? "" : "To unlock Positron Cloud, you need to master 2 Positronic Boosts."
+		getEl("pos_tab").style.display = unl ? "" : "none"
+		getEl("pos_tab").textContent = pos_tmp.tab == "cloud" ? "Show boosts" : "Show cloud"
+		getEl("pos_boost_div").style.display = pos_tmp.tab == "boost" ? "" : "none"
+		getEl("pos_cloud_div").style.display = pos_tmp.tab == "cloud" ? "" : "none"
+		getEl("pos_cloud_req").innerHTML = unl || !enB.has("pos", 2) ? "" : "<br>To unlock Positron Cloud, you need to get " + getFullExpansion(enB.getMastered("pos", 2)) + " Positronic Boosters."
 		if (!unl) return
 
 		//Mechanic
@@ -148,8 +151,9 @@ var pos = {
 
 				getEl("pos_boost" + i + "_btn").className = pos_tmp.chosen ? (pos_tmp.chosen == i ? "chosenbtn posbtn" : this.canSwap(i) ? "storebtn posbtn" : "unavailablebtn posbtn") :
 					excluded ? "unavailablebtn posbtn" :
-					(pos_tmp.next_swaps[i] ? "chosenbtn posbtn" : "storebtn posbtn")
-				getEl("pos_boost" + i + "_excite").textContent = pos_tmp.chosen == i ? "(Selected)" :"(Tier " + originalLvl + (lvl != originalLvl ? " -> " + lvl : "") + (lvl != nextLvl ? "; Next: " + nextLvl : "") + ")"
+					(pos_tmp.next_swaps[i] ? "chosenbtn posbtn" : lvl != nextLvl ? "chosenbtn2 posbtn" : "storebtn posbtn")
+				getEl("pos_boost" + i + "_excite").innerHTML = (lvl != nextLvl ? "(Next: " + lvl + " -> " + nextLvl + ")" : "Tier " + originalLvl + (originalLvl != lvl ? " -> " + lvl : "") + (pos_tmp.chosen == i ? "<br>(Selected)" : originalLvl != lvl ? "<br>(from PB" + pos_save.swaps[i] + ")" : ""))
+				this.updateCharge(i)
 				data[lvl] = (data[lvl] || 0) + 1
 
 				if (excluded) data.exclude++
@@ -161,7 +165,8 @@ var pos = {
 			getEl("pos_cloud" + i + "_num").textContent = "Tier " + i + ": " + (data[i] || 0) + " / " + i * 2
 			getEl("pos_cloud" + i + "_cell").className = data[i] >= i * 2 ? "green" : ""
 		}
-		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used; " + data.exclude + " excluded" : "")
+		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " excluded" : "")
+		getEl("pos_toggle").style.display = QCs.in(2) ? "none" : ""
 	},
 	updateTmpOnTick() {
 		if (!this.unl()) return
@@ -220,7 +225,16 @@ var pos = {
 		}
 		this.updateCloud()
 	},
-	apply() {
+	clearSwaps() {
+		pos_tmp.next_swaps = {}
+		pos.updateCloud()
+	},
+	cancelSwaps() {
+		if (!confirm("Do you want to cancel changes on Positronic Cloud?")) return
+		pos_tmp.next_swaps = {... pos_save.swaps}
+		pos.updateCloud()
+	},
+	applySwaps() {
 		if (!confirm("Do you want to apply the changes immediately? This restarts your Quantum run!")) return
 		quantum(false, true)
 	},
@@ -229,8 +243,6 @@ var pos = {
 	},
 
 	updateTab() {
-		enB.updateOnTick("pos")
-
 		getEl("pos_formula").textContent = getFullExpansion(pos_tmp.sac_mdb) + " Meta Dimension Boosts + " + shorten(pos_tmp.sac_qe) + " Quantum Energy ->"
 		getEl("pos_toggle").textContent = pos_save.on ? "ON" : "OFF"
 		getEl("pos_amt").textContent = getFullExpansion(pos_save.amt)
@@ -242,10 +254,33 @@ var pos = {
 			var gals = pos_save.gals[type].sac
 			if (gals > 0 || type == "ng") msg.push(getFullExpansion(gals) + " sacrificed " + pos.types[type].galName)
 		}
-
 		getEl("pos_charge_formula").innerHTML = wordizeList(msg, false, " +<br>", false) + " -> "
 
-		if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "^" + (1 / enB_tmp.pos4).toFixed(Math.floor(3 + Math.log10(enB_tmp.pos4)))
+		enB.updateOnTick("pos")
+		if (pos_tmp.tab == "boost") {
+			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "^" + (1 / enB_tmp.pos4).toFixed(Math.floor(3 + Math.log10(enB_tmp.pos4)))
+
+			for (var i = 1; i <= enB.pos.max; i++) {
+				if (!enB.has("pos", i)) return
+				getEl("enB_pos" + i).className = enB.color(i, "pos")
+			}
+		}
+		if (pos_tmp.tab == "cloud") {
+			for (var i = 1; i <= enB.pos.max; i++) {
+				if (enB.mastered("pos", i)) pos.updateCharge(i)
+			}
+		}
+	},
+	updateCharge(i) {
+		var charged = enB.pos.charged(i) && enB.pos.lvl(i, true) == enB.pos.lvl(i)
+		getEl("pos_boost" + i + "_charge").textContent = charged ? "Charged" : "Charge: " + shorten(enB.pos.chargeReq(i, true))
+		getEl("pos_boost" + i + "_charge").className = charged ? "charged" : ""
+	},
+	switchTab() {
+		pos_tmp.tab = pos_tmp.tab == "cloud" ? "boost" : "cloud"
+		getEl("pos_boost_div").style.display = pos_tmp.tab == "boost" ? "" : "none"
+		getEl("pos_cloud_div").style.display = pos_tmp.tab == "cloud" ? "" : "none"
+		getEl("pos_tab").textContent = pos_tmp.tab == "cloud" ? "Show boosts" : "Show cloud"
 	}
 }
 var pos_save = undefined

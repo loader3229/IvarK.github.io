@@ -50,7 +50,7 @@ function nanofieldResetOnQuantum(){
 
 function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	var headstart = !tmp.ngp3
-	var oheHeadstart = bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 1
+	var oheHeadstart = bigRip ? tmp.bruActive[2] : tmp.ngp3
 	var keepABnICs = oheHeadstart || hasAch("ng3p12")
 	var turnSomeOn = !bigRip || tmp.bruActive[1]
 	var bigRipChanged = tmp.ngp3 && bigRip != qu_save.bigRip.active
@@ -107,7 +107,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 			!qMs.isOn(5) ? [] :
 			qMs.tmp.amt >= 9 ? [1, 2, 3, 4, 5, 6] : qMs.tmp.amt >= 6 ? [1, 2, 3, 4, 5] : [1],
 		active: false,
-		tachyonParticles: player.dilation.tachyonParticles,
+		tachyonParticles: new Decimal(0),
 		dilatedTime: new Decimal(0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
@@ -122,7 +122,6 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 			4: Math.floor(player.dilation.rebuyables[4] * multUpgs),
 		}
 	}
-	player.dilation.tachyonParticles = getTPGain(true, player.totalmoney.log10()).min(player.dilation.tachyonParticles)
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
 
 	resetTimeDimensions(true)

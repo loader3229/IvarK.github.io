@@ -230,7 +230,8 @@ function updateInChallenges() {
 	if (inNGM(4) && player.galacticSacrifice.chall > 0) array.push(NC_NAMES["challenge" + player.galacticSacrifice.challenge])
 	if (player.currentChallenge != "") array.push(getNCName(player.currentChallenge))
 	if (player.currentEternityChall != "") array.push("Eternity Challenge " + player.eternityChallUnlocked)
-	if (QCs.inAny()) array.push("Quantum Challenge " + QCs_save.in[0])
+	if (PCs.in()) array.push("Paired Challenge " + QCs_save.in[0] + " + " + QCs_save.in[1])
+	else if (QCs.inAny()) array.push("Quantum Challenge " + QCs_save.in[0])
 
 	setAndMaybeShow("inchall", array.length > 0, () => "You are currently in " + wordizeList(array))
 }

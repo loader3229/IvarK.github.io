@@ -2408,9 +2408,10 @@ td.grey {
 }
 
 .posbtn {
+	margin: 2px;
 	position: relative;
-	width: 72px !important;
-	height: 72px !important;
+	width: 90px !important;
+	height: 90px !important;
 }
 
 .posbtn span {
@@ -2419,11 +2420,55 @@ td.grey {
 	top: 50%;
 	transform: translateY(-50%);
 	width: 100%;
-	font-size: 8px
+	font-size: 10px
 }
 
 .posbtn b {
-	font-size: 12px
+	font-size: 15px
+}
+
+.posbtn p {
+	margin: 0
+}
+
+.charged {
+	color: #ffbf00;
+	text-shadow: 0px 0px 6px #ffbf00, -1px -0.5px 1px #7f5f00, -2px -1px 2px #7f5f00
+}
+
+#pc_table td {
+	height: 72px;
+	width: 72px;
+	max-height: 72px;
+	max-width: 72px;
+	min-height: 72px;
+	min-width: 72px;
+
+	padding: 0 !important;
+	margin: 0 !important;
+	font-size: 15px;
+	text-align: center;
+}
+
+#pc_table tr:nth-child(1) td {
+	vertical-align: bottom
+}
+
+#pc_table tr:nth-child(1) button {
+	font-size: 10px;
+	height: 24px;
+	width: 60px;
+}
+
+#pc_table td:nth-child(1) {
+	text-align: right
+}
+
+#pc_table button {
+	font-size: 12px;
+	height: 60px;
+	width: 60px;
+	padding: 0
 }
 
 #moreQCs {
@@ -2885,6 +2930,18 @@ td.lEp {
     width: 120px;
 	height: 25px;
 	background: #3A7F42;
+	border: 1px solid #127A20;
+	border-radius: 4px;
+	font-size: 13px;
+	font-weight: bold;
+    font-family: Typewriter;
+	transition-duration: 0.2s
+}
+
+.chosenbtn2 {
+    width: 120px;
+	height: 25px;
+	background: #BAFFC1;
 	border: 1px solid #127A20;
 	border-radius: 4px;
 	font-size: 13px;

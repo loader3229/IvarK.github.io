@@ -98,12 +98,6 @@ input[type=text], input[type=number], input:not([type]) {
     border-radius: 4px;
     color: #fff;
 }
-... (1,653 lines left)
-Collapse
-theme-Aero.css
-48 KB
-dshamlin — Today at 11:48 AM
-2047 = 2^11 - 1, smallest composite number of the form 2^n - 1 for prime n.
 ﻿
 * {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", Helvetica, Arial, sans-serif !important;
@@ -1349,6 +1343,9 @@ td .timestudybought.elcstudy {
 #produceQuarkCharge:hover {
     box-shadow: 0 0 8px #aab7;
 }
+.chosenbtn2 {
+    filter: none !important;
+}
 .nfReward {
     background: linear-gradient(#555, #667) !important;
     color: #aab !important;
@@ -1761,6 +1758,9 @@ td.lime {
 td.green {
     background: linear-gradient(#7f75, #7f73)
 }
+td.cyan {
+    background: linear-gradient(#7ff5, #7ff3)
+}
 td.blue {
     background: linear-gradient(#77f5, #77f3)
 }
@@ -1770,7 +1770,7 @@ td.indigo {
 td.violet {
     background: linear-gradient(#c7f5, #c7f3)
 }
-td.uv {
+td.uv, td.magenta {
     background: linear-gradient(#f7f7, #f7f3)
 }
 
@@ -1845,6 +1845,9 @@ td.uv.light {
 .green {
     color: #7f7;
 }
+.cyan {
+    color: #7ff;
+}
 .blue {
     color: #77f;
 }
@@ -1854,6 +1857,6 @@ td.uv.light {
 .violet {
     color: #c7f;
 }
-.uv {
+.uv, .magenta {
     color: #f7f;
 }

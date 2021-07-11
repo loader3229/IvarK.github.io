@@ -2,36 +2,41 @@
 let qMs = {
 	tmp: {},
 	data: {
-		types: ["sr", "rl", "en", "ch"],
+		types: ["sr", "en", "rl", "ch"],
 		sr: {
 			name: "Speedrun",
 			targ: () => qu_save.best,
 			targDisp: timeDisplay,
+			targKind: "quantum",
 			daysStart: () => tmp.dtMode ? 0.25 : tmp.exMode ? 0.375 : tmp.bgMode ? 0.75 : 0.5,
-			gain: (x) => Math.log10(86400 * qMs.data.sr.daysStart() / x) / Math.log10(2) * 3 + 1,
-			nextAt: (x) => Math.pow(2, (1 - x) / 3) * 86400 * qMs.data.sr.daysStart()
-		},
-		rl: {
-			name: "Relativistic",
-			targ: () => new Decimal(player.dilation.bestTP || 0),
-			targDisp: shorten,
-			gain: (x) => (x.max(1).log10() - 80) / 5 + 1,
-			nextAt: (x) => Decimal.pow(10, (x - 1) * 5 + 80)
+			gain: (x) => Math.log10(86400 * qMs.data.sr.daysStart() / x) / Math.log10(2) * 2 + 1,
+			nextAt: (x) => Math.pow(2, (1 - x) / 2) * 86400 * qMs.data.sr.daysStart()
 		},
 		en: {
 			name: "Enegretic",
 			targ: () => qu_save.bestEnergy || 0,
 			targDisp: shorten,
+			targKind: "energy",
 			gain: (x) => Math.sqrt(Math.max(x - 0.5, 0)) * 3,
 			nextAt: (x) => Math.pow(x / 3, 2) + 0.5
+		},
+		rl: {
+			name: "Relativistic",
+			unl: () => pos.unl(),
+			targ: () => new Decimal(player.dilation.bestTP || 0),
+			targDisp: shorten,
+			targKind: "TP",
+			gain: (x) => (x.max(1).log10() - 90) / 3 + 1,
+			nextAt: (x) => Decimal.pow(10, (x - 1) * 3 + 90)
 		},
 		ch: {
 			name: "Challenging",
 			unl: () => QCs.unl(),
-			targ: () => 0,
+			targ: () => (PCs_save && PCs_save.comps.length) || 0,
 			targDisp: getFullExpansion,
-			gain: (x) => 0,
-			nextAt: (x) => 1/0
+			targKind: "completions",
+			gain: (x) => x * 1.5,
+			nextAt: (x) => Math.ceil(x / 1.5)
 		}
 	},
 	update() {
@@ -61,7 +66,7 @@ let qMs = {
 			else delete qu_save.disabledRewards[i]
 		}
 
-		if (qMs.tmp.amt >= 12) data.metaSpeed *= Math.pow(0.9, Math.pow(qMs.tmp.amt - 12 + 1, 1 + Math.max(qMs.tmp.amt - 16, 0) / 15))
+		if (qMs.tmp.amt >= 12) data.metaSpeed *= Math.pow(0.9, Math.pow(qMs.tmp.amt - 12 + 1, 1 + Math.max(qMs.tmp.amt - 15, 0) / 15))
 	},
 	updateDisplay() {
 		if (tmp.quUnl) {
@@ -75,27 +80,26 @@ let qMs = {
 			}
 
 			for (var i = 1; i <= qMs.max; i++) {
-				var shown = qMs.tmp.amt >= i - 2
-				getEl("qMs_req_" + i).style.display = shown ? "" : "none"
+				var shown = qMs.tmp.amt >= i - 1
 				getEl("qMs_reward_" + i).style.display = shown ? "" : "none"
 
 				if (shown) {
-					getEl("qMs_req_" + i).textContent = "Milestone Point #" + getFullExpansion(qMs[i].req)
 					getEl("qMs_reward_" + i).className = qMs.tmp.amt < i || qMs.forceOff(i) ? "qMs_locked" :
 						!this[i].disablable ? "qMs_reward" :
 						"qMs_toggle_" + (!qu_save.disabledRewards[i] ? "on" : "off")
-					getEl("qMs_reward_" + i).textContent = qMs[i].eff()
+					getEl("qMs_reward_" + i).innerHTML = qMs[i].eff() + (qMs.tmp.amt >= i ? "" : "<br>(requires " + getFullExpansion(qMs[i].req) + " MP)")
 				}
 			}
+			getEl("qMs_next").textContent = qMs.tmp.amt >= qMs.max ? "" : "Next milestone unlocks at " + getFullExpansion(qMs[qMs.tmp.amt + 1].req) + " Milestone Points."
 		}
 
 		getEl('dilationmode').style.display = qMs.tmp.amt >= 4 ? "block" : "none"
 		getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 11 ? "" : "none"
 		getEl('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
-		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 16 ? "block" : "none"
-		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 16 ? "" : "none"
-		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 23 ? "" : "none"
-		getEl('respec_quarks').style.display = qMs.tmp.amt >= 24 ? "" : "none"
+		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 17 ? "block" : "none"
+		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 17 ? "" : "none"
+		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 20 ? "" : "none"
+		getEl('respec_quarks').style.display = qMs.tmp.amt >= 21 ? "" : "none"
 	},
 	updateDisplayOnTick() {
 		let types = qMs.data.types
@@ -106,8 +110,8 @@ let qMs = {
 
 			if (unl) {
 				getEl("qMs_" + type + "_target").textContent = typeData.targDisp(qMs.tmp["targ_" + type])
-				getEl("qMs_" + type + "_points").textContent = getFullExpansion(qMs.tmp["amt_" + type])
-				getEl("qMs_" + type + "_next").textContent = typeData.targDisp(typeData.nextAt(qMs.tmp["amt_" + type] + 1))
+				getEl("qMs_" + type + "_points").textContent = "+" + getFullExpansion(qMs.tmp["amt_" + type]) + " MP"
+				getEl("qMs_" + type + "_next").textContent = qMs.tmp["amt_" + type] > 20 ? "" : "(Next at: " + typeData.targDisp(typeData.nextAt(qMs.tmp["amt_" + type] + 1)) + " " + typeData.targKind + ")"
 			}
 		}
 
@@ -129,16 +133,16 @@ let qMs = {
 		getEl("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
 	},
 
-	max: 26,
+	max: 24,
 	1: {
 		req: 1,
-		eff: () => "Start with 100 Eternities, and EC completions no longer respec studies",
-		effGot: () => "You now start with 100 Eternities, EC completions no longer respec studies."
+		eff: () => "Completing an EC only exits your challenge.",
+		effGot: () => "Completing an EC now only exits your challenge."
 	},
 	2: {
 		req: 2,
-		eff: () => "Unlock the autobuyer for Time Theorems, start with 3x more Eternities per milestone, and keep Eternity Challenges",
-		effGot: () => "You now can automatically buy Time Theorems, start with 3x more Eternities per milestone, and keep Eternity Challenges."
+		eff: () => "Unlock the TT autobuyer, start with 3x more Eternities per milestone (" + shortenDimensions(Math.pow(3, qMs.tmp.amt >= 2 ? qMs.tmp.amt : 0) * 100) + "), and keep Eternity Challenges",
+		effGot: () => "You now can automatically buy TT, start with 3x more Eternities per milestone, and keep Eternity Challenges."
 	},
 	3: {
 		req: 3,
@@ -148,14 +152,14 @@ let qMs = {
 	},
 	4: {
 		req: 4,
-		eff: () => "Unlock 'X times eternities' mode of auto-Eternity, and unlock Auto-Dilation",
+		eff: () => "Unlock auto-Dilation and new modes for auto-Eternity",
 		effGot: () => "You have unlocked the 'X times eternitied' mode for auto-Eternity... And you can now automatically dilate time!"
 	},
 	5: {
 		req: 5,
 		disablable: true,
-		eff: () => "Start with Time Dilation unlocked & 1 TP" + (tmp.dtMode ? "" : " and each time you buy '3x TP' upgrade, your TP amount is increased by 3x"),
-		effGot: () => "You now start with Time Dilation unlocked & 1 TP" + (tmp.dtMode ? "" : " and each time you buy '3x TP' upgrade, your TP amount is increased by 3x.")
+		eff: () => "Start with Time Dilation unlocked" + (tmp.dtMode ? "" : " and '3x TP' upgrade is retroactive"),
+		effGot: () => "You now start with Time Dilation unlocked" + (tmp.dtMode ? "." : " and '3x TP' upgrade is now retroactive.")
 	},
 	6: {
 		req: 6,
@@ -186,44 +190,44 @@ let qMs = {
 		effGot: () => "You now can keep all your mastery studies."
 	},
 	11: {
-		req: 11,
+		req: 12,
 		eff: () => "Unlock the autobuyer for repeatable dilation upgrades",
 		effGot: () => "You now can automatically buy repeatable dilation upgrades."
 	},
 	12: {
-		req: 12,
+		req: 13,
 		eff: () => "Reduce the interval of auto-dilation upgrades and MDs by 10% per milestone" + (qMs.tmp.amt >= 12 ? " (" + shorten(1 / qMs.tmp.metaSpeed) + "/s)" : ""),
 		effGot: () => "The interval of auto-dilation upgrades and MDs is now reduced by 10% per milestone."
 	},
 	13: {
-		req: 13,
-		eff: () => "Reduce the interval of auto-slow MDs by 1 tick per milestone (repeats for each following milestone)",
-		effGot: () => "The interval of auto-slow MDs is now reduced by 1 tick per milestone. (repeats for each following milestone)"
+		req: 15,
+		eff: () => "Reduce the interval of auto-slow MDs by 1 tick per milestone",
+		effGot: () => "The interval of auto-slow MDs is now reduced by 1 tick per milestone."
 	},
 	14: {
-		req: 14,
+		req: 16,
 		eff: () => "Unlock the autobuyer for meta-Dimension Boosts, and start with 4 MDBs",
 		effGot: () => "You now can automatically buy meta-Dimension Boosts, and you now start with 4 MDBs."
 	},
 	15: {
-		req: 15,
+		req: 18,
 		eff: () => "All Meta Dimensions are available for purchase on Quantum",
 		effGot: () => "All Meta Dimensions are now available for purchase on Quantum."
 	},
 	16: {
-		req: 16,
-		eff: () => "Unlock the autobuyer for Quantum runs",
-		effGot: () => "You can now automatically go Quantum."
-	},
-	17: {
-		req: 18,
+		req: 19,
 		eff: () => "Each milestone greatly reduces the interval of auto-dilation upgrades and MDBs",
 		effGot: () => "Each milestone now greatly reduces the interval of auto-dilation upgrades and MDBs."
 	},
-	18: {
+	17: {
 		req: 20,
-		eff: () => "'2 Million Infinities' effect is always applied and is increased to " + shorten(1e3) + "x",
-		effGot: () => "'2 Million Infinities' effect is now always applied and is increased to " + shorten(1e3) + "x."
+		eff: () => "Unlock the autobuyer for Quantum runs",
+		effGot: () => "You can now automatically go Quantum."
+	},
+	18: {
+		req: 21,
+		eff: () => "'2 Million Infinities' effect is always applied",
+		effGot: () => "'2 Million Infinities' effect is now always applied."
 	},
 	19: {
 		req: 22,
@@ -231,37 +235,26 @@ let qMs = {
 		effGot: () => "Meta-Dimension Boosts no longer reset Meta Dimensions anymore."
 	},
 	20: {
-		req: 25,
+		req: 24,
 		eff: () => "All Infinity-related autobuyers fire for each tick",
 		effGot: () => "All Infinity-related autobuyers now fire for each tick"
 	},
 	21: {
-		req: 28,
-		eff: () => "Gain banked infinities based on your post-crunch infinitied stat",
-		effGot: () => "Gain banked infinities based on your post-crunch infinitied stat."
+		req: 25,
+		eff: () => "Unlock QoL features for quark assortion, like automation and respec.",
+		effGot: () => "You have unlocked QoL features for quark assortion!"
 	},
 	22: {
 		req: 30,
-		eff: () => "Unlock the automation feature for quark assortion.",
-		effGot: () => "You can now automatically assort quarks."
+		eff: () => "Gain banked infinities based on your post-crunch infinitied stat",
+		effGot: () => "Gain banked infinities based on your post-crunch infinitied stat."
 	},
 	23: {
-		req: 35,
-		disablable: true,
-		eff: () => "Auto-dilation upgrades maximize all repeatable dilation upgrades",
-		effGot: () => "Auto-dilation upgrades now can maximize all repeatable dilation upgrades."
+		req: 40,
+		eff: () => "Every second, you gain Tachyon Particles, if you dilate.",
+		effGot: () => "Every second, you now gain Tachyon Particles, if you dilate."
 	},
 	24: {
-		req: 40,
-		eff: () => "You can respec all your colored quarks anytime",
-		effGot: () => "You can now respec all your colored quarks anytime."
-	},
-	25: {
-		req: 50,
-		eff: () => "Able to maximize Meta-Dimension Boosts",
-		effGot: () => "You now can maximize Meta-Dimension Boosts."
-	},
-	26: {
 		req: 100,
 		eff: () => "Able to purchase all time studies without blocking",
 		effGot: () => "You now can buy every single time study."

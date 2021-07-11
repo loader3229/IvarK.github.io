@@ -842,6 +842,13 @@ strong { color: #0072e5 }
     font-weight: 500;
 }
 
+.chosenbtn2 {
+    border-color: #090 !important;
+    background-color: #9f7 !important;
+    color:black !important;
+    font-weight:900 !important;
+}
+
 .quantumchallengediv {
     background-color: #060 !important;
     font-family:'IBM Plex Mono', monospace !important;

@@ -3,8 +3,8 @@ var QCs = {
 		QCs_save = {
 			in: [],
 			comps: 0,
+			mod_comps: {},
 			best: {},
-			perks_unl: {},
 			cloud_disable: 1
 		}
 		return QCs_save
@@ -24,9 +24,10 @@ var QCs = {
 		if (QCs_save.qc1 === undefined) this.reset()
 		if (typeof(QCs_save.qc2) !== "number") QCs_save.qc2 = QCs_save.cloud_disable || 1
 
-		if (QCs_save.best_exclusion) {
-			QCs_save.perks_unl = {}
+		if (QCs_save.best_exclusion || QCs_save.perks_unl) {
+			QCs_save.mod_comps = {}
 			delete QCs_save.best_exclusion
+			delete QCs_save.perks_unl
 		}
 
 		this.updateTmp()
@@ -58,7 +59,6 @@ var QCs = {
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
 			perkReqs: [0, 0],
-			perkMasReqs: [0, 0],
 			perkEff() {
 				return 1
 			},
@@ -130,7 +130,6 @@ var QCs = {
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
 			perkReqs: [0, 0],
-			perkMasReqs: [0, 0],
 			perkEff() {
 				return 1
 			},
@@ -167,7 +166,6 @@ var QCs = {
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
 			perkReqs: [0, 0],
-			perkMasReqs: [0, 0],
 			perkEff() {
 				return 1
 			},
@@ -194,7 +192,6 @@ var QCs = {
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
 			perkReqs: [0, 0],
-			perkMasReqs: [0, 0],
 			perkEff() {
 				return 1
 			},
@@ -250,7 +247,6 @@ var QCs = {
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
 			perkReqs: [0, 0],
-			perkMasReqs: [0, 0],
 			perkEff() {
 				return 1
 			},
@@ -290,7 +286,6 @@ var QCs = {
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
 			perkReqs: [0, 0],
-			perkMasReqs: [0, 0],
 			perkEff() {
 				return 1
 			},
@@ -312,7 +307,6 @@ var QCs = {
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
 			perkReqs: [0, 0],
-			perkMasReqs: [0, 0],
 			perkEff() {
 				return 1
 			},
@@ -332,7 +326,6 @@ var QCs = {
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
 			perkReqs: [0, 0],
-			perkMasReqs: [0, 0],
 			perkEff() {
 				return 1
 			},
@@ -388,34 +381,36 @@ var QCs = {
 		return this.unl() && QCs_save.comps >= x
 	},
 	getGoal() {
-		return QCs_tmp.in.length >= 2 ? true : player.meta.bestAntimatter.gte(this.getGoalMA()) && this.data[QCs_tmp.in[0]].goal()
+		return PCs.in() ? player.meta.bestAntimatter.gte(this.getGoalMA()) : player.meta.bestAntimatter.gte(this.getGoalMA()) && this.data[QCs_tmp.in[0]].goal()
 	},
 	getGoalDisp() {
-		return QCs_tmp.in.length >= 2 ? "" : " and " + this.data[QCs_tmp.in[0]].goalDisp()
+		return PCs.in() ? "" : " and " + this.data[QCs_tmp.in[0]].goalDisp()
 	},
 	getGoalMA() {
-		return this.data[QCs_tmp.in[0]].goalMA
+		return PCs.in() ? PCs.goal() : this.data[QCs_tmp.in[0]].goalMA
 	},
 	isRewardOn(x) {
 		return this.done(x) && QCs_tmp.rewards[x]
 	},
 
+	modDone(x, m) {
+		var data = QCs_save.mod_comps
+		return this.unl() && data && data[m] && data[m].includes(x)
+	},
+
 	perkUnl(x) {
-		return PCs.unl() && QCs_save.perks_unl[x]
+		var data = QCs_save.mod_comps
+		return this.modDone(x, "perk")
 	},
 	perkCan(x) {
 		var data = this.data[x]
 		if (!PCs.unl()) return
 		if (pos_tmp.cloud == undefined) return
-		if (this.perkMastered(x)) return
-		if (this.perkUnl(x)) return pos_tmp.cloud.total >= data.perkMasReqs[0] && pos_tmp.cloud.exclude >= data.perkMasReqs[1]
+		if (this.perkUnl(x)) return
 		return pos_tmp.cloud.total >= data.perkReqs[0] && pos_tmp.cloud.exclude >= data.perkReqs[1]
 	},
-	perkMastered(x) {
-		return QCs_save.perks_unl[x] == 2
-	},
 	perkActive(x) {
-		return QCs_tmp.perks[x] && this.perkUnl(x) && (this.perkMastered(x) ? this.inAny() : this.in(x))
+		return QCs_tmp.perks[x] && this.perkUnl(x) && this.inAny()
 	},
 
 	tp() {
@@ -466,17 +461,15 @@ var QCs = {
 
 			getEl("qc_" + qc + "_div").style.display = cUnl ? "" : "none"
 			if (QCs_tmp.show_perks) {
-				var reqs = this.data[qc][this.perkUnl(qc) ? "perkMasReqs" : "perkReqs"]
+				var reqs = this.data[qc].perkReqs
 				getEl("qc_" + qc + "_desc").textContent = "Quantum Challenge " + qc + " Perk: " + this.data[qc].perkDesc(QCs_tmp.perks[qc])
-				getEl("qc_" + qc + "_goal").textContent = (this.perkUnl(qc) ? "Mastery" : "Requires") + ": Complete QC" + qc + " + " + reqs[0] + " used Positronic Boosts + " + reqs[1] + " excluded Positronic Boosts"
-				getEl("qc_" + qc + "_btn").textContent = this.perkCan(qc) ? "Can " + (this.perkUnl(qc) ? "master!" : "unlock!") :
+				getEl("qc_" + qc + "_goal").textContent = "Requires: Complete QC" + qc + " + " + reqs[0] + " used Positronic Boosts + " + reqs[1] + " excluded Positronic Boosts"
+				getEl("qc_" + qc + "_btn").textContent = this.perkCan(qc) ? "Can unlock!" :
 					!this.perkUnl(qc) ? "Locked" :
-					this.inAny() ? (this.perkActive(qc) ? "Active" : "Inactive") :
-					this.perkMastered(qc) ? "Mastered" : "Obtained"
+					"Obtained"
 				getEl("qc_" + qc + "_btn").className = this.perkCan(qc) ? (this.in(qc) ? "onchallengebtn" : "challengesbtn") :
 					!this.perkUnl(qc) ? "lockedchallengesbtn" :
-					this.inAny() ? (this.perkActive(qc) ? "onchallengebtn" : "lockedchallengesbtn") :
-					this.perkMastered(qc) ? "completedchallengesbtn" : "onchallengebtn"
+					"completedchallengesbtn"
 			} else if (cUnl) {
 				getEl("qc_" + qc + "_desc").textContent = this.data[qc].desc()
 				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.data[qc].goalMA) + " meta-antimatter and " + this.data[qc].goalDisp()
@@ -560,12 +553,49 @@ let QUANTUM_CHALLENGES = QCs
 
 //PAIRED CHALLENGES
 var PCs = {
+	setup: {},
+	setupData() {
+		var data = {
+			qc1_ids: [null, 7, 6, 4, 2, 8, 1, 5, 3],
+			qc2_ids: [null, 3, 5, 1, 8, 2, 4, 6, 7],
+			qc1_lvls: [null, 1, 2, 3, 4, 10, 11, 12, 13],
+			qc2_lvls: [null, 1, 2, 4, 8, 14, 15, 17, 18],
+			setup: true
+		}
+		PCs.data = data
+		getEl("pc_table").innerHTML = ""
+
+		data.lvls = {}
+		data.pos = {}
+		for (var x = 1; x <= 8; x++) {
+			for (var y = 1; y <= 9 - x; y++) {
+				var lvl = data.qc1_lvls[x] + data.qc2_lvls[y] - 1
+				data.lvls[lvl] = (data.lvls[lvl] || 0) + 1
+				data.pos[this.conv(data.qc1_ids[x], data.qc2_ids[y])] = x * 10 + y
+			}
+		}
+
+		var sum = 0
+		PCs_tmp.lvl = 1
+		for (var i = 1; i <= 18; i++) {
+			sum += data.lvls[i]
+			data.lvls[i] = sum
+		}
+	},
+
 	setup() {
-		PCs_save = undefined
+		PCs_save = {
+			comps: [],
+			skips: [],
+			lvl: 1
+		}
+		qu_save.pc = PCs_save
 		return PCs_save
 	},
 	compile() {
 		PCs_save = undefined
+		PCs.data = {}
+		PCs_tmp = { unl: PCs.unl() }
 		if (!tmp.ngp3 || qu_save === undefined) {
 			this.updateTmp()
 			this.updateDisp()
@@ -577,27 +607,94 @@ var PCs = {
 		PCs_save = data
 
 		this.updateTmp()
-		this.updateDisp()
 	},
 
 	unl() {
 		return qu_save.qc && qu_save.qc.comps >= 7
 	},
 	updateTmp() {
-		let data = { unl: PCs.unl }
-		PCs_tmp = data
+		if (!PCs_tmp.unl) return
+		if (!PCs.data.setup) this.setupData()
+
+		//Level up!
+		var oldLvl = PCs_save.lvl
+		var lvlData = PCs.data.lvls
+		var comps = PCs_save.comps.length
+		while (PCs_save.lvl < 19 && comps >= lvlData[PCs_save.lvl]) PCs_save.lvl++
+		if (PCs_save.lvl > oldLvl) {
+			for (var i = 0; i < PCs.data.all.length; i++) this.updateButton(PCs.data.all[i])
+		}
 
 		this.updateTmpOnTick()
 	},
 	updateTmpOnTick() {
 	},
 
+	start(x) {
+		quantum(false, true, PCs.convBack(x))
+	},
 	in(x) {
 		return QCs_tmp.in.length >= 2
 	},
+	goal(pc) {
+		var QCs = this.convBack(pc)
+		return new Decimal(1/0)
+	},
+	conv(c1, c2) {
+		return Math.min(c1 * 10 + c2, c2 * 10 + c1)
+	},
+	convBack(pc) {
+		return [Math.floor(pc / 10), pc % 10]
+	},
+	done(c1, c2) {
+		var id = this.conv(c1, c2)
+		return PCs.unl() && (PCs_save.comps.includes(id) || PCs_save.skips.includes(id))
+	},
+
+	setupButton: (pc) => '<td><button id="pc' + pc + '" class="challengesbtn" onclick="PCs.start(' + pc + ')">PC' + Math.floor(pc / 10) + "+" + pc % 10 + '</button></td>',
+	setupHeader: (qc) => '<td>QC' + qc + '<br><button class="storebtn" onclick="PCs.openMilestones(' + qc + ')">Milestones</button></td>',
+	setupHTML() {
+		var el = getEl("pc_table")
+		var data = PCs.data
+		if (PCs.data.setupHTML) return
+
+		//Setup header
+		var html = "<td></td>"
+		for (var i = 1; i <= 8; i++) html += this.setupHeader(data.qc1_ids[i])
+		el.insertRow(0).innerHTML = html
+
+		//Setup rows
+		data.all = []
+		for (var x = 1; x <= 8; x++) {
+			var html = "<td>QC" + data.qc2_ids[x]+ "</td>"
+			for (var i = 1; i <= 9 - x; i++) {
+				var pc = this.conv(data.qc1_ids[x], data.qc2_ids[i])
+				html += this.setupButton(pc)
+				data.all.push(pc)
+			}
+			el.insertRow(x).innerHTML = html
+		}
+
+		for (var i = 0; i < data.all.length; i++) this.updateButton(data.all[i])
+
+		data.setupHTML = true
+		this.updateDisp()
+	},
+	updateButton(pc) {
+		var qcs = this.convBack(pc)
+		var pos = this.convBack(PCs.data.pos[pc])
+		var lvl = PCs.data.qc1_lvls[pos[0]] + PCs.data.qc2_lvls[pos[1]] - 1
+
+		getEl("pc" + pc).style.display = PCs_save.lvl >= lvl ? "" : "none"
+		if (PCs_save.lvl >= lvl) getEl("pc" + pc).className = /*QCs.in(qcs[0]) && QCs.in(qcs[1]) ? "onchallengebtn" :*/ PCs_save.comps.includes(pc) ? "completedchallengesbtn" : "challengesbtn"
+	},
 
 	updateDisp() {
-		
+		if (!PCs_tmp.unl) return
+		if (!PCs.data.setupHTML) return
+
+		getEl("pc_lvl").textContent = getFullExpansion(PCs_save.lvl)
+		getEl("pc_comps").textContent = getFullExpansion(PCs_save.comps.length) + " / " + getFullExpansion(PCs.data.lvls[Math.min(PCs_save.lvl, 18)])
 	}
 }
 var PCs_save = undefined

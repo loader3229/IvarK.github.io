@@ -646,7 +646,7 @@ var enB = {
 		},
 		5: {
 			req: 9,
-			masReq: 100,
+			masReq: 70,
 
 			title: "Otherworldly Galaxies",
 			type: "b",
@@ -692,7 +692,7 @@ var enB = {
 		},
 		8: {
 			req: 12,
-			masReq: 100,
+			masReq: 70,
 
 			title: "Meta Resynergizer II",
 			type: "r",
@@ -719,7 +719,7 @@ var enB = {
 		},
 		10: {
 			req: 36,
-			masReq: 100,
+			masReq: 70,
 
 			title: "Blue Saturation",
 			type: "g",
@@ -733,7 +733,7 @@ var enB = {
 		},
 		11: {
 			req: 45,
-			masReq: 100,
+			masReq: 70,
 
 			title: "Blue Unseeming",
 			type: "r",
@@ -746,7 +746,7 @@ var enB = {
 		},
 		12: {
 			req: 50,
-			masReq: 100,
+			masReq: 70,
 
 			title: "Color Subcharge",
 			type: "b",
@@ -786,16 +786,23 @@ var enB = {
 			return !QCs.isntCatched() ? pos.on() && enB.mastered("pos", x) && !pos.excluded(x) : tmp.bgMode || enB.mastered("pos", x) || pos.on()
 		},
 
-		eff(x) {
+		engEff(x) {
 			var eng = this.engAmt()
 			if (QCs_tmp.qc5) eng += QCs_tmp.qc5.eff
+			return eng
+		},
+		eff(x) {
+			var eng = this.engEff()
 			if ((enB.mastered("pos", x) || enB.colorMatch("pos", x)) && eng >= this.chargeReq(x)) eng *= 2 * this.lvl(x)
 			return eng
 		},
 
-		chargeReq(x) {
-			var lvl = this.lvl(x)
+		chargeReq(x, next) {
+			var lvl = this.lvl(x, next)
 			return this[x].chargeReq * (tmp.exMode ? 1.25 : 1) * Math.pow(lvl, tmp.dtMode ? 2.5 : 2)
+		},
+		charged(x) {
+			return this.engAmt() >= this.chargeReq(x) && (enB.mastered("pos", x) || enB.colorMatch("pos", x))
 		},
 		lvl(x, next) {
 			var swaps = next ? pos_tmp.next_swaps : pos_save.swaps
@@ -806,8 +813,9 @@ var enB = {
 		max: 12,
 		1: {
 			req: 1,
-			masReq: 5,
-			masReqExpert: 6,
+			masReq: 3,
+			masReqExpert: 4,
+			masReqDeath: 5,
 			chargeReq: 1,
 
 			title: "Replicanti Launch",
@@ -823,15 +831,17 @@ var enB = {
 		},
 		2: {
 			req: 3,
-			masReq: 6,
-			chargeReq: 0,
+			masReq: 5,
+			chargeReq: 1,
 
 			title: "Meta Accelerator",
 			tier: 2,
 			type: "b",
 			eff(x) {
-				var timeMult = Math.min(qu_save.time / 12000, 1)
+				var timeMult = qu_save.time / 24000
+				if (enB.pos.engAmt() >= enB.pos.chargeReq(2)) timeMult *= 2
 				if (enB.active("pos", 11)) timeMult *= enB_tmp.pos11
+				timeMult = Math.min(timeMult, 1)
 
 				var baseMult = timeMult
 				var slowStart = 4
@@ -899,7 +909,7 @@ var enB = {
 		},
 		5: {
 			req: 50,
-			masReq: 70,
+			masReq: 55,
 			chargeReq: 100,
 
 			title: "Transfinite Time",
@@ -913,8 +923,8 @@ var enB = {
 			}
 		},
 		6: {
-			req: 100,
-			masReq: 0,
+			req: 55,
+			masReq: 1/0,
 			chargeReq: 4,
 
 			title: "Tickspeed Flux",
@@ -929,8 +939,8 @@ var enB = {
 			}
 		},
 		7: {
-			req: 1/0,
-			masReq: 0,
+			req: 60,
+			masReq: 1/0,
 			chargeReq: 5,
 
 			title: "308% Completionist",
@@ -944,8 +954,8 @@ var enB = {
 			}
 		},
 		8: {
-			req: 1/0,
-			masReq: 0,
+			req: 70,
+			masReq: 1/0,
 			chargeReq: 6,
 
 			title: "MT-Force Preservation",
@@ -960,8 +970,8 @@ var enB = {
 			}
 		},
 		9: {
-			req: 1/0,
-			masReq: 0,
+			req: 80,
+			masReq: 1/0,
 			chargeReq: 7,
 
 			title: "Overpowered Infinities",
@@ -979,9 +989,9 @@ var enB = {
 			}
 		},
 		10: {
-			req: 1/0,
-			masReq: 0,
-			chargeReq: 0,
+			req: 90,
+			masReq: 1/0,
+			chargeReq: 1/0,
 
 			title: "Looped Dimensionality",
 			tier: 3,
@@ -995,9 +1005,9 @@ var enB = {
 			}
 		},
 		11: {
-			req: 1/0,
-			masReq: 0,
-			chargeReq: 0,
+			req: 90,
+			masReq: 1/0,
+			chargeReq: 1/0,
 
 			title: "8th Shade of Blue",
 			tier: 3,
@@ -1011,9 +1021,9 @@ var enB = {
 			}
 		},
 		12: {
-			req: 1/0,
-			masReq: 0,
-			chargeReq: 0,
+			req: 90,
+			masReq: 1/0,
+			chargeReq: 1/0,
 
 			title: "Timeless Capability",
 			tier: 3,
@@ -1031,36 +1041,49 @@ var enB = {
 	update(type) {
 		var data = enB
 		var typeData = data[type]
-		var colors = {
-			r: "red",
-			g: "green",
-			b: "blue"
-		}
 
 		getEl("enB_" + type + "_amt").textContent = getFullExpansion(typeData.amt() || 0)
 		getEl("enB_" + type + "_cost").textContent = shorten(typeData.cost())
 		getEl("enB_" + type + "_next").textContent = ""
 
 		var has = true
+		var allMastered = true
 		for (var e = 1; e <= typeData.max; e++) {
 			var active = data.active(type, e)
 			var mastered = data.mastered(type, e)
+			var el = getEl("enB_" + type + e + "_name")
 
 			if (has && !data.has(type, e)) {
 				has = false
 				getEl("enB_" + type + "_next").textContent = "Next " + typeData.name + " Boost unlocks at " + typeData[e].req + " " + typeData.name + " Boosters."
 			}
 
-			var el = getEl("enB_" + type + e + "_name")
-			el.parentElement.style.display = has ? "" : "none"
+			var localHas = has
+			if (id == "pos" && QCs.inAny() && !mastered) localHas = false
+			el.parentElement.style.display = localHas ? "" : "none"
 
-			if (has) {
-				el.parentElement.className = !active ? "black" : mastered ? "lime" : enB.colorMatch(type, e) ? colors[typeData[e].type] + (typeData[e].anti ? "_anti" : "") : "grey"
+			if (localHas) {
+				if (!mastered) allMastered = false
+				el.parentElement.className = data.color(e, type)
 				el.textContent = typeData.name + " Boost #" + e
 			}
 		}
+		if (QCs.inAny()) getEl("enB_" + type + "_next").textContent = ""
 
-		if (type == "pos") pos.updateCloud()
+		if (type == "pos") {
+			pos.updateCloud()
+			getEl("entangle_div_pos").style.display = allMastered ? "none" : ""
+		}
+	},
+	color(e, type) {
+		var colors = {
+			r: "red",
+			g: "green",
+			b: "blue"
+		}
+		var data = enB
+		var typeData = data[type]
+		return !data.active(type, e) ? "black" : type == "pos" && typeData.charged(e) ? "yellow" : data.mastered(type, e) ? "lime" : enB.colorMatch(type, e) ? colors[typeData[e].type] + (typeData[e].anti ? "_anti" : "") : "grey"
 	},
 	updateUnlock() {
 		let gluUnl = enB.glu.unl()
@@ -1078,12 +1101,20 @@ var enB = {
 
 			var active = this.active(type, i)
 			var mastered = this.mastered(type, i)
+			var charged = type == "pos" && this.pos.charged(i)
+
+			var list = []
+			if (!active) list.push("Inactive")
+			if (charged) list.push("<b class='charged'>Charged</b>")
+			else if (mastered) list.push("Mastered")
+			if (!mastered || shiftDown) list.push((data[i].anti ? "anti-" : "") + data[i].type.toUpperCase() + "-type boost")
+			if (!mastered) list.push("Get " + getFullExpansion(enB.getMastered(type, i)) + " " + data.name + " Boosters to master")
 
 			getEl("enB_" + type + i + "_name").textContent = shiftDown ? (data[i].title || "Unknown title.") : (data.name + " Boost #" + i)
-			getEl("enB_" + type + i + "_type").innerHTML = "(" + (active ? "" : "Inactive - ") + (mastered ? "Mastered" + (shiftDown ? " - " : "") : "") + (!mastered || shiftDown ? (data[i].anti ? "anti-" : "") + data[i].type.toUpperCase() + "-type boost" : "") + (mastered ? ")" : " - Get " + getFullExpansion(enB.getMastered(type, i)) + " " + data.name + " Boosters to master)") + (data[i].activeDispReq ? "<br>Requirement: " + data[i].activeDispReq() : "")
+			getEl("enB_" + type + i + "_type").innerHTML = "(" + wordizeList(list, false, " - ", false) + ")" + (data[i].activeDispReq ? "<br>Requirement: " + data[i].activeDispReq() : "")
 
 			if (enB_tmp[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(enB_tmp[type + i])
-			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = "Tier " + enB.pos.lvl(i) + " - " + (!enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No self-boost)" : "Self-boost is at " + shorten(enB.pos.chargeReq(i)) + " charge")
+			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = (mastered ? "Tier " + enB.pos.lvl(i) + " - " : "") + (!enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No self-boost)" : "Self-boost is at " + shorten(enB.pos.chargeReq(i)) + " charge")
 		}
 	}
 }

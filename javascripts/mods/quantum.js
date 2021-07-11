@@ -117,14 +117,13 @@ function updateLastTenQuantums() {
 	for (var i = 0; i < 10; i++) {
 		if (qu_save.last10[i][1].gt(0)) {
 			var qkpm = qu_save.last10[i][1].dividedBy(qu_save.last10[i][0] / 600)
-			var tempstring = "(" + shorten(qkpm) + " QK/min)"
-			if (qkpm<1) tempstring = "(" + shorten(qkpm * 60) + " QK/hour)"
+			var tempstring = "(" + rateFormat(qkpm, "aQs") + ")"
 			var msg = "The quantum " + (i == 0 ? '1 quantum' : (i + 1) + ' quantums') + " ago took " + timeDisplayShort(qu_save.last10[i][0], false, 3)
 			if (qu_save.last10[i][2]) {
 				if (typeof(qu_save.last10[i][2]) == "number") " in Quantum Challenge " + qu_save.last10[i][2]
 				else msg += " in Paired Challenge " + qu_save.last10[i][2][0] + " (QC" + qu_save.last10[i][2][1][0] + "+" + qu_save.last10[i][2][1][1] + ")"
 			}
-			msg += " and gave " + shortenDimensions(qu_save.last10[i][1]) +" QK. "+ tempstring
+			msg += " and gave " + shortenDimensions(qu_save.last10[i][1]) +" aQs. "+ tempstring
 			getEl("quantumrun"+(i+1)).textContent = msg
 			tempTime = tempTime.plus(qu_save.last10[i][0])
 			tempQK = tempQK.plus(qu_save.last10[i][1])
@@ -136,10 +135,9 @@ function updateLastTenQuantums() {
 		tempTime = tempTime.dividedBy(listed)
 		tempQK = tempQK.dividedBy(listed)
 		var qkpm = tempQK.dividedBy(tempTime / 600)
-		var tempstring = "(" + shorten(qkpm) + " QK/min)"
+		var tempstring = "(" + rateFormat(qkpm, "aQs") + ")"
 		averageQk = tempQK
-		if (qkpm < 1) tempstring = "(" + shorten(qkpm * 60) + " QK/hour"
-		getEl("averageQuantumRun").textContent = "Average time of the last " + listed + " Quantums: "+ timeDisplayShort(tempTime, false, 3) + " | Average QK gain: " + shortenDimensions(tempQK) + " QK. " + tempstring
+		getEl("averageQuantumRun").textContent = "Average time of the last " + listed + " Quantums: "+ timeDisplayShort(tempTime, false, 3) + " | Average QK gain: " + shortenDimensions(tempQK) + " aQs. " + tempstring
 	} else getEl("averageQuantumRun").textContent = ""
 }
 
@@ -307,28 +305,37 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 
 	// Quantum Challenges
 	var isQC = mode == "qc"
+	var qcData = [... QCs_save.in]
 	if (!force) {
-		let qcData = QCs_save.in
 		if (qcData.length == 1) {
 			let qc = qcData[0]
 			QCs_save.comps = Math.max(QCs_save.comps, qc)
 			QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, qu_save.best)
 		}
+		if (qcData.length == 2) {
+			var id = PCs.conv(qcData[0], qcData[1])
+			if (!PCs_save.comps.includes(id)) PCs_save.comps.push(id)
+			PCs.updateTmp()
+		}
 	}
 	if (isQC) {
 		QCs_save.in = data
+		QCs_tmp.in = data
+		if (data.length == 2) PCs.updateButton(PCs.conv(data[0], data[1]))
 		if (!QCs.inAny()) QCs_save.kept = {
 			tt: player.timestudy.theorem,
 			ms: [...player.masterystudies]
 		}
 	} else if (force || !player.options.retryChallenge) {
 		QCs_save.in = []
+		QCs_tmp.in = []
 		if (QCs_save.kept) {
 			player.timestudy.theorem = QCs_save.kept.tt
 			player.masterystudies = QCs_save.kept.ms
 			delete QCs_save.kept
 		}
 	}
+	if (qcData.length == 2) PCs.updateButton(PCs.conv(qcData[0], qcData[1]))
 
 	QCs.reset()
 	QCs.updateTmp()

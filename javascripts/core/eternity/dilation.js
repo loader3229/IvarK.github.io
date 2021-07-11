@@ -159,16 +159,16 @@ function getAMEffToTP() {
 	return 1 / 400
 }
 
-function getTPGain(reset, amLog) {
+function getTPGain() {
 	let qm = qMs.tmp.amt
 
-	if (!amLog) amLog = player.money.log10()
+	let amLog = player.money.log10()
 	let amLogEff = getAMEffToTP()
 	if (amLog < 1 / amLogEff) return new Decimal(0)
 
 	//Base TP
-	let gain = reset && !qMs.isOn(25) ? new Decimal(qMs.tmp.amt >= 5 ? 1 : 0) : Decimal.pow(amLog * amLogEff, getTPExp())
-	gain = gain.times(reset ? Decimal.pow(3, player.dilation.rebuyables[3]) : getTPMult())
+	let gain = Decimal.pow(amLog * amLogEff, getTPExp())
+	gain = gain.times(getTPMult())
 
 	//NG Condensed
 	if (!reset && tmp.ngC) {

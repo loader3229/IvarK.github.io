@@ -139,7 +139,7 @@ function metaBoost() {
 	if (!(player.meta[req.tier].bought >= req.amount)) return
 
 	let isNU1ReductionActive = hasNU(1) ? !qu_save.bigRip.active : false
-	if (qMs.tmp.amt >= 25) {
+	if (false) {
 		if (isNU1ReductionActive && player.meta.resets < 110) {
 			player.meta.resets = Math.min(player.meta.resets + Math.floor((player.meta[8].bought - req.amount) / (req.mult + 1)) + 1, 110)
 			req = getMetaShiftRequirement()

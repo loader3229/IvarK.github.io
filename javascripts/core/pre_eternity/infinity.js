@@ -155,7 +155,7 @@ function getInfinitied() {
 
 function getInfinitiedGain() {
 	let infGain = 1
-	if (qMs.tmp.amt >= 18) infGain = 1e3
+	if (qMs.tmp.amt >= 18) infGain = 250
 	else if (player.thisInfinityTime >= 50 && hasAch("r87")) infGain = 250
 	if (hasTS(32)) infGain *= tsMults[32]()
 	if (tmp.ngp3 && hasAch("ngpp18")) infGain *= 10

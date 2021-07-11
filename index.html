@@ -232,7 +232,7 @@
 					<tr>
 						<td><button id="81" onclick="buyTimeStudy(81)">Dimension Boost power <span id="81desc" style="display:inline"></span><span>Cost: 4 Time Theorems</button></td>
 						<td><button id="82" onclick="buyTimeStudy(82)">Dimension Boosts affect Infinity Dimensions<span id="82desc">Currently: 1x</span>Cost: 6 Time Theorems</button></td>
-						<td><button id="83" onclick="buyTimeStudy(83)">Dimension Boosts are 0.04% more effective for each free tickspeed upgrade<span id="83desc">Currently: 1x</span><span>Cost: 5 Time Theorems</button></td>
+						<td><button id="83" onclick="buyTimeStudy(83)" style="font-size: 9px">Dimension Boosts are 0.04% more effective for each free tickspeed upgrade<span id="83desc">Currently: 1x</span><span id="softcap_ts83_disp"></span><span>Cost: 5 Time Theorems</button></td>
 					</tr>
 					<tr>
 						<td><button id="91" onclick="buyTimeStudy(91)">Normal Dimensions gain a multiplier based on time spent this Eternity<span id="91desc">Currently: 1x</span>Cost: 4 Time Theorems</button></td>
@@ -1449,75 +1449,70 @@
 					<tr>
 						<td><div><button id="save" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Save</button></div></td>
 						<td><div><button id="load" class="storebtn" onclick='load_saves()' style="color:black; width: 200px; height: 55px; font-size: 20px">Load</button></div></td>
-						<td><div><button id="exportbtn" class="storebtn" onclick='export_save()' style="color:black; width: 200px; height: 55px; font-size: 20px">Export</button></div></td>
-						<td><div><button id="importbtn" class="storebtn" onclick='import_save("current")' style="color:black; width: 200px; height: 55px; font-size: 20px">Import</button></div></td>
 						<td><div><button id="rename" class="storebtn" onclick='rename_save()' style="color:black; width: 200px; height: 55px; font-size: 20px">Rename</button></div></td>
 					</tr>
 					<tr>
+						<td><div><button id="exportbtn" class="storebtn" onclick='export_save()' style="color:black; width: 200px; height: 55px; font-size: 20px">Export</button></div></td>
+						<td><div><button id="importbtn" class="storebtn" onclick='import_save("current")' style="color:black; width: 200px; height: 55px; font-size: 20px">Import</button></div></td>
 						<td><div><button id="autoSave" onclick='toggleAutoSave()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
-						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="autoSaveInterval">Auto-save interval: 30s</b><input id="autoSaveIntervalSlider" style="width: 170px;" type="range" min="15" max="120" value="30" class="slider" oninput="changeAutoSaveInterval()"></div></td>
-						<td></td>
-						<td></td>
+					</tr>
+					<tr>
 						<td><div><button onclick="pauseGame()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 8px"><p id="pauseStatus" style="font-size:20px">Pause</p>(Stops all time, production, and automation)</button></div></td>
-					</tr>
-					<tr>
-						<td><div><button id="offlineProgress" onclick='toggleOfflineProgress()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
-						<td></td>
-						<td></td>
 						<td><div><button onclick='reload()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 8px"><p style="font-size: 20px">Rollback</p>(to last save point)</button></div></td>
-						<td><div><button id="reset" onclick="reset_game()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">RESET THE GAME</button></div></td>
+						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="autoSaveInterval">Auto-save interval: 30s</b><input id="autoSaveIntervalSlider" style="width: 170px;" type="range" min="15" max="120" value="30" class="slider" oninput="changeAutoSaveInterval()"></div></td>
 					</tr>
 					<tr>
-						<td><div><button id="convertSave" onclick="convertSave(convert)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
+						<td><div><button id="offlineProgress" onclick='toggleOfflineProgress()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button></div></td>
+						<td><div><button id="reset" onclick="reset_game()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">RESET THE GAME</button></div></td>
+						<td></td>
+					</tr>
+					<tr>
 						<td><div><button id="bugExport" onclick="bugExport()" class="storebtn" style="color:black; width:200px; height:55px; font-size:12px; display:none">Export "Infinite" bug save<br><b>(WARNING: This disappears when you reload the game!)</button></b></div></td>
+						<td><div><button id="convertSave" onclick="convertSave(convert)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
+						<td></td>
 					</tr>
 				</table>
 			</div>
 			<div class='optionstab' id='displays' style='display:none'>
 				<table>
 					<tr>
-						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size: 130%; text-align: center"><b id="updaterate">Update Rate: 50ms</b><input id="updaterateslider" style="width: 170px;" type="range" min="0" max="200" value="50" class="slider" ></div></td>
 						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size: 130%; text-align: center"><b id="renderrate">Render rate: 1 tick</b><input id="renderrateslider" style="width: 170px;" type="range" min="1" max="20" value="1" class="slider"></div></td>
-						<td></td>
 						<td><div><button id="theme" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 12px" onclick="showOptions('thememenu')"></button></div></td>
-						<td><div><button id="animationoptionsbtn" class="storebtn" onclick="showOptions('animationoptions')" style="color:black; width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
-					</tr>
-					<tr>
-						<td></td>
 						<td><div><button onclick="showOptions('visibilityoptions')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide stuff</button></div></td>
-						<td><div><button id="layerDispOptions" onclick="showOptions('layervisibilitymenu')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide layers</button></div></td>
-						<td><!--<div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Menu: OFF</button></div>--></td>
-						<td></td>
 					</tr>
 					<tr>
+						<td><div><button id="animationoptionsbtn" class="storebtn" onclick="showOptions('animationoptions')" style="color:black; width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
+						<td><div><button id="layerDispOptions" onclick="showOptions('layervisibilitymenu')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide layers</button></div></td>
 						<td><div><button id="tabsSave" onclick="toggleTabsSave()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button></div></td>
-						<td><!--<div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Gameplay Tabs: Combined</button></div>--></td>
-						<td><!--<div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Alternate Tab Grouping: OFF</button></div>--></td>
-						<td><!--<div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Shortcuts: OFF</button>--></div></td>
-						<td><!--<div><button id="resetDispOptions" onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Reset Displays: Top</button></div>--></td>
+					</tr>
+					<tr>
+						<td><div><button id="notation" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:10px"></button></div></td>
+						<!--
+						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Menu: OFF</button></div></td>
+						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Gameplay Tabs: Combined</button></div></td>
+						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Alternate Tab Grouping: OFF</button></div></td>
+						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Shortcuts: OFF</button></div></td>
+						<td><div><button id="resetDispOptions" onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Reset Displays: Top</button></div></td>
+						-->
 					</tr>
 				</table>
 			</div>
 			<div class='optionstab' id='otheroptions' style='display:none'>
 				<table>
 					<tr>
-						<td></td>
 						<td><div><button id="hotkeys" onclick="toggleHotkeys()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Disable hotkeys</button></div></td>
-						<td></td>
+						<td><div><button id="confirmations" onclick="showOptions('confirmationoptions')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Confirmations</button></div></td>
+						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size: 130%; text-align: center"><b id="updaterate">Update Rate: 50ms</b><input id="updaterateslider" style="width: 170px;" type="range" min="0" max="200" value="50" class="slider" ></div></td>
 					</tr>
 					<tr>
-						<td><div><button id="notation" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:10px"></button></div></td>
 						<td><div><button id="toggleLogRateChange" onclick="toggleLogRateChange()" class="storebtn" style="color:black; width: 200px; height: 55px"></button></div></td>
 						<td><div><button id="decimalModeBtn" onclick="switchDecimalMode()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 8px"><p style="font-size: 15px">Number Library</p><span id="decimalMode"></span></button></div></td>
-					</tr>
-					<tr>
-						<td><div><button id="confirmations" onclick="showOptions('confirmationoptions')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Confirmations</button></div></td>
-						<td><div><button id="retry" onclick="toggleChallengeRetry()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%"></button></div></td>
 						<td><div><button id="performanceTicks" onclick="togglePerformanceTicks()" class="storebtn" style="color:black; width: 200px; height: 55px"></button></div></td>
 					</tr>
 					<tr>
-						<td></td> <!-- This centers the below button. Don't remove. -->
+						<td><div><button id="retry" onclick="toggleChallengeRetry()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%"></button></div></td>
 						<td><div><button id="maxHighestTD" onclick="maxHighestTD()" class="storebtn" style="color:black; width: 200px; height: 55px"></button></div></td>
+						<td></td>
 					</tr>
 				</table>
 			</div>
@@ -1580,7 +1575,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects - 7/9/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects - 7/10/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -2250,7 +2245,7 @@
 								<div id="I don't have enough fuel!" class="achievement achievementlocked" style="background-image: url(images/105.png)"><br></div>
 							</td>
 							<td>
-								<div id="Sub-atomic" class="achievement achievementlocked" style="background-image: url(images/106.png)" ach-tooltip="Go quantum. Reward: Autobuyers never reset, the Mastery Study cost multiplier is divided by 2, and dilation requires nothing."><br></div>
+								<div id="Sub-atomic" class="achievement achievementlocked" style="background-image: url(images/106.png)" ach-tooltip="Go quantum. Reward: Start with 100 Eternities, the Mastery Study cost multiplier is divided by 2, and dilation requires nothing."><br></div>
 							</td>
 							<td>
 								<div id="Hadronization" class="achievement achievementlocked" style="background-image: url(images/107.png)" ach-tooltip="Have colored quarks, but have no color charge. Reward: Quantum Worth boosts all Meta Dimensions."><br></div>
@@ -2273,7 +2268,7 @@
 						</tr>
 						<tr id="achRowng3p2">
 							<td>
-								<div id="Special Relativity" class="achievement achievementlocked" style="background-image: url(images/113.png)" ach-tooltip="Get the first 24 Quantum Milestones. Reward: 1st Meta Dimensions are stronger based on your best meta antimatter."><br></div>
+								<div id="Special Relativity" class="achievement achievementlocked" style="background-image: url(images/113.png)" ach-tooltip="Get 22 Quantum Milestones. Reward: 1st Meta Dimensions are stronger based on your best meta antimatter."><br></div>
 							</td>
 							<td>
 								<div id="We are not going squared." class="achievement achievementlocked" style="background-image: url(images/114.png)"><br></div>
@@ -3539,7 +3534,12 @@
 					</table>
 				</div>
 			</div>
-			<div id="pairedChalls" class="challengeTab">You have currently reached the end-game! Wait until Beta v0.5 comes...</div>
+			<div id="pairedChalls" class="challengeTab">
+				<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>.</span>
+				<br>
+				Next level is at <span id="pc_comps" style="font-size: 20px">0 / 1</span> completions.
+				<table id="pc_table" align="center" style="margin: auto"></table>
+			</div>
 			<div class="footer"></div>
 		</div>
 		<div id="automation" class="tab">
@@ -4721,131 +4721,78 @@
 		<div id="speedruns" class="quantumtab">
 			<table class="qTable_4col">
 				<tr>
-					<td id="qMs_sr_cell">
-						<b style="font-size: 25px">Speedrun</b><br>
-						Your best quantum time is <span id="qMs_sr_target" style="font-size: 15px">0 seconds</span>,<br>
-						which giving you <span id="qMs_sr_points" style="font-size: 25px">0</span> Milestone Points.<br>
-						(Next Milestone Point is at <span id="qMs_sr_next">0</span> best quantum)
-					</td>
-					<td id="qMs_rl_cell">
-						<b style="font-size: 25px">Relativistic</b><br>
-						You got a best of <span id="qMs_rl_target" style="font-size: 15px">0</span> Tachyon Particles,<br>
-						which giving you <span id="qMs_rl_points" style="font-size: 25px">0</span> Milestone Points.<br>
-						(Next Milestone Point is at <span id="qMs_rl_next">0</span> best Tachyon Particles)
-					</td>
-					<td id="qMs_en_cell">
-						<b style="font-size: 25px">Energetic</b><br>
-						Your best quantum energy is <span id="qMs_en_target" style="font-size: 15px">0</span>,<br>
-						which giving you <span id="qMs_en_points" style="font-size: 25px">0</span> Milestone Points.<br>
-						(Next Milestone Point is at <span id="qMs_en_next">0</span> best quantum energy)
-					</td>
-					<td id="qMs_ch_cell">
-						<b style="font-size: 25px">Challenging</b><br>
-						You have completed a total of <span id="qMs_ch_target" style="font-size: 15px">0</span> unique paired challenges,<br>
-						which giving you <span id="qMs_ch_points" style="font-size: 25px">0</span> Milestone Points.<br>
-						(Next Milestone Point is at <span id="qMs_ch_next">0</span> completions)
+					<td class="lime" colspan=4 style="font-size: 20px">
+						<span id="qMs_points" style="font-size: 30px">0</span> Milestone Points
 					</td>
 				</tr>
 				<tr>
-					<td class="green" colspan=4>
-						You have got a total of <span id="qMs_points" style="font-size: 35px">0</span> Milestone Points!
+					<td class="yellow" id="qMs_sr_cell">
+						<b style="font-size: 25px">Speedrun</b>
+						<span id="qMs_sr_points" style="font-size: 20px"></span><br>
+						(Your best quantum time is <span id="qMs_sr_target" style="font-size: 15px">0 seconds</span>)<br>
+						<span id="qMs_sr_next">0</span>
+					</td>
+					<td class="green" id="qMs_en_cell">
+						<b style="font-size: 25px">Energetic</b>
+						<span id="qMs_en_points" style="font-size: 20px"></span><br>
+						(Your best quantum energy is <span id="qMs_en_target" style="font-size: 15px">0</span>)<br>
+						<span id="qMs_en_next">0</span>
+					</td>
+					<td class="cyan" id="qMs_rl_cell">
+						<b style="font-size: 25px">Relativistic</b>
+						<span id="qMs_rl_points" style="font-size: 20px"></span><br>
+						(You got a best of <span id="qMs_rl_target" style="font-size: 15px">0</span> Tachyon Particles)<br>
+						<span id="qMs_rl_next">0</span>
+					</td>
+					<td class="blue" id="qMs_ch_cell">
+						<b style="font-size: 25px">Challenging</b>
+						<span id="qMs_ch_points" style="font-size: 20px"></span><br>
+						(You have completed a total of <span id="qMs_ch_target" style="font-size: 15px">0</span> unique paired challenges)<br>
+						<span id="qMs_ch_next">0</span>
 					</td>
 				</tr>
 			</table>
-			<br>
+			<p id="qMs_next"></p>
 			<table class="table" align="center" style="margin: auto" id="qMs_rewards">
-				<!-- NEXT ROW -->
 				<tr>
-					<td class="milestoneText" id="qMs_req_1"></td>
-					<td class="milestoneText" id="qMs_req_2"></td>
-					<td class="milestoneText" id="qMs_req_3"></td>
-					<td class="milestoneText" id="qMs_req_4"></td>
-				</tr>
-				<tr>
-					<td><button class="qMs_locked" id="qMs_reward_1" onclick="qMs.toggle(1)" style="font-size: 11px"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_1" onclick="qMs.toggle(1)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_2" onclick="qMs.toggle(2)" style="font-size: 10px"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_3" onclick="qMs.toggle(3)"></button></td>
+				</tr>
+				<tr>
 					<td><button class="qMs_locked" id="qMs_reward_4" onclick="qMs.toggle(4)"></button></td>
-				</tr>
-
-				<!-- NEXT ROW -->
-				<tr>
-					<td class="milestoneText" id="qMs_req_5"></td>
-					<td class="milestoneText" id="qMs_req_6"></td>
-					<td class="milestoneText" id="qMs_req_7"></td>
-					<td class="milestoneText" id="qMs_req_8"></td>
-				</tr>
-				<tr>
-					<td><button class="qMs_locked" id="qMs_reward_5" onclick="qMs.toggle(5)" style="font-size: 10px"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_5" onclick="qMs.toggle(5)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_6" onclick="qMs.toggle(6)"></button></td>
+				</tr>
+				<tr>
 					<td><button class="qMs_locked" id="qMs_reward_7" onclick="qMs.toggle(7)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_8" onclick="qMs.toggle(8)"></button></td>
-				</tr>
-
-				<!-- NEXT ROW -->
-				<tr>
-					<td class="milestoneText" id="qMs_req_9"></td>
-					<td class="milestoneText" id="qMs_req_10"></td>
-					<td class="milestoneText" id="qMs_req_11"></td>
-					<td class="milestoneText" id="qMs_req_12"></td>
-				</tr>
-				<tr>
 					<td><button class="qMs_locked" id="qMs_reward_9" onclick="qMs.toggle(9)"></button></td>
+				</tr>
+				<tr>
 					<td><button class="qMs_locked" id="qMs_reward_10" onclick="qMs.toggle(10)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_11" onclick="qMs.toggle(11)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_12" onclick="qMs.toggle(12)" style="font-size: 10px"></button></td>
 				</tr>
-
-				<!-- NEXT ROW -->
 				<tr>
-					<td class="milestoneText" id="qMs_req_13"></td>
-					<td class="milestoneText" id="qMs_req_14"></td>
-					<td class="milestoneText" id="qMs_req_15"></td>
-					<td class="milestoneText" id="qMs_req_16"></td>
+					<td><button class="qMs_locked" id="qMs_reward_13" onclick="qMs.toggle(13)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_14" onclick="qMs.toggle(14)" style="font-size: 11px"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_15" onclick="qMs.toggle(15)"></button></td>
 				</tr>
 				<tr>
-					<td><button class="qMs_locked" id="qMs_reward_13" onclick="qMs.toggle(13)" style="font-size: 11px"></button></td>
-					<td><button class="qMs_locked" id="qMs_reward_14" onclick="qMs.toggle(14)"></button></td>
-					<td><button class="qMs_locked" id="qMs_reward_15" onclick="qMs.toggle(15)" style="font-size: 11px"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_16" onclick="qMs.toggle(16)"></button></td>
-				</tr>
-
-				<!-- NEXT ROW -->
-				<tr>
-					<td class="milestoneText" id="qMs_req_17"></td>
-					<td class="milestoneText" id="qMs_req_18"></td>
-					<td class="milestoneText" id="qMs_req_19"></td>
-					<td class="milestoneText" id="qMs_req_20"></td>
-				</tr>
-				<tr>
-					<td><button class="qMs_locked" id="qMs_reward_17" onclick="qMs.toggle(17)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_17" onclick="qMs.toggle(17)" style="font-size: 11px"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_18" onclick="qMs.toggle(18)"></button></td>
-					<td><button class="qMs_locked" id="qMs_reward_19" onclick="qMs.toggle(19)" style="font-size: 11px"></button></td>
+				</tr>
+				<tr>
+					<td><button class="qMs_locked" id="qMs_reward_19" onclick="qMs.toggle(19)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_20" onclick="qMs.toggle(20)"></button></td>
-				</tr>
-
-				<!-- NEXT ROW -->
-				<tr>
-					<td class="milestoneText" id="qMs_req_21"></td>
-					<td class="milestoneText" id="qMs_req_22"></td>
-					<td class="milestoneText" id="qMs_req_23"></td>
-					<td class="milestoneText" id="qMs_req_24"></td>
+					<td><button class="qMs_locked" id="qMs_reward_21" onclick="qMs.toggle(21)" style="font-size: 11px"></button></td>
 				</tr>
 				<tr>
-					<td><button class="qMs_locked" id="qMs_reward_21" onclick="qMs.toggle(21)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_22" onclick="qMs.toggle(22)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_23" onclick="qMs.toggle(23)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_24" onclick="qMs.toggle(24)"></button></td>
-				</tr>
-
-				<!-- NEXT ROW -->
-				<tr>
-					<td class="milestoneText" id="qMs_req_25"></td>
-					<td class="milestoneText" id="qMs_req_26"></td>
-				</tr>
-				<tr>
-					<td><button class="qMs_locked" id="qMs_reward_25" onclick="qMs.toggle(25)"></button></td>
-					<td><button class="qMs_locked" id="qMs_reward_26" onclick="qMs.toggle(26)"></button></td>
 				</tr>
 			</table>
 		</div>
@@ -4878,8 +4825,8 @@
 				</td>
 			</tr>
 		</table>
-		<table class="qTable_2col"><tr>
-			<td id="pos_cloud_div" style="vertical-align: top"><b style="font-size: 15px">Positron Cloud</b><br>
+		<button id="pos_tab" class='storebtn' style="width: 180px" onclick="pos.switchTab()"></button>
+		<div id="pos_cloud_div" style="vertical-align: top">
 			Note: You can swap Positronic Boosts, only if they are mastered, and are in different tiers.<br>
 			Note 2: Swaps take effect when you start a Quantum run.
 			<table class="qTable_2col">
@@ -4896,15 +4843,15 @@
 						<button id="pos_boost1_btn" onclick="pos.swap(1)">
 							<span>
 								<b>PB1</b><br>
+								<p id="pos_boost1_charge"></p>
 								<p id="pos_boost1_excite">(+0 tiers)</p>
-								Type: Green
 							</span>
 						</button>
 						<button id="pos_boost2_btn" onclick="pos.swap(2)">
 							<span>
 								<b>PB2</b><br>
+								<p id="pos_boost2_charge"></p>
 								<p id="pos_boost2_excite">(+0 tiers)</p>
-								Type: Red
 							</span>
 						</button>
 					</td>
@@ -4922,29 +4869,29 @@
 						<button id="pos_boost3_btn" onclick="pos.swap(3)">
 							<span>
 								<b>PB3</b><br>
+								<p id="pos_boost3_charge"></p>
 								<p id="pos_boost3_excite">(+0 tiers)</p>
-								Type: Blue
 							</span>
 						</button>
 						<button id="pos_boost4_btn" onclick="pos.swap(4)">
 							<span>
 								<b>PB4</b><br>
+								<p id="pos_boost4_charge"></p>
 								<p id="pos_boost4_excite">(+0 tiers)</p>
-								Type: Blue
 							</span>
 						</button>
 						<button id="pos_boost5_btn" onclick="pos.swap(5)">
 							<span>
 								<b>PB5</b><br>
+								<p id="pos_boost5_charge"></p>
 								<p id="pos_boost5_excite">(+0 tiers)</p>
-								Type: Red
 							</span>
 						</button>
 						<button id="pos_boost6_btn" onclick="pos.swap(6)">
 							<span>
 								<b>PB6</b><br>
+								<p id="pos_boost6_charge"></p>
 								<p id="pos_boost6_excite">(+0 tiers)</p>
-								Type: Anti-Red
 							</span>
 						</button>
 					</td>
@@ -4962,64 +4909,62 @@
 						<button id="pos_boost7_btn" onclick="pos.swap(7)">
 							<span>
 								<b>PB7</b><br>
+								<p id="pos_boost7_charge"></p>
 								<p id="pos_boost7_excite">(+0 tiers)</p>
-								Type: Green
 							</span>
 						</button>
 						<button id="pos_boost8_btn" onclick="pos.swap(8)">
 							<span>
 								<b>PB8</b><br>
+								<p id="pos_boost8_charge"></p>
 								<p id="pos_boost8_excite">(+0 tiers)</p>
-								Type: Anti-Green
 							</span>
 						</button>
 						<button id="pos_boost9_btn" onclick="pos.swap(9)">
 							<span>
 								<b>PB9</b><br>
+								<p id="pos_boost9_charge"></p>
 								<p id="pos_boost9_excite">(+0 tiers)</p>
-								Type: Anti-Blue
 							</span>
 						</button>
 						<button id="pos_boost10_btn" onclick="pos.swap(10)">
 							<span>
 								<b>PB10</b><br>
+								<p id="pos_boost10_charge"></p>
 								<p id="pos_boost10_excite">(+0 tiers)</p>
-								Type: Anti-Blue
 							</span>
 						</button>
 						<button id="pos_boost11_btn" onclick="pos.swap(11)">
 							<span>
 								<b>PB11</b><br>
+								<p id="pos_boost11_charge"></p>
 								<p id="pos_boost11_excite">(+0 tiers)</p>
-								Type: Anti-Blue
 							</span>
 						</button>
 						<button id="pos_boost12_btn" onclick="pos.swap(12)">
 							<span>
 								<b>PB12</b><br>
+								<p id="pos_boost12_charge"></p>
 								<p id="pos_boost12_excite">(+0 tiers)</p>
-								Type: Anti-Blue
 							</span>
 						</button>
 					</td>
 				</tr>
-				<tr>
-					<td id="pos_cloud_total"></td>
-					<td><button class="storebtn" id="pos_toggle" style="width: 180px" onclick="pos.apply()">Apply changes</button></td>
-				</tr>
-			</table></td>
-			<td id="pos_boost_div" style="vertical-align: top"><b style="font-size: 15px">Boost Overview</b><br>
-			<button id="entangle_rg_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('rg')">RG</button>
-			<button id="entangle_gb_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('gb')">GB</button>
-			<button id="entangle_br_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('br')">BR</button>
-			<br>
-			<span id="enB_pos_next"></span><br>
+			</table>
+			<p id="pos_cloud_total" style="font-size: 15px"></p>
+			<button class="storebtn" id="pos_toggle" style="width: 180px" onclick="pos.clearSwaps()">Clear swaps</button>
+			<button class="storebtn" id="pos_toggle" style="width: 180px" onclick="pos.cancelSwaps()">Cancel changes</button>
+			<button class="storebtn" id="pos_toggle" style="width: 180px" onclick="pos.applySwaps()">Apply changes</button>
+		</div>
+		<div id="pos_boost_div" style="vertical-align: top">
+			<div id="entangle_div_pos">
+				<button id="entangle_rg_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('rg')">RG</button>
+				<button id="entangle_gb_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('gb')">GB</button>
+				<button id="entangle_br_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('br')">BR</button>
+			</div>
+			<span id="enB_pos_next"></span>
 			<span id="pos_cloud_req"></span>
-			<table class="qTable_2col">
-				<tr>
-					<td></td>
-					<td></td>
-				</tr>
+			<table class="qTable">
 				<tr>
 					<td id="enB_pos1">
 						<b id="enB_pos1_name" style="font-size: 25px"></b>
@@ -5043,8 +4988,6 @@
 						<br>
 						(See Meta Dimensions tab)
 					</td>
-				</tr>
-				<tr>
 					<td id="enB_pos3">
 						<b id="enB_pos3_name" style="font-size: 25px"></b>
 						<br>
@@ -5054,6 +4997,8 @@
 						<br><br>
 						Raise the multiplier per ten normal Dimensions by <span id="enB_pos3_eff" style="font-size:25px"></span>.
 					</td>
+				</tr>
+				<tr>
 					<td id="enB_pos4">
 						<b id="enB_pos4_name" style="font-size: 25px"></b>
 						<br>
@@ -5063,8 +5008,6 @@
 						<br><br>
 						Quantum requirement is reduced to <span id="enB_pos4_eff" style="font-size:25px"></span>. (<span id="enB_pos4_exp" style="font-size:25px"></span>)
 					</td>
-				</tr>
-				<tr>
 					<td id="enB_pos5">
 						<b id="enB_pos5_name" style="font-size: 25px"></b>
 						<br>
@@ -5103,8 +5046,6 @@
 						<br><br>
 						Meta Accelerator slowdown starts <span id="enB_pos8_eff" style="font-size:25px"></span> later.
 					</td>
-				<tr>
-				</tr>
 					<td id="enB_pos9">
 						<b id="enB_pos9_name" style="font-size: 25px"></b>
 						<br>
@@ -5114,6 +5055,8 @@
 						<br><br>
 						Infinitied stat boosts itself by <span id="enB_pos9_eff" style="font-size:25px"></span> to effect.
 					</td>
+				</tr>
+				<tr>
 					<td id="enB_pos10">
 						<b id="enB_pos10_name" style="font-size: 25px"></b>
 						<br>
@@ -5123,8 +5066,6 @@
 						<br><br>
 						Quark efficiency multiplies Meta Accelerator by <span id="enB_pos10_eff" style="font-size:25px"></span>x.
 					</td>
-				</tr>
-				</tr>
 					<td id="enB_pos11">
 						<b id="enB_pos11_name" style="font-size: 25px"></b>
 						<br>
@@ -5144,8 +5085,8 @@
 						Before multipliers, Replicantis add <span id="enB_pos12_eff" style="font-size:25px"></span>x to Meta Accelerator base.
 					</td>
 				</tr>
-			</table></td>
-		</tr></table>
+			</table>
+		</div>
 		</div>
 		<div class='quantumtab' id='replicants'>
 			You have <span id="replicantiAmount2">1</span> replicantis.<br>

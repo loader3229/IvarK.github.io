@@ -290,7 +290,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (qu_save.breakEternity.did) giveAchievement("Time Breaker")
 	if (mTs.bought >= 48) giveAchievement("The Theory of Ultimate Studies")
 	if (qu_save.best <= 300) giveAchievement("And the winner is...")
-	if (qMs.tmp.amt >= 24) giveAchievement("Special Relativity")
+	if (qMs.tmp.amt >= 22) giveAchievement("Special Relativity")
 	if (qu_save.best <= 10) giveAchievement("Quantum doesn't take so long")
 	if (player.masterystudies.includes("d13")) giveAchievement("Do protons decay?")
 	if (getTotalRadioactiveDecays() >= 10) giveAchievement("Radioactive Decaying to the max!")

@@ -383,14 +383,16 @@ function doCheckECCompletionStuff() {
 
 		//Special
 		if (qMs.tmp.amt >= 1) {
-			player.etercreq = 0
 			if (ecNum > 12) {
 				getEl("ec" + ecNum + "Req").style.display = "block"
 				mTs.ecReqNumsStored[ecNum] = mTs.ecReqNums[ecNum]()
 				updateMasteryStudyTextDisplay()
 			}
-			resetEternityChallUnlocks()
-		} else forceRespec = true
+			if (data[ec] == 5) resetEternityChallUnlocks()
+		} else {
+			player.etercreq = 0
+			forceRespec = true
+		}
 
 		if (ecNum == 12 && hasAch("ng3p51")) data.eterc11 = Math.min((data.eterc11 || 0) + 1, 5)
 	}

@@ -297,7 +297,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 		else pow = power
 		if (pow > 100000) {
 			if (player.options.commas !== "Commas") pow = formatValue(player.options.commas, pow, 3, 3)
-			else if (pow >= 1e12) pow = formatValue("Standard", pow, 3, 3)
+			else if (pow >= 1e9) pow = formatValue("Standard", pow, 3, 3)
 			else pow = getFullExpansion(pow);
 		}
 
@@ -400,6 +400,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			if (power <= 33) return matissa + " " + FormatList[(power - (power % 3)) / 3];
 			else return (matissa + "e" + pow);
 		} else if (notation === "Engineering") {
+			if (power >= 1e9) return "e" + pow
 			return (matissa + "e" + pow);
 		} else if (notation === "Letters") {
 			return matissa + letter(power, 'abcdefghijklmnopqrstuvwxyz');
