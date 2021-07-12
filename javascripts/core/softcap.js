@@ -234,8 +234,12 @@ var softcap_data = {
 			func: "dilate",
 			start: new Decimal(1e3),
 			base: 10,
-			pow: 0.75,
-			mul: 2/3
+			pow() {
+				let x = 0.75
+				if (PCs.unl()) x *= PCs_tmp.eff2
+				return x
+			},
+			mul: 2/3,
 		},
 	},
 	bam: {
@@ -892,7 +896,6 @@ function hasSoftcapStarted(id, num){
 	if (check[id] !== undefined && !check[id]) return false
 	
 	let amt = getSoftcapAmtFromId(id)
-	
 	return hasSoftcapStartedArg(id, num, amt)
 }
 
@@ -902,7 +905,8 @@ function hasSoftcapStartedArg(id, num, arg){
 		if (typeof a == "function") a = a()
 		if (a == false) return false
 	}
-	return Decimal.gt(arg, softcap_data[id][num].start)
+	let start = softcap_data[id][num].start
+	return Decimal.gt(arg, typeof(start) == "function" ? start() : start)
 }
 
 function hasAnySoftcapStarted(id){

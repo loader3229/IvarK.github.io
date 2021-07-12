@@ -377,7 +377,7 @@ button, div.storebtn {
 	color: #00e5e5 !important
 }
 
-#metadimensions table #quantum.storebtn, .quantumbtn, #pastquantums, .qMs_reward, #dilstudy8.dilationupgbought, #qctabbtn, #qcsbtn, #dilstudy9.dilationupgbought, #pccompletionsbtn {
+#metadimensions table #quantum.storebtn, .quantumbtn, #pastquantums, .qMs_reward, #dilstudy8.dilationupgbought, #qctabbtn, #pctabbtn {
 	background-color: #72e500 !important;
 	border-color: #72e500 !important;
 	color: #191919 !important
@@ -389,7 +389,7 @@ button, div.storebtn {
 	color: #191919 !important
 }
 
-#metadimensions table #quantum.storebtn:hover, .quantumbtn:hover, #pastquantums:hover, #dilstudy8.dilationupg, #qctabbtn:hover, #qcsbtn:hover, #dilstudy9.dilationupg, #pccompletionsbtn:hover {
+#metadimensions table #quantum.storebtn:hover, .quantumbtn:hover, #pastquantums:hover, #dilstudy8.dilationupg, #qctabbtn:hover, #pctabbtn:hover {
 	background-color: #8fe539 !important
 }
 
@@ -409,7 +409,9 @@ button, div.storebtn {
 	background-color: #e59999 !important
 }
 
-.QKAmount, #normalReplGatherRate, #gatherRate, #gatheredQuarks, #workerReplGatherRate, #babyReplGatherRate, .empQuarks, #quarksNanofield, #quarkLoss,
+.QKAmount, 
+#pc_lvl, #pc_eff1, #pc_eff2,
+#normalReplGatherRate, #gatherRate, #gatheredQuarks, #workerReplGatherRate, #babyReplGatherRate, .empQuarks, #quarksNanofield, #quarkLoss,
 #gbRepl, #quarkEnergy, #quarkEnergyMult, #quarkEnergyEffect1, #quarkEnergyEffect2, #bestQE, #enB_glu_amt, #quarkTranslation, #gbEDs, #quarkCharge, #quarkChargeRate {
 	color: #72e500 !important
 }

@@ -566,12 +566,18 @@ var enB = {
 		},
 
 		eff(x) {
-			var amt = this.target(true)
-			if (pos.on()) amt += enB.pos.target()
+			var amt = this.boosterEff()
 
 			var r = Math.max(amt * 2 / 3 - 1, 1)
 			r *= tmp.glB[enB.mastered("glu", x) ? "masAmt" : "enAmt"]
 			return r
+		},
+		boosterEff(x) {
+			var amt = this.target(true)
+			if (pos.on()) amt += enB.pos.target()
+			if (PCs.unl() && amt >= PCs_tmp.eff1_start) amt = Math.pow(amt / PCs_tmp.eff1_start, PCs_tmp.eff1) * PCs_tmp.eff1_start
+
+			return amt
 		},
 		gluonEff(x) {
 			let l = Decimal.add(x, 1).log10()
@@ -793,17 +799,26 @@ var enB = {
 		},
 		eff(x) {
 			var eng = this.engEff()
-			if ((enB.mastered("pos", x) || enB.colorMatch("pos", x)) && eng >= this.chargeReq(x)) eng *= 2 * this.lvl(x)
+			if (this.charged(x)) eng *= 2 * this.lvl(x)
 			return eng
 		},
 
 		chargeReq(x, next) {
 			var lvl = this.lvl(x, next)
-			return this[x].chargeReq * (tmp.exMode ? 1.25 : 1) * Math.pow(lvl, tmp.dtMode ? 2.5 : 2)
+			var req = this[x].chargeReq * (tmp.exMode ? 1.25 : 1) * Math.pow(lvl, tmp.dtMode ? 2.5 : 2)
+			if (PCs.milestoneDone(43) && lvl == 1) req *= req
+			return req
+		},
+		chargeEff(x) {
+			var lvl = this.lvl(x)
+			var eff = 2 * lvl
+			if (PCs.milestoneDone(43) && lvl == 1) eff *= 4
+			return eff
 		},
 		charged(x) {
 			return this.engAmt() >= this.chargeReq(x) && (enB.mastered("pos", x) || enB.colorMatch("pos", x))
 		},
+
 		lvl(x, next) {
 			var swaps = next ? pos_tmp.next_swaps : pos_save.swaps
 			if (swaps[x]) x = swaps[x]
@@ -848,6 +863,7 @@ var enB = {
 				var slowSpeed = 1
 				if (mTs.has(333)) slowSpeed /= getMTSMult(333)
 				if (enB.active("glu", 9)) slowSpeed /= enB_tmp.glu9
+				if (PCs.milestoneDone(33)) slowSpeed /= Math.pow(0.98, PCs_save.comps.length)
 				if (enB.active("pos", 8)) slowStart += enB_tmp.pos8
 				if (enB.active("pos", 12)) baseMult += enB_tmp.pos12
 				if (enB.active("pos", 10)) baseMult *= enB_tmp.pos10
@@ -1101,11 +1117,11 @@ var enB = {
 
 			var active = this.active(type, i)
 			var mastered = this.mastered(type, i)
-			var charged = type == "pos" && this.pos.charged(i)
+			var charged = type == "pos" && data.charged(i)
 
 			var list = []
 			if (!active) list.push("Inactive")
-			if (charged) list.push("<b class='charged'>Charged</b>")
+			if (charged) list.push("<b class='charged'>Charged (" + data.chargeEff(i) + "x)</b>")
 			else if (mastered) list.push("Mastered")
 			if (!mastered || shiftDown) list.push((data[i].anti ? "anti-" : "") + data[i].type.toUpperCase() + "-type boost")
 			if (!mastered) list.push("Get " + getFullExpansion(enB.getMastered(type, i)) + " " + data.name + " Boosters to master")
@@ -1189,6 +1205,7 @@ function updateGluonsTab() {
 		getEl(color + "PowerNerf").textContent = shorten(tmp.glB[color].sub)
 		getEl(color + colors[(c + 1) % 3]).textContent = shortenDimensions(qu_save.gluons[color + colors[(c + 1) % 3]])
 	}
+	getEl("enB_eff").textContent = "Effective Boosters: " + shorten(enB.glu.boosterEff())
 
 	enB.updateOnTick("glu")
 }

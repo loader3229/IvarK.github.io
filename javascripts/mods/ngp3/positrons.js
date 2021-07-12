@@ -79,7 +79,7 @@ var pos = {
 		eg: {
 			galName: "extra Replicated Galaxies",
 			pow(x) {
-				return 0 //x / 4
+				return PCs.milestoneDone(42) ? x / 10 : 0
 			},
 			sacGals(x) {
 				return Math.min(tmp.extraRG * pos_tmp.mults.gal, x)
@@ -273,7 +273,7 @@ var pos = {
 	},
 	updateCharge(i) {
 		var charged = enB.pos.charged(i) && enB.pos.lvl(i, true) == enB.pos.lvl(i)
-		getEl("pos_boost" + i + "_charge").textContent = charged ? "Charged" : "Charge: " + shorten(enB.pos.chargeReq(i, true))
+		getEl("pos_boost" + i + "_charge").textContent = charged ? "Charged (" + enB.pos.chargeEff(i) + "x)" : "Charge: " + shorten(enB.pos.chargeReq(i, true))
 		getEl("pos_boost" + i + "_charge").className = charged ? "charged" : ""
 	},
 	switchTab() {

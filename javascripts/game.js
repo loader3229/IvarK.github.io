@@ -3325,7 +3325,7 @@ function eternity(force, auto, forceRespec, dilated) {
 		updateBreakEternity()
 	}
 	addEternityTime(array)
-	player.thisEternity = 0
+	player.thisEternity = PCs.milestoneDone(63) ? Math.max(player.thisEternity - 300, 0) : 0
 	forceRespec = doCheckECCompletionStuff() || forceRespec
 
 	var oldStat = getEternitied()
@@ -3508,7 +3508,6 @@ function exitChallenge() {
 		return
 	}
 	if (QCs.inAny()) {
-		QCs_save.in = []
 		quantum(false, true)
 		return
 	}
@@ -3905,6 +3904,7 @@ setInterval(function() {
 	updateHotkeys()
 	updateSoftcapStatsTab()
 	doNGm2CorrectPostC3Reward()
+	//dev.quickQuantum()
 
 	//Rounding errors
 	if (isNaN(player.totalmoney.e)) player.totalmoney = new Decimal(10)
@@ -4611,11 +4611,11 @@ function doQuantumButtonDisplayUpdating(diff){
 		}
 	}
 
-	var showGain = (QCs.inAny() ? QCs_save.comps >= QCs_save.in[0] : tmp.quUnl) && currentQKmin.lte(Number.MAX_VALUE) ? "QK" : ""
+	var showGain = (PCs.in() ? PCs.done(PCs.conv(QCs_tmp.in[0], QCs_tmp.in[1])) : QCs.inAny() ? QCs_save.comps >= QCs_save.in[0] : tmp.quUnl) ? "QK" : ""
 	getEl("quantumbtnFlavor").textContent = showGain != "" ? "" : QCs.inAny() ? "The unseening has been detected... Complete this challenging experiment!" : "The spacetime has been conceptualized... It's time to go quantum!"
 	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain " + shortenDimensions(quarkGain()) + " anti-quark" + (quarkGain().eq(1) ? "." : "s.") : ""
 	getEl("quantumbtnQKNextAt").textContent = showGain == "QK" && currentQKmin.lt(1) ? "Next at " + shorten(getQuantumReqSource()) + " / " + shorten(quarkGainNextAt()) + " MA" : ""
-	if (showGain != "QK") {
+	if (showGain != "QK" || currentQKmin.gt(1e30)) {
 		getEl("quantumbtnRate").textContent = ''
 		getEl("quantumbtnPeak").textContent = ''
 	} else if (currentQKmin.gt(1e6)) {

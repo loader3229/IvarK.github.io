@@ -2432,8 +2432,8 @@ td.grey {
 }
 
 .charged {
-	color: #ffbf00;
-	text-shadow: 0px 0px 6px #ffbf00, -1px -0.5px 1px #7f5f00, -2px -1px 2px #7f5f00
+	color: #ffdf7f;
+	text-shadow: 0px 0px 6px #ffbf00, 2px 1px 3px #bfbf00, -2px -1px 3px #bfbf00
 }
 
 #pc_table td {
@@ -2446,18 +2446,15 @@ td.grey {
 
 	padding: 0 !important;
 	margin: 0 !important;
-	font-size: 15px;
+	font-size: 12px;
 	text-align: center;
 }
 
 #pc_table tr:nth-child(1) td {
-	vertical-align: bottom
-}
-
-#pc_table tr:nth-child(1) button {
-	font-size: 10px;
 	height: 24px;
-	width: 60px;
+	max-height: 24px;
+	min-height: 24px;
+	vertical-align: bottom
 }
 
 #pc_table td:nth-child(1) {

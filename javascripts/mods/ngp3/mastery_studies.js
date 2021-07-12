@@ -519,6 +519,7 @@ function updateMasteryStudyCosts() {
 	var oldBought = mTs.bought
 	mTs.latestBoughtRow = 0
 	mTs.baseCostMult = hasAch("ng3p12") ? 0.5 : 1
+	if (PCs.milestoneDone(72)) mTs.baseCostMult /= 5
 	mTs.costMult = mTs.baseCostMult
 	mTs.bought = 0
 	mTs.ttSpent = 0

@@ -304,49 +304,59 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	}
 
 	// Quantum Challenges
-	var isQC = mode == "qc"
-	var qcData = [... QCs_save.in]
-	if (!force) {
-		if (qcData.length == 1) {
-			let qc = qcData[0]
-			QCs_save.comps = Math.max(QCs_save.comps, qc)
-			QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, qu_save.best)
+	if (QCs.unl()) {
+		var isQC = mode == "qc"
+		var qcData = QCs_save.in
+		if (!force) {
+			if (QCs_save.mod) {
+				var qc = QCs_save.mod + qcData[0]
+				if (!QCs_save.mod_comps.includes(qc)) QCs_save.mod_comps.push(qc)
+			} else if (qcData.length == 1) {
+				var qc = qcData[0]
+				QCs_save.comps = Math.max(QCs_save.comps, qc)
+				QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, qu_save.best)
+			} else if (qcData.length == 2) {
+				var id = PCs.conv(qcData[0], qcData[1])
+				if (!PCs_save.comps.includes(id)) PCs_save.comps.push(id)
+				PCs.updateTmp()
+				PCs.updateDisp()
+			}
 		}
-		if (qcData.length == 2) {
-			var id = PCs.conv(qcData[0], qcData[1])
-			if (!PCs_save.comps.includes(id)) PCs_save.comps.push(id)
-			PCs.updateTmp()
+		if (qcData.length == 2) PCs.updateButton(PCs.conv(qcData[0], qcData[1]), [])
+		if (isQC) {
+			QCs_save.in = data
+			QCs_tmp.in = data
+			if (data.length == 2) PCs.updateButton(PCs.conv(data[0], data[1]), data)
+			if (!QCs.isntCatched() && !QCs_save.kept) QCs_save.kept = {
+				tt: player.timestudy.theorem,
+				ms: [...player.masterystudies]
+			}
+		} else if (force || !player.options.retryChallenge) {
+			QCs_save.in = []
+			QCs_tmp.in = []
+			if (QCs_save.kept) {
+				player.timestudy.theorem = QCs_save.kept.tt
+				player.masterystudies = QCs_save.kept.ms
+				delete QCs_save.kept
+			}
+		}
+
+		QCs.reset()
+		QCs.updateTmp()
+		QCs.updateDisp()
+		if (QCs.in(3)) {
+			player.respec = false
+			player.respecMastery = true
+			respecTimeStudies()
+
+			player.timestudy.theorem = 0
 		}
 	}
-	if (isQC) {
-		QCs_save.in = data
-		QCs_tmp.in = data
-		if (data.length == 2) PCs.updateButton(PCs.conv(data[0], data[1]))
-		if (!QCs.inAny()) QCs_save.kept = {
-			tt: player.timestudy.theorem,
-			ms: [...player.masterystudies]
-		}
-	} else if (force || !player.options.retryChallenge) {
-		QCs_save.in = []
-		QCs_tmp.in = []
-		if (QCs_save.kept) {
-			player.timestudy.theorem = QCs_save.kept.tt
-			player.masterystudies = QCs_save.kept.ms
-			delete QCs_save.kept
-		}
-	}
-	if (qcData.length == 2) PCs.updateButton(PCs.conv(qcData[0], qcData[1]))
 
-	QCs.reset()
-	QCs.updateTmp()
-	QCs.updateDisp()
-
-	if (QCs.in(3)) {
-		player.respec = false
-		player.respecMastery = true
-		respecTimeStudies()
-
-		player.timestudy.theorem = 0
+	//Paired Challenges
+	if (PCs.unl()) {
+		PCs.updateTmp()
+		PCs.updateDisp()
 	}
 
 	// more big rip stuff
