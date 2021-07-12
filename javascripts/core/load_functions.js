@@ -1027,18 +1027,6 @@ function doNGp3v199tov19995(){
                 qu_save.quantumFoodCost=1e46*Math.pow(5,Math.round(new Decimal(qu_save.replicants.workers).toNumber()*3+new Decimal(qu_save.replicants.workerProgress).toNumber()))
         }
         if (player.masterystudies ? aarMod.newGame3PlusVersion < 1.999 || (qu_save.emperorDimensions ? qu_save.emperorDimensions[1] == undefined : false) : false) { 
-                var oldLength=player.masterystudies.length
-                var newMS=[]
-                for (var m=0;m<player.masterystudies.length;m++) {
-                        var t=player.masterystudies[m].split("t")
-                        if (t[1]==undefined) newMS.push(player.masterystudies[m])
-                        else {
-                                t=parseInt(t[1])
-                                if (t!=322&&t<330) newMS.push(player.masterystudies[m])
-                        }
-                }
-                player.masterystudies=newMS
-                if (oldLength > newMS.length) forceToQuantumAndRemove = true
                 qu_save.replicants.quantumFoodCost = Decimal.times(qu_save.replicants.quantumFoodCost, 2)
                 qu_save.replicants.limitDim=1
                 qu_save.emperorDimensions = {}
@@ -1097,17 +1085,6 @@ function doNGp3v19995tov21(){
                                 upgrades: {}
                         },
                         upgrades: {}
-                }
-                if (qu_save.nanofield.rewards>16) {
-                        var newMS=[]
-                        for (var m=0;m<player.masterystudies.length;m++) {
-                                var d=player.masterystudies[m].split("d")
-                                if (d[1]!==undefined) newMS.push(player.masterystudies[m])
-                        }
-                        player.masterystudies = newMS
-                        qu_save.nanofield.rewards = 16
-                        forceToQuantumAndRemove = true
-                        setTTAfterQuantum = 2e94
                 }
         }
         if (aarMod.newGame3PlusVersion < 2) {
@@ -1642,17 +1619,6 @@ function doNGp3Init2(){
 			qu_save.nanofield.producingCharge = false
 		}
 		if (qu_save.autobuyer.peakTime === undefined) qu_save.autobuyer.peakTime = 0
-		if (qu_save.nanofield.rewards >= 18 && qu_save.tod.upgrades[1] == undefined && !player.ghostify.reached && !aarMod.ngp4V) {
-			var newMS = []
-			for (var m = 0; m < player.masterystudies.length; m++) {
-				var d = player.masterystudies[m].split("d")
-				if (d[1] !== undefined) newMS.push(player.masterystudies[m])
-			}
-			player.masterystudies = newMS
-			qu_save.nanofield.rewards = 16
-			forceToQuantumAndRemove = true
-			setTTAfterQuantum = 2e94
-		}
 		if (qu_save.bigRip.bestGals == undefined) qu_save.bigRip.bestGals = 0
 		if (player.ghostify.neutrinos.boosts == undefined|| !player.ghostify.times) player.ghostify.neutrinos.boosts = 0
 		if (player.ghostify.ghostlyPhotons.maxRed == undefined) player.ghostify.ghostlyPhotons.maxRed = 0
@@ -1914,7 +1880,6 @@ function setTSDisplay(){
 }
 
 function updateNGp3DisplayStuff(){
-	updateMasteryStudyCosts()
 	getEl('rebuyupgauto').textContent="Rebuyable upgrade auto: O"+(player.autoEterOptions.rebuyupg?"N":"FF")
 	getEl('dilUpgsauto').textContent="Auto-buy dilation upgrades: O"+(player.autoEterOptions.dilUpgs?"N":"FF")
 	getEl('metaboostauto').textContent="Meta-boost auto: O"+(player.autoEterOptions.metaboost?"N":"FF")
@@ -2263,7 +2228,11 @@ function setupNGP31Versions() {
 		mTs.respec(true)
 	}
 	if (aarMod.ngp3Build < 20210625 && (player.masterystudies.includes("t241") || player.masterystudies.includes("t282"))) resetReplicantiUpgrades()
-	if (aarMod.ngp3Build < 20210709 && Decimal.log10(player.money) >= 4e12) {
+	if (aarMod.ngp3Build < 20210712 && !canUnlockDilation()) {
+		player.timestudy.theorem += 4000
+		player.dilation.studies = []
+	}
+	if (aarMod.ngp3Build < 20210712 && Decimal.log10(player.money) >= 4e12) {
 		player.totalMoney = new Decimal(1)
 		qu_save.quarks = new Decimal(0)
 		qu_save.gluons = {
@@ -2273,14 +2242,15 @@ function setupNGP31Versions() {
 		}
 		qu_save.entBoosts = 0
 		pos_save.boosts = 0
-		QCs_save.comps = 0
+		QCs_save.comps = aarMod.ngp3Build < 20210709 ? 0 : 7
 
-		dev.giveQuantumStuff(1e3, true)
-		gainQKOnQuantum(1e3, true)
+		var aQs = aarMod.ngp3Build < 20210709 ? 1e3 : 1e11
+		dev.giveQuantumStuff(aQs, true)
+		gainQKOnQuantum(aQs, true)
 		forceToQuantumAndRemove = true
 		setTTAfterQuantum = 1e80
 	}
-	aarMod.ngp3Build = 20210709
+	aarMod.ngp3Build = 20210712
 }
 
 function checkNGM(imported) {

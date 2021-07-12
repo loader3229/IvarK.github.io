@@ -10,10 +10,8 @@ let dsStudyCosts = {
 }
 
 function buyDilationStudy(name) {
-	let cost = dsStudyCosts[name]()
-	if (player.timestudy.theorem >= cost && !player.dilation.studies.includes(name) && (player.dilation.studies.includes(name - 1) || name < 2)) {
+	if (canBuyDilationStudy(name) && !player.dilation.studies.includes(name)) {
 		if (name == 1) {
-			if (!tmp.quUnl && (ECComps("eterc11") + ECComps("eterc12") < 10 || getTotalTT(player) < getDilationTotalTTReq())) return
 			showEternityTab("dilation")
 			ls.reset()
 			if (player.eternityUpgrades.length < 1) giveAchievement("Work harder.")
@@ -25,11 +23,19 @@ function buyDilationStudy(name) {
 			updateDilationUpgradeCosts()
 		}
 		player.dilation.studies.push(name)
-		player.timestudy.theorem -= cost
+		player.timestudy.theorem -= dsStudyCosts[name]()
 		getEl("dilstudy"+name).className = "dilationupgbought"
 		updateTimeStudyButtons(true)
 		drawStudyTree()
 	}
+}
+
+function canUnlockDilation() {
+	return (hasAch("ng3p12") ? ECComps("eterc11") || ECComps("eterc12") : ECComps("eterc11") + ECComps("eterc12") == 10) &&
+		(tmp.ngp3 || getTotalTT(player) >= getDilationTotalTTReq())
+}
+function canBuyDilationStudy(x) {
+	return player.timestudy.theorem >= dsStudyCosts[x]() && (x == 1 ? canUnlockDilation() : hasDilationStudy(x - 1))
 }
 
 function hasDilationStudy(x) {

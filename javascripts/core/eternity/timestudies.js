@@ -360,12 +360,7 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 
 	for (let i = 1; i <= 6; i++) {
 		if (hasDilationStudy(i)) getEl("dilstudy" + i).className = "dilationupgbought"
-		else if (player.timestudy.theorem >= dsStudyCosts[i]() && (i == 1 ? pH.did("quantum") ||
-			//Dilation Upgrade 1
-			ECComps("eterc11") >= 5 &&
-			ECComps("eterc12") >= 5 &&
-			(tmp.ngp3 || getTotalTT() >= getDilationTotalTTReq())
-		: hasDilationStudy(i - 1))) getEl("dilstudy" + i).className = "dilationupg"
+		else if (canBuyDilationStudy(i)) getEl("dilstudy" + i).className = "dilationupg"
 		else getEl("dilstudy" + i).className = "timestudylocked"
 	}
 

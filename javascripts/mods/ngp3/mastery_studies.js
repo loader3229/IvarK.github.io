@@ -589,6 +589,7 @@ function setupMasteryStudies() {
 function setupMasteryStudiesHTML() {
 	setupMasteryStudies()
 
+	if (!mTs.unl()) return
 	for (id = 0; id < mTs.timeStudies.length; id++) {
 		var name = mTs.timeStudies[id]
 		var html = "<span id='mts" + name + "Desc'></span>"
@@ -600,6 +601,7 @@ function setupMasteryStudiesHTML() {
 		getEl("mts" + name).innerHTML = html
 		getEl("mts" + name).className = "timestudy"
 	}
+	updateMasteryStudyCosts()
 }
 
 function getMasteryStudyConnections(id) {

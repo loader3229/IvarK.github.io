@@ -688,7 +688,7 @@ function initialTimeStudyDisplay(){
 	getEl("121desc").textContent = "Currently: " + (hasAch("ngpp11") ? 50 : (253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5).toFixed(1) + "x"
 	getEl("122desc").textContent = "You gain " +  (hasAch("ngpp11") ? 50 : 35) + "x more EP"
 	getEl("123desc").textContent = "Currently: " + Math.sqrt(1.39*player.thisEternity/10).toFixed(1) + "x"
-	getEl("141desc").textContent = "Currently: " + shortenMoney(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime)*Math.pow(player.thisInfinityTime, 0.125))).max(1)) + "x"
+	getEl("141desc").textContent = "Currently: " + shorten(tsMults[141]()) + "x"
 	getEl("142desc").textContent = "You gain " + shortenCosts(1e25) + "x more IP"
 	getEl("143desc").textContent = "Currently: " + shortenMoney(Decimal.pow(15, Math.log(player.thisInfinityTime)*Math.pow(player.thisInfinityTime, 0.125))) + "x"
 	getEl("151desc").textContent = shortenCosts(1e4) + "x multiplier on all Time Dimensions"

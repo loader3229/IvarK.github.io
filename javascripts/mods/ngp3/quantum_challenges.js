@@ -645,7 +645,8 @@ var PCs = {
 		return QCs_tmp.in.length >= 2
 	},
 	goal(pc) {
-		var list = this.convBack(pc || QCs_tmp.in)
+		var list = pc || QCs_tmp.in
+		if (typeof(list) == "number") list = this.convBack(list)
 		return QCs.data[list[0]].goalMA.pow(QCs.data[list[1]].goalMA.log10() / getQuantumReq(true).log10() * 10)
 	},
 	conv(c1, c2) {

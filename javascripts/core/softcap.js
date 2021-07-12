@@ -239,7 +239,7 @@ var softcap_data = {
 				if (PCs.unl()) x *= PCs_tmp.eff2
 				return x
 			},
-			mul: 2/3,
+			mul: 0.5
 		},
 	},
 	bam: {
