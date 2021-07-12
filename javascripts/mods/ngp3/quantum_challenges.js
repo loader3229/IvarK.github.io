@@ -659,7 +659,7 @@ var PCs = {
 		return PCs.unl() && (PCs_save.comps.includes(pc) || PCs_save.skips.includes(pc))
 	},
 	milestoneDone(pos) {
-		return true //PCs.unl() && PCs_tmp.pos_comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
+		return PCs.unl() && PCs_tmp.pos_comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
 	},
 
 	setupButton: (pc) => '<td><button id="pc' + pc + '" class="challengesbtn" onclick="PCs.start(' + pc + ')">PC' + Math.floor(pc / 10) + "+" + pc % 10 + '</button></td>',
