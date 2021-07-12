@@ -1075,7 +1075,7 @@ var enB = {
 			}
 
 			var localHas = has
-			if (id == "pos" && QCs.inAny() && !mastered) localHas = false
+			if (type == "pos" && QCs.inAny() && !mastered) localHas = false
 			el.parentElement.style.display = localHas ? "" : "none"
 
 			if (localHas) {
