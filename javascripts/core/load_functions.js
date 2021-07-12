@@ -2228,10 +2228,6 @@ function setupNGP31Versions() {
 		mTs.respec(true)
 	}
 	if (aarMod.ngp3Build < 20210625 && (player.masterystudies.includes("t241") || player.masterystudies.includes("t282"))) resetReplicantiUpgrades()
-	if (aarMod.ngp3Build < 20210712 && !canUnlockDilation()) {
-		player.timestudy.theorem += 4000
-		player.dilation.studies = []
-	}
 	if (aarMod.ngp3Build < 20210712 && Decimal.log10(player.money) >= 4e12) {
 		player.totalMoney = new Decimal(1)
 		qu_save.quarks = new Decimal(0)
@@ -2249,6 +2245,10 @@ function setupNGP31Versions() {
 		gainQKOnQuantum(aQs, true)
 		forceToQuantumAndRemove = true
 		setTTAfterQuantum = 1e80
+	}
+	if (player.dilation.studies.includes(1) && !canUnlockDilation()) {
+		player.timestudy.theorem += 4000
+		player.dilation.studies = []
 	}
 	aarMod.ngp3Build = 20210712
 }
