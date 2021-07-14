@@ -2250,7 +2250,11 @@ function setupNGP31Versions() {
 		player.timestudy.theorem += 4000
 		player.dilation.studies = []
 	}
-	aarMod.ngp3Build = 20210712
+	aarMod.ngp3Build = 20210713
+
+	if (tmp.ngp3_boost && !player.timestudy.auto) {
+		player.timestudy.auto = {}
+	}
 }
 
 function checkNGM(imported) {

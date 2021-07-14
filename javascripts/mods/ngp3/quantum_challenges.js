@@ -58,7 +58,7 @@ var QCs = {
 			},
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
-			perkReqs: [0, 0],
+			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
 			},
@@ -92,8 +92,11 @@ var QCs = {
 				}
 				QCs_tmp.qc1 = data
 
-				if (QCs.in(1)) {
-					data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
+				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
+				if (PCs.milestoneDone(11)) {
+					data.req = data.req.pow(0.95)
+					data.speedMult = data.speedMult.times(boosts / 2 + 1)
+					data.effMult = maxBoosts / 28 + boosts / 14 + 1
 				}
 			},
 			convert(x) {
@@ -129,7 +132,7 @@ var QCs = {
 			},
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
-			perkReqs: [0, 0],
+			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
 			},
@@ -165,7 +168,7 @@ var QCs = {
 			},
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
-			perkReqs: [0, 0],
+			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
 			},
@@ -185,13 +188,13 @@ var QCs = {
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
 			hint: "Test every single combination of this exclusion, and try to minimize galaxies.",
 
-			rewardDesc: (x) => "Replicated Galaxies contribute to Positronic Charge.",
+			rewardDesc: (x) => "Replicated Galaxies contribute to Positronic Charge, and you can spend Quantum Energy to charge early.",
 			rewardEff(str) {
 				return
 			},
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
-			perkReqs: [0, 0],
+			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
 			},
@@ -246,7 +249,7 @@ var QCs = {
 			},
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
-			perkReqs: [0, 0],
+			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
 			},
@@ -283,12 +286,13 @@ var QCs = {
 			rewardDesc: (x) => "Replicantis also produce Replicanti Energy; but also boosted by time since Eternity. (" + shorten(QCs_tmp.rewards[6]) + "x)",
 			rewardEff(str) {
 				let t = player.thisEternity / 10
+				if (PCs.milestoneDone(61)) t /= 2
 				if (PCs.milestoneDone(62)) t = Math.sqrt(t)
 				return (9 / (Math.abs(5 - t) + 1) + 1) * Math.log2(player.thisEternity / 10 + 2)
 			},
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
-			perkReqs: [0, 0],
+			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
 			},
@@ -309,7 +313,7 @@ var QCs = {
 			hint: "It's a tricky puzzle.",
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
-			perkReqs: [0, 0],
+			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
 			},
@@ -328,7 +332,7 @@ var QCs = {
 			hint: "Trial and error.",
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
-			perkReqs: [0, 0],
+			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
 			},
@@ -378,7 +382,7 @@ var QCs = {
 		return QCs_tmp.in.length >= 1
 	},
 	isntCatched() {
-		return hasAch("ng3p25") || QCs_tmp.in.length != 1 || this.in(7)
+		return hasAch("ng3p25") || QCs_tmp.in.length != 1 || QCs_save.mod || this.in(7)
 	},
 	done(x) {
 		return this.unl() && QCs_save.comps >= x
@@ -390,12 +394,33 @@ var QCs = {
 		return PCs.in() ? "" : " and " + this.data[QCs_tmp.in[0]].goalDisp()
 	},
 	getGoalMA() {
-		return PCs.in() ? PCs.goal() : this.data[QCs_tmp.in[0]].goalMA
+		return PCs.in() ? PCs.goal() : QCs_save.mod ? this.data[QCs_tmp.in[0]].goalMA.pow(QCs.modData[QCs_save.mod].maExp) : this.data[QCs_tmp.in[0]].goalMA
 	},
 	isRewardOn(x) {
 		return this.done(x) && QCs_tmp.rewards[x]
 	},
 
+	modData: {
+		nf: {
+			name: "Nerfed",
+			maExp: 1/0,
+		},
+		pk: {
+			name: "Perked",
+			maExp: 1/0,
+		},
+		ol: {
+			name: "Overlapped",
+			maExp: 1/0,
+		},
+		us: {
+			name: "Unstable",
+			maExp: 1/0,
+		},
+	},
+	modIn(m) {
+		return this.unl() && QCs_save.mod == m
+	},
 	modDone(x, m) {
 		var data = QCs_save.mod_comps
 		return this.unl() && data && data[m] && data[m].includes(x)
@@ -458,7 +483,8 @@ var QCs = {
 		//Quantum Challenges
 		if (!unl) return
 
-		getEl("qc_effects").textContent = (tmp.bgMode ? "No" : (tmp.exMode ? "No" : "Reduced") + " global quark energy bonus, no") + " gluon nerfs, and mastered boosts only work."
+		getEl("qc_effects").innerHTML = QCs_tmp.show_perks ? "" : "All quantum mechanics will change, when entering a Quantum Challenge:<br>" +
+			(tmp.bgMode ? "No" : (tmp.exMode ? "No" : "Reduced") + " global quark energy bonus, no") + " gluon nerfs, and mastered boosts only work."
 		for (let qc = 1; qc <= this.data.max; qc++) {
 			var cUnl = QCs_tmp.unl.includes(qc)
 
@@ -470,7 +496,7 @@ var QCs = {
 				getEl("qc_" + qc + "_btn").textContent = this.perkCan(qc) ? "Can unlock!" :
 					!this.perkUnl(qc) ? "Locked" :
 					"Obtained"
-				getEl("qc_" + qc + "_btn").className = this.perkCan(qc) ? (this.in(qc) ? "onchallengebtn" : "challengesbtn") :
+				getEl("qc_" + qc + "_btn").className = this.perkCan(qc) ? (this.in(qc) && this.modIn("pk") ? "onchallengebtn" : "challengesbtn") :
 					!this.perkUnl(qc) ? "lockedchallengesbtn" :
 					"completedchallengesbtn"
 			} else if (cUnl) {
@@ -521,13 +547,13 @@ let QUANTUM_CHALLENGES = QCs
 //PAIRED CHALLENGES
 var PCs = {
 	milestones: {
-		11: "Boost the QC1 reward. (not implemented)",
+		11: "Boost the QC1 reward.",
 		21: "Boost the QC2 reward. (not implemented)",
 		31: "Boost the QC3 reward. (not implemented)",
 		41: "Boost the QC4 reward. (not implemented)",
 		51: "Boost the QC5 reward. (not implemented)",
-		61: "Boost the QC6 reward. (not implemented)",
-		71: "Boost the QC7 reward. (not implemented)",
+		61: "Boost the QC6 reward.",
+		71: "Reduce the level up requirement by 1.",
 		81: "Boost the QC8 reward. (not implemented)",
 		12: "Unlock Replicated Expanders. (not implemented)",
 		22: "You can exclude a Positron Cloud tier in any QC; and unlock the Perked modifier. (not implemented)",
@@ -624,9 +650,8 @@ var PCs = {
 
 		//Level up!
 		var oldLvl = PCs_save.lvl
-		var lvlData = PCs.data.lvls
 		var comps = PCs_save.comps.concat(PCs_save.skips).length
-		while (PCs_save.lvl < 19 && comps >= lvlData[PCs_save.lvl]) PCs_save.lvl++
+		while (PCs_save.lvl < 19 && comps >= this.lvlReq(PCs_save.lvl)) PCs_save.lvl++
 		if (PCs.data.setupHTML && PCs_save.lvl > oldLvl) {
 			for (var i = 0; i < PCs.data.all.length; i++) this.updateButton(PCs.data.all[i])
 		}
@@ -647,7 +672,7 @@ var PCs = {
 	goal(pc) {
 		var list = pc || QCs_tmp.in
 		if (typeof(list) == "number") list = this.convBack(list)
-		return QCs.data[list[0]].goalMA.pow(QCs.data[list[1]].goalMA.log10() / getQuantumReq(true).log10() * 10)
+		return QCs.data[list[0]].goalMA.pow(QCs.data[list[1]].goalMA.log10() / getQuantumReq(true).log10() * 0.9)
 	},
 	conv(c1, c2) {
 		return Math.min(c1 * 10 + c2, c2 * 10 + c1)
@@ -661,9 +686,14 @@ var PCs = {
 	milestoneDone(pos) {
 		return PCs.unl() && PCs_tmp.pos_comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
 	},
+	lvlReq(x) {
+		let r = PCs.data.lvls[x]
+		if (PCs.milestoneDone(71)) r--
+		return r
+	},
 
 	setupButton: (pc) => '<td><button id="pc' + pc + '" class="challengesbtn" onclick="PCs.start(' + pc + ')">PC' + Math.floor(pc / 10) + "+" + pc % 10 + '</button></td>',
-	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Milestones</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
+	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Milestones</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
 	setupHTML() {
 		var el = getEl("pc_table")
 		var data = PCs.data
@@ -711,10 +741,13 @@ var PCs = {
 		if (!PCs_tmp.unl) return
 		if (!PCs.data.setupHTML) return
 
-		for (var i = 1; i <= 8; i++) getEl("pc_comp" + i).textContent = PCs_tmp.pos_comps[i] + " / 8"
+		for (var i = 1; i <= 8; i++) {
+			getEl("pc_comp" + i + "_div").style.display = PCs_tmp.pos_comps[i] ? "" : "none"
+			getEl("pc_comp" + i).textContent = PCs_tmp.pos_comps[i] + " / 8"
+		}
 
 		getEl("pc_lvl").textContent = getFullExpansion(PCs_save.lvl)
-		getEl("pc_comps").textContent = getFullExpansion(PCs_save.comps.length) + " / " + getFullExpansion(PCs.data.lvls[Math.min(PCs_save.lvl, 18)])
+		getEl("pc_comps").textContent = getFullExpansion(PCs_save.comps.length) + " / " + getFullExpansion(this.lvlReq(Math.min(PCs_save.lvl, 18)))
 
 		getEl("pc_eff1").textContent = "^" + PCs_tmp.eff1.toFixed(3)
 		getEl("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)

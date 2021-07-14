@@ -218,7 +218,7 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button id="63" onclick="buyTimeStudy(63)" style="font-size: 9px;">OS_ND_1 & 2 start later based on your unspent EP, and are 50% weaker<span id="63eff"></span>Cost: 7 Time Theorems</button></td>
-						<td><button id="61" onclick="buyTimeStudy(61)" style="font-size: 9px;">You gain <span id="61desc" style="display:inline"></span><span>Cost: 3 Time Theorems<span id="61req"></span></button></td>
+						<td><button id="61" onclick="buyTimeStudy(61)">You gain <span id="61desc" style="display:inline"></span><span>Cost: 3 Time Theorems<span id="61req"></span></button></td>
 						<td><button id="62" onclick="buyTimeStudy(62)">You gain replicanti <span id="62desc" style="display:inline"></span> times faster<span>Cost: 3 Time Theorems</button></td>
 					</tr>
 				</table>
@@ -1575,7 +1575,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/12/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/13/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -2671,6 +2671,7 @@
 
 		<div id="challenges" class="tab">
 			<br>
+			<div id="inchall"></div>
 			<button class="storebtn" style="font-size: 100%; width:200px" onclick="exitChallenge()">Exit Challenge</button><br><br>
 			<table class="table" align="center" style="margin: auto; display: none" id="challTabButtons">
 				<tr>
@@ -2681,7 +2682,6 @@
 					<td><button id="pctabbtn" class="secondarytabbtn" onclick="showChallengesTab('pairedChalls')">Paired Challenges</button></td>
 				</tr>
 			</table>
-			<div id="inchall"></div>
 			<div id="nextchall"></div>
 			<div id="normalchallenges" class="challengeTab">
 				<table class="table" style="margin: 0 auto">
@@ -3405,12 +3405,9 @@
 				</table>
 			</div>
 			<div id="quantumchallenges" class="challengeTab">
-				All quantum mechanics will change, when entering a Quantum Challenge:
-				<br>
-				<span id="qc_effects"></span>
-				<br>
 				<button class="secondarytabbtn" id="qc_perks" style="width: 200px" onclick="QCs.viewPerks()">View perks</button>
 				<br>
+				<span id="qc_effects"></span>
 				<span id="qc_perks_note"></span>
 				<table class="table" id="qcs_div" style="margin: 0 auto"></table>
 
@@ -4768,133 +4765,47 @@
 		<button id="pos_tab" class='secondarytabbtn' style="width: 180px" onclick="pos.switchTab()"></button>
 		<div id="pos_cloud_div" style="vertical-align: top">
 			Note: You can swap Positronic Boosts, only if they are mastered, and are in different tiers.<br>
-			Note 2: Swaps take effect when you start a Quantum run.
+			Note 2: Swaps take effect when you start a Quantum run.<br>
+			<p id="pos_cloud_total" style="font-size: 15px"></p>
 			<table class="qTable_2col">
 				<tr>
-					<td id="pos_cloud1_cell">
-						<b id="pos_cloud1_num" style="font-size: 15px"></b>
-					</td>
+					<td class="pos_tier" id="pos_cloud1_cell"></td>
 					<td>
 						<button class="storebtn longbtn" id="pos_cloud1_toggle" onclick="QCs.data[2].switch(1)">Disable on challenge</button>
 					</td>
 				</tr>
 				<tr>
-					<td id="pos_cloud1_boosts" colspan=2>
-						<button id="pos_boost1_btn" onclick="pos.swap(1)">
-							<span>
-								<b>PB1</b><br>
-								<p id="pos_boost1_charge"></p>
-								<p id="pos_boost1_excite">(+0 tiers)</p>
-							</span>
-						</button>
-						<button id="pos_boost2_btn" onclick="pos.swap(2)">
-							<span>
-								<b>PB2</b><br>
-								<p id="pos_boost2_charge"></p>
-								<p id="pos_boost2_excite">(+0 tiers)</p>
-							</span>
-						</button>
-					</td>
+					<td id="pos_cloud1_boosts" colspan=2></td>
 				</tr>
 				<tr>
-					<td id="pos_cloud2_cell">
-						<b id="pos_cloud2_num" style="font-size: 15px"></b>
-					</td>
+					<td class="pos_tier" id="pos_cloud2_cell"></td>
 					<td>
 						<button class="storebtn longbtn" id="pos_cloud2_toggle" onclick="QCs.data[2].switch(2)">Disable on challenge</button>
 					</td>
 				</tr>
 				<tr>
-					<td id="pos_cloud2_boosts" colspan=2>
-						<button id="pos_boost3_btn" onclick="pos.swap(3)">
-							<span>
-								<b>PB3</b><br>
-								<p id="pos_boost3_charge"></p>
-								<p id="pos_boost3_excite">(+0 tiers)</p>
-							</span>
-						</button>
-						<button id="pos_boost4_btn" onclick="pos.swap(4)">
-							<span>
-								<b>PB4</b><br>
-								<p id="pos_boost4_charge"></p>
-								<p id="pos_boost4_excite">(+0 tiers)</p>
-							</span>
-						</button>
-						<button id="pos_boost5_btn" onclick="pos.swap(5)">
-							<span>
-								<b>PB5</b><br>
-								<p id="pos_boost5_charge"></p>
-								<p id="pos_boost5_excite">(+0 tiers)</p>
-							</span>
-						</button>
-						<button id="pos_boost6_btn" onclick="pos.swap(6)">
-							<span>
-								<b>PB6</b><br>
-								<p id="pos_boost6_charge"></p>
-								<p id="pos_boost6_excite">(+0 tiers)</p>
-							</span>
-						</button>
-					</td>
+					<td id="pos_cloud2_boosts" colspan=2></td>
 				</tr>
 				<tr>
-					<td id="pos_cloud3_cell">
-						<b id="pos_cloud3_num" style="font-size: 15px"></b>
-					</td>
+					<td class="pos_tier" id="pos_cloud3_cell"></td>
 					<td>
 						<button class="storebtn longbtn" id="pos_cloud3_toggle" onclick="QCs.data[2].switch(3)">Disable on challenge</button>
 					</td>
 				</tr>
 				<tr>
-					<td id="pos_cloud3_boosts" colspan=2>
-						<button id="pos_boost7_btn" onclick="pos.swap(7)">
-							<span>
-								<b>PB7</b><br>
-								<p id="pos_boost7_charge"></p>
-								<p id="pos_boost7_excite">(+0 tiers)</p>
-							</span>
-						</button>
-						<button id="pos_boost8_btn" onclick="pos.swap(8)">
-							<span>
-								<b>PB8</b><br>
-								<p id="pos_boost8_charge"></p>
-								<p id="pos_boost8_excite">(+0 tiers)</p>
-							</span>
-						</button>
-						<button id="pos_boost9_btn" onclick="pos.swap(9)">
-							<span>
-								<b>PB9</b><br>
-								<p id="pos_boost9_charge"></p>
-								<p id="pos_boost9_excite">(+0 tiers)</p>
-							</span>
-						</button>
-						<button id="pos_boost10_btn" onclick="pos.swap(10)">
-							<span>
-								<b>PB10</b><br>
-								<p id="pos_boost10_charge"></p>
-								<p id="pos_boost10_excite">(+0 tiers)</p>
-							</span>
-						</button>
-						<button id="pos_boost11_btn" onclick="pos.swap(11)">
-							<span>
-								<b>PB11</b><br>
-								<p id="pos_boost11_charge"></p>
-								<p id="pos_boost11_excite">(+0 tiers)</p>
-							</span>
-						</button>
-						<button id="pos_boost12_btn" onclick="pos.swap(12)">
-							<span>
-								<b>PB12</b><br>
-								<p id="pos_boost12_charge"></p>
-								<p id="pos_boost12_excite">(+0 tiers)</p>
-							</span>
-						</button>
-					</td>
+					<td id="pos_cloud3_boosts" colspan=2></td>
 				</tr>
 			</table>
-			<p id="pos_cloud_total" style="font-size: 15px"></p>
-			<button class="storebtn" id="pos_toggle" style="width: 180px" onclick="pos.clearSwaps()">Clear swaps</button>
-			<button class="storebtn" id="pos_toggle" style="width: 180px" onclick="pos.cancelSwaps()">Cancel changes</button>
-			<button class="storebtn" id="pos_toggle" style="width: 180px" onclick="pos.applySwaps()">Apply changes</button>
+			<button class="storebtn" id="pos_toggle" style="width: 120px" onclick="pos.clearSwaps()">Clear</button>
+			<button class="storebtn" id="pos_toggle" style="width: 120px" onclick="pos.cancelSwaps()">Cancel</button>
+			<button class="storebtn" id="pos_toggle" style="width: 120px" onclick="pos.applySwaps()">Apply</button>
+			<div id="early_charge">
+				<br>
+				<b style="font-size: 20px">Early Charge</b> (not implemented)
+				<br>
+				<button class="storebtn" id="pos_toggle" style="width: 120px">Early charge</button>
+				<button class="storebtn" id="pos_toggle" style="width: 120px">Respec</button>
+			</div>
 		</div>
 		<div id="pos_boost_div" style="vertical-align: top">
 			<div id="entangle_div_pos">
@@ -5966,8 +5877,25 @@
 			</div>
 		</p>
 	</div>
+	<div class="popup optionmenu" id="autoPresets">
+		<button class="closebtn storebtn" onclick="closeToolTip()">&times;</button>
+		<button class="storebtn" id="autoPresetToggle" onclick="toggleAutoPreset()">Auto: ON</button>
+		<p>
+			<b>Eternity</b> (Normal)<br>
+			<input id="autoPresetEternity" style="width: 170px" onchange="changeAutoPreset('eternity', 'autoPresetEternity')"></input>
+		</p>
+		<p>
+			<b>Dilation</b><br>
+			<input id="autoPresetDilation" style="width: 170px" onchange="changeAutoPreset('dilation', 'autoPresetDilation')"></input>
+		</p>
+		<p id="autoPresetQCDiv">
+			<b>Quantum Challenge</b><br>
+			<input id="autoPresetQC" style="width: 170px" onchange="changeAutoPreset('qc', 'autoPresetQC')"></input>
+		</p>
+	</div>
 	<div id="TTbuttons" style="display:none;">
 		<button class="timetheorembtn" onclick="toggleAutoTT()" id="theoremmax" style="margin-left:-276px; width:130px; height: 30px; font-size: 0.75rem; bottom: 77px;">Buy max Theorems</button>
+		<button class="timetheorembtn" onclick="openAutoPresets()" id="autopresetsbtn" style="margin-left:-276px; width:130px; height: 30px; font-size: 0.75rem; bottom: -3px;">Auto-Presets</button>
 		<button class="timetheorembtn" onclick="openStudyPresets()" id="presetsbtn" style="margin-left:146px; width:130px; height: 30px; font-size: 0.75rem; bottom: 77px;">Presets</button>
 		<button class="timetheorembtn" onclick="buyWithAntimatter()" id="theoremam" style="margin-left: -276px">Buy Time Theorems <br>Cost: 1e20000 antimatter</button>
 		<button class="timetheorembtn" onclick="buyWithIP()" id="theoremip" style="margin-left: -86px">Buy Time Theorems <br>Cost: 1 IP</button>

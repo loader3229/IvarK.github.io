@@ -141,68 +141,39 @@ function updateLastTenQuantums() {
 	} else getEl("averageQuantumRun").textContent = ""
 }
 
-//v2.9014
+function isQuantumFirst() {
+	return QCs.inAny() ? !QCs.done(QCs_tmp.in[0]) : !pH.did("quantum")
+}
+
 function doQuantumProgress() {
-	var quantumReq = getQuantumReq()
-	var id = 1
-	if (pH.did("quantum") && tmp.ngp3) {
-		if (qu_save.bigRip.active) {
-			var gg = getGHPGain()
-			if (player.meta.antimatter.lt(quantumReq)) id = 1
-			else if (!qu_save.breakEternity.unlocked) id = 4
-			else if (!pH.did("ghostify") || player.money.lt(QCs.getGoalMA(undefined, true)) || Decimal.lt(gg, 2)) id = 5
-			else if (player.ghostify.neutrinos.boosts > 8 && hasNU(12) && !player.ghostify.ghostlyPhotons.unl) id = 7
-			else id = 6
-		} else if (!QCs.inAny()) {
-			var gqk = quarkGain()
-			if (player.meta.antimatter.gte(quantumReq) && Decimal.gt(gqk, 1)) id = 3
-		} else if (player.money.lt(Decimal.pow(10, QCs.getGoalMA())) || player.meta.antimatter.gte(quantumReq)) id = 2
+	var percentage = 0
+	var className = "metaProgress"
+	var first = isQuantumFirst()
+	var name = ""
+
+	if (!first && quarkGain().gte(256)) {
+		var qkLog = quarkGain().log(2)
+		var qkNext = Math.pow(2, Math.floor(Math.log2(qkLog) + 1))
+		percentage = qkLog / qkNext
+		name = "Percentage until " + shorten(Decimal.pow(2, qkNext)) + " aQs"
+		className = "quantumProgress"
+	} else if (!first && pH.can("quantum")) {
+		var qkNext = Math.pow(2, Math.floor(quarkGain().log(2) + 1))
+		var goal = quarkGainNextAt(qkNext)
+		percentage = getQuantumReqSource().log(goal)
+		name = "Percentage until " + shorten(goal) + " MA (" + shortenDimensions(qkNext) + " aQs)"
+	} else {
+		var goal = QCs.inAny() ? QCs.getGoalMA() : getQuantumReq()
+		percentage = getQuantumReqSource().log(goal)
+		name = "Percentage until Quantum" + (QCs.inAny() ? " Challenge completion" : "") + " (MA)"
 	}
-	var className = id > 4 ? "ghostifyProgress" : "quantumProgress"
+	getEl("progresspercent").setAttribute('ach-tooltip', name)
+
+	//Set percentage
+	percentage = Math.min(percentage * 100, 100).toFixed(2) + "%"
 	if (getEl("progressbar").className != className) getEl("progressbar").className = className
-	if (id == 1) {
-		var percentage = Math.min(player.meta.antimatter.max(1).log10() / quantumReq.log10() * 100, 100).toFixed(2) + "%"
-		getEl("progressbar").style.width = percentage
-		getEl("progresspercent").textContent = percentage
-		getEl("progresspercent").setAttribute('ach-tooltip', (player.masterystudies ? "Meta-antimatter p" : "P") + 'ercentage to quantum')
-	} else if (id == 2) {
-		var percentage = Math.min(player.money.max(1).log10() / QCs.getGoalMA() * 100, 100).toFixed(2) + "%"
-		getEl("progressbar").style.width = percentage
-		getEl("progresspercent").textContent = percentage
-		getEl("progresspercent").setAttribute('ach-tooltip','Percentage to Quantum Challenge goal')
-	} else if (id == 3) {
-		var gqkLog = gqk.log2()
-		var goal = Math.pow(2, Math.ceil(Math.log10(gqkLog) / Math.log10(2)))
-		if (!qu_save.reachedInfQK) goal = Math.min(goal, 1024)
-		var percentage = Math.min(gqkLog / goal * 100, 100).toFixed(2) + "%"
-		if (goal > 512 && !qu_save.reachedInfQK) percentage = Math.min(qu_save.quarks.add(gqk).log2() / goal * 100, 100).toFixed(2) + "%"
-		getEl("progressbar").style.width = percentage
-		getEl("progresspercent").textContent = percentage
-		if (goal > 512 && !qu_save.reachedInfQK) getEl("progresspercent").setAttribute('ach-tooltip', "Percentage to new QoL features (" + shorten(Number.MAX_VALUE) + " QK)")
-		else getEl("progresspercent").setAttribute('ach-tooltip', "Percentage to " + shortenDimensions(Decimal.pow(2, goal)) + " QK gain")
-	} else if (id == 4) {
-		var percentage = Math.min(player.eternityPoints.max(1).log10() / 12.15, 100).toFixed(2) + "%"
-		getEl("progressbar").style.width = percentage
-		getEl("progresspercent").textContent = percentage
-		getEl("progresspercent").setAttribute('ach-tooltip','Eternity Points percentage to Break Eternity')
-	} else if (id == 5) {
-		var percentage = Math.min(qu_save.bigRip.bestThisRun.max(1).log10() / QCs.getGoalMA(undefined, true) * 100, 100).toFixed(2) + "%"
-		getEl("progressbar").style.width = percentage
-		getEl("progresspercent").textContent = percentage
-		getEl("progresspercent").setAttribute('ach-tooltip','Percentage to Ghostify')
-	} else if (id == 6) {
-		var ggLog = gg.log2()
-		var goal = Math.pow(2, Math.ceil(Math.log10(ggLog) / Math.log10(2)))
-		var percentage = Math.min(ggLog / goal * 100, 100).toFixed(2) + "%"
-		getEl("progressbar").style.width = percentage
-		getEl("progresspercent").textContent = percentage
-		getEl("progresspercent").setAttribute('ach-tooltip', "Percentage to " + shortenDimensions(Decimal.pow(2, goal)) + " GHP gain")
-	} else if (id == 7) {
-		var percentage = Math.min(qu_save.bigRip.bestThisRun.max(1).log10() / 6000e4, 100).toFixed(2) + "%"
-		getEl("progressbar").style.width = percentage
-		getEl("progresspercent").textContent = percentage
-		getEl("progresspercent").setAttribute('ach-tooltip', "Percentage to Ghostly Photons")
-	}
+	getEl("progressbar").style.width = percentage
+	getEl("progresspercent").textContent = percentage
 }
 
 //v2.90142
@@ -327,6 +298,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 			QCs_save.in = data
 			QCs_tmp.in = data
 			if (data.length == 2) PCs.updateButton(PCs.conv(data[0], data[1]), data)
+			else if (QCs.perkCan(data[0])) QCs_save.mod = "pk"
 			if (!QCs.isntCatched() && !QCs_save.kept) QCs_save.kept = {
 				tt: player.timestudy.theorem,
 				ms: [...player.masterystudies]

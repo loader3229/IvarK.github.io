@@ -44,14 +44,14 @@ var mTs = {
 			//Eternity
 			t241: 1,
 			t251: 3, t252: 3, t253: 3,
-			t261: 12, t262: 12, t263: 4, t264: 1, t265: 4, t266: 4,
+			t261: 12, t262: 12, t263: 4, t264: 2, t265: 4, t266: 4,
 
 			//Quantum
 			t271: "reset", t272: 1.5,
 			t281: 4, t282: 6, t283: 6, t284: 4,
-			t291: 5, t292: 5,
-			t301: 10, t302: "reset", t303: 10,
-			t311: 1 / 2, t312: 16, t313: 16, t314: 1 / 2,
+			t291: 6, t292: 6,
+			t301: 12, t302: "reset", t303: 12,
+			t311: 1 / 2, t312: 32, t313: 32, t314: 1 / 2,
 
 			//QC7
 			t321: 1 / 4, t322: "reset", t323: 1 / 4,
@@ -88,8 +88,9 @@ var mTs = {
 		},
 		14() {
 			let comps = ECComps("eterc14")
-			if (tmp.bgMode) return 1/0
-			return Decimal.pow(10, (comps ? 1e6 : 250000) * Math.pow(tmp.dtMode ? 1.8 : tmp.exMode ? 1.6 : 1.5, Math.max(comps - 1, 0)))
+			let base = tmp.dtMode ? 1.8 : tmp.exMode ? 1.6 : 1.5
+			if (!tmp.bgMode) base = Math.max(1.5 + comps / 25, base)
+			return Decimal.pow(10, (comps ? 1.2e6 : 250000) * Math.pow(base, Math.max(comps - 1, 0)))
 		}
 	},
 	ecReqNumsStored: {},

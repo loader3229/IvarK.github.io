@@ -77,6 +77,7 @@ function updateTheoremButtons() {
 		getEl("theoremep").style.display = "none"
 		getEl("timetheorems").style.bottom = "0"
 		getEl("presetsbtn").style.bottom = "-3px"
+		getEl("autopresetsbtn").style.display = player.timestudy.auto ? "" : "none"
 		getEl("theorembuybackground").style.bottom = "-80px"
 	} else {
 		getEl("theoremmax").style.display = ""
@@ -85,6 +86,7 @@ function updateTheoremButtons() {
 		getEl("theoremep").style.display = ""
 		getEl("timetheorems").style.bottom = "80px"
 		getEl("presetsbtn").style.bottom = "77px"
+		getEl("autopresetsbtn").style.display = "none"
 		getEl("theorembuybackground").style.bottom = "0"
 		getEl("theoremam").className = player.money.gte(player.timestudy.amcost) ? "timetheorembtn" : "timetheorembtnlocked"
 		getEl("theoremip").className = player.infinityPoints.gte(player.timestudy.ipcost) ? "timetheorembtn" : "timetheorembtnlocked"

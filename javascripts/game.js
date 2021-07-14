@@ -375,6 +375,7 @@ function setupHTMLAndData() {
 	setupMasteryStudiesHTML()
 	setupToDHTMLandData()
 	setupNanofieldHTMLandData()
+	pos.setupHTML()
 	QCs.setupDiv()
 	setupBraveMilestones()
 	setupBosonicExtraction()
@@ -3334,7 +3335,6 @@ function eternity(force, auto, forceRespec, dilated) {
 	player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
 	updateBankedEter()
 
-	if (!force && (player.respec || player.respecMastery || forceRespec)) respecTimeStudies(forceRespec)
 	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
 	player.currentEternityChall = ""
 
@@ -3358,6 +3358,14 @@ function eternity(force, auto, forceRespec, dilated) {
 	if (dilated) {
 		player.eternityBuyer.statBeforeDilation = player.eternityBuyer.dilationPerAmount
 		player.eternityBuyer.alwaysDilCond = false
+	}
+
+	if (!force) {
+		var autoPreset = QCs.inAny() ? "qc" : dilated ? "dilation" : "eternity"
+		var on = player.timestudy.auto && player.timestudy.auto.on && player.timestudy.auto[autoPreset]
+		if (on) forceRespec = true
+		if (player.respec || player.respecMastery || forceRespec) respecTimeStudies(forceRespec)
+		if (on) loadAutoPreset(autoPreset)
 	}
 
 	doEternityResetStuff(4, dilated ? "dil" : 0)
@@ -4580,12 +4588,12 @@ function doEternityButtonDisplayUpdating(diff){
 		if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getTPGain())) getEl("eternitybtnEPGain").innerHTML = getReqForTPGainDisp()
 		else {
 			getEl("eternitybtnEPGain").innerHTML = ((player.eternities > 0 && (player.currentEternityChall == "" || player.options.theme == "Aarex's Modifications")) ?
-				(moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[5] && EPminUnits == "EP") || (EPminpeak.gte(1e9) && EPminpeakType == "logarithm") || (EPminpeakType == 'normal' && EPminpeak.gte(Decimal.pow(10, 1e9))) ? "<b>Other times await... I need to become Eternal.</b>" :
+				EPminpeakType == 'normal' && EPminpeak.gte(Decimal.pow(10, 1e9)) ? "<b>Other times await... I need to become Eternal.</b>" :
 				"Gain <b>" + (player.dilation.active?shortenMoney(getTPGain().sub(player.dilation.totalTachyonParticles)):shortenDimensions(gainedEternityPoints()))+"</b> "+(EPminpeakType == "logarithm" ? EPminUnits + "." : player.dilation.active?"Tachyon particles.": tmp.be ?"EP and <b>"+shortenDimensions(getEMGain())+"</b> Eternal Matter." : "Eternity points.")
 			: "")
 		}
 		var showEPmin=(player.currentEternityChall===""||player.options.theme=="Aarex's Modifications")&&EPminpeak>0&&player.eternities>0&&player.options.notation!='Morse code'&&player.options.notation!='Spazzy'&&(!(player.dilation.active||tmp.be)||isSmartPeakActivated)
-		if (EPminUnits != "TP" && EPminpeak.log10() < 1e9 && (!moreEMsUnlocked() || getEternitied() <= tmp.ngp3_em[5])) {
+		if (EPminUnits != "TP") {
 			getEl("eternitybtnRate").textContent = (showEPmin
 										  ? rateFormat(currentEPmin, EPminpeakUnits) : "")
 			getEl("eternitybtnPeak").textContent = showEPmin ? "Peaked at " + rateFormat(EPminpeak, EPminpeakUnits) : ""
@@ -4611,7 +4619,7 @@ function doQuantumButtonDisplayUpdating(diff){
 		}
 	}
 
-	var showGain = (PCs.in() ? PCs.done(PCs.conv(QCs_tmp.in[0], QCs_tmp.in[1])) : QCs.inAny() ? QCs_save.comps >= QCs_save.in[0] : tmp.quUnl) ? "QK" : ""
+	var showGain = !isQuantumFirst() ? "QK" : ""
 	getEl("quantumbtnFlavor").textContent = showGain != "" ? "" : QCs.inAny() ? "The unseening has been detected... Complete this challenging experiment!" : "The spacetime has been conceptualized... It's time to go quantum!"
 	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain " + shortenDimensions(quarkGain()) + " anti-quark" + (quarkGain().eq(1) ? "." : "s.") : ""
 	getEl("quantumbtnQKNextAt").textContent = showGain == "QK" && currentQKmin.lt(1) ? "Next at " + shorten(getQuantumReqSource()) + " / " + shorten(quarkGainNextAt()) + " MA" : ""
@@ -4997,7 +5005,7 @@ function generateTT(diff){
 }
 
 function thisQuantumTimeUpdating(){
-	setAndMaybeShow("quantumClock", tmp.quUnl && !QCs.unl(), '"Quantum time: <b class=\'QKAmount\'>"+timeDisplay(qu_save.time)+"</b>"')
+	setAndMaybeShow("quantumClock", true, '"Quantum time: <b class=\'QKAmount\'>"+timeDisplayShort(qu_save.time)+"</b>"')
 }
 
 function updateInfinityTimes(){

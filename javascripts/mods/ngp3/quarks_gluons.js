@@ -206,8 +206,6 @@ function updateColorCharge() {
 			Decimal.add(usedQuarks[sorted[0]], 1)
 		)
 	}
-
-	colorCharge[sorted[0]] = colorCharge.normal.charge
 	if (enB.active("glu", 12)) {
 		colorCharge.sub = {
 			color: sorted[1],
@@ -217,13 +215,18 @@ function updateColorCharge() {
 			)
 		}
 		colorCharge.sub.eff = Math.pow(colorCharge.sub.charge + 1, enB_tmp.glu12)
-		colorCharge[sorted[0]] *= colorCharge.sub.eff
+		colorCharge.normal.charge *= colorCharge.sub.eff
 	}
+	if (pos_tmp.cloud[1] == 2) colorCharge.normal.charge *= 1.25
+	if (pos_tmp.cloud[2] == 4) colorCharge.normal.charge *= 1.5
+	if (pos_tmp.cloud[3] == 6) colorCharge.normal.charge *= 1.75
+
+	colorCharge[sorted[0]] = colorCharge.normal.charge
 	if (QCs.isRewardOn(2)) colorCharge[sorted[0]] *= QCs_tmp.rewards[2]
 	if (QCs.in(7)) colorCharge[sorted[0]] *= -1
 	if (usedQuarks[sorted[0]] > 0 && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
 
-	colorCharge.subCancel = hasAch("ng3p13") ? Math.pow(colorCharge.normal.charge * 3, 1.25) : 0
+	colorCharge.subCancel = hasAch("ng3p13") ? Math.pow(colorCharge.normal.charge, 0.75) * 4 : 0
 
 	colorCharge.neutralize = {}
 	colorCharge.neutralize[sorted[0]] = new Decimal(0)
@@ -281,7 +284,7 @@ function updateColorPowers() {
 
 //Gluons
 function gainQuantumEnergy() {
-	let xNoDiv = (getQEQuarksPortion() + getQEGluonsPortion()) * tmp.qe.mult * (tmp.ngp3_mul ? 1.25 : 1)
+	let xNoDiv = (getQEQuarksPortion() + getQEGluonsPortion()) * tmp.qe.mult
 	let x = xNoDiv / tmp.qe.div
 
 	if (isNaN(xNoDiv)) xNoDiv = 0
@@ -297,8 +300,15 @@ function getQEQuarksPortion() {
 }
 
 function getQEGluonsPortion() {
+	var glu = enB.colorUsed()
+	if (!glu) return 0
+	if (tmp.dtMode) {
+		if (colorCharge.normal.charge == 0) return 0
+		if (glu[0] != colorCharge.normal.color && glu[1] != colorCharge.normal.color) return 0
+	}
+
 	let exp = tmp.qe.exp
-	return enB.colorUsed() ? Math.pow(qu_save.gluons[enB.colorUsed()].add(1).log10(), exp) * (tmp.exMode ? 0 : tmp.ngp3_mul ? 1 : 0.25) : 0
+	return Math.pow(qu_save.gluons[glu].add(1).log10(), exp) * (tmp.ngp3_mul ? 1 : 0.25)
 }
 
 function getQuantumEnergyMult() {
@@ -307,6 +317,7 @@ function getQuantumEnergyMult() {
 	let x = 1
 	if (enB.active("glu", 1)) x += enB_tmp.glu1
 	if (tmp.ngp3_mul && tmp.glb) x += (tmp.glB.r.mult + tmp.glB.g.mult + tmp.glB.b.mult) / 15
+	if (tmp.ngp3_mul) x *= 1.25
 	return x
 }
 
@@ -789,6 +800,7 @@ var enB = {
 		},
 
 		activeReq(x) {
+			if (pos_tmp.sac_qe < pos.swapCost(pos_tmp.cloud.swaps)) return false
 			return !QCs.isntCatched() ? pos.on() && enB.mastered("pos", x) && !pos.excluded(x) : tmp.bgMode || enB.mastered("pos", x) || pos.on()
 		},
 
@@ -816,6 +828,7 @@ var enB = {
 			return eff
 		},
 		charged(x) {
+			if (pos_save.early_charge == x) return true
 			return this.engAmt() >= this.chargeReq(x) && (enB.mastered("pos", x) || enB.colorMatch("pos", x))
 		},
 
@@ -1205,9 +1218,16 @@ function updateGluonsTab() {
 		getEl(color + "PowerNerf").textContent = shorten(tmp.glB[color].sub)
 		getEl(color + colors[(c + 1) % 3]).textContent = shortenDimensions(qu_save.gluons[color + colors[(c + 1) % 3]])
 	}
-	getEl("enB_eff").textContent = "Effective Boosters: " + shorten(enB.glu.boosterEff())
+
+	let typeUsed = enB.colorUsed()
+	if (typeUsed != "") {
+		getEl("entangle_" + typeUsed).className = "gluonupgrade chosenbtn"
+		getEl("entangle_" + typeUsed + "_pos").className = "gluonupgrade  chosenbtn"
+		getEl("entangle_" + typeUsed + "_bonus").textContent = "+" + shorten(getQEGluonsPortion() * tmp.qe.mult / tmp.qe.div) + " quantum energy, " + shorten(enB.glu.gluonEff(qu_save.gluons[typeUsed])) + "x effective boosters"
+	}
 
 	enB.updateOnTick("glu")
+	getEl("enB_eff").textContent = "Effective Boosters: " + shorten(enB.glu.boosterEff())
 }
 
 //Display: On load
@@ -1232,7 +1252,7 @@ function updateQuarksTabOnUpdate(mode) {
 		getEl("neutralize_quarks").className = qu_save.quarks.gte(colorCharge.neutralize.total) ? "storebtn" : "unavailablebtn"
 	}
 
-	getEl("colorSubchargeDiv").style.display = colorCharge.sub ? "" : "none"
+	getEl("colorSubchargeDiv").style.visibility = colorCharge.sub ? "visible" : "hidden"
 	if (colorCharge.sub) {
 		var color = colorShorthands[colorCharge.sub.color]
 		getEl("colorSubchargeDiv").className = colorCharge.sub.charge == 0 ? "black" : color + " light"
@@ -1291,12 +1311,6 @@ function updateGluonsTabOnUpdate(mode) {
 		getEl("entangle_" + type + "_pos").style.display = tmp.dtMode ? "none" : ""
 		getEl("entangle_" + type + "_pos").className = "gluonupgrade " + type
 		getEl("entangle_" + type + "_bonus").textContent = ""
-	}
-
-	if (typeUsed != "") {
-		getEl("entangle_" + typeUsed).className = "gluonupgrade chosenbtn"
-		getEl("entangle_" + typeUsed + "_pos").className = "gluonupgrade  chosenbtn"
-		getEl("entangle_" + typeUsed + "_bonus").textContent = "Entanglement Bonus: +" + shorten(getQEGluonsPortion() * tmp.qe.mult / tmp.qe.div) + " quantum energy"
 	}
 
 	getEl("masterNote").style.display = enB.mastered("glu", 1) ? "" : "none"

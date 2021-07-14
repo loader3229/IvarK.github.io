@@ -396,13 +396,18 @@ strong { color: #0072e5 }
 #quantum.storebtn, .quantumbtn, #pastquantums, .qMs_locked, .qMs_locked:hover, #dilstudy8.dilationupg, #qctabbtn, #pctabbtn {
     border-color: #72e500 !important
 }
-#quantum.storebtn:hover, .quantumbtn:hover, #pastquantums:hover, .qMs_reward, .qMs_reward:hover, #dilstudy8.dilationupg:hover, #dilstudy8.dilationupgbought, #qctabbtn:hover, #pctabbtn:hover {
+#quantum.storebtn:hover, .quantumbtn:hover, #pastquantums:hover, #dilstudy8.dilationupg:hover, #dilstudy8.dilationupgbought, #qctabbtn:hover, #pctabbtn:hover {
     border-color: #72e500 !important;
     background-color: #72e500 !important;
 	color: #e5e5e5 !important
 }
 #progressbar.quantumProgress {
 	background-color: #72e500 !important
+}
+.qMs_reward, .qMs_reward:hover {
+    border-color: #72e500 !important;
+    background-color: #72e500 !important;
+	color: #191919 !important
 }
 .qMs_toggle_on {
 	border-color: #72e572 !important;

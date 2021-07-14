@@ -1190,6 +1190,8 @@ button {
     pointer-events: all !important;
 }
 
+.metaProgress { background: #00bfff !important }
+
 .quantumProgress { background: #0a640a !important }
 .quantumProgress #progresspercent { color: #32c832 }
 
@@ -2407,6 +2409,14 @@ td.grey {
 	border-color: #8e991e
 }
 
+.pos_tier {
+	font-size: 10px
+}
+
+.pos_tier b {
+	font-size: 15px
+}
+
 .posbtn {
 	margin: 2px;
 	position: relative;
@@ -2433,7 +2443,7 @@ td.grey {
 
 .charged {
 	color: #ffdf7f;
-	text-shadow: 0px 0px 6px #ffbf00, 2px 1px 3px #bfbf00, -2px -1px 3px #bfbf00
+	text-shadow: 0px 0px 6px #bf9f00, 2px 1px 3px #bf9f00, -2px -1px 3px #bf9f00
 }
 
 #pc_table td {
@@ -2926,6 +2936,7 @@ td.lEp {
 .chosenbtn {
     width: 120px;
 	height: 25px;
+	color: #FFF;
 	background: #3A7F42;
 	border: 1px solid #127A20;
 	border-radius: 4px;
@@ -2936,6 +2947,19 @@ td.lEp {
 }
 
 .chosenbtn2 {
+    width: 120px;
+	height: 25px;
+	color: #FFF;
+	background: #1F1F1F;
+	border: 1px solid #127A20;
+	border-radius: 4px;
+	font-size: 13px;
+	font-weight: bold;
+    font-family: Typewriter;
+	transition-duration: 0.2s
+}
+
+.chosenbtn3 {
     width: 120px;
 	height: 25px;
 	background: #BAFFC1;

@@ -1,5 +1,11 @@
 var player = {};
 
+//Do not remove.
+var betaId = "G"
+var prefix = betaId + "ds"
+var savePrefix = prefix + "AM_"
+var metaSaveId = betaId + "AD_aarexModifications"
+
 function changestate(n) {
     var classes = getEl('div'+n).classList
     if(classes.contains('hidden')){
@@ -24,14 +30,14 @@ function save() {
 
 function get_save(id) {
     try {
-        var dimensionSave = localStorage.getItem(btoa('dsAM_ghostify_'+id))
+        var dimensionSave = localStorage.getItem(btoa(savePrefix+id))
         if (dimensionSave !== null) dimensionSave = JSON.parse(atob(dimensionSave, function(k, v) { return (v === Infinity) ? "Infinity" : v; }))
         return dimensionSave
     } catch(e) { console.log("An error happened"); }
 }
 
 function load_game() {
-	metaSave = localStorage.getItem('AD_aarexModifications_ghostify')
+	metaSave = localStorage.getItem(metaSaveId)
 	if (metaSave == null) metaSave = {}
 	else metaSave = JSON.parse(atob(metaSave))
 	if (metaSave.current == undefined) {
@@ -54,9 +60,10 @@ function showspoilers() {
 }
 
 function updateSpoilers() {
-	var displayed = spoilers;
-	getEl("ng3pguide").style.display=player.masterystudies||spoilers?"":"none"
-	for (i=42; i>0; i--) {
+	var displayed = spoilers
+	var ngp3 = player && player.masterystudies
+	getEl("ng3pguide").style.display = ngp3 || spoilers ? "" : "none"
+	for (i=27; i>0; i--) {
 		if (i != 7) {
 			if (!displayed) {
 				if (i < 5) displayed = 1
@@ -74,31 +81,20 @@ function updateSpoilers() {
 					if (i == 22 && player.quantum) if (player.quantum.times>0) displayed = 1
 					if (player.masterystudies) {
 						if (i == 21 && player.dilation.upgrades.includes("ngpp4")) displayed = 1
-						if (i == 23 && player.quantum) if (player.quantum.times > 0) displayed = 1
-						if (i == 24 && player.masterystudies.includes("d7")) displayed = 1
-						if (i == 25 && player.masterystudies.includes("d8")) displayed = 1
-						if (i == 26 && player.masterystudies.includes("d9")) displayed = 1
-						if (i == 27 && player.masterystudies.includes("d10")) displayed = 1
-						if (i == 28 && player.masterystudies.includes("d11")) displayed = 1
-						if (i == 29 && player.masterystudies.includes("d12")) displayed = 1
-						if (i == 30 && player.masterystudies.includes("d13")) displayed = 1
-						if (i == 31 && player.masterystudies.includes("d14")) displayed = 1
-						if (i == 32 && player.quantum) if (player.quantum.breakEternity) if (player.quantum.breakEternity.unlocked) displayed = 1
-						if (i == 36 && player.ghostify) if (player.ghostify.times > 0) displayed = 1
-						if (i == 37 && player.ghostify && player.ghostify.ghostlyPhotons) if (player.ghostify.ghostlyPhotons.unl) displayed = 1
-						if (i == 40 && player.ghostify && player.ghostify.wzb && player.ghostify.wzb.unl) displayed = 1
-						if (i == 41 && player.ghostify && player.ghostify.hb && player.ghostify.hb.unl) displayed = 1
-						if (i == 42 && player.ghostify && player.ghostify.gds && player.ghostify.gds.unl) displayed = 1
+						if (i == 23 && player.quantum && player.quantum.times > 0) displayed = 1
+						if (i == 25 && player.masterystudies.includes("d7")) displayed = 1
+						if (i == 26 && player.masterystudies.includes("d8")) displayed = 1
+						if (i == 27 && player.quantum && player.quantum.qc && player.quantum.qc.comps >= 7) displayed = 1
 					}
 				}
 			}
 			if (displayed) {
 				if (i == 22) {
 					var msg = "When you reach "
-					if (player.masterystudies) msg += "9.32e446 meta-antimatter and completed EC14 for the first time"
+					if (ngp3) msg += "e385 meta-antimatter and completed EC14 for the first time"
 					else msg += "infinity meta-antimatter"
-					msg += ", you will able to go quantum. Quantum will reset everything eternity resets, and also time studies, eternity challenges, dilation, "+(player.masterystudies?"meta dimensions, and mastery studies":"and meta dimensions (except your best meta-antimatter)")+". You will gain a quark and unlock various upgrades."
-					if (player.masterystudies) msg += "<br><br>You will also unlock speedrun milestones where you must do fast quantums to get your QoL content rewards on eternity, and even quantum autobuyer."
+					msg += ", you will able to go quantum. Quantum will reset everything eternity resets, and also time studies, eternity challenges, dilation, "+(ngp3?"meta dimensions, and mastery studies":"and meta dimensions (except your best meta-antimatter)")+". You will gain anti-quarks and quantum energy in return, besides with a multiplier to quantum energy."
+					if (ngp3) msg += "<br><br>You will also unlock Quantum Milestones where you must go fast or progress to get your QoL content rewards on eternity, and even quantum autobuyer."
 					getEl("div22").innerHTML = msg
 				}
 			} else getEl("div"+i).className = "hidden";

@@ -133,7 +133,9 @@ var pos = {
 		//Mechanic
 		data = {
 			total: 0,
-			exclude: 0
+			exclude: 0,
+			swaps: 0,
+			swaps_next: 0,
 		}
 		pos_tmp.cloud = data
 		for (var i = 1; i <= enB.pos.max; i++) {
@@ -156,17 +158,26 @@ var pos = {
 				this.updateCharge(i)
 				data[lvl] = (data[lvl] || 0) + 1
 
+				if (originalLvl != lvl) data.swaps++
+				if (originalLvl != nextLvl) data.swaps_next++
+
 				if (excluded) data.exclude++
 				else data.total++
 			}
 		}
 
 		for (var i = 1; i <= 3; i++) {
-			getEl("pos_cloud" + i + "_num").textContent = "Tier " + i + ": " + (data[i] || 0) + " / " + i * 2
-			getEl("pos_cloud" + i + "_cell").className = data[i] >= i * 2 ? "green" : ""
+			getEl("pos_cloud" + i + "_cell").innerHTML = "<b>Tier " + i + ": " + (data[i] || 0) + " / " + i * 2 + "</b>" + (data[i] == i * 2 ? "<br>Bonus: +" + (i * 25) + "% color charge" : "")
+			getEl("pos_cloud" + i + "_cell").className = "pos_tier " + (data[i] >= i * 2 ? "green" : "")
+			getEl("pos_cloud" + i + "_cell").style.display = data[i] ? "" : "none"
 		}
-		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " excluded" : "")
+		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " excluded" : "") + (data.swaps_next == 0 ? "" : " (Requires " + shortenDimensions(this.swapCost(data.swaps_next)) + " sacrificed quantum energy)")
 		getEl("pos_toggle").style.display = QCs.in(2) ? "none" : ""
+
+		//QC5
+		var qc5 = pos_save.early_charge
+		if (qc5) getEl("pos_boost" + qc5 + "_btn").className = "chosenbtn3 posbtn"
+		getEl("early_charge").style.display = QCs.done(5) ? "" : "none"
 	},
 	updateTmpOnTick() {
 		if (!this.unl()) return
@@ -238,8 +249,24 @@ var pos = {
 		if (!confirm("Do you want to apply the changes immediately? This restarts your Quantum run!")) return
 		quantum(false, true)
 	},
+	swapCost(x) {
+		return x == 0 ? 0 : Math.pow(2, Math.pow(2, x / 2) - 1)
+	},
 	excluded(x) {
 		return QCs.in(2) ? enB.pos.lvl(x) == QCs_save.qc2 : false
+	},
+
+	getCloudBtn: (x) => '<button id="pos_boost' + x + '_btn" onclick="pos.swap(' + x + ')">' +
+							'<span>' +
+								'<b>PB' + x + '</b><br>' +
+								'<p id="pos_boost' + x + '_charge"></p>' +
+								'<p id="pos_boost' + x + '_excite">(+0 tiers)</p>' +
+							'</span>' +
+						'</button>',
+	setupHTML() {
+		var html = ""
+		for (var i = 1; i <= enB.pos.max; i++) html += this.getCloudBtn(i)
+		getEl("pos_cloud1_boosts").innerHTML = html
 	},
 
 	updateTab() {

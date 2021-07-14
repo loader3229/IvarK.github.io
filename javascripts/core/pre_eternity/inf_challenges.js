@@ -229,9 +229,10 @@ function updateInChallenges() {
 	let array = []
 	if (inNGM(4) && player.galacticSacrifice.chall > 0) array.push(NC_NAMES["challenge" + player.galacticSacrifice.challenge])
 	if (player.currentChallenge != "") array.push(getNCName(player.currentChallenge))
-	if (player.currentEternityChall != "") array.push("Eternity Challenge " + player.eternityChallUnlocked)
+	if (player.dilation.active) array.push("Time Dilation")
+	else if (player.currentEternityChall != "") array.push("Eternity Challenge " + player.eternityChallUnlocked)
 	if (PCs.in()) array.push("Paired Challenge " + QCs_save.in[0] + " + " + QCs_save.in[1])
-	else if (QCs.inAny()) array.push("Quantum Challenge " + QCs_save.in[0])
+	else if (QCs.inAny()) array.push("Quantum Challenge " + QCs_save.in[0] + (QCs_save.mod ? " (" + QCs.modData[QCs_save.mod].name + " modifier)": ""))
 
 	setAndMaybeShow("inchall", array.length > 0, () => "You are currently in " + wordizeList(array))
 }

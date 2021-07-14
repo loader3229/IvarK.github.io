@@ -68,6 +68,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 		ipcost: new Decimal(1),
 		epcost: new Decimal(1),
 		studies: [],
+		auto: player.timestudy.auto
 	}
 	if (isQC) player.timestudy.theorem = 0
 

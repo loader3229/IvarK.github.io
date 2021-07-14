@@ -49,7 +49,7 @@ var quantumTabs = {
 
 function updateQuantumTabs() {
 	getEl("quarkEnergy").textContent = shorten(qu_save.quarkEnergy)
-	getEl("quarkEnergyMult").textContent = "(" + shorten(tmp.qe.mult) + (tmp.qe.div > 1 ? " / " + shorten(tmp.qe.div) : "") + ")"
+	getEl("quarkEnergyMult").textContent = "(" + (tmp.qe.div > 1 && shiftDown ? shorten(tmp.qe.mult) + "x, /" + shorten(tmp.qe.div) : shorten(tmp.qe.mult / tmp.qe.div) + "x") + ")"
 	getEl("bestQE").textContent = shorten(qu_save.bestEnergy)
 	getEl("qeEff").textContent = "^" + tmp.qe.exp.toFixed(3)
 	getEl("qeFrac").textContent = shorten(tmp.qe.expNum) + "/" + shorten(tmp.qe.expDen)
@@ -913,4 +913,30 @@ function doubleMSMult(x) {
 
 function isAtEndGame() {
 	return tmp.ngp3 && QCs_save.comps >= 1
+}
+
+//Auto-Preset
+function openAutoPresets() {
+	closeToolTip()
+	getEl("autoPresets").style.display = "flex"
+
+	getEl("autoPresetToggle").textContent = player.timestudy.auto.on ? "Auto: ON" : "Auto: OFF"
+	getEl("autoPresetEternity").value = player.timestudy.auto.eternity || ""
+	getEl("autoPresetDilation").value = player.timestudy.auto.dilation || ""
+
+	getEl("autoPresetQCDiv").style.display = QCs.unl() ? "" : "none"
+	if (QCs.unl()) getEl("autoPresetQC").value = player.timestudy.auto.qc || ""
+}
+
+function toggleAutoPreset() {
+	player.timestudy.auto.on = !player.timestudy.auto.on
+	getEl("autoPresetToggle").textContent = player.timestudy.auto.on ? "Auto: ON" : "Auto: OFF"
+}
+
+function changeAutoPreset(x, id) {
+	player.timestudy.auto[x] = getEl(id).value
+}
+
+function loadAutoPreset(x) {
+	importStudyTree(player.timestudy.auto[x])
 }
