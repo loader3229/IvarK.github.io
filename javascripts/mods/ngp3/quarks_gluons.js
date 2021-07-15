@@ -243,7 +243,7 @@ function updateColorCharge() {
 function getColorPowerQuantity(color, base) {
 	if (QCs.in(2)) return 0
 
-	let ret = colorCharge[color] * tmp.glB[color].mult
+	let ret = Math.pow(colorCharge[color], 2 * tmp.qe.exp) * tmp.glB[color].mult
 	if (tmp.qe) ret = ret * tmp.qe.eff1 + tmp.qe.eff2
 	if (tmp.glB) ret -= tmp.glB[color].sub
 	ret = Math.max(ret, 0)
@@ -266,12 +266,14 @@ function updateColorPowers() {
 	//Red
 	colorBoosts.r = Math.log10(qu_save.colorPowers.r * 5 + 1) / 3.5 + 1
 	if (hasMTS(272)) colorBoosts.r += 0.25
+	if (colorBoosts.r > 1.75) colorBoosts.r = Math.sqrt(colorBoosts.r * 1.75)
 
 	//Green
 	colorBoosts.g = Math.log10(qu_save.colorPowers.g * 3 + 1) + 1
 
 	//Blue
-	colorBoosts.b_base = qu_save.colorPowers.b * 1.5 + 1
+	colorBoosts.b_base = qu_save.colorPowers.b + 1
+	colorBoosts.b_base += Math.log2(colorBoosts.b_base)
 	colorBoosts.b_exp = 2
 	if (enB.active("glu", 10)) colorBoosts.b_base *= enB_tmp.glu10
 	if (enB.active("glu", 11)) colorBoosts.b_exp += enB_tmp.glu11
@@ -342,7 +344,7 @@ function updateQEGainTmp() {
 	if (data.expNum > 0 && data.expNum > data.expDen - 1) {
 		let sc = data.expDen - 1
 		let scEff = data.expNum / Math.max(sc, 1)
-		data.expNum = Math.max(data.expDen - 1 / Math.log2(scEff + 1), 0)
+		data.expNum = Math.max(data.expDen - 1 / Math.sqrt(scEff), 0)
 	}
 	if (QCs.in(2)) data.expNum += 0.75
 
@@ -438,15 +440,15 @@ function updateGluonicBoosts() {
 }
 
 function getGluonEffBuff(x) {
-	let r = Math.log10(Decimal.add(x, 1).log10() * 5 + 1) + 1
+	let r = Math.log10(Decimal.add(x, 1).log10() * 3 + 1)
 	if (tmp.ngp3_mul) r *= 1.5
-	return r
+	return r + 1
 }
 
 function getGluonEffNerf(x, color) {
 	if (!QCs.isntCatched()) return 0
 
-	let r = Math.max(Math.pow(Decimal.add(x, 1).log10(), tmp.exMode ? 1.8 : 1.5) - colorCharge.subCancel, 0)
+	let r = Math.max(Math.pow(Decimal.add(x, 1).log10(), 2) - colorCharge.subCancel, 0)
 	if (tmp.ngp3_mul) r *= 0.5
 
 	let gluon = enB.colorUsed()
@@ -592,7 +594,7 @@ var enB = {
 		},
 		gluonEff(x) {
 			let l = Decimal.add(x, 1).log10()
-			return Math.pow(Math.log2(l + 1), 1.5)
+			return Math.pow(Math.log2(l + 2), 2 * (tmp.qe.exp || 0))
 		},
 
 		activeReq(x) {
@@ -639,7 +641,7 @@ var enB = {
 			title: "Dilation Overflow",
 			type: "b",
 			eff(x) {
-				return Math.sqrt(x / 2 + 1, 0.5)
+				return Math.pow(x / 2 + 1, 0.4)
 			},
 			effDisplay(x) {
 				return formatReductionPercentage(x, 2, 3)
@@ -696,7 +698,7 @@ var enB = {
 		},
 		7: {
 			req: 12,
-			masReq: 60,
+			masReq: 50,
 
 			title: "Dilation Overflow II",
 			type: "g",
@@ -721,7 +723,7 @@ var enB = {
 			}
 		},
 		9: {
-			req: 14,
+			req: 15,
 			masReq: 36,
 
 			title: "Inflation Resistor",
@@ -841,9 +843,9 @@ var enB = {
 		max: 12,
 		1: {
 			req: 1,
-			masReq: 3,
-			masReqExpert: 4,
-			masReqDeath: 5,
+			masReq: 4,
+			masReqExpert: 5,
+			masReqDeath: 6,
 			chargeReq: 1,
 
 			title: "Replicanti Launch",
@@ -851,7 +853,8 @@ var enB = {
 			type: "g",
 			eff(x) {
 				var rep = getReplEff()
-				return Math.log10(rep.log10() + 1) * Math.cbrt(x)
+				var eff = Math.log2(x * 4 + 1)
+				return Math.log10(rep.log10() / 1e6 * eff + 1) * eff
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -859,15 +862,15 @@ var enB = {
 		},
 		2: {
 			req: 3,
-			masReq: 5,
-			chargeReq: 1,
+			masReq: 6,
+			chargeReq: 2,
 
 			title: "Meta Accelerator",
 			tier: 2,
 			type: "b",
 			eff(x) {
 				var timeMult = qu_save.time / 24000
-				if (enB.pos.engAmt() >= enB.pos.chargeReq(2)) timeMult *= 2
+				if (enB.pos.charged(2)) timeMult *= enB.pos.chargeEff(2) / 2 + 1
 				if (enB.active("pos", 11)) timeMult *= enB_tmp.pos11
 				timeMult = Math.min(timeMult, 1)
 
@@ -904,7 +907,7 @@ var enB = {
 			}
 		},
 		3: {
-			req: 5,
+			req: 6,
 			masReq: 7,
 			chargeReq: 4,
 
@@ -919,18 +922,18 @@ var enB = {
 			}
 		},
 		4: {
-			req: 7,
-			masReq: 10,
-			masReqExpert: 11,
-			masReqDeath: 1/0,
-			chargeReq: 2,
+			req: 8,
+			masReq: 9,
+			masReqExpert: 10,
+			masReqDeath: 12,
+			chargeReq: 3,
 
 			title: "Quantum Scope",
 			tier: 3,
 			type: "b",
 			anti: true,
 			eff(x) {
-				return Math.log10(x / 20 + 1) / 5 * Math.pow(x / 10 + 1, 0.1) + 1
+				return Math.log10(x / 10 + 1) * Math.pow(x / 100 + 1, 0.25) / 3 + 1
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
@@ -939,7 +942,7 @@ var enB = {
 		5: {
 			req: 50,
 			masReq: 55,
-			chargeReq: 100,
+			chargeReq: 50,
 
 			title: "Transfinite Time",
 			tier: 2,

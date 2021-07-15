@@ -1767,6 +1767,11 @@ button {
     animation: dilationBtnGlow 10s infinite;
 }
 
+.presBtn.dilationbtn {
+    width: 210px !important;
+    height: 70px !important;
+}
+
 .dilationbtn:hover {
     color: #64DD17;
     background: white;

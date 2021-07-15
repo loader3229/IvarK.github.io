@@ -261,9 +261,8 @@ var mTs = {
 		313() {
 			let tpLog = player.dilation.tachyonParticles.max(1).log10()
 			let bpLog = colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0
-			let x = Math.pow(tpLog / 100, 0.75) * Math.pow(bpLog, 0.25)
-			x = x * (1 - 1 / (x + 1)) / 4 + Math.min(x, 1)
-			return x
+
+			return Math.pow(tpLog / 100, 0.75) * Math.pow(bpLog / 4, 0.25)
 		},
 
 		321() {
@@ -432,7 +431,7 @@ var mTs = {
 		271: [272, 281, 282, 283, 284],
 		281: [291, 302], 282: [302], 283: [302], 284: [292, 302],
 		291: [311], 292: [314],
-		302: [301, "d8", 303],
+		302: [301, "d8"], 301: [303],
 		311: [312], 314: [313],
 
 		//QC7
@@ -532,7 +531,7 @@ function updateMasteryStudyCosts() {
 			setMasteryStudyCost(t, "t")
 			mTs.ttSpent += mTs.costs.time[t] < 1/0 ? mTs.costs.time[t] : 0
 			mTs.costMult = costMult == "reset" ? mTs.baseCostMult : mTs.costMult * costMult
-			mTs.latestBoughtRow = Math.max(mTs.latestBoughtRow,Math.floor(t/10))
+			mTs.latestBoughtRow = Math.max(mTs.latestBoughtRow, Math.floor(t/10))
 			mTs.bought++
 		}
 	}
@@ -697,6 +696,7 @@ function getMasteryStudyCostMult(id) {
 	if (tmp.dtMode) r = d[id + "_dt"] || r
 
 	if (id.split("t")[1] < 290 && tmp.ngp3_mul && tmp.bgMode) r = Math.sqrt(r)
+	if (!QCs.isntCatched() && QCs.in(1)) r *= 2
 
 	return r
 }
@@ -834,7 +834,7 @@ function updateMasteryStudyButtons() {
 			if (div.className !== className) div.className = className
 			if (mTs.hasStudyEffect.includes(name)) {
 				var mult = getMTSMult(name)
-				if (mult) getEl("mts" + name + "Current").textContent = (mTs.studyEffectDisplays[name] !== undefined ? mTs.studyEffectDisplays[name](mult) : shorten(mult) + "x")
+				if (mult !== undefined) getEl("mts" + name + "Current").textContent = (mTs.studyEffectDisplays[name] !== undefined ? mTs.studyEffectDisplays[name](mult) : shorten(mult) + "x")
 			}
 		}
 	}

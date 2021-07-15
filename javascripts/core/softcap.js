@@ -143,7 +143,7 @@ var softcap_data = {
 		name: "base replicanti multiplier",
 		1: {
 			func: "dilate",
-			start: Decimal.pow(10, 5e5),
+			start: Decimal.pow(10, 3e5),
 			base: Math.pow(10, 0.032),
 			pow: 4/5
 		},
@@ -231,15 +231,10 @@ var softcap_data = {
 	aqs: {
 		name: "Anti-Quark gain",
 		1: {
-			func: "dilate",
-			start: new Decimal(1e3),
-			base: 10,
-			pow() {
-				let x = 0.75
-				if (PCs.unl()) x *= PCs_tmp.eff2
-				return x
-			},
-			mul: 0.5
+			func: "pow",
+			start: new Decimal(3e3),
+			pow: 0.5,
+			derv: false
 		},
 	},
 	bam: {

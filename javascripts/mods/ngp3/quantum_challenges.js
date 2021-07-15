@@ -46,11 +46,11 @@ var QCs = {
 		max: 8,
 		1: {
 			unl: () => true,
-			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and TT softcap is " + formatReductionPercentage(QCs.data[1].ttScaling()) + "% faster.",
-			goal: () => QCs_save.qc1.boosts >= (tmp.dtMode ? 5 : 4),
-			goalDisp: () => (tmp.dtMode ? 5 : 4) + " Replicated Compressors",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 1.3),
-			hint: "Figure out how to get more Replicanti Chance (MS35), and to minimize the spending of TT.",
+			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and TT cost multipliers are doubled.",
+			goal: () => player.money.e >= 1.1e11,
+			goalDisp: () => shortenCosts(Decimal.pow(10, 1.1e11)) + " antimatter",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 1.35),
+			hint: "Figure out how to get more Replicanti Chance. (MS35)",
 
 			rewardDesc: (x) => "You can keep Replicated Compressors.",
 			rewardEff(str) {
@@ -83,7 +83,7 @@ var QCs = {
 					req: Decimal.pow(10, 1e6 + 2e5 * brokenBoosts),
 					limit: new Decimal("1e6000000"),
 
-					speedMult: Decimal.pow(4, -brokenBoosts).times(Math.pow(boosts / 2 + 1, 2)),
+					speedMult: Decimal.pow(4, -brokenBoosts).times(boosts / 2 + 1),
 					scalingMult: Math.pow(2, Math.max(boosts - 20, 0) / 20),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
@@ -91,12 +91,13 @@ var QCs = {
 					effExp: Math.min(1 + boosts / 20, 2)
 				}
 				QCs_tmp.qc1 = data
+				QCs_tmp.qc1.limit = QCs_tmp.qc1.limit.max(QCs_tmp.qc1.req)
 
 				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
-				if (PCs.milestoneDone(11)) {
-					data.req = data.req.pow(0.95)
+				if (false && PCs.milestoneDone(11)) {
+					data.req = data.req.pow(0.9)
 					data.speedMult = data.speedMult.times(boosts / 2 + 1)
-					data.effMult = maxBoosts / 28 + boosts / 14 + 1
+					data.effMult = maxBoosts / 24 + boosts / 12 + 1
 				}
 			},
 			convert(x) {
@@ -121,9 +122,9 @@ var QCs = {
 		2: {
 			unl: () => true,
 			desc: () => "Some quantum contents are based on one, but quantum energy multiplier. color powers, and gluons are useless; and you must exclude 1 tier from Positron Cloud.",
-			goal: () => pos_save.boosts >= 7,
-			goalDisp: () => "7 Positronic Boosters",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 1.1),
+			goal: () => pos_save.boosts >= 8,
+			goalDisp: () => getFullExpansion(8) + " Positronic Boosters",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 1.15),
 			hint: "Mess around Positronic Cloud by swapping and excluding.",
 
 			rewardDesc: (x) => "Color charge also multiply a color power that's used by it. (" + shorten(x) + "x)",
@@ -286,9 +287,14 @@ var QCs = {
 			rewardDesc: (x) => "Replicantis also produce Replicanti Energy; but also boosted by time since Eternity. (" + shorten(QCs_tmp.rewards[6]) + "x)",
 			rewardEff(str) {
 				let t = player.thisEternity / 10
-				if (PCs.milestoneDone(61)) t /= 2
-				if (PCs.milestoneDone(62)) t = Math.sqrt(t)
-				return (9 / (Math.abs(5 - t) + 1) + 1) * Math.log2(player.thisEternity / 10 + 2)
+				let t_puzzle = t
+				if (PCs.milestoneDone(61)) t_puzzle /= 2
+				if (PCs.milestoneDone(62)) t_puzzle = Math.sqrt(t)
+
+				let x = Math.log2(t + 2)
+				if (PCs.milestoneDone(61)) x *= x
+				x *= (9 / (Math.abs(5 - t_puzzle) + 1) + 1) //Hindrance... >_<
+				return x
 			},
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",

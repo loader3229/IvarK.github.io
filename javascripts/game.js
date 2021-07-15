@@ -4583,7 +4583,7 @@ function doEternityButtonDisplayUpdating(diff){
 	var currentEPmin = updateEPminpeak(diff, EPminpeakUnits)
 	EPminpeakUnits = (EPminpeakType == 'logarithm' ? ' log(' + EPminpeakUnits + ')' : ' ' + EPminpeakUnits)
 	if (getEl("eternitybtn").style.display != "none") {
-		getEl("eternitybtnFlavor").textContent = (((!player.dilation.active&&gainedEternityPoints().lt(1e6))||player.eternities<1||player.currentEternityChall!==""||(player.options.theme=="Aarex's Modifications"&&player.options.notation!="Morse code"))
+		getEl("eternitybtnFlavor").textContent = (((!player.dilation.active&&gainedEternityPoints().lt(1e6))||player.eternities<1||player.currentEternityChall!=="")
 									    ? ((player.currentEternityChall!=="" ? "Other challenges await..." : player.eternities>0 ? "" : "Other times await...") + " I need to become Eternal.") : "")
 		if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getTPGain())) getEl("eternitybtnEPGain").innerHTML = getReqForTPGainDisp()
 		else {
@@ -5327,7 +5327,10 @@ function autoEternityABTick(){
 		if (gainedEternityPoints().gte(bestEp.times(player.eternityBuyer.limit))) eternity(false, true)
 	} else if (player.autoEterMode == "eternitied") {
 		var eternitied = getEternitied()
-		if (nG(nA(eternitied, gainEternitiedStat()), nM(eternitied, nN(new Decimal(player.eternityBuyer.limit))))) eternity(false, true)
+		if (Decimal.gte(
+			nA(eternitied, gainEternitiedStat()),
+			Decimal.times(eternitied, player.eternityBuyer.limit)
+		)) eternity(false, true)
 	} else if (player.autoEterMode == "exponent") {
 		var eternitied = getEternitied()
 		if (Decimal.gte(

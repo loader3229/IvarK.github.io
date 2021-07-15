@@ -256,6 +256,9 @@ var pH = {
 			if (!tmp_pH.eternity.shown) tmp_pH.shown++
 		}
 
+		//Time Dilation
+		if (player.dilation.active) getEl("eternitybtn").className = "presBtn presPos" + (tmp_pH.eternity.shown ? tmp_pH.eternity.order : tmp_pH.shown + 1) + " dilationbtn"
+
 		//Quantum (after Neutrino Upgrade 16)
 		let bigRipAndQuantum = !hasNU(16) && !pl.on()
 		if (!bigRipAndQuantum && !QCs.inAny()) getEl("quantumbtn").style.display = "none"

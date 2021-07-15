@@ -89,16 +89,21 @@ function quarkGain() {
 
 	if (!tmp.ngp3) return Decimal.pow(10, ma.log(10) / Math.log10(Number.MAX_VALUE) - 1).floor()
 
-	let log = Math.max(ma.div(maReq).log(2) / 2048, 0)
-	log = Math.pow(log + 1, 4) - 1
+	let log = Math.max(ma.div(maReq).log(2) / 2048 * 5/4, 0)
+	let logExp = 3
+	if (PCs.unl()) logExp *= PCs_tmp.eff2
+	log = Math.pow(log + 1, logExp) - 1
 
 	return softcap(Decimal.pow(10, log), "aqs").max(1)
 }
 
 function quarkGainNextAt(qk) {
+	let logExp = 3
+	if (PCs.unl()) logExp *= PCs_tmp.eff2
+
 	if (!qk) qk = quarkGain()
 	qk = Decimal.add(qk, 1).log10() - getQKAchBonusLog()
-	qk = Math.pow(qk + 1, 1 / 4) - 1
+	qk = Math.pow(qk + 1, 1 / logExp) - 1
 	return Decimal.pow(Number.MAX_VALUE, qk * 2).times(getQuantumReq())
 }
 
@@ -399,10 +404,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 			}
 			if (pH.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			qu_save.bigRip.active = bigRip
-		}
-		if ((player.autoEterMode=="replicanti"||player.autoEterMode=="peak")&&qMs.tmp.amt<18) {
-			player.autoEterMode="amount"
-			updateAutoEterMode()
 		}
 		if (!bigRip || tmp.bruActive[12]) player.dilation.upgrades.push(10)
 		else qu_save.wasted = bigRip && qu_save.bigRip.storedTS === undefined

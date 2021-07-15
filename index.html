@@ -525,8 +525,8 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr class="wideRow">
-						<td><button id="mts301" style='font-size:9px' onclick='buyMasteryStudy("t", 301)'></button></td>
 						<td><button id="mts302" style='font-size:9px' onclick='buyMasteryStudy("t", 302)'></button></td>
+						<td><button id="mts301" style='font-size:9px' onclick='buyMasteryStudy("t", 301)'></button></td>
 						<td><button id="mts303" style='font-size:9px' onclick='buyMasteryStudy("t", 303)'></button></td>
 					</tr>
 				</table>
@@ -1575,7 +1575,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/13/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/14/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -3471,7 +3471,7 @@
 					</table>
 				</div>
 				<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 25px">0 / 1</span>)</span><br>
-				(translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and <span id="pc_eff2" style="font-size: 20px"></span> to aQs gain exponent after softcap)<br>
+				(translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and <span id="pc_eff2" style="font-size: 20px"></span> to aQs gain exponent)<br>
 				<button class="storebtn" style="font-size: 100%; width:200px" onclick="exitChallenge()">Exit Challenge</button>
 				<table id="pc_table" align="center" style="margin: auto"></table>
 			</div>
@@ -3743,7 +3743,7 @@
 						Dilate for every X eternities:
 						<input type="text" onchange="updatePriorities()" id="prioritydil"></input>
 						<br>
-						Dilate at next Eternity, on TP upgrade:
+						Auto-dilate after TP upgrade or quantum:
 						<input type="checkbox" onchange="updatePriorities()" id="autoalwaysdil"></input>
 						<br><br>
 						<span style="font-size: 80%">Is active</span>
@@ -4546,7 +4546,7 @@
 				<td colspan=3>
 					You have <span id="enB_glu_amt" style="font-size:35px">0</span> Entangled Boosters.
 					<br>
-					<button class="storebtn" id="enB_glu_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1 Entangled Booster<br>(requires <span id="enB_glu_cost">1</span> best Quantum Energy)</button>
+					<button class="storebtn" id="enB_glu_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1 Entangled Booster<br><span style="font-size: 10px">(requires <span id="enB_glu_cost">1</span> best quantum energy)</span></button>
 					<br>
 					<button class='storebtn' style="width: 180px" onclick="ENTANGLED_BOOSTS.maxBuy('glu')">Max buy</button>
 				</td>
@@ -4756,7 +4756,7 @@
 				<td>
 					<span id="enB_pos_amt" style="font-size:25px">0</span> Positronic Boosters
 					<br>
-					<button class="storebtn" id="enB_pos_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> Positronic Charge</button>
+					<button class="storebtn" id="enB_pos_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1 Positronic Booster<br><span style="font-size: 10px">(requires <span id="enB_pos_cost">1</span> Positronic Charge)</span></button>
 					<br>
 					<button class='storebtn' style="width: 180px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy</button>
 				</td>

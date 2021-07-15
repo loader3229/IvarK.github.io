@@ -1926,9 +1926,6 @@ function setSomeQuantumAutomationDisplay(){
         }
         getEl('replicantibulkmodetoggle').textContent="Mode: "+(player.galaxyMaxBulk?"Max":"Singles")
         getEl('versionDesc').style.display = tmp.ngp3 ? "" : "none"
-        var autoAssignUnl = qMs.tmp.amt >= 22
-        getEl('autoAssign').style.display = autoAssignUnl ? "" : "none"
-        getEl('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
         getEl('autoReset').style.display = hasAch("ng3p47") ? "" : "none"
 }
 
@@ -2854,7 +2851,7 @@ function loadAutoBuyerSettings() {
         getEl("bulkDimboost").value = player.autobuyers[9].bulk
         getEl("prioritySac").value = player.autoSacrifice.priority
         getEl("bulkgalaxy").value = player.autobuyers[10].bulk
-        getEl("priority13").value = formatValue("Scientific", new Decimal(player.eternityBuyer.limit), 2, player.autoEterMode == "exponent" ? 2 : 0)
+        getEl("priority13").value = formatValue("Scientific", new Decimal(player.eternityBuyer.limit), 2, player.autoEterMode == "eternitied" || player.autoEterMode == "exponent" ? 2 : 0)
         if (hasAch("ng3p52") && player.eternityBuyer.presets !== undefined) {
         }
         if (player.autobuyers[12] !== undefined) getEl("priority14").value = formatValue("Scientific", new Decimal(player.autobuyers[12].priority), 2, 0)

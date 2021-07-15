@@ -91,7 +91,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 		isOn: false
 	}
 	if (tmp.ngp3) {
-		player.eternityBuyer.autoDilCond = false
+		player.eternityBuyer.alwaysDilCond = false
 		player.eternityBuyer.statBeforeDilation = player.eternityBuyer.dilationPerAmount || 0
 	}
 
@@ -131,7 +131,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	doMetaDimensionsReset(bigRip, headstart, isQC)
 	resetMasteryStudies()
 
-	doEternityResetStuff(layer)
+	doEternityResetStuff(layer, player.eternityBuyer.alwaysDil ? "dil" : "")
 	player.old = tmp.ngp3 ? !QCs.inAny() : undefined
 	player.dontWant = tmp.ngp3 || undefined
 }

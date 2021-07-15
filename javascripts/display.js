@@ -660,7 +660,12 @@ function replicantiDisplay() {
 		if (tmp.ngC) ngC.condense.rep.update()
 
 		if (QCs_tmp.qc1) {
-			getEl("repCompress").innerHTML = (QCs_save.qc1.boosts > QCs.data[1].compressScaling() ? "Compress." : "Do a Eternity reset to compress.") + "<br>Requirement: " + shortenCosts(QCs_tmp.qc1.req) + "<br>" + getFullExpansion(QCs_save.qc1.boosts) + " / " + getFullExpansion(QCs.data[1].max()) + " " + (QCs_save.qc1.boosts > QCs.data[1].compressScaling() ? "Distant " : "") + "Compressors" + (QCs_save.qc1.max ? "<br>(" + QCs_save.qc1.max + " max boosts)" : "")
+			let qc1Explain = QCs_save.qc1.boosts == 0
+			getEl("repCompress").innerHTML = "Compress for a " + (qc1Explain ? "small multiplier " : "") + "boost" +
+				(!qc1Explain ? "." : ", but reduce the interval scaling.") +
+				"<br><div style='font-size: 10px'>(Requires " + shortenCosts(QCs_tmp.qc1.req) + " replicantis)</div>" +
+				(!qc1Explain ? "(" + getFullExpansion(QCs_save.qc1.boosts) + " / " + getFullExpansion(QCs.data[1].max()) + (QCs_save.qc1.boosts >= QCs.data[1].compressScaling() ? " Distant" : "") + (QCs_save.qc1.max ? ", " + getFullExpansion(QCs_save.qc1.max) + " Max" : "") + ")" : "")
+			getEl("repCompress").style["font-size"] = qc1Explain ? "11px" : "12px"
 			getEl("repCompress").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
 		}
 		if (QCs_tmp.qc5) QCs.data[5].updateDispOnTick()
