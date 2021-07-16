@@ -139,13 +139,14 @@ var softcap_data = {
 			pow: 3/4
 		},
 	},
-	repMult: {
-		name: "base replicanti multiplier",
+	rep: {
+		name: "effective Replicantis",
 		1: {
 			func: "dilate",
-			start: Decimal.pow(10, 3e5),
-			base: Math.pow(10, 0.032),
-			pow: 4/5
+			start: Decimal.pow(10, 9e6),
+			base: 10,
+			pow: 4/5,
+			mul: 0.5
 		},
 	},
 	rInt: {
@@ -232,7 +233,7 @@ var softcap_data = {
 		name: "Anti-Quark gain",
 		1: {
 			func: "pow",
-			start: new Decimal(3e3),
+			start: new Decimal(1/0),
 			pow: 0.5,
 			derv: false
 		},
@@ -819,7 +820,7 @@ function getSoftcapAmtFromId(id){
 		ts11_log_big_rip: () => tsMults[11]().log10(),
 		bru1_log: () => tmp.bru[1].max(1).log10(),
 		beu3_log: () => tmp.beu[3].max(1).log10(),
-		repMult: () => getReplMult(),
+		rep: () => getReplEff(),
 		rInt: () => tmp.rep ? tmp.rep.baseBaseEst.pow(1 - getECReward(14)) : new Decimal(1),
 		it: () => tmp.it.max(1),
 		ec14: () => tmp.rep ? tmp.rep.ec14.baseInt : new Decimal(1),
@@ -866,7 +867,7 @@ function hasSoftcapStarted(id, num){
 		This currently includes: _ngC, _big_rip, _dilation, _ngmX for integers of length 1 X
 		*/
 		idbase: tmp.ngp3,
-		repMult: tmp.ngp3,
+		rep: tmp.ngp3,
 		rInt: ECComps("eterc14"),
 		ts83: tmp.ngp3,
 		ts225: tmp.ngp3,
@@ -985,7 +986,7 @@ function updateSoftcapStatsTab(){
 		ts11_log_big_rip: "softcap_ts2",
 		bru1_log: "softcap_bru1",
 		beu3_log: "softcap_beu3",
-		repMult: "softcap_rep",
+		rep: "softcap_rep",
 		rInt: "softcap_rInt",
 		it: "softcap_it",
 		tt: "softcap_tt",

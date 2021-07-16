@@ -3361,6 +3361,8 @@ function eternity(force, auto, forceRespec, dilated) {
 	}
 
 	if (!force) {
+		if (player.respec || player.respecMastery) toggleAutoPreset()
+
 		var autoPreset = QCs.inAny() ? "qc" : dilated ? "dilation" : "eternity"
 		var on = player.timestudy.auto && player.timestudy.auto.on && player.timestudy.auto[autoPreset]
 		if (on) forceRespec = true

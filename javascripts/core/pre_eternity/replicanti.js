@@ -73,6 +73,7 @@ function getReplEff() {
 
 function getReplBaseEff(x) {
 	x = QCs.in(5) ? new Decimal(1) : QCs.data[1].convert(x || player.replicanti.amount)
+	if (tmp.ngp3) x = softcap(x, "rep")
 	return x
 }
 
@@ -90,6 +91,7 @@ function getReplMult(next) {
 	let repl = getReplBaseEff()
 	let replmult = Decimal.max(repl.log(2), 1).pow(exp)
 	if (hasTimeStudy(21) && !tmp.ngC) replmult = replmult.plus(repl.pow(0.032))
+
 	if (hasTimeStudy(102)) {
 		let rg = getFullEffRGs()
 		let base = new Decimal(replmult)
@@ -97,7 +99,6 @@ function getReplMult(next) {
 		replmult = base.times(Decimal.pow(5, rg))
 		if (hasMTS(292)) replmult = replmult.max(base.pow(getMTSMult(292)))
 	}
-	if (tmp.ngp3) replmult = softcap(replmult, "repMult")
 	return replmult
 }
 

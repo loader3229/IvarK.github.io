@@ -189,14 +189,14 @@ getEl("softReset").onclick = function () {
 };
 
 function skipResets() {
-	if (inNC(0)) {
+	if (inNC(0) && player.currentChallenge == "") {
 		var upToWhat = 0
 		for (var s = 1; s < 4; s++) if (player.infinityUpgrades.includes("skipReset" + s)) upToWhat = s
 		if (player.infinityUpgrades.includes("skipResetGalaxy")) {
 			upToWhat = 4 
 			if (player.galaxies < 1) player.galaxies = 1
 		}
-		if (player.resets < upToWhat) player.resets=upToWhat
+		if (player.resets < upToWhat) player.resets = upToWhat
 		if (player.tickspeedBoosts<upToWhat * 4) player.tickspeedBoosts = upToWhat * 4
 	}
 }

@@ -11,7 +11,7 @@ var mTs = {
 			281: 1e78, 282: 5e76, 283: 5e76, 284: 1e78,
 			291: 2e78, 292: 2e78,
 			301: 1e80, 302: 1e78, 303: 1e80,
-			311: 1e80, 312: 1e82, 313: 1e82, 314: 1e80,
+			311: 1e80, 312: 1.5e81, 313: 1.5e81, 314: 1e80,
 
 			//QC7
 			321: 0, 322: 0, 323: 0,
@@ -55,7 +55,7 @@ var mTs = {
 
 			//QC7
 			t321: 1 / 4, t322: "reset", t323: 1 / 4,
-			t331: 1 / 4, t332: 16, t333: 1024, t334: 16, t335: 1 / 4,
+			t331: 1 / 4, t332: 8, t333: 1024, t334: 8, t335: 1 / 4,
 
 			//Beginner Mode
 			t251_bg: 1.5, t252_bg: 1.5, t253_bg: 1.5,
@@ -262,7 +262,7 @@ var mTs = {
 			let tpLog = player.dilation.tachyonParticles.max(1).log10()
 			let bpLog = colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0
 
-			return Math.pow(tpLog / 100, 0.75) * Math.pow(bpLog / 4, 0.25)
+			return Math.pow(tpLog / 90, 0.75) * Math.pow(bpLog / 3, 0.25)
 		},
 
 		321() {

@@ -55,6 +55,11 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	var turnSomeOn = !bigRip || tmp.bruActive[1]
 	var bigRipChanged = tmp.ngp3 && bigRip != qu_save.bigRip.active
 
+	if (qMs.tmp.amt < 1) {
+		if (player.dimensionMultDecrease <= 3) player.dimensionMultDecrease = 3
+		if (player.tickSpeedMultDecrease <= 2) player.tickSpeedMultDecrease = 2
+	}
+
 	player.bestEternity = 9999999999
 	player.lastTenEternities = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
 

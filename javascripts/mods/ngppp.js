@@ -940,3 +940,9 @@ function changeAutoPreset(x, id) {
 function loadAutoPreset(x) {
 	importStudyTree(player.timestudy.auto[x])
 }
+
+function refreshAutoPreset() {
+	if (!player.timestudy.auto.on) return
+	player.timestudy.auto[QCs.inAny() ? "qc" : player.dilation.active ? "dilation" : "eternity"] = getStudyTreeStr()
+	if (getEl("autoPresets").style.display == "flex") openAutoPresets()
+}

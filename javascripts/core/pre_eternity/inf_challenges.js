@@ -8,10 +8,10 @@ function startChallenge(name) {
 	if (player.options.challConf && name != "") if (!confirm("You will start over with just your Infinity upgrades, and achievements. You need to reach " + (name.includes("post") ? "a set goal" : "infinity") + " with special conditions. The 4th Infinity upgrade column doesn't work on challenges.")) return
 	if (player.tickspeedBoosts != undefined) player.tickspeedBoosts = 0
 	if (name == "postc1" && player.currentEternityChall != "" && QCs.in(4) && QCs.in(6)) giveAchievement("The Ultimate Challenge")
-	
-	doNormalChallengeResetStuff()
+
 	player.currentChallenge = name
 	player.challengeTarget = target
+	doNormalChallengeResetStuff()
 	
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()

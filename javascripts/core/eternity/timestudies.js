@@ -122,6 +122,7 @@ function buyTimeStudy(name, quickBuy) {
 		if (quickBuy) return
 		updateTimeStudyButtons(true)
 		drawStudyTree()
+		refreshAutoPreset()
 	}
 }
 
@@ -417,6 +418,7 @@ function studiesUntil(id) {
 		if ((i > 6 && i < 11) && player.timestudy.studies.includes(201)) buyTimeStudy(i * 10 + secondPath, true);
 		else for (var j = 1; all.includes(i * 10 + j) ; j++) buyTimeStudy(i * 10 + j, true);
 	}
+	refreshAutoPreset()
 }
 
 function respecTimeStudies(force) {

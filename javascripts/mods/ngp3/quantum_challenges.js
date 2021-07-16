@@ -47,8 +47,8 @@ var QCs = {
 		1: {
 			unl: () => true,
 			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and TT cost multipliers are doubled.",
-			goal: () => player.money.e >= 1.1e11,
-			goalDisp: () => shortenCosts(Decimal.pow(10, 1.1e11)) + " antimatter",
+			goal: () => player.money.e >= tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11,
+			goalDisp: () => shortenCosts(Decimal.pow(10, tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11)) + " antimatter",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.35),
 			hint: "Figure out how to get more Replicanti Chance. (MS35)",
 
@@ -67,7 +67,7 @@ var QCs = {
 				return tmp.dtMode ? 2 : tmp.exMode ? 1.75 : 1.5
 			},
 			compressScaling() {
-				let x = 5
+				let x = 4
 				if (hasAch("ng3p27")) x += 0.5
 				return x
 			},
@@ -80,14 +80,14 @@ var QCs = {
 				let brokenBoosts = Math.max(QCs_save.qc1.boosts - this.compressScaling(), 0)
 
 				let data = {
-					req: Decimal.pow(10, 1e6 + 2e5 * brokenBoosts),
+					req: Decimal.pow(10, 1e6 + 2.5e5 * brokenBoosts),
 					limit: new Decimal("1e6000000"),
 
-					speedMult: Decimal.pow(4, -brokenBoosts).times(boosts / 2 + 1),
+					speedMult: Decimal.pow(2, -boosts),
 					scalingMult: Math.pow(2, Math.max(boosts - 20, 0) / 20),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
-					effMult: maxBoosts / 30 + boosts / 15 + 1,
+					effMult: maxBoosts / 30 + boosts / 30 + 1,
 					effExp: Math.min(1 + boosts / 20, 2)
 				}
 				QCs_tmp.qc1 = data
@@ -97,7 +97,7 @@ var QCs = {
 				if (false && PCs.milestoneDone(11)) {
 					data.req = data.req.pow(0.9)
 					data.speedMult = data.speedMult.times(boosts / 2 + 1)
-					data.effMult = maxBoosts / 24 + boosts / 12 + 1
+					data.effMult = maxBoosts / 20 + boosts / 20 + 1
 				}
 			},
 			convert(x) {
@@ -122,9 +122,9 @@ var QCs = {
 		2: {
 			unl: () => true,
 			desc: () => "Some quantum contents are based on one, but quantum energy multiplier. color powers, and gluons are useless; and you must exclude 1 tier from Positron Cloud.",
-			goal: () => pos_save.boosts >= 8,
-			goalDisp: () => getFullExpansion(8) + " Positronic Boosters",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 1.15),
+			goal: () => pos_save.boosts >= 11,
+			goalDisp: () => getFullExpansion(11) + " Positronic Boosters",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
 			hint: "Mess around Positronic Cloud by swapping and excluding.",
 
 			rewardDesc: (x) => "Color charge also multiply a color power that's used by it. (" + shorten(x) + "x)",
@@ -160,7 +160,7 @@ var QCs = {
 			desc: () => "There are only Meta Dimensions that produce antimatter, but successfully dilating reduces antimatter production.",
 			goal: () => player.dilation.times >= 3,
 			goalDisp: () => "4 successful dilation runs",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 0.15),
+			goalMA: Decimal.pow(Number.MAX_VALUE, 0.13),
 			hint: "Try not to automate dilation, and also not to dilate time frequently.",
 
 			rewardDesc: (x) => "You sacrifice 30% of Meta Dimension Boosts instead of 25%.",
@@ -184,8 +184,8 @@ var QCs = {
 		4: {
 			unl: () => true,
 			desc: () => "You must exclude one type of galaxy for a single run. Changing the exclusion requires a forced Eternity reset.",
-			goal: () => player.dilation.freeGalaxies >= 2900,
-			goalDisp: () => getFullExpansion(2900) + " Tachyonic Galaxies",
+			goal: () => player.dilation.freeGalaxies >= 2800,
+			goalDisp: () => getFullExpansion(2800) + " Tachyonic Galaxies",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
 			hint: "Test every single combination of this exclusion, and try to minimize galaxies.",
 
@@ -548,230 +548,3 @@ var QCs_save = undefined
 var QCs_tmp = { unl: [], in: [], rewards: {}, perks: {}, show_perks: false }
 
 let QUANTUM_CHALLENGES = QCs
-
-
-//PAIRED CHALLENGES
-var PCs = {
-	milestones: {
-		11: "Boost the QC1 reward.",
-		21: "Boost the QC2 reward. (not implemented)",
-		31: "Boost the QC3 reward. (not implemented)",
-		41: "Boost the QC4 reward. (not implemented)",
-		51: "Boost the QC5 reward. (not implemented)",
-		61: "Boost the QC6 reward.",
-		71: "Reduce the level up requirement by 1.",
-		81: "Boost the QC8 reward. (not implemented)",
-		12: "Unlock Replicated Expanders. (not implemented)",
-		22: "You can exclude a Positron Cloud tier in any QC; and unlock the Perked modifier. (not implemented)",
-		32: "Dilation stat is 50% weaker.",
-		42: "Extra Replicated Galaxies contribute to Positronic Charge.",
-		52: "You gain 2x more Replicanti Energy.",
-		62: "Time since Eternity is squared root.",
-		72: "Mastery Study cost multiplier is divided by 5x, permanently.",
-		82: "Unlock Galactic Clusters. (not implemented)",
-		13: "Unlock Replicated Dilaters. (not implemented)",
-		23: "You can exclude matched Boosts instead. (not implemented)",
-		33: "For each PC combination, Meta Accelerator slowdown is 2% slower.",
-		43: "Tier-1 Positronic Boosts can charge more by 4x, but the requirement is squared than normal.",
-		53: "Replicanti Energy formula is stronger.",
-		63: "Eternitying only loses 30 seconds of time stat.",
-		73: "Unlock Strings. (not implemented)",
-		83: "Kept galaxies are converted into extra Positronic Charge on Quantum. (not implemented)",
-	},
-	setupData() {
-		var data = {
-			qc1_ids: [null, 7, 6, 4, 2, 3, 8, 5, 1],
-			qc2_ids: [null, 1, 5, 8, 3, 2, 4, 6, 7],
-			qc1_lvls: [null, 1, 2, 3, 4, 10, 11, 12, 13],
-			qc2_lvls: [null, 1, 2, 4, 8, 14, 15, 17, 18],
-			milestoneReqs: [null, 1, 2, 4],
-			setup: true
-		}
-		PCs.data = data
-		getEl("pc_table").innerHTML = ""
-
-		data.lvls = {}
-		data.pos = {}
-		data.all = []
-		for (var x = 1; x <= 8; x++) {
-			for (var y = 1; y <= 9 - x; y++) {
-				var lvl = data.qc1_lvls[x] + data.qc2_lvls[y] - 1
-				var id = this.conv(data.qc1_ids[x], data.qc2_ids[y])
-				data.lvls[lvl] = (data.lvls[lvl] || 0) + 1
-				data.pos[id] = x * 10 + y
-				data.all.push(id)
-			}
-		}
-
-		var sum = 0
-		PCs_tmp.lvl = 1
-		for (var i = 1; i <= 18; i++) {
-			sum += data.lvls[i]
-			data.lvls[i] = sum
-		}
-	},
-
-	setup() {
-		PCs_save = {
-			comps: [],
-			skips: [],
-			lvl: 1
-		}
-		qu_save.pc = PCs_save
-		return PCs_save
-	},
-	compile() {
-		PCs_save = undefined
-		PCs.data = {}
-		PCs_tmp = { unl: PCs.unl() }
-		if (!tmp.ngp3 || qu_save === undefined) {
-			this.updateTmp()
-			return
-		}
-
-		let data = qu_save.pc
-		if (data === undefined) data = this.setup()
-		PCs_save = data
-
-		this.updateTmp()
-	},
-
-	unl() {
-		return qu_save && qu_save.qc && qu_save.qc.comps >= 7
-	},
-	updateTmp() {
-		PCs_tmp.unl = PCs.unl()
-		if (!PCs_tmp.unl) return
-		if (!PCs.data.setup) this.setupData()
-		var data = PCs_tmp
-
-		//Positionist
-		data.pos_comps = {}
-		for (var i = 1; i <= 8; i++) data.pos_comps[i] = 0
-		for (var i = 0; i < PCs_save.comps.length; i++) {
-			var id = PCs.convBack(PCs_save.comps[i])
-			data.pos_comps[id[0]]++
-			data.pos_comps[id[1]]++
-		}
-
-		//Level up!
-		var oldLvl = PCs_save.lvl
-		var comps = PCs_save.comps.concat(PCs_save.skips).length
-		while (PCs_save.lvl < 19 && comps >= this.lvlReq(PCs_save.lvl)) PCs_save.lvl++
-		if (PCs.data.setupHTML && PCs_save.lvl > oldLvl) {
-			for (var i = 0; i < PCs.data.all.length; i++) this.updateButton(PCs.data.all[i])
-		}
-
-		//Boosts
-		var lvl = PCs_save.lvl - 1
-		data.eff1 = 1 + 0.75 * lvl / 18
-		data.eff1_start = 100
-		data.eff2 = 1 + lvl / 54
-	},
-
-	start(x) {
-		quantum(false, true, PCs.convBack(x))
-	},
-	in(x) {
-		return QCs_tmp.in.length >= 2
-	},
-	goal(pc) {
-		var list = pc || QCs_tmp.in
-		if (typeof(list) == "number") list = this.convBack(list)
-		return QCs.data[list[0]].goalMA.pow(QCs.data[list[1]].goalMA.log10() / getQuantumReq(true).log10() * 0.9)
-	},
-	conv(c1, c2) {
-		return Math.min(c1 * 10 + c2, c2 * 10 + c1)
-	},
-	convBack(pc) {
-		return [Math.floor(pc / 10), pc % 10]
-	},
-	done(pc) {
-		return PCs.unl() && (PCs_save.comps.includes(pc) || PCs_save.skips.includes(pc))
-	},
-	milestoneDone(pos) {
-		return PCs.unl() && PCs_tmp.pos_comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
-	},
-	lvlReq(x) {
-		let r = PCs.data.lvls[x]
-		if (PCs.milestoneDone(71)) r--
-		return r
-	},
-
-	setupButton: (pc) => '<td><button id="pc' + pc + '" class="challengesbtn" onclick="PCs.start(' + pc + ')">PC' + Math.floor(pc / 10) + "+" + pc % 10 + '</button></td>',
-	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Milestones</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
-	setupHTML() {
-		var el = getEl("pc_table")
-		var data = PCs.data
-		if (PCs.data.setupHTML) return
-		data.setupHTML = true
-
-		//Setup milestones
-		var html = ""
-		for (var i = 1; i <= 8; i++) html += this.setupMilestone(i)
-		getEl("qc_milestones").innerHTML = html
-
-		//Setup header
-		var html = "<td></td>"
-		for (var i = 1; i <= 8; i++) html += "<td>" + data.qc2_ids[i]+ "</td>"
-		el.insertRow(0).innerHTML = html
-
-		//Setup rows
-		for (var x = 1; x <= 8; x++) {
-			var html = "<td>" + data.qc1_ids[x]+ "</td>"
-			for (var i = 1; i <= 9 - x; i++) {
-				var pc = this.conv(data.qc1_ids[x], data.qc2_ids[i])
-				html += this.setupButton(pc)
-			}
-			el.insertRow(x).innerHTML = html
-		}
-
-		for (var i = 0; i < data.all.length; i++) this.updateButton(data.all[i])
-		this.updateDisp()
-	},
-	updateButton(pc, inQCs) {
-		if (!PCs.data.setupHTML) return
-		if (!inQCs) inQCs = QCs_save.in
-		var qcs = this.convBack(pc)
-		var pos = this.convBack(PCs.data.pos[pc])
-		var lvl = PCs.data.qc1_lvls[pos[0]] + PCs.data.qc2_lvls[pos[1]] - 1
-
-		getEl("pc" + pc).style.display = PCs_save.lvl >= lvl ? "" : "none"
-		if (PCs_save.lvl >= lvl) {
-			getEl("pc" + pc).setAttribute("ach-tooltip", "Goal: " + shorten(PCs.goal(pc)) + " MA")
-			getEl("pc" + pc).className = inQCs.includes(qcs[0]) && inQCs.includes(qcs[1]) ? "onchallengebtn" : PCs.done(pc) ? "completedchallengesbtn" : "challengesbtn"
-		}
-	},
-
-	updateDisp() {
-		if (!PCs_tmp.unl) return
-		if (!PCs.data.setupHTML) return
-
-		for (var i = 1; i <= 8; i++) {
-			getEl("pc_comp" + i + "_div").style.display = PCs_tmp.pos_comps[i] ? "" : "none"
-			getEl("pc_comp" + i).textContent = PCs_tmp.pos_comps[i] + " / 8"
-		}
-
-		getEl("pc_lvl").textContent = getFullExpansion(PCs_save.lvl)
-		getEl("pc_comps").textContent = getFullExpansion(PCs_save.comps.length) + " / " + getFullExpansion(this.lvlReq(Math.min(PCs_save.lvl, 18)))
-
-		getEl("pc_eff1").textContent = "^" + PCs_tmp.eff1.toFixed(3)
-		getEl("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
-		getEl("pc_eff2").textContent = "^" + PCs_tmp.eff2.toFixed(3)
-
-		this.showMilestones(PCs_tmp.milestone || 0)
-	},
-	showMilestones(qc) {
-		PCs_tmp.milestone = qc
-		getEl("qc_milestone_div").style.display = qc ? "" : "none"
-		if (qc) {
-			getEl("qc_milestone_header").textContent = "QC" + qc + " Milestones"
-			for (var i = 1; i < PCs.data.milestoneReqs.length; i++) {
-				getEl("qc_milestone" + i).className = "qMs_" + (this.milestoneDone(qc * 10 + i) ? "reward" : "locked")
-				getEl("qc_milestone" + i).textContent = PCs.milestones[qc * 10 + i] || "???"
-			}
-		}
-	}
-}
-var PCs_save = undefined
-var PCs_tmp = { unl: false }

@@ -250,7 +250,7 @@ var pos = {
 		quantum(false, true)
 	},
 	swapCost(x) {
-		return x == 0 ? 0 : Math.pow(2, Math.pow(2, x / 2) - 1)
+		return x == 0 ? 0 : Math.pow(2, Math.pow(2, x / 2) - 2)
 	},
 	excluded(x) {
 		return QCs.in(2) ? enB.pos.lvl(x) == QCs_save.qc2 : false

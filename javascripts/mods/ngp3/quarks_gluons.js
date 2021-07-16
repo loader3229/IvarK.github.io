@@ -266,7 +266,7 @@ function updateColorPowers() {
 	//Red
 	colorBoosts.r = Math.log10(qu_save.colorPowers.r * 5 + 1) / 3.5 + 1
 	if (hasMTS(272)) colorBoosts.r += 0.25
-	if (colorBoosts.r > 1.75) colorBoosts.r = Math.sqrt(colorBoosts.r * 1.75)
+	if (colorBoosts.r > 1.5) colorBoosts.r = Math.sqrt(colorBoosts.r * 1.5)
 
 	//Green
 	colorBoosts.g = Math.log10(qu_save.colorPowers.g * 3 + 1) + 1
@@ -341,12 +341,8 @@ function updateQEGainTmp() {
 
 	data.expNum = 1
 	if (enB.active("pos", 1)) data.expNum = enB_tmp.pos1
-	if (data.expNum > 0 && data.expNum > data.expDen - 1) {
-		let sc = data.expDen - 1
-		let scEff = data.expNum / Math.max(sc, 1)
-		data.expNum = Math.max(data.expDen - 1 / Math.sqrt(scEff), 0)
-	}
-	if (QCs.in(2)) data.expNum += 0.75
+	if (data.expNum > data.expDen - 1) data.expNum = data.expDen - 1 / Math.sqrt(data.expNum - data.expDen + 2)
+	if (QCs.in(2)) data.expNum += 0.5
 
 	data.exp = data.expNum / data.expDen
 	qu_save.expEnergy = data.exp
@@ -448,7 +444,10 @@ function getGluonEffBuff(x) {
 function getGluonEffNerf(x, color) {
 	if (!QCs.isntCatched()) return 0
 
-	let r = Math.max(Math.pow(Decimal.add(x, 1).log10(), 2) - colorCharge.subCancel, 0)
+	let mult = 1
+	if (enB.active("pos", 5)) mult /= enB_tmp.pos5
+
+	let r = Math.max(Math.pow(Decimal.add(x, 1).log10() * mult, 2) - colorCharge.subCancel, 0)
 	if (tmp.ngp3_mul) r *= 0.5
 
 	let gluon = enB.colorUsed()
@@ -698,12 +697,13 @@ var enB = {
 		},
 		7: {
 			req: 12,
-			masReq: 50,
+			masReq: 40,
+			masReqExpert: 50,
 
 			title: "Dilation Overflow II",
 			type: "g",
 			eff(x) {
-				return 1.5 + 0.5 / (Math.log10(x / 10 + 1) / 5 + 1)
+				return 1.5 + 0.5 / (Math.log10(x / 5 + 1) / 3 + 1)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -744,7 +744,7 @@ var enB = {
 			type: "g",
 			anti: true,
 			eff(x) {
-				return Math.pow(x + 1, 0.1)
+				return Math.pow(x + 1, 0.25)
 			},
 			effDisplay(x) {
 				return shorten(x) + "x"
@@ -803,7 +803,7 @@ var enB = {
 
 		activeReq(x) {
 			if (pos_tmp.sac_qe < pos.swapCost(pos_tmp.cloud.swaps)) return false
-			return !QCs.isntCatched() ? pos.on() && enB.mastered("pos", x) && !pos.excluded(x) : tmp.bgMode || enB.mastered("pos", x) || pos.on()
+			return !QCs.isntCatched() ? pos.on() && enB.mastered("pos", x) && (!QCs.in(2) || enB.pos.lvl(x) != QCs_save.qc2) : pos.on() || enB.mastered("pos", x)
 		},
 
 		engEff(x) {
@@ -940,34 +940,35 @@ var enB = {
 			}
 		},
 		5: {
-			req: 50,
-			masReq: 55,
-			chargeReq: 50,
+			req: 8,
+			masReq: 9,
+			masReqExpert: 10,
+			chargeReq: 4,
+
+			title: "Gluon Flux",
+			tier: 2,
+			type: "r",
+			anti: true,
+			eff(x) {
+				return Math.log2(x / 10 + 1) + 1
+			},
+			effDisplay(x) {
+				return formatReductionPercentage(x) + "%"
+			}
+		},
+		6: {
+			req: 9,
+			masReq: 16,
+			chargeReq: 1.5,
 
 			title: "Transfinite Time",
-			tier: 2,
+			tier: 3,
 			type: "r",
 			eff(x) {
 				return Math.min(Math.sqrt(Math.log10(x / 100 + 1) / 2 + 1), 3)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
-			}
-		},
-		6: {
-			req: 55,
-			masReq: 1/0,
-			chargeReq: 4,
-
-			title: "Tickspeed Flux",
-			tier: 3,
-			type: "r",
-			anti: true,
-			eff(x) {
-				return 1
-			},
-			effDisplay(x) {
-				return Math.pow(player.tickSpeedMultDecrease, 1 / x).toFixed(4) + "x"
 			}
 		},
 		7: {
@@ -1224,8 +1225,6 @@ function updateGluonsTab() {
 
 	let typeUsed = enB.colorUsed()
 	if (typeUsed != "") {
-		getEl("entangle_" + typeUsed).className = "gluonupgrade chosenbtn"
-		getEl("entangle_" + typeUsed + "_pos").className = "gluonupgrade  chosenbtn"
 		getEl("entangle_" + typeUsed + "_bonus").textContent = "+" + shorten(getQEGluonsPortion() * tmp.qe.mult / tmp.qe.div) + " quantum energy, " + shorten(enB.glu.gluonEff(qu_save.gluons[typeUsed])) + "x effective boosters"
 	}
 
@@ -1314,6 +1313,12 @@ function updateGluonsTabOnUpdate(mode) {
 		getEl("entangle_" + type + "_pos").style.display = tmp.dtMode ? "none" : ""
 		getEl("entangle_" + type + "_pos").className = "gluonupgrade " + type
 		getEl("entangle_" + type + "_bonus").textContent = ""
+	}
+
+	if (typeUsed != "") {
+		getEl("entangle_" + typeUsed).className = "gluonupgrade chosenbtn"
+		getEl("entangle_" + typeUsed + "_pos").className = "gluonupgrade chosenbtn"
+		getEl("entangle_" + typeUsed + "_bonus").textContent = "+" + shorten(getQEGluonsPortion() * tmp.qe.mult / tmp.qe.div) + " quantum energy, " + shorten(enB.glu.gluonEff(qu_save.gluons[typeUsed])) + "x effective boosters"
 	}
 
 	getEl("masterNote").style.display = enB.mastered("glu", 1) ? "" : "none"

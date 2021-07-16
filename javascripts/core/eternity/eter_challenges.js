@@ -95,7 +95,7 @@ for (let ecnum = 1; ecnum <= 12; ecnum ++){
 function unlockEChall(idx) {
 	if (player.eternityChallUnlocked == 0) {
 		player.eternityChallUnlocked = idx
-		getEl("eterc"+player.eternityChallUnlocked+"div").style.display = "inline-block"
+		getEl("eterc" + player.eternityChallUnlocked + "div").style.display = "inline-block"
 		if (!justImported) showTab("challenges")
 		if (!justImported) showChallengesTab("eternitychallenges")
 		if (idx < 13) {
