@@ -243,7 +243,9 @@ function updateColorCharge() {
 function getColorPowerQuantity(color, base) {
 	if (QCs.in(2)) return 0
 
-	let ret = Math.pow(colorCharge[color], 2 * tmp.qe.exp) * tmp.glB[color].mult
+	let charge = colorCharge[color]
+	let ret = Math.pow(Math.abs(charge), 2 * tmp.qe.exp) * tmp.glB[color].mult
+	if (charge < 0) ret = -ret
 	if (tmp.qe) ret = ret * tmp.qe.eff1 + tmp.qe.eff2
 	if (tmp.glB) ret -= tmp.glB[color].sub
 	ret = Math.max(ret, 0)

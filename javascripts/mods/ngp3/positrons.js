@@ -110,10 +110,10 @@ var pos = {
 		data.cloud_div = {}
 
 		data.mults = {
-			mdb: !pos.on() ? 0 : QCs.done(3) ? 0.3 : 0.25,
-			mdb_eff: !pos.on() ? 0 : QCs.done(5) ? 1.1 : 1,
-			gal: !pos.on() ? 0 : QCs.done(5) ? 0.2 : 0.25,
-			base_pc: !pos.on() ? 0 : QCs.done(5) ? 1 / 100 : 1 / 125
+			mdb: QCs.done(3) ? 0.3 : 0.25,
+			mdb_eff: QCs.done(5) ? 1.1 : 1,
+			gal: !QCs.done(5) ? 0.2 : 0.25,
+			base_pc: QCs.done(5) ? 1 / 100 : 1 / 125
 		}
 
 		this.updateCloud()

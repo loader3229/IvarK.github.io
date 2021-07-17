@@ -1575,7 +1575,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/15/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/16/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -4359,7 +4359,7 @@
 	<div class='tab' id='repMajor'></div>
 	<div class='tab' id='quantumtab'>
 		<br>
-		<div>Your quantum worth (sum of anti-quarks, colored anti-quarks, and anti-gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.</div>
+		<div>Your quantum worth (sum of anti-quarks, colored anti-quarks, and gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.</div>
 		<br>
 		<span style="font-size: 15px">You have <span class="QKAmount" id="quarkEnergy" style="font-size:30px">0.0</span> quantum energy.</span>
 		<span id="quarkEnergyMult" style="font-size: 15px">(1.00x)</span>
@@ -4369,7 +4369,7 @@
 		<table class="table" align="center" style="margin: auto">
 			<tr>
 				<td><button class="secondarytabbtn" onclick="showQuantumTab('uquarks')">Anti-Quarks</button></td>
-				<td id='gluonstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Anti-Gluons</button></td>
+				<td id='gluonstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Gluons</button></td>
 				<td id='positronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('positrons')">Positrons</button></td>
 				<td id='replicantstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('replicants')">Duplicants</button></td>
 				<td id='nanofieldtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('nanofield')">Nanofield</button></td>
@@ -4499,21 +4499,21 @@
 		<div class='quantumtab' id='gluons'><table class="qTable">
 			<tr>
 				<td class="red">
-					<span style="font-size: 15px"><span id="rg" style="font-size: 30px">0</span> red-green</span>
+					<span style="font-size: 15px"><span id="rg" style="font-size: 30px">0</span> green-antired</span>
 					<br>
 					<span id="entangle_rg_bonus"></span>
 					<br>
 					<button id="entangle_rg" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('rg')">Use boosts with RG</button>
 				</td>
 				<td class="green">
-					<span style="font-size: 15px"><span id="gb" style="font-size: 30px">0</span> green-blue</span>
+					<span style="font-size: 15px"><span id="gb" style="font-size: 30px">0</span> blue-antigreen</span>
 					<br>
 					<span id="entangle_gb_bonus"></span>
 					<br>
 					<button id="entangle_gb" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('gb')">Use boosts with GB</button>
 				</td>
 				<td class="blue">
-					<span style="font-size: 15px"><span id="br" style="font-size: 30px">0</span> blue-red</span>
+					<span style="font-size: 15px"><span id="br" style="font-size: 30px">0</span> red-antiblue</span>
 					<br>
 					<span id="entangle_br_bonus"></span>
 					<br>
