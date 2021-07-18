@@ -446,11 +446,23 @@ amNewsArray = [
 ["Did you realize that this is not just about large numbers? You might see more small numbers soon, while your antimatter grows faster than superexponential rate.", "pH.did('ghostify')", "am233"],
 ["Who thought that Expert Mode should nerf the production all of times? It should give players how to do strategies properly! Not just add timewalls! That's wrong, and it will be like- another generic NG- mod!", "aarMod.newGameMinusVersion || tmp.exMode", "am234"],
 ["Local replicant paralyzed after eating 413 quantum food", "hasMTS('d10')", "am235"],
-["Hey, yeah you. You're playing this game right? And you're seeing this newsticker right now right? There are prbably many hundreds of news tickers, maybe even thousands. A news ticker does take like half a minute to scroll past the scrren AT A MINIMUM, and if we say there are 1000 news, it would take you about 1000 news for you to get this one. So multiply half a minute with 1000, and you get 500 minutes. That's a huge chunk of your day, that could be spent doing something else. Also, consider the fact that yu'll probably miss this news like 99% of the time, it would most probably take you like a week on average to find this news. All this time, you played a simple game, instead of doing anything else. In one week you could have learned how to make your own idle game, and many other things. So stop playing now, and do something else for once, you lazybag.", true, "am236"],
+["Hey, yeah you. You're playing this game right? And you're seeing this newsticker right now right? There are prbably many hundreds of news tickers, maybe even thousands. A news ticker does take like half a minute to scroll past the scrren AT A MINIMUM, and if we say there are 1000 news, it would take you about 1000 news for you to get this one. So multiply half a minute with 1000, and you get 500 minutes. That's a huge chunk of your day, that could be spent doing something else. Also, consider the fact that you'll probably miss this news like 99% of the time, it would most probably take you like a week on average to find this news. All this time, you played a simple game, instead of doing anything else. In one week you could have learned how to make your own idle game, and many other things. So stop playing now, and do something else for once, you lazybag.", true, "am236"],
 ["Spelpotatis owns the communism news, Aarex can confirm it.", true, "am237"],
 ["Only 0.000001% can get this dimension :scream::scream:", true, "am238"],
 ["Meester Twees-Twitter, Jo-ho-oh gold and silver, Juhmatok-medal-itis, but that underestimates the significance of TWOW S2", true, "am239"],
-/*NEXT ID: am236*/
+["'DNA ordinal = 0' ~ Googology community, 2021", true, "am240"],
+["What do you mean Aarex balancing? I think his balancing is perfectly fine! -new player who doesn't know about pre-respec", true, "am241"],
+["People are talking about meta infinity and eternity, but noone's talking about meta meta dimensions", true, "am242"],
+["Everything you pledged to do might be absolutely wrong. You might do those in a far future... Pledgations might age badly.", true, "am243"],
+["This Game is brought to you by sus", true, "am244"],
+["it's increasingly obvious, matter dawn is small and shouldn't have pokemon. however they've been looking at antimatter dawn, let her grow up, let matter dawn die, let matter dawn die, let matter dawn shrivel up and die, but in bdsp they forgot her location so they found matter dawn, she is small", true, "am245"],
+["Imagine building a drone factory, in which drones do the vaccine work for people who is currently sleeping... Just quiet and peace...", true, "am246"],
+['"noooooooooo!!!!!! you can\'t just merge two different memes out of two different games like that!!! that\'s nonsense and less people will actually understand it!!!! you are making us have a copyright strike noooooooo" "haha ⑨th dimensions go brrr"', true, "am247"],
+["o+<| help im in a horizontal autoscroller videogame", true, "am248"],
+["That awkward moment when you play antimatter dimensions on a computer made of matter", true, "am249"],
+["250th Aarex's Modifications newsticker. That's not even close to have infinite storage. Silly!", true, "am250"],
+["Do you know Omnisity? It is an actual layer for NG+3 contributors, where golden and diamond intrastructures side together in a island.", true, "am251"],
+/*NEXT ID: am252*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);

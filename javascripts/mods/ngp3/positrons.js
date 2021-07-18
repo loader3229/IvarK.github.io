@@ -55,10 +55,10 @@ var pos = {
 		ng: {
 			galName: "Antimatter Galaxies",
 			pow(x) {
-				return x / 4
+				return x * pos_tmp.mults.gal
 			},
 			sacGals(x) {
-				return Math.min(player.galaxies * pos_tmp.mults.gal, x)
+				return Math.min(player.galaxies / 4, x)
 			},
 			basePcGain(x) {
 				return Math.pow(x * pos_tmp.mults.base_pc, 2)
@@ -67,10 +67,10 @@ var pos = {
 		rg: {
 			galName: "base Replicated Galaxies",
 			pow(x) {
-				return QCs.done(4) ? x / 10 : 0
+				return QCs.done(4) ? x * pos_tmp.mults.gal * 2 / 5 : 0
 			},
 			sacGals(x) {
-				return Math.min(player.replicanti.galaxies * pos_tmp.mults.gal, x)
+				return Math.min(player.replicanti.galaxies / 4, x)
 			},
 			basePcGain(x) {
 				return Math.pow(x * pos_tmp.mults.base_pc, 2)
@@ -79,7 +79,7 @@ var pos = {
 		eg: {
 			galName: "extra Replicated Galaxies",
 			pow(x) {
-				return PCs.milestoneDone(42) ? x / 10 : 0
+				return PCs.milestoneDone(42) ? x * pos_tmp.mults.gal * 2 / 5 : 0
 			},
 			sacGals(x) {
 				return Math.min(tmp.extraRG * pos_tmp.mults.gal, x)
@@ -111,8 +111,8 @@ var pos = {
 
 		data.mults = {
 			mdb: QCs.done(3) ? 0.3 : 0.25,
-			mdb_eff: QCs.done(5) ? 1.1 : 1,
-			gal: !QCs.done(5) ? 0.2 : 0.25,
+			mdb_eff: QCs.done(5) ? 1.5 : 1,
+			gal: QCs.done(5) ? 0.2 : 0.25,
 			base_pc: QCs.done(5) ? 1 / 100 : 1 / 125
 		}
 

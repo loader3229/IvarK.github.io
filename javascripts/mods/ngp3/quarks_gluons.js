@@ -666,7 +666,7 @@ var enB = {
 		},
 		5: {
 			req: 9,
-			masReq: 70,
+			masReq: 80,
 
 			title: "Otherworldly Galaxies",
 			type: "b",
@@ -701,6 +701,7 @@ var enB = {
 			req: 12,
 			masReq: 40,
 			masReqExpert: 50,
+			masReqDeath: 60,
 
 			title: "Dilation Overflow II",
 			type: "g",
@@ -713,7 +714,7 @@ var enB = {
 		},
 		8: {
 			req: 12,
-			masReq: 70,
+			masReq: 80,
 
 			title: "Meta Resynergizer II",
 			type: "r",
@@ -740,7 +741,7 @@ var enB = {
 		},
 		10: {
 			req: 36,
-			masReq: 70,
+			masReq: 80,
 
 			title: "Blue Saturation",
 			type: "g",
@@ -754,7 +755,7 @@ var enB = {
 		},
 		11: {
 			req: 45,
-			masReq: 70,
+			masReq: 80,
 
 			title: "Blue Unseeming",
 			type: "r",
@@ -766,13 +767,13 @@ var enB = {
 			}
 		},
 		12: {
-			req: 50,
-			masReq: 70,
+			req: 65,
+			masReq: 80,
 
 			title: "Color Subcharge",
 			type: "b",
 			eff(x) {
-				return 1 - 1 / (Math.log10(x / 10 + 1) / 5 + 1)
+				return 1 - 1 / (Math.log10(x / 30 + 1) / 5 + 1)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)

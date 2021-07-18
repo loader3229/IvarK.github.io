@@ -1,7 +1,7 @@
 //meta dimensions
 function getMetaAntimatterStart(bigRip) {
 	let x = 10
-	if (hasAch("ngpp12")) x = 100
+	if (hasAch("ngpp12") || (moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3]))) x = 100
 	if (hasAch("ng3p16")) x = 1e10
 
 	return new Decimal(x)

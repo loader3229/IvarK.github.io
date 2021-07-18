@@ -109,7 +109,7 @@ var QCs = {
 			},
 
 			can: () => QCs_tmp.qc1 && pH.can("eternity") && player.replicanti.amount.gte(QCs_tmp.qc1.req) && QCs_save.qc1.boosts < QCs.data[1].max(),
-			max: () => QCs.in(6) ? 6 : 20,
+			max: () => QCs.in(6) ? 4 : 20,
 			boost() {
 				if (!QCs.data[1].can()) return false
 
@@ -239,9 +239,9 @@ var QCs = {
 		5: {
 			unl: () => true,
 			desc: () => "Replicantis only produce Replicanti Energy by gaining, which increases effective Quantum Energy and Positronic Charge.",
-			goal: () => player.eternityPoints.gte(Decimal.pow(10, 2.4e6)),
-			goalDisp: () => shortenCosts(Decimal.pow(10, 2.4e6)) + " Eternity Points",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 1.7),
+			goal: () => player.eternityPoints.gte(Decimal.pow(10, 1.9e7)),
+			goalDisp: () => shortenCosts(Decimal.pow(10, 1.9e7)) + " Eternity Points",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 3.15),
 			hint: "Do sub-1 Eternity runs before getting Compressors.",
 
 			rewardDesc: (x) => "Sacrificed things are stronger for Positrons, but you sacrifice less galaxies.",
@@ -261,7 +261,7 @@ var QCs = {
 
 				QCs_tmp.qc5 = {
 					mult: 1 / (Math.log10(QCs_save.qc1.boosts + 1) + 1),
-					eff: Math.pow(Math.log2(QCs_save.qc5 / 2e6 + 1), PCs.milestoneDone(53) ? 2.5 : 2),
+					eff: Math.log2(QCs_save.qc5 / 2e6 + 1) * 10,
 				}
 				if (QCs.isRewardOn(6)) QCs_tmp.qc5.mult *= QCs_tmp.rewards[6]
 				if (PCs.milestoneDone(52)) QCs_tmp.qc5.mult *= 2
@@ -279,9 +279,9 @@ var QCs = {
 		6: {
 			unl: () => true,
 			desc: () => "There is a increasing variable, which gives different boosts; but eternitying subtracts it, and dilating reduces the gain.",
-			goal: () => player.replicanti.amount.e >= 1e6 && QCs_save.qc1.boosts >= 6,
-			goalDisp: () => shortenCosts(Decimal.pow(10, 1e6)) + " Replicantis + " + getFullExpansion(6) + " Replicanti Compressors",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 2.7),
+			goal: () => player.replicanti.amount.e >= 1e6 && QCs_save.qc1.boosts >= 4,
+			goalDisp: () => shortenCosts(Decimal.pow(10, 1e6)) + " Replicantis + " + getFullExpansion(4) + " Replicanti Compressors",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 2.45),
 			hint: "Do long Eternity runs.",
 
 			rewardDesc: (x) => "Replicantis also produce Replicanti Energy; but also boosted by time since Eternity. (" + shorten(QCs_tmp.rewards[6]) + "x)",
