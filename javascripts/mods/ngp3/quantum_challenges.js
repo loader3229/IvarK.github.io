@@ -312,7 +312,7 @@ var QCs = {
 		},
 		7: {
 			unl: () => true,
-			desc: () => "Unlock a new set of Mastery Studies, but color charge subtracts color powers instead of the main catches, and disable red power.",
+			desc: () => "Unlock a new set of Mastery Studies, but color charge subtracts color powers instead of the main catches, disable red power, and Meta Dimensions are reduced to ^0.95.",
 			goal: () => player.timestudy.theorem >= 5e86,
 			goalDisp: () => shortenDimensions(5e86) + " Time Theorems",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 3.55),

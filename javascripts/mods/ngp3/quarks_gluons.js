@@ -253,7 +253,7 @@ function getColorPowerQuantity(color, base) {
 	if (!base) {
 		if (hasMTS(314)) ret += getColorPowerQuantity(color == "r" ? "g" : color == "g" ? "b" : "r", true) / 5
 		if (color == "r" && hasMTS(272)) ret /= 5
-		if (color == "r" && QCs.in(7)) ret = Math.sqrt(ret)
+		if (color == "r" && QCs.in(7)) ret = 0
 	}
 	return ret
 }
@@ -267,7 +267,7 @@ colorBoosts = {
 function updateColorPowers() {
 	//Red
 	colorBoosts.r = Math.log10(qu_save.colorPowers.r * 5 + 1) / 3.5 + 1
-	if (hasMTS(272)) colorBoosts.r += 0.25
+	if (hasMTS(272) && !QCs.in(7)) colorBoosts.r += 0.25
 	if (colorBoosts.r > 1.5) colorBoosts.r = Math.sqrt(colorBoosts.r * 1.5)
 
 	//Green
