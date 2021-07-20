@@ -230,7 +230,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 
 		gainQKOnQuantum(qkGain)
 
-		if (Decimal.max(player.meta.bestAntimatter, getQuantumReq()).lte(Number.MAX_VALUE)) giveAchievement("We are not going squared.")
 		if (player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] < 1 && player.dilation.upgrades.length < 1) giveAchievement("Never make paradoxes!")
 		if (qu_save.times >= 1e4) giveAchievement("Prestige No-lifer")
 
@@ -304,7 +303,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 			QCs_tmp.in = data
 			if (data.length == 2) PCs.updateButton(PCs.conv(data[0], data[1]), data)
 			else if (QCs.perkCan(data[0])) QCs_save.mod = "pk"
-			if (!QCs.isntCatched() && !QCs_save.kept) QCs_save.kept = {
+			if ((!QCs.isntCatched() || QCs.in(7)) && !QCs_save.kept) QCs_save.kept = {
 				tt: player.timestudy.theorem,
 				ms: [...player.masterystudies]
 			}

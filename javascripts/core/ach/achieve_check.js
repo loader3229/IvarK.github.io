@@ -247,6 +247,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.money.gte(getOldAgeRequirement())) giveAchievement("Old age")
 	if (player.infinityPoints.log10() >= 3e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
 
+	if (QCs.done(3)) giveAchievement("We are not going squared.")
 	if (player.meta.bestAntimatter.gte(Decimal.pow(Number.MAX_VALUE, 3)) && player.meta[5].amount.lt(Math.sqrt(Number.MAX_VALUE))) giveAchievement("Old memories come true")
 	if (player.timestudy.theorem >= 1e90 && !QCs.isntCatched()) giveAchievement("Infinity Morals")
 	if (PCs_save.comps.length >= 4) giveAchievement("Twice in a row")

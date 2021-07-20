@@ -189,7 +189,7 @@ let qMs = {
 	},
 	10: {
 		req: 10,
-		forceDisable: () => !QCs.isntCatched(),
+		forceDisable: () => !QCs.isntCatched() || QCs.in(7),
 		eff: () => "Keep all your mastery studies",
 		effGot: () => "You now can keep all your mastery studies."
 	},

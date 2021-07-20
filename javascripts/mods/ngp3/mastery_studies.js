@@ -13,10 +13,6 @@ var mTs = {
 			301: 1e80, 302: 1e78, 303: 1e80,
 			311: 2e80, 312: 3e81, 313: 3e81, 314: 2e80,
 
-			//QC7
-			321: 0, 322: 0, 323: 0,
-			331: 1e85, 332: 3e86, 333: 5e86, 334: 3e86, 335: 1e85,
-
 			//Beginner Mode
 			bg_251: 2e69, bg_252: 2e69, bg_253: 2e69,
 			bg_261: 2e69, bg_262: 2e69, bg_263: 2e69, bg_264: 2e69, bg_265: 2e69, bg_266: 2e69,
@@ -52,10 +48,6 @@ var mTs = {
 			t291: 6, t292: 6,
 			t301: 6, t302: "reset", t303: 6,
 			t311: 1 / 2, t312: 32, t313: 32, t314: 1 / 2,
-
-			//QC7
-			t321: 1 / 4, t322: "reset", t323: 1 / 4,
-			t331: 1 / 4, t332: 8, t333: 1024, t334: 8, t335: 1 / 4,
 
 			//Beginner Mode
 			t251_bg: 1.5, t252_bg: 1.5, t253_bg: 1.5,
@@ -118,34 +110,13 @@ var mTs = {
 			return hasAch("ng3p16") || player.dilation.dilatedTime.gte(1e100)
 		},
 		271() {
-			return mTs.bought >= (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10)
-		},
-		322() {
-			return mTs.bought >= 25 && (QCs.in(7) || QCs.done(7))
+			return QCs.in(7) || mTs.bought >= (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10)
 		},
 		d7() {
 			return enB.glu.engAmt() >= 5.3
 		},
 		d8() {
 			return enB.pos.engAmt() >= 5
-		},
-		d9() {
-			return false
-		},
-		d10() {
-			return false
-		},
-		d11() {
-			return tmp.eds[1].perm >= 10
-		},
-		d12() {
-			return tmp.eds[8].perm >= 10
-		},
-		d13() {
-			return qu_save.nanofield.rewards >= 16
-		},
-		d14() {
-			return hasAch("ng3p34")
 		}
 	},
 	unlockReqDisplays: {
@@ -153,10 +124,7 @@ var mTs = {
 			return hasAch("ng3p16") ? undefined : shorten(1e100) + " dilated time"
 		},
 		271() {
-			return (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10) + " bought mastery studies"
-		},
-		322() {
-			return QCs.in(7) || QCs.done(7) ? "25 bought mastery studies" : "In Quantum Challenge 7"
+			return QCs.in(7) ? "" : (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10) + " bought mastery studies"
 		},
 		d7() {
 			return "5.3 quantum energy"
@@ -264,42 +232,6 @@ var mTs = {
 
 			return Math.pow(tpLog / 90, 0.75) * Math.pow(bpLog / 3, 0.25)
 		},
-
-		321() {
-			let x = 0.25 - Math.log10(player.timestudy.theorem / 1e85 + 1) / 25
-			return Math.max(x, 0)
-		},
-		323() {
-			let x = 0.25 - Math.log10(player.timestudy.theorem / 1e88 + 1) / 25
-			return Math.max(x, 0)
-		},
-		331() {
-			let x = 1.5 - Math.log10(player.timestudy.theorem / 1e90 + 1) / 20
-			return Math.max(x, 1)
-		},
-		332() {
-			return Math.pow(player.galaxies + player.replicanti.galaxies + tmp.extraRG + player.dilation.freeGalaxies, 2 / 5) / 100
-		},
-		333() {
-			let x = 1
-			if (mTs.has(322)) x += 0.5
-			if (mTs.has(332)) x += getMTSMult(332, "update")
-			if (mTs.has(334)) x += getMTSMult(334, "update")
-
-			//Nerfs
-			if (mTs.has(321)) x -= getMTSMult(321, "update")
-			if (mTs.has(323)) x -= getMTSMult(323, "update")
-			if (mTs.has(331)) x /= getMTSMult(331, "update")
-			return Math.max(x, 1)
-		},
-		334() {
-			let x = Math.pow(getReplBaseEff().max(1).log10(), 0.1) / 10
-			if (mTs.has(335)) x = Math.pow(x + 1, getMTSMult(335, "update")) - 1
-			return x
-		},
-		335() {
-			return Math.min(0.5 + Math.log10(player.timestudy.theorem / 1e90 + 1) / 10, 1)
-		},
 	},
 	eff(id, uses = "") {
 		if (uses == "" && this.studyUnl.includes(id)) return mTs_tmp[id]
@@ -336,16 +268,6 @@ var mTs = {
 		312: () => "Green power boosts Tachyonic Galaxies with Replicated Galaxies' strength.",
 		313: () => "Blue power effect boosts itself; but Tachyonic Particles also boost it.",
 		314: () => "Every color power adds the suceeding color power.",
-
-		321: () => "Subtract MS103 effect, but TT reverts it.",
-		322: () => "Add +50% into a study below it.",
-		323: () => "Subtract MS103 effect, but TT reverts it.",
-
-		331: () => "Divide MS103 effect, but TT reverts it.",
-		332: () => "Total galaxies add the MS103 effect.",
-		333: () => "Slow down Meta Accelerator.",
-		334: () => "Replicantis add the MS103 effect.",
-		335: () => "Reduce a study on the left, but TT reverts it.",
 	},
 	timeStudyTitles: {
 		241: "Multiplier Overcharge",
@@ -355,13 +277,9 @@ var mTs = {
 		281: "Time Augment-RP", 282: "Rep. Augment-TM", 283: "Replicanti Self-Luck", 284: "Type-IV Goo",
 		291: "Dimensional Acknowledge", 292: "Galactic Insurance",
 		301: "Replicanti Equality", 302: "Replicanti Foam", 303: "Multiplier Based",
-		311: "Study Code: Red", 312: "Lucidious Jump", 313: "Blue Condenser", 314: "Color Circuit",
-
-		//QC7
-		321: "Puzzled", 322: "Final Ceremony", 323: "Jigsawed",
-		331: "Nerfed", 332: "Knowledge of Timeless", 333: "The Final Mastery...", 334: "Knowledge of Spaceless", 335: "Unbuffed"
+		311: "Study Code: Red", 312: "Lucidious Jump", 313: "Blue Condenser", 314: "Color Circuit"
 	},
-	hasStudyEffect: [251, 252, 253, 265, 271, 281, 283, 284, 291, 292, 311, 312, 313, 321, 323, 331, 332, 333, 334, 335],
+	hasStudyEffect: [251, 252, 253, 265, 271, 281, 283, 284, 291, 292, 311, 312, 313],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -396,27 +314,6 @@ var mTs = {
 		313(x) {
 			return "^" + shorten(x)
 		},
-		321(x) {
-			return "-" + formatPercentage(x) + "%"
-		},
-		323(x) {
-			return "-" + formatPercentage(x) + "%"
-		},
-		331(x) {
-			return "/" + x.toFixed(3)
-		},
-		332(x) {
-			return "+" + formatPercentage(x) + "%"
-		},
-		333(x) {
-			return formatReductionPercentage(x) + "%"
-		},
-		334(x) {
-			return "+" + formatPercentage(x) + "%"
-		},
-		335(x) {
-			return "^" + x.toFixed(3)
-		},
 	},
 	ecsUpTo: 14,
 	unlocksUpTo: 14,
@@ -434,10 +331,6 @@ var mTs = {
 		302: [301, "d8"], 301: [303],
 		311: [312], 314: [313],
 
-		//QC7
-		d8: [322],
-		322: [321, 323, 332, 333, 334], 332: [331], 334: [335],
-
 		//Expert Mode
 		ex_264: [],
 		ex_282: [], ex_283: [], ex_284: [292],
@@ -452,9 +345,6 @@ var mTs = {
 		},
 		r27() {
 			return pos.unl()
-		},
-		r32() {
-			return QCs.unl()
 		}
 	},
 	studyUnl: [],
@@ -555,6 +445,7 @@ function updateMasteryStudyCosts() {
 
 function setupMasteryStudies() {
 	mTs.studies = [241]
+	mTs.studyRows = {}
 	mTs.timeStudies = []
 
 	if (!mTs.unl()) return
@@ -570,7 +461,10 @@ function setupMasteryStudies() {
 			id = part
 			part = ""
 		}
-		if (typeof(id) == "number") mTs.timeStudies.push(id)
+		if (typeof(id) == "number") {
+			mTs.studyRows[Math.floor(id / 10)] = (mTs.studyRows[Math.floor(id / 10)] || 0) + 1
+			mTs.timeStudies.push(id)
+		}
 		var paths = getMasteryStudyConnections(id)
 		if (paths !== undefined) for (var x = 0; x < paths.length; x++) {
 			var y = paths[x]
@@ -642,6 +536,7 @@ function updateUnlockedMasteryStudies() {
 
 function updateSpentableMasteryStudies() {
 	mTs.spentable = []
+	mTs.spentRows = {}
 	addSpentableMasteryStudies(241)
 }
 
@@ -664,6 +559,7 @@ function addSpentableMasteryStudies(x) {
 
 		if (mTs.studyUnl.includes(id) && !mTs.spentable.includes(id)) mTs.spentable.push(id)
 		if (canAdd) {
+			if (player.masterystudies.includes("t" + id) && QCs.in(7)) mTs.spentRows[Math.floor(id / 10)] = (mTs.spentRows[Math.floor(id / 10)] || 0) + 1
 			var paths = getMasteryStudyConnections(id)
 			if (paths) for (var x = 0; x < paths.length; x++) {
 				var subPath = paths[x]
@@ -794,18 +690,24 @@ function buyMasteryStudy(type, id, quick=false) {
 		updateMasteryStudyCosts()
 		updateMasteryStudyButtons()
 		drawMasteryTree()
+		refreshAutoPreset()
 	}
 }
 
 function canBuyMasteryStudy(type, id) {
 	if (type == 't') {
+		var row = Math.floor(id / 10)
+
 		if (player.timestudy.theorem < mTs.costs.time[id] || player.masterystudies.includes('t' + id) || player.eternityChallUnlocked > 12 || !mTs.timeStudies.includes(id)) return false
-		if (!hasAch("ng3p26") && mTs.latestBoughtRow - (tmp.bgMode || tmp.ngp3_mul && !tmp.exMode ? 1 : 0) > Math.floor(id / 10)) return false
+		if (!hasAch("ng3p26") && mTs.latestBoughtRow - (tmp.bgMode || tmp.ngp3_mul && !tmp.exMode ? 1 : 0) > row) return false
 		if (!mTs.spentable.includes(id)) return false
 		if (mTs.unlockReqConditions[id] && !mTs.unlockReqConditions[id]()) return false
 
 		//Death Mode
 		if (tmp.dtMode && mTs.latestBoughtRow <= 26 && (id != "t264" && id != "t265") && (hasMTS(264) || hasMTS(265))) return false
+
+		//QC7
+		if (QCs.in(7)) return !mTs.spentRows[row] || mTs.spentRows[row] < mTs.studyRows[row] - 1
 	} else if (type == 'd') {
 		if (player.timestudy.theorem < mTs.costs.dil[id] || player.masterystudies.includes('d' + id)) return false
 		if (!pH.did("ghostify") && !(mTs.unlockReqConditions["d" + id] && mTs.unlockReqConditions["d" + id]())) return false

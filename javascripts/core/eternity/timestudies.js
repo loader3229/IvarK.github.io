@@ -113,7 +113,10 @@ function buyTimeStudy(name, quickBuy) {
 		updateTimeStudyButtons(true)
 		return
 	}
-	if (shiftDown && !quickBuy) studiesUntil(name);
+	if (!quickBuy) {
+		if (shiftDown) studiesUntil(name)
+		if (tmp.ngp3_boost) refreshAutoPreset()
+	}
 	if (player.timestudy.theorem >= cost && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
 		player.timestudy.studies.push(name)
 		player.timestudy.theorem -= cost
@@ -128,7 +131,7 @@ function buyTimeStudy(name, quickBuy) {
 
 function hasRow(row) {
 	for (let i = 0; i < player.timestudy.studies.length; i++) {
-		if (Math.floor(player.timestudy.studies[i]/10) == row) return true
+		if (Math.floor(player.timestudy.studies[i] / 10) == row) return true
 	}
 	return false
 }

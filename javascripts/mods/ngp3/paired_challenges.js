@@ -138,7 +138,7 @@ var PCs = {
 		return PCs.unl() && (PCs_save.comps.includes(pc) || PCs_save.skips.includes(pc))
 	},
 	milestoneDone(pos) {
-		return PCs.unl() && PCs_tmp.pos_comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
+		return PCs.unl() && PCs_tmp.pos_comps && PCs_tmp.pos_comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
 	},
 	lvlReq(x) {
 		let r = PCs.data.lvls[x]

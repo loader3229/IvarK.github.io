@@ -925,7 +925,10 @@ function openAutoPresets() {
 	getEl("autoPresetDilation").value = player.timestudy.auto.dilation || ""
 
 	getEl("autoPresetQCDiv").style.display = QCs.unl() ? "" : "none"
-	if (QCs.unl()) getEl("autoPresetQC").value = player.timestudy.auto.qc || ""
+	getEl("autoPresetQC").value = player.timestudy.auto.qc || ""
+
+	getEl("autoPresetQC7Div").style.display = QCs.done(6) ? "" : "none"
+	getEl("autoPresetQC7").value = player.timestudy.auto.qc7 || ""
 }
 
 function toggleAutoPreset() {
@@ -941,8 +944,12 @@ function loadAutoPreset(x) {
 	importStudyTree(player.timestudy.auto[x])
 }
 
+function targetAutoPreset() {
+	return QCs.in(7) ? "qc7" : QCs.inAny() ? "qc" : player.dilation.active ? "dilation" : "eternity"
+}
+
 function refreshAutoPreset() {
 	if (!player.timestudy.auto.on) return
-	player.timestudy.auto[QCs.inAny() ? "qc" : player.dilation.active ? "dilation" : "eternity"] = getStudyTreeStr()
+	player.timestudy.auto[targetAutoPreset()] = getStudyTreeStr()
 	if (getEl("autoPresets").style.display == "flex") openAutoPresets()
 }

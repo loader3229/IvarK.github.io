@@ -46,7 +46,7 @@ var QCs = {
 		max: 8,
 		1: {
 			unl: () => true,
-			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and TT cost multipliers are doubled.",
+			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and TT cost multipliers are doubled. (only if Mastery Studies get resetted)",
 			goal: () => player.money.e >= tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11,
 			goalDisp: () => shortenCosts(Decimal.pow(10, tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11)) + " antimatter",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.35),
@@ -159,7 +159,7 @@ var QCs = {
 			unl: () => true,
 			desc: () => "There are only Meta Dimensions that produce antimatter, but successfully dilating reduces antimatter production.",
 			goal: () => player.dilation.times >= 3,
-			goalDisp: () => "4 successful dilation runs",
+			goalDisp: () => "3 successful dilation runs",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 0.13),
 			hint: "Try not to automate dilation, and also not to dilate time frequently.",
 
@@ -312,11 +312,11 @@ var QCs = {
 		},
 		7: {
 			unl: () => true,
-			desc: () => "Unlock a new set of Mastery Studies, but color charge subtracts color powers instead of the main catches, disable red power, and Meta Dimensions are reduced to ^0.95.",
-			goal: () => player.timestudy.theorem >= 5e86,
-			goalDisp: () => shortenDimensions(5e86) + " Time Theorems",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 3.55),
-			hint: "It's a tricky puzzle.",
+			desc: () => "You can’t have all Mastery Studies in a row (except one-column rows), and Meta Dimensions are reduced to ^0.95.",
+			goal: () => player.timestudy.theorem >= 1e83,
+			goalDisp: () => shortenDimensions(1e83) + " Time Theorems",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 2.35),
+			hint: "...",
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
 			perkReqs: [1/0, 1/0],
@@ -324,7 +324,7 @@ var QCs = {
 				return 1
 			},
 
-			rewardDesc: (x) => "You keep that set of Mastery Studies, and unlock Paired Challenges.",
+			rewardDesc: (x) => "Meta Accelerator slowdown is 20% slower, and unlock Paired Challenges.",
 			rewardEff(str) {
 				return 1
 			}
@@ -388,7 +388,7 @@ var QCs = {
 		return QCs_tmp.in.length >= 1
 	},
 	isntCatched() {
-		return hasAch("ng3p25") || QCs_tmp.in.length != 1 || QCs_save.mod || this.in(7)
+		return hasAch("ng3p25") || QCs_tmp.in.length != 1 || QCs_save.mod
 	},
 	done(x) {
 		return this.unl() && QCs_save.comps >= x
