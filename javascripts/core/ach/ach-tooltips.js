@@ -359,7 +359,7 @@ function setR16Tooltip() {
 
 	//ACHIEVEMENT ROW 16
 	memories.setAttribute('ach-tooltip', "Reach " + shorten(Decimal.pow(Number.MAX_VALUE, 3)) + " meta-antimatter without having at least " + shorten(Math.sqrt(Number.MAX_VALUE)) + " of 5th Meta Dimensions. Reward: Even Meta Dimensions boost odd Meta Dimensions.")
-	morals.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e90) + " TT in any Quantum Challenge, except in QC7. Reward: You can buy all Mastery Studies that you have missed.")
+	morals.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e86) + " TT in any Quantum Challenge. Reward: You can buy Mastery Studies from a row above the latest bought row.")
 	intergal.setAttribute('ach-tooltip', "Get " + getFullExpansion(1/0) + " Eighth Dimensions without Replicated Galaxies. Reward: First " + getFullExpansion(100) + " sacrificed galaxies don't get nullified.")
 	seriously.setAttribute('ach-tooltip', "Get " + shortenCosts(1/0) + " Eternity Points with at least 3 excluded Positronic Boosts. Reward: You can unexclude one Positronic Boost.")
 }

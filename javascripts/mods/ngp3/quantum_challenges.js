@@ -313,9 +313,9 @@ var QCs = {
 		7: {
 			unl: () => true,
 			desc: () => "You can’t have all Mastery Studies in a row (except one-column rows), and Meta Dimensions are reduced to ^0.95.",
-			goal: () => player.timestudy.theorem >= 1e83,
-			goalDisp: () => shortenDimensions(1e83) + " Time Theorems",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 2.35),
+			goal: () => player.timestudy.theorem >= 5e82,
+			goalDisp: () => shortenDimensions(5e82) + " Time Theorems",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 2.3),
 			hint: "...",
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
@@ -343,7 +343,7 @@ var QCs = {
 				return 1
 			},
 
-			rewardDesc: (x) => "In dilation runs, strengthen the base formulas of RGs, but remove multipliers. (not implemented)",
+			rewardDesc: (x) => "You can enter a harder version of Quantum Challenges, which you can skip a combination on completion.",
 			rewardEff(str) {
 				return 1
 			}
@@ -388,7 +388,7 @@ var QCs = {
 		return QCs_tmp.in.length >= 1
 	},
 	isntCatched() {
-		return hasAch("ng3p25") || QCs_tmp.in.length != 1 || QCs_save.mod
+		return(QCs_tmp.in.length == 2 ? tmp.bgMode : QCs_tmp.in.length != 1) || QCs_save.mod
 	},
 	done(x) {
 		return this.unl() && QCs_save.comps >= x

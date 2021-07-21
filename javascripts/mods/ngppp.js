@@ -948,8 +948,13 @@ function targetAutoPreset() {
 	return QCs.in(7) ? "qc7" : QCs.inAny() ? "qc" : player.dilation.active ? "dilation" : "eternity"
 }
 
-function refreshAutoPreset() {
-	if (!player.timestudy.auto.on) return
+function refreshAutoPreset(update) {
+	if (!update && !player.timestudy.auto.on) return
 	player.timestudy.auto[targetAutoPreset()] = getStudyTreeStr()
 	if (getEl("autoPresets").style.display == "flex") openAutoPresets()
+}
+
+//Update Messages
+var ngp3WelcomeMsgs = {
+	0.6: "<b class='lime'>Paired Challenges!</b> Can you complete 2 challenges at once, and level up your progression? Unlocks after completing Quantum Challenge 7!"
 }

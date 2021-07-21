@@ -249,7 +249,7 @@ function preHiggsNGp3AchieveCheck() {
 
 	if (QCs.done(3)) giveAchievement("We are not going squared.")
 	if (player.meta.bestAntimatter.gte(Decimal.pow(Number.MAX_VALUE, 3)) && player.meta[5].amount.lt(Math.sqrt(Number.MAX_VALUE))) giveAchievement("Old memories come true")
-	if (player.timestudy.theorem >= 1e90 && !QCs.isntCatched()) giveAchievement("Infinity Morals")
+	if (player.timestudy.theorem >= 1e86 && !QCs.isntCatched()) giveAchievement("Infinity Morals")
 	if (PCs_save.comps.length >= 4) giveAchievement("Twice in a row")
 	if (player.eightBought >= 1/0 && (player.replicanti.galaxies + tmp.extraRG) == 0) giveAchievement("Intergalactic")
 	if (player.eternityPoints.e >= 1/0 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")

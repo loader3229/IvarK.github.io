@@ -28,8 +28,8 @@ var PCs = {
 	},
 	setupData() {
 		var data = {
-			qc1_ids: [null, 7, 6, 4, 2, 3, 8, 5, 1],
-			qc2_ids: [null, 1, 5, 8, 3, 2, 4, 6, 7],
+			qc1_ids: [null, 1, 3, 6, 2, 8, 5, 4, 7],
+			qc2_ids: [null],
 			qc1_lvls: [null, 1, 2, 3, 4, 10, 11, 12, 13],
 			qc2_lvls: [null, 1, 2, 4, 8, 14, 15, 17, 18],
 			milestoneReqs: [null, 1, 2, 4],
@@ -37,6 +37,8 @@ var PCs = {
 		}
 		PCs.data = data
 		getEl("pc_table").innerHTML = ""
+
+		for (var i = data.qc1_ids.length - 1; i >= 1; i--) data.qc2_ids.push(data.qc1_ids[i])
 
 		data.lvls = {}
 		data.pos = {}
@@ -126,7 +128,11 @@ var PCs = {
 	goal(pc) {
 		var list = pc || QCs_tmp.in
 		if (typeof(list) == "number") list = this.convBack(list)
-		return QCs.data[list[0]].goalMA.pow(QCs.data[list[1]].goalMA.log10() / getQuantumReq(true).log10() * 0.9)
+
+		var qc1 = QCs.data[list[0]].goalMA
+		var qc2 = QCs.data[list[1]].goalMA
+		var base = 10
+		return qc1.pow(qc2.log(base))
 	},
 	conv(c1, c2) {
 		return Math.min(c1 * 10 + c2, c2 * 10 + c1)

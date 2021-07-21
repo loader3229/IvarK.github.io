@@ -2156,6 +2156,12 @@ function onLoad(noOffline) {
 		infiniteCheck = false
 		closeToolTip()
 		showNextModeMessage()
+	} else if (welcomeUpdates.length) {
+		ngModeMessages = []
+		inflationCheck = false
+		infiniteCheck = false
+		closeToolTip()
+		showNextModeMessage()
 	}
 
 	if (aarMod.offlineProgress && !aarMod.pause && !noOffline) {
@@ -2185,6 +2191,7 @@ STUFF
 END OF ONLOAD
 */
 
+var welcomeUpdates = []
 function setupNGP31Versions() {
 	if (aarMod.ngp3lV) {
 		alert("NG+3L is no longer supported. This save will now go through a mandatory migration to NG+3R.")
@@ -2247,7 +2254,13 @@ function setupNGP31Versions() {
 		player.timestudy.theorem += 4000
 		player.dilation.studies = []
 	}
-	aarMod.ngp3Build = 20210713
+	if (aarMod.ngp3Build < 20210720) PCs_save.comps = []
+
+	welcomeUpdates = []
+	if (aarMod.ngp3Build) {
+		//if (aarMod.ngp3Build < 20210721) welcomeUpdates.push(0.6)
+	}
+	aarMod.ngp3Build = 20210720
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) {
 		player.timestudy.auto = {}

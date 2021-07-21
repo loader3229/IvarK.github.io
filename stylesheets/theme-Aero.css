@@ -1668,6 +1668,10 @@ td .timestudybought.elcstudy {
     border: 1px solid #77fa;
 }
 
+#welcomeMessage b { 
+	font-weight: bold !important
+}
+
 /*=====================
   C H A L L E N G E S
 =====================*/

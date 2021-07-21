@@ -2124,6 +2124,13 @@ function showNextModeMessage(click) {
 		getEl("welcome").style.display = "flex"
 		getEl("welcomeMessage").innerHTML = ngModeMessages[ngModeMessages.length - 1]
 		ngModeMessages.pop()
+	} else if (welcomeUpdates.length > 0) {
+		var ver = welcomeUpdates.pop()
+		getEl("welcome").style.display = "flex"
+		getEl("welcomeMessage").innerHTML = "<b class='lime'>Welcome to NG+3 Respecced v" + ver + "!</b><br>This update introduces...<br><br>" +
+			(ngp3WelcomeMsgs[ver] || "???") +
+			"<br><br><b>Discord</b>: <a href='http://discord.gg/KsjcgskgTj' target='_newtab'>http://discord.gg/KsjcgskgTj</a>" +
+			"<br><br>Thank you for playing NG+3R!<br>~Aarex"
 	} else if (click) getEl("welcome").style.display = "none"
 }
 
