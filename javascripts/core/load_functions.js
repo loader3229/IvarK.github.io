@@ -2254,13 +2254,16 @@ function setupNGP31Versions() {
 		player.timestudy.theorem += 4000
 		player.dilation.studies = []
 	}
-	if (aarMod.ngp3Build < 20210720) PCs_save.comps = []
+	if (aarMod.ngp3Build < 20210721) {
+		PCs_save.comps = []
+		PCs_save.lvl = 1
+	}
 
 	welcomeUpdates = []
 	if (aarMod.ngp3Build) {
 		//if (aarMod.ngp3Build < 20210721) welcomeUpdates.push(0.6)
 	}
-	aarMod.ngp3Build = 20210720
+	aarMod.ngp3Build = 20210721
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) {
 		player.timestudy.auto = {}

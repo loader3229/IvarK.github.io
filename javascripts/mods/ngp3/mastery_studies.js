@@ -351,9 +351,9 @@ var mTs = {
 	spentable: [],
 	latestBoughtRow: 0,
 	ttSpent: 0,
-	respec(quick) {
+	respec(quick, reset) {
 		var respecedMS = []
-		player.timestudy.theorem += mTs.ttSpent
+		if (!reset) player.timestudy.theorem += mTs.ttSpent
 		for (var id = 0; id < player.masterystudies.length; id++) {
 			var d = player.masterystudies[id].split("d")[1]
 			if (d) respecedMS.push(player.masterystudies[id])
@@ -365,7 +365,7 @@ var mTs = {
 		respecUnbuyableTimeStudies()
 		updateMasteryStudyCosts()
 
-		if (quick) return
+		if (quick || reset) return
 		maybeShowFillAll()
 		updateMasteryStudyButtons()
 		drawMasteryTree()
@@ -416,12 +416,12 @@ function updateMasteryStudyCosts() {
 	for (id = 0; id<player.masterystudies.length; id++) {
 		var t = player.masterystudies[id].split("t")[1]
 		if (t) {
+			mTs.latestBoughtRow = Math.max(mTs.latestBoughtRow, Math.floor(t / 10))
 			var costMult = getMasteryStudyCostMult("t" + t)
 
 			setMasteryStudyCost(t, "t")
 			mTs.ttSpent += mTs.costs.time[t] < 1/0 ? mTs.costs.time[t] : 0
 			mTs.costMult = costMult == "reset" ? mTs.baseCostMult : mTs.costMult * costMult
-			mTs.latestBoughtRow = Math.max(mTs.latestBoughtRow, Math.floor(t/10))
 			mTs.bought++
 		}
 	}
@@ -584,6 +584,8 @@ function setMasteryStudyCost(id, type) {
 }
 
 function getMasteryStudyCostMult(id) {
+	if (id.split("t")[1] < mTs.latestBoughtRow * 10) return 1
+
 	let d = mTs.costs.mults
 	let r = d[id] || 1
 
@@ -592,7 +594,7 @@ function getMasteryStudyCostMult(id) {
 	if (tmp.dtMode) r = d[id + "_dt"] || r
 
 	if (id.split("t")[1] < 290 && tmp.ngp3_mul && tmp.bgMode) r = Math.sqrt(r)
-	if (!QCs.isntCatched() && QCs.in(1)) r *= 2
+	if (r + 0 === r && !QCs.isntCatched() && QCs.in(1)) r *= 2
 
 	return r
 }

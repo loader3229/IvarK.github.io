@@ -46,7 +46,7 @@ function getMDMultiplier(tier) {
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
 
 	//Quantum Challenges:
-	if (QCs.in(7)) ret = ret.pow(0.95)
+	if (QCs.in(7) || PCs.in()) ret = ret.pow(0.95)
 
 	return ret
 }

@@ -1,14 +1,14 @@
 //PAIRED CHALLENGES
 var PCs = {
 	milestones: {
-		11: "Boost the QC1 reward.",
-		21: "Boost the QC2 reward. (not implemented)",
-		31: "Boost the QC3 reward. (not implemented)",
-		41: "Boost the QC4 reward. (not implemented)",
-		51: "Boost the QC5 reward. (not implemented)",
-		61: "Boost the QC6 reward.",
-		71: "Reduce the level up requirement by 1.",
-		81: "Boost the QC8 reward. (not implemented)",
+		11: "Replicated Compressors are stronger.",
+		21: "The QC2 reward is squared.",
+		31: "You sacrifice 40% MDBs instead of 30%.",
+		41: "You sacrifice Replicated Galaxies more.",
+		51: "Sacrificed things by Positrons give 25% more.",
+		61: "The QC6 reward is squared.",
+		71: "Meta Accelerator is 10% slower.",
+		81: "The Nerfed modifier doesn't increase the goal. (not implemented)",
 		12: "Unlock Replicated Expanders. (not implemented)",
 		22: "You can exclude a Positron Cloud tier in any QC; and unlock the Perked modifier. (not implemented)",
 		32: "Dilation stat is 50% weaker.",
@@ -17,7 +17,7 @@ var PCs = {
 		62: "Time since Eternity is squared root.",
 		72: "Mastery Study cost multiplier is divided by 5x, permanently.",
 		82: "Unlock Galactic Clusters. (not implemented)",
-		13: "Unlock Replicated Dilaters. (not implemented)",
+		14: "Unlock Replicated Dilaters. (not implemented)",
 		23: "You can exclude matched Boosts instead. (not implemented)",
 		33: "For each PC combination, Meta Accelerator slowdown is 2% slower.",
 		43: "Tier-1 Positronic Boosts can charge more by 4x, but the requirement is squared than normal.",
@@ -131,7 +131,7 @@ var PCs = {
 
 		var qc1 = QCs.data[list[0]].goalMA
 		var qc2 = QCs.data[list[1]].goalMA
-		var base = 10
+		var base = Decimal.pow(Number.MAX_VALUE, 1.5)
 		return qc1.pow(qc2.log(base))
 	},
 	conv(c1, c2) {
@@ -148,7 +148,6 @@ var PCs = {
 	},
 	lvlReq(x) {
 		let r = PCs.data.lvls[x]
-		if (PCs.milestoneDone(71)) r--
 		return r
 	},
 

@@ -67,7 +67,7 @@ var pos = {
 		rg: {
 			galName: "base Replicated Galaxies",
 			pow(x) {
-				return QCs.done(4) ? x * pos_tmp.mults.gal * 2 / 5 : 0
+				return QCs.done(4) ? x * pos_tmp.mults.gal * (PCs.milestoneDone(41) ? 3 : 2) / 5 : 0
 			},
 			sacGals(x) {
 				return Math.min(player.replicanti.galaxies / 4, x)
@@ -110,7 +110,7 @@ var pos = {
 		data.cloud_div = {}
 
 		data.mults = {
-			mdb: QCs.done(3) ? 0.3 : 0.25,
+			mdb: QCs.done(3) ? (PCs.milestoneDone(31) ? 0.4 : 0.3) : 0.25,
 			mdb_eff: QCs.done(5) ? 1.5 : 1,
 			gal: QCs.done(5) ? 0.2 : 0.25,
 			base_pc: QCs.done(5) ? 1 / 100 : 1 / 125
@@ -177,7 +177,7 @@ var pos = {
 		//QC5
 		var qc5 = pos_save.early_charge
 		if (qc5) getEl("pos_boost" + qc5 + "_btn").className = "chosenbtn3 posbtn"
-		getEl("early_charge").style.display = QCs.done(5) ? "" : "none"
+		getEl("early_charge").style.display = "none"
 	},
 	updateTmpOnTick() {
 		if (!this.unl()) return

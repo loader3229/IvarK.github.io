@@ -262,11 +262,7 @@ function doMetaDimensionsReset(bigRip, headstart, isQC) {
 }
 
 function resetMasteryStudies() {
-	if (!qMs.isOn(10)) {
-		let respeccedMS = []
-		for (var d = 7; d <= 13; d++) if (player.masterystudies.includes("d" + d)) respeccedMS.push("d" + d)
-		player.masterystudies = respeccedMS
-	}
+	if (!qMs.isOn(10)) mTs.respec(false, true)
 }
 
 function checkOnCrunchAchievements(){

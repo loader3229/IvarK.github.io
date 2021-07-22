@@ -640,7 +640,9 @@ var enB = {
 			title: "Dilation Overflow",
 			type: "b",
 			eff(x) {
-				return Math.pow(x / 2 + 1, 0.4)
+				let r = Math.pow(x / 2 + 1, 0.4)
+				if (r > 100) r = Math.pow(Math.log10(r) * 5, 2)
+				return r
 			},
 			effDisplay(x) {
 				return formatReductionPercentage(x, 2, 3)
@@ -677,8 +679,8 @@ var enB = {
 		},
 		6: {
 			req: 10,
-			masReq: 12,
-			masReqExpert: 13,
+			masReq: 13,
+			masReqExpert: 14,
 			masReqDeath: 15,
 
 			title: "Energy Lever",
@@ -879,7 +881,8 @@ var enB = {
 				var slowStart = 4
 				var slowSpeed = 1
 				if (enB.active("glu", 9)) slowSpeed /= enB_tmp.glu9
-				if (QCs.done(7)) slowSpeed *= 0.8
+				if (QCs.done(7)) slowSpeed *= 0.9
+				if (PCs.milestoneDone(71)) slowSpeed *= 0.9
 				if (PCs.milestoneDone(33)) slowSpeed *= Math.pow(0.98, PCs_save.comps.length)
 				if (enB.active("pos", 8)) slowStart += enB_tmp.pos8
 				if (enB.active("pos", 12)) baseMult += enB_tmp.pos12
@@ -973,8 +976,8 @@ var enB = {
 			}
 		},
 		7: {
-			req: 60,
-			masReq: 1/0,
+			req: 40,
+			masReq: 0,
 			chargeReq: 5,
 
 			title: "308% Completionist",
@@ -988,8 +991,8 @@ var enB = {
 			}
 		},
 		8: {
-			req: 70,
-			masReq: 1/0,
+			req: 1/0,
+			masReq: 0,
 			chargeReq: 6,
 
 			title: "MT-Force Preservation",
@@ -1004,8 +1007,8 @@ var enB = {
 			}
 		},
 		9: {
-			req: 80,
-			masReq: 1/0,
+			req: 1/0,
+			masReq: 0,
 			chargeReq: 7,
 
 			title: "Overpowered Infinities",
@@ -1023,8 +1026,8 @@ var enB = {
 			}
 		},
 		10: {
-			req: 90,
-			masReq: 1/0,
+			req: 1/0,
+			masReq: 0,
 			chargeReq: 1/0,
 
 			title: "Looped Dimensionality",
@@ -1039,8 +1042,8 @@ var enB = {
 			}
 		},
 		11: {
-			req: 90,
-			masReq: 1/0,
+			req: 1/0,
+			masReq: 0,
 			chargeReq: 1/0,
 
 			title: "8th Shade of Blue",
@@ -1055,8 +1058,8 @@ var enB = {
 			}
 		},
 		12: {
-			req: 90,
-			masReq: 1/0,
+			req: 1/0,
+			masReq: 0,
 			chargeReq: 1/0,
 
 			title: "Timeless Capability",

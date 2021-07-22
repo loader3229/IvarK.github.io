@@ -94,10 +94,9 @@ var QCs = {
 				QCs_tmp.qc1.limit = QCs_tmp.qc1.limit.max(QCs_tmp.qc1.req)
 
 				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
-				if (false && PCs.milestoneDone(11)) {
+				if (PCs.milestoneDone(11)) {
 					data.req = data.req.pow(0.9)
 					data.speedMult = data.speedMult.times(boosts / 2 + 1)
-					data.effMult = maxBoosts / 20 + boosts / 20 + 1
 				}
 			},
 			convert(x) {
@@ -129,7 +128,9 @@ var QCs = {
 
 			rewardDesc: (x) => "Color charge also multiply a color power that's used by it. (" + shorten(x) + "x)",
 			rewardEff(str) {
-				return Math.log10(colorCharge.normal.charge + 1) / 2 + 1
+				let x = Math.log10(colorCharge.normal.charge + 1) / 2 + 1
+				if (PCs.milestoneDone(21)) x *= x
+				return x
 			},
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
@@ -189,7 +190,7 @@ var QCs = {
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
 			hint: "Test every single combination of this exclusion, and try to minimize galaxies.",
 
-			rewardDesc: (x) => "Replicated Galaxies contribute to Positronic Charge, and you can spend Quantum Energy to charge early.",
+			rewardDesc: (x) => "Replicated Galaxies contribute to Positronic Charge.",
 			rewardEff(str) {
 				return
 			},
@@ -221,7 +222,7 @@ var QCs = {
 			updateDisp() {		
 				getEl("qc4_div").style.display = QCs.in(4) ? "" : "none"
 				getEl("coinsPerSec").style.display = QCs.in(4) || QCs.done(4) ? "none" : ""
-				getEl("tickSpeedRow").style.display = QCs.in(4) || QCs.done(4) ? "none" : ""
+				getEl("tickSpeedRow").style.display = QCs.in(4) ? "none" : ""
 
 				if (!QCs.in(4)) return
 				var types = ["ng", "rg", "eg", "tg"]
@@ -324,7 +325,7 @@ var QCs = {
 				return 1
 			},
 
-			rewardDesc: (x) => "Meta Accelerator slowdown is 20% slower, and unlock Paired Challenges.",
+			rewardDesc: (x) => "Meta Accelerator slowdown is 10% slower, and unlock Paired Challenges.",
 			rewardEff(str) {
 				return 1
 			}
