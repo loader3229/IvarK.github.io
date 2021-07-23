@@ -87,7 +87,7 @@ let qMs = {
 					getEl("qMs_reward_" + i).className = qMs.tmp.amt < i || qMs.forceOff(i) ? "qMs_locked" :
 						!this[i].disablable ? "qMs_reward" :
 						"qMs_toggle_" + (!qu_save.disabledRewards[i] ? "on" : "off")
-					getEl("qMs_reward_" + i).innerHTML = qMs[i].eff() + (qMs.tmp.amt >= i ? "" : "<br>(requires " + getFullExpansion(qMs[i].req) + " MP)")
+					getEl("qMs_reward_" + i).innerHTML = qMs[i].eff() + (false && qMs.tmp.amt >= i ? "" : "<br>(requires " + getFullExpansion(qMs[i].req) + " MP)")
 				}
 			}
 			getEl("qMs_next").textContent = qMs.tmp.amt >= qMs.max ? "" : "Next milestone unlocks at " + getFullExpansion(qMs[qMs.tmp.amt + 1].req) + " Milestone Points."
@@ -100,7 +100,7 @@ let qMs = {
 		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 17 ? "" : "none"
 		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 20 ? "" : "none"
 
-        var autoAssignUnl = qMs.tmp.amt >= 21
+        var autoAssignUnl = qMs.tmp.amt >= 23
 		getEl('respec_quarks').style.display = autoAssignUnl ? "" : "none"
         getEl('autoAssign').style.display = autoAssignUnl ? "" : "none"
         getEl('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
@@ -115,7 +115,7 @@ let qMs = {
 			if (unl) {
 				getEl("qMs_" + type + "_target").textContent = typeData.targDisp(qMs.tmp["targ_" + type])
 				getEl("qMs_" + type + "_points").textContent = "+" + getFullExpansion(qMs.tmp["amt_" + type]) + " MP"
-				getEl("qMs_" + type + "_next").textContent = qMs.tmp["amt_" + type] > 20 ? "" : "(Next at: " + typeData.targDisp(typeData.nextAt(qMs.tmp["amt_" + type] + 1)) + " " + typeData.targKind + ")"
+				getEl("qMs_" + type + "_next").textContent = qMs.tmp["amt_" + type] > 50 ? "" : "(Next at: " + typeData.targDisp(typeData.nextAt(qMs.tmp["amt_" + type] + 1)) + " " + typeData.targKind + ")"
 			}
 		}
 
@@ -245,21 +245,22 @@ let qMs = {
 	},
 	21: {
 		req: 25,
-		eff: () => "Unlock QoL features for quark assortion, like automation and respec.",
-		effGot: () => "You have unlocked QoL features for quark assortion!"
+		forceDisable: () => !PCs.milestoneDone(32) && QCs.in(3),
+		eff: () => "Every second, you gain Tachyon Particles, if you dilate.",
+		effGot: () => "Every second, you now gain Tachyon Particles, if you dilate."
 	},
 	22: {
-		req: 30,
+		req: 35,
 		eff: () => "Gain banked infinities based on your post-crunch infinitied stat",
 		effGot: () => "Gain banked infinities based on your post-crunch infinitied stat."
 	},
 	23: {
-		req: 40,
-		eff: () => "Every second, you gain Tachyon Particles, if you dilate.",
-		effGot: () => "Every second, you now gain Tachyon Particles, if you dilate."
+		req: 50,
+		eff: () => "Unlock QoL features for quark assortion, like automation and respec.",
+		effGot: () => "You have unlocked QoL features for quark assortion!"
 	},
 	24: {
-		req: 100,
+		req: 200,
 		eff: () => "Able to purchase all time studies without blocking",
 		effGot: () => "You now can buy every single time study."
 	},

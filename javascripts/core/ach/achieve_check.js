@@ -249,8 +249,8 @@ function preHiggsNGp3AchieveCheck() {
 
 	if (QCs.done(3)) giveAchievement("We are not going squared.")
 	if (player.meta.bestAntimatter.gte(Decimal.pow(Number.MAX_VALUE, 3)) && player.meta[5].amount.lt(Math.sqrt(Number.MAX_VALUE))) giveAchievement("Old memories come true")
-	if (player.timestudy.theorem >= 1e86 && !QCs.isntCatched()) giveAchievement("Infinity Morals")
-	if (PCs_save.comps.length >= 4) giveAchievement("Twice in a row")
+	if (player.timestudy.theorem >= 1e85 && !QCs.isntCatched()) giveAchievement("Infinity Morals")
+	if (PCs_save.lvl >= 1/0) giveAchievement("Twice in a row")
 	if (player.eightBought >= 1/0 && (player.replicanti.galaxies + tmp.extraRG) == 0) giveAchievement("Intergalactic")
 	if (player.eternityPoints.e >= 1/0 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 
@@ -292,7 +292,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (qu_save.breakEternity.did) giveAchievement("Time Breaker")
 	if (mTs.bought >= 48) giveAchievement("The Theory of Ultimate Studies")
 	if (qu_save.best <= 300) giveAchievement("And the winner is...")
-	if (qMs.tmp.amt >= 22) giveAchievement("Special Relativity")
+	if (qMs.tmp.amt >= 21) giveAchievement("Special Relativity")
 	if (qu_save.best <= 10) giveAchievement("Quantum doesn't take so long")
 	if (player.masterystudies.includes("d13")) giveAchievement("Do protons decay?")
 	if (getTotalRadioactiveDecays() >= 10) giveAchievement("Radioactive Decaying to the max!")

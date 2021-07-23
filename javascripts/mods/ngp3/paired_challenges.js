@@ -11,8 +11,8 @@ var PCs = {
 		81: "The Nerfed modifier doesn't increase the goal. (not implemented)",
 		12: "Unlock Replicated Expanders. (not implemented)",
 		22: "You can exclude a Positron Cloud tier in any QC; and unlock the Perked modifier. (not implemented)",
-		32: "Dilation stat is 50% weaker.",
-		42: "Extra Replicated Galaxies contribute to Positronic Charge.",
+		32: "25 MP milestone is activated in QC3.",
+		42: "Tier-1 Positronic Boosts can charge more by 4x, but the requirement is squared than normal.",
 		52: "You gain 2x more Replicanti Energy.",
 		62: "Time since Eternity is squared root.",
 		72: "Mastery Study cost multiplier is divided by 5x, permanently.",
@@ -20,7 +20,7 @@ var PCs = {
 		14: "Unlock Replicated Dilaters. (not implemented)",
 		23: "You can exclude matched Boosts instead. (not implemented)",
 		33: "For each PC combination, Meta Accelerator slowdown is 2% slower.",
-		43: "Tier-1 Positronic Boosts can charge more by 4x, but the requirement is squared than normal.",
+		43: "Extra Replicated Galaxies contribute to Positronic Charge.",
 		53: "Replicanti Energy formula is stronger.",
 		63: "Eternitying only loses 30 seconds of time stat.",
 		73: "Unlock Strings. (not implemented)",
@@ -30,8 +30,8 @@ var PCs = {
 		var data = {
 			qc1_ids: [null, 1, 3, 6, 2, 8, 5, 4, 7],
 			qc2_ids: [null],
-			qc1_lvls: [null, 1, 2, 3, 4, 10, 11, 12, 13],
-			qc2_lvls: [null, 1, 2, 4, 8, 14, 15, 17, 18],
+			qc1_lvls: [null, 1, 2, 4, 5, 10, 11, 13, 14],
+			qc2_lvls: [null, 1, 2, 3, 5, 14, 16, 17, 18],
 			milestoneReqs: [null, 1, 2, 4],
 			setup: true
 		}
@@ -115,7 +115,7 @@ var PCs = {
 		//Boosts
 		var lvl = PCs_save.lvl - 1
 		data.eff1 = 1 + 0.75 * lvl / 18
-		data.eff1_start = 100
+		data.eff1_start = 150
 		data.eff2 = 1 + lvl / 54
 	},
 
@@ -131,7 +131,7 @@ var PCs = {
 
 		var qc1 = QCs.data[list[0]].goalMA
 		var qc2 = QCs.data[list[1]].goalMA
-		var base = Decimal.pow(Number.MAX_VALUE, 1.5)
+		var base = Decimal.pow(Number.MAX_VALUE, list.includes(3) ? 1.65 : 1.55)
 		return qc1.pow(qc2.log(base))
 	},
 	conv(c1, c2) {

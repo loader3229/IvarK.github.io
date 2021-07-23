@@ -3369,10 +3369,13 @@ function eternity(force, auto, forceRespec, dilated) {
 
 	if (!force) {
 		var autoOn = player.timestudy.auto && player.timestudy.auto.on
-		if (autoOn && (player.respec || player.respecMastery)) toggleAutoPreset()
+		if (autoOn && (player.respec || player.respecMastery)) {
+			toggleAutoPreset()
+			autoOn = false
+		}
 
 		var autoPreset = targetAutoPreset()
-		var canSwitch = autoOn && player.timestudy.auto[autoPreset]
+		var canSwitch = autoOn && player.timestudy.auto[autoPreset] && player.timestudy.auto[autoPreset] != ""
 		if (autoOn) forceRespec = true
 		if (player.respec || player.respecMastery || forceRespec) respecTimeStudies(forceRespec)
 		if (autoOn) loadAutoPreset(autoPreset)
@@ -3690,7 +3693,7 @@ function dilationStuffABTick(){
 
 	if (canAutoUpgs && player.autoEterOptions.dilUpgs) autoBuyDilUpgs()
 
-	if (qMs.tmp.amt >= 23 && player.dilation.active && getTPGain().gt(player.dilation.tachyonParticles)) {
+	if (qMs.isOn(21) && player.dilation.active && getTPGain().gt(player.dilation.tachyonParticles)) {
 		setTachyonParticles(getTPGain())
 		player.eternityBuyer.alwaysDilCond = false
 	}

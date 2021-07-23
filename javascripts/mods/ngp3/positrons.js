@@ -79,7 +79,7 @@ var pos = {
 		eg: {
 			galName: "extra Replicated Galaxies",
 			pow(x) {
-				return PCs.milestoneDone(42) ? x * pos_tmp.mults.gal * 2 / 5 : 0
+				return PCs.milestoneDone(43) ? x * pos_tmp.mults.gal / 5 : 0
 			},
 			sacGals(x) {
 				return Math.min(tmp.extraRG * pos_tmp.mults.gal, x)
@@ -250,7 +250,7 @@ var pos = {
 		quantum(false, true)
 	},
 	swapCost(x) {
-		return x == 0 ? 0 : Math.pow(2, Math.pow(2, x / 2) - 2)
+		return ([0, 2, 4, 16, 64])[x / 2]
 	},
 	excluded(x) {
 		return QCs.in(2) ? enB.pos.lvl(x) == QCs_save.qc2 : false

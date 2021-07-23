@@ -158,7 +158,7 @@ var QCs = {
 		},
 		3: {
 			unl: () => true,
-			desc: () => "There are only Meta Dimensions that produce antimatter, but successfully dilating reduces antimatter production.",
+			desc: () => "There are only Meta Dimensions that produce antimatter, but successfully dilating reduces antimatter production, and you only gain TP by exiting dilation.",
 			goal: () => player.dilation.times >= 3,
 			goalDisp: () => "3 successful dilation runs",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 0.13),
@@ -179,7 +179,7 @@ var QCs = {
 				return getMDProduction(1).max(1).pow(this.amExp())
 			},
 			amExp() {
-				return 20 / Math.sqrt((player.dilation.times || 0) / (PCs.milestoneDone(32) ? 6 : 3) + 1)
+				return 20 / Math.sqrt((player.dilation.times || 0) / 4 + 1)
 			}
 		},
 		4: {
@@ -221,7 +221,7 @@ var QCs = {
 
 			updateDisp() {		
 				getEl("qc4_div").style.display = QCs.in(4) ? "" : "none"
-				getEl("coinsPerSec").style.display = QCs.in(4) || QCs.done(4) ? "none" : ""
+				getEl("coinsPerSec").style.display = QCs.in(4) ? "none" : ""
 				getEl("tickSpeedRow").style.display = QCs.in(4) ? "none" : ""
 
 				if (!QCs.in(4)) return

@@ -238,6 +238,25 @@ var softcap_data = {
 			derv: false
 		},
 	},
+	rp: {
+		name: "Red power effect",
+		1: {
+			func: "log",
+			start: 1.5,
+			pow: 1,
+			mul: (1.5 - 1.3) / Math.log10(1.5),
+			add: 1.3
+		}
+	},
+	gp: {
+		name: "Green power effect",
+		1: {
+			func: "log",
+			start: 4,
+			pow: 1,
+			mul: Math.log2(10) * 2
+		}
+	},
 	bam: {
 		name: "Bosonic Antimatter gain per second",
 		1: {
@@ -829,6 +848,8 @@ function getSoftcapAmtFromId(id){
 		ts225: () => tsMults[225](),
 		ma: () => getExtraDimensionBoostPowerUse(),
 		aqs: () => quarkGain(),
+		rp: () => colorBoosts.r,
+		gp: () => colorBoosts.g,
 		ig_log_high: () => tmp.ig.max(1).log10(),
 		bam: () => getBosonicAMProduction(),
 		idbase: () => getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).max(1).log10(),
@@ -875,6 +896,7 @@ function hasSoftcapStarted(id, num){
 		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined && tmp.quActive,
 		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined && tmp.quActive,
 		aqs: tmp.ngp3,
+		rp: tmp.ngp3,
 		bam: tmp.ngp3,
 		bu45: tmp.ngp3,
 		tt: tmp.ngp3,
@@ -995,6 +1017,8 @@ function updateSoftcapStatsTab(){
 		ec14: "softcap_ec14",
 		ma: "softcap_ma",
 		aqs: "softcap_aqs",
+		rp: "softcap_rp",
+		gp: "softcap_gp",
 		ig_log_high: "softcap_ig",
 		bam: "softcap_bam",
 		idbase: "softcap_idbase",

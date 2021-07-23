@@ -266,10 +266,11 @@ function updateColorPowers() {
 	//Red
 	colorBoosts.r = Math.log10(qu_save.colorPowers.r * 5 + 1) / 3.5 + 1
 	if (hasMTS(272)) colorBoosts.r += 0.25
-	if (colorBoosts.r > 1.5) colorBoosts.r = Math.sqrt(colorBoosts.r * 1.5)
+	colorBoosts.r = softcap(colorBoosts.r, "rp")
 
 	//Green
 	colorBoosts.g = Math.log10(qu_save.colorPowers.g * 3 + 1) + 1
+	colorBoosts.g = softcap(colorBoosts.g, "gp")
 
 	//Blue
 	colorBoosts.b_base = qu_save.colorPowers.b + 1
@@ -641,7 +642,7 @@ var enB = {
 			type: "b",
 			eff(x) {
 				let r = Math.pow(x / 2 + 1, 0.4)
-				if (r > 100) r = Math.pow(Math.log10(r) * 5, 2)
+				//if (r > 10) r = Math.log10(r) * 10
 				return r
 			},
 			effDisplay(x) {
@@ -823,18 +824,17 @@ var enB = {
 		chargeReq(x, next) {
 			var lvl = this.lvl(x, next)
 			var req = this[x].chargeReq * (tmp.exMode ? 1.25 : 1) * Math.pow(lvl, tmp.dtMode ? 2.5 : 2)
-			if (PCs.milestoneDone(43) && lvl == 1) req *= req
+			if (PCs.milestoneDone(42) && lvl == 1) req *= req
 			return req
 		},
 		chargeEff(x) {
 			var lvl = this.lvl(x)
 			var eff = 2 * lvl
-			if (PCs.milestoneDone(43) && lvl == 1) eff *= 4
+			if (PCs.milestoneDone(42) && lvl == 1) eff *= 4
 			return eff
 		},
 		charged(x) {
-			if (pos_save.early_charge == x) return true
-			return this.engAmt() >= this.chargeReq(x) && (enB.mastered("pos", x) || enB.colorMatch("pos", x))
+			return this.activeReq(x) && this.engAmt() >= this.chargeReq(x) && (enB.mastered("pos", x) || enB.colorMatch("pos", x))
 		},
 
 		lvl(x, next) {
@@ -969,29 +969,32 @@ var enB = {
 			tier: 3,
 			type: "r",
 			eff(x) {
-				return Math.min(Math.sqrt(Math.log10(x / 100 + 1) / 2 + 1), 3)
+				let r = Math.log10(x / 100 + 1) / 2 + 1
+				r = Math.sqrt(r)
+				if (r > 1.25) r = (r + 1.25) / 2
+				return r
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
 			}
 		},
 		7: {
-			req: 40,
+			req: 60,
 			masReq: 0,
-			chargeReq: 5,
+			chargeReq: 20,
 
 			title: "308% Completionist",
 			tier: 2,
 			type: "g",
 			eff(x) {
-				return 0
+				return Math.log10(Math.log10(x + 1) + 1) / 2
 			},
 			effDisplay(x) {
 				return shorten(x)
 			}
 		},
 		8: {
-			req: 1/0,
+			req: 90,
 			masReq: 0,
 			chargeReq: 6,
 
@@ -1000,7 +1003,7 @@ var enB = {
 			type: "g",
 			anti: true,
 			eff(x) {
-				return 0
+				return Math.log10(Math.log10(x + 1) / 5 + 1) / 2
 			},
 			effDisplay(x) {
 				return x.toFixed(3)

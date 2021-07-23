@@ -243,7 +243,7 @@ var pH = {
 
 		//Blockages
 		var blockRank = tmp_pH.shown
-		if (!isEmptiness && (QCs.in(4) || QCs.done(4))) blockRank = blockRank + 2
+		if (!isEmptiness && QCs.in(4)) blockRank = blockRank + 2
 
 		var haveBlock = blockRank >= 3
 		getEl("bigcrunch").parentElement.style.top = haveBlock ? (Math.floor(blockRank / 3) * 120 + 19) + "px" : "19px"

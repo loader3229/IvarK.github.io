@@ -230,7 +230,7 @@ var mTs = {
 			let tpLog = player.dilation.tachyonParticles.max(1).log10()
 			let bpLog = colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0
 
-			return Math.pow(tpLog / 90, 0.75) * Math.pow(bpLog / 3, 0.25)
+			return Math.pow(tpLog / 90, 0.75) * Math.pow(bpLog * 0.3, 0.25)
 		},
 	},
 	eff(id, uses = "") {
@@ -406,13 +406,15 @@ function convertMasteryStudyIdToDisplay(x) {
 }
 
 function updateMasteryStudyCosts() {
-	var oldBought = mTs.bought
-	mTs.latestBoughtRow = 0
 	mTs.baseCostMult = hasAch("ng3p12") ? 0.5 : 1
 	if (PCs.milestoneDone(72)) mTs.baseCostMult /= 5
+
 	mTs.costMult = mTs.baseCostMult
-	mTs.bought = 0
 	mTs.ttSpent = 0
+
+	var oldBought = mTs.bought
+	mTs.bought = 0
+	mTs.latestBoughtRow = 0
 	for (id = 0; id<player.masterystudies.length; id++) {
 		var t = player.masterystudies[id].split("t")[1]
 		if (t) {
