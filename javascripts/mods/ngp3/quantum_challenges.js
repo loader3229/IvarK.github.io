@@ -22,6 +22,7 @@ var QCs = {
 		QCs_save = data
 
 		if (QCs_save.qc1 === undefined) this.reset()
+		if (QCs_save.qc1.expands === undefined) QCs_save.qc1.expands = 0
 		if (typeof(QCs_save.qc2) !== "number") QCs_save.qc2 = QCs_save.cloud_disable || 1
 
 		if (QCs_save.best_exclusion || QCs_save.perks_unl) {
@@ -34,7 +35,7 @@ var QCs = {
 		this.updateDisp()
 	},
 	reset() {
-		QCs_save.qc1 = {boosts: 0, max: 0}
+		QCs_save.qc1 = {boosts: 0, max: 0, expands: 0}
 		QCs_save.qc3 = undefined
 		QCs_save.qc4 = "ng"
 		QCs_save.qc5 = 0
@@ -98,6 +99,11 @@ var QCs = {
 					data.req = data.req.pow(0.9)
 					data.speedMult = data.speedMult.times(boosts / 2 + 1)
 				}
+				if (PCs.milestoneDone(12)) {
+					var eff = QCs_save.qc1.expands / 3 + 1
+					data.speedMult = data.speedMult.times(Math.pow(eff, 5))
+					data.limit = data.limit.pow(eff)
+				}
 			},
 			convert(x) {
 				if (!QCs_tmp.qc1) return x
@@ -116,6 +122,14 @@ var QCs = {
 				player.replicanti.amount = Decimal.pow(10, Math.pow(player.replicanti.amount.log10(), 0.9))
 				eternity(false, true)
 				return true
+			},
+
+			expandCost: () => Math.pow(4, QCs_save.qc1.expands) * 1e7,
+			canExpand: () => QCs_tmp.qc5 && QCs_save.qc5 >= QCs.data[1].expandCost(),
+			expand() {
+				if (!this.canExpand()) return
+				QCs_save.qc5 -= QCs.data[1].expandCost()
+				QCs_save.qc1.expands++
 			}
 		},
 		2: {
@@ -243,7 +257,7 @@ var QCs = {
 			goal: () => player.eternityPoints.gte(Decimal.pow(10, 1.9e7)),
 			goalDisp: () => shortenCosts(Decimal.pow(10, 1.9e7)) + " Eternity Points",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 3.15),
-			hint: "Do sub-1 Eternity runs before getting Compressors.",
+			hint: "Automate eternities until you are ready to get Compressors.",
 
 			rewardDesc: (x) => "Sacrificed things are stronger for Positrons, but you sacrifice less galaxies.",
 			rewardEff(str) {
@@ -317,7 +331,7 @@ var QCs = {
 			goal: () => player.timestudy.theorem >= 5e82,
 			goalDisp: () => shortenDimensions(5e82) + " Time Theorems",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.3),
-			hint: "...",
+			hint: "Do not buy MS22 and MS53/54.",
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
 			perkReqs: [1/0, 1/0],
@@ -483,6 +497,7 @@ var QCs = {
 		//In Quantum Challenges
 		getEl("qc_restart").style.display = QCs.in(2) || QCs.in(8) ? "" : "none"
 		getEl("repCompress").style.display = QCs_tmp.qc1 ? "" : "none"
+		getEl("repExpand").style.display = PCs.milestoneDone(12) ? "" : "none"
 		this.data[2].updateCloudDisp()
 		this.data[4].updateDisp()
 		this.data[5].updateDisp()

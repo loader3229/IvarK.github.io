@@ -8,8 +8,8 @@ var PCs = {
 		51: "Sacrificed things by Positrons give 25% more.",
 		61: "The QC6 reward is squared.",
 		71: "Meta Accelerator is 10% slower.",
-		81: "The Nerfed modifier doesn't increase the goal. (not implemented)",
-		12: "Unlock Replicated Expanders. (not implemented)",
+		81: "The Nerfed modifier doesn't increase the goal.",
+		12: "Unlock Replicated Expanders.",
 		22: "You can exclude a Positron Cloud tier in any QC; and unlock the Perked modifier. (not implemented)",
 		32: "25 MP milestone is activated in QC3.",
 		42: "Tier-1 Positronic Boosts can charge more by 4x, but the requirement is squared than normal.",
@@ -17,7 +17,7 @@ var PCs = {
 		62: "Time since Eternity is squared root.",
 		72: "Mastery Study cost multiplier is divided by 5x, permanently.",
 		82: "Unlock Galactic Clusters. (not implemented)",
-		14: "Unlock Replicated Dilaters. (not implemented)",
+		13: "Unlock Replicated Dilaters. (not implemented)",
 		23: "You can exclude matched Boosts instead. (not implemented)",
 		33: "For each PC combination, Meta Accelerator slowdown is 2% slower.",
 		43: "Extra Replicated Galaxies contribute to Positronic Charge.",
@@ -30,8 +30,9 @@ var PCs = {
 		var data = {
 			qc1_ids: [null, 1, 3, 6, 2, 8, 5, 4, 7],
 			qc2_ids: [null],
-			qc1_lvls: [null, 1, 2, 4, 5, 10, 11, 13, 14],
-			qc2_lvls: [null, 1, 2, 3, 5, 14, 16, 17, 18],
+			qc1_lvls: [null, 1, 2, 4, 6, 10, 11, 12, 14],
+			qc2_lvls: [null, 1, 2, 3, 5, 12, 13, 14, 18],
+			goal_divs: [null, 0.25, 0.25, 0.35, 0, 0.65, 1.1, 0.3, 0.3],
 			milestoneReqs: [null, 1, 2, 4],
 			setup: true
 		}
@@ -120,7 +121,8 @@ var PCs = {
 	},
 
 	start(x) {
-		quantum(false, true, PCs.convBack(x))
+		var qcs = PCs.convBack(x)
+		if (QCs.done(qcs[0]) && QCs.done(qcs[1])) quantum(false, true, qcs)
 	},
 	in(x) {
 		return QCs_tmp.in.length >= 2
@@ -131,8 +133,8 @@ var PCs = {
 
 		var qc1 = QCs.data[list[0]].goalMA
 		var qc2 = QCs.data[list[1]].goalMA
-		var base = Decimal.pow(Number.MAX_VALUE, list.includes(3) ? 1.65 : 1.55)
-		return qc1.pow(qc2.log(base))
+		var div = PCs.data.goal_divs[list[0]] + PCs.data.goal_divs[list[1]] + 1
+		return qc1.pow(qc2.log(Number.MAX_VALUE) / div)
 	},
 	conv(c1, c2) {
 		return Math.min(c1 * 10 + c2, c2 * 10 + c1)
@@ -192,7 +194,7 @@ var PCs = {
 		getEl("pc" + pc).style.display = PCs_save.lvl >= lvl ? "" : "none"
 		if (PCs_save.lvl >= lvl) {
 			getEl("pc" + pc).setAttribute("ach-tooltip", "Goal: " + shorten(PCs.goal(pc)) + " MA")
-			getEl("pc" + pc).className = inQCs.includes(qcs[0]) && inQCs.includes(qcs[1]) ? "onchallengebtn" : PCs.done(pc) ? "completedchallengesbtn" : "challengesbtn"
+			getEl("pc" + pc).className = inQCs.includes(qcs[0]) && inQCs.includes(qcs[1]) ? "onchallengebtn" : PCs.done(pc) ? "completedchallengesbtn" : QCs.done(qcs[0]) && QCs.done(qcs[1]) ? "challengesbtn" : "lockedchallengesbtn"
 		}
 	},
 

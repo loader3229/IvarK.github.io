@@ -996,7 +996,7 @@ var enB = {
 		8: {
 			req: 90,
 			masReq: 0,
-			chargeReq: 6,
+			chargeReq: 35,
 
 			title: "MT-Force Preservation",
 			tier: 3,
@@ -1010,7 +1010,7 @@ var enB = {
 			}
 		},
 		9: {
-			req: 1/0,
+			req: 96,
 			masReq: 0,
 			chargeReq: 7,
 
@@ -1019,8 +1019,8 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				var expExp = 1
-				var expDiv = 1
+				var expExp = Math.log10(Math.log10(x + 1) * 3 + 1)
+				var expDiv = 25 / Math.log2(Math.log10(x + 1) + 2)
 
 				return Math.pow(Decimal.max(getInfinitied(), 10).log10(), expExp) / expDiv
 			},

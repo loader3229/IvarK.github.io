@@ -91,8 +91,8 @@ function quarkGain() {
 
 	let log = Math.max(ma.div(maReq).log(2) / 2048 * 5/4, 0)
 	let logExp = 3
-	if (PCs.unl()) logExp *= PCs_tmp.eff2
 	log = Math.pow(log + 1, logExp) - 1
+	if (log > 3) log = Math.pow(log / 3, PCs_tmp.eff2) * 3
 
 	return softcap(Decimal.pow(10, log), "aqs").max(1)
 }

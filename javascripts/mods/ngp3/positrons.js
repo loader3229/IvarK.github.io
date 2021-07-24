@@ -250,7 +250,7 @@ var pos = {
 		quantum(false, true)
 	},
 	swapCost(x) {
-		return ([0, 2, 4, 16, 64])[x / 2]
+		return ([0, 2, 4, 8, 16])[x / 2]
 	},
 	excluded(x) {
 		return QCs.in(2) ? enB.pos.lvl(x) == QCs_save.qc2 : false

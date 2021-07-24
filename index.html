@@ -1559,7 +1559,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/22/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/23/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -2266,7 +2266,7 @@
 								<div id="Old memories come true" class="achievement achievementlocked" style="background-image: url(images/116.png)"><br></div>
 							</td>
 							<td>
-								<div id="Twice in a row" class="achievement achievementlocked" style="background-image: url(images/117.png)" ach-tooltip="Reach Paired Challenge level ???. Reward: Unlock Auto-Challenge Sweeper."><br></div>
+								<div id="Twice in a row" class="achievement achievementlocked" style="background-image: url(images/117.png)" ach-tooltip="Reach Paired Challenge level 5. Reward: Unlock Auto-Challenge Sweeper. (not implemented)"><br></div>
 							</td>
 							<td>
 								<div id="Infinity Morals" class="achievement achievementlocked" style="background-image: url(images/118.png)"><br></div>
@@ -3457,7 +3457,7 @@
 					</table>
 				</div>
 				<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 25px">0 / 1</span>)</span><br>
-				(translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and <span id="pc_eff2" style="font-size: 20px"></span> to aQs gain exponent)<br>
+				Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and <span id="pc_eff2" style="font-size: 20px"></span> to aQs gain exponent. (starting from 100 aQs)<br>
 				<button class="storebtn" style="font-size: 100%; width:200px" onclick="exitChallenge()">Exit Challenge</button>
 				<table id="pc_table" align="center" style="margin: auto"></table>
 			</div>
@@ -4249,6 +4249,7 @@
 				<br>
 				<button class="storebtn" id="replicantireset" onclick="replicantiGalaxy()" style="width: 200px; height: 90px; font-size: 12px"></button>
 				<button class="storebtn" id="repCompress" onclick="QCs.data[1].boost()" style="width: 200px; height: 90px; font-size: 12px"></button>
+				<button class="storebtn" id="repExpand" onclick="QCs.data[1].expand()" style="width: 200px; height: 90px; font-size: 12px"></button>
 				<br>
 				<button class="storebtn" id="replicantiresettoggle" onclick="replicantiGalaxyAutoToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Auto galaxy OFF</button><br>
 				<button class="storebtn" id="replicantibulkmodetoggle" onclick="replicantiGalaxyBulkModeToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Galaxy bulk mode: single</button>

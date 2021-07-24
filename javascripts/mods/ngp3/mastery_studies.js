@@ -230,7 +230,7 @@ var mTs = {
 			let tpLog = player.dilation.tachyonParticles.max(1).log10()
 			let bpLog = colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0
 
-			return Math.pow(tpLog / 90, 0.75) * Math.pow(bpLog * 0.3, 0.25)
+			return Math.pow(tpLog / 90, 0.5) * Math.pow(bpLog / 3, 0.25)
 		},
 	},
 	eff(id, uses = "") {

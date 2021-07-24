@@ -668,6 +668,12 @@ function replicantiDisplay() {
 			getEl("repCompress").style["font-size"] = qc1Explain ? "11px" : "12px"
 			getEl("repCompress").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
 		}
+		if (PCs.milestoneDone(12)) {
+			getEl("repExpand").innerHTML = "Energize the Replicantis and expand their space." +
+				"<br>Cost: " + shorten(QCs.data[1].expandCost()) + " Replicanti Energy" +
+				"<br>(" + getFullExpansion(QCs_save.qc1.expands) + " Expansions)"
+			getEl("repExpand").className = QCs.data[1].canExpand() ? "storebtn" : "unavailablebtn"
+		}
 		if (QCs_tmp.qc5) QCs.data[5].updateDispOnTick()
 	} else {
 		let cost = getReplUnlCost()
