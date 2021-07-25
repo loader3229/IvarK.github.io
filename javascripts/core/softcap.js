@@ -243,8 +243,9 @@ var softcap_data = {
 		1: {
 			func: "log",
 			start: 1.5,
+			base: 1.5,
 			pow: 1,
-			mul: (1.5 - 1.3) / Math.log10(1.5),
+			mul: 0.2,
 			add: 1.3
 		}
 	},
@@ -712,7 +713,7 @@ var softcap_data = {
 var softcap_vars = {
 	pow: ["start", "pow", "derv"],
 	dilate: ["start", "base", "pow", "mul", "sub10"],
-	log: ["start", "pow", "mul", "add"],
+	log: ["start", "base", "pow", "mul", "add"],
 	logshift: ["shift", "pow", "add"]
 }
 
@@ -729,16 +730,16 @@ var softcap_funcs = {
 		x = x.times(start)
 		return x
 	},
-	log(x, start, pow = 1, mul = 1, add = 0) {
+	log(x, start, base = 10, pow = 1, mul = 1, add = 0) {
 		if (x <= start) return x
 
-		let x2 = Math.pow(Math.log10(x) * mul + add, pow)
+		let x2 = Math.pow(Math.log10(x) / Math.log10(base) * mul + add, pow)
 		return Math.min(x, x2)
 	},
-	log_decimal(x, start, pow = 1, mul = 1, add = 0) { 
+	log_decimal(x, start, base = 10, pow = 1, mul = 1, add = 0) { 
 		if (x.lte(start)) return x
 
-		let x2 = Decimal.pow(x.log10() * mul + add, pow)
+		let x2 = Decimal.pow(x.log(base) * mul + add, pow)
 		return Decimal.min(x, x2)
 	},
 	logshift: function (x, shift, pow, add = 0){
@@ -973,13 +974,13 @@ function getSoftcapStringEffect(id, num, amt, namenum){
 		return "Softcap of " + name + " " + inside + "."
 	}
 	if (func == "log") { // vars ["start", "pow", "mul", "add"]
-		let mult = (v[2] != undefined && Decimal.neq(v[2], 1)) ? ", times: " + softcapShorten(v[2]) : ""
+		let mult = (v[3] != undefined && Decimal.neq(v[3], 1)) ? ", times: " + softcapShorten(v[3]) : ""
 		let add = ""
-		if (v[3] != undefined) {
-			if (typeof v[3] != "number" || v[3] > 0) add = (v[3] != undefined && Decimal.neq(v[3], 0)) ? ", plus: " + softcapShorten(v[3]) : ""
-			else add = (v[3] != undefined) ? ", Mminus: " + softcapShorten(-1*v[3]) : ""
+		if (v[4] != undefined) {
+			if (typeof v[4] != "number" || v[4] > 0) add = (v[4] != undefined && Decimal.neq(v[4], 0)) ? ", plus: " + softcapShorten(v[4]) : ""
+			else add = (v[4] != undefined) ? ", Mminus: " + softcapShorten(-1*v[4]) : ""
 		}
-		let inside = "Start: " + softcapShorten(v[0]) + ", log (base 10) // " + "to the Power of " + softcapShorten(v[1]) + mult + add 
+		let inside = "Start: " + softcapShorten(v[0]) + ", log (base " + v[1] + ") // " + "to the Power of " + softcapShorten(v[2]) + mult + add 
 		return "Softcap of " + name + " " + inside + "."
 	} 
 	return "oops someone messed up"

@@ -1559,7 +1559,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/23/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/24/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -3460,6 +3460,10 @@
 				Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and <span id="pc_eff2" style="font-size: 20px"></span> to aQs gain exponent. (starting from 100 aQs)<br>
 				<button class="storebtn" style="font-size: 100%; width:200px" onclick="exitChallenge()">Exit Challenge</button>
 				<table id="pc_table" align="center" style="margin: auto"></table>
+				<span id="pc_shrunker_div">
+					You have <span id="pc_shrunker" style="font-size: 20px">0</span> unspent PC shrunkers.<br>
+					<button class="storebtn" style="width: 180px; height: 60px" onclick="PCs.reset()">Respec, but reset the combinations.</button>
+				</span>
 			</div>
 			<div class="footer"></div>
 		</div>
@@ -4485,7 +4489,10 @@
 				</tr>
 			</table>
 		</div>
-		<div class='quantumtab' id='gluons'><table class="qTable">
+		<div class='quantumtab' id='gluons'>
+		<p id="qc8_note"></p>
+		<button id="qc8_clear" class="storebtn" style="font-size: 100%; width:200px" onclick="QCs.data[8].clear()">Clear kinds</button>
+		<table class="qTable">
 			<tr>
 				<td class="red">
 					<span style="font-size: 15px"><span id="rg" style="font-size: 30px">0</span> green-antired</span>
@@ -4788,13 +4795,6 @@
 			<button class="storebtn" id="pos_toggle" style="width: 120px" onclick="pos.clearSwaps()">Clear</button>
 			<button class="storebtn" id="pos_toggle" style="width: 120px" onclick="pos.cancelSwaps()">Cancel</button>
 			<button class="storebtn" id="pos_toggle" style="width: 120px" onclick="pos.applySwaps()">Apply</button>
-			<div id="early_charge">
-				<br>
-				<b style="font-size: 20px">Early Charge</b> (not implemented)
-				<br>
-				<button class="storebtn" id="pos_toggle" style="width: 120px">Early charge</button>
-				<button class="storebtn" id="pos_toggle" style="width: 120px">Respec</button>
-			</div>
 		</div>
 		<div id="pos_boost_div" style="vertical-align: top">
 			<div id="entangle_div_pos">

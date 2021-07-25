@@ -84,6 +84,14 @@ var PCs = {
 		if (data === undefined) data = this.setup()
 		PCs_save = data
 
+		if (data.best === undefined) {
+			data.best = {}
+			data.shrunkers = {
+				unspent: 0,
+				spent: {}
+			}
+		}
+
 		this.updateTmp()
 	},
 
@@ -104,6 +112,9 @@ var PCs = {
 			data.pos_comps[id[0]]++
 			data.pos_comps[id[1]]++
 		}
+
+		//Milestones
+		for (var i = 1; i <= 8; i++) PCs_save.best[i] = Math.max(PCs_save.best[i] || 0, data.pos_comps[i])
 
 		//Level up!
 		var oldLvl = PCs_save.lvl
@@ -146,7 +157,7 @@ var PCs = {
 		return PCs.unl() && (PCs_save.comps.includes(pc) || PCs_save.skips.includes(pc))
 	},
 	milestoneDone(pos) {
-		return PCs.unl() && PCs_tmp.pos_comps && PCs_tmp.pos_comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
+		return PCs.unl() && PCs_save.best && PCs_save.best[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
 	},
 	lvlReq(x) {
 		let r = PCs.data.lvls[x]
@@ -203,8 +214,8 @@ var PCs = {
 		if (!PCs.data.setupHTML) return
 
 		for (var i = 1; i <= 8; i++) {
-			getEl("pc_comp" + i + "_div").style.display = PCs_tmp.pos_comps[i] ? "" : "none"
-			getEl("pc_comp" + i).textContent = PCs_tmp.pos_comps[i] + " / 8"
+			getEl("pc_comp" + i + "_div").style.display = PCs_save.best[i] ? "" : "none"
+			getEl("pc_comp" + i).textContent = PCs_save.best[i] + " / 8"
 		}
 
 		getEl("pc_lvl").textContent = getFullExpansion(PCs_save.lvl)
@@ -215,6 +226,8 @@ var PCs = {
 		getEl("pc_eff2").textContent = "^" + PCs_tmp.eff2.toFixed(3)
 
 		this.showMilestones(PCs_tmp.milestone || 0)
+
+		getEl("pc_shrunker_div").style.display = QCs.done(8) ? "" : "none"
 	},
 	showMilestones(qc) {
 		PCs_tmp.milestone = qc
@@ -226,6 +239,15 @@ var PCs = {
 				getEl("qc_milestone" + i).textContent = PCs.milestones[qc * 10 + i] || "???"
 			}
 		}
+	},
+	reset() {
+		if (confirm("You will keep your milestones and level, and bring all your Shrunkers back. Are you sure do you want to reset?"))
+		PCs_save.shrunkers = {
+			unspent: 0,
+			spent: {}
+		}
+		PCs_save.comps = []
+		quantum(false, true)
 	}
 }
 var PCs_save = undefined

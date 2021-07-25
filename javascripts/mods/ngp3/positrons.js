@@ -128,7 +128,6 @@ var pos = {
 		getEl("pos_boost_div").style.display = pos_tmp.tab == "boost" ? "" : "none"
 		getEl("pos_cloud_div").style.display = pos_tmp.tab == "cloud" ? "" : "none"
 		getEl("pos_cloud_req").innerHTML = unl || !enB.has("pos", 2) ? "" : "<br>To unlock Positron Cloud, you need to get " + getFullExpansion(enB.getMastered("pos", 2)) + " Positronic Boosters."
-		if (!unl) return
 
 		//Mechanic
 		data = {
@@ -173,11 +172,6 @@ var pos = {
 		}
 		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " excluded" : "") + (data.swaps_next == 0 ? "" : " (Requires " + shortenDimensions(this.swapCost(data.swaps_next)) + " sacrificed quantum energy)")
 		getEl("pos_toggle").style.display = QCs.in(2) ? "none" : ""
-
-		//QC5
-		var qc5 = pos_save.early_charge
-		if (qc5) getEl("pos_boost" + qc5 + "_btn").className = "chosenbtn3 posbtn"
-		getEl("early_charge").style.display = "none"
 	},
 	updateTmpOnTick() {
 		if (!this.unl()) return

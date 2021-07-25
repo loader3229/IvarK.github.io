@@ -493,6 +493,8 @@ var enB = {
 		return true
 	},
 	mastered(type, x) {
+		if (type == "glu" && QCs.in(8)) return false
+
 		var data = this[type]
 		return data.amt() >= this.getMastered(type, x) && data.amt() >= data[x].req
 	},
@@ -500,8 +502,16 @@ var enB = {
 		var data = this[type]
 		return (tmp.dtMode && data[x].masReqDeath) || (tmp.exMode && data[x].masReqExpert) || data[x].masReq
 	},
+	anti(type, x) {
+		if (type == "glu" && QCs.in(8)) return true
+		return this[type][x].anti
+	},
 
 	colorUsed(x) {
+		if (QCs.in(8)) {
+			var qc8 = QCs_save.qc8
+			return qc8.order.length ? qc8.order[qc8.index] : ""
+		}
 		if (qu_save.entColor === undefined) qu_save.entColor = "rg"
 		return qu_save.entColor
 	},
@@ -511,11 +521,19 @@ var enB = {
 		if (!gluon) return
 
 		var r = data.type == gluon[0] || data.type == gluon[1]
-		if (data.anti) r = !r
+		if (this.anti(type, x)) r = !r
 		return r
 	},
 
 	choose(x) {
+		if (QCs.in(8)) {
+			var qc8 = QCs_save.qc8
+			if (qc8.order.length < 2 && !qc8.order.includes(x)) {
+				qc8.order.push(x)
+				QCs.data[8].updateDisp()
+			}
+			return
+		}
 		if ((enB.colorUsed()) == x) return
 		if (!qu_save.entBoosts || qu_save.gluons.rg.max(qu_save.gluons.gb).max(qu_save.gluons.br).eq(0)) {
 			alert("You need to get at least 1 Entangled Boost and have gluons before choosing a type!")
@@ -774,7 +792,7 @@ var enB = {
 			title: "Color Subcharge",
 			type: "b",
 			eff(x) {
-				return 1 - 1 / (Math.log10(x / 30 + 1) / 5 + 1)
+				return 1 - 1 / (Math.log10(x / 50 + 1) / 2 + 1)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -796,9 +814,11 @@ var enB = {
 		},
 
 		amt() {
+			if (pos_save === undefined) return 0
 			return pos_save.boosts
 		},
 		engAmt() {
+			if (pos_save === undefined) return 0
 			return pos_save.eng
 		},
 		set(x) {
@@ -838,6 +858,8 @@ var enB = {
 		},
 
 		lvl(x, next) {
+			if (pos_save === undefined) return this[x].tier
+
 			var swaps = next ? pos_tmp.next_swaps : pos_save.swaps
 			if (swaps[x]) x = swaps[x]
 			return this[x].tier
@@ -996,7 +1018,7 @@ var enB = {
 		8: {
 			req: 90,
 			masReq: 0,
-			chargeReq: 35,
+			chargeReq: 25,
 
 			title: "MT-Force Preservation",
 			tier: 3,
@@ -1012,17 +1034,15 @@ var enB = {
 		9: {
 			req: 96,
 			masReq: 0,
-			chargeReq: 7,
+			chargeReq: 30,
 
 			title: "Overpowered Infinities",
 			tier: 2,
 			type: "b",
 			anti: true,
 			eff(x) {
-				var expExp = Math.log10(Math.log10(x + 1) * 3 + 1)
-				var expDiv = 25 / Math.log2(Math.log10(x + 1) + 2)
-
-				return Math.pow(Decimal.max(getInfinitied(), 10).log10(), expExp) / expDiv
+				var exp = Math.log2(x / 100 + 1) / 10
+				return Decimal.max(getInfinitied(), 10).log10() * exp
 			},
 			effDisplay(x) {
 				return "^" + shorten(x)
@@ -1123,7 +1143,7 @@ var enB = {
 		}
 		var data = enB
 		var typeData = data[type]
-		return !data.active(type, e) ? "black" : type == "pos" && typeData.charged(e) ? "yellow" : data.mastered(type, e) ? "lime" : enB.colorMatch(type, e) ? colors[typeData[e].type] + (typeData[e].anti ? "_anti" : "") : "grey"
+		return !data.active(type, e) ? "black" : type == "pos" && typeData.charged(e) ? "yellow" : data.mastered(type, e) ? "lime" : enB.colorMatch(type, e) ? colors[typeData[e].type] + (data.anti(type, e) ? "_anti" : "") : "grey"
 	},
 	updateUnlock() {
 		let gluUnl = enB.glu.unl()
@@ -1147,8 +1167,8 @@ var enB = {
 			if (!active) list.push("Inactive")
 			if (charged) list.push("<b class='charged'>Charged (" + data.chargeEff(i) + "x)</b>")
 			else if (mastered) list.push("Mastered")
-			if (!mastered || shiftDown) list.push((data[i].anti ? "anti-" : "") + data[i].type.toUpperCase() + "-type boost")
-			if (!mastered) list.push("Get " + getFullExpansion(enB.getMastered(type, i)) + " " + data.name + " Boosters to master")
+			if (!mastered || shiftDown) list.push((this.anti(type, i) ? "anti-" : "") + data[i].type.toUpperCase() + "-type boost")
+			if (!mastered && !QCs.in(8)) list.push("Get " + getFullExpansion(enB.getMastered(type, i)) + " " + data.name + " Boosters to master")
 
 			getEl("enB_" + type + i + "_name").textContent = shiftDown ? (data[i].title || "Unknown title.") : (data.name + " Boost #" + i)
 			getEl("enB_" + type + i + "_type").innerHTML = "(" + wordizeList(list, false, " - ", false) + ")" + (data[i].activeDispReq ? "<br>Requirement: " + data[i].activeDispReq() : "")
@@ -1325,7 +1345,6 @@ function updateGluonsTabOnUpdate(mode) {
 	if (typeUsed != "") {
 		getEl("entangle_" + typeUsed).className = "gluonupgrade chosenbtn"
 		getEl("entangle_" + typeUsed + "_pos").className = "gluonupgrade chosenbtn"
-		getEl("entangle_" + typeUsed + "_bonus").textContent = "+" + shorten(getQEGluonsPortion() * tmp.qe.mult / tmp.qe.div) + " quantum energy, " + shorten(enB.glu.gluonEff(qu_save.gluons[typeUsed])) + "x effective boosters"
 	}
 
 	getEl("masterNote").style.display = enB.mastered("glu", 1) ? "" : "none"

@@ -25,6 +25,11 @@ var QCs = {
 		if (QCs_save.qc1.expands === undefined) QCs_save.qc1.expands = 0
 		if (typeof(QCs_save.qc2) !== "number") QCs_save.qc2 = QCs_save.cloud_disable || 1
 
+		if (QCs_save.qc8 === undefined) QCs_save.qc8 = {
+			index: 0,
+			order: []
+		}
+
 		if (QCs_save.best_exclusion || QCs_save.perks_unl) {
 			QCs_save.mod_comps = {}
 			delete QCs_save.best_exclusion
@@ -41,7 +46,6 @@ var QCs = {
 		QCs_save.qc5 = 0
 		QCs_save.qc6 = 0
 		QCs_save.qc7 = 0
-		QCs_save.qc8 = undefined //Same as QC5
 	},
 	data: {
 		max: 8,
@@ -346,11 +350,11 @@ var QCs = {
 		},
 		8: {
 			unl: () => true,
-			desc: () => "You must exclude one type of galaxy in each type of run: normal and dilated Eternity runs.",
-			goal: () => false,
-			goalDisp: () => "(not implemented)",
-			goalMA: new Decimal(1),
-			hint: "Trial and error.",
+			desc: () => "All Entangled Boosts are unmastered and anti'd. You have to setup a cycle of 2 chosen gluons, and Big Crunching switches your gluon kind to the next one.",
+			goal: () => enB.glu.boosterEff() >= 125,
+			goalDisp: () => "125 Effective Boosters",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 2.95),
+			hint: "Make your Auto-Crunch faster than Auto-Eternity.",
 
 			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
 			perkReqs: [1/0, 1/0],
@@ -358,9 +362,38 @@ var QCs = {
 				return 1
 			},
 
-			rewardDesc: (x) => "You can enter a harder version of Quantum Challenges, which you can skip a combination on completion.",
+			rewardDesc: (x) => "Unlock new comprehensive content for Paired Challenges.",
 			rewardEff(str) {
 				return 1
+			},
+
+			switch() {
+				var qc8 = QCs_save.qc8
+				qc8.index++
+				if (qc8.index >= qc8.order.length) qc8.index = 0
+				QCs.data[8].updateDisp()
+			},
+			updateDisp() {
+				var qc8 = QCs_save.qc8
+				var qc8_in = QCs.in(8)
+				getEl("qc8_note").innerHTML = qc8_in ? "You have to Big Crunch to switch your gluon kind!<br>Used kinds: " + qc8.order.length + " / 2" : ""
+				getEl("qc8_clear").style.display = qc8_in ? "" : "none"
+
+				if (qc8_in) {
+					updateGluonsTabOnUpdate()
+
+					var kinds = ["rg", "gb", "br"]
+					for (var k = 0; k < kinds.length; k++) {
+						var kind = kinds[k]
+						getEl("entangle_" + kind).className = qc8.order[qc8.index] == kind ? "chosenbtn2" : qc8.order.includes(kind) ? "chosenbtn" : qc8.order.length == 2 ? "unavailablebtn" : "gluonupgrade " + kind
+					}
+				}
+			},
+			clear() {
+				if (!confirm("Are you sure?")) return
+				QCs_save.qc8.index = 0
+				QCs_save.qc8.order = []
+				QCs.restart()
 			}
 		},
 	},
@@ -495,12 +528,13 @@ var QCs = {
 		let unl = this.divInserted && this.unl() && pH.shown("quantum")
 
 		//In Quantum Challenges
-		getEl("qc_restart").style.display = QCs.in(2) || QCs.in(8) ? "" : "none"
+		getEl("qc_restart").style.display = QCs.in(2) || QCs.in(3) ? "" : "none"
 		getEl("repCompress").style.display = QCs_tmp.qc1 ? "" : "none"
 		getEl("repExpand").style.display = PCs.milestoneDone(12) ? "" : "none"
 		this.data[2].updateCloudDisp()
 		this.data[4].updateDisp()
 		this.data[5].updateDisp()
+		this.data[8].updateDisp()
 
 		//Quantum Challenges
 		if (!unl) return
