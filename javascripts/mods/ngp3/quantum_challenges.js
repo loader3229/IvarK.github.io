@@ -51,7 +51,7 @@ var QCs = {
 		max: 8,
 		1: {
 			unl: () => true,
-			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and TT cost multipliers are doubled. (only if Mastery Studies get resetted)",
+			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and TT cost multipliers are doubled.",
 			goal: () => player.money.e >= tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11,
 			goalDisp: () => shortenCosts(Decimal.pow(10, tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11)) + " antimatter",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.35),
@@ -62,7 +62,7 @@ var QCs = {
 				return 0.1
 			},
 
-			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkDesc: (x) => "Each Replicated Compressor gives 10s of Quantum-layer ticks.",
 			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
@@ -151,7 +151,7 @@ var QCs = {
 				return x
 			},
 
-			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkDesc: (x) => "If excluded, then charged boosts give free Positronic Charge instead.",
 			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
@@ -176,10 +176,10 @@ var QCs = {
 		},
 		3: {
 			unl: () => true,
-			desc: () => "There are only Meta Dimensions that produce antimatter, but successfully dilating reduces antimatter production, and you only gain TP by exiting dilation.",
-			goal: () => player.dilation.times >= 3,
-			goalDisp: () => "3 successful dilation runs",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 0.13),
+			desc: () => "There are only Meta Dimensions that produce AM and IP, but successfully dilating reduces the AM production, and you only gain TP by exiting dilation.",
+			goal: () => player.dilation.tachyonParticles.gte(1e6),
+			goalDisp: () => shortenCosts(1e6) + " Tachyon Particles",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 0.2),
 			hint: "Try not to automate dilation, and also not to dilate time frequently.",
 
 			rewardDesc: (x) => "You sacrifice 30% of Meta Dimension Boosts instead of 25%.",
@@ -187,7 +187,7 @@ var QCs = {
 				return 1
 			},
 
-			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkDesc: (x) => "Time multiplier is always 1x for the Meta Accelerator base.",
 			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
@@ -213,7 +213,7 @@ var QCs = {
 				return
 			},
 
-			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkDesc: (x) => "Total galaxies reduce the QC goal by ^" + shorten(1 / x) + ".",
 			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
@@ -268,7 +268,7 @@ var QCs = {
 				return 1
 			},
 
-			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkDesc: (x) => "Replicated Energy effect is doubled.",
 			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
@@ -316,7 +316,7 @@ var QCs = {
 				return x
 			},
 
-			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
+			perkDesc: (x) => "QC6 variable can’t go below 0.",
 			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
@@ -337,14 +337,14 @@ var QCs = {
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.3),
 			hint: "Do not buy MS22 and MS53/54.",
 
-			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
-			perkReqs: [1/0, 1/0],
-			perkEff() {
+			rewardDesc: (x) => "Meta Accelerator slowdown is 10% slower, and unlock Paired Challenges.",
+			rewardEff(str) {
 				return 1
 			},
 
-			rewardDesc: (x) => "Meta Accelerator slowdown is 10% slower, and unlock Paired Challenges.",
-			rewardEff(str) {
+			perkDesc: (x) => "You passively generate 10x more TT.",
+			perkReqs: [1/0, 1/0],
+			perkEff() {
 				return 1
 			}
 		},
@@ -356,14 +356,14 @@ var QCs = {
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.95),
 			hint: "Make your Auto-Crunch faster than Auto-Eternity.",
 
-			perkDesc: (x) => "Boost something by " + shorten(x) + "x",
-			perkReqs: [1/0, 1/0],
-			perkEff() {
+			rewardDesc: (x) => "Unlock new comprehensive content for Paired Challenges.",
+			rewardEff(str) {
 				return 1
 			},
 
-			rewardDesc: (x) => "Unlock new comprehensive content for Paired Challenges.",
-			rewardEff(str) {
+			perkDesc: (x) => "You can’t lose your Eternity time.",
+			perkReqs: [1/0, 1/0],
+			perkEff() {
 				return 1
 			},
 
@@ -563,7 +563,7 @@ var QCs = {
 			}
 		}
 
-		getEl("qc_perks").style.display = PCs.unl() ? "" : "none"
+		getEl("qc_perks").style.display = QCs.done(8) ? "" : "none"
 		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : "View perks"
 		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? "Note: Perks only work in specific Quantum Challenge. However, mastered Perks work in any Quantum Challenge!" : ""
 

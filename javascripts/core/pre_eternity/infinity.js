@@ -38,6 +38,8 @@ function getIPGainDiv(){
 }
 
 function gainedInfinityPoints(next) {
+	if (QCs.in(3)) return QCs.data[3].amProd()
+
 	let div = getIPGainDiv()
 	let uIPM = player.dilation.upgrades.includes("ngp3c5") && tmp.ngC
 

@@ -134,7 +134,7 @@ var softcap_data = {
 		},
 		2: {
 			func: "dilate",
-			start: new Decimal(3e79),
+			start: () => new Decimal(PCs.milestoneDone(73) ? 1/0 : 3e79),
 			base: 10,
 			pow: 3/4
 		},
@@ -143,7 +143,7 @@ var softcap_data = {
 		name: "effective Replicantis",
 		1: {
 			func: "dilate",
-			start: () => Decimal.pow(10, 9e6 + (QCs_tmp.qc1 ? 1e6 * QCs_save.qc1.expands : 0)),
+			start: () => Decimal.pow(10, 9e6 + (QCs_tmp.qc1 ? 1e6 * Math.sqrt(QCs_save.qc1.expands) : 0)),
 			base: 10,
 			pow: 4/5,
 			mul: 0.5

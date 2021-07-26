@@ -925,7 +925,8 @@ var enB = {
 				exp /= 30
 				return {
 					acc: Decimal.pow(base, exp),
-					baseMult: baseMult
+					baseMult: baseMult,
+					igal: hasAch("ng3p27") ? Math.log10(exp * Math.log10(base) / 10 + 1) / 2 + 1 : undefined
 				}
 			},
 			effDisplay(x) {

@@ -304,6 +304,7 @@ function getMADimBoostPowerExp(ma) {
 	let power = 8
 	if (hasDilationUpg("ngpp5")) power++
 	if (hasMTS(262)) power += doubleMSMult(0.5)
+	if (enB.active("pos", 2) && enB_tmp.pos2.igal) power *= enB_tmp.pos2.igal
 	if (isNanoEffectUsed("ma_effect_exp")) power += tmp.nf.effects.ma_effect_exp
 	return power
 }
@@ -381,7 +382,7 @@ function updateMetaDimensions () {
 	getEl("quantum").innerHTML = tmp.quUnl ? "Gain " + shortenDimensions(quarkGain()) + " aQs." : 'Reset your progress for a new layer...'
 	getEl("quantum").className = pH.can("quantum") ? 'quantumbtn' : 'unavailablebtn'
 
-	getEl("metaAccelerator").textContent = enB.active("pos", 2) ? "Meta Accelerator: " + shorten(enB_tmp.pos2.acc) + "x to MA, DT, and replicate interval" : ""
+	getEl("metaAccelerator").textContent = enB.active("pos", 2) ? "Meta Accelerator: " + shorten(enB_tmp.pos2.acc) + "x to MA, DT, and replicate interval" + (enB_tmp.pos2.igal ? ", ^" + shorten(enB_tmp.pos2.igal) + " to MA effect" : "") : ""
 }
 
 function getDil15Bonus() {
