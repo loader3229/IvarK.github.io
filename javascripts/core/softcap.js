@@ -143,7 +143,7 @@ var softcap_data = {
 		name: "effective Replicantis",
 		1: {
 			func: "dilate",
-			start: () => Decimal.pow(10, 9e6 + (QCs_tmp.qc1 ? 1e6 * Math.sqrt(QCs_save.qc1.expands) : 0)),
+			start: () => Decimal.pow(10, 9e6 + (QCs_tmp.qc1 ? 1e6 * QCs_save.qc1.expands : 0)),
 			base: 10,
 			pow: 4/5,
 			mul: 0.5
@@ -306,66 +306,6 @@ var softcap_data = {
 			pow() {
 				return getBosonicAMProductionSoftcapExp(6)
 			},
-			derv: true
-		}
-	},
-	idbase: {
-		name: "log base 10 of initial infinity dimension power",
-		1: {
-			func: "pow",
-			start: 1e14,
-			pow: .90,
-			derv: true
-		},
-		2: {
-			func: "pow",
-			start: 1e15,
-			pow: .85,
-			derv: true
-		},
-		3: {
-			func: "pow",
-			start: 3e15,
-			pow: .80,
-			derv: true
-		},
-		4: {
-			func: "pow",
-			start: 1e16,
-			pow: .75,
-			derv: true
-		},
-		5: {
-			func: "pow",
-			start: 3e16,
-			pow: .70,
-			derv: true
-		},
-		6: {
-			func: "pow",
-			start: 1e17,
-			pow: .65,
-			derv: true
-		}
-	},
-	working_ts: {
-		name: "log base 10 of tickspeed effect",
-		1: {
-			func: "pow",
-			start: 1e15,
-			pow: .9,
-			derv: true
-		},
-		2: {
-			func: "pow",
-			start: 1e16,
-			pow: .85,
-			derv: true
-		},
-		3: {
-			func: "pow",
-			start: 1e17,
-			pow: .8,
 			derv: true
 		}
 	},
@@ -853,8 +793,6 @@ function getSoftcapAmtFromId(id){
 		gp: () => colorBoosts.g,
 		ig_log_high: () => tmp.ig.max(1).log10(),
 		bam: () => getBosonicAMProduction(),
-		idbase: () => getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).max(1).log10(),
-		working_ts: () => getTickspeed().pow(-1).log10(),
 		bu45: () => bu.effects[45](),
 		mptd_log: () => Decimal.log10(tmp.mptb) * tmp.mpte,
 
@@ -888,7 +826,6 @@ function hasSoftcapStarted(id, num){
 		NOTE: this excludes Big Rip, and other endings that are at the end of words 
 		This currently includes: _ngC, _big_rip, _dilation, _ngmX for integers of length 1 X
 		*/
-		idbase: tmp.ngp3,
 		rep: tmp.ngp3,
 		rInt: ECComps("eterc14"),
 		ts83: tmp.ngp3,
@@ -1022,8 +959,6 @@ function updateSoftcapStatsTab(){
 		gp: "softcap_gp",
 		ig_log_high: "softcap_ig",
 		bam: "softcap_bam",
-		idbase: "softcap_idbase",
-		working_ts: "softcap_workts",
 		bu45: "softcap_bu45",
 		mptd_log: "softcap_mptd",
 		// Condensened:

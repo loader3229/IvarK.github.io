@@ -136,7 +136,7 @@ function bestInfinityDisplay(){
 		getEl("infinityStatistics").style.display = ""
 		getEl("bestInfinity").textContent = "Your fastest Infinity is in " + timeDisplay(player.bestInfinityTime) + "."
 		getEl("thisInfinity").textContent = "You have spent " + timeDisplay(player.thisInfinityTime) + " in this Infinity."
-		getEl("infinitied").textContent = "You have Infinitied " + getFullExpansion(player.infinitied) + " time" + (player.infinitied == 1 ? "" : "s") + (player.eternities!==0||player.eternitiesBank>0 ? " this Eternity." : ".")
+		getEl("infinitied").textContent = "You have Infinitied " + getFullExpansion(player.infinitied) + " time" + (player.infinitied == 1 ? "" : "s") + (pH.did("eternity") ? " this Eternity." : ".")
 	}
 	if (pH.shown("infinity") && player.infinitiedBank > 0) getEl("infinityStatistics").style.display = ""
 }
@@ -866,7 +866,6 @@ function bankedInfinityDisplay(){
 	var bankedInfGain=gainBankedInf()
 	getEl("bankedInfGain").style.display = bankedInfGain>0 ? "block" : "none"
 	getEl("bankedInfGain").textContent = "You will gain " + getFullExpansion(bankedInfGain) + " banked infinities on next Eternity."
-	if (hasAch("ng3p73")) updateBankedEter(true)
 }
 
 function updateNGM2RewardDisplay(){

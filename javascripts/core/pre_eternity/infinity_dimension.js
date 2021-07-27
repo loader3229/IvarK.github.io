@@ -124,11 +124,6 @@ function getBestUsedIDPower(){
 function getStartingIDPower(tier){
 	let dim = player["infinityDimension" + tier]
 	let mult = dim.power
-	if (mult.gt(1) && tmp.ngp3){
-		let log = mult.log10()
-		log = softcap(log, "idbase")
-		mult = Decimal.pow(10, log)
-	}
 	return mult
 }
 

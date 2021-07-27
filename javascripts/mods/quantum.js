@@ -67,16 +67,6 @@ function getQCtoQKEffect(){
 	return ret
 }
 
-function getQKAchBonusLog() {
-	let log = 0
-	if (hasAch("ng3p33")) log += Math.log10(getQCtoQKEffect())
-	if (hasAch("ng3p53")) log += qu_save.bigRip.spaceShards.plus(1).log10()
-	if (hasAch("ng3p65")) log += getTotalRadioactiveDecays()
-	if (hasAch("ng3p85")) log += Math.pow(player.ghostify.ghostlyPhotons.enpowerments, 2)
-	if (hasAch("ng3p93")) log += Math.log10(500)
-	return log
-}
-
 function getQuantumReqSource() {
 	return tmp.ngp3 ? player.meta.bestAntimatter : player.meta.antimatter
 }
@@ -89,22 +79,27 @@ function quarkGain() {
 
 	if (!tmp.ngp3) return Decimal.pow(10, ma.log(10) / Math.log10(Number.MAX_VALUE) - 1).floor()
 
-	let log = Math.max(ma.div(maReq).log(2) / 2048 * 5/4, 0)
+	let log = Math.max(ma.div(maReq).log(2) * 5 / 8192, 0)
 	let logExp = 3
 	log = Math.pow(log + 1, logExp) - 1
+
 	if (log > 3 && PCs.unl()) log = Math.pow(log / 3, PCs_tmp.eff2) * 3
+	if (enB.active("pos", 11)) log += player.eternityPoints.max(1).log10() * enB_tmp.pos11
 
 	return softcap(Decimal.pow(10, log), "aqs").max(1)
 }
 
 function quarkGainNextAt(qk) {
-	let logExp = 3
-	if (PCs.unl()) logExp *= PCs_tmp.eff2
-
 	if (!qk) qk = quarkGain()
-	qk = Decimal.add(qk, 1).log10() - getQKAchBonusLog()
+
+	qk = Decimal.add(qk, 1).log10()
+	if (enB.active("pos", 11)) qk -= player.eternityPoints.max(1).log10() * enB_tmp.pos11
+	if (qk > 3 && PCs.unl()) qk = Math.pow(qk / 3, 1 / PCs_tmp.eff2) * 3
+
+	let logExp = 3
 	qk = Math.pow(qk + 1, 1 / logExp) - 1
-	return Decimal.pow(Number.MAX_VALUE, qk * 2).times(getQuantumReq())
+
+	return Decimal.pow(2, qk * 8192 / 5).times(getQuantumReq())
 }
 
 function toggleQuantumConf() {
@@ -234,14 +229,12 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		if (qu_save.times >= 1e4) giveAchievement("Prestige No-lifer")
 
 		if (hasAch("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
-		player.eternitiesBank = nA(player.eternitiesBank, bankedEterGain)
 	} //bounds the else statement to if (force)
 	var oheHeadstart = bigRip ? tmp.bruActive[2] : tmp.ngp3
 	var keepABnICs = oheHeadstart || bigRip || hasAch("ng3p51")
 	var oldTime = qu_save.time
 	qu_save.time = 0
 	updateQuarkDisplay()
-	updateBankedEter()
 
 	if (player.tickspeedBoosts !== undefined) player.tickspeedBoosts = 0
 	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25);
@@ -485,16 +478,16 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	updateTimeStudyButtons()
 	updateDilationUpgradeCosts()
 	drawStudyTree()
-	handleDispAndTmpOnQuantum(bigRip)
+	handleDispOnQuantum(bigRip)
 
 	Marathon2 = 0;
 	setInitialMoney()
 	getEl("quantumConfirmBtn").style.display = "inline-block"
 }
 
-function handleDispAndTmpOnQuantum(bigRip, prestige) {
+function handleDispOnQuantum(bigRip, prestige) {
 	if (!bigRip) bigRip = inBigRip()
-	handleDispAndTmpOutOfQuantum(bigRip)
+	handleDispOutOfQuantum(bigRip)
 	handleQuantumDisplays(prestige)
 
 	if (!tmp.ngp3) return
@@ -539,7 +532,7 @@ function handleDispAndTmpOnQuantum(bigRip, prestige) {
 	}
 }
 
-function handleDispAndTmpOutOfQuantum(bigRip) {
+function handleDispOutOfQuantum(bigRip) {
 	if (!bigRip) bigRip = inBigRip()
 
 	let keepQuantum = pH.shown("quantum")
@@ -560,15 +553,15 @@ function handleDispAndTmpOutOfQuantum(bigRip) {
 }
 
 function handleQuantumDisplays(prestige) {
-	updateBankedEter()
 	qMs.updateDisplay()
 	if (!tmp.ngp3) return
 
 	updateLastTenQuantums()
 	updateAutoQuantumMode()
 
-	updateAssortPercentage()
 	updateColorCharge()
+	updateAssortPercentage()
+	updateQuarksTabOnUpdate()
 	updateGluonsTabOnUpdate()
 
 	QCs.updateDisp()

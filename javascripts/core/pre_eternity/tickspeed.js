@@ -314,7 +314,6 @@ function getTickspeedBeforePostMults() {
 		var log = 3 - tick.log10()
 		if (log > 25) tick = Decimal.pow(10, 3 - Math.sqrt(log) * 5)
 	}
-	if (tmp.ngp3 && tick.log10() < -1e15) tick = Decimal.pow(10, -softcap(-tick.log10(), "working_ts"))
 	if (tmp.ngC) tick = softcap(tick.pow(-1), "ts_ngC").pow(-1)
 	return tick
 }
@@ -351,7 +350,6 @@ function updateTickspeed() {
 	if (showTickspeed) {
 		let tick = getTickspeed()
 		label = (tick.e <= -1e9 ? "Ticks" : "Tickspeed") + ": " + getTickspeedText(tick)
-		if (!isTickDisabled() && tmp.ts.pre2.gt(tmp.ts.pre1)) label += " (" + formatReductionPercentage(tmp.ts.pre1.log10() / tmp.ts.pre2.log10()) + "% subluminal)"
 	}
 	if (player.currentChallenge == "postc3" || player.challenges.includes("postc3") || isIC3Trapped()) label = (showTickspeed ? label + ", Tickspeed m" : "M") + "ultiplier: " + formatValue(player.options.notation, player.postC3Reward, 2, 3)
 	let speeds = []

@@ -244,9 +244,10 @@ function updateNGP3TempStuff(init) {
 		//Quantum
 		QCs.updateTmpOnTick() //Quantum Challenges
 		pos.updateTmpOnTick() //Positrons
-		updateQEGainTmp() //Quantum Energy
+		updateQEGainTmp() //Quantum Energy + Quark Efficiency
+		updateGluonicBoosts() //Entangled + Positronic Boosts
+		updateColorPowers() //Color Powers
 
-		updateGluonicBoosts()
 		updateQuarkEnergyEffects()
 	}
 	if (mTs.unl() || init) {

@@ -128,7 +128,7 @@ var QCs = {
 				return true
 			},
 
-			expandCost: () => Math.pow(4, QCs_save.qc1.expands) * 1e7,
+			expandCost: () => Math.pow(Math.max(QCs_save.qc1.expands * 2, 1), 2) * 1e7,
 			canExpand: () => QCs_tmp.qc5 && QCs_save.qc5 >= QCs.data[1].expandCost(),
 			expand() {
 				if (!this.canExpand()) return
@@ -144,9 +144,9 @@ var QCs = {
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
 			hint: "Mess around Positronic Cloud by swapping and excluding.",
 
-			rewardDesc: (x) => "Color charge also multiply a color power that's used by it. (" + shorten(x) + "x)",
+			rewardDesc: (x) => "Color charge boosts itself by " + shorten(x) + "x.",
 			rewardEff(str) {
-				let x = Math.log10(colorCharge.normal.charge + 1) / 2 + 1
+				let x = Math.log10((str || colorCharge.normal.charge) + 1) / 2 + 1
 				if (PCs.milestoneDone(21)) x *= x
 				return x
 			},
@@ -374,6 +374,8 @@ var QCs = {
 				QCs.data[8].updateDisp()
 			},
 			updateDisp() {
+				if (!tmp.quUnl) return
+
 				var qc8 = QCs_save.qc8
 				var qc8_in = QCs.in(8)
 				getEl("qc8_note").innerHTML = qc8_in ? "You have to Big Crunch to switch your gluon kind!<br>Used kinds: " + qc8.order.length + " / 2" : ""
@@ -419,7 +421,7 @@ var QCs = {
 		let data = QCs_tmp
 		for (let x = this.data.max; x; x--) {
 			if (data.unl.includes(x)) {
-				data.rewards[x] = this.data[x].rewardEff(1)
+				data.rewards[x] = this.data[x].rewardEff()
 				if (PCs.unl()) data.perks[x] = this.data[x].perkEff(1)
 			}
 			if (this.data[x].updateTmp) this.data[x].updateTmp()

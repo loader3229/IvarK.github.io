@@ -558,7 +558,6 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	player.postC3Reward = new Decimal(1)
 	player.eternityPoints = new Decimal(0)
 	player.eternities = bm ? 1e13 : 1e10
-	player.eternitiesBank = 0
 	player.thisEternity = 0
 	player.bestEternity = 9999999999
 	player.eternityUpgrades = bm ? [1, 2, 3, 4, 5, 6] : []
@@ -768,7 +767,6 @@ function doQuantumGhostifyResetStuff(implode, bm){
 	updateColorCharge()
 	updateGluonsTabOnUpdate("prestige")
 	updateQuantumWorth("quick")
-	updateBankedEter()
 	QCs.updateTmp()
 	QCs.updateDisp()
 	updateReplicants("prestige")

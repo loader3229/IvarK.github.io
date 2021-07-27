@@ -166,7 +166,7 @@ var pos = {
 		}
 
 		for (var i = 1; i <= 3; i++) {
-			getEl("pos_cloud" + i + "_cell").innerHTML = "<b>Tier " + i + ": " + (data[i] || 0) + " / " + i * 2 + "</b>" + (data[i] == i * 2 ? "<br>Bonus: +" + (i * 25) + "% color charge" : "")
+			getEl("pos_cloud" + i + "_cell").innerHTML = "<b>Tier " + i + ": " + (data[i] || 0) + " / " + i * 2 + "</b>" + (data[i] == i * 2 ? "<br>Bonus: +25% color charge" : "")
 			getEl("pos_cloud" + i + "_cell").className = "pos_tier " + (data[i] >= i * 2 ? "green" : "")
 			getEl("pos_cloud" + i + "_cell").style.display = data[i] ? "" : "none"
 		}

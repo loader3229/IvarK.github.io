@@ -278,7 +278,6 @@ function startEternityChallenge(n) {
 	if (pH.did("ghostify") && name == "eterc10") player.ghostify.under = false
 	let oldStat = getEternitied()
 	player.eternities = nA(player.eternities, gainEternitiedStat())
-	updateBankedEter()
 	player.thisEternity = 0
 	if (player.tickspeedBoosts != undefined) player.tickspeedBoosts = 0
 	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25);

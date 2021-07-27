@@ -1535,10 +1535,7 @@ function onAntimatterClick() {
 }
 
 function getEternitied() {
-	let banked = player.eternitiesBank
-	let total = player.eternities
-	if (banked && (!QCs.inAny() || hasNU(10))) total = nA(total, player.eternitiesBank)
-	return total
+	return player.eternities
 }
 
 function sacrificeConf() {
@@ -2335,7 +2332,6 @@ function onNotationChange() {
 		updateQuarksTabOnUpdate()
 		updateGluonsTabOnUpdate("notation")
 		updateQuantumWorth("notation")
-		updateBankedEter()
 		QCs.updateDisp()
 		updateMasteryStudyTextDisplay()
 		updateReplicants("notation")
@@ -3336,11 +3332,8 @@ function eternity(force, auto, forceRespec, dilated) {
 	player.thisEternity = PCs.milestoneDone(63) ? Math.max(player.thisEternity - 300, 0) : 0
 	forceRespec = doCheckECCompletionStuff() || forceRespec
 
-	var oldStat = getEternitied()
-	player.eternities = nA(player.eternities, gainEternitiedStat())
-
 	player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
-	updateBankedEter()
+	player.eternities = nA(player.eternities, gainEternitiedStat())
 
 	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
 	player.currentEternityChall = ""
@@ -4384,7 +4377,6 @@ function quantumOverallUpdating(diff){
 		//Color Powers
 		var colorShorthands=["r","g","b"]
 		for (var c = 0; c < 3; c++) qu_save.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
-		updateColorPowers()
 
 		if (hasMTS("d10")) replicantOverallUpdating(diff)
 		if (hasMTS("d11")) emperorDimUpdating(diff)
@@ -4635,7 +4627,7 @@ function doQuantumButtonDisplayUpdating(diff){
 	var showGain = !isQuantumFirst() ? "QK" : ""
 	getEl("quantumbtnFlavor").textContent = showGain != "" ? "" : QCs.inAny() ? "The unseening has been detected... Complete this challenging experiment!" : "The spacetime has been conceptualized... It's time to go quantum!"
 	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain " + shortenDimensions(quarkGain()) + " anti-quark" + (quarkGain().eq(1) ? "." : "s.") : ""
-	getEl("quantumbtnQKNextAt").textContent = showGain == "QK" && currentQKmin.lt(1) ? "Next at " + shorten(getQuantumReqSource()) + " / " + shorten(quarkGainNextAt()) + " MA" : ""
+	getEl("quantumbtnQKNextAt").textContent = showGain == "QK" && currentQKmin.lt(10) ? "Next at " + shorten(getQuantumReqSource()) + " / " + shorten(quarkGainNextAt()) + " MA" : ""
 	if (showGain != "QK" || currentQKmin.gt(1e30)) {
 		getEl("quantumbtnRate").textContent = ''
 		getEl("quantumbtnPeak").textContent = ''
@@ -5018,7 +5010,7 @@ function generateTT(diff){
 }
 
 function thisQuantumTimeUpdating(){
-	setAndMaybeShow("quantumClock", true, '"Quantum time: <b class=\'QKAmount\'>"+timeDisplayShort(qu_save.time)+"</b>"')
+	setAndMaybeShow("quantumClock", tmp.quUnl, '"Quantum time: <b class=\'QKAmount\'>"+timeDisplayShort(qu_save.time)+"</b>"')
 }
 
 function updateInfinityTimes(){

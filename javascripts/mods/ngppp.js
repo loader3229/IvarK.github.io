@@ -51,7 +51,7 @@ function updateQuantumTabs() {
 	getEl("quarkEnergy").textContent = shorten(qu_save.quarkEnergy)
 	getEl("quarkEnergyMult").textContent = "(" + (tmp.qe.div > 1 && shiftDown ? shorten(tmp.qe.mult) + "x, /" + shorten(tmp.qe.div) : shorten(tmp.qe.mult / tmp.qe.div) + "x") + ")"
 	getEl("bestQE").textContent = shorten(qu_save.bestEnergy)
-	getEl("qeEff").textContent = "^" + tmp.qe.exp.toFixed(3)
+	getEl("qeEff").textContent = "^" + qu_save.expEnergy.toFixed(3)
 	getEl("qeFrac").textContent = shorten(tmp.qe.expNum) + "/" + shorten(tmp.qe.expDen)
 
 	for (var i = 0; i < quantumTabs.tabIds.length; i++) {
@@ -143,18 +143,6 @@ function toggleAutoQuantumContent(id) {
 function respecMasteryToggle() {
 	player.respecMastery = !player.respecMastery
 	updateRespecButtons()
-}
-
-//v1.9987
-var bankedEterGain
-function updateBankedEter(updateHtml = true) {
-	bankedEterGain = 0
-	if (hasAch("ng3p73")) bankedEterGain = nA(bankedEterGain, gainEternitiedStat())
-	bankedEterGain = nD(bankedEterGain, 20)
-	if (updateHtml) {
-		setAndMaybeShow("bankedEterGain", bankedEterGain > 0, '"You will gain "+getFullExpansion(bankedEterGain)+" banked eternities on next quantum."')
-		setAndMaybeShow("eternitiedBank", player.eternitiesBank, '"You have "+getFullExpansion(player.eternitiesBank)+" banked eternities."')
-	}
 }
 
 //v1.99871

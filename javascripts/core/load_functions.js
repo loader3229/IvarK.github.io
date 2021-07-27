@@ -1015,7 +1015,6 @@ function doNGp3v199tov19995(){
                 updateRespecButtons()
                 delete player.respecOptions
         }
-        if (aarMod.newGame3PlusVersion < 1.9987) player.eternitiesBank=0
         if (aarMod.newGame3PlusVersion < 1.99871) {
                 qu_save.replicants.limit=Math.min(qu_save.replicants.limit,10)
                 qu_save.replicants.limitCost=Math.pow(200,qu_save.replicants.limit-1)*1e49
@@ -1898,7 +1897,7 @@ function updateNGp3DisplayStuff(){
 	getEl("odSlider").value=Math.round((tmp.bl.odSpeed-1)/4*50)
 	for (var g=1;g<=br.limit;g++) getEl("typeToExtract"+g).className=tmp.bl.typeToExtract==g?"chosenbtn":"storebtn"
 
-	handleDispAndTmpOnQuantum()
+	handleDispOnQuantum()
 	updateBraveMilestones()
 	updateNeutrinoBoosts()
 	updateNeutrinoUpgradeUnlocks(5, 12)
@@ -2068,7 +2067,7 @@ function onLoad(noOffline) {
 	}
 	updateGalaxyTabs()
 	if (tmp.ngp3) updateNGp3DisplayStuff()
-	handleDispAndTmpOutOfQuantum()
+	handleDispOutOfQuantum()
 	hideDimensions()
 	updateChallenges()
 	updateNCVisuals()
@@ -2087,8 +2086,7 @@ function onLoad(noOffline) {
 	updateEterChallengeTimes()
 	updateDilationUpgradeCosts()
 	updateExdilation()
-	handleDispAndTmpOnQuantum()
-	updateBankedEter()
+	handleDispOnQuantum()
 	maybeShowFillAll()
 	updateNanoRewardTemp()
 	updateLastTenGhostifies()
@@ -2732,10 +2730,6 @@ function conToDeciLateEter(){
         player.dilation.dilatedTime = new Decimal(player.dilation.dilatedTime)
         player.dilation.totalTachyonParticles = new Decimal(player.dilation.totalTachyonParticles)
         player.dilation.nextThreshold = new Decimal(player.dilation.nextThreshold)
-        if (player.eternitiesBank != undefined) {
-                player.eternitiesBank = new Decimal(player.eternitiesBank)
-                if (player.eternitiesBank.lt(1e308)) player.eternitiesBank = player.eternitiesBank.toNumber()
-        }
 }
 
 function conToDeciMS(){
@@ -2850,7 +2844,6 @@ function conToDeciPlanck() {
 function transformSaveToDecimal() {
 	conToDeciPreEter()
 	player.eternities = nP(player.eternities)
-	if (player.eternitiesBank !== undefined) player.eternitiesBank = nP(player.eternitiesBank)
 	conToDeciTD()
 	conToDeciLateEter()
 	conToDeciMS()
