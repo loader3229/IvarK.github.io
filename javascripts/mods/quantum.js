@@ -283,6 +283,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 				var qc = qcData[0]
 				QCs_save.comps = Math.max(QCs_save.comps, qc)
 				QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, qu_save.best)
+				PCs.resetButtons()
 			} else if (qcData.length == 2) {
 				var id = PCs.conv(qcData[0], qcData[1])
 				if (!PCs_save.comps.includes(id)) PCs_save.comps.push(id)

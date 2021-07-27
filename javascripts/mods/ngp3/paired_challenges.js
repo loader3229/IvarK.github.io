@@ -7,10 +7,10 @@ var PCs = {
 		41: "You sacrifice Replicated Galaxies more.",
 		51: "Sacrificed things by Positrons give 25% more.",
 		61: "The QC6 reward is squared.",
-		71: "Meta Accelerator is 10% slower.",
+		71: "Meta Accelerator accelerates 2% faster per PC level.",
 		81: "Unlock Galactic Clusters.",
 		12: "Unlock Replicated Expanders.",
-		22: "You can exclude a Positron Cloud tier in any QC; and unlock the Perked modifier. (not implemented)",
+		22: "You can exclude a Positron Cloud tier in any QC, and unlock the Perked modifier. (not implemented)",
 		32: "25 MP milestone is activated in QC3.",
 		42: "Tier-1 Positronic Boosts can charge more by 4x, but the requirement is squared than normal.",
 		52: "You gain 2x more Replicanti Energy.",
@@ -19,7 +19,7 @@ var PCs = {
 		82: "First 50 galaxies of every type don't get sacrficed.",
 		13: "Unlock Replicated Dilaters. (not implemented)",
 		23: "You can exclude matched Boosts instead. (not implemented)",
-		33: "For each PC combination, Meta Accelerator slowdown is 2% slower.",
+		33: "Meta Accelerator starts 0.1 later per PC level.",
 		43: "Extra Replicated Galaxies contribute to Positronic Charge.",
 		53: "Replicanti Energy formula is stronger.",
 		63: "Eternity time stat is 3x slower.",
@@ -30,7 +30,7 @@ var PCs = {
 		var data = {
 			qc1_ids: [null, 1, 3, 6, 2, 8, 5, 4, 7],
 			qc2_ids: [null],
-			qc1_lvls: [null, 1, 2, 4, 6, 10, 11, 12, 14],
+			qc1_lvls: [null, 1, 2, 4, 6, 9, 10, 12, 14],
 			qc2_lvls: [null, 1, 2, 3, 5, 12, 13, 14, 18],
 			goal_divs: [null, 0.25, 0.25, 0.5, 0, 0.65, 1.1, 0.3, 1.2],
 			milestoneReqs: [null, 1, 2, 4],
@@ -148,6 +148,13 @@ var PCs = {
 		return qc1.pow(qc2.log(Number.MAX_VALUE) / div)
 	},
 	conv(c1, c2) {
+		if (!c1) { //Current (No augments)
+			c1 = QCs_tmp.in[0]
+			c2 = QCs_tmp.in[1]
+		} else if (typeof(c1) !== "number") { //Table lookup
+			c2 = c1[1]
+			c1 = c1[0]
+		}
 		return Math.min(c1 * 10 + c2, c2 * 10 + c1)
 	},
 	convBack(pc) {
@@ -192,7 +199,7 @@ var PCs = {
 			el.insertRow(x).innerHTML = html
 		}
 
-		for (var i = 0; i < data.all.length; i++) this.updateButton(data.all[i])
+		this.resetButtons()
 		this.updateDisp()
 	},
 	updateButton(pc, inQCs) {
@@ -208,6 +215,10 @@ var PCs = {
 			getEl("pc" + pc).className = inQCs.includes(qcs[0]) && inQCs.includes(qcs[1]) ? "onchallengebtn" : PCs.done(pc) ? "completedchallengesbtn" : QCs.done(qcs[0]) && QCs.done(qcs[1]) ? "challengesbtn" : "lockedchallengesbtn"
 		}
 	},
+	resetButtons(force) {
+		var data = PCs.data
+		for (var i = 0; i < data.all.length; i++) this.updateButton(data.all[i])
+	},
 
 	updateDisp() {
 		if (!PCs_tmp.unl) return
@@ -215,7 +226,7 @@ var PCs = {
 
 		for (var i = 1; i <= 8; i++) {
 			getEl("pc_comp" + i + "_div").style.display = PCs_save.best[i] ? "" : "none"
-			getEl("pc_comp" + i).textContent = PCs_save.best[i] + " / 8"
+			getEl("pc_comp" + i).textContent = PCs_save.best[i] + " / 9"
 		}
 
 		getEl("pc_lvl").textContent = getFullExpansion(PCs_save.lvl)
@@ -226,28 +237,54 @@ var PCs = {
 		getEl("pc_eff2").textContent = "^" + PCs_tmp.eff2.toFixed(3)
 
 		this.showMilestones(PCs_tmp.milestone || 0)
-
-		getEl("pc_shrunker_div").style.display = QCs.done(8) ? "" : "none"
+		this.updateShrunkerDisp()
 	},
 	showMilestones(qc) {
 		PCs_tmp.milestone = qc
 		getEl("qc_milestone_div").style.display = qc ? "" : "none"
+		getEl("pc_info").style.display = qc ? "none" : ""
 		if (qc) {
 			getEl("qc_milestone_header").textContent = "QC" + qc + " Milestones"
 			for (var i = 1; i < PCs.data.milestoneReqs.length; i++) {
 				getEl("qc_milestone" + i).className = "qMs_" + (this.milestoneDone(qc * 10 + i) ? "reward" : "locked")
 				getEl("qc_milestone" + i).textContent = PCs.milestones[qc * 10 + i] || "???"
 			}
+			getEl("qc_milestone2").style["font-size"] = (qc == 2 || qc == 4) ? "11px" : "12px"
 		}
 	},
-	reset() {
-		if (confirm("You will keep your milestones and level, and bring all your Shrunkers back. Are you sure do you want to reset?"))
-		PCs_save.shrunkers = {
-			unspent: 0,
-			spent: {}
-		}
+	reset(force) {
+		var data = PCs.data
+		if (!force && !confirm("You will keep your milestones and level, and bring all your Shrunkers back. Are you sure do you want to reset?")) return
+
+		for (var i = 0; i < data.all.length; i++) this.respec(data.all[i])
 		PCs_save.comps = []
+		this.resetButtons()
 		quantum(false, true)
+	},
+
+	shrunk() {
+		if (PCs.in()) {
+			if (!PCs_save.shrunkers.unspent || PCs.done(PCs.conv())) return
+
+			var pc = PCs.conv()
+			PCs_save.shrunkers.unspent--
+			PCs_save.shrunkers.spent[pc] = (PCs_save.spent[pc] || 0) + 1
+		} else PCs.reset()
+	},
+	respec(pc) {
+		if (!PCs_save.shrunkers.spent[pc]) return
+		PCs_save.shrunkers.unspent += PCs_save.shrunkers.spent[pc]
+		delete PCs_save.shrunkers.spent[pc]
+	},
+	updateShrunkerDisp() {
+		getEl("pc_shrunker_div").style.display = QCs.done(8) ? "" : "none"
+		getEl("pc_shrunker").textContent = getFullExpansion(PCs_save.shrunkers.unspent)
+		getEl("pc_shrunker_btn").className = !PCs.in() ? "storebtn" :
+			PCs.done(PCs.conv()) ? "unavailablebtn" :
+			PCs_save.shrunkers.unspent ? "storebtn" :"unavailablebtn"
+		getEl("pc_shrunker_btn").textContent = !PCs.in() ? "Respec, but reset the combinations." :
+			PCs.done(PCs.conv()) ? "You already completed this challenge!" :
+			"Spend a shrunker to reduce the goal by ^0.99."
 	}
 }
 var PCs_save = undefined

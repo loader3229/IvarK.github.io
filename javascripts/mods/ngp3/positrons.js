@@ -191,6 +191,7 @@ var pos = {
 			data.sac_qe = 0
 			pos_save.amt = 0
 		}
+		if (dev.boosts.tmp[2]) pos_save.amt *= dev.boosts.tmp[2]
 
 		//Galaxies -> Charge
 		let types = ["ng", "rg", "eg", "tg"]
@@ -206,6 +207,7 @@ var pos = {
 		}
 		if (!pos.on() && enB.active("glu", 6)) pos_save.eng = enB_tmp.glu6
 		else pos_save.eng = Math.pow(pcSum, 2)
+		if (dev.boosts.tmp[3]) pos_save.eng *= dev.boosts.tmp[3]
 	},
 
 	canSwap(x) {

@@ -40,7 +40,7 @@ function getMDMultiplier(tier) {
 	if (tier % 2 == 1 && hasAch("ng3p24")) ret = ret.times(player.meta[tier + 1].amount.add(1).pow(0.01))
 
 	//Positronic Boosts:
-	if (tier == 1 && enB.active("pos", 2)) ret = ret.times(enB_tmp.pos2.acc)
+	if (tier == 1 && enB.active("pos", 2)) ret = ret.times(enB_tmp.pos2.mult)
 
 	//Dilation Upgrades:
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
@@ -141,7 +141,7 @@ function metaBoost() {
 	if (!(player.meta[req.tier].bought >= req.amount)) return
 
 	let isNU1ReductionActive = hasNU(1) ? !qu_save.bigRip.active : false
-	if (false) {
+	if (qMs.tmp.amt >= 24) {
 		if (isNU1ReductionActive && player.meta.resets < 110) {
 			player.meta.resets = Math.min(player.meta.resets + Math.floor((player.meta[8].bought - req.amount) / (req.mult + 1)) + 1, 110)
 			req = getMetaShiftRequirement()
@@ -151,7 +151,7 @@ function metaBoost() {
 		if (player.meta[8].bought >= getMetaShiftRequirement().amount) player.meta.resets++
 	} else player.meta.resets++
 
-	if (hasAch("ng3p72")) return
+	if (qMs.tmp.amt >= 25) return
 
 	player.meta.antimatter = getMetaAntimatterStart()
 	if (qMs.tmp.amt < 19) clearMetaDimensions()
@@ -382,7 +382,11 @@ function updateMetaDimensions () {
 	getEl("quantum").innerHTML = tmp.quUnl ? "Gain " + shortenDimensions(quarkGain()) + " aQs." : 'Reset your progress for a new layer...'
 	getEl("quantum").className = pH.can("quantum") ? 'quantumbtn' : 'unavailablebtn'
 
-	getEl("metaAccelerator").textContent = enB.active("pos", 2) ? "Meta Accelerator: " + shorten(enB_tmp.pos2.acc) + "x to MA, DT, and replicate interval" + (enB_tmp.pos2.igal ? ", ^" + shorten(enB_tmp.pos2.igal) + " to MA effect" : "") : ""
+	getEl("metaAccelerator").innerHTML = enB.active("pos", 2) ?
+		"Meta Accelerator: " + shorten(enB_tmp.pos2.mult) + "x to MA, DT, and replicate interval" +
+		(enB_tmp.pos2.igal ? ", ^" + shorten(enB_tmp.pos2.igal) + " to MA effect" : "") +
+		(shiftDown ? "<br>(Base: " + shorten(enB_tmp.pos2.base) + ", raised by ^" + shorten(enB_tmp.pos2.exp) + ", exp speed: +" + enB_tmp.pos2.speed.toFixed(3) + "/MDB" + ", accelerator: +^" + enB_tmp.pos2.acc.toFixed(3) + " speed/MDB" + ", slowdown start: " + shorten(enB_tmp.pos2.slowdown) + " MDBs)" : "")
+	: ""
 }
 
 function getDil15Bonus() {
@@ -398,4 +402,14 @@ function getDil15Bonus() {
 function getMetaUnlCost() {
 	if (tmp.ngp3) return 1e20
 	return 1e24
+}
+
+function getPataAccelerator() {
+	var x = qu_save.time / 24000
+	if (enB.pos.charged(2)) x *= enB.pos.chargeEff(2) / 2 + 1
+	if (enB.active("pos", 10)) x *= enB_tmp.pos10
+
+	x = Math.min(x, 1)
+	if (enB.active("pos", 12)) x += enB_tmp.pos12
+	return x
 }

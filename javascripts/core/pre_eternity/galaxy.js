@@ -47,7 +47,6 @@ getEl("secondSoftReset").onclick = function() {
 function getDistantScalingEffect(){
 	let speed = 1
 	if (pH.did("ghostify") && player.ghostify.neutrinos.boosts >= 6) speed /= tmp.nb[6]
-	if (hasBosonicUpg(45)) speed /= tmp.blu[45]
 	if (hasAch("ng3p98")) speed *= 0.9
 	if (hasAch("ng3p101")) speed *= 0.5
 	return speed

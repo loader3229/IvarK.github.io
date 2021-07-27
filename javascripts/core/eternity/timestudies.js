@@ -222,7 +222,7 @@ function canBuyStudy(name) {
 	}
 
 	if (row > 1 && (
-		qMs.tmp.amt >= 24 || //NG+3
+		qMs.tmp.amt >= 27 || //NG+3
 		(tmp.ngp3_mul && player.eternityUpgrades.includes(15)) //NG*+3
 	)) return hasRow(row - 1) 
 	if (tmp.ngC) {

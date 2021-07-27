@@ -105,7 +105,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	player.dimlife = true
 	player.dead = true
 
-	let multUpgs = !qMs.isOn(8) ? 0 : tmp.exMode ? 0.25 : tmp.bgMode ? 1 : 0.5
+	let multUpgs = !qMs.isOn(8) ? 0 : tmp.exMode ? 10 : tmp.bgMode ? 1/0 : 25
 	if (!player.dilation.bestTP) player.dilation.bestTP = player.dilation.tachyonParticles
 	player.dilation = {
 		studies:
@@ -124,8 +124,8 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 		rebuyables: {
 			1: 0,
 			2: 0,
-			3: Math.floor(player.dilation.rebuyables[3] * multUpgs),
-			4: Math.floor(player.dilation.rebuyables[4] * multUpgs),
+			3: Math.min(player.dilation.rebuyables[3], multUpgs),
+			4: Math.min(player.dilation.rebuyables[4], multUpgs),
 		}
 	}
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles

@@ -1559,7 +1559,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/26/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/27/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -1674,7 +1674,6 @@
 				<div id="softcap_ts83"></div>
 				<div id="softcap_ts225"></div>
 				<div id="softcap_ec14"></div>
-				<div id="softcap_dt"></div>
 				<div id="softcap_ma"></div>
 				<div id="softcap_aqs"></div>
 				<div id="softcap_rp"></div>
@@ -1683,7 +1682,6 @@
 				<div id="softcap_bru1"></div>
 				<div id="softcap_beu3"></div>
 				<div id="softcap_bam"></div>
-				<div id="softcap_bu45"></div>
 				<div id="softcap_C_nd"></div>
 				<div id="softcap_C_ts"></div>
 				<div id="softcap_C_sac"></div>
@@ -3439,6 +3437,8 @@
 					<b id="qc_milestone_header" style="font-size: 20px">QC1 Milestones</b>
 					<br>
 					<button class="secondarytabbtn" onclick="PCs.showMilestones(0)">Close</button>
+					<br>
+					Completing a challenge of the same combination gives you 2 completions instead of 1!
 					<table class="table" align="center" style="margin: auto">
 						<tr>
 							<td>1 completion</td>
@@ -3452,13 +3452,17 @@
 						</tr>
 					</table>
 				</div>
-				<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 25px">0 / 1</span>)</span><br>
-				Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and <span id="pc_eff2" style="font-size: 20px"></span> to aQs gain exponent. (starting from 100 aQs)<br>
+				<div id="pc_info">
+					<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 25px">0 / 1</span>)</span><br>
+					Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and <span id="pc_eff2" style="font-size: 20px"></span> to aQs gain exponent. (starting from 100 aQs)
+				</div>
+				<br><br>
 				<button class="storebtn" style="font-size: 100%; width:200px" onclick="exitChallenge()">Exit Challenge</button>
+				<br>Note: Starting a Paired Challenge reduces Meta Dimensions by ^0.95! (acts like you are in QC7)
 				<table id="pc_table" align="center" style="margin: auto"></table>
 				<span id="pc_shrunker_div">
 					You have <span id="pc_shrunker" style="font-size: 20px">0</span> unspent PC shrunkers.<br>
-					<button class="storebtn" style="width: 180px; height: 60px" onclick="PCs.reset()">Respec, but reset the combinations.</button>
+					<button id="pc_shrunker_btn" class="storebtn" style="width: 180px; height: 60px" onclick="PCs.shrunk()"></button>
 				</span>
 			</div>
 			<div class="footer"></div>
@@ -4620,7 +4624,7 @@
 					<br>
 					<span id="enB_glu9_type"></span>
 					<br><br>
-					Reduce the slowdown of Meta Accelerator by <span id="enB_glu9_eff" style="font-size:24px"></span>.
+					Meta Accelerator accelerates <span id="enB_glu9_eff" style="font-size:24px"></span> faster.
 				</td>
 			</tr>
 			<tr>
@@ -4710,7 +4714,7 @@
 					<td><button class="qMs_locked" id="qMs_reward_15" onclick="qMs.toggle(15)"></button></td>
 				</tr>
 				<tr>
-					<td><button class="qMs_locked" id="qMs_reward_16" onclick="qMs.toggle(16)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_16" onclick="qMs.toggle(16)" style="font-size: 11px"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_17" onclick="qMs.toggle(17)" style="font-size: 11px"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_18" onclick="qMs.toggle(18)"></button></td>
 				</tr>
@@ -4723,6 +4727,11 @@
 					<td><button class="qMs_locked" id="qMs_reward_22" onclick="qMs.toggle(22)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_23" onclick="qMs.toggle(23)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_24" onclick="qMs.toggle(24)"></button></td>
+				</tr>
+				<tr>
+					<td><button class="qMs_locked" id="qMs_reward_25" onclick="qMs.toggle(25)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_26" onclick="qMs.toggle(26)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_27" onclick="qMs.toggle(27)"></button></td>
 				</tr>
 			</table>
 		</div>

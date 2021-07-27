@@ -258,49 +258,59 @@ dev.boosts = {
 				}
 			}
 		}
-		//if (this.on != this.tmp.on) console.log("Dev boosts: " + this.on)
+		if (this.on != this.tmp.on) console.log("Dev boosts: " + this.on)
 
 		this.tmp = data
 	},
 	1: {
 		unl() {
-			return tmp.quActive
+			return enB.active("pos", 2)
 		},
 		eff(x) {
-			//Quantum worth adds QE multiplier
-			if (x === undefined) x = quantumWorth
-			return Math.pow(quantumWorth.add(1).log10() + 1, 0.5)
+			//Timeless Fuse: Eternity points multiply Meta Accelerator.
+			if (x === undefined) x = player.eternityPoints
+			x = Math.pow(x.add(1).log10() + 1, 0.25)
+			return Decimal.pow(2, x)
 		},
 	},
 	2: {
 		unl() {
-			return false
+			return pos.on()
 		},
 		eff(x) {
+			//Excited Positrons: Antimatter multiplies Positrons.
+			if (x === undefined) x = player.money
+			x = Math.pow(x.add(1).log10() / 1e10 + 1, 0.1)
+			return x
 		}
 	},
 	3: {
 		unl() {
-			
+			return tmp.quActive
 		},
-		eff() {
-			
+		eff(x) {
+			//Potential Strings: Potential Vibration Energy (scaled by antimatter) multiply Quantum Energy and Positronic Charge.
+			if (x === undefined) x = Math.log10(player.money.add(1).log10() + 1)
+			return Math.max(x / 4 - 2, 1)
 		},
 	},
 	4: {
 		unl() {
-			
+			return tmp.eterUnl
 		},
-		eff() {
-			
+		eff(x) {
+			//Eternal Bent: Decoherence tiers (scaled by antimatter) raise Infinite Time reward.
+			if (x === undefined) x = Math.log10(player.money.add(1).log10() + 1)
+			return Math.max(x / 6 - 1, 1)
 		},
 	},
 	5: {
 		unl() {
-			
+			return true
 		},
-		eff() {
-			
+		eff(x) {
+			//Again and again...: Raise Infinitied and Eternitied gains to an exponent.
+			return 1.5
 		},
 	}
 }

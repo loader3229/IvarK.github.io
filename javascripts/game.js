@@ -3488,6 +3488,7 @@ function gainEternitiedStat() {
 	let exp = getEternitiesAndDTBoostExp()
 	if (exp > 0) ret = nM(player.dilation.dilatedTime.max(1).pow(exp), ret)
 	if (tmp.ngC & exp > 0) ret = nM(ret, Decimal.pow(player.dilation.tachyonParticles.plus(1).log10() + 1, exp))
+	if (dev.boosts.tmp[5]) ret = nM(ret, Decimal.pow(ret, dev.boosts.tmp[5] - 1))
 	if (typeof(ret) == "number") ret = Math.floor(ret)
 	return ret
 }
@@ -4593,11 +4594,11 @@ function doEternityButtonDisplayUpdating(diff){
 		if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getTPGain())) getEl("eternitybtnEPGain").innerHTML = getReqForTPGainDisp()
 		else {
 			getEl("eternitybtnEPGain").innerHTML = ((player.eternities > 0 && (player.currentEternityChall == "" || player.options.theme == "Aarex's Modifications")) ?
-				EPminpeakType == 'normal' && EPminpeak.gte(Decimal.pow(10, 1e9)) ? "<b>Other times await... I need to become Eternal.</b>" :
+				EPminUnits == "EP" && gainedEternityPoints().e >= 1e9 ? "<b>Other times await... I need to become Eternal.</b>" :
 				"Gain <b>" + (player.dilation.active?shortenMoney(getTPGain().sub(player.dilation.totalTachyonParticles)):shortenDimensions(gainedEternityPoints()))+"</b> "+(EPminpeakType == "logarithm" ? EPminUnits + "." : player.dilation.active?"Tachyon particles.": tmp.be ?"EP and <b>"+shortenDimensions(getEMGain())+"</b> Eternal Matter." : "Eternity points.")
 			: "")
 		}
-		var showEPmin=(player.currentEternityChall===""||player.options.theme=="Aarex's Modifications")&&EPminpeak>0&&player.eternities>0&&player.options.notation!='Morse code'&&player.options.notation!='Spazzy'&&(!(player.dilation.active||tmp.be)||isSmartPeakActivated)
+		var showEPmin = pH.did("eternity") && gainedEternityPoints().e < 1e9 && Decimal.gt(EPminpeak, 0)
 		if (EPminUnits != "TP") {
 			getEl("eternitybtnRate").textContent = (showEPmin
 										  ? rateFormat(currentEPmin, EPminpeakUnits) : "")

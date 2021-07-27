@@ -308,7 +308,7 @@ function gainQuantumEnergy() {
 	if (isNaN(x)) x = 0
 
 	qu_save.quarkEnergy = Math.max(qu_save.quarkEnergy || 0, x)
-	qu_save.bestEnergy = Math.max(qu_save.bestEnergy || 0, xNoDiv)
+	qu_save.bestEnergy = Math.max(qu_save.bestEnergy || 0, tmp.qe.div > 1 ? xNoDiv : x)
 }
 
 function getQEQuarksPortion() {
@@ -341,6 +341,7 @@ function getQuantumEnergyMult() {
 function getQuantumEnergyDiv() {
 	let x = 1
 	if (pos.on()) x = tmp.ngp3_mul ? 10 / 9 : 4 / 3
+	if (dev.boosts.tmp[3]) x /= dev.boosts.tmp[3]
 	return x
 }
 
@@ -768,10 +769,10 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return Math.pow(x + 1, 0.1)
+				return Math.log2(x / 100 + 1) + 1
 			},
 			effDisplay(x) {
-				return formatReductionPercentage(x, 3) + "%"
+				return shorten(x) + "x"
 			}
 		},
 		10: {
@@ -911,42 +912,41 @@ var enB = {
 			tier: 2,
 			type: "b",
 			eff(x) {
-				var timeMult = qu_save.time / 24000
-				if (enB.pos.charged(2)) timeMult *= enB.pos.chargeEff(2) / 2 + 1
-				if (enB.active("pos", 10)) timeMult *= enB_tmp.pos10
-				timeMult = Math.min(timeMult, 1)
-
-				var baseMult = timeMult
 				var slowStart = 4
-				var slowSpeed = 1
-				if (enB.active("glu", 9)) slowSpeed /= enB_tmp.glu9
-				if (QCs.done(7)) slowSpeed *= 0.9
-				if (PCs.milestoneDone(71)) slowSpeed *= 0.9
-				if (PCs.milestoneDone(33)) slowSpeed *= Math.pow(0.98, PCs_save.comps.length)
 				if (enB.active("pos", 8)) slowStart += enB_tmp.pos8
-				if (enB.active("pos", 12)) baseMult += enB_tmp.pos12
+				if (PCs.milestoneDone(33)) slowStart += 0.1 * PCs_save.lvl
+
+				var accSpeed = 3 / (slowStart - 1)
+				if (enB.active("glu", 9)) accSpeed *= enB_tmp.glu9
+				if (QCs.done(7)) accSpeed *= 1.25
+				if (PCs.milestoneDone(71)) accSpeed *= 1 + 0.02 * PCs_save.lvl
 
 				var mdb = player.meta.resets
-				var base = player.meta.antimatter.add(1).log10() * baseMult + 1
+				var base = player.meta.antimatter.add(1).log10() * getPataAccelerator() + 1
 				var exp = mdb
 
 				var pre_slow_mdb = Math.min(mdb, slowStart)
-				exp += pre_slow_mdb * (pre_slow_mdb - 1)
-
-				if (mdb > slowStart) {
-					var post_slow_mdb = Math.min(mdb - slowStart, (slowStart - 1) / slowSpeed)
-					exp += Math.pow(post_slow_mdb, 2) / slowSpeed + post_slow_mdb * (slowStart - post_slow_mdb / slowSpeed)
-				}
-
+				exp += pre_slow_mdb * (pre_slow_mdb - 1) * accSpeed
 				exp /= 30
+
+				var speed = 1
+				if (mdb <= slowStart) speed += (mdb - 1) * accSpeed
+
+				var mult = Decimal.pow(base, exp)
+				if (dev.boosts.tmp[1]) mult = mult.times(dev.boosts.tmp[1])
+
 				return {
-					acc: Decimal.pow(base, exp),
-					baseMult: baseMult,
-					igal: hasAch("ng3p27") ? Math.log10(exp * Math.log10(base) / 10 + 1) / 2 + 1 : undefined
+					base: base,
+					exp: exp,
+					slowdown: slowStart,
+					speed: speed / 30,
+					acc: accSpeed / 30,
+					mult: mult,
+					igal: hasAch("ng3p27") ? Math.pow(mult.log10() / 20 + 1, 0.25) : undefined
 				}
 			},
 			effDisplay(x) {
-				return x.baseMult.toFixed(3) + "x"
+				return getPataAccelerator().toFixed(3) + "x"
 			}
 		},
 		3: {
@@ -1042,7 +1042,7 @@ var enB = {
 			type: "g",
 			anti: true,
 			eff(x) {
-				return Math.log10(Math.log10(x + 1) / 5 + 1) / 2
+				return Math.pow(x + 1, 0.1) - 1
 			},
 			effDisplay(x) {
 				return x.toFixed(3)
@@ -1066,7 +1066,7 @@ var enB = {
 			}
 		},
 		10: {
-			req: 0,
+			req: 120,
 			masReq: 0,
 			chargeReq: 0,
 
@@ -1082,7 +1082,7 @@ var enB = {
 			}
 		},
 		11: {
-			req: 0,
+			req: 120,
 			masReq: 0,
 			chargeReq: 0,
 
@@ -1091,14 +1091,14 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return Math.min(Math.sqrt(x) / 1e7, 5e-4)
+				return Math.min(Math.sqrt(x) / 1e6, 1e-4)
 			},
 			effDisplay(x) {
 				return "x^" + x.toFixed(6)
 			}
 		},
 		12: {
-			req: 0,
+			req: 120,
 			masReq: 0,
 			chargeReq: 0,
 
@@ -1142,7 +1142,7 @@ var enB = {
 			if (localHas) {
 				if (!mastered) allMastered = false
 				el.parentElement.className = data.color(e, type)
-				el.textContent = typeData.name + " Boost #" + e
+				el.textContent = shiftDown ? (typeData[e].title || "Unknown title.") : (typeData.name + " Boost #" + e)
 			}
 		}
 		if (QCs.inAny()) getEl("enB_" + type + "_next").textContent = ""

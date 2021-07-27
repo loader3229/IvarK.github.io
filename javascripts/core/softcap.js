@@ -13,27 +13,6 @@ To make a new softcap using this function
 */
 
 var softcap_data = {
-	dt_log: {
-		name: "log base 10 of dilated time gain per second",
-		1: {
-			func: "pow",
-			start: 4e3,
-			pow: 0.6,
-			derv: true
-		},
-		2: {
-			func: "pow",
-			start: 5e3,
-			pow: 0.4,
-			derv: true
-		},
-		3: {
-			func: "pow",
-			start: 6e3,
-			pow: 0.2,
-			derv: true
-		}
-	},
 	ts_reduce_log: {
 		name: "log base 10 of tickspeed reduction"
 		//No softcaps
@@ -199,12 +178,18 @@ var softcap_data = {
 		},
 	},
 	it: {
-		name: "Infinite Time reward",
+		name: "base Infinite Time reward",
 		1: {
 			func: "dilate",
 			start: Decimal.pow(10, 90000),
 			base: 10,
 			pow: 0.5
+		},
+		2: {
+			func: "dilate",
+			start: Decimal.pow(10, 1e10),
+			base: 10,
+			pow: 0.9
 		},
 	},
 	ig_log_high: { 
@@ -307,51 +292,6 @@ var softcap_data = {
 				return getBosonicAMProductionSoftcapExp(6)
 			},
 			derv: true
-		}
-	},
-	bu45: {
-		name: "20th Bosonic Upgrade",
-		1: {
-			func: "pow",
-			start: 9,
-			pow: .5,
-			derv: false
-		},
-		2: {
-			func: "pow",
-			start: 25,
-			pow: .5,
-			derv: false
-		},
-		3: {
-			func: "pow",
-			start: 49,
-			pow: .5,
-			derv: false
-		},
-		4: {
-			func: "pow",
-			start: 81,
-			pow: .5,
-			derv: false
-		},
-		5: {
-			func: "pow",
-			start: 121,
-			pow: .5,
-			derv: false
-		},
-		6: {
-			func: "pow",
-			start: 169,
-			pow: .5,
-			derv: false
-		},
-		7: {
-			func: "pow",
-			start: 225,
-			pow: .5,
-			derv: false
 		}
 	},
 	mptd_log: { //NOT USED IN ANYTHING YET, JUST TESTING SO PLS DONT REMOVE
@@ -774,7 +714,6 @@ function getSoftcapName(id){
 
 function getSoftcapAmtFromId(id){
 	return { // for amount
-		dt_log: () => getDilTimeGainPerSecond().max(1).log10(), 
 		ts_reduce_log: () => Decimal.pow(tmp.tsReduce, -1).log10(),
 		ts_reduce_log_big_rip: () => Decimal.pow(tmp.tsReduce, -1).log10(),
 		ts11_log_big_rip: () => tsMults[11]().log10(),
@@ -782,7 +721,7 @@ function getSoftcapAmtFromId(id){
 		beu3_log: () => tmp.beu[3].max(1).log10(),
 		rep: () => getReplEff(),
 		rInt: () => tmp.rep ? tmp.rep.baseBaseEst.pow(1 - getECReward(14)) : new Decimal(1),
-		it: () => tmp.it.max(1),
+		it: () => tmp.baseIt.max(1),
 		ec14: () => tmp.rep ? tmp.rep.ec14.baseInt : new Decimal(1),
 		tt: () => getTTGenPart(player.dilation.tachyonParticles),
 		ts83: () => tsMults[83](),
@@ -793,7 +732,6 @@ function getSoftcapAmtFromId(id){
 		gp: () => colorBoosts.g,
 		ig_log_high: () => tmp.ig.max(1).log10(),
 		bam: () => getBosonicAMProduction(),
-		bu45: () => bu.effects[45](),
 		mptd_log: () => Decimal.log10(tmp.mptb) * tmp.mpte,
 
 		// Condensened: () =>
@@ -830,13 +768,11 @@ function hasSoftcapStarted(id, num){
 		rInt: ECComps("eterc14"),
 		ts83: tmp.ngp3,
 		ts225: tmp.ngp3,
-		dt_log: tmp.ngp3 && !tmp.bE50kDT,
 		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined && tmp.quActive,
 		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined && tmp.quActive,
 		aqs: tmp.ngp3,
 		rp: tmp.ngp3,
 		bam: tmp.ngp3,
-		bu45: tmp.ngp3,
 		tt: tmp.ngp3,
 		ma: tmp.ngp3,
 		ig_log_high: tmp.ngp3 && tmp.ig !== undefined,
@@ -910,14 +846,14 @@ function getSoftcapStringEffect(id, num, amt, namenum){
 		let inside = "Start: " + softcapShorten(v[0]) + ", Dilate: ^" + softcapShorten(v[2]) + ", Base (log): " + softcapShorten(v[1])
 		return "Softcap of " + name + " " + inside + "."
 	}
-	if (func == "log") { // vars ["start", "pow", "mul", "add"]
+	if (func == "log") { // vars ["start", "base", "pow", "mul", "add"]
 		let mult = (v[3] != undefined && Decimal.neq(v[3], 1)) ? ", times: " + softcapShorten(v[3]) : ""
 		let add = ""
 		if (v[4] != undefined) {
 			if (typeof v[4] != "number" || v[4] > 0) add = (v[4] != undefined && Decimal.neq(v[4], 0)) ? ", plus: " + softcapShorten(v[4]) : ""
 			else add = (v[4] != undefined) ? ", Mminus: " + softcapShorten(-1*v[4]) : ""
 		}
-		let inside = "Start: " + softcapShorten(v[0]) + ", log (base " + v[1] + ") // " + "to the Power of " + softcapShorten(v[2]) + mult + add 
+		let inside = "Start: " + softcapShorten(v[0]) + ", log (base " + (v[1] || 10) + ") // " + "to the Power of " + softcapShorten(v[2]) + mult + add 
 		return "Softcap of " + name + " " + inside + "."
 	} 
 	return "oops someone messed up"
@@ -940,7 +876,6 @@ function getInnerHTMLSoftcap(id){
 
 function updateSoftcapStatsTab(){
 	let names = {
-		dt_log: "softcap_dt",
 		ts_reduce_log: "softcap_ts1",
 		ts_reduce_log_big_rip: "softcap_tsBR",
 		ts11_log_big_rip: "softcap_ts2",
@@ -959,7 +894,6 @@ function updateSoftcapStatsTab(){
 		gp: "softcap_gp",
 		ig_log_high: "softcap_ig",
 		bam: "softcap_bam",
-		bu45: "softcap_bu45",
 		mptd_log: "softcap_mptd",
 		// Condensened:
 		nds_ngC: "softcap_C_nd",

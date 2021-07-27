@@ -87,7 +87,7 @@ let qMs = {
 					getEl("qMs_reward_" + i).className = qMs.tmp.amt < i || qMs.forceOff(i) ? "qMs_locked" :
 						!this[i].disablable ? "qMs_reward" :
 						"qMs_toggle_" + (!qu_save.disabledRewards[i] ? "on" : "off")
-					getEl("qMs_reward_" + i).innerHTML = qMs[i].eff() + (false && qMs.tmp.amt >= i ? "" : "<br>(requires " + getFullExpansion(qMs[i].req) + " MP)")
+					getEl("qMs_reward_" + i).innerHTML = qMs[i].eff() + (qMs.tmp.amt >= i ? "" : "<br>(requires " + getFullExpansion(qMs[i].req) + " MP)")
 				}
 			}
 			getEl("qMs_next").textContent = qMs.tmp.amt >= qMs.max ? "" : "Next milestone unlocks at " + getFullExpansion(qMs[qMs.tmp.amt + 1].req) + " Milestone Points."
@@ -137,7 +137,7 @@ let qMs = {
 		getEl("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
 	},
 
-	max: 24,
+	max: 27,
 	1: {
 		req: 1,
 		eff: () => "Completing an EC only exits your challenge.",
@@ -179,8 +179,8 @@ let qMs = {
 		req: 8,
 		forceDisable: () => tmp.dtMode || QCs.inAny(),
 		disablable: true,
-		eff: () => tmp.dtMode ? "N/A" : "Keep " + (tmp.exMode ? "25% of" : tmp.bgMode ? "all" : "50% of") + " your dilation upgrades that boost TP gain",
-		effGot: () => tmp.dtMode ? "" : "You now can keep " + (tmp.exMode ? "25% of" : tmp.bgMode ? "all" : "50% of") + " your dilation upgrades that boost TP gain."
+		eff: () => tmp.dtMode ? "N/A" : "Keep " + (tmp.exMode ? "10 levels of " : tmp.bgMode ? "" : "25 levels of ") + "your dilation upgrades that boost TP gain",
+		effGot: () => tmp.dtMode ? "" : "You now can keep your dilation upgrades that boost TP gain."
 	},
 	9: {
 		req: 9,
@@ -260,6 +260,21 @@ let qMs = {
 		effGot: () => "You have unlocked QoL features for quark assortion!"
 	},
 	24: {
+		req: 75,
+		eff: () => "Able to max Meta-Dimension Boosts",
+		effGot: () => "You now can max Meta-Dimension Boosts."
+	},
+	25: {
+		req: 100,
+		eff: () => "Meta-Dimension Boosts reset nothing",
+		effGot: () => "Meta-Dimension Boosts no longer reset anything."
+	},
+	26: {
+		req: 150,
+		eff: () => "Unlock the autobuyer for Replicated Expanders.",
+		effGot: () => "Unlock the autobuyer for Replicated Expanders."
+	},
+	27: {
 		req: 200,
 		eff: () => "Able to purchase all time studies without blocking",
 		effGot: () => "You now can buy every single time study."

@@ -337,7 +337,7 @@ var QCs = {
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.3),
 			hint: "Do not buy MS22 and MS53/54.",
 
-			rewardDesc: (x) => "Meta Accelerator slowdown is 10% slower, and unlock Paired Challenges.",
+			rewardDesc: (x) => "Meta Accelerator accelerates 20% faster, and unlock Paired Challenges.",
 			rewardEff(str) {
 				return 1
 			},

@@ -882,7 +882,7 @@ var bu = {
 		42: "Red power boosts the first Bosonic Upgrade.",
 		43: "Green power effect boosts Tree Upgrades.",
 		44: "???",
-		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
+		45: "???",
 		51: "You never produce preon anti-energy and always produce Eternal Matter (but at a reduced rate outside of Big Rips).",
 		52: "Replicantis raise all powers to Infinite Time and Intergalactic amount to an exponent.",
 		53: "Reduce the cost scaling of extra Gravity Dimension Boosts.",
@@ -971,12 +971,6 @@ var bu = {
 			if (!tmp.quActive) return 1
 			return Math.sqrt(colorBoosts.g) / (inBigRip() ? 100 : 40) + 1
 		},
-		45() {
-			if (!tmp.eterUnl) return 1
-			let eff = player.dilation.dilatedTime.add(1).pow(.0005)
-			eff = softcap(eff, "bu45")
-			return eff.toNumber()
-		},
 		52() {
 			let log = player.replicanti.amount.max(1).log10()
 			let div1 = bu62.active("rep") ? 5e8 : 7.5e8
@@ -1035,9 +1029,6 @@ var bu = {
 		},
 		44(x) {
 			return "+" + x.toFixed(1) + " OoMs"
-		},
-		45(x) {
-			return "/" + shorten(x) + " to efficiency"
 		},
 		52(x) {
 			return "^" + formatValue(player.options.notation, x.ig, 3, 3) + " to Intergalactic, ^" + formatValue(player.options.notation, x.it, 3, 3) + " to Infinite Time"
