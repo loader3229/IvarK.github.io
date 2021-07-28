@@ -379,7 +379,7 @@ function buyMaxTimeDimension(tier, bulk) {
 	} else {
 		let data = doBulkSpent(player.eternityPoints, (x) => timeDimCost(tier, x), dim.bought)
 
-		player.eternityPoints = data.res
+		if (player.eternityPoints.lt(Decimal.pow(10, 1e10))) player.eternityPoints = data.res
 		toBuy = data.toBuy
 	}
 

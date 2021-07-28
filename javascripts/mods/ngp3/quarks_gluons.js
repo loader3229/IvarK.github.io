@@ -199,7 +199,8 @@ function updateColorCharge() {
 
 
 	//Color Charge
-	var charge = colorPowers[sorted[0]] * Decimal.div(
+	var charge = colorPowers[sorted[0]]
+	if (quantumWorth.lte(Decimal.pow(10, 1e15))) charge *= Decimal.div(
 			Decimal.sub(usedQuarks[sorted[0]], usedQuarks[sorted[1]]),
 			Decimal.add(usedQuarks[sorted[0]], 1)
 		)
@@ -213,10 +214,12 @@ function updateColorCharge() {
 	if (enB.active("glu", 12)) {
 		colorCharge.sub = {
 			color: sorted[1],
-			charge: colorPowers[sorted[1]] * Decimal.div(
-				Decimal.sub(usedQuarks[sorted[1]], usedQuarks[sorted[2]]),
-				Decimal.add(usedQuarks[sorted[1]], 1)
-			)
+			charge: colorPowers[sorted[1]] * (quantumWorth.lte(Decimal.pow(10, 1e15)) ?
+				Decimal.div(
+					Decimal.sub(usedQuarks[sorted[1]], usedQuarks[sorted[2]]),
+					Decimal.add(usedQuarks[sorted[1]], 1)
+				)
+			: 1)
 		}
 		colorCharge.sub.charge *= chargeMult
 		colorCharge.sub.eff = Math.log10(Math.log2(colorCharge.sub.charge + 1) + 1) + 1
@@ -706,11 +709,11 @@ var enB = {
 			eff(x) {
 				return {
 					chance: Math.pow(x / 1000, 0.25),
-					int: Math.log10(x / 2 + 1) / 2 + 1
+					int: Math.log10(x / 2 + 1) * Math.pow(x / 1e4 + 1, 0.05) / 2 + 1
 				}
 			},
 			effDisplay(x) {
-				return "Strengthen replicate interval upgrades by <span style='font-size:25px'>" + formatPercentage(x.int - 1) + "</span>% and replicate chance upgrades by <span style='font-size:24px'>" + shorten(x.chance) + "</span>x."
+				return "Strengthen replicate interval upgrades by <span style='font-size:25px'>" + shorten(x.int) + "</span>x and replicate chance upgrades by <span style='font-size:24px'>" + shorten(x.chance) + "</span>x."
 			}
 		},
 		6: {
@@ -933,8 +936,6 @@ var enB = {
 				if (mdb <= slowStart) speed += (mdb - 1) * accSpeed
 
 				var mult = Decimal.pow(base, exp)
-				if (dev.boosts.tmp[1]) mult = mult.times(dev.boosts.tmp[1])
-
 				return {
 					base: base,
 					exp: exp,
@@ -1058,7 +1059,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				var exp = Math.log2(x / 100 + 1) / 10
+				var exp = Math.log2(x / 1000 + 1) / 3
 				return Decimal.max(getInfinitied(), 10).log10() * exp
 			},
 			effDisplay(x) {

@@ -264,13 +264,13 @@ dev.boosts = {
 	},
 	1: {
 		unl() {
-			return enB.active("pos", 2)
+			return tmp.eterUnl
 		},
 		eff(x) {
-			//Timeless Fuse: Eternity points multiply Meta Accelerator.
+			//Timeless Fuse: Eternity points multiply Tachyon Particles.
 			if (x === undefined) x = player.eternityPoints
-			x = Math.pow(x.add(1).log10() + 1, 0.25)
-			return Decimal.pow(2, x)
+			x = Math.pow(x.add(1).log10() + 1, 1/3)
+			return Decimal.pow(1.01, x)
 		},
 	},
 	2: {

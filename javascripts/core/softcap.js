@@ -189,7 +189,7 @@ var softcap_data = {
 			func: "dilate",
 			start: Decimal.pow(10, 1e10),
 			base: 10,
-			pow: 0.9
+			pow: 1
 		},
 	},
 	ig_log_high: { 

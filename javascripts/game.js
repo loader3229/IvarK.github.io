@@ -3095,8 +3095,9 @@ function doBulkSpent(res, scaling, bought, fixed, max) {
 		}
 
 		res = newRes
-		if (isNaN(newRes.e)) res = new Decimal(0)
-		else if (isNaN(newRes)) res = 0
+		if (res + 0 === res) {
+			if (isNaN(newRes.e)) res = new Decimal(0)
+		} else if (isNaN(newRes)) res = 0
 	}
 
 	return {res: res, toBuy: toBuy}

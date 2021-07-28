@@ -175,7 +175,7 @@ function buyEternityUpgrade(name) {
 	let cost = ETER_UPGS[name].cost
 	if (player.eternityPoints.gte(cost) && !player.eternityUpgrades.includes(name)) {
 		player.eternityUpgrades.push(name)
-		player.eternityPoints = player.eternityPoints.minus(cost)
+		if (player.eternityPoints.lt(Decimal.pow(10, 1e10))) player.eternityPoints = player.eternityPoints.minus(cost)
 		updateEternityUpgrades();
 		if (name == 4) {
 			achMultLabelUpdate(); // Eternity Upgrade 4 applies achievement multiplier to Time Dimensions
@@ -203,7 +203,7 @@ function buyEPMult() {
 			player.eternityBuyer.limit = Decimal.times(player.eternityBuyer.limit, 5);
 			getEl("priority13").value = formatValue("Scientific", player.eternityBuyer.limit, 2, 0);
 		}
-		player.eternityPoints = player.eternityPoints.minus(player.epmultCost)
+		if (player.eternityPoints.lt(Decimal.pow(10, 1e10))) player.eternityPoints = player.eternityPoints.minus(player.epmultCost)
 		player.epmultCost = getEPMultCost(Math.round(player.epmult.log(5)))
 		updateEternityUpgrades()
 	}
@@ -214,7 +214,7 @@ function buyMaxEPMult() {
 	let bought = Math.round(player.epmult.ln() / Math.log(5))
 	let data = doBulkSpent(player.eternityPoints, getEPMultCost, bought)
 
-	player.eternityPoints = data.res
+	if (player.eternityPoints.lt(Decimal.pow(10, 1e10))) player.eternityPoints = data.res
 	let toBuy = data.toBuy
 
 	player.epmult = player.epmult.times(Decimal.pow(5, toBuy))

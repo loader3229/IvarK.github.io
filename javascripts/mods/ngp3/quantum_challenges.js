@@ -351,9 +351,9 @@ var QCs = {
 		8: {
 			unl: () => true,
 			desc: () => "All Entangled Boosts are unmastered and anti'd. You have to setup a cycle of 2 chosen gluons, and Big Crunching switches your gluon kind to the next one.",
-			goal: () => enB.glu.boosterEff() >= 125,
-			goalDisp: () => "125 Effective Boosters",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 2.95),
+			goal: () => enB.glu.boosterEff() >= 100,
+			goalDisp: () => "100 Effective Boosters",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 1.8),
 			hint: "Make your Auto-Crunch faster than Auto-Eternity.",
 
 			rewardDesc: (x) => "Unlock new comprehensive content for Paired Challenges.",

@@ -131,6 +131,7 @@ function getTPMult() {
 		if (hasMTS(264)) ret = ret.times(doubleMSMult(5)) //Mastery Studies
 		if (tmp.quActive) ret = ret.times(colorBoosts.b) //Color Powers
 	}
+	if (dev.boosts.tmp[1]) ret = ret.times(dev.boosts.tmp[1])
 
 	//NG Condensed
 	if (tmp.ngC) {

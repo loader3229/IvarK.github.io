@@ -284,7 +284,7 @@ var PCs = {
 			PCs_save.shrunkers.unspent ? "storebtn" :"unavailablebtn"
 		getEl("pc_shrunker_btn").textContent = !PCs.in() ? "Respec, but reset the combinations." :
 			PCs.done(PCs.conv()) ? "You already completed this challenge!" :
-			"Spend a shrunker to reduce the goal by ^0.99."
+			"Spend a shrunker to reduce the goal by ^0.9."
 	}
 }
 var PCs_save = undefined
