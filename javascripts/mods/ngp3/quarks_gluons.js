@@ -179,7 +179,7 @@ colorShorthands = {
 	b: 'blue'
 }
 
-function updateColorCharge() {
+function updateColorCharge(update) {
 	if (!tmp.ngp3) return
 	var usedQuarks = qu_save.usedQuarks
 
@@ -244,6 +244,8 @@ function updateColorCharge() {
 
 	//Death Mode
 	if (tmp.dtMode) qu_save.entColor = usedQuarks[sorted[0]].gte(0) && usedQuarks[sorted[1]].gte(0) ? sorted[0] + sorted[1] : ""
+
+	if (update) updateQuarksTabOnUpdate()
 }
 
 function getColorPowerQuantity(color, base) {
@@ -550,6 +552,7 @@ var enB = {
 			if (qc8.order.length < 2 && !qc8.order.includes(x)) {
 				qc8.order.push(x)
 				QCs.data[8].updateDisp()
+				if (qc8.order.length == 1 && enB.active("glu", 12)) updateColorCharge(true)
 			}
 			return
 		}
@@ -708,7 +711,7 @@ var enB = {
 			type: "b",
 			eff(x) {
 				return {
-					chance: Math.pow(x / 1000, 0.25),
+					chance: Math.pow(x / 1000 + 1, 0.25),
 					int: Math.log10(x / 2 + 1) * Math.pow(x / 1e4 + 1, 0.05) / 2 + 1
 				}
 			},
@@ -900,7 +903,7 @@ var enB = {
 			eff(x) {
 				var rep = getReplEff()
 				var eff = Math.log2(x * 4 + 1)
-				return Math.log10(rep.log10() / 1e6 * eff + 1) * eff
+				return Math.log10(rep.max(1).log10() / 1e6 * eff + 1) * eff
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -1092,10 +1095,10 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return Math.min(Math.sqrt(x) / 1e6, 1e-4)
+				return 1e-10
 			},
 			effDisplay(x) {
-				return "x^" + x.toFixed(6)
+				return "x^1/" + shorten(1/x)
 			}
 		},
 		12: {

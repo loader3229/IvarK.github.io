@@ -5,7 +5,7 @@ var PCs = {
 		21: "The QC2 reward is squared.",
 		31: "You sacrifice 40% MDBs instead of 30%.",
 		41: "You sacrifice Replicated Galaxies more.",
-		51: "Sacrificed things by Positrons give 25% more.",
+		51: "You gain 5% more from sacrificed things.",
 		61: "The QC6 reward is squared.",
 		71: "Meta Accelerator accelerates 2% faster per PC level.",
 		81: "Unlock Galactic Clusters.",
@@ -32,7 +32,7 @@ var PCs = {
 			qc2_ids: [null],
 			qc1_lvls: [null, 1, 2, 4, 6, 9, 10, 12, 14],
 			qc2_lvls: [null, 1, 2, 3, 5, 12, 13, 14, 18],
-			goal_divs: [null, 0.25, 0.25, 0.5, 0, 0.65, 1.1, 0.3, 1.2],
+			goal_divs: [null, 0.25, 0.25, 0.5, 0, 0.6, 1.2, 0.3, 1.2],
 			milestoneReqs: [null, 1, 2, 4],
 			setup: true
 		}
@@ -133,13 +133,22 @@ var PCs = {
 
 	start(x) {
 		var qcs = PCs.convBack(x)
-		if (QCs.done(qcs[0]) && QCs.done(qcs[1])) quantum(false, true, qcs)
+		if (PCs.pcUnl(x)) quantum(false, true, qcs)
 	},
 	in(x) {
 		return QCs_tmp.in.length >= 2
 	},
+	pcUnl(x) {
+		var qcs = PCs.convBack(x)
+		var pos = this.convBack(PCs.data.pos[x])
+		if (PCs_save.comps.includes(x)) return true
+		if (this.overlapped(x)) return QCs.done(8)
+		if (PCs_save.lvl < PCs.data.qc1_lvls[pos[0]] + PCs.data.qc2_lvls[pos[1]] - 1) return
+		return QCs.done(qcs[0]) && QCs.done(qcs[1])
+	},
 	goal(pc) {
 		var list = pc || QCs_tmp.in
+		if (this.overlapped(list)) return QCs.getGoalMA(pc % 10, "ol")
 		if (typeof(list) == "number") list = this.convBack(list)
 
 		var qc1 = QCs.data[list[0]].goalMA
@@ -169,6 +178,9 @@ var PCs = {
 	lvlReq(x) {
 		let r = PCs.data.lvls[x]
 		return r
+	},
+	overlapped(x) {
+		return Math.floor(x / 10) == x % 10
 	},
 
 	setupButton: (pc) => '<td><button id="pc' + pc + '" class="challengesbtn" onclick="PCs.start(' + pc + ')">PC' + Math.floor(pc / 10) + "+" + pc % 10 + '</button></td>',
@@ -207,15 +219,16 @@ var PCs = {
 		if (!inQCs) inQCs = QCs_save.in
 		var qcs = this.convBack(pc)
 		var pos = this.convBack(PCs.data.pos[pc])
-		var lvl = PCs.data.qc1_lvls[pos[0]] + PCs.data.qc2_lvls[pos[1]] - 1
+		var unl = this.pcUnl(pc)
 
-		getEl("pc" + pc).style.display = PCs_save.lvl >= lvl ? "" : "none"
-		if (PCs_save.lvl >= lvl) {
+		getEl("pc" + pc).style.display = unl ? "" : "none"
+		if (unl) {
 			getEl("pc" + pc).setAttribute("ach-tooltip", "Goal: " + shorten(PCs.goal(pc)) + " MA")
-			getEl("pc" + pc).className = inQCs.includes(qcs[0]) && inQCs.includes(qcs[1]) ? "onchallengebtn" : PCs.done(pc) ? "completedchallengesbtn" : QCs.done(qcs[0]) && QCs.done(qcs[1]) ? "challengesbtn" : "lockedchallengesbtn"
+			getEl("pc" + pc).className = inQCs[0] == qcs[0] && inQCs[1] == qcs[1] ? "onchallengebtn" : PCs.done(pc) ? "completedchallengesbtn" : QCs.done(qcs[0]) && QCs.done(qcs[1]) ? "challengesbtn" : "lockedchallengesbtn"
 		}
 	},
 	resetButtons(force) {
+		if (!PCs.unl()) return
 		var data = PCs.data
 		for (var i = 0; i < data.all.length; i++) this.updateButton(data.all[i])
 	},

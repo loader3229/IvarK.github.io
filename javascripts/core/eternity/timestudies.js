@@ -451,7 +451,7 @@ function respecTimeStudies(force) {
 	}
 
 	let respecMastery = false
-	if (tmp.ngp3) respecMastery = player.respecMastery || force
+	if (mTs.unl()) respecMastery = player.respecMastery || force
 	if (respecMastery) {
 		let oldMS = player.masterystudies.concat()
 		mTs.respec()

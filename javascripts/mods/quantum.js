@@ -1,16 +1,16 @@
 // v2.9
-function quantum(auto, force, qc, isPC, bigRip, quick) {
+function quantum(auto, force, qc, mod, quick) {
 	if (tmp.ngp3 && qu_save.bigRip.active) force = true
 	if (!(isQuantumReached()||force)||implosionCheck) return
 
 	var headstart = aarMod.newGamePlusVersion >= 1 && !tmp.ngp3
-	var mode = ""
+	var mode = []
 	var data
 	if (qc) {
 		if ((!QCs.done(1) || player.options.challConf || aarMod.quantumConf) && !quick) {
 			if (!confirm("This performs a forced Quantum reset, but you will be brought into a real challenge. All rebuyables will also be resetted. Are you sure you want to take this challenge down?")) return
 		}
-		mode = "qc"
+		mode.push("qc")
 		data = typeof(qc) == "number" ? [qc] : qc
 	}
 	if (aarMod.quantumConf && !(auto || force)) if (!confirm(player.masterystudies ? "Quantum will reset everything Eternity resets, and including all Eternity Content. You will gain a quark and unlock various upgrades." + (inNGM(2) ? " WARNING! THIS EXITS NG-- MODE DUE TO BALANCING REASONS!" : ""):"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
@@ -24,13 +24,13 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 		implosionCheck = 2
 		dev.implode()
 		setTimeout(function(){
-			quantumReset(force, auto, data, mode, bigRip, true)
+			quantumReset(force, auto, data, mode, true)
 			implosionCheck = 1
 		}, 1000)
 		setTimeout(function(){
 			implosionCheck = 0
 		}, 2000)
-	} else quantumReset(force, auto, data, mode, bigRip)
+	} else quantumReset(force, auto, data, mode)
 
 	updateTmp()
 }
@@ -177,7 +177,7 @@ function doQuantumProgress() {
 }
 
 //v2.90142
-function quantumReset(force, auto, data, mode, bigRip, implode = false) {
+function quantumReset(force, auto, data, mode, implode = false) {
 	var headstart = aarMod.newGamePlusVersion > 0 && !tmp.ngp3
 	if (implode && qMs.tmp.amt < 1) {
 		showTab("dimensions")
@@ -210,10 +210,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 
 	// check if forced quantum
 	// otherwise, give rewards
-	if (force) {
-		if (bigRip && hasAch("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
-		else bankedEterGain = 0
-	} else {
+	if (!force) {
 		for (var i = qu_save.last10.length - 1; i > 0; i--) {
 			qu_save.last10[i] = qu_save.last10[i - 1]
 		}
@@ -230,8 +227,8 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 
 		if (hasAch("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
 	} //bounds the else statement to if (force)
-	var oheHeadstart = bigRip ? tmp.bruActive[2] : tmp.ngp3
-	var keepABnICs = oheHeadstart || bigRip || hasAch("ng3p51")
+	var oheHeadstart = tmp.ngp3
+	var keepABnICs = oheHeadstart || hasAch("ng3p51")
 	var oldTime = qu_save.time
 	qu_save.time = 0
 	updateQuarkDisplay()
@@ -247,22 +244,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	if (tmp.ngp3) {
 		qMs.update()
 		qu_save.quarkEnergy = 0
-
-		// big rip tracking
-		if (bigRip && !tmp.bruActive[12]) {
-			qu_save.bigRip.storedTS = {
-				tt: player.timestudy.theorem,
-				studies: player.timestudy.studies,
-				boughtA: Decimal.div(player.timestudy.amcost, "1e20000").log("1e20000"),
-				boughtI: player.timestudy.ipcost.log("1e100"),
-				boughtE: Math.round(player.timestudy.epcost.log(2))
-			}
-			if (player.eternityChallUnlocked >= 12) qu_save.bigRip.storedTS.tt += mTs.costs.ec[player.eternityChallUnlocked]
-			else qu_save.bigRip.storedTS.tt += ([0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[player.eternityChallUnlocked]
-			for (var s = 0; s < player.masterystudies.length; s++) if (player.masterystudies[s].indexOf("t") == 0) qu_save.bigRip.storedTS.studies.push(parseInt(player.masterystudies[s].split("t")[1]))
-		}
-		if (bigRip != qu_save.bigRip.active) switchAB()
-		if (!bigRip && qu_save.bigRip.active) if (player.galaxies == 9 && player.replicanti.galaxies == 9 && player.timeDimension4.amount.round().eq(9)) giveAchievement("We can really afford 9.")
 	} else qu_save.gluons = 0;
 
 	// Positrons
@@ -273,7 +254,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 
 	// Quantum Challenges
 	if (QCs.unl()) {
-		var isQC = mode == "qc"
+		var isQC = mode.includes("qc")
 		var qcData = QCs_save.in
 		if (!force) {
 			if (QCs_save.mod) {
@@ -292,11 +273,16 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 			}
 		}
 		if (qcData.length == 2) PCs.updateButton(PCs.conv(qcData[0], qcData[1]), [])
+		delete QCs_save.mod
 		if (isQC) {
 			QCs_save.in = data
 			QCs_tmp.in = data
-			if (data.length == 2) PCs.updateButton(PCs.conv(data[0], data[1]), data)
-			else if (QCs.perkCan(data[0])) QCs_save.mod = "pk"
+
+			if (data.length == 2) {
+				PCs.updateButton(PCs.conv(data[0], data[1]), data)
+				if (data[0] == data[1]) QCs_save.mod = "ol"
+			} else if (QCs.perkCan(data[0])) QCs_save.mod = "pk"
+
 			if ((!QCs.isntCatched() || QCs.in(7)) && !QCs_save.kept) QCs_save.kept = {
 				tt: player.timestudy.theorem,
 				ms: [...player.masterystudies]
@@ -304,6 +290,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		} else if (force || !player.options.retryChallenge) {
 			QCs_save.in = []
 			QCs_tmp.in = []
+
 			if (QCs_save.kept) {
 				player.timestudy.theorem = QCs_save.kept.tt
 				player.masterystudies = QCs_save.kept.ms
@@ -314,13 +301,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		QCs.reset()
 		QCs.updateTmp()
 		QCs.updateDisp()
-		if (QCs.in(3)) {
-			player.respec = false
-			player.respecMastery = true
-			respecTimeStudies()
-
-			player.timestudy.theorem = 0
-		}
 	}
 
 	//Paired Challenges
@@ -329,34 +309,9 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		PCs.updateDisp()
 	}
 
-	// more big rip stuff
-	if (tmp.ngp3) {
-		if (!bigRip && qu_save.bigRip.active && force) {
-			qu_save.bigRip.spaceShards = qu_save.bigRip.spaceShards.add(getSpaceShardsGain())
-			if (player.ghostify.milestones < 8) qu_save.bigRip.spaceShards = qu_save.bigRip.spaceShards.round()
-			if (player.matter.gt("1e5000")) giveAchievement("Really?")
-		}
-	}
-	var oldMoney = player.money
-	var dilTimes = player.dilation.times
-	var bigRipChanged = tmp.ngp3 && bigRip != qu_save.bigRip.active
-	var turnSomeOn = !bigRip || qu_save.bigRip.upgrades.includes(1)
-	qMs.update()
+	doQuantumResetStuff(5, false, isQC, QCs_save.in)
 
-	doQuantumResetStuff(5, bigRip, isQC, QCs_save.in)
-
-	// ghostify achievement reward - "Kee-hee-hee!"
-	if (pH.did("ghostify") && bigRip) {
-		player.timeDimension8 = {
-			cost: timeDimCost(8, 1),
-			amount: new Decimal(1),
-			power: new Decimal(1),
-			bought: 1
-		}
-	}
-
-	doInitInfMultStuff()
-	player.challenges = challengesCompletedOnEternity(bigRip)
+	player.challenges = challengesCompletedOnEternity()
 	if (getEternitied() < 50) {
 		getEl("replicantidiv").style.display = "none"
 		getEl("replicantiunlock").style.display = "inline-block"
@@ -364,7 +319,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		getEl("replicantidiv").style.display = "inline-block"
 		getEl("replicantiunlock").style.display = "none"
 	}
-	if (bigRip && player.ghostify.milestones > 9 && aarMod.ngudpV) for (var u = 7; u < 10; u++) player.eternityUpgrades.push(u)
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
 
 	if (tmp.ngp3) {
@@ -375,44 +329,16 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 
 		pH.updateActive()
 
-		if ((!isQC && player.ghostify.milestones < 6) || bigRip != qu_save.bigRip.active) qu_save.replicants.amount = new Decimal(0)
+		if (!isQC && player.ghostify.milestones < 6) qu_save.replicants.amount = new Decimal(0)
 		replicantsResetOnQuantum(isQC)
 		nanofieldResetOnQuantum()
 		player.eternityBuyer.tpUpgraded = false
 		player.eternityBuyer.slowStopped = false
-		if (qu_save.bigRip.active != bigRip) {
-			if (bigRip) {
-				for (var u = 0; u < qu_save.bigRip.upgrades.length; u++) tweakBigRip(qu_save.bigRip.upgrades[u])
-				if (qu_save.bigRip.times < 1) getEl("bigRipConfirmBtn").style.display = "inline-block"
-				qu_save.bigRip.times++
-				qu_save.bigRip.bestThisRun = player.money
-				giveAchievement("To the new dimension!")
-				if (qu_save.breakEternity.break) qu_save.breakEternity.did = true
-			} else {
-				if (!qu_save.bigRip.upgrades.includes(1) && oheHeadstart) {
-					player.infmultbuyer = true
-					for (var d=0;d<8;d++) player.infDimBuyers[d] = true
-				}
-				if (qMs.tmp.amt >= 12) unstoreTT()
-			}
-			if (pH.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
-			qu_save.bigRip.active = bigRip
-		}
-		if (!bigRip || tmp.bruActive[12]) player.dilation.upgrades.push(10)
-		else qu_save.wasted = bigRip && qu_save.bigRip.storedTS === undefined
-		if (bigRip ? tmp.bruActive[12] : qMs.tmp.amt >= 14) {
-			for (let i = (player.exdilation != undefined ? 1 : 3); i < 7; i++) if (i != 2 || !aarMod.ngudpV) player.dilation.upgrades.push((i > 2 ? "ngpp" : "ngud") + i)
-			if (aarMod.nguspV) {
-				for (var i = 1; i < 3; i++) player.dilation.upgrades.push("ngusp" + i)
-				for (var i = 4; i < 23; i++) if (player.dilation.upgrades.includes(getDilUpgId(i))) player.dilation.autoUpgrades.push(i)
-				updateExdilation()
-			}
-		}
 		qu_save.notrelative = true
 		updateMasteryStudyCosts()
 		updateMasteryStudyButtons()
 	} // bounds if tmp.ngp3
-	if (qMs.tmp.amt < 1 && !bigRip) {
+	if (qMs.tmp.amt < 1) {
 		getEl("infmultbuyer").textContent = "Autobuy IP mult: OFF"
 		getEl("togglecrunchmode").textContent = "Auto crunch mode: amount"
 		getEl("limittext").textContent = "Amount of IP to wait until reset:"
@@ -441,7 +367,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	updateLastTenRuns()
 	updateLastTenEternities()
 	updateLastTenQuantums()
-	if (!hasAch("r133") && !bigRip) {
+	if (!hasAch("r133")) {
 		var infchalls = Array.from(document.getElementsByClassName('infchallengediv'))
 		for (var i = 0; i < infchalls.length; i++) infchalls[i].style.display = "none"
 	}
@@ -479,7 +405,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	updateTimeStudyButtons()
 	updateDilationUpgradeCosts()
 	drawStudyTree()
-	handleDispOnQuantum(bigRip)
+	handleDispOnQuantum(false)
 
 	Marathon2 = 0;
 	setInitialMoney()

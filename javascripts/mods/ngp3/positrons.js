@@ -115,6 +115,10 @@ var pos = {
 			gal: QCs.done(5) ? 0.2 : 0.25,
 			base_pc: QCs.done(5) ? 1 / 100 : 1 / 125
 		}
+		if (PCs.milestoneDone(51)) {
+			data.mults.mdb_eff *= 1.05
+			data.mults.base_pc *= 1.05
+		}
 
 		this.updateCloud()
 	},

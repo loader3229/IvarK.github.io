@@ -67,14 +67,18 @@ function isReplicantiLimitBroken() {
 	return hasTimeStudy(192) && !tmp.ngC
 }
 
-function getReplEff() {
-	return Decimal.max(tmp.rmPseudo || getReplBaseEff(), player.replicanti.amount)
+function getReplEff(x, base) {
+	if (QCs.in(5)) return new Decimal(1)
+	if (!x) x = player.replicanti.amount
+	if (!base && tmp.ngp3) {
+		x = QCs.data[1].convert(x)
+		x = softcap(x, "rep")
+	}
+	return base ? x : x.max(tmp.rmPseudo || getReplEff(undefined, true))
 }
 
 function getReplBaseEff(x) {
-	x = QCs.in(5) ? new Decimal(1) : QCs.data[1].convert(x || player.replicanti.amount)
-	if (tmp.ngp3) x = softcap(x, "rep")
-	return x
+	return getReplEff(x, true)
 }
 
 function getReplMult(next) {
@@ -417,7 +421,6 @@ function boostReplicateInterval() {
 	}
 	if (QCs_tmp.qc1) x = x.times(QCs_tmp.qc1.speedMult)
 
-
 	data.intBoost = x
 	data.baseInt = data.baseInt.div(x)
 	data.baseEst = data.baseEst.times(x)
@@ -447,6 +450,12 @@ function updateReplicantiTemp() {
 
 	data.baseInt = data.intUpg.times(data.intMult)
 	data.baseEst = Decimal.div(estChance, data.baseInt)
+
+	if (QCs.in(5)) {
+		var qc5 = data.baseEst.pow(Math.max(1 - player.thisEternity / 100, 0))
+		data.baseInt = data.baseInt.times(qc5)
+		data.baseEst = data.baseEst.div(qc5)
+	}
 
 	data.speeds = getReplSpeed()
 	updateEC14BaseReward()

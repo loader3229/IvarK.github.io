@@ -52,7 +52,7 @@ var QCs = {
 		1: {
 			unl: () => true,
 			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and TT cost multipliers are doubled.",
-			goal: () => player.money.e >= tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11,
+			goal: () => player.money.e >= (tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11),
 			goalDisp: () => shortenCosts(Decimal.pow(10, tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11)) + " antimatter",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.35),
 			hint: "Figure out how to get more Replicanti Chance. (MS35)",
@@ -105,7 +105,7 @@ var QCs = {
 				}
 				if (PCs.milestoneDone(12)) {
 					var eff = QCs_save.qc1.expands / 3 + 1
-					data.speedMult = data.speedMult.times(Math.pow(eff, 5))
+					data.speedMult = data.speedMult.times(Math.pow(eff, 2))
 					data.limit = data.limit.pow(eff)
 				}
 			},
@@ -118,7 +118,7 @@ var QCs = {
 			},
 
 			can: () => QCs_tmp.qc1 && pH.can("eternity") && player.replicanti.amount.gte(QCs_tmp.qc1.req) && QCs_save.qc1.boosts < QCs.data[1].max(),
-			max: () => QCs.in(6) ? 4 : 20,
+			max: () => 20,
 			boost() {
 				if (!QCs.data[1].can()) return false
 
@@ -128,7 +128,7 @@ var QCs = {
 				return true
 			},
 
-			expandCost: () => Math.pow(Math.max(QCs_save.qc1.expands * 2, 1), 2) * 1e7,
+			expandCost: () => Math.pow(4, QCs_save.qc1.expands) * 1e7,
 			canExpand: () => QCs_tmp.qc5 && QCs_save.qc5 >= QCs.data[1].expandCost(),
 			expand() {
 				if (!this.canExpand()) return
@@ -257,11 +257,11 @@ var QCs = {
 		},
 		5: {
 			unl: () => true,
-			desc: () => "Replicantis only produce Replicanti Energy by gaining, which increases effective Quantum Energy and Positronic Charge.",
-			goal: () => player.eternityPoints.gte(Decimal.pow(10, 1.9e7)),
-			goalDisp: () => shortenCosts(Decimal.pow(10, 1.9e7)) + " Eternity Points",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 3.15),
-			hint: "Automate eternities until you are ready to get Compressors.",
+			desc: () => "You gain Replicanti Energy based on how many Replicantis you gained. However, Eternitying resets Replicantis, and you start at 1x replicate interval. (reduces over eternity time)",
+			goal: () => player.eternityPoints.gte(Decimal.pow(10, 2.8e6)),
+			goalDisp: () => shortenCosts(Decimal.pow(10, 2.8e6)) + " Eternity Points",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 1.7),
+			hint: "Adjust your auto-Eternity time to maximize your production.",
 
 			rewardDesc: (x) => "Sacrificed things are stronger for Positrons, but you sacrifice less galaxies.",
 			rewardEff(str) {
@@ -279,7 +279,7 @@ var QCs = {
 				if (!QCs.in(5) && !QCs.done(6)) return
 
 				QCs_tmp.qc5 = {
-					mult: 1 / (Math.log10(QCs_save.qc1.boosts + 1) + 1),
+					mult: QCs_save.qc1.boosts + 1,
 					eff: Math.log2(QCs_save.qc5 / 2e6 + 1) * 10,
 				}
 				if (QCs.isRewardOn(6)) QCs_tmp.qc5.mult *= QCs_tmp.rewards[6]
@@ -298,7 +298,7 @@ var QCs = {
 		6: {
 			unl: () => true,
 			desc: () => "There is a increasing variable, which gives different boosts; but eternitying subtracts it, and dilating reduces the gain.",
-			goal: () => player.replicanti.amount.e >= 1e6 && QCs_save.qc1.boosts >= 4,
+			goal: () => (player.replicanti.amount.e >= 1e6 && QCs_save.qc1.boosts == 4) || QCs_save.qc1.boosts >= 5,
 			goalDisp: () => shortenCosts(Decimal.pow(10, 1e6)) + " Replicantis + " + getFullExpansion(4) + " Replicanti Compressors",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.45),
 			hint: "Do long Eternity runs.",
@@ -351,8 +351,8 @@ var QCs = {
 		8: {
 			unl: () => true,
 			desc: () => "All Entangled Boosts are unmastered and anti'd. You have to setup a cycle of 2 chosen gluons, and Big Crunching switches your gluon kind to the next one.",
-			goal: () => enB.glu.boosterEff() >= 100,
-			goalDisp: () => "100 Effective Boosters",
+			goal: () => enB.glu.boosterEff() >= 130,
+			goalDisp: () => "130 Effective Boosters",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.8),
 			hint: "Make your Auto-Crunch faster than Auto-Eternity.",
 
@@ -369,9 +369,11 @@ var QCs = {
 
 			switch() {
 				var qc8 = QCs_save.qc8
+				var eb12 = enB.active("glu", 12)
 				qc8.index++
 				if (qc8.index >= qc8.order.length) qc8.index = 0
 				QCs.data[8].updateDisp()
+				if (eb12 != enB.active("glu", 12)) updateColorCharge(true)
 			},
 			updateDisp() {
 				if (!tmp.quUnl) return
@@ -449,7 +451,13 @@ var QCs = {
 	getGoalDisp() {
 		return PCs.in() ? "" : " and " + this.data[QCs_tmp.in[0]].goalDisp()
 	},
-	getGoalMA() {
+	getGoalMA(x, mod) {
+		if (x) {
+			var r = this.data[x].goalMA
+			if (mod) r = r.pow(QCs.modData[mod].maExp)
+			return r
+		}
+
 		return PCs.in() ? PCs.goal() : QCs_save.mod ? this.data[QCs_tmp.in[0]].goalMA.pow(QCs.modData[QCs_save.mod].maExp) : this.data[QCs_tmp.in[0]].goalMA
 	},
 	isRewardOn(x) {

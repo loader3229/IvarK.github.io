@@ -495,7 +495,7 @@ function buyDilationUpgrade(pos, max, isId) {
 			resetDilationGalaxies()
 		}
 		if (id[1] == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(getDil3Power()))
-		else if (id[1] >= 3 && player.eternityBuyer.alwaysDil) player.eternityBuyer.alwaysDilCond = true
+		else if (id[1] >= 3 && player.eternityBuyer.alwaysDil && (!player.dilation.active || !qMs.on(21))) player.eternityBuyer.alwaysDilCond = true
 	} else {
 		// Not rebuyable
 		if (hasDilationUpg(id)) return

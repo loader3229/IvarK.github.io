@@ -119,7 +119,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
 		nextThreshold: new Decimal(1000),
 		freeGalaxies: 0,
-		upgrades: qMs.tmp.amt >= 7 && (!bigRip || tmp.bruActive[12]) ? [4,5,6,7,8,9,"ngpp1","ngpp2"] : [],
+		upgrades: qMs.tmp.amt >= 9 ? player.dilation.upgrades : qMs.tmp.amt >= 7 ? [4, 5, 6, , 7, 8, 9, 10] : [],
 		autoUpgrades: [],
 		rebuyables: {
 			1: 0,
@@ -339,7 +339,7 @@ function doEternityResetStuff(layer = 4, chall) {
 	player.replicanti.amount = layer >= 5 ? (
 		new Decimal(getEternitied() >= 50 ? 1 : 0)
 	) : (
-		moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[2] && (chall == 0 || chall == "dil") ? Decimal.pow(player.replicanti.kept || player.replicanti.amount, 0.995).floor().max(1) :
+		moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[2] && (chall == 0 || chall == "dil") && !QCs.in(5) ? Decimal.pow(player.replicanti.kept || player.replicanti.amount, 0.995).floor().max(1) :
 		new Decimal(getEternitied() >= 50 ? 1 : 0)
 	)
 	if (chall != 14) delete player.replicanti.kept

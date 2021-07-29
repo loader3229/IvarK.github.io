@@ -3370,9 +3370,10 @@ function eternity(force, auto, forceRespec, dilated) {
 
 		var autoPreset = targetAutoPreset()
 		var canSwitch = autoOn && player.timestudy.auto[autoPreset] && player.timestudy.auto[autoPreset] != ""
-		if (autoOn) forceRespec = true
+
+		if (canSwitch) forceRespec = true
 		if (player.respec || player.respecMastery || forceRespec) respecTimeStudies(forceRespec)
-		if (autoOn) loadAutoPreset(autoPreset)
+		if (canSwitch) loadAutoPreset(autoPreset)
 	}
 
 	doEternityResetStuff(4, dilated ? "dil" : 0)
