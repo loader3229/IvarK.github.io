@@ -44,7 +44,7 @@ var pos = {
 		return tmp.ngp3 && player.masterystudies.includes("d7")
 	},
 	on() {
-		return this.unl() && pos_save.on
+		return this.unl() && pos_save && pos_save.on
 	},
 	toggle() {
 		if (pos_save.on && !confirm("You will lose access to Positronic Boosts except the mastered ones. Are you sure?")) return

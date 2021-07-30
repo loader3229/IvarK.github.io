@@ -531,6 +531,8 @@ function buyDilationUpgrade(pos, max, isId) {
 }
 
 function getTTProduction(display) {
+	if (QCs.modIn(7, "up")) return 0
+
 	let tp = player.dilation.tachyonParticles
 	let r = getTTGenPart(tp)
 
@@ -542,6 +544,7 @@ function getTTProduction(display) {
 function getTTGenPart(x) {
 	x = x.div(2e4)
 	if (tmp.ngp3) x = softcap(x, "tt")
+	if (QCs.perkActive(7)) x = x.times(10)
 	return x
 }
 

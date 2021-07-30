@@ -1,10 +1,10 @@
 // v2.9
-function quantum(auto, force, qc, mod, quick) {
+function quantum(auto, force, qc, mode, quick) {
 	if (tmp.ngp3 && qu_save.bigRip.active) force = true
 	if (!(isQuantumReached()||force)||implosionCheck) return
 
 	var headstart = aarMod.newGamePlusVersion >= 1 && !tmp.ngp3
-	var mode = []
+	var mode = mode ? [mode] : []
 	var data
 	if (qc) {
 		if ((!QCs.done(1) || player.options.challConf || aarMod.quantumConf) && !quick) {
@@ -12,6 +12,9 @@ function quantum(auto, force, qc, mod, quick) {
 		}
 		mode.push("qc")
 		data = typeof(qc) == "number" ? [qc] : qc
+
+		if (QCs_save.mod && mode.includes("restart")) mode.push(QCs_save.mod)
+		if (QCs_tmp.show_perks && mode.includes("click")) mode.push("up")
 	}
 	if (aarMod.quantumConf && !(auto || force)) if (!confirm(player.masterystudies ? "Quantum will reset everything Eternity resets, and including all Eternity Content. You will gain a quark and unlock various upgrades." + (inNGM(2) ? " WARNING! THIS EXITS NG-- MODE DUE TO BALANCING REASONS!" : ""):"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
 	if (!pH.did("quantum")) if (!confirm("Are you sure you want to do this? You will lose everything you have!")) return
@@ -259,7 +262,10 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		if (!force) {
 			if (QCs_save.mod) {
 				var qc = QCs_save.mod + qcData[0]
-				if (!QCs_save.mod_comps.includes(qc)) QCs_save.mod_comps.push(qc)
+				if (!QCs_save.mod_comps.includes(qc)) {
+					PCs_save.shrunkers.unspent += QCs.modData[QCs_save.mod].shrunker
+					QCs_save.mod_comps.push(qc)
+				}
 			} else if (qcData.length == 1) {
 				var qc = qcData[0]
 				QCs_save.comps = Math.max(QCs_save.comps, qc)
@@ -268,6 +274,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 			} else if (qcData.length == 2) {
 				var id = PCs.conv(qcData[0], qcData[1])
 				if (!PCs_save.comps.includes(id)) PCs_save.comps.push(id)
+				PCs.respec(id)
 				PCs.updateTmp()
 				PCs.updateDisp()
 			}
@@ -281,7 +288,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 			if (data.length == 2) {
 				PCs.updateButton(PCs.conv(data[0], data[1]), data)
 				if (data[0] == data[1]) QCs_save.mod = "ol"
-			} else if (QCs.perkCan(data[0])) QCs_save.mod = "pk"
+			} else if (mode.includes("up")) QCs_save.mod = "up"
 
 			if ((!QCs.isntCatched() || QCs.in(7)) && !QCs_save.kept) QCs_save.kept = {
 				tt: player.timestudy.theorem,

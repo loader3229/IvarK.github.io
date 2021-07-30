@@ -135,22 +135,6 @@ function getGalaxyTickSpeedMultiplier() {
 	}
 	let perGalaxy = player.infinityUpgradesRespecced != undefined ? 0.98 : 0.965
 	let x = Decimal.pow(perGalaxy, galaxies - linearGalaxies).times(baseMultiplier)
-	x = redShiftTickspeedMultiplier(x)
-	return x
-}
-
-function redShiftTickspeedMultiplier(x) {
-	let log = x.log10()
-	let oldLog = log
-	tmp.galRed = 1
-
-	if (log < 0) {
-		log = -softcap(-log, "ts_reduce_log")
-		tmp.galRed = log / oldLog
-		if (hasBosonicUpg(55)) tmp.galRed = Math.pow(tmp.galRed, tmp.blu[55])
-
-		x = Decimal.pow(10, oldLog * tmp.galRed)
-	}
 	return x
 }
 

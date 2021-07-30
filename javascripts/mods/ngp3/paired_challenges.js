@@ -138,13 +138,16 @@ var PCs = {
 	in(x) {
 		return QCs_tmp.in.length >= 2
 	},
-	pcUnl(x) {
-		var qcs = PCs.convBack(x)
+	pcShown(x) {
 		var pos = this.convBack(PCs.data.pos[x])
 		if (PCs_save.comps.includes(x)) return true
 		if (this.overlapped(x)) return QCs.done(8)
-		if (PCs_save.lvl < PCs.data.qc1_lvls[pos[0]] + PCs.data.qc2_lvls[pos[1]] - 1) return
-		return QCs.done(qcs[0]) && QCs.done(qcs[1])
+		if (PCs_save.lvl < PCs.data.qc1_lvls[pos[0]] + PCs.data.qc2_lvls[pos[1]] - 1) return false
+		return true
+	},
+	pcUnl(x) {
+		var qcs = this.convBack(x)
+		return this.pcShown(x) && QCs.done(qcs[0]) && QCs.done(qcs[1])
 	},
 	goal(pc) {
 		var list = pc || QCs_tmp.in
@@ -154,7 +157,9 @@ var PCs = {
 		var qc1 = QCs.data[list[0]].goalMA
 		var qc2 = QCs.data[list[1]].goalMA
 		var div = PCs.data.goal_divs[list[0]] + PCs.data.goal_divs[list[1]] + 1
-		return qc1.pow(qc2.log(Number.MAX_VALUE) / div)
+		var r = qc1.pow(qc2.log(Number.MAX_VALUE) / div)
+		if (PCs_save.shrunkers.spent[this.conv(list)]) r = r.pow(Math.pow(0.95, PCs_save.shrunkers.spent[this.conv(list)]))
+		return r
 	},
 	conv(c1, c2) {
 		if (!c1) { //Current (No augments)
@@ -219,12 +224,12 @@ var PCs = {
 		if (!inQCs) inQCs = QCs_save.in
 		var qcs = this.convBack(pc)
 		var pos = this.convBack(PCs.data.pos[pc])
-		var unl = this.pcUnl(pc)
+		var unl = this.pcShown(pc)
 
 		getEl("pc" + pc).style.display = unl ? "" : "none"
 		if (unl) {
 			getEl("pc" + pc).setAttribute("ach-tooltip", "Goal: " + shorten(PCs.goal(pc)) + " MA")
-			getEl("pc" + pc).className = inQCs[0] == qcs[0] && inQCs[1] == qcs[1] ? "onchallengebtn" : PCs.done(pc) ? "completedchallengesbtn" : QCs.done(qcs[0]) && QCs.done(qcs[1]) ? "challengesbtn" : "lockedchallengesbtn"
+			getEl("pc" + pc).className = inQCs[0] == qcs[0] && inQCs[1] == qcs[1] ? "onchallengebtn" : PCs.done(pc) ? "completedchallengesbtn" : this.pcUnl(pc) ? "challengesbtn" : "lockedchallengesbtn"
 		}
 	},
 	resetButtons(force) {
@@ -281,8 +286,10 @@ var PCs = {
 
 			var pc = PCs.conv()
 			PCs_save.shrunkers.unspent--
-			PCs_save.shrunkers.spent[pc] = (PCs_save.spent[pc] || 0) + 1
-		} else PCs.reset()
+			PCs_save.shrunkers.spent[pc] = (PCs_save.shrunkers.spent[pc] || 0) + 1
+			PCs.updateShrunkerDisp()
+			PCs.updateButton(pc)
+		} else alert("This is not available because Challenge Sweeper isn't implemented yet!") //PCs.reset()
 	},
 	respec(pc) {
 		if (!PCs_save.shrunkers.spent[pc]) return
@@ -292,12 +299,13 @@ var PCs = {
 	updateShrunkerDisp() {
 		getEl("pc_shrunker_div").style.display = QCs.done(8) ? "" : "none"
 		getEl("pc_shrunker").textContent = getFullExpansion(PCs_save.shrunkers.unspent)
-		getEl("pc_shrunker_btn").className = !PCs.in() ? "storebtn" :
-			PCs.done(PCs.conv()) ? "unavailablebtn" :
-			PCs_save.shrunkers.unspent ? "storebtn" :"unavailablebtn"
-		getEl("pc_shrunker_btn").textContent = !PCs.in() ? "Respec, but reset the combinations." :
-			PCs.done(PCs.conv()) ? "You already completed this challenge!" :
-			"Spend a shrunker to reduce the goal by ^0.9."
+		getEl("pc_shrunker_btn").className = !this.in() ? "unavailablebtn" :
+			this.done(this.conv()) ? "unavailablebtn" :
+			PCs_save.shrunkers.unspent ? "storebtn" : "unavailablebtn"
+		getEl("pc_shrunker_btn").textContent = !this.in() ? "Respec, but reset the combinations. (locked)" :
+			this.done(this.conv()) ? "You already completed this challenge!" :
+			"Spend a shrunker to reduce the goal by ^0.95."
+		getEl("pc_shrunker_goal").textContent = !this.in() ? "" : "Goal: " + shorten(this.goal()) + " MA (" + getFullExpansion(PCs_save.shrunkers.spent[PCs.conv()] || 0) + " shrunkers spent)"
 	}
 }
 var PCs_save = undefined

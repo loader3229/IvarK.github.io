@@ -13,94 +13,6 @@ To make a new softcap using this function
 */
 
 var softcap_data = {
-	ts_reduce_log: {
-		name: "log base 10 of tickspeed reduction"
-		//No softcaps
-	},
-	ts_reduce_log_big_rip: {
-		name: "log base 10 of tickspeed reduction in Big Rip",
-		//No softcaps
-	},
-	ts11_log_big_rip: {
-		name: "log base 10 of time study 11 effect in Big Rip",
-		1: {
-			func: "pow",
-			start: 11e4,
-			pow: 0.8,
-			derv: true
-		},
-		2: {
-			func: "pow",
-			start: 13e4,
-			pow: 0.7,
-			derv: true
-		},
-		3: {
-			func: "pow",
-			start: 15e4,
-			pow: 0.6,
-			derv: true
-		},
-		4: {
-			func: "pow",
-			start: 17e4,
-			pow: 0.5,
-			derv: true
-		},
-		5: {
-			func: "pow",
-			start: 19e4,
-			pow: 0.4,
-			derv: true
-		},
-		6: {
-			func: "log",
-			start: 5e5,
-			mul: .2,
-			pow: 1e5
-		},	
-	},
-	bru1_log: {
-		name: "log base 10 of Big Rip Upgrade 1",
-		1: {
-			func: "pow",
-			start: 3e8,
-			pow: 0.75,
-			derv: false
-		},
-		2: {
-			func: "log",
-			start: 1e10,
-			pow: 10
-		},
-		3: {
-			func: "pow",
-			start: 2e10,
-			pow: 0.5,
-			derv: true
-		},
-		4: {
-			func: "pow",
-			start: 4e10,
-			pow: 0.7,
-			derv: true
-		},
-		5: {
-			func: "log",
-			start: 1e11,
-			pow: 11,
-			add: -1
-		},
-	},
-	beu3_log: {
-		name: "log base 10 of Break Eternity Upgrade 3",
-		1: {
-			func: "pow",
-			start: 150,
-			pow: 0.5,
-			derv: false
-		}
-	},
 	tt: {
 		name: "TT production",
 		1: {
@@ -122,10 +34,9 @@ var softcap_data = {
 		name: "effective Replicantis",
 		1: {
 			func: "dilate",
-			start: () => Decimal.pow(10, 9e6 + (QCs_tmp.qc1 ? 1e6 * QCs_save.qc1.expands : 0)),
+			start: Decimal.pow(10, 1e7),
 			base: 10,
-			pow: 4/5,
-			mul: 0.5
+			pow: 4/5
 		},
 	},
 	rInt: {
@@ -166,7 +77,7 @@ var softcap_data = {
 		},
 	},
 	ma: {
-		name: "meta-antimatter",
+		name: "effective meta-antimatter",
 		1: {
 			func: "pow",
 			start: new Decimal(Number.MAX_VALUE),
@@ -191,28 +102,6 @@ var softcap_data = {
 			base: 10,
 			pow: 1
 		},
-	},
-	ig_log_high: { 
-		name: "log base 10 of Intergalactic reward",
-		1: { 
-			func: "log",
-			start: 1e20,
-			pow: 10,
-			mul: 5
-		},
-		2: { 
-			func: "log", 
-			start: 1e22,
-			pow: 11,
-			mul: 4,
-			add: 12
-		},
-		3: {
-			func: "pow",
-			start: 1e23,
-			pow: 0.1,
-			derv: false
-		}
 	},
 	aqs: {
 		name: "Anti-Quark gain",
@@ -242,108 +131,6 @@ var softcap_data = {
 			pow: 1,
 			mul: Math.log2(10) * 2
 		}
-	},
-	bam: {
-		name: "Bosonic Antimatter gain per second",
-		1: {
-			func: "pow",
-			start: new Decimal(1e80),
-			pow() {
-				return getBosonicAMProductionSoftcapExp(1)
-			},
-			derv: true
-		},
-		2: {
-			func: "pow",
-			start: new Decimal(1e90),
-			pow() {
-				return getBosonicAMProductionSoftcapExp(2)
-			},
-			derv: true
-		},
-		3: {
-			func: "pow",
-			start: new Decimal(1e100),
-			pow() {
-				return getBosonicAMProductionSoftcapExp(3)
-			},
-			derv: true
-		},
-		4: {
-			func: "pow",
-			start: new Decimal(1e110),
-			pow() {
-				return getBosonicAMProductionSoftcapExp(4)
-			},
-			derv: true
-		},
-		5: {
-			func: "pow",
-			start: new Decimal(1e120),
-			pow() {
-				return getBosonicAMProductionSoftcapExp(5)
-			},
-			derv: true
-		},
-		6: {
-			func: "pow",
-			start: new Decimal(1e130),
-			pow() {
-				return getBosonicAMProductionSoftcapExp(6)
-			},
-			derv: true
-		}
-	},
-	mptd_log: { //NOT USED IN ANYTHING YET, JUST TESTING SO PLS DONT REMOVE
-		name: "log base 10 of multiplier per ten dimensions",
-		1: {
-			func: "pow",
-			start: 2.5e6,
-			pow: .99,
-			derv: false
-		},
-		2: {
-			func: "pow",
-			start: 3e6,
-			pow: .97,
-			derv: false
-		},
-		3: {
-			func: "pow",
-			start: 3.5e6,
-			pow: .94,
-			derv: false
-		},
-		4: {
-			func: "pow",
-			start: 4e6,
-			pow: .90,
-			derv: false
-		},
-		5: {
-			func: "pow",
-			start: 4.5e6,
-			pow: .85, 
-			derv: false
-		},
-		6: {
-			func: "pow",
-			start: 5e6,
-			pow: .79, 
-			derv: false
-		},
-		7: {
-			func: "pow",
-			start: 5.5e6,
-			pow: .72, 
-			derv: false
-		},
-		8: {
-			func: "pow",
-			start: 6e6,
-			pow: .64, 
-			derv: false
-		},
 	},
 
 	//NG Condensed
@@ -714,11 +501,6 @@ function getSoftcapName(id){
 
 function getSoftcapAmtFromId(id){
 	return { // for amount
-		ts_reduce_log: () => Decimal.pow(tmp.tsReduce, -1).log10(),
-		ts_reduce_log_big_rip: () => Decimal.pow(tmp.tsReduce, -1).log10(),
-		ts11_log_big_rip: () => tsMults[11]().log10(),
-		bru1_log: () => tmp.bru[1].max(1).log10(),
-		beu3_log: () => tmp.beu[3].max(1).log10(),
 		rep: () => getReplEff(),
 		rInt: () => tmp.rep ? tmp.rep.baseBaseEst.pow(1 - getECReward(14)) : new Decimal(1),
 		it: () => tmp.baseIt.max(1),
@@ -730,9 +512,6 @@ function getSoftcapAmtFromId(id){
 		aqs: () => quarkGain(),
 		rp: () => colorBoosts.r,
 		gp: () => colorBoosts.g,
-		ig_log_high: () => tmp.ig.max(1).log10(),
-		bam: () => getBosonicAMProduction(),
-		mptd_log: () => Decimal.log10(tmp.mptb) * tmp.mpte,
 
 		// Condensened: () =>
 		nds_ngC: () => getDimensionFinalMultiplier(1),
@@ -768,15 +547,10 @@ function hasSoftcapStarted(id, num){
 		rInt: ECComps("eterc14"),
 		ts83: tmp.ngp3,
 		ts225: tmp.ngp3,
-		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined && tmp.quActive,
-		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined && tmp.quActive,
 		aqs: tmp.ngp3,
 		rp: tmp.ngp3,
-		bam: tmp.ngp3,
 		tt: tmp.ngp3,
-		ma: tmp.ngp3,
-		ig_log_high: tmp.ngp3 && tmp.ig !== undefined,
-		mptd_log: false, //again, for now only
+		ma: tmp.ngp3
 	}
 	if (l >= 4 && !tmp.ngC && id.slice(l - 4, l) == "_ngC") return false
 	if (l >= 5 && id.slice(l - 5, l - 1) == "_ngm") {
@@ -876,11 +650,6 @@ function getInnerHTMLSoftcap(id){
 
 function updateSoftcapStatsTab(){
 	let names = {
-		ts_reduce_log: "softcap_ts1",
-		ts_reduce_log_big_rip: "softcap_tsBR",
-		ts11_log_big_rip: "softcap_ts2",
-		bru1_log: "softcap_bru1",
-		beu3_log: "softcap_beu3",
 		rep: "softcap_rep",
 		rInt: "softcap_rInt",
 		it: "softcap_it",
@@ -892,9 +661,6 @@ function updateSoftcapStatsTab(){
 		aqs: "softcap_aqs",
 		rp: "softcap_rp",
 		gp: "softcap_gp",
-		ig_log_high: "softcap_ig",
-		bam: "softcap_bam",
-		mptd_log: "softcap_mptd",
 		// Condensened:
 		nds_ngC: "softcap_C_nd",
 		ts_ngC: "softcap_C_ts",

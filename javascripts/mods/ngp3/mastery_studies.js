@@ -217,7 +217,7 @@ var mTs = {
 		},
 		292() {
 			let rg = getFullEffRGs()
-			return Math.log10(rg / 1e3 + 1) / 3 + 1
+			return Math.log2(rg / 2e3 + 1) / 5 + 1
 		},
 
 		311() {

@@ -30,8 +30,8 @@ var QCs = {
 			order: []
 		}
 
-		if (QCs_save.best_exclusion || QCs_save.perks_unl) {
-			QCs_save.mod_comps = {}
+		if (QCs_save.best_exclusion || QCs_save.perks_unl || (QCs_save.mod_comps && !QCs_save.mod_comps.length)) {
+			QCs_save.mod_comps = []
 			delete QCs_save.best_exclusion
 			delete QCs_save.perks_unl
 		}
@@ -41,6 +41,7 @@ var QCs = {
 	},
 	reset() {
 		QCs_save.qc1 = {boosts: 0, max: 0, expands: 0}
+		if (!QCs_save.qc2) QCs_save.qc2 = 1
 		QCs_save.qc3 = undefined
 		QCs_save.qc4 = "ng"
 		QCs_save.qc5 = 0
@@ -62,19 +63,19 @@ var QCs = {
 				return 0.1
 			},
 
-			perkDesc: (x) => "Each Replicated Compressor gives 10s of Quantum-layer ticks.",
-			perkReqs: [1/0, 1/0],
+			upsideDesc: (x) => "Replicated Compressors are 50% weaker, and the replicate interval is " + (tmp.exMode ? "inverted" : "always 1s") + ".",
+			perkDesc: (x) => "Each Replicated Compressor gives 10s of Quantum-layer ticks. (not implemented)",
 			perkEff() {
 				return 1
 			},
+
+			overlapReqs: [1/0, 1/0],
 
 			ttScaling() {
 				return tmp.dtMode ? 2 : tmp.exMode ? 1.75 : 1.5
 			},
 			compressScaling() {
-				let x = 4
-				if (hasAch("ng3p27")) x += 0.5
-				return x
+				return 4
 			},
 			updateTmp() {
 				delete QCs_tmp.qc1
@@ -83,6 +84,7 @@ var QCs = {
 				let boosts = QCs_save.qc1.boosts
 				let maxBoosts = QCs_save.qc1.max
 				let brokenBoosts = Math.max(QCs_save.qc1.boosts - this.compressScaling(), 0)
+				let eff = QCs.modIn(1, "up") ? 0.5 : 1
 
 				let data = {
 					req: Decimal.pow(10, 1e6 + 2.5e5 * brokenBoosts),
@@ -92,8 +94,8 @@ var QCs = {
 					scalingMult: Math.pow(2, Math.max(boosts - 20, 0) / 20),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
-					effMult: maxBoosts / 30 + boosts / 30 + 1,
-					effExp: Math.min(1 + boosts / 20, 2)
+					effMult: (maxBoosts / 10 + boosts / 40) * eff + 1,
+					effExp: Math.min(1 + boosts / 20 * eff, 2)
 				}
 				QCs_tmp.qc1 = data
 				QCs_tmp.qc1.limit = QCs_tmp.qc1.limit.max(QCs_tmp.qc1.req)
@@ -101,12 +103,12 @@ var QCs = {
 				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
 				if (PCs.milestoneDone(11)) {
 					data.req = data.req.pow(0.9)
-					data.speedMult = data.speedMult.times(boosts / 2 + 1)
+					data.speedMult = data.speedMult.times(boosts + 1)
 				}
 				if (PCs.milestoneDone(12)) {
-					var eff = QCs_save.qc1.expands / 3 + 1
-					data.speedMult = data.speedMult.times(Math.pow(eff, 2))
-					data.limit = data.limit.pow(eff)
+					var exp = QCs_save.qc1.expands
+					data.speedMult = data.speedMult.times(Math.pow(exp + 1, 2))
+					data.limit = data.limit.times(Decimal.pow(10, exp * 1e6))
 				}
 			},
 			convert(x) {
@@ -125,6 +127,7 @@ var QCs = {
 				QCs_save.qc1.boosts++
 				player.replicanti.amount = Decimal.pow(10, Math.pow(player.replicanti.amount.log10(), 0.9))
 				eternity(false, true)
+
 				return true
 			},
 
@@ -151,11 +154,13 @@ var QCs = {
 				return x
 			},
 
-			perkDesc: (x) => "If excluded, then charged boosts give free Positronic Charge instead.",
-			perkReqs: [1/0, 1/0],
+			upsideDesc: (x) => "Only excluded Positronic Boosts work.",
+			perkDesc: (x) => "If excluded, then charged boosts give free Positronic Charge instead. (not implemented)",
 			perkEff() {
 				return 1
 			},
+
+			overlapReqs: [1/0, 1/0],
 
 			updateCloudDisp() {
 				if (!pos_tmp.cloud) return
@@ -187,11 +192,13 @@ var QCs = {
 				return 1
 			},
 
+			upsideDesc: (x) => "???",
 			perkDesc: (x) => "Time multiplier is always 1x for the Meta Accelerator base.",
-			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
 			},
+
+			overlapReqs: [1/0, 1/0],
 
 			amProd() {
 				return getMDProduction(1).max(1).pow(this.amExp())
@@ -213,11 +220,17 @@ var QCs = {
 				return
 			},
 
-			perkDesc: (x) => "Total galaxies reduce the QC goal by ^" + shorten(1 / x) + ".",
-			perkReqs: [1/0, 1/0],
+			upsideDesc: (x) => "???",
+			perkDesc: (x) => "Total galaxies reduce the QC goal by " + shorten(x) + "x",
 			perkEff() {
-				return 1
+				return Math.pow(
+					Math.sqrt(player.galaxies) +
+					Math.sqrt(getTotalRGs()) +
+					Math.sqrt(player.dilation.freeGalaxies)
+				, 2)
 			},
+
+			overlapReqs: [1/0, 1/0],
 
 			updateTmp() {
 				delete QCs_tmp.qc4
@@ -268,11 +281,13 @@ var QCs = {
 				return 1
 			},
 
+			upsideDesc: (x) => "???",
 			perkDesc: (x) => "Replicated Energy effect is doubled.",
-			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
 			},
+
+			overlapReqs: [1/0, 1/0],
 
 			updateTmp() {
 				delete QCs_tmp.qc5
@@ -283,6 +298,7 @@ var QCs = {
 					eff: Math.log2(QCs_save.qc5 / 2e6 + 1) * 10,
 				}
 				if (QCs.isRewardOn(6)) QCs_tmp.qc5.mult *= QCs_tmp.rewards[6]
+				if (QCs.perkActive(5)) QCs_tmp.qc5.eff *= 2
 				if (PCs.milestoneDone(52)) QCs_tmp.qc5.mult *= 2
 			},
 
@@ -316,17 +332,19 @@ var QCs = {
 				return x
 			},
 
+			upsideDesc: (x) => "QC6 variable is inverted.",
 			perkDesc: (x) => "QC6 variable can’t go below 0.",
-			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
 			},
+
+			overlapReqs: [1/0, 1/0],
 
 			updateTmp() {
 				delete QCs_tmp.qc6
 				if (!QCs.in(6)) return
 
-				QCs_tmp.qc6 = Math.log2(Math.max(-QCs_save.qc6, 0) / 100 + 1) + 2
+				QCs_tmp.qc6 = Math.log2(Math.max(QCs.modIn(6, "up") ? QCs_save.qc6 : -QCs_save.qc6, 0) / 100 + 1) + 2
 			}
 		},
 		7: {
@@ -342,11 +360,13 @@ var QCs = {
 				return 1
 			},
 
+			upsideDesc: (x) => "You can't passively generate TT, and QC7 applies to Time Studies. (partly implemented)",
 			perkDesc: (x) => "You passively generate 10x more TT.",
-			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
-			}
+			},
+
+			overlapReqs: [1/0, 1/0],
 		},
 		8: {
 			unl: () => true,
@@ -361,11 +381,13 @@ var QCs = {
 				return 1
 			},
 
+			upsideDesc: (x) => "You must setup a cycle on Positronic Boosts. (not implemented)",
 			perkDesc: (x) => "You can’t lose your Eternity time.",
-			perkReqs: [1/0, 1/0],
 			perkEff() {
 				return 1
 			},
+
+			overlapReqs: [1/0, 1/0],
 
 			switch() {
 				var qc8 = QCs_save.qc8
@@ -440,69 +462,72 @@ var QCs = {
 		return QCs_tmp.in.length >= 1
 	},
 	isntCatched() {
-		return(QCs_tmp.in.length == 2 ? tmp.bgMode : QCs_tmp.in.length != 1) || QCs_save.mod
+		return QCs_tmp.in.length == 2 ? tmp.bgMode : QCs_tmp.in.length != 1
 	},
 	done(x) {
 		return this.unl() && QCs_save.comps >= x
 	},
 	getGoal() {
-		return PCs.in() ? player.meta.bestAntimatter.gte(this.getGoalMA()) : player.meta.bestAntimatter.gte(this.getGoalMA()) && this.data[QCs_tmp.in[0]].goal()
+		return PCs.in() || QCs_save.mod ? player.meta.bestAntimatter.gte(this.getGoalMA()) : player.meta.bestAntimatter.gte(this.getGoalMA()) && this.data[QCs_tmp.in[0]].goal()
 	},
 	getGoalDisp() {
 		return PCs.in() ? "" : " and " + this.data[QCs_tmp.in[0]].goalDisp()
 	},
 	getGoalMA(x, mod) {
+		var r
 		if (x) {
-			var r = this.data[x].goalMA
+			r = this.data[x].goalMA
 			if (mod) r = r.pow(QCs.modData[mod].maExp)
-			return r
-		}
-
-		return PCs.in() ? PCs.goal() : QCs_save.mod ? this.data[QCs_tmp.in[0]].goalMA.pow(QCs.modData[QCs_save.mod].maExp) : this.data[QCs_tmp.in[0]].goalMA
+		} else r = PCs.in() ? PCs.goal() : QCs_save.mod ? this.data[QCs_tmp.in[0]].goalMA.pow(QCs.modData[QCs_save.mod].maExp) : this.data[QCs_tmp.in[0]].goalMA
+		if (this.perkActive(4)) r = r.div(QCs_tmp.perks[4])
+		return r
 	},
 	isRewardOn(x) {
 		return this.done(x) && QCs_tmp.rewards[x]
 	},
 
 	modData: {
-		nf: {
-			name: "Nerfed",
-			maExp: 1/0,
-		},
-		pk: {
-			name: "Perked",
-			maExp: 1/0,
+		up: {
+			name: '"Up"-side',
+			maExp: 0.1,
+			shrunker: 1
 		},
 		ol: {
 			name: "Overlapped",
 			maExp: 1/0,
+			shrunker: 2
 		},
 		us: {
 			name: "Unstable",
 			maExp: 1/0,
+			shrunker: 0
+		},
+		tl: {
+			name: "Timeless",
+			maExp: 1/0,
+			shrunker: 0
 		},
 	},
-	modIn(m) {
-		return this.unl() && QCs_save.mod == m
+	modIn(x, m) {
+		return this.in(x) && QCs_save.mod == m
 	},
 	modDone(x, m) {
 		var data = QCs_save.mod_comps
-		return this.unl() && data && data[m] && data[m].includes(x)
+		return this.unl() && data && data.includes(m + x)
 	},
 
 	perkUnl(x) {
-		var data = QCs_save.mod_comps
-		return this.modDone(x, "perk")
+		return this.modDone(x, "up")
 	},
-	perkCan(x) {
+	perkActive(x) {
+		return QCs_tmp.perks[x] && this.perkUnl(x) && this.inAny()
+	},
+	overlapCan(x) {
 		var data = this.data[x]
 		if (!PCs.unl()) return
 		if (pos_tmp.cloud == undefined) return
 		if (this.perkUnl(x)) return
-		return pos_tmp.cloud.total >= data.perkReqs[0] && pos_tmp.cloud.exclude >= data.perkReqs[1]
-	},
-	perkActive(x) {
-		return QCs_tmp.perks[x] && this.perkUnl(x) && this.inAny()
+		return pos_tmp.cloud.total >= data.overlapReqs[0] && pos_tmp.cloud.exclude >= data.overlapReqs[1]
 	},
 
 	tp() {
@@ -510,10 +535,10 @@ var QCs = {
 		showChallengesTab("quantumchallenges")
 	},
 	start(x) {
-		quantum(false, true, x)
+		quantum(false, true, x, "click")
 	},
 	restart(x) {
-		quantum(false, true, QCs_save.in)
+		quantum(false, true, QCs_save.in, "restart")
 	},
 
 	setupDiv() {
@@ -556,15 +581,11 @@ var QCs = {
 
 			getEl("qc_" + qc + "_div").style.display = cUnl ? "" : "none"
 			if (QCs_tmp.show_perks) {
-				var reqs = this.data[qc].perkReqs
-				getEl("qc_" + qc + "_desc").textContent = "Quantum Challenge " + qc + " Perk: " + this.data[qc].perkDesc(QCs_tmp.perks[qc])
-				getEl("qc_" + qc + "_goal").textContent = "Requires: Complete QC" + qc + " + " + reqs[0] + " used Positronic Boosts + " + reqs[1] + " excluded Positronic Boosts"
-				getEl("qc_" + qc + "_btn").textContent = this.perkCan(qc) ? "Can unlock!" :
-					!this.perkUnl(qc) ? "Locked" :
-					"Obtained"
-				getEl("qc_" + qc + "_btn").className = this.perkCan(qc) ? (this.in(qc) && this.modIn("pk") ? "onchallengebtn" : "challengesbtn") :
-					!this.perkUnl(qc) ? "lockedchallengesbtn" :
-					"completedchallengesbtn"
+				var reqs = this.data[qc].overlapReqs
+				getEl("qc_" + qc + "_desc").textContent = this.data[qc].upsideDesc()
+				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.getGoalMA(qc, "up")) + " meta-antimatter"
+				getEl("qc_" + qc + "_btn").textContent = this.modIn(qc, "up") ? "Running" : this.modDone(qc, "up") ? (this.perkActive(qc) ? "Perk Activated" : "Completed") : "Start"
+				getEl("qc_" + qc + "_btn").className = this.modIn(qc, "up") ? "onchallengebtn" : this.modDone(qc, "up") ? "completedchallengesbtn" : "challengesbtn"
 			} else if (cUnl) {
 				getEl("qc_" + qc + "_desc").textContent = this.data[qc].desc()
 				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.data[qc].goalMA) + " meta-antimatter and " + this.data[qc].goalDisp()
@@ -574,8 +595,8 @@ var QCs = {
 		}
 
 		getEl("qc_perks").style.display = QCs.done(8) ? "" : "none"
-		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : "View perks"
-		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? "Note: Perks only work in specific Quantum Challenge. However, mastered Perks work in any Quantum Challenge!" : ""
+		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'View "Up"-side modes'
+		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: "Up"-side modifier doesn\'t have its secondary goals. And perks only work in any Quantum Challenge!' : ""
 
 		//Big Rip
 		getEl("bigrip").style.display = player.masterystudies.includes("d14") ? "" : "none"
@@ -593,7 +614,10 @@ var QCs = {
 		if (!this.divInserted) return
 
 		for (let qc = 1; qc <= this.data.max; qc++) {
-			if (QCs_tmp.unl.includes(qc)) getEl("qc_" + qc + "_reward").textContent = shiftDown || QCs.in(qc) ? "Hint: " + this.data[qc].hint : "Reward: " + this.data[qc].rewardDesc(QCs_tmp.rewards[qc])
+			if (QCs_tmp.unl.includes(qc)) getEl("qc_" + qc + "_reward").innerHTML = 
+				QCs_tmp.show_perks ? "Reward: +1 PC Shrunker<br>Perk: " + this.data[qc].perkDesc(QCs_tmp.perks[qc]) :
+				shiftDown || QCs.in(qc) ? "Hint: " + this.data[qc].hint :
+				"Reward: " + this.data[qc].rewardDesc(QCs_tmp.rewards[qc])
 		}
 	},
 	updateBest() {

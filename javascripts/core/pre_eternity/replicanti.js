@@ -17,7 +17,7 @@ function unlockReplicantis() {
 }
 
 function replicantiIncrease(diff) {
-	if (!player.replicanti.unl || player.currentEternityChall == "eterc14") {
+	if (!player.replicanti.unl || player.currentEternityChall == "eterc14" || dev.noRep) {
 		replicantiTicks = 0
 		return
 	}
@@ -67,21 +67,30 @@ function isReplicantiLimitBroken() {
 	return hasTimeStudy(192) && !tmp.ngC
 }
 
-function getReplEff(x, base) {
+function replicantiless() {
+	return true
+}
+
+function getReplEff() {
+	if (dev.noRep) return new Decimal(1)
 	if (QCs.in(5)) return new Decimal(1)
-	if (!x) x = player.replicanti.amount
-	if (!base && tmp.ngp3) {
-		x = QCs.data[1].convert(x)
-		x = softcap(x, "rep")
-	}
-	return base ? x : x.max(tmp.rmPseudo || getReplEff(undefined, true))
+	return getReplBaseEff().max(tmp.rmPseudo || 0)
 }
 
 function getReplBaseEff(x) {
-	return getReplEff(x, true)
+	if (dev.noRep) return new Decimal(1)
+	if (QCs.in(5)) return new Decimal(1)
+
+	if (!x) x = player.replicanti.amount
+	if (tmp.ngp3) {
+		x = QCs.data[1].convert(x)
+		x = softcap(x, "rep")
+	}
+	return x
 }
 
 function getReplMult(next) {
+	if (dev.noRep) return new Decimal(1)
 	if (QCs.in(5)) return new Decimal(1)
 
 	let exp = 2
@@ -385,10 +394,10 @@ function updateEC14BaseReward() {
 	var est = tmp.rep.baseEst
 	tmp.rep.ec14 = data
 
-	if (est && ECComps("eterc14")) {
+	if (est.gt(1) && ECComps("eterc14")) {
 		//Sub-1ms reduction -> Lower replicanti scaling
 		var pow = getECReward(14)
-		var div = est.max(1).pow(pow)
+		var div = est.pow(pow)
 
 		data.baseInt = div
 		data.interval = div
@@ -455,6 +464,11 @@ function updateReplicantiTemp() {
 		var qc5 = data.baseEst.pow(Math.max(1 - player.thisEternity / 100, 0))
 		data.baseInt = data.baseInt.times(qc5)
 		data.baseEst = data.baseEst.div(qc5)
+	}
+	if (QCs.modIn(1, "up")) {
+		var qc1 = data.baseEst.pow(tmp.exMode ? 2 : 1)
+		data.baseInt = data.baseInt.times(qc1)
+		data.baseEst = data.baseEst.div(qc1)
 	}
 
 	data.speeds = getReplSpeed()

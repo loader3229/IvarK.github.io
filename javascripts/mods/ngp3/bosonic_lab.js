@@ -186,8 +186,6 @@ function getBosonicAMProduction() {
 	let ret = Decimal.pow(10, exp).times(tmp.wzb.wbp)
 
 	if (hasAch("ng3p113")) ret = ret.times(Math.log10(getReplEff().max(1e10).log10()))
-
-	ret = softcap(ret, "bam")
 	return ret
 }
 

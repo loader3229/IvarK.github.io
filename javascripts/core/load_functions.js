@@ -2230,7 +2230,11 @@ function setupNGP31Versions() {
 		mTs.respec(true)
 	}
 	if (aarMod.ngp3Build < 20210625 && (player.masterystudies.includes("t241") || player.masterystudies.includes("t282"))) resetReplicantiUpgrades()
-	if (aarMod.ngp3Build < 20210712 && Decimal.log10(player.money) >= 4e12) {
+	if (player.dilation.studies.includes(1) && !canUnlockDilation()) {
+		player.timestudy.theorem += 4000
+		player.dilation.studies = []
+	}
+	if (aarMod.ngp3Build < 20210729 && Decimal.log10(player.money) >= 4e12) {
 		player.totalMoney = new Decimal(1)
 		qu_save.quarks = new Decimal(0)
 		qu_save.gluons = {
@@ -2242,26 +2246,22 @@ function setupNGP31Versions() {
 		pos_save.boosts = 0
 		QCs_save.comps = aarMod.ngp3Build < 20210709 ? 0 : 7
 
+		PCs_save.comps = []
+		PCs_save.best = {}
+		PCs_save.lvl = 1
+
 		var aQs = aarMod.ngp3Build < 20210709 ? 1e3 : 1e11
 		dev.giveQuantumStuff(aQs, true)
 		gainQKOnQuantum(aQs, true)
 		forceToQuantumAndRemove = true
 		setTTAfterQuantum = 1e80
 	}
-	if (player.dilation.studies.includes(1) && !canUnlockDilation()) {
-		player.timestudy.theorem += 4000
-		player.dilation.studies = []
-	}
-	if (aarMod.ngp3Build < 20210721) {
-		PCs_save.comps = []
-		PCs_save.lvl = 1
-	}
 
 	welcomeUpdates = []
 	if (aarMod.ngp3Build) {
-		//if (aarMod.ngp3Build < 20210721) welcomeUpdates.push(0.6)
+		//if (aarMod.ngp3Build < 20210729) welcomeUpdates.push(0.6)
 	}
-	aarMod.ngp3Build = 20210721
+	aarMod.ngp3Build = 20210729
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) {
 		player.timestudy.auto = {}

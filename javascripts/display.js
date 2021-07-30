@@ -55,8 +55,6 @@ function tickspeedDisplay(){
 		else if (e >= 9) label = "divide the tick interval by " + shortenDimensions(Decimal.recip(mult))
 		else if (multNum > .9) label = 'reduce the tick interval by ' + shorten((1 - multNum) * 100) + '%'
 		else label = 'reduce the tick interval by ' + ((1 - multNum) * 100).toFixed(e) + '%'
-		if (tmp.galRed < 1) label += " (Redshifted galaxies by " + formatReductionPercentage(1 / tmp.galRed) + "%)"
-		if (tmp.galRed > 1) label += " (Blueshifted galaxies by " + formatPercentage(tmp.galRed - 1) + "%)"
 		labels.push(label)
 
 		if (player.currentChallenge == "postc3" || player.challenges.includes("postc3") || isIC3Trapped()) labels.push("multiply all Dimensions by " + formatValue(player.options.notation, getIC3Mult(), 2, 4) + "x")

@@ -315,7 +315,7 @@ function doEternityResetStuff(layer = 4, chall) {
 	player.autoIP = new Decimal(0)
 	player.autoTime = 1e300
 
-	player.thisEternity = 0
+	if (layer > 5 || !QCs.perkActive(8)) player.thisEternity = 0
 	player.bestInfinityTime = 9999999999
 	player.lastTenRuns = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
 

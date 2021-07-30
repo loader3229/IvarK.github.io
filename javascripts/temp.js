@@ -334,7 +334,6 @@ function updateBreakEternityUpgrade3Temp(){
 	let log = ep.div("1e1370").add(1).log10()
 	if (nerfUpgs) log /= 2e6
 	let exp = Math.pow(log, 1/3) * 0.5
-	exp = softcap(exp, "beu3_log")
 	tmp.beu[3] = Decimal.pow(10, exp)
 }
 
@@ -433,7 +432,6 @@ function updateBRU1Temp() {
 	if (qu_save.bigRip.upgrades.includes(17)) exp = tmp.bru[17]
 	if (ghostified && player.ghostify.neutrinos.boosts > 7) exp *= tmp.nb[8]
 	exp *= player.infinityPoints.max(1).log10()
-	exp = softcap(exp, "bru1_log")
 	tmp.bru[1] = Decimal.pow(10, exp) // BRU1
 }
 

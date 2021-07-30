@@ -901,10 +901,6 @@ let tsMults = {
 		else log = Math.min(log, 2500)
 
 		if (log < 0) log = 0
-		
-		if (inNGM(2) || !bigRipped) return Decimal.pow(10, log)
-		log = softcap(log, "ts11_log_big_rip")
-		
 		return Decimal.pow(10, log)
 	},
 	32() {

@@ -410,6 +410,7 @@ function getPataAccelerator() {
 	if (enB.active("pos", 10)) x *= enB_tmp.pos10
 
 	x = Math.min(x, 1)
+	if (QCs.perkActive(3)) x = 1
 	if (enB.active("pos", 12)) x += enB_tmp.pos12
 	return x
 }

@@ -1559,7 +1559,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/28/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/29/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -1663,10 +1663,6 @@
 				NOTE^2: This does not encompass all softcaps, instead only the ones that are handeled by the general softcapping function
 				<br>
 				<br>
-				<div id="softcap_mptd"></div>
-				<div id="softcap_ts1"></div>
-				<div id="softcap_tsBR"></div>
-				<div id="softcap_ts2"></div>
 				<div id="softcap_rep"></div>
 				<div id="softcap_rInt"></div>
 				<div id="softcap_it"></div>
@@ -1678,10 +1674,6 @@
 				<div id="softcap_aqs"></div>
 				<div id="softcap_rp"></div>
 				<div id="softcap_gp"></div>
-				<div id="softcap_ig"></div>
-				<div id="softcap_bru1"></div>
-				<div id="softcap_beu3"></div>
-				<div id="softcap_bam"></div>
 				<div id="softcap_C_nd"></div>
 				<div id="softcap_C_ts"></div>
 				<div id="softcap_C_sac"></div>
@@ -3461,7 +3453,8 @@
 				<br>Note: Starting a Paired Challenge reduces Meta Dimensions by ^0.95! (acts like you are in QC7)
 				<table id="pc_table" align="center" style="margin: auto"></table>
 				<span id="pc_shrunker_div">
-					You have <span id="pc_shrunker" style="font-size: 20px">0</span> unspent PC shrunkers.<br>
+					You have <span id="pc_shrunker" style="font-size: 20px">0</span> unspent PC shrunkers.
+					<p id="pc_shrunker_goal"></p>
 					<button id="pc_shrunker_btn" class="storebtn" style="width: 180px; height: 60px" onclick="PCs.shrunk()"></button>
 				</span>
 			</div>
@@ -3472,7 +3465,7 @@
 				<tr>
 					<td id="abbtn_pos_yes_auto"></td>
 					<td id="agbtn_pos_yes_auto"></td>
-					<td><button class="secondarytabbtn" onclick="showAutoTab('control')">Others</button></td>
+					<!--<td><button class="secondarytabbtn" onclick="showAutoTab('control')">Others</button></td>-->
 				</tr>
 			</table>
 			<div id="ab_pos_yes_auto"></div>
@@ -4852,7 +4845,7 @@
 						<br>
 						<span id="enB_pos4_full"></span>
 						<br><br>
-						Quantum requirement is reduced to <span id="enB_pos4_eff" style="font-size:24px"></span>. (<span id="enB_pos4_exp" style="font-size:24px"></span>)
+						Quantum requirement is reduced to <span id="enB_pos4_eff" style="font-size:24px"></span>. (<span id="enB_pos4_exp" style="font-size:18px"></span>)
 					</td>
 					<td id="enB_pos5">
 						<b id="enB_pos5_name" style="font-size: 24px"></b>
@@ -4881,7 +4874,7 @@
 						<br>
 						<span id="enB_pos7_full"></span>
 						<br><br>
-						Add the exponent of EC14 by <span id="enB_pos7_eff" style="font-size:24px"></span>, but also divide the exponent.
+						The exponent of EC14 is <span id="enB_pos7_eff" style="font-size:24px"></span> closer to ^1.
 					</td>
 					<td id="enB_pos8">
 						<b id="enB_pos8_name" style="font-size: 24px"></b>
@@ -4910,7 +4903,7 @@
 						<br>
 						<span id="enB_pos10_full"></span>
 						<br><br>
-						Tachyon particles speed up Pata Accelerator by <span id="enB_pos10_eff" style="font-size:24px"></span>x.
+						Tachyon particles speed up Pata Accelerator production by <span id="enB_pos10_eff" style="font-size:24px"></span>x.
 					</td>
 					<td id="enB_pos11">
 						<b id="enB_pos11_name" style="font-size: 24px"></b>
@@ -4928,7 +4921,7 @@
 						<br>
 						<span id="enB_pos12_full"></span>
 						<br><br>
-						Replicantis add the Pata Accelerator multiplier by <span id="enB_pos12_eff" style="font-size:24px"></span>x.
+						Replicantis add +<span id="enB_pos12_eff" style="font-size:24px"></span>x to Pata Accelerator.
 					</td>
 				</tr>
 			</table>

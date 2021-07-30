@@ -67,7 +67,7 @@ function assignQuark(color) {
 	qu_save.quarks = qu_save.quarks.sub(usedQuarks)
 	getEl("quarks").innerHTML = "You have <b class='QKAmount'>0</b> quarks."
 	if (!mult.eq(1)) updateQuantumWorth()
-	updateColorCharge()
+	updateColorCharge(true)
 	if (player.ghostify.another > 0) player.ghostify.another--
 }
 
@@ -102,7 +102,7 @@ function assignAll(auto) {
 		for (c = 0; c < 3; c++) getEl("ratio_" + colors[c]).value = qu_save.assignAllRatios[colors[c]]
 	}
 	if (mult.gt(1)) updateQuantumWorth()
-	updateColorCharge()
+	updateColorCharge(true)
 }
 
 function getQuarkAssignMult() {
@@ -748,7 +748,7 @@ var enB = {
 			title: "Dilation Overflow II",
 			type: "g",
 			eff(x) {
-				return 1.5 + 0.5 / (Math.log10(x / 5 + 1) / 3 + 1)
+				return 1.5 + 0.5 / (Math.log2(x / 20 + 1) / 3 + 1)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -851,7 +851,14 @@ var enB = {
 
 		activeReq(x) {
 			if (pos_tmp.sac_qe < pos.swapCost(pos_tmp.cloud.swaps)) return false
-			return !QCs.isntCatched() ? pos.on() && enB.mastered("pos", x) && (!QCs.in(2) || enB.pos.lvl(x) != QCs_save.qc2) : pos.on() || enB.mastered("pos", x)
+			var mas = enB.mastered("pos", x)
+
+			return QCs.in(2) ? (pos.on() && mas && (
+				QCs.modIn(2, "up") ? enB.pos.lvl(x) == QCs_save.qc2 :
+				enB.pos.lvl(x) != QCs_save.qc2
+			)) :
+			!QCs.isntCatched() ? (pos.on() && mas) :
+			(pos.on() || mas)
 		},
 
 		engEff(x) {
@@ -980,7 +987,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return Math.log10(x / 10 + 1) * Math.pow(x / 100 + 1, 0.25) / 3 + 1
+				return Math.log10(x / 10 + 1) * Math.pow(x / 200 + 1, 0.25) / 3 + 1
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
@@ -1033,7 +1040,7 @@ var enB = {
 				return Math.log10(Math.log10(x + 1) + 1) / 2
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return formatReductionPercentage(x + 1) + "%"
 			}
 		},
 		8: {

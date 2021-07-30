@@ -3385,7 +3385,7 @@ function eternity(force, auto, forceRespec, dilated) {
 		loadAutoBuyerSettings()
 	}
 	doAutoEterTick()
-	if (QCs.in(6)) QCs_save.qc6 = Math.max(QCs_save.qc6 - 30 / (player.dilation.active ? 2 : 1), -30)
+	if (QCs.in(6)) QCs_save.qc6 = Math.max(QCs_save.qc6 - 30 / (player.dilation.active ? 2 : 1), QCs.perkActive(6) ? 0 : -30)
 	if (tmp.ngp3) updateBreakEternity()
 }
 
