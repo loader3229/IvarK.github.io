@@ -67,10 +67,6 @@ function isReplicantiLimitBroken() {
 	return hasTimeStudy(192) && !tmp.ngC
 }
 
-function replicantiless() {
-	return true
-}
-
 function getReplEff() {
 	if (dev.noRep) return new Decimal(1)
 	if (QCs.in(5)) return new Decimal(1)
