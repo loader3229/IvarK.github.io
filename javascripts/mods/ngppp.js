@@ -951,7 +951,7 @@ function getReplDilBonus() {
 	let slog = log / 1e4
 	if (hasMTS(302)) {
 		slog *= Math.log10(Math.log10(slog + 1) + 1) + 1
-		slog *= Math.sqrt(slog / 100 + 1)
+		slog *= Math.sqrt(slog / 1e3 + 1)
 	}
 
 	return Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(slog + 1) - 1)
