@@ -77,7 +77,7 @@ function updateTheoremButtons() {
 		getEl("theoremep").style.display = "none"
 		getEl("timetheorems").style.bottom = "0"
 		getEl("presetsbtn").style.bottom = "-3px"
-		getEl("autopresetsbtn").style.display = player.timestudy.auto ? "" : "none"
+		getEl("autopresetsbtn").style.display = player.timestudy.auto && qMs.tmp.amt >= 2 ? "" : "none"
 		getEl("theorembuybackground").style.bottom = "-80px"
 	} else {
 		getEl("theoremmax").style.display = ""
@@ -221,11 +221,11 @@ function canBuyStudy(name) {
 		}
 	}
 
-	if (row > 1 && (
+	var always = row > 1 && (
 		qMs.tmp.amt >= 27 || //NG+3
 		(tmp.ngp3_mul && player.eternityUpgrades.includes(15)) //NG*+3
-	)) return hasRow(row - 1) 
-	if (tmp.ngC) {
+	)
+	if (!always && tmp.ngC) {
 		if (name == 61 && total < 18) return false
 		if (name == 151 && total < 195) return false
 		if (name == 171 && total < 200) return false
@@ -242,7 +242,7 @@ function canBuyStudy(name) {
 		case 15:
 		case 16:
 		case 17:
-			return hasRow(row-1)
+			return hasRow(row - 1)
 
 		case 3:
 		case 4:
@@ -256,7 +256,7 @@ function canBuyStudy(name) {
 		case 12:
 			let have = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 12}).length
 			if (hasRow(row - 1)) {
-				if (ETER_UPGS.has(10)) return true
+				if (always || ETER_UPGS.has(10)) return true
 				if (ETER_UPGS.has(15)) return have < 2
 				return have < 1
 			}
@@ -264,8 +264,9 @@ function canBuyStudy(name) {
 
 		case 7:
 			if (!hasTS(61)) return false
+			if (always) return true
 			if (hasDilationUpg(8)) return true
-			if (ETER_UPGS.has(10) && tmp.ngC) return true
+			if (ETER_UPGS.has(10)) return true
 
 			let have2 = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length
 			if (hasTS(201)) return have2 < 2
@@ -275,11 +276,11 @@ function canBuyStudy(name) {
 			return player.eternityChalls.eterc10 !== undefined && hasTS(181)
 
 		case 22:
-			if (tmp.ngC && total < 4500) return false;
-			return hasTS(210 + Math.round(col/2)) && (((name % 2 == 0) ? !hasTS(name-1) : !hasTS(name+1)) || (ETER_UPGS.has(11) && tmp.ngC) || ETER_UPGS.has(14))
+			if (!always && tmp.ngC && total < 4500) return false;
+			return hasTS(210 + Math.round(col/2)) && (((name % 2 == 0) ? !hasTS(name-1) : !hasTS(name+1)) || (ETER_UPGS.has(11) && tmp.ngC) || ETER_UPGS.has(14) || always)
 
 		case 23:
-			return (hasTS(220 + Math.floor(col*2)) || hasTS(220 + Math.floor(col*2-1))) && (!hasTS((name%2 == 0) ? name-1 : name+1) || ETER_UPGS.has(11) || ETER_UPGS.has(13))
+			return (hasTS(220 + Math.floor(col*2)) || hasTS(220 + Math.floor(col*2-1))) && (!hasTS((name%2 == 0) ? name-1 : name+1) || ETER_UPGS.has(11) || ETER_UPGS.has(13) || always)
 	}
 }
 

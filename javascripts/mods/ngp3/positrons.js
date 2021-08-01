@@ -110,7 +110,7 @@ var pos = {
 		data.cloud_div = {}
 
 		data.mults = {
-			mdb: QCs.done(3) ? (PCs.milestoneDone(31) ? 0.4 : 0.3) : 0.25,
+			mdb: QCs.done(3) ? (PCs.milestoneDone(31) ? 1/3 : 0.3) : 0.25,
 			mdb_eff: QCs.done(5) ? 1.5 : 1,
 			gal: QCs.done(5) ? 0.2 : 0.25,
 			base_pc: QCs.done(5) ? 1 / 100 : 1 / 125
@@ -285,7 +285,7 @@ var pos = {
 
 		enB.updateOnTick("pos")
 		if (pos_tmp.tab == "boost") {
-			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "^" + (1 / enB_tmp.pos4).toFixed(Math.floor(3 + Math.log10(enB_tmp.pos4)))
+			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "^" + (1 / enB_tmp.pos4).toFixed(Math.min(Math.floor(3 + Math.log10(enB_tmp.pos4)), 5))
 
 			for (var i = 1; i <= enB.pos.max; i++) {
 				if (!enB.has("pos", i)) return

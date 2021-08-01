@@ -145,7 +145,7 @@ let qMs = {
 	},
 	2: {
 		req: 2,
-		eff: () => "Unlock the TT autobuyer, start with 3x more Eternities per milestone (" + shortenDimensions(Math.pow(3, qMs.tmp.amt >= 2 ? qMs.tmp.amt : 0) * 100) + "), and keep Eternity Challenges",
+		eff: () => "Unlock the autobuyer for TT and study presets, start with 3x more Eternities per milestone (" + shortenDimensions(Math.pow(3, qMs.tmp.amt >= 2 ? qMs.tmp.amt : 0) * 100) + "), and keep Eternity Challenges",
 		effGot: () => "You now can automatically buy TT, start with 3x more Eternities per milestone, and keep Eternity Challenges."
 	},
 	3: {

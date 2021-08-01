@@ -37,7 +37,7 @@ var softcap_data = {
 			start: Decimal.pow(10, 1e7),
 			base: 10,
 			pow: 4/5
-		},
+		}
 	},
 	rInt: {
 		name: "base replicate interval",
@@ -53,8 +53,9 @@ var softcap_data = {
 		1: {
 			func: "dilate",
 			start: new Decimal("1e5000"),
-			base: Math.sqrt(10),
+			base: 10,
 			pow: 3/4,
+			mul: 0.5,
 			derv: false
 		}
 	},
@@ -95,13 +96,7 @@ var softcap_data = {
 			start: Decimal.pow(10, 90000),
 			base: 10,
 			pow: 0.5
-		},
-		2: {
-			func: "dilate",
-			start: Decimal.pow(10, 1e10),
-			base: 10,
-			pow: 1
-		},
+		}
 	},
 	aqs: {
 		name: "Anti-Quark gain",

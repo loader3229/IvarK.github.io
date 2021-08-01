@@ -623,7 +623,7 @@ function replicantiDisplay() {
 		let baseInt = player.replicanti.interval
 		let interval = Decimal.div(tmp.rep.interval, 1e3).times(10)
 		getEl("replicantiinterval").innerHTML = "Interval: " + timeDisplayShort(interval, true, 3) +
-			(isIntervalAffordable() ?
+			(isIntervalAffordable() && player.infinityPoints.lt(Decimal.pow(10, 1e10)) ?
 				"<br> -> " + timeDisplayShort(interval.times(getReplicantiBaseInterval(baseInt * 0.9).div(getReplicantiBaseInterval(baseInt))), true, 3) + 
 				" Cost: " + shortenCosts(player.replicanti.intervalCost)+" IP"
 			: "")
@@ -662,7 +662,7 @@ function replicantiDisplay() {
 			getEl("repCompress").innerHTML = "Compress for a " + (qc1Explain ? "small multiplier " : "") + "boost" +
 				(!qc1Explain ? "." : ", but reduce the interval scaling.") +
 				"<br><div style='font-size: 10px'>(Requires " + shortenCosts(QCs_tmp.qc1.req) + " replicantis)</div>" +
-				(!qc1Explain ? "(" + getFullExpansion(QCs_save.qc1.boosts) + " / " + getFullExpansion(QCs.data[1].max()) + (QCs_save.qc1.boosts >= QCs.data[1].compressScaling() ? " Distant" : "") + (QCs_save.qc1.max ? ", " + getFullExpansion(QCs_save.qc1.max) + " Max" : "") + ")" : "")
+				(!qc1Explain ? "(" + getFullExpansion(QCs_save.qc1.boosts) + " / " + getFullExpansion(QCs.data[1].max()) + (QCs_save.qc1.boosts > QCs.data[1].scalings[0] ? " Distant" : "") + (QCs_save.qc1.max ? ", " + getFullExpansion(QCs_save.qc1.max) + " Max" : "") + ")" : "")
 			getEl("repCompress").style["font-size"] = qc1Explain ? "11px" : "12px"
 			getEl("repCompress").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
 		}

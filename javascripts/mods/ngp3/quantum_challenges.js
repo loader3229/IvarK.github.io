@@ -74,42 +74,34 @@ var QCs = {
 			ttScaling() {
 				return tmp.dtMode ? 2 : tmp.exMode ? 1.75 : 1.5
 			},
-			compressScaling() {
-				return 4
-			},
+			scalings: [4],
 			updateTmp() {
 				delete QCs_tmp.qc1
 				if (!QCs.in(1) && !QCs.done(1)) return
 
 				let boosts = QCs_save.qc1.boosts
 				let maxBoosts = QCs_save.qc1.max
-				let brokenBoosts = Math.max(QCs_save.qc1.boosts - this.compressScaling(), 0)
+				let brokenBoosts = Math.max(QCs_save.qc1.boosts - this.scalings[0], 0)
 				let eff = QCs.modIn(1, "up") ? 0.5 : 1
 
 				let data = {
-					req: Decimal.pow(10, 1e6 + 2.5e5 * brokenBoosts),
+					req: Decimal.pow(10, 1e6 * (brokenBoosts + 1)),
 					limit: new Decimal("1e6000000"),
 
-					speedMult: Decimal.pow(2, -boosts),
+					speedMult: Decimal.pow(2, - boosts - brokenBoosts),
 					scalingMult: Math.pow(2, Math.max(boosts - 20, 0) / 20),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
-					effMult: (maxBoosts / 10 + boosts / 40) * eff + 1,
-					effExp: Math.min(1 + boosts / 20 * eff, 2)
+					effMult: (maxBoosts / 20 + boosts / 40) * eff + 1,
+					effExp: 1 + boosts / 20 * eff
 				}
 				QCs_tmp.qc1 = data
-				QCs_tmp.qc1.limit = QCs_tmp.qc1.limit.max(QCs_tmp.qc1.req)
 
 				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
-				if (PCs.milestoneDone(11)) {
-					data.req = data.req.pow(0.9)
-					data.speedMult = data.speedMult.times(boosts + 1)
-				}
-				if (PCs.milestoneDone(12)) {
-					var exp = QCs_save.qc1.expands
-					data.speedMult = data.speedMult.times(Math.pow(exp + 1, 2))
-					data.limit = data.limit.times(Decimal.pow(10, exp * 1e6))
-				}
+				if (PCs.milestoneDone(11)) data.req = data.req.pow(0.9)
+				if (PCs.milestoneDone(12)) data.limit = data.limit.times(Decimal.pow(10, QCs_save.qc1.expands * 1e6))
+
+				QCs_tmp.qc1.limit = QCs_tmp.qc1.limit.max(QCs_tmp.qc1.req)
 			},
 			convert(x) {
 				if (!QCs_tmp.qc1) return x
@@ -120,7 +112,7 @@ var QCs = {
 			},
 
 			can: () => QCs_tmp.qc1 && pH.can("eternity") && player.replicanti.amount.gte(QCs_tmp.qc1.req) && QCs_save.qc1.boosts < QCs.data[1].max(),
-			max: () => 20,
+			max: () => 30, //1 + 30 / 20 = 2.5 / 2 = 1.25
 			boost() {
 				if (!QCs.data[1].can()) return false
 
@@ -349,7 +341,7 @@ var QCs = {
 		},
 		7: {
 			unl: () => true,
-			desc: () => "You can’t have all Mastery Studies in a row (except one-column rows), and Meta Dimensions are reduced to ^0.95.",
+			desc: () => "You can’t have all Mastery Studies in a row (except one-column rows), and Meta Dimensions and Time Theorems are reduced to ^0.95.",
 			goal: () => player.timestudy.theorem >= 5e82,
 			goalDisp: () => shortenDimensions(5e82) + " Time Theorems",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.3),
@@ -488,8 +480,8 @@ var QCs = {
 
 	modData: {
 		up: {
-			name: '"Up"-side',
-			maExp: 0.1,
+			name: 'Nerfed',
+			maExp: 1.25,
 			shrunker: 1
 		},
 		ol: {
@@ -595,8 +587,8 @@ var QCs = {
 		}
 
 		getEl("qc_perks").style.display = QCs.done(8) ? "" : "none"
-		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'View "Up"-side modes'
-		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: "Up"-side modifier doesn\'t have its secondary goals. And perks only work in any Quantum Challenge!' : ""
+		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Nerfed modifier'
+		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Nerfed modifier doesn\'t have its secondary goals. And perks only work in any Quantum Challenge!' : ""
 
 		//Big Rip
 		getEl("bigrip").style.display = player.masterystudies.includes("d14") ? "" : "none"

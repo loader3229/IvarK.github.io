@@ -309,6 +309,7 @@ var pH = {
 		getEl("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 
 		if (layer == "infinity") getEl("postctabbtn").parentElement.style.display = pH.shown("infinity") && (player.postChallUnlocked >= 1 || pH.did("eternity")) ? "" : "none"
+		if (layer == "eternity") updateEternityChallenges()
 		if (layer == "quantum") handleDispAndTmpOutOfQuantum()
 		if (!aarMod.layerHidden[layer]) return
 

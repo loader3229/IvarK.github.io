@@ -56,7 +56,7 @@ var mTs = {
 
 			//Expert Mode
 			t241_ex: 1,
-			t251_ex: 6, t252: 3, t253: 3,
+			t251_ex: 6, t252_ex: 3, t253_ex: 3,
 			t261_ex: 12, t262_ex: 12, t263_ex: 6, t264_ex: 2, t265_ex: 8, t266_ex: 6,
 			t271_ex: 1 / 5e3, t272_ex: 2,
 			t281_ex: 6, t282_ex: 1, t283_ex: 1, t284_ex: 6,
@@ -230,7 +230,7 @@ var mTs = {
 			let tpLog = player.dilation.tachyonParticles.max(1).log10()
 			let bpLog = colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0
 
-			return Math.pow(tpLog / 90, 0.5) * Math.pow(bpLog / 3, 0.25)
+			return Math.pow(tpLog / 90, 0.6) * Math.pow(bpLog / 3, 0.2)
 		},
 	},
 	eff(id, uses = "") {
@@ -258,7 +258,7 @@ var mTs = {
 		284: () => "Total galaxies add OoMs to replicate interval slowdown.",
 
 		291: () => "Replicantis multiply Dimension Boosts.",
-		292: () => "Replicated Galaxies raise Replicanti multiplier to an exponent instead.",
+		292: () => "Replicated Galaxies boost Replicantis.",
 
 		301: () => "Replicated Galaxies work effective equally.",
 		302: () => "Strengthen some Replicanti boosts.",
@@ -319,7 +319,7 @@ var mTs = {
 	unlocksUpTo: 14,
 	allConnections: {
 		//Eternity
-		241: [251, 253, 252],
+		241: [251, 252, 253],
 		251: [261, 262], 252: [263, 264], 253: [265, 266],
 		261: ["ec13"], 262: ["ec13"], 263: ["ec13"], 264: ["ec14"], 265: ["ec14"], 266: ["ec14"],
 

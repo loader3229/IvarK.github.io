@@ -900,7 +900,7 @@ function doubleMSMult(x) {
 }
 
 function isAtEndGame() {
-	return tmp.ngp3 && QCs_save.comps >= 1
+	return tmp.ngp3 && false
 }
 
 //Auto-Preset
@@ -912,10 +912,10 @@ function openAutoPresets() {
 	getEl("autoPresetEternity").value = player.timestudy.auto.eternity || ""
 	getEl("autoPresetDilation").value = player.timestudy.auto.dilation || ""
 
-	getEl("autoPresetQCDiv").style.display = QCs.unl() ? "" : "none"
+	getEl("autoPresetQCDiv").style.display = autoPresetUnlocked("qc") ? "" : "none"
 	getEl("autoPresetQC").value = player.timestudy.auto.qc || ""
 
-	getEl("autoPresetQC7Div").style.display = QCs.done(6) ? "" : "none"
+	getEl("autoPresetQC7Div").style.display = autoPresetUnlocked("qc7") ? "" : "none"
 	getEl("autoPresetQC7").value = player.timestudy.auto.qc7 || ""
 }
 
@@ -940,6 +940,21 @@ function refreshAutoPreset(update) {
 	if (!update && !player.timestudy.auto.on) return
 	player.timestudy.auto[targetAutoPreset()] = getStudyTreeStr()
 	if (getEl("autoPresets").style.display == "flex") openAutoPresets()
+}
+
+function autoPresetUnlocked(x) {
+	return qMs.tmp.amt >= 2 && (!(x == "qc" || x == "qc7") || hasAch("ng3p26"))
+}
+
+function getReplDilBonus() {
+	let log = getReplEff().max(1).log10()
+	let slog = log / 1e4
+	if (hasMTS(302)) {
+		slog *= Math.log10(Math.log10(slog + 1) + 1) + 1
+		slog *= Math.sqrt(slog / 100 + 1)
+	}
+
+	return Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(slog + 1) - 1)
 }
 
 //Update Messages

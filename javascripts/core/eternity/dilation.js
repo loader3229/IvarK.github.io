@@ -1,9 +1,9 @@
 let dsStudyCosts = {
 	1: () => tmp.ngC ? 3e3 : tmp.ngp3 ? 4e3 : 5e3,
-	2: () => 1e5,
-	3: () => 1e6,
-	4: () => 1e7,
-	5: () => 1e8,
+	2: () => 1e6,
+	3: () => 1e7,
+	4: () => 1e8,
+	5: () => 1e9,
 
 	// Meta
 	6: () => getMetaUnlCost()
@@ -54,13 +54,7 @@ function getDilTimeGainPerSecond() {
 	if (hasDilationUpg('ngusp3')) gain = gain.times(getD22Bonus())
 
 	//NG+3
-	if (hasAch("r137") && tmp.ngp3_boost) {
-		let log = getReplEff().max(1).log10()
-		let slog = log / 1e4
-		if (hasMTS(302)) slog *= Math.log10(Math.log10(slog + 1) + 1) + 1
-
-		gain = gain.times(Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(slog + 1) - 1))
-	}
+	if (hasAch("r137") && tmp.ngp3_boost) gain = gain.times(getReplDilBonus())
 	if (tmp.ngp3) {
 		if (hasAch("r138")) gain = gain.times(tmp.ngp3_exp ? 3 : 2)
 		if (hasAch("ngpp13")) gain = gain.times(2)

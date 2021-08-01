@@ -1,9 +1,9 @@
 //PAIRED CHALLENGES
 var PCs = {
 	milestones: {
-		11: "Replicated Compressors are stronger.",
+		11: "Replicated Compressors require 10% less.",
 		21: "The QC2 reward is squared.",
-		31: "You sacrifice 40% MDBs instead of 30%.",
+		31: "You sacrifice 33% MDBs instead of 30%.",
 		41: "You sacrifice Replicated Galaxies more.",
 		51: "You gain 5% more from sacrificed things.",
 		61: "The QC6 reward is squared.",
@@ -141,7 +141,6 @@ var PCs = {
 	pcShown(x) {
 		var pos = this.convBack(PCs.data.pos[x])
 		if (PCs_save.comps.includes(x)) return true
-		if (this.overlapped(x)) return QCs.done(8)
 		if (PCs_save.lvl < PCs.data.qc1_lvls[pos[0]] + PCs.data.qc2_lvls[pos[1]] - 1) return false
 		return true
 	},

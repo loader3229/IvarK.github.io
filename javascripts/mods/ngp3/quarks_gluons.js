@@ -386,7 +386,7 @@ function updateQuarkEnergyEffects() {
 	var exp2 = 4 / 3
 	if (!QCs.isntCatched()) exp2 *= tmp.exMode ? 0 : tmp.bgMode ? 1 : 0.5
 
-	tmp.qe.eff1 = Math.pow(Math.log10(eng / 1.7 + 1) + 1, exp)
+	tmp.qe.eff1 = Math.pow(Math.log10(eng / 2 + 1) + 1, exp)
 	tmp.qe.eff2 = Math.pow(eng, exp2) * tmp.qe.eff1 / 4 * exp2 / exp
 }
 
@@ -679,9 +679,7 @@ var enB = {
 			title: "Dilation Overflow",
 			type: "b",
 			eff(x) {
-				let r = Math.pow(x / 2 + 1, 0.4)
-				//if (r > 10) r = Math.log10(r) * 10
-				return r
+				return Math.pow(x / 2 + 1, 0.4)
 			},
 			effDisplay(x) {
 				return formatReductionPercentage(x, 2, 3)
@@ -711,12 +709,12 @@ var enB = {
 			type: "b",
 			eff(x) {
 				return {
-					chance: Math.pow(x / 1000 + 1, 0.25),
-					int: Math.log10(x / 2 + 1) * Math.pow(x / 1e4 + 1, 0.05) / 2 + 1
+					int: Math.log10(x / 2 + 1) / 2 + 1,
+					exp: Math.min(Math.log10(Math.log10(x / 1e3 + 1) + 1) + 1, 1.75)
 				}
 			},
 			effDisplay(x) {
-				return "Strengthen replicate interval upgrades by <span style='font-size:25px'>" + shorten(x.int) + "</span>x and replicate chance upgrades by <span style='font-size:24px'>" + shorten(x.chance) + "</span>x."
+				return "Strengthen replicate interval upgrades by <span style='font-size:25px'>" + shorten(x.int) + "x</span>, and ^<span style='font-size:24px'>" + shorten(x.exp) + "</span> to all replicanti upgrades."
 			}
 		},
 		6: {
@@ -1070,7 +1068,7 @@ var enB = {
 			anti: true,
 			eff(x) {
 				var exp = Math.log2(x / 1000 + 1) / 3
-				return Decimal.max(getInfinitied(), 10).log10() * exp
+				return Decimal.max(getInfinitied(), 10).log10() * exp + 1
 			},
 			effDisplay(x) {
 				return "^" + shorten(x)
@@ -1102,7 +1100,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return 1e-10
+				return Math.min(Math.sqrt(x) / 1e10, 1e-6)
 			},
 			effDisplay(x) {
 				return "x^1/" + shorten(1/x)
