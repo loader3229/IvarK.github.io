@@ -2234,7 +2234,8 @@ function setupNGP31Versions() {
 		player.timestudy.theorem += 4000
 		player.dilation.studies = []
 	}
-	if (aarMod.ngp3Build < 20210729 && Decimal.log10(player.money) >= 4e12) {
+	if (aarMod.ngp3Build < 20210802) PCs.reset()
+	if (aarMod.ngp3Build < 20210802 && Decimal.log10(player.money) >= 4e12) {
 		player.totalMoney = new Decimal(1)
 		qu_save.quarks = new Decimal(0)
 		qu_save.gluons = {
@@ -2245,10 +2246,6 @@ function setupNGP31Versions() {
 		qu_save.entBoosts = 0
 		pos_save.boosts = 0
 		QCs_save.comps = aarMod.ngp3Build < 20210709 ? 0 : 7
-
-		PCs_save.comps = []
-		PCs_save.best = {}
-		PCs_save.lvl = 1
 
 		var aQs = aarMod.ngp3Build < 20210709 ? 1e3 : 1e11
 		dev.giveQuantumStuff(aQs, true)
@@ -2261,7 +2258,7 @@ function setupNGP31Versions() {
 	if (aarMod.ngp3Build) {
 		//if (aarMod.ngp3Build < 20210729) welcomeUpdates.push(0.6)
 	}
-	aarMod.ngp3Build = 20210729
+	aarMod.ngp3Build = 20210802
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) {
 		player.timestudy.auto = {}

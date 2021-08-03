@@ -274,7 +274,6 @@ function quantumReset(force, auto, data, mode, implode = false) {
 			} else if (qcData.length == 2) {
 				var id = PCs.conv(qcData[0], qcData[1])
 				if (!PCs_save.comps.includes(id)) PCs_save.comps.push(id)
-				PCs.respec(id)
 				PCs.updateTmp()
 				PCs.updateDisp()
 			}

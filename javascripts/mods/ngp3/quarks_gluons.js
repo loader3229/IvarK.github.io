@@ -313,7 +313,7 @@ function gainQuantumEnergy() {
 	if (isNaN(x)) x = 0
 
 	qu_save.quarkEnergy = Math.max(qu_save.quarkEnergy || 0, x)
-	qu_save.bestEnergy = Math.max(qu_save.bestEnergy || 0, tmp.qe.div > 1 ? xNoDiv : x)
+	qu_save.bestEnergy = Math.max(qu_save.bestEnergy || 0, xNoDiv)
 }
 
 function getQEQuarksPortion() {
@@ -340,13 +340,13 @@ function getQuantumEnergyMult() {
 	if (enB.active("glu", 1)) x += enB_tmp.glu1
 	if (tmp.ngp3_mul && tmp.glb) x += (tmp.glB.r.mult + tmp.glB.g.mult + tmp.glB.b.mult) / 15
 	if (tmp.ngp3_mul) x *= 1.25
+	if (dev.boosts.tmp[3]) x *= dev.boosts.tmp[3]
 	return x
 }
 
 function getQuantumEnergyDiv() {
 	let x = 1
 	if (pos.on()) x = tmp.ngp3_mul ? 10 / 9 : 4 / 3
-	if (dev.boosts.tmp[3]) x /= dev.boosts.tmp[3]
 	return x
 }
 
@@ -1247,7 +1247,7 @@ function updateQuarksTab(tab) {
 	getEl("greenPower").textContent = shorten(qu_save.colorPowers.g)
 	getEl("bluePower").textContent = shorten(qu_save.colorPowers.b)
 
-	getEl("redTranslation").textContent = formatPercentage(colorBoosts.r - 1)
+	getEl("redTranslation").textContent = "+" + formatPercentage(colorBoosts.r - 1)
 	getEl("greenTranslation").textContent = shorten(colorBoosts.g)
 	getEl("blueTranslation").textContent = shorten(colorBoosts.b)
 	getEl("blueTransInfo").textContent = shiftDown ? "(Base: " + shorten(colorBoosts.b_base) + ", raised by ^" + shorten(colorBoosts.b_exp) + ")" : ""

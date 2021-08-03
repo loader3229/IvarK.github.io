@@ -1559,7 +1559,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 7/31/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/02/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -3444,19 +3444,20 @@
 						</tr>
 					</table>
 				</div>
+				<br>
 				<div id="pc_info">
 					<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 25px">0 / 1</span>)</span><br>
-					Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and <span id="pc_eff2" style="font-size: 20px"></span> to aQs gain exponent. (starting from 100 aQs)
+					Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and <span id="pc_eff2" style="font-size: 20px"></span> to aQs gain exponent. (starting from 1,000 aQs)
 				</div>
-				<br><br>
-				<button class="storebtn" style="font-size: 100%; width:200px" onclick="exitChallenge()">Exit Challenge</button>
-				<br>Note: Starting a Paired Challenge reduces Meta Dimensions by ^0.95! (acts like you are in QC7)
-				<table id="pc_table" align="center" style="margin: auto"></table>
-				<span id="pc_shrunker_div">
-					You have <span id="pc_shrunker" style="font-size: 20px">0</span> unspent PC shrunkers.
-					<p id="pc_shrunker_goal"></p>
-					<button id="pc_shrunker_btn" class="storebtn" style="width: 180px; height: 60px" onclick="PCs.shrunk()"></button>
+				<span id="pc_enter">
+					<br>
+					<button class="storebtn" style="font-size: 100%; width:200px" onclick="exitChallenge()">Exit Challenge</button>
+					<br>Note: Starting a Paired Challenge reduces Meta Dimensions by ^0.95! (acts like you are in QC7)
 				</span>
+				<span id="pc_pick">
+				</span>
+				<table id="pc_table" align="center" style="margin: auto"></table>
+				Your <span id="pc_shrunker" style="font-size: 20px"></span> PC shrunkers are reducing the PC goal by <span id="pc_shrunker_eff" style="font-size: 20px"></span>.
 			</div>
 			<div class="footer"></div>
 		</div>
@@ -4388,7 +4389,7 @@
 						You have <span id="redPower" style="font-size: 25px">0.0</span> red power.
 					</td>
 					<td rowspan=2>
-						Translated to +<span class="red" id="redTranslation" style="font-size: 25px"></span>% stronger galaxies.
+						Translated to <span class="red" id="redTranslation" style="font-size: 25px"></span>% stronger galaxies.
 						<span class="softcap" id="softcap_rp_disp"></span>
 					</td>
 				</tr>
@@ -4410,7 +4411,7 @@
 						You have <span id="greenPower" style="font-size: 25px">0.0</span> green power.
 					</td>
 					<td rowspan=2>
-						Translated to +<span class="green" id="greenTranslation" style="font-size: 25px"></span>x slower replicanti interval scaling.
+						Translated to <span class="green" id="greenTranslation" style="font-size: 25px"></span>x slower replicanti interval scaling.
 						<span class="softcap" id="softcap_gp_disp"></span>
 					</td>
 				</tr>
@@ -4432,7 +4433,7 @@
 						You have <span id="bluePower" style="font-size: 25px">0.0</span> blue power.
 					</td>
 					<td rowspan=2>
-						Translated to +<span class="blue" id="blueTranslation" style="font-size: 25px"></span>x multiplier to Tachyon particles.<br>
+						Translated to <span class="blue" id="blueTranslation" style="font-size: 25px"></span>x multiplier to Tachyon particles.<br>
 						<span id="blueTransInfo"></span>
 					</td>
 				</tr>

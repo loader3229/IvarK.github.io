@@ -280,7 +280,7 @@ dev.boosts = {
 		eff(x) {
 			//Excited Positrons: Antimatter multiplies Positrons.
 			if (x === undefined) x = player.money
-			x = Math.pow(x.add(1).log10() / 1e10 + 1, 0.1)
+			x = Math.pow(x.add(1).log10() / 1e11 + 1, 0.15)
 			return x
 		}
 	},
