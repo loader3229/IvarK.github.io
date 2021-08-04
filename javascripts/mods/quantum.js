@@ -1,39 +1,42 @@
 // v2.9
-function quantum(auto, force, qc, mode, quick) {
+function quantum(auto, force, attrs, mode, quick) {
 	if (tmp.ngp3 && qu_save.bigRip.active) force = true
 	if (!(isQuantumReached()||force)||implosionCheck) return
 
-	var headstart = aarMod.newGamePlusVersion >= 1 && !tmp.ngp3
-	var mode = mode ? [mode] : []
-	var data
-	if (qc) {
+	var data = {}
+	if (mode == "qc") {
 		if ((!QCs.done(1) || player.options.challConf || aarMod.quantumConf) && !quick) {
 			if (!confirm("This performs a forced Quantum reset, but you will be brought into a real challenge. All rebuyables will also be resetted. Are you sure you want to take this challenge down?")) return
 		}
-		mode.push("qc")
-		data = typeof(qc) == "number" ? [qc] : qc
-
-		if (QCs_save.mod && mode.includes("restart")) mode.push(QCs_save.mod)
-		if (QCs_tmp.show_perks && mode.includes("click")) mode.push("up")
+		data.qc = [attrs.qc]
+		if (QCs_tmp.show_perks) data.mod = "up"
 	}
+	if (mode == "pc") {
+		data.pc = attrs.pc
+		data.qc = PCs.convBack(PCs_save.challs[attrs.pc])
+	}
+	if (mode == "restart") {
+		data.qc = QCs_save.in
+		data.mod = QCs_save.mod
+	}
+
+	var headstart = aarMod.newGamePlusVersion >= 1 && !tmp.ngp3
 	if (aarMod.quantumConf && !(auto || force)) if (!confirm(player.masterystudies ? "Quantum will reset everything Eternity resets, and including all Eternity Content. You will gain a quark and unlock various upgrades." + (inNGM(2) ? " WARNING! THIS EXITS NG-- MODE DUE TO BALANCING REASONS!" : ""):"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
 	if (!pH.did("quantum")) if (!confirm("Are you sure you want to do this? You will lose everything you have!")) return
 
-	var qcData = []
-	var QCType = 0
 
 	var implode = !auto && !force && !pH.did("ghostify") && tmp.quUnl && !QCs.unl()
 	if (implode) {
 		implosionCheck = 2
 		dev.implode()
 		setTimeout(function(){
-			quantumReset(force, auto, data, mode, true)
+			quantumReset(force, auto, data, true)
 			implosionCheck = 1
 		}, 1000)
 		setTimeout(function(){
 			implosionCheck = 0
 		}, 2000)
-	} else quantumReset(force, auto, data, mode)
+	} else quantumReset(force, auto, data)
 
 	updateTmp()
 }
@@ -257,37 +260,33 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 	// Quantum Challenges
 	if (QCs.unl()) {
-		var isQC = mode.includes("qc")
-		var qcData = QCs_save.in
+		var isQC = data.qc !== undefined
+		var qcDataPrev = QCs_save.in
+		var qcData = PCs.sort(data.qc)
+
 		if (!force) {
 			if (QCs_save.mod) {
-				var qc = QCs_save.mod + qcData[0]
+				var qc = QCs_save.mod + qcDataPrev[0]
 				if (!QCs_save.mod_comps.includes(qc)) {
 					PCs_save.shrunkers.unspent += QCs.modData[QCs_save.mod].shrunker
 					QCs_save.mod_comps.push(qc)
 				}
-			} else if (qcData.length == 1) {
-				var qc = qcData[0]
+			} else if (qcDataPrev.length == 1) {
+				var qc = qcDataPrev[0]
 				QCs_save.comps = Math.max(QCs_save.comps, qc)
 				QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, qu_save.best)
-				PCs.resetButtons()
-			} else if (qcData.length == 2) {
-				var id = PCs.conv(qcData[0], qcData[1])
-				if (!PCs_save.comps.includes(id)) PCs_save.comps.push(id)
-				PCs.updateTmp()
-				PCs.updateDisp()
+			} else if (qcDataPrev.length == 2) {
+				var pc = PCs.conv(qcDataPrev)
+				if (!PCs_save.comps.includes(pc)) PCs_save.comps.push(pc)
 			}
 		}
-		if (qcData.length == 2) PCs.updateButton(PCs.conv(qcData[0], qcData[1]), [])
-		delete QCs_save.mod
-		if (isQC) {
-			QCs_save.in = data
-			QCs_tmp.in = data
 
-			if (data.length == 2) {
-				PCs.updateButton(PCs.conv(data[0], data[1]), data)
-				if (data[0] == data[1]) QCs_save.mod = "ol"
-			} else if (mode.includes("up")) QCs_save.mod = "up"
+		delete QCs_save.mod
+		if (data.mod) QCs_save.mod = data.mod
+
+		if (isQC) {
+			QCs_save.in = qcData
+			QCs_tmp.in = qcData
 
 			if ((!QCs.isntCatched() || QCs.in(7)) && !QCs_save.kept) QCs_save.kept = {
 				tt: player.timestudy.theorem,
@@ -311,6 +310,17 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 	//Paired Challenges
 	if (PCs.unl()) {
+		if (PCs_save.in) {
+			if (!force) console.log("PC completed!")
+			PCs.updateButton(PCs_save.in, true)
+		}
+		delete PCs_save.in
+
+		if (data.pc) {
+			PCs_save.in = data.pc
+			PCs.updateButton(data.pc)
+		}
+
 		PCs.updateTmp()
 		PCs.updateDisp()
 	}

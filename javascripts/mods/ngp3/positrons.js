@@ -49,7 +49,7 @@ var pos = {
 	toggle() {
 		if (pos_save.on && !confirm("You will lose access to Positronic Boosts except the mastered ones. Are you sure?")) return
 		pos_save.on = !pos_save.on
-		quantum(false, true)
+		quantum(false, true, {}, "restart")
 	},
 	types: {
 		ng: {
@@ -247,7 +247,7 @@ var pos = {
 	},
 	applySwaps() {
 		if (!confirm("Do you want to apply the changes immediately? This restarts your Quantum run!")) return
-		quantum(false, true)
+		quantum(false, true, {}, "restart")
 	},
 	swapCost(x) {
 		return ([0, 2, 4, 8, 16])[x / 2]

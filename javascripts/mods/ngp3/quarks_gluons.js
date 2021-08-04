@@ -164,7 +164,7 @@ function respecQuarks() {
 		qu_save.usedQuarks[color] = new Decimal(0)
 	}
 	qu_save.quarks = qu_save.quarks.add(sum)
-	quantum(false, true)
+	quantum(false, true, {}, "restart")
 
 	if (qu_save.autoOptions.assignQK) assignAll(true)
 }
@@ -563,7 +563,7 @@ var enB = {
 		}
 		if (!confirm("This will perform a quantum reset without gaining anything. Are you sure?")) return
 		qu_save.entColor = x
-		quantum(false, true)
+		quantum(false, true, {}, "restart")
 	},
 
 	updateTmp() {

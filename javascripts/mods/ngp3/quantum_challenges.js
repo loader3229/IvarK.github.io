@@ -168,7 +168,7 @@ var QCs = {
 				if (QCs_save.qc2 == x) return
 				if (!confirm("This will restart your run. Are you sure?")) return
 				QCs_save.qc2 = x
-				quantum(false, true, 2, false, false, true)
+				quantum(false, true, {}, "restart")
 			}
 		},
 		3: {
@@ -305,7 +305,7 @@ var QCs = {
 		},
 		6: {
 			unl: () => true,
-			desc: () => "There is a increasing variable, which gives different boosts; but eternitying subtracts it, and dilating reduces the gain.",
+			desc: () => "There is a increasing variable, which nerfs replicanti slowdown; but eternitying subtracts it, and dilating reduces the gain.",
 			goal: () => (player.replicanti.amount.e >= 1e6 && QCs_save.qc1.boosts == 4) || QCs_save.qc1.boosts >= 5,
 			goalDisp: () => shortenCosts(Decimal.pow(10, 1e6)) + " Replicantis + " + getFullExpansion(4) + " Replicanti Compressors",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.45),
@@ -527,10 +527,10 @@ var QCs = {
 		showChallengesTab("quantumchallenges")
 	},
 	start(x) {
-		quantum(false, true, x, "click")
+		quantum(false, true, { qc: x }, "qc")
 	},
 	restart(x) {
-		quantum(false, true, QCs_save.in, "restart")
+		quantum(false, true, {}, "restart")
 	},
 
 	setupDiv() {
