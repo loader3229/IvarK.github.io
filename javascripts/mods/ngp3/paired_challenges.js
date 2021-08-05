@@ -68,6 +68,7 @@ var PCs = {
 
 		this.updateTmp()
 		this.updateUsed()
+		this.resetShrunkers()
 	},
 	reset() {
 		PCs_save = this.setup()
@@ -100,10 +101,6 @@ var PCs = {
 			}
 			if (PCs_tmp.picked) this.occupy(PCs_tmp.picked[0])
 
-			var p1 = PCs_tmp.used.p1
-			var p2 = PCs_tmp.used.p2
-			var p = l == 2 ? p2 : p1
-			for (var i = 1; i <= 8; i++) if (p1.concat(p2).includes(i) && !p.includes(i)) this.occupy(i)
 
 			if (l == 1) {
 				var d = PCs_tmp.used.d1
@@ -115,6 +112,11 @@ var PCs = {
 					var p = PCs.sort(i * 10 + PCs_tmp.picked[0])
 					if (d.includes(p)) this.occupy(i)
 				}
+
+				var p1 = PCs_tmp.used.p1
+				var p2 = PCs_tmp.used.p2
+				var p = p1.includes(PCs_tmp.picked[0]) ? p1 : p2
+				for (var i = 1; i <= 8; i++) if (p.includes(i)) this.occupy(i)
 			}
 		}
 
@@ -134,7 +136,7 @@ var PCs = {
 		if (PCs.data.setupHTML && PCs_save.lvl > oldLvl) this.resetButtons()
 
 		//Boosts
-		var eff = (PCs_save.lvl - 1) / 19
+		var eff = (PCs_save.lvl - 1) / 28
 		data.eff1 = 1 + 0.75 * eff
 		data.eff1_start = 150
 		data.eff2 = 1 + eff / 3
@@ -182,6 +184,8 @@ var PCs = {
 		else {
 			PCs_tmp.picked.push(x)
 			if (PCs_tmp.picked.length == 2) {
+				if (PCs_tmp.used.p1.includes(x)) PCs_tmp.picked = [PCs_tmp.picked[1], PCs_tmp.picked[0]]
+
 				PCs_save.challs[PCs_tmp.pick] = PCs_tmp.picked[0] * 10 + PCs_tmp.picked[1]
 				PCs.updateUsed()
 
@@ -390,6 +394,14 @@ var PCs = {
 		PCs.resetButtons()
 	},
 
+	resetShrunkers() {
+		if (!PCs.unl()) return
+
+		let x = 0
+		for (var c = 1; c <= 8; c++) if (qu_save.qc) x++
+
+		PCs_save.shrunkers = x
+	},
 	shrunkerEff() {
 		let x = PCs_save.shrunkers
 		return Decimal.pow(10, x * (x + 1) * 5)
