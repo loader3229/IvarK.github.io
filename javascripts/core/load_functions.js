@@ -2258,7 +2258,7 @@ function setupNGP31Versions() {
 	if (aarMod.ngp3Build) {
 		//if (aarMod.ngp3Build < 20210729) welcomeUpdates.push(0.6)
 	}
-	aarMod.ngp3Build = 20210802
+	aarMod.ngp3Build = 20210805
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) {
 		player.timestudy.auto = {}

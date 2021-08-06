@@ -596,7 +596,7 @@ function updateDilationUpgradeCost(pos, id) {
 	if (id == "r2" && !canBuyGalaxyThresholdUpg()) getEl("dil" + pos + "cost").textContent = "Maxed out"
 	else {
 		let r = getDilUpgCost(id)
-		if (id == "r4" && tmp.ngp3) r = shorten(r)
+		if ((id == "r3" || id == "r4") && tmp.ngp3) r = shorten(r)
 		else if (id == "r3") r = formatValue(player.options.notation, getRebuyableDilUpgCost(3), 1, 1)
 		else r = shortenCosts(r)
 		getEl("dil" + pos + "cost").textContent = "Cost: " + r + " dilated time"

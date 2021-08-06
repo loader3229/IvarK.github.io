@@ -28,7 +28,7 @@ var PCs = {
 	},
 	setupData() {
 		var data = {
-			goal_divs: [null, 0.25, 0.5, 0.4, 0.75, 0.5, 0.75, 0.75, 0.75],
+			goal_divs: [null, 0.25, 0.5, 0.35, 0.75, 0.5, 0.75, 0.4, 0.75],
 			milestoneReqs: [null, 1, 2, 4],
 			all: [],
 			setup: true
@@ -221,8 +221,10 @@ var PCs = {
 
 		var qc1 = QCs.data[list[0]].goalMA
 		var qc2 = QCs.data[list[1]].goalMA
+		var base = Number.MAX_VALUE
 		var div = PCs.data.goal_divs[list[0]] + PCs.data.goal_divs[list[1]] + 1
-		var r = qc1.pow(qc2.log(Number.MAX_VALUE) / div)
+
+		var r = qc1.pow(qc2.log(base) / div)
 		r = r.pow(Math.sqrt(PCs_save.comps / 16 + 1))
 		r = r.div(this.shrunkerEff())
 		return r
@@ -358,7 +360,7 @@ var PCs = {
 		}
 
 		getEl("pc_shrunker").textContent = getFullExpansion(PCs_save.shrunkers)
-		getEl("pc_shrunker_eff").textContent = this.shrunkerEff() + "x"
+		getEl("pc_shrunker_eff").textContent = shortenCosts(this.shrunkerEff()) + "x"
 
 		this.showMilestones(PCs_tmp.milestone || 0)
 	},
@@ -395,16 +397,17 @@ var PCs = {
 	},
 
 	resetShrunkers() {
-		if (!PCs.unl()) return
+		var qc = qu_save.qc
+		if (!PCs.unl() && !qc.mod_comps) return
 
 		let x = 0
-		for (var c = 1; c <= 8; c++) if (qu_save.qc) x++
+		for (var c = 1; c <= 8; c++) if (qc.mod_comps.includes("up" + x)) x++
 
 		PCs_save.shrunkers = x
 	},
 	shrunkerEff() {
 		let x = PCs_save.shrunkers
-		return Decimal.pow(10, x * (x + 1) * 5)
+		return Decimal.pow(10, x * (x + 3))
 	}
 }
 var PCs_save = undefined
