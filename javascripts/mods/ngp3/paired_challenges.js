@@ -147,7 +147,7 @@ var PCs = {
 	},
 
 	updateUsed() {
-		if (!PCs_tmp.unl) return
+		if (!PCs_tmp.unl || !PCs_save.challs) return
 		PCs_tmp.used = {
 			d1: [],
 			d2: [],
@@ -398,7 +398,7 @@ var PCs = {
 
 	resetShrunkers() {
 		var qc = qu_save.qc
-		if (!PCs.unl() && (!qc.mod_comps || !qc.mod_comps.length)) return
+		if (!PCs.unl() || !qc.mod_comps || !qc.mod_comps.length) return
 
 		let x = 0
 		for (var c = 1; c <= 8; c++) if (qc.mod_comps.includes("up" + x)) x++
