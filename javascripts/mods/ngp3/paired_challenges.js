@@ -28,7 +28,7 @@ var PCs = {
 	},
 	setupData() {
 		var data = {
-			goal_divs: [null, 0.25, 0.5, 0.35, 0.75, 0.5, 0.75, 0.4, 0.75],
+			goal_divs: [null, 0.2, 0.55, 0.35, 1, 0.5, 0.8, 0.55, 0.7],
 			milestoneReqs: [null, 1, 2, 4],
 			all: [],
 			setup: true
@@ -223,9 +223,9 @@ var PCs = {
 		var qc2 = QCs.data[list[1]].goalMA
 		var base = Number.MAX_VALUE
 		var div = PCs.data.goal_divs[list[0]] + PCs.data.goal_divs[list[1]] + 1
+		div -= PCs_save.comps.length / 28
 
 		var r = qc1.pow(qc2.log(base) / div)
-		r = r.pow(Math.sqrt(PCs_save.comps / 16 + 1))
 		r = r.div(this.shrunkerEff())
 		return r
 	},
@@ -356,6 +356,7 @@ var PCs = {
 				getEl("pc_pick" + i).className = PCs_tmp.picked.includes(i) ? "onchallengebtn" :
 					PCs_tmp.occupied.includes(i) ? "lockedchallengesbtn" :
 					"challengesbtn"
+				getEl("pc_pick" + i).style.display = QCs.done(i) ? "" : "none"
 			}
 		}
 
@@ -407,7 +408,7 @@ var PCs = {
 	},
 	shrunkerEff() {
 		let x = PCs_save.shrunkers
-		return Decimal.pow(10, x * (x + 3))
+		return Decimal.pow(10, x * (x + 7))
 	}
 }
 var PCs_save = undefined

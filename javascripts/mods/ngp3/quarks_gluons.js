@@ -967,7 +967,8 @@ var enB = {
 			tier: 1,
 			type: "r",
 			eff(x) {
-				return Math.sqrt(x * 100) + 1
+				let eff = 0.002 * Math.log2(x / 30 + 1)
+				return Math.pow(player.galaxies * eff + 1, 1.5)
 			},
 			effDisplay(x) {
 				return "^" + shorten(x)
@@ -1019,7 +1020,7 @@ var enB = {
 			eff(x) {
 				let r = Math.log10(x / 100 + 1) / 2 + 1
 				r = Math.sqrt(r)
-				if (r > 1.25) r = (r + 1.25) / 2
+				if (r > 1.2) r = (r + 1.2) / 2
 				return r
 			},
 			effDisplay(x) {
@@ -1027,15 +1028,15 @@ var enB = {
 			}
 		},
 		7: {
-			req: 60,
+			req: 40,
 			masReq: 0,
-			chargeReq: 20,
+			chargeReq: 15,
 
 			title: "308% Completionist",
 			tier: 2,
 			type: "g",
 			eff(x) {
-				return Math.log10(Math.log10(x + 1) + 1) / 2
+				return Math.log10(Math.log10(x + 1) / 2 + 1)
 			},
 			effDisplay(x) {
 				return formatReductionPercentage(x + 1) + "%"

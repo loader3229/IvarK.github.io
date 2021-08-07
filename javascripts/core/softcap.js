@@ -36,8 +36,14 @@ var softcap_data = {
 			func: "dilate",
 			start: Decimal.pow(10, 1e7),
 			base: 10,
-			pow: 4/5
-		}
+			pow: 3/4
+		},
+		2: {
+			func: "pow",
+			start: Decimal.pow(10, 1.5e7),
+			pow: 2/3,
+			derv: false
+		},
 	},
 	rInt: {
 		name: "base replicate interval",

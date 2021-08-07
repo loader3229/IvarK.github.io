@@ -481,13 +481,13 @@ var QCs = {
 	modData: {
 		up: {
 			name: 'Nerfed',
-			maExp: 1.25,
+			maExp: 1.75,
 			shrunker: 1
 		},
 		ol: {
 			name: "Overlapped",
-			maExp: 1/0,
-			shrunker: 2
+			maExp: 2,
+			shrunker: 1
 		},
 		us: {
 			name: "Unstable",

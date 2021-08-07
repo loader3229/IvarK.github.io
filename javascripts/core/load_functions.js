@@ -2235,7 +2235,7 @@ function setupNGP31Versions() {
 		player.dilation.studies = []
 	}
 	if (aarMod.ngp3Build < 20210802) PCs.reset()
-	if (aarMod.ngp3Build < 20210802 && Decimal.log10(player.money) >= 4e12) {
+	if (aarMod.ngp3Build < 20210802 && Decimal.log10(player.money) >= 1/0) {
 		player.totalMoney = new Decimal(1)
 		qu_save.quarks = new Decimal(0)
 		qu_save.gluons = {
