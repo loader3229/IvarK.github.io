@@ -398,7 +398,7 @@ var PCs = {
 
 	resetShrunkers() {
 		var qc = qu_save.qc
-		if (!PCs.unl() && !qc.mod_comps) return
+		if (!PCs.unl() && (!qc.mod_comps || !qc.mod_comps.length)) return
 
 		let x = 0
 		for (var c = 1; c <= 8; c++) if (qc.mod_comps.includes("up" + x)) x++

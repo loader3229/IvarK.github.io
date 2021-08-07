@@ -3,7 +3,7 @@ var QCs = {
 		QCs_save = {
 			in: [],
 			comps: 0,
-			mod_comps: {},
+			mod_comps: [],
 			best: {},
 			cloud_disable: 1
 		}
