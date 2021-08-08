@@ -286,6 +286,7 @@ var pos = {
 		enB.updateOnTick("pos")
 		if (pos_tmp.tab == "boost") {
 			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "^" + (1 / enB_tmp.pos4).toFixed(Math.min(Math.floor(3 + Math.log10(enB_tmp.pos4)), 5))
+			if (enB.has("pos", 10)) getEl("enB_pos10_exp").textContent = "x^1/" + shorten(1/x)
 
 			for (var i = 1; i <= enB.pos.max; i++) {
 				if (!enB.has("pos", i)) return

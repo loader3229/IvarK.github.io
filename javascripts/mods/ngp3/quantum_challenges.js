@@ -89,16 +89,16 @@ var QCs = {
 					limit: new Decimal("1e6000000"),
 
 					speedMult: Decimal.pow(2, - boosts - brokenBoosts),
-					scalingMult: Math.pow(2, Math.max(boosts - 20, 0) / 20),
-					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
+					scalingMult: 1 / (1 + Math.max(boosts - 30, 0) / 20),
+					scalingExp: 1 / Math.min(1 + boosts / 20, 2.5),
 
-					effMult: (maxBoosts / 20 + boosts / 40) * eff + 1,
+					effMult: (boosts / 10 - maxBoosts / 20) * eff + 1,
 					effExp: 1 + boosts / 20 * eff
 				}
 				QCs_tmp.qc1 = data
 
 				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
-				if (PCs.milestoneDone(11)) data.req = data.req.pow(0.9)
+				if (PCs.milestoneDone(11)) data.limit = data.req.pow(0.9)
 				if (PCs.milestoneDone(12)) data.limit = data.limit.times(Decimal.pow(10, QCs_save.qc1.expands * 1e6))
 
 				QCs_tmp.qc1.limit = QCs_tmp.qc1.limit.max(QCs_tmp.qc1.req)
@@ -147,7 +147,7 @@ var QCs = {
 			},
 
 			upsideDesc: (x) => "Only excluded Positronic Boosts work.",
-			perkDesc: (x) => "If excluded, then charged boosts give free Positronic Charge instead. (not implemented)",
+			perkDesc: (x) => "Entangled Boosts are 50% stronger, but mastery requires 20x more and always anti'd.",
 			perkEff() {
 				return 1
 			},
@@ -481,7 +481,7 @@ var QCs = {
 	modData: {
 		up: {
 			name: 'Nerfed',
-			maExp: 1.75,
+			maExp: 1.25,
 			shrunker: 1
 		},
 		ol: {

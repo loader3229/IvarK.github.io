@@ -146,7 +146,7 @@ function bestEternityDisplay(){
 			getEl("besteternity").textContent = ""
 		} else getEl("besteternity").textContent = "Your fastest Eternity is in " + timeDisplay(player.bestEternity) + "."
 		getEl("thiseternity").textContent = "You have spent " + timeDisplay(player.thisEternity) + " in this Eternity."
-		getEl("eternitied").textContent = "You have Eternitied " + getFullExpansion(Decimal.floor(player.eternities).toNumber()) + " time" + (player.eternities == 1 ? "" : "s") + (pH.did("quantum") ? " this Quantum." : ".")
+		getEl("eternitied").textContent = "You have Eternitied " + getFullExpansion(Decimal.floor(player.eternities)) + " time" + (player.eternities == 1 ? "" : "s") + (pH.did("quantum") ? " this Quantum." : ".")
 	} else getEl("eternityStatistics").style.display = "none"
 }
 

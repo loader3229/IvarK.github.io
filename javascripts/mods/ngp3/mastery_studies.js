@@ -165,7 +165,8 @@ var mTs = {
 			if (hasNU(6)) return 0
 
 			let x = player.meta.resets
-			x *= (13 / (Math.abs(x / 50) + 1) + 2)
+			x *= Math.sqrt(x / 100 + 1)
+			x *= (13 / (x / 50 + 1) + 2)
 			if (tmp.ngp3_mul) x *= 1.25
 			return x
 		},
@@ -224,7 +225,13 @@ var mTs = {
 			return Math.min(Math.log10(Math.log10(qu_save.colorPowers.r / 10 + 1) + 1), 1)
 		},
 		312() {
-			return Math.min(Math.log10(Math.log10(qu_save.colorPowers.g / 50 + 1) + 1), 1)
+			let exp = Math.min(Math.log10(Math.log10(qu_save.colorPowers.g / 50 + 1) / 2 + 1), 1)
+			let eff = Math.pow(getReplGalaxyEff(), exp)
+			eff = softcap(eff, "mts312")
+			return {
+				exp: exp,
+				eff: eff
+			}
 		},
 		313() {
 			let tpLog = player.dilation.tachyonParticles.max(1).log10()
@@ -309,7 +316,7 @@ var mTs = {
 			return formatPercentage(Math.pow(tsMults[232](), x) - 1) + "% (^" + x.toFixed(3) + " power)"
 		},
 		312(x) {
-			return formatPercentage(Math.pow(getReplGalaxyEff(), x) - 1) + "% (^" + x.toFixed(3) + " power)"
+			return formatPercentage(x.eff - 1) + "% (^" + x.exp.toFixed(3) + " power)"
 		},
 		313(x) {
 			return "^" + shorten(x)
@@ -485,12 +492,14 @@ function setupMasteryStudies() {
 function setupMasteryStudiesHTML() {
 	setupMasteryStudies()
 
+	let sc = softcap_data
 	if (!mTs.unl()) return
 	for (id = 0; id < mTs.timeStudies.length; id++) {
 		var name = mTs.timeStudies[id]
 		var html = "<span id='mts" + name + "Desc'></span>"
 
 		if (mTs.hasStudyEffect.includes(name)) html += "<br>Currently: <span id='mts" + name + "Current'></span>"
+		if (sc["mts" + name]) html += "<span id='softcap_mts" + name + "_disp'></span>"
 		html += "<br>Cost: <span id='mts" + name + "Cost'></span> Time Theorems"
 		html += "<span id='mts" + name + "Req'></span>"
 

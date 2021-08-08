@@ -41,8 +41,16 @@ var softcap_data = {
 		2: {
 			func: "pow",
 			start: Decimal.pow(10, 1.5e7),
-			pow: 2/3,
+			pow: 0.5,
 			derv: false
+		},
+	},
+	eu2: {
+		name: "Eternity Upgrade 2",
+		1: {
+			func: "dilate",
+			start: Decimal.pow(10, 1e21),
+			pow: 3/4
 		},
 	},
 	rInt: {
@@ -74,6 +82,16 @@ var softcap_data = {
 			derv: false
 		}
 	},
+	mts312: {
+		name: "MS92 multiplier",
+		1: {
+			func: "log",
+			start: 2,
+			base: 2,
+			mul: 0.5,
+			add: 1.5
+		}
+	},
 	ec14: {
 		name: "EC14 base interval",
 		1: {
@@ -87,10 +105,10 @@ var softcap_data = {
 		name: "effective meta-antimatter",
 		1: {
 			func: "pow",
-			start: new Decimal(Number.MAX_VALUE),
+			start: () => new Decimal(Number.MAX_VALUE),
 			pow(x) {
 				let l2 = Decimal.log(x, 2)
-				return 1 / (Math.log2(l2 / 1024) / 4 + 2)
+				return 1 / (Math.log2(l2) / softcap_data.ma[1].start().log(2) / 4 + 2)
 			},
 			derv: false
 		},
@@ -103,15 +121,6 @@ var softcap_data = {
 			base: 10,
 			pow: 0.5
 		}
-	},
-	aqs: {
-		name: "Anti-Quark gain",
-		1: {
-			func: "pow",
-			start: new Decimal(1/0),
-			pow: 0.5,
-			derv: false
-		},
 	},
 	rp: {
 		name: "Red power effect",
@@ -505,12 +514,13 @@ function getSoftcapAmtFromId(id){
 		rep: () => getReplEff(),
 		rInt: () => tmp.rep ? tmp.rep.baseBaseEst.pow(1 - getECReward(14)) : new Decimal(1),
 		it: () => tmp.baseIt.max(1),
+		eu2: () => ETER_UPGS[2].mult(),
 		ec14: () => tmp.rep ? tmp.rep.ec14.baseInt : new Decimal(1),
 		tt: () => getTTGenPart(player.dilation.tachyonParticles),
 		ts83: () => tsMults[83](),
 		ts225: () => tsMults[225](),
+		mts312: () => getMTSMult(312).eff,
 		ma: () => getExtraDimensionBoostPowerUse(),
-		aqs: () => quarkGain(),
 		rp: () => colorBoosts.r,
 		gp: () => colorBoosts.g,
 
@@ -546,9 +556,10 @@ function hasSoftcapStarted(id, num){
 		*/
 		rep: tmp.ngp3,
 		rInt: ECComps("eterc14"),
+		eu2: tmp.ngp3,
 		ts83: tmp.ngp3,
 		ts225: tmp.ngp3,
-		aqs: tmp.ngp3,
+		mts312: tmp.ngp3,
 		rp: tmp.ngp3,
 		tt: tmp.ngp3,
 		ma: tmp.ngp3
@@ -655,11 +666,12 @@ function updateSoftcapStatsTab(){
 		rInt: "softcap_rInt",
 		it: "softcap_it",
 		tt: "softcap_tt",
+		eu2: "softcap_eu2",
 		ts83: "softcap_ts83",
 		ts225: "softcap_ts225",
+		mts312: "softcap_mts312",
 		ec14: "softcap_ec14",
 		ma: "softcap_ma",
-		aqs: "softcap_aqs",
 		rp: "softcap_rp",
 		gp: "softcap_gp",
 		// Condensened:

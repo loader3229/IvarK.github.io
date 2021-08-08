@@ -1,7 +1,7 @@
 //PAIRED CHALLENGES
 var PCs = {
 	milestones: {
-		11: "Replicated Compressors require 10% less.",
+		11: "The Replicanti limit is 10% lower.",
 		21: "The QC2 reward is squared.",
 		31: "You sacrifice 33% MDBs instead of 30%.",
 		41: "You sacrifice Replicated Galaxies more.",
@@ -28,7 +28,7 @@ var PCs = {
 	},
 	setupData() {
 		var data = {
-			goal_divs: [null, 0.2, 0.55, 0.35, 1, 0.5, 0.8, 0.55, 0.7],
+			goal_divs: [null, 0.2, 0.6, 0.35, 1, 0.5, 0.8, 0.55, 0.7],
 			milestoneReqs: [null, 1, 2, 4],
 			all: [],
 			setup: true
@@ -139,7 +139,7 @@ var PCs = {
 		var eff = (PCs_save.lvl - 1) / 28
 		data.eff1 = 1 + 0.75 * eff
 		data.eff1_start = 150
-		data.eff2 = 1 + eff / 3
+		data.eff2 = eff
 	},
 	occupy(x, c) {
 		var d = PCs_tmp.occupied
@@ -223,7 +223,7 @@ var PCs = {
 		var qc2 = QCs.data[list[1]].goalMA
 		var base = Number.MAX_VALUE
 		var div = PCs.data.goal_divs[list[0]] + PCs.data.goal_divs[list[1]] + 1
-		div -= PCs_save.comps.length / 28
+		div += Math.max(1 - PCs_save.comps.length / 14, -1) * PCs_save.comps.length / 28
 
 		var r = qc1.pow(qc2.log(base) / div)
 		r = r.div(this.shrunkerEff())
@@ -347,7 +347,6 @@ var PCs = {
 
 		getEl("pc_eff1").textContent = "^" + PCs_tmp.eff1.toFixed(3)
 		getEl("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
-		getEl("pc_eff2").textContent = "^" + PCs_tmp.eff2.toFixed(3)
 
 		getEl("pc_enter").style.display = PCs_tmp.pick ? "none" : ""
 		getEl("pc_pick").style.display = PCs_tmp.pick ? "" : "none"
@@ -364,6 +363,12 @@ var PCs = {
 		getEl("pc_shrunker_eff").textContent = shortenCosts(this.shrunkerEff()) + "x"
 
 		this.showMilestones(PCs_tmp.milestone || 0)
+	},
+	updateDispOnTick() {
+		if (!PCs_tmp.unl) return
+		if (!PCs.data.setupHTML) return
+
+		getEl("pc_eff2").textContent = "^" + shorten(getAQSGainExp())
 	},
 	showMilestones(qc) {
 		PCs_tmp.milestone = qc
@@ -408,7 +413,7 @@ var PCs = {
 	},
 	shrunkerEff() {
 		let x = PCs_save.shrunkers
-		return Decimal.pow(10, x * (x + 7))
+		return Decimal.pow(10, x * (x + 3) * 2)
 	}
 }
 var PCs_save = undefined

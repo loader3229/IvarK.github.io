@@ -73,12 +73,9 @@ function getExtraGalaxyPower(noDil) {
 	let replPower = getFullEffRGs()
 	let replGalEff = getReplGalaxyEff()
 
-	let tsReplEff = 1
-	if (hasTimeStudy(133)) tsReplEff += 0.5
-	if (hasTimeStudy(132)) tsReplEff += 0.4
-
-	if (hasMTS(301)) replPower *= replGalEff * tsReplEff
+	if (hasMTS(301)) replPower *= replGalEff
 	else {
+		let tsReplEff = getTSReplEff()
 		let extraReplGalPower = 0
 		extraReplGalPower += replPower * (tsReplEff - 1) + getEffectiveRGs("eg")
 		replPower += Math.min(replPower, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
@@ -90,7 +87,7 @@ function getExtraGalaxyPower(noDil) {
 	let dilGalEff = 1
 	if (hasDilationStudy(1) && !noDil) {
 		dilGalEff = getBaseDilGalaxyEff()
-		if (hasMTS(312)) dilGalEff *= Math.pow(replGalEff, getMTSMult(312))
+		if (hasMTS(312)) dilGalEff *= getMTSMult(312).eff
 
 		x += Math.floor(getEffectiveTGs()) * dilGalEff
 	}

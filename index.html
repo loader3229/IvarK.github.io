@@ -67,7 +67,6 @@
 			<button id="quantumbtn" onclick="quantum()">
 				<div id="quantumbtnFlavor" class="hideEmpty"></div>
 				<div id="quantumbtnQKGain" class="hideEmpty"></div>
-				<div id="softcap_aqs_disp"></div>
 				<div id="quantumbtnQKNextAt" class="hideEmpty"></div>
 				<div id="quantumbtnRate" class="hideEmpty"></div>
 				<div id="quantumbtnPeak" class="hideEmpty"></div>
@@ -1559,7 +1558,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/06/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/07/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -1667,11 +1666,12 @@
 				<div id="softcap_rInt"></div>
 				<div id="softcap_it"></div>
 				<div id="softcap_tt"></div>
+				<div id="softcap_eu2"></div>
 				<div id="softcap_ts83"></div>
 				<div id="softcap_ts225"></div>
+				<div id="softcap_mts312"></div>
 				<div id="softcap_ec14"></div>
 				<div id="softcap_ma"></div>
-				<div id="softcap_aqs"></div>
 				<div id="softcap_rp"></div>
 				<div id="softcap_gp"></div>
 				<div id="softcap_C_nd"></div>
@@ -3447,7 +3447,7 @@
 				<br>
 				<div id="pc_info">
 					<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 25px">0 / 1</span>)</span><br>
-					Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and <span id="pc_eff2" style="font-size: 20px"></span> to aQs gain exponent. (starting from 1,000 aQs)
+					Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and make aQs gain boosts itself by <span id="pc_eff2" style="font-size: 20px"></span>.
 				</div>
 				<span id="pc_enter">
 					<br>
@@ -4904,7 +4904,7 @@
 						<br>
 						<span id="enB_pos10_full"></span>
 						<br><br>
-						Tachyon particles speed up Pata Accelerator production by <span id="enB_pos10_eff" style="font-size:24px"></span>x.
+						Tachyon particles speed up Pata Accelerator production by <span id="enB_pos10_eff" style="font-size:24px"></span>. (<span id="enB_pos10_exp" style="font-size:18px"></span>)
 					</td>
 					<td id="enB_pos11">
 						<b id="enB_pos11_name" style="font-size: 24px"></b>
@@ -4913,7 +4913,7 @@
 						<br>
 						<span id="enB_pos11_full"></span>
 						<br><br>
-						After boosts, Eternity Points boost Anti-Quarks by <span id="enB_pos11_eff" style="font-size:24px"></span>.
+						Eternity Points boost Anti-Quarks by <span id="enB_pos11_eff" style="font-size:24px"></span>.
 					</td>
 					<td id="enB_pos12">
 						<b id="enB_pos12_name" style="font-size: 24px"></b>

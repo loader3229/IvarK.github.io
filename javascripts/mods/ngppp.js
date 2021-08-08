@@ -159,7 +159,7 @@ function fillAll() {
 
 //v1.99872
 function maxAllDilUpgs() {
-	let dt = player.dilation.dilatedTime.min("1e10000000")
+	let dt = player.dilation.dilatedTime
 	let update
 	for (var i = 0; i < MAX_DIL_UPG_PRIORITIES.length; i++) {
 		var num = MAX_DIL_UPG_PRIORITIES[i]
@@ -856,7 +856,7 @@ function moreEMsUnlocked() {
 }
 
 function getNGP3EterMilestones() {
-	let r = [1e6, 1e8, 1e10, 1e12, 1e15, 1e18]
+	let r = [1e6, 1e8, 1e10, 1e12, 7e14, 1e18]
 	if (tmp.bgMode) {
 		r[3] = 1e10
 		r[4] = 1e10

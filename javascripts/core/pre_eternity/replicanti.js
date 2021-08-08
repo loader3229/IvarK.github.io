@@ -269,6 +269,7 @@ function getReplGalaxyEff() {
 	if (player.boughtDims) x = Math.log10(player.replicanti.limit.log(2)) / Math.log10(2) / 10
 	else if (ECComps("eterc8") > 0) x = getECReward(8)
 
+	if (hasMTS(301)) x *= getTSReplEff()
 	if (hasMTS(311)) x *= Math.pow(tsMults[232](), getMTSMult(311))
 	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 

@@ -966,7 +966,7 @@ let tsMults = {
 		return x
 	},
 	227() {
-		return Math.pow(tmp.sacPow.max(10).log10(), 10)
+		return Decimal.pow(tmp.sacPow.max(10).log10(), 10)
 	},
 	231() {
 		let db = getTotalDBs()
@@ -1050,4 +1050,12 @@ let tsMults = {
 		let x = Decimal.pow(10, 50 * Math.sqrt(cond))
 		return x
 	}
+}
+
+function getTSReplEff() {
+	let r = 1
+	if (hasTS(132)) r += 0.4
+	if (hasTS(133)) r += 0.5
+
+	return r
 }

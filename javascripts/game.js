@@ -4843,34 +4843,11 @@ function progressBarUpdating(){
 	else preQuantumNormalProgress()
 }
 
-function bigRipUpgradeUpdating(){
-	if (player.ghostify.milestones>7) {
-		getEl("spaceShards").textContent=shortenDimensions(qu_save.bigRip.spaceShards)
-		for (var u=1;u<=getMaxBigRipUpgrades();u++) {
-			getEl("bigripupg"+u).className = qu_save.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : qu_save.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
-			getEl("bigripupg"+u+"cost").textContent = shortenDimensions(new Decimal(bigRipUpgCosts[u]))
-		}
-	}
-	getEl("bigripupg1current").textContent = shortenDimensions(tmp.bru[1])
-	getEl("bigripupg8current").textContent = shortenDimensions(tmp.bru[8])+(Decimal.gte(tmp.bru[8],Number.MAX_VALUE)&&!hasNU(11)?"x (cap)":"x")
-	getEl("bigripupg14current").textContent = new Decimal(tmp.bru[14]).toFixed(2)
-	var bru15effect = tmp.bru[15]
-	getEl("bigripupg15current").textContent=bru15effect < 999.995 ? bru15effect.toFixed(2) : getFullExpansion(Math.round(bru15effect))
-	getEl("bigripupg16current").textContent=shorten(tmp.bru[16])
-	getEl("bigripupg17current").textContent=tmp.bru[17]
-	if (player.ghostify.ghostlyPhotons.unl) {
-		getEl("bigripupg18current").textContent=shorten(tmp.bru[18])
-		getEl("bigripupg19current").textContent=shorten(tmp.bru[19])
-	}
-}
-
 function challengeOverallDisplayUpdating(){
 	if (getEl("challenges").style.display == "block") {
 		if (getEl("eternitychallenges").style.display == "block") ECRewardDisplayUpdating()
-		if (getEl("quantumchallenges").style.display == "block") {
-			QCs.updateDispOnTick()
-			if (hasMTS("d14")) bigRipUpgradeUpdating() //big rip
-		}
+		if (getEl("quantumchallenges").style.display == "block") QCs.updateDispOnTick()
+		if (getEl("pairedChalls").style.display == "block") PCs.updateDispOnTick()
 	}
 }
 

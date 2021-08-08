@@ -429,10 +429,7 @@ function isDilUpgUnlocked(id) {
 
 function getDilUpgCost(id) {
 	if (id + 0 === id) id = "u" + toString(id)
-	else if (id[0] == "r") {
-		let cost = getRebuyableDilUpgCost(id[1])
-		return cost.gte("1e10000000") ? new Decimal(1/0) : cost
-	}
+	else if (id[0] == "r") return getRebuyableDilUpgCost(id[1])
 
 	let cost = DIL_UPG_COSTS[id]
 	let ngpp = id.split("ngpp")[1]
@@ -563,7 +560,7 @@ function updateDilationUpgradeButtons() {
 	var power = getDil3Power()
 	getEl("dil13desc").innerHTML = "You gain " + shorten(power) + "x more Tachyon Particles."
 	getEl("dil13eff").innerHTML = "Currently: " + shorten(Decimal.pow(power, getDilUpgPower(3))) + "x"
-	getEl("dil14eff").innerHTML = aarMod.nguspV ? "Currently: 3x -> " + (getDilUpgPower(4) / 2 + 3).toFixed(2) + "x" : "Currently: ^" + getTPExp("dil4").toFixed(2) + " -> ^" + getTPExp("post-dil4").toFixed(2)
+	getEl("dil14eff").innerHTML = aarMod.nguspV ? "Currently: 3x -> " + (getDilUpgPower(4) / 2 + 3).toFixed(2) + "x" : "Currently: ^" + shorten(getTPExp("dil4")) + " -> ^" + shorten(getTPExp("post-dil4"))
 
 	getEl("dil22desc").innerHTML = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Replicanti multiplier speeds up Time Dimensions.<br>Currently: " + shorten(tmp.rm.pow(getRepToTDExp())) + "x"
 	getEl("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"

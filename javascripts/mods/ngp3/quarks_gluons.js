@@ -521,10 +521,12 @@ var enB = {
 	},
 	getMastered(type, x) {
 		var data = this[type]
-		return (tmp.dtMode && data[x].masReqDeath) || (tmp.exMode && data[x].masReqExpert) || data[x].masReq
+		var r = (tmp.dtMode && data[x].masReqDeath) || (tmp.exMode && data[x].masReqExpert) || data[x].masReq
+		if (type == "glu" && QCs.perkActive(2)) r *= 20
+		return r
 	},
 	anti(type, x) {
-		if (type == "glu" && QCs.in(8)) return true
+		if (type == "glu" && (QCs.perkActive(2) || QCs.in(8))) return true
 		return this[type][x].anti
 	},
 
@@ -627,6 +629,7 @@ var enB = {
 			var amt = this.target(true)
 			if (pos.on()) amt += enB.pos.target()
 			if (PCs.unl() && amt >= PCs_tmp.eff1_start) amt = Math.pow(amt / PCs_tmp.eff1_start, PCs_tmp.eff1) * PCs_tmp.eff1_start
+			if (QCs.perkActive(2)) amt *= 1.5
 
 			return amt
 		},
@@ -746,7 +749,7 @@ var enB = {
 			title: "Dilation Overflow II",
 			type: "g",
 			eff(x) {
-				return 1.5 + 0.5 / (Math.log2(x / 20 + 1) / 3 + 1)
+				return Math.max(1.49 + 0.51 / (Math.log2(x / 20 + 1) / 3 + 1), 1.5)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -1088,7 +1091,7 @@ var enB = {
 				return Math.cbrt(player.dilation.tachyonParticles.add(1).log10() * Math.log10(x / 10 + 1) / 100 + 1)
 			},
 			effDisplay(x) {
-				return x.toFixed(3)
+				return x.toFixed(3) + "x"
 			}
 		},
 		11: {
@@ -1101,10 +1104,10 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return Math.min(Math.sqrt(x) / 1e10, 1e-6)
+				return 1e-11 * Math.min(Math.sqrt(x), 1e3)
 			},
 			effDisplay(x) {
-				return "x^1/" + shorten(1/x)
+				return shortenCosts(player.eternityPoints.pow(x * getAQSGainExp())) + "x"
 			}
 		},
 		12: {

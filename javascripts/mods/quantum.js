@@ -77,7 +77,7 @@ function getQuantumReqSource() {
 	return tmp.ngp3 ? player.meta.bestAntimatter : player.meta.antimatter
 }
 
-function quarkGain() {
+function quarkGain(base) {
 	if (!pH.did("quantum")) return new Decimal(1)
 
 	let ma = getQuantumReqSource().max(1)
@@ -89,10 +89,18 @@ function quarkGain() {
 	let logExp = 3
 	log = Math.pow(log + 1, logExp) - 1
 
-	if (log > 3 && PCs.unl()) log = Math.pow(log / 3, PCs_tmp.eff2) * 3
 	if (enB.active("pos", 11)) log += player.eternityPoints.max(1).log10() * enB_tmp.pos11
+	if (!base) log *= getAQSGainExp(Decimal.pow(10, log))
 
-	return softcap(Decimal.pow(10, log), "aqs").max(1)
+	return Decimal.pow(10, log)
+}
+
+function getAQSGainExp(x) {
+	if (!x) x = quarkGain(true)
+
+	let r = 1
+	if (PCs.unl()) r = Math.pow(x.log10() / 2 + 1, PCs_tmp.eff2)
+	return Math.min(r, 1e5)
 }
 
 function quarkGainNextAt(qk) {

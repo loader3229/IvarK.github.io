@@ -14,17 +14,7 @@ let ETER_UPGS = {
 		unl: () => true,
 		cost: 10,
 		eternities(){
-			/*
-			the reason I softcapped eternities is because they caused balance issues 
-			when you got a lot of eternities (from tmp.e50kdt being true <==> that broken DT upgrade)
-			you get a TON of IPo so much so that you supa-inflate, and this should stop most of it 
-			note: it was giving me about 95% of the mult to ID which is.... a LOT
-			note2: that being said, you can softcap it later, but it it gets to e1000 then the multiplier is
-			about ee14 to IDs = BROKEN (e5k = e50DT ==> e3e17 to IDs = BROKEN BROKEN GOOD)
-			*/
-
 			let e = nMx(getEternitied(), 0)
-			//if (Decimal.gt(e, Decimal.pow(2, 1024))) e = Decimal.pow(Decimal.log10(e) / 4 * Math.log2(10), 128)
 			if (typeof(e) == "number" && isNaN(e)) e = 0
 			return e
 		},
@@ -39,8 +29,10 @@ let ETER_UPGS = {
 
 			let achReward = 1
 			if (hasAch("ngpp15")) {
-				if (tmp.ngC || tmp.ngp3) achReward = Decimal.pow(tmp.ngC ? 10 : 1e3, Math.pow(Decimal.log10(Decimal.add(e, 10)), tmp.ngC ? 3 : 4))
-				else return Decimal.pow(e, Math.min(1e4, Math.pow(e, .3)))
+				if (tmp.ngC || tmp.ngp3) {
+					achReward = Decimal.pow(tmp.ngC ? 10 : 1e3, Math.pow(Decimal.log10(Decimal.add(e, 10)), tmp.ngC ? 3 : 4))
+					if (tmp.ngp3) achReward = softcap(achReward, "eu2")
+				} else return Decimal.pow(e, Math.min(1e4, Math.pow(e, .3)))
 			}
 
 			let div1 = tmp.ngC ? 100 : 200
