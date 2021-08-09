@@ -222,12 +222,17 @@ var mTs = {
 		},
 
 		311() {
-			return Math.min(Math.log10(Math.log10(qu_save.colorPowers.r / 10 + 1) + 1), 1)
+			let exp = Math.min(Math.log10(Math.log10(qu_save.colorPowers.r / 10 + 1) + 1), 1)
+			let eff = hasTS(232) ? Math.pow(tsMults[232](), exp) : 1
+			return {
+				exp: exp,
+				eff: eff
+			}
 		},
 		312() {
-			let exp = Math.min(Math.log10(Math.log10(qu_save.colorPowers.g / 50 + 1) / 2 + 1), 1)
-			let eff = Math.pow(getReplGalaxyEff(), exp)
-			eff = softcap(eff, "mts312")
+			let exp = Math.min(Math.log10(Math.log10(qu_save.colorPowers.g / 20 + 1) / 2 + 1), 1)
+			let eff = getReplGalaxyEff()
+			eff = Math.pow(eff, exp)
 			return {
 				exp: exp,
 				eff: eff
@@ -271,9 +276,9 @@ var mTs = {
 		302: () => "Strengthen some Replicanti boosts.",
 		303: () => "All Replicanti boosts are based on replicanti multiplier instead.",
 
-		311: () => "Red power boosts Replicated and Tachyonic Galaxies with TS232's power.",
+		311: () => "Red power boosts Replicated Galaxies with TS232's power.",
 		312: () => "Green power boosts Tachyonic Galaxies with Replicated Galaxies' strength.",
-		313: () => "Blue power effect boosts itself; but Tachyonic Particles also boost it.",
+		313: () => "Blue power boosts itself, and Tachyon Particles boost this.",
 		314: () => "Every color power adds the suceeding color power.",
 	},
 	timeStudyTitles: {
@@ -313,7 +318,7 @@ var mTs = {
 			return "^" + x.toFixed(3)
 		},
 		311(x) {
-			return formatPercentage(Math.pow(tsMults[232](), x) - 1) + "% (^" + x.toFixed(3) + " power)"
+			return formatPercentage(x.eff - 1) + "% (^" + x.exp.toFixed(3) + " power)"
 		},
 		312(x) {
 			return formatPercentage(x.eff - 1) + "% (^" + x.exp.toFixed(3) + " power)"

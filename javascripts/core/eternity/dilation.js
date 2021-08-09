@@ -59,7 +59,7 @@ function getDilTimeGainPerSecond() {
 		if (hasAch("r138")) gain = gain.times(tmp.ngp3_exp ? 3 : 2)
 		if (hasAch("ngpp13")) gain = gain.times(2)
 		if (hasAch("ng3p11")) gain = gain.times(Math.min(Math.max(Math.log10(player.eternityPoints.max(1).log10()), 1) / 2, 2.5))
-		if (enB.active("pos", 2)) gain = gain.times(enB_tmp.pos2.acc)
+		if (enB.active("pos", 2)) gain = gain.times(enB_tmp.pos2.mult)
 		if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 	}
 	if (tmp.quActive && tmp.ngp3_mul) gain = gain.times(colorBoosts.b) //Color Powers (NG*+3)
@@ -236,12 +236,6 @@ function getEternityBoostToDT(){
 		let eterLog = eter.log10()
 		gain = gain.times(Math.max(eterLog, 1)) //Tier 1: Boost
 		gain = gain.times(Math.pow(Math.max(eterLog - 6, 1), 3)) //Tier 2: Superboost
-
-		/*
-		WHY SOFTCAPS
-		if (e.gt(1e14)) gain = gain.times(Math.sqrt(e.log10()))
-		if (e.gt(1e20)) gain = gain.pow(Math.max(Math.pow(e.log10(), .005) - .01, 1.05))
-		*/
 	}
 
 	//NG Condensed
@@ -620,7 +614,11 @@ function getFreeGalaxyThresholdIncrease() {
 	if (dil2 > 0) thresholdMult += (5 - thresholdMult) * Math.pow(0.8, dil2)
 	else thresholdMult = 5
 
-	if (tmp.ngp3 && dil2 > 30) thresholdMult = Math.pow(thresholdMult, 1 / Math.sqrt(Math.log10(dil2 / 3)))
+	if (tmp.ngp3 && dil2 > 30) {
+		let dil2b = Math.log10(dil2 / 3) //#1 - Boost
+		let dil2b_exp = Math.min(Math.max(dil2b / 3, 0.5), 1) //#2 - Superboost
+		thresholdMult = Math.pow(thresholdMult, 1 / Math.pow(dil2b, dil2b_exp))
+	}
 
 	if (player.exdilation != undefined) {
 		thresholdMult -= Math.min(.1 * exDilationUpgradeStrength(2), 0.2)
@@ -668,11 +666,11 @@ function getEffectiveTGs() {
 	return tg
 }
 
-function getBaseDilGalaxyEff() {
+function getDilGalaxyEff() {
 	let x = 1
 
 	if (hasMTS(263)) x = 1 + doubleMSMult(0.25)
-	if (hasMTS(311)) x *= Math.pow(tsMults[232](), getMTSMult(311))
+	if (hasMTS(312)) x *= getMTSMult(312).eff
 	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 
 	return x

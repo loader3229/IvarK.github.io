@@ -23,7 +23,15 @@ var QCs = {
 
 		if (QCs_save.qc1 === undefined) this.reset()
 		if (QCs_save.qc1.expands === undefined) QCs_save.qc1.expands = 0
+		if (QCs_save.qc1.autoExpand === undefined) QCs_save.qc1.autoExpand = {
+			value: 0,
+			percentage: 0
+		}
+		getEl("setAutoExpand_value").value = QCs_save.qc1.autoExpand.value
+		getEl("setAutoExpand_percentage").value = QCs_save.qc1.autoExpand.percentage
+
 		if (typeof(QCs_save.qc2) !== "number") QCs_save.qc2 = QCs_save.cloud_disable || 1
+		QCs_save.qc5 = new Decimal(QCs_save.qc5)
 
 		if (QCs_save.qc8 === undefined) QCs_save.qc8 = {
 			index: 0,
@@ -40,11 +48,16 @@ var QCs = {
 		this.updateDisp()
 	},
 	reset() {
-		QCs_save.qc1 = {boosts: 0, max: 0, expands: 0}
+		QCs_save.qc1 = {
+			boosts: 0,
+			max: 0,
+			expands: 0,
+			autoExpand: QCs_save.qc1 && QCs_save.qc1.autoExpand
+		}
 		if (!QCs_save.qc2) QCs_save.qc2 = 1
 		QCs_save.qc3 = undefined
 		QCs_save.qc4 = "ng"
-		QCs_save.qc5 = 0
+		QCs_save.qc5 = new Decimal(0)
 		QCs_save.qc6 = 0
 		QCs_save.qc7 = 0
 	},
@@ -89,25 +102,34 @@ var QCs = {
 					limit: new Decimal("1e6000000"),
 
 					speedMult: Decimal.pow(2, - boosts - brokenBoosts),
-					scalingMult: 1 / (1 + Math.max(boosts - 30, 0) / 20),
+					scalingMult: Math.pow(2, Math.max(boosts - 30, 0) / 10),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2.5),
 
-					effMult: (boosts / 10 - maxBoosts / 20) * eff + 1,
+					effMult: (boosts / 5 - maxBoosts / 10) * eff + 1,
 					effExp: 1 + boosts / 20 * eff
 				}
 				QCs_tmp.qc1 = data
 
 				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
-				if (PCs.milestoneDone(11)) data.limit = data.req.pow(0.9)
-				if (PCs.milestoneDone(12)) data.limit = data.limit.times(Decimal.pow(10, QCs_save.qc1.expands * 1e6))
+				if (PCs.milestoneDone(11)) {
+					let pow = (PCs_save.lvl - 1) / 28
+					data.limit = data.req.pow(1 - pow / 2)
+					data.effMult = Math.min(Math.pow(1.1, boosts * pow), 10) * (data.effMult - 1) + 1
+					data.effExp = (1 + pow / 2) * (data.effExp - 1) + 1
+				}
 
-				QCs_tmp.qc1.limit = QCs_tmp.qc1.limit.max(QCs_tmp.qc1.req)
+				data.limit = data.limit.max(data.req)
+				if (PCs.milestoneDone(12)) data.limit = data.limit.pow(QCs_save.qc1.expands / 10 + 1)
 			},
 			convert(x) {
 				if (!QCs_tmp.qc1) return x
 
 				var dilMult = Math.log2(getReplSpeedLimit()) / 1024
-				x = Decimal.pow(2, Math.pow(x.log(2) * dilMult * QCs_tmp.qc1.effMult, QCs_tmp.qc1.effExp) / dilMult)
+				var log = x.log(2) * dilMult
+				if (log > 1) log = Math.pow(log, QCs_tmp.qc1.effExp)
+				log *= QCs_tmp.qc1.effMult / dilMult
+
+				x = Decimal.pow(2, log)
 				return x
 			},
 
@@ -123,12 +145,30 @@ var QCs = {
 				return true
 			},
 
-			expandCost: () => Math.pow(4, QCs_save.qc1.expands) * 1e7,
-			canExpand: () => QCs_tmp.qc5 && QCs_save.qc5 >= QCs.data[1].expandCost(),
-			expand() {
+			expandCost: () => Decimal.pow(4, QCs_save.qc1.expands).times(1e7),
+			canExpand: () => QCs_tmp.qc5 && QCs_save.qc5.gte(QCs.data[1].expandCost()),
+			expandGain: () => Math.floor(QCs_save.qc5.div(QCs.data[1].expandCost()).times(3).add(1).log(4)),
+			expandTarget: () => QCs.data[1].expandGain() + QCs_save.qc1.expands,
+			expand(auto) {
 				if (!this.canExpand()) return
-				QCs_save.qc5 -= QCs.data[1].expandCost()
-				QCs_save.qc1.expands++
+
+				var cost = QCs.data[1].expandCost()
+				var bulk = auto ? Math.floor(QCs.data[1].expandTarget() * QCs_save.qc1.autoExpand.percentage / 100) - QCs_save.qc1.expands : 1
+				if (bulk < 0) return
+
+				QCs_save.qc5 = QCs_save.qc5.sub(Decimal.pow(4, bulk).sub(1).div(3).times(cost))
+				QCs_save.qc1.expands += bulk
+			},
+			autoExpand() {
+				var save = QCs_save.qc1
+				if (!QCs_tmp.qc5) return
+				if (save.boosts < save.autoExpand.value) return
+				if (this.expandGain() < Math.floor(this.expandTarget() * save.autoExpand.percentage / 100) - save.expands) return
+				if (!this.canExpand()) return
+				this.expand(true)
+			},
+			setAutoExpand(x) {
+				QCs_save.qc1.autoExpand[x] = parseInt(getEl("setAutoExpand_" + x).value)
 			}
 		},
 		2: {
@@ -281,26 +321,34 @@ var QCs = {
 
 			overlapReqs: [1/0, 1/0],
 
+			exp: () => 1, //(QCs_save.qc1.boosts + 1) * Math.sqrt(QCs_save.qc1.expands + 1),
 			updateTmp() {
 				delete QCs_tmp.qc5
 				if (!QCs.in(5) && !QCs.done(6)) return
 
 				QCs_tmp.qc5 = {
-					mult: QCs_save.qc1.boosts + 1,
-					eff: Math.log2(QCs_save.qc5 / 2e6 + 1) * 10,
+					mult: new Decimal(QCs_save.qc1.boosts + 1),
+					eff_glu: Math.pow(QCs_save.qc5.div(2e6).add(1).log(2), 12 / 7) * 5,
+					eff_pos: QCs_save.qc5.div(2e6).add(1).log(2) * 10,
 				}
-				if (QCs.isRewardOn(6)) QCs_tmp.qc5.mult *= QCs_tmp.rewards[6]
-				if (QCs.perkActive(5)) QCs_tmp.qc5.eff *= 2
-				if (PCs.milestoneDone(52)) QCs_tmp.qc5.mult *= 2
+				if (QCs.isRewardOn(6)) QCs_tmp.qc5.mult = QCs_tmp.qc5.mult.times(QCs_tmp.rewards[6])
+				if (PCs.milestoneDone(52)) QCs_tmp.qc5.mult = QCs_tmp.qc5.mult.times(2)
+				if (QCs.perkActive(5)) {
+					QCs_tmp.qc5.eff_glu *= 2
+					QCs_tmp.qc5.eff_pos *= 2
+				}
 			},
 
 			updateDisp() {		
 				getEl("qc5_div").style.display = QCs_tmp.qc5 ? "" : "none"
 			},
 			updateDispOnTick() {		
+				let exp = QCs.data[5].exp()
 				getEl("qc5_eng").textContent = shorten(QCs_save.qc5)
 				getEl("qc5_eng_mult").textContent = shiftDown ? " (+" + shorten(Math.max(QCs_tmp.qc5.mult, 1)) + " per " + shorten(Decimal.pow(10, 1 / Math.min(QCs_tmp.qc5.mult, 1))) + "x)" : ""
-				getEl("qc5_eff").textContent = shorten(QCs_tmp.qc5.eff)
+				getEl("qc5_eng_exp").textContent = exp > 1 ? shorten(exp) : ""
+				getEl("qc5_eff_glu").textContent = shorten(QCs_tmp.qc5.eff_glu)
+				getEl("qc5_eff_pos").textContent = shorten(QCs_tmp.qc5.eff_pos)
 			},
 		},
 		6: {

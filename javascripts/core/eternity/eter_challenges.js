@@ -373,13 +373,6 @@ function doCheckECCompletionStuff() {
 	if (ec !== "") {
 		data[ec] = Math.min((data[ec] || 0) + 1, 5)
 
-		/*
-		R.I.P. Eternity Challenge Times (Active exploit)
-
-		//Speedruns
-		if (data[ec] == 5) aarMod.eternityChallRecords[ecNum] = Math.max(player.thisEternity, aarMod.eternityChallRecords[ecNum] || 1/0)
-		*/
-
 		//Special
 		if (qMs.tmp.amt >= 1) {
 			if (ecNum > 12) {

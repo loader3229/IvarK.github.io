@@ -87,10 +87,7 @@ function updateInfiniteTimeTemp() {
 
 function getInfiniteTimePow() {
 	var x = 1
-	if (tmp.ngp3) {
-		if (enB.active("pos", 6)) x *= enB_tmp.pos6
-		if (dev.boosts.tmp[4]) x *= dev.boosts.tmp[4]
-	}
+	if (enB.active("pos", 6) && !dev.boosts.tmp[6]) x *= enB_tmp.pos6
 	return x
 }
 
@@ -128,6 +125,7 @@ function getTimeDimensionPower(tier) {
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
 	if (tmp.ngC) ret = softcap(ret, "tds_ngC")
 
+	if (dev.boosts.tmp[4]) ret = ret.pow(dev.boosts.tmp[4])
 	return ret
 }
 
@@ -319,6 +317,7 @@ function timeDimCost(tier, bought) {
 		// to avoid exponential growth
 		cost = cost.times(Decimal.pow(10, Math.pow((cost.log10() - superScaleStartLog) / 1e3, 2) * 1e3))
 	}
+
 	return cost
 }
 

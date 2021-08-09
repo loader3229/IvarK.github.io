@@ -3052,13 +3052,13 @@ function fromValue(value) {
 	return Decimal.fromString(value)
 }
 
-let MAX_BULK = Math.pow(2, 60)
-function doBulkSpent(res, scaling, bought, fixed, max) {
+let MAX_BULK = Math.pow(2, 512)
+function doBulkSpent(res, scaling, bought, fixed, max, bgtFix) {
 	//Log2 Skip
 	let log2Skip = Math.pow(2,
 		Math.max(
 			Math.floor(Math.log2(
-				Math.min(bought, max || 1/0)
+				Math.min(bgtFix || bought, max || 1/0)
 			))
 		- 20, 0)
 	)
@@ -3068,6 +3068,8 @@ function doBulkSpent(res, scaling, bought, fixed, max) {
 
 	//Maximize (Multiply)
 	let inc = log2Skip
+	let pow32 = Math.pow(2, 32)
+	while (inc <= max && nGE(res, scaling(bought + inc * pow32 - 1))) inc *= pow32
 	while (inc <= max && nGE(res, scaling(bought + inc * 2 - 1))) inc *= 2
 
 	//Maximize (Add)
@@ -3450,12 +3452,17 @@ function doAfterEternityResetStuff() {
 
 function resetReplicantiUpgrades() {
 	let keepPartial = moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[1]
+
 	player.replicanti.chance = keepPartial ? Math.min(player.replicanti.chance, 1) : 0.01
-	player.replicanti.interval = keepPartial ? Math.max(player.replicanti.interval, hasTimeStudy(22) ? 1 : 50) : 1000
-	player.replicanti.gal = 0
 	player.replicanti.chanceCost = Decimal.pow(1e15, player.replicanti.chance * 100).times((inNGM(2) && player.tickspeedBoosts == undefined) ? 1e75 : 1e135)
+
+	player.replicanti.interval = keepPartial ? Math.max(player.replicanti.interval, hasTimeStudy(22) ? 1 : 50) : 1000
 	player.replicanti.intervalCost = Decimal.pow(1e10, Math.round(Math.log10(1000 / player.replicanti.interval) / -Math.log10(0.9))).times((inNGM(2) && player.tickspeedBoosts == undefined) ? 1e80 : player.boughtDims ? 1e150 : 1e140)
-	player.replicanti.galCost = new Decimal((inNGM(2) && player.tickspeedBoosts == undefined) ? 1e110 : 1e170)	
+
+	player.replicanti.gal = 0
+	player.replicanti.galCost = new Decimal((inNGM(2) && player.tickspeedBoosts == undefined) ? 1e110 : 1e170)
+	player.replicanti.galaxies = 0	
+
 }
 
 function challengesCompletedOnEternity() {
@@ -3796,6 +3803,8 @@ function givePerSecondNeuts(){
 function doPerSecondNGP3Stuff(){
 	if (!tmp.ngp3) return
 
+	if (qMs.tmp.amt >= 26) QCs.data[1].autoExpand()
+
 	doNGP3UnlockStuff()
 	notifyGhostifyMilestones()
 	ghostifyAutomationUpdatingPerSecond()
@@ -3921,7 +3930,6 @@ setInterval(function() {
 	updateHotkeys()
 	updateSoftcapStatsTab()
 	doNGm2CorrectPostC3Reward()
-	//dev.quickQuantum()
 
 	//Rounding errors
 	if (isNaN(player.totalmoney.e)) player.totalmoney = new Decimal(10)

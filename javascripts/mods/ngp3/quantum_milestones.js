@@ -99,6 +99,7 @@ let qMs = {
 		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 17 ? "block" : "none"
 		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 17 ? "" : "none"
 		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 20 ? "" : "none"
+		getEl('repExpandAuto').style.display = qMs.tmp.amt >= 26 ? "" : "none"
 
         var autoAssignUnl = qMs.tmp.amt >= 23
 		getEl('respec_quarks').style.display = autoAssignUnl ? "" : "none"

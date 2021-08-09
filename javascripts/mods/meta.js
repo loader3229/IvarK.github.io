@@ -46,7 +46,7 @@ function getMDMultiplier(tier) {
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
 
 	//Quantum Challenges:
-	if (QCs.in(7) || PCs.in()) ret = ret.pow(0.95)
+	if (QCs.in(7) || (PCs.in() && !(tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp))) ret = ret.pow(0.95)
 
 	return ret
 }
@@ -114,7 +114,7 @@ function clearMetaDimensions () { //Resets costs and amounts
 	for (var i = 1; i <= 8; i++) {
 		player.meta[i].amount = new Decimal(0);
 		player.meta[i].bought = 0;
-		player.meta[i].cost = new Decimal(initCost[i - 1]);
+		player.meta[i].cost = getMetaCost(i, 0);
 	}
 }
 
@@ -159,7 +159,7 @@ function metaBoost() {
 
 
 function dimMetaCostMult(tier) {
-	return new Decimal(costMults[tier]);
+	return costMults[tier]
 }
 
 function dimMetaBought(tier) {
@@ -181,14 +181,8 @@ function metaBuyOneDimension(tier) {
 }
 
 function getMetaCost(tier, boughtTen) {
-	let cost = Decimal.times(initCost[tier], dimMetaCostMult(tier).pow(boughtTen))
-	let scalingStart = Math.ceil(Decimal.div(getMetaCostScalingStart(), initCost[tier]).log(dimMetaCostMult(tier)))
-	if (boughtTen >= scalingStart) cost = cost.times(Decimal.pow(10, (boughtTen - scalingStart + 1) * (boughtTen - scalingStart + 2) / 2))
+	let cost = Decimal.pow(dimMetaCostMult(tier), boughtTen).times(initCost[tier])
 	return cost
-}
-
-function getMetaCostScalingStart() {
-	return 1/0
 }
 
 function getMetaMaxCost(tier) {
@@ -196,17 +190,15 @@ function getMetaMaxCost(tier) {
 }
 
 function metaBuyManyDimension(tier) {
-	var cost = getMetaMaxCost(tier);
-	if (!canBuyMetaDimension(tier)) {
-		return false;
-	}
-	if (!canAffordMetaDimension(cost)) {
-		return false;
-	}
-	player.meta.antimatter = player.meta.antimatter.minus(cost);
-	player.meta[tier].amount = player.meta[tier].amount.plus(10 - dimMetaBought(tier));
+	var cost = getMetaMaxCost(tier)
+	if (!canBuyMetaDimension(tier)) return false
+	if (!canAffordMetaDimension(cost)) return false
+
+	player.meta.antimatter = player.meta.antimatter.minus(cost)
+	player.meta[tier].amount = player.meta[tier].amount.plus(10 - dimMetaBought(tier))
 	player.meta[tier].bought += 10 - dimMetaBought(tier)
 	player.meta[tier].cost = getMetaCost(tier, player.meta[tier].bought / 10)
+
 	if (tier > 7) giveAchievement("And still no ninth dimension...")
 	return true;
 }
@@ -214,37 +206,31 @@ function metaBuyManyDimension(tier) {
 function buyMaxMetaDimension(tier, bulk) {
 	if (!canBuyMetaDimension(tier)) return
 	if (getMetaMaxCost(tier).gt(player.meta.antimatter)) return
-	var currentBought = Math.floor(player.meta[tier].bought / 10)
-	var bought = player.meta.antimatter.div(10).div(initCost[tier]).log(dimMetaCostMult(tier)) + 1
-	var scalingStart = Math.ceil(Decimal.div(getMetaCostScalingStart(), initCost[tier]).log(dimMetaCostMult(tier)))
-	if (bought >= scalingStart) {
-		let b = dimMetaCostMult(tier).log10() + 0.5
-		bought = Math.sqrt(b * b + 2 * (bought - scalingStart) * dimMetaCostMult(tier).log10()) - b + scalingStart
-	}
-	bought = Math.floor(bought) - currentBought
-	if (bulk) bought = Math.min(bought, bulk)
-	var num = bought
+
 	var tempMA = player.meta.antimatter
-	if (num > 1) {
-		while (num > 0) {
-			var temp = tempMA
-			var cost = getMetaCost(tier, currentBought + num - 1).times(num > 1 ? 10 : 10 - dimMetaBought(tier))
-			if (cost.gt(tempMA)) {
-				tempMA = player.meta.antimatter.sub(cost)
-				bought--
-			} else tempMA = tempMA.sub(cost)
-			if (temp.eq(tempMA) || currentBought + num > 9007199254740991) break
-			num--
-		}
-	} else {
-		tempMA = tempMA.sub(getMetaCost(tier, currentBought).times(10 - dimMetaBought(tier)))
-		bought = 1
+	var cost = getMetaMaxCost(tier)
+	var bought = 0
+	if (!bulk) bulk = 1/0
+
+	if (dimMetaBought(tier) > 0) {
+		tempMA = tempMA.sub(cost)
+		bought = 10 - dimMetaBought(tier)
+		cost = getMetaCost(tier, Math.floor(player.meta[tier].bought / 10) + 1).times(10)
+		bulk--
 	}
-	player.meta.antimatter = tempMA
-	player.meta[tier].amount = player.meta[tier].amount.add(bought * 10 - dimMetaBought(tier))
-	player.meta[tier].bought += bought * 10 - dimMetaBought(tier)
-	player.meta[tier].cost = getMetaCost(tier, currentBought + bought)
-	if (tier >= 8) giveAchievement("And still no ninth dimension...")
+
+	//To-do: Max
+	var mult = dimMetaCostMult(tier)
+	var add = Math.min(
+		Math.floor(tempMA.div(cost).times(mult - 1).add(1).log(mult))
+	, bulk || 1/0)
+	tempMA = tempMA.sub(Decimal.pow(mult, add).sub(1).div(mult - 1).times(cost).min(tempMA))
+	bought += add * 10
+
+	if (player.meta.antimatter.lte(Decimal.pow(10, 1e12))) player.meta.antimatter = tempMA
+	player.meta[tier].amount = player.meta[tier].amount.plus(bought)
+	player.meta[tier].bought += bought
+	player.meta[tier].cost = getMetaCost(tier, player.meta[tier].bought / 10)
 }
 
 function canAffordMetaDimension(cost) {

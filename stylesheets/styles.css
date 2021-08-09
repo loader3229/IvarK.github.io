@@ -2482,13 +2482,13 @@ td.grey {
 	padding: 0
 }
 
-#moreQCs {
-	width: 100%
+.cool {
+	color: #005fff;
+	text-shadow: 0px 6px 12px #0000ff, 0px 3px 9px #005fff, 0px 0px 6px #007fff
 }
-
-#moreQCs td {
-	vertical-align: 0;
-	text-align: center
+.hot {
+	color: #ff5f00;
+	text-shadow: 0px -6px 12px #ff3f00, 0px -3px 9px #ff5f00, 0px 0px 6px #ff7f00
 }
 
 #replicants .qTable td { vertical-align: 0 }
@@ -2502,70 +2502,6 @@ td.grey {
 	font-weight: bold;
 	font-family: Typewriter;
 	font-size: 13px
-}
-
-#pccompletionstable td {
-	min-height: 24px;
-	height: 24px;
-	max-height: 24px;
-	min-width: 24px;
-	width: 24px;
-	max-width: 24px;
-	text-align: center;
-	vertical-align: 50%
-}
-
-.pc1completed {
-    color: #32c832;
-    background: #0a640a;
-    border: 2px solid #32c832;
-	border-radius: 10px;
-    font-weight: bold;
-}
-
-.pc2completed {
-    color: #b341e0;
-    background: black;
-    border: 2px solid #b341e0;
-	border-radius: 10px;
-}
-
-.pc3completed {
-	color: #FFF;
-	background: #1F1F1F;
-	border: 2px solid #B67F33;
-	border-radius: 10px;
-}
-
-.pc4completed {
-	color: #FFF;
-	background: #5AC467;
-	border: 2px solid #127A20;
-	border-radius: 10px;
-}
-
-.ndcompleted {
-    color: #64DD17;
-    background: black;
-	border: 2px solid #64DD17;
-	border-radius: 10px;
-    font-weight: bold;
-    animation: dilationBtnGlow 10s infinite
-}
-
-#produceQuarkCharge {
-	background: black !important;
-	border: 2px solid #4c4c4c;
-	width: 210px;
-	height: 90px;
-	text-shadow: 0px 0px 1px #4c4c4c, 0px 0px 2px #4c4c4c, 0px 0px 3px #4c4c4c;
-	color: #727272;
-	font-size: 12px;
-	animation: nanofieldanimation 5s infinite
-}
-
-#produceQuarkCharge:hover {
-	color: #999999
 }
 
 .nfReward {
@@ -2643,35 +2579,7 @@ td.grey {
 	color: #00001f;
 	cursor: pointer
 }
-#autoEternityTable tr {
-	height: 300px
-}
-#autoEternityTable td {
-	min-width: 450px;
-	width: 450px;
-	max-width: 450px;
-	text-align: center;
-	vertical-align: top
-}
-#autoEternityTable div {
-	overflow-x: hidden
-}
-#autoEternityTable div tr {
-	height: 0
-}
-#autoEternityTable div td {
-	padding: 0
-}
-#autoEternityTable div td:nth-child(1) {
-	min-width: 20px;
-	width: 20px;
-	max-width: 20px
-}
-#automatedPresets td:nth-child(2) {
-	min-width: 380px;
-	width: 380px;
-	max-width: 380px
-}
+
 .bigripbtn {
 	width:150px;
 	height: 30px;

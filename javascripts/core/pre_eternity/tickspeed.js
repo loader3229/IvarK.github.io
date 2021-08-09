@@ -84,13 +84,7 @@ function getExtraGalaxyPower(noDil) {
 	x += replPower
 
 	//Dilation
-	let dilGalEff = 1
-	if (hasDilationStudy(1) && !noDil) {
-		dilGalEff = getBaseDilGalaxyEff()
-		if (hasMTS(312)) dilGalEff *= getMTSMult(312).eff
-
-		x += Math.floor(getEffectiveTGs()) * dilGalEff
-	}
+	if (hasDilationStudy(1) && !noDil) x += Math.floor(getEffectiveTGs()) * getDilGalaxyEff()
 	return x
 }
 
@@ -203,6 +197,7 @@ function getTickSpeedCostMultiplierIncrease() {
 		ret = Math.pow(ret, exp / galeff)
 	}
 
+	if (dev.boosts.tmp[6]) ret = Math.pow(ret, 1 / dev.boosts.tmp[6])
 	return ret
 }
 

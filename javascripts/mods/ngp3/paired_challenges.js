@@ -1,7 +1,7 @@
 //PAIRED CHALLENGES
 var PCs = {
 	milestones: {
-		11: "The Replicanti limit is 10% lower.",
+		11: "Replicated Compressors are better. (per PC level)",
 		21: "The QC2 reward is squared.",
 		31: "You sacrifice 33% MDBs instead of 30%.",
 		41: "You sacrifice Replicated Galaxies more.",
@@ -138,8 +138,16 @@ var PCs = {
 		//Boosts
 		var eff = (PCs_save.lvl - 1) / 28
 		data.eff1 = 1 + 0.75 * eff
-		data.eff1_start = 150
-		data.eff2 = eff
+		data.eff1_start = (tmp.ngp3_mul ? 125 : 150)
+		data.eff2 = eff / (tmp.ngp3_exp ? 1 : tmp.ngp3_mul ? 1.5 : 2)
+
+		//Temperature
+		data.temp = (PCs_save.comps.length / 21 - (tmp.exMode ? 0 : 1/3)) * PCs_save.comps.length / 28
+		if (tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp) {
+			if (data.temp > 0) data.temp /= 2
+			data.temp -= 0.1
+		}
+		if (tmp.exMode) data.temp += 0.01
 	},
 	occupy(x, c) {
 		var d = PCs_tmp.occupied
@@ -197,6 +205,7 @@ var PCs = {
 		PCs.updateDisp()
 	},
 	start(x) {
+		if (PCs_tmp.pick && PCs_tmp.pick != x) return
 		var c = PCs_save.challs
 		if (c[x]) {
 			quantum(false, true, {pc: x}, "pc")
@@ -223,7 +232,7 @@ var PCs = {
 		var qc2 = QCs.data[list[1]].goalMA
 		var base = Number.MAX_VALUE
 		var div = PCs.data.goal_divs[list[0]] + PCs.data.goal_divs[list[1]] + 1
-		div += Math.max(1 - PCs_save.comps.length / 14, -1) * PCs_save.comps.length / 28
+		div -= PCs_tmp.temp
 
 		var r = qc1.pow(qc2.log(base) / div)
 		r = r.div(this.shrunkerEff())
@@ -259,6 +268,8 @@ var PCs = {
 	lvlReq(pc) {
 		var x = Math.floor(pc / 10 - 1) * 3
 		if (pc < 20) x = 1
+		else if (tmp.dtMode) x++
+		else if (tmp.bgMode) x--
 		if (pc < 50) x += pc % 10 - 1
 		return x
 	},
@@ -268,11 +279,12 @@ var PCs = {
 
 	setupButton: (pc) => '<td><button id="pc' + pc + '" class="challengesbtn" onclick="PCs.start(' + pc + ')"></button></td>',
 	buttonTxt(pc) {
+		var id = PCs.sort(PCs_save.challs[pc])
 		return '<b style="font-size: 18px">PC' + pc + '</b><br>' + (
-			PCs_tmp.pick == pc ? "Click to cancel" :
+			PCs_tmp.pick ? (PCs_tmp.pick == pc ? "Click to cancel" : "") :
 			!PCs_save.challs[pc] ? "Click to assign" :
-			"QC " + wordizeList(PCs.convBack(PCs.sort(PCs_save.challs[pc])), false, " + ", false) +
-			(PCs.done(pc) ? "" : "<br>Goal: " + shorten(PCs.goal(PCs_save.challs[pc])) + " MA")
+			"QC " + wordizeList(PCs.convBack(id), false, " + ", false) +
+			(PCs.done(id) ? "" : "<br>Goal: " + shorten(PCs.goal(id)) + " MA")
 		)
 	},
 	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Milestones</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
@@ -349,6 +361,7 @@ var PCs = {
 		getEl("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
 
 		getEl("pc_enter").style.display = PCs_tmp.pick ? "none" : ""
+		getEl("pc_penalty").style.display = tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp ? "" : "none"
 		getEl("pc_pick").style.display = PCs_tmp.pick ? "" : "none"
 		if (PCs_tmp.pick) {
 			for (var i = 1; i <= 8; i++) {
@@ -358,6 +371,10 @@ var PCs = {
 				getEl("pc_pick" + i).style.display = QCs.done(i) ? "" : "none"
 			}
 		}
+
+		getEl("pc_comps2").textContent = getFullExpansion(PCs_save.comps.length)
+		getEl("pc_temp").innerHTML = formatPercentage(Math.abs(PCs_tmp.temp)) + "<sup>o</sup> " + (PCs_tmp.temp > 0 ? "hotter" : "cooler")
+		getEl("pc_temp_color").className = PCs_tmp.temp > 0 ? "hot" : "cool"
 
 		getEl("pc_shrunker").textContent = getFullExpansion(PCs_save.shrunkers)
 		getEl("pc_shrunker_eff").textContent = shortenCosts(this.shrunkerEff()) + "x"

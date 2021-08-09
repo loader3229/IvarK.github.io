@@ -175,7 +175,6 @@ var pos = {
 			getEl("pos_cloud" + i + "_cell").style.display = data[i] ? "" : "none"
 		}
 		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " excluded" : "") + (data.swaps_next == 0 ? "" : " (Requires " + shortenDimensions(this.swapCost(data.swaps_next)) + " sacrificed quantum energy)")
-		getEl("pos_toggle").style.display = QCs.in(2) ? "none" : ""
 	},
 	updateTmpOnTick() {
 		if (!this.unl()) return
@@ -285,8 +284,8 @@ var pos = {
 
 		enB.updateOnTick("pos")
 		if (pos_tmp.tab == "boost") {
-			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "^" + (1 / enB_tmp.pos4).toFixed(Math.min(Math.floor(3 + Math.log10(enB_tmp.pos4)), 5))
-			if (enB.has("pos", 10)) getEl("enB_pos10_exp").textContent = "x^1/" + shorten(1/x)
+			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "^" + (1 / enB_tmp.pos4).toFixed(3)
+			if (enB.has("pos", 11)) getEl("enB_pos11_exp").textContent = "x^1/" + shorten(1 / enB_tmp.pos11 / getAQSGainExp())
 
 			for (var i = 1; i <= enB.pos.max; i++) {
 				if (!enB.has("pos", i)) return

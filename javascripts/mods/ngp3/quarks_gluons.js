@@ -611,7 +611,7 @@ var enB = {
 		},
 		engAmt(noBest) {
 			var x = noBest ? qu_save.quarkEnergy : qu_save.bestEnergy
-			if (noBest && QCs_tmp.qc5) x += QCs_tmp.qc5.eff
+			if (noBest && QCs_tmp.qc5) x += QCs_tmp.qc5.eff_glu
 			return x
 		},
 		set(x) {
@@ -682,7 +682,7 @@ var enB = {
 			title: "Dilation Overflow",
 			type: "b",
 			eff(x) {
-				return Math.pow(x / 2 + 1, 0.4)
+				return Math.pow(x / 2 + 1, tmp.ngp3_mul ? 0.5 : 0.4)
 			},
 			effDisplay(x) {
 				return formatReductionPercentage(x, 2, 3)
@@ -697,8 +697,8 @@ var enB = {
 			title: "Meta Resynergizer",
 			type: "r",
 			eff(x) {
-				x = Math.pow(1 + Math.log10(Math.log10(x + 1) + 1) / 2, 1.5)
-				return 0.0045 * x
+				x = Math.pow(1 + Math.log10(Math.log10(x + 1) + 1) / (tmp.ngp3_mul ? 1 : 2), 1.5)
+				return 0.0045 * Math.min(x, 2.5)
 			},
 			effDisplay(x) {
 				return x.toFixed(4)
@@ -711,10 +711,11 @@ var enB = {
 			title: "Otherworldly Galaxies",
 			type: "b",
 			eff(x) {
-				return {
+				let r = {
 					int: Math.log10(x / 2 + 1) / 2 + 1,
-					exp: Math.min(Math.log10(Math.log10(x / 1e3 + 1) + 1) + 1, 1.75)
+					exp: Math.min(Math.log10(Math.log10(x / 2e3 + 1) + 1) * (tmp.ngp3_mul ? 1.5 : 1) + 1, 1.75)
 				}
+				return r
 			},
 			effDisplay(x) {
 				return "Strengthen replicate interval upgrades by <span style='font-size:25px'>" + shorten(x.int) + "x</span>, and ^<span style='font-size:24px'>" + shorten(x.exp) + "</span> to all replicanti upgrades."
@@ -749,7 +750,8 @@ var enB = {
 			title: "Dilation Overflow II",
 			type: "g",
 			eff(x) {
-				return Math.max(1.49 + 0.51 / (Math.log2(x / 20 + 1) / 3 + 1), 1.5)
+				var lowLim = tmp.ngp3_mul ? 1.4 : 1.49
+				return Math.max(lowLim + (2 - lowLim) / (Math.log2(x / 20 + 1) / 3 + 1), 1.5)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -762,7 +764,7 @@ var enB = {
 			title: "Meta Resynergizer II",
 			type: "r",
 			eff(x) {
-				return 0.125 - 0.025 / Math.pow(x + 1, 0.2)
+				return 0.125 - 0.025 / Math.pow(x + 1, tmp.ngp3_mul ? 0.3 : 0.2)
 			},
 			effDisplay(x) {
 				return "x^" + x.toFixed(3)
@@ -776,7 +778,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return Math.log2(x / 100 + 1) + 1
+				return Math.log2(x / 100 + 1) * (tmp.ngp3_exp ? 1.5 : 1) + 1
 			},
 			effDisplay(x) {
 				return shorten(x) + "x"
@@ -790,7 +792,7 @@ var enB = {
 			type: "g",
 			anti: true,
 			eff(x) {
-				return Math.pow(x + 1, 0.25)
+				return Math.pow(x + 1, tmp.ngp3_exp ? 0.35 : 0.25)
 			},
 			effDisplay(x) {
 				return shorten(x) + "x"
@@ -803,7 +805,7 @@ var enB = {
 			title: "Blue Unseeming",
 			type: "r",
 			eff(x) {
-				return Math.log10(Math.log10(x + 1) / 5 + 1)
+				return Math.log10(Math.log10(x + 1) / (tmp.ngp3_mul ? 4 : 5) + 1)
 			},
 			effDisplay(x) {
 				return x.toFixed(4)
@@ -864,7 +866,7 @@ var enB = {
 
 		engEff(x) {
 			var eng = this.engAmt()
-			if (QCs_tmp.qc5) eng += QCs_tmp.qc5.eff
+			if (QCs_tmp.qc5) eng += QCs_tmp.qc5.eff_pos
 			return eng
 		},
 		eff(x) {
@@ -875,7 +877,7 @@ var enB = {
 
 		chargeReq(x, next) {
 			var lvl = this.lvl(x, next)
-			var req = this[x].chargeReq * (tmp.exMode ? 1.25 : 1) * Math.pow(lvl, tmp.dtMode ? 2.5 : 2)
+			var req = this[x].chargeReq * (tmp.exMode ? 1.25 : 1) * Math.pow(lvl, tmp.dtMode ? 2.5 : tmp.bgMode ? 1 : 2)
 			if (PCs.milestoneDone(42) && lvl == 1) req *= req
 			return req
 		},
@@ -936,12 +938,13 @@ var enB = {
 				if (PCs.milestoneDone(71)) accSpeed *= 1 + 0.02 * PCs_save.lvl
 
 				var mdb = player.meta.resets
-				var base = player.meta.antimatter.add(1).log10() * getPataAccelerator() + 1
+				var base = player.meta.bestAntimatter.add(1).log10() * getPataAccelerator() + 1
 				var exp = mdb
+				var rel_speed = tmp.ngp3_mul || tmp.ngp3_exp ? 30 : 60
 
 				var pre_slow_mdb = Math.min(mdb, slowStart)
 				exp += pre_slow_mdb * (pre_slow_mdb - 1) * accSpeed
-				exp /= 30
+				exp /= rel_speed
 
 				var speed = 1
 				if (mdb <= slowStart) speed += (mdb - 1) * accSpeed
@@ -951,8 +954,8 @@ var enB = {
 					base: base,
 					exp: exp,
 					slowdown: slowStart,
-					speed: speed / 30,
-					acc: accSpeed / 30,
+					speed: speed / rel_speed,
+					acc: accSpeed / rel_speed,
 					mult: mult,
 					igal: hasAch("ng3p27") ? Math.pow(mult.log10() / 20 + 1, 0.25) : undefined
 				}
@@ -970,7 +973,7 @@ var enB = {
 			tier: 1,
 			type: "r",
 			eff(x) {
-				let eff = 0.002 * Math.log2(x / 30 + 1)
+				let eff = Math.min((tmp.ngp3_mul ? 0.0025 : 0.002) * Math.log2(x / 30 + 1), 0.02)
 				return Math.pow(player.galaxies * eff + 1, 1.5)
 			},
 			effDisplay(x) {
@@ -989,7 +992,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return Math.log10(x / 10 + 1) * Math.pow(x / 200 + 1, 0.25) / 3 + 1
+				return Math.log10(x / 10 + 1) * Math.pow(tmp.ngp3_mul ? x + 1 : x / 200 + 1, 0.25) / 3 + 1
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
@@ -1006,7 +1009,7 @@ var enB = {
 			type: "r",
 			anti: true,
 			eff(x) {
-				return Math.log2(x / 10 + 1) + 1
+				return Math.pow(Math.log2(x / 10 + 1) + 1, tmp.ngp3_mul ? 2 : 1)
 			},
 			effDisplay(x) {
 				return formatReductionPercentage(x) + "%"
@@ -1023,7 +1026,8 @@ var enB = {
 			eff(x) {
 				let r = Math.log10(x / 100 + 1) / 2 + 1
 				r = Math.sqrt(r)
-				if (r > 1.2) r = (r + 1.2) / 2
+				if (r > 1.2 && !tmp.ngp3_exp) r = (r + 1.2) / 2
+				if (dev.boosts.tmp[4] && !dev.boosts.tmp[6]) r = Math.sqrt(r)
 				return r
 			},
 			effDisplay(x) {
@@ -1039,7 +1043,7 @@ var enB = {
 			tier: 2,
 			type: "g",
 			eff(x) {
-				return Math.log10(Math.log10(x + 1) / 2 + 1)
+				return Math.log10(Math.log10(x + 1) / (tmp.ngp3_mul ? 1 : 2) + 1)
 			},
 			effDisplay(x) {
 				return formatReductionPercentage(x + 1) + "%"
@@ -1055,10 +1059,10 @@ var enB = {
 			type: "g",
 			anti: true,
 			eff(x) {
-				return Math.pow(x + 1, 0.1) - 1
+				return Math.pow(x / 15 + 1, 0.1) - 1
 			},
 			effDisplay(x) {
-				return x.toFixed(3)
+				return shorten(x)
 			}
 		},
 		9: {
@@ -1071,8 +1075,9 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				var exp = Math.log2(x / 1000 + 1) / 3
-				return Decimal.max(getInfinitied(), 10).log10() * exp + 1
+				var sqrt = Math.sqrt(Decimal.max(getInfinitied(), 1).log10())
+				var exp = Math.min(Math.pow(x / 1000 + 1, 0.2) - 1, 1e3)
+				return Math.max(sqrt, 1) * Math.min(sqrt, exp) + 1
 			},
 			effDisplay(x) {
 				return "^" + shorten(x)
@@ -1088,7 +1093,7 @@ var enB = {
 			type: "r",
 			anti: true,
 			eff(x) {
-				return Math.cbrt(player.dilation.tachyonParticles.add(1).log10() * Math.log10(x / 10 + 1) / 100 + 1)
+				return Math.pow(player.dilation.tachyonParticles.add(1).log10() * Math.log10(x / 10 + 1) / 100 + 1, tmp.ngp3_mul ? 0.4 : 1/3)
 			},
 			effDisplay(x) {
 				return x.toFixed(3) + "x"
@@ -1107,7 +1112,7 @@ var enB = {
 				return 1e-11 * Math.min(Math.sqrt(x), 1e3)
 			},
 			effDisplay(x) {
-				return shortenCosts(player.eternityPoints.pow(x * getAQSGainExp())) + "x"
+				return shorten(player.eternityPoints.max(1).pow(x * getAQSGainExp())) + "x"
 			}
 		},
 		12: {
@@ -1120,7 +1125,7 @@ var enB = {
 			type: "g",
 			anti: true,
 			eff(x) {
-				return Math.pow(Math.log10(getReplEff().add(1).log10() + 1) / 10 + 1, 3) - 1
+				return Math.pow(Math.log10(getReplEff().add(1).log10() + 1) / (tmp.ngp3_mul ? 8 : 10) + 1, 3) - 1
 			},
 			effDisplay(x) {
 				return x.toFixed(3)

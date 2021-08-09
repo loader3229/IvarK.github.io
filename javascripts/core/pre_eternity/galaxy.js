@@ -68,22 +68,6 @@ function getGalaxyRequirement(offset = 0, display) {
 		if (player.currentEternityChall == "eterc10" && qu_save.breakEternity.upgrades.includes(9)) amount /= getBreakUpgMult(9)
 	}
 	if (!player.boughtDims) {
-		/*tmp.grd.speed = 1
-		if (tmp.ngp3) {
-			let ghostlySpeed = tmp.be ? 55 : 1
-			let div = 1e4
-			let over = tmp.grd.gals / 302500 * ghostlySpeed
-			if (over >= 1) {
-				if (over >= 3) {
-					div /= Math.pow(over, 6) / 729
-					scaling = Math.max(scaling, 5)
-				}
-				if (isLEBoostUnlocked(2) && tmp.be) div *= tmp.leBonus[2]
-				tmp.grd.speed = Math.pow(2, (tmp.grd.gals + 1 - 302500 / ghostlySpeed) * ghostlySpeed / div)
-				scaling = Math.max(scaling, 4)
-			}
-		}*/
-
 		let distantStart = getDistantScalingStart()
 		if (tmp.grd.gals >= distantStart) {
 			let speed = getDistantScalingEffect()
@@ -203,5 +187,5 @@ function getDarkScalingStart() {
 function maxBuyGalaxies(manual) {
 	let max = (manual || (getEternitied() >= 10 && tmp.ngp3_boost && player.autobuyers[10].priority == 0)) ? 1/0 : player.autobuyers[10].priority
 	if ((inNC(11) || player.currentEternityChall == "eterc6" || player.currentChallenge == "postc1" || (player.currentChallenge == "postc5" && inNGM(3)) || player.currentChallenge == "postc7") && !tmp.be) return
-	if (max > player.galaxies) galaxyReset(doBulkSpent(getAmount(inNC(4) || inNGM(5) ? 6 : 8), getGalaxyRequirement, 0, true).toBuy) //Offset function
+	if (max > player.galaxies) galaxyReset(doBulkSpent(getAmount(inNC(4) || inNGM(5) ? 6 : 8), getGalaxyRequirement, 0, true, undefined, player.galaxies).toBuy) //Offset function
 }

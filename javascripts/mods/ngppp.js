@@ -160,6 +160,7 @@ function fillAll() {
 //v1.99872
 function maxAllDilUpgs() {
 	let dt = player.dilation.dilatedTime
+	let dtSub = dt.lte(Decimal.pow(10, 1e12))
 	let update
 	for (var i = 0; i < MAX_DIL_UPG_PRIORITIES.length; i++) {
 		var num = MAX_DIL_UPG_PRIORITIES[i]
@@ -169,7 +170,7 @@ function maxAllDilUpgs() {
 				if (dt.gte(cost)) {
 					var toBuy = Math.floor(dt.div(cost).times(9).add(1).log10())
 					var toSpend = Decimal.pow(10, toBuy).sub(1).div(9).times(cost)
-					dt = dt.sub(dt.min(cost))
+					if (dtSub) dt = dt.sub(dt.min(cost))
 					player.dilation.rebuyables[1] += toBuy
 					update = true
 				}
@@ -180,7 +181,7 @@ function maxAllDilUpgs() {
 						if (dt.gte(cost)) {
 							var toBuy = Math.floor(dt.div(cost).times(99).add(1).log(100))
 							var toSpend = Decimal.pow(100,toBuy).sub(1).div(99).times(cost)
-							dt = dt.sub(dt.min(cost))
+							if (dtSub) dt = dt.sub(dt.min(cost))
 							player.dilation.rebuyables[2] += toBuy
 							resetDilationGalaxies()
 							update = true
@@ -194,7 +195,7 @@ function maxAllDilUpgs() {
 				let data = doBulkSpent(dt, (x) => getRebuyableDilUpgCost(num, x), player.dilation.rebuyables[num] || 0)
 
 				if (data.toBuy > 0) {
-					dt = data.res
+					if (dtSub) dt = data.res
 					player.dilation.rebuyables[num] = (player.dilation.rebuyables[num] || 0) + data.toBuy
 					update = true
 
@@ -946,15 +947,19 @@ function autoPresetUnlocked(x) {
 	return qMs.tmp.amt >= 2 && (!(x == "qc" || x == "qc7") || hasAch("ng3p26"))
 }
 
+//Recent boosts
 function getReplDilBonus() {
 	let log = getReplEff().max(1).log10()
-	let slog = log / 1e4
-	if (hasMTS(302)) {
-		slog *= Math.log10(Math.log10(slog + 1) + 1) + 1
-		slog *= Math.sqrt(slog / 1e3 + 1)
-	}
+	log *= Math.log10(log / 1e5 + 1) / 3 + 1
+	return Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(log / 1e4 + 1) - 1)
+}
 
-	return Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(slog + 1) - 1)
+function getAQSGainExp(x) {
+	if (!x) x = quarkGain(true)
+
+	let r = 1
+	if (PCs.unl()) r = Math.pow(x.log10() / 2 + 1, PCs_tmp.eff2)
+	return Math.min(r, 1e5)
 }
 
 //Update Messages

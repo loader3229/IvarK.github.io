@@ -49,8 +49,9 @@ var softcap_data = {
 		name: "Eternity Upgrade 2",
 		1: {
 			func: "dilate",
-			start: Decimal.pow(10, 1e21),
-			pow: 3/4
+			start: Decimal.pow(10, 1e9),
+			base: 10,
+			pow: 3/5
 		},
 	},
 	rInt: {
@@ -65,11 +66,9 @@ var softcap_data = {
 	ts83: {
 		name: "TS83 multiplier",
 		1: {
-			func: "dilate",
+			func: "pow",
 			start: new Decimal("1e5000"),
-			base: 10,
-			pow: 3/4,
-			mul: 0.5,
+			pow: 0.05,
 			derv: false
 		}
 	},
@@ -80,16 +79,6 @@ var softcap_data = {
 			start: 100,
 			pow: 1/4,
 			derv: false
-		}
-	},
-	mts312: {
-		name: "MS92 multiplier",
-		1: {
-			func: "log",
-			start: 2,
-			base: 2,
-			mul: 0.5,
-			add: 1.5
 		}
 	},
 	ec14: {
@@ -108,7 +97,7 @@ var softcap_data = {
 			start: () => new Decimal(Number.MAX_VALUE),
 			pow(x) {
 				let l2 = Decimal.log(x, 2)
-				return 1 / (Math.log2(l2) / softcap_data.ma[1].start().log(2) / 4 + 2)
+				return 1 / (Math.log2(l2 / softcap_data.ma[1].start().log(2)) / 4 + 2)
 			},
 			derv: false
 		},
@@ -442,14 +431,15 @@ var softcap_funcs = {
 	dilate_decimal(x, start, base = 10, pow = 1, mul = 1, sub10 = 0) { 
 		if (x.lte(start)) return x
 
-		var x_log = x.log(base)
-		var start_log = start.log(base)
+		var base_log = Decimal.log10(base)
+		var x_log = x.log10() / base_log
+		var start_log = start.log10() / base_log
 
-		var sub = sub10 / Math.log10(base)
+		var sub = sub10 / base_log
 		x_log -= sub
 		start_log -= sub
 
-		return Decimal.pow(base,(Math.pow(x_log / start_log, pow) * mul - mul + 1) * start_log + sub)
+		return Decimal.pow(base, (Math.pow(x_log / start_log, pow) * mul - mul + 1) * start_log + sub)
 	},
 }
 
@@ -519,7 +509,6 @@ function getSoftcapAmtFromId(id){
 		tt: () => getTTGenPart(player.dilation.tachyonParticles),
 		ts83: () => tsMults[83](),
 		ts225: () => tsMults[225](),
-		mts312: () => getMTSMult(312).eff,
 		ma: () => getExtraDimensionBoostPowerUse(),
 		rp: () => colorBoosts.r,
 		gp: () => colorBoosts.g,
@@ -559,7 +548,6 @@ function hasSoftcapStarted(id, num){
 		eu2: tmp.ngp3,
 		ts83: tmp.ngp3,
 		ts225: tmp.ngp3,
-		mts312: tmp.ngp3,
 		rp: tmp.ngp3,
 		tt: tmp.ngp3,
 		ma: tmp.ngp3
@@ -669,7 +657,6 @@ function updateSoftcapStatsTab(){
 		eu2: "softcap_eu2",
 		ts83: "softcap_ts83",
 		ts225: "softcap_ts225",
-		mts312: "softcap_mts312",
 		ec14: "softcap_ec14",
 		ma: "softcap_ma",
 		rp: "softcap_rp",

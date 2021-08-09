@@ -65,3 +65,197 @@ function doAutoEterTick() {
 	}
 	if (player.autoEterOptions.tt && !(hasDilationUpg(10) && getTTProduction() > 1e3)) maxTheorems()
 }
+
+//Smart presets
+var onERS = false
+var onNGP3 = false
+var poData
+
+function save_preset(id, placement) {
+	let data = getEl("preset_" + id +"_data").value
+	presets[id].preset = presets.editing && data != presets[id].preset ? data : getStudyTreeStr()
+	localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
+	delete presets.editing
+
+	changePresetTitle(id, placement)
+	$.notify("Preset saved", "info")
+}
+
+function toggle_preset_reset(load) {
+	if (!load) {
+		aarMod.presetReset = !aarMod.presetReset
+		getEl("toggle_preset_reset").style.display = tmp.ngp3 ? "" : "none"
+	}
+	getEl("toggle_preset_reset").textContent = "Force Eternity: " + (aarMod.presetReset ? "ON" : "OFF")
+}
+
+function load_preset(id, placement) {
+	let data = getEl("preset_" + id + "_data").value
+
+	if (aarMod.presetReset) {
+		if (!pH.can("eternity")) return
+
+		player.respec = true
+		if (tmp.ngp3) player.respecMastery = true
+		eternity(false, true, true, presets[id].dilation)
+	} else if (presets[id].dilation) dilateTime(true)
+
+	let saved = false
+	if (data != presets[id].preset && id == presets.editing) {
+		delete presets.editing
+		presets[id].preset = data
+		localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
+		changePresetTitle(id, placement)
+		saved = true
+	}
+
+	importStudyTree(data)
+	closeToolTip()
+	$.notify("Preset" + (saved ? " saved and " : "") + " loaded", "info")
+}
+
+function delete_preset(presetId) {
+	if (!confirm("Do you really want to erase this preset? You will lose access to this preset!")) return
+	var alreadyDeleted = false
+	var newPresetsOrder = []
+	for (var id = 0; id < poData.length; id++) {
+		if (alreadyDeleted) {
+			newPresetsOrder.push(poData[id])
+			changePresetTitle(poData[id], id)
+		} else if (poData[id] == presetId) {
+			if (id == presets.editing) delete presets.editing
+			delete presets[presetId]
+			localStorage.removeItem(btoa(presetPrefix + presetId))
+			alreadyDeleted = true
+			getEl("presets").deleteRow(id)
+			loadedPresets--
+		} else newPresetsOrder.push(poData[id])
+	}
+	metaSave["presetsOrder"+(player.boughtDims?"_ers":"")] = newPresetsOrder
+	poData = newPresetsOrder
+	localStorage.setItem(metaSaveId,btoa(JSON.stringify(metaSave)))
+	$.notify("Preset deleted", "info")
+}
+
+function rename_preset(id) {
+	presets[id].title = prompt("Input the new name for this preset. It is recommended you rename the preset based on what studies you have selected.")
+	localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
+	placement = 1
+	while (poData[placement-1] != id) placement++
+	changePresetTitle(id, placement)
+	$.notify("Preset renamed", "info")
+}
+
+function move_preset(id,offset) {
+	placement = 0
+	while (poData[placement] != id) placement++
+
+	if (offset < 0) {
+		if (placement < -offset) return
+	} else if (placement > poData.length - offset - 1) return
+	if (id == presets.editing) presets.editing += offset
+
+	var temp = poData[placement]
+	poData[placement] = poData[placement+offset]
+	poData[placement+offset] = temp
+	getEl("presets").rows[placement].innerHTML = getPresetLayout(poData[placement])
+	getEl("presets").rows[placement+offset].innerHTML = getPresetLayout(id)
+	changePresetTitle(poData[placement], placement)
+	changePresetTitle(poData[placement+offset], placement + offset)
+	localStorage.setItem(metaSaveId, btoa(JSON.stringify(metaSave)))
+}
+
+var loadedPresets = 0
+function openStudyPresets() {
+	closeToolTip()
+	let saveOnERS = !(!player.boughtDims)
+	let saveOnNGP3 = player.masterystudies !== undefined
+	if (saveOnERS != onERS) {
+		delete presets.editing
+		getEl("presets").innerHTML = ""
+		presets = {}
+		onERS = saveOnERS
+		if (onERS) presetPrefix = prefix+"ERS_ST_"
+		else presetPrefix = prefix+"AM_ST_"
+		loadedPresets = 0
+	} else if (saveOnNGP3 != onNGP3) {
+		onNGP3 = saveOnNGP3
+		for (var p = 0; p < loadedPresets; p++) {
+			getEl("presets").rows[p].innerHTML = getPresetLayout(poData[p])
+			changePresetTitle(poData[p], p + 1)
+		}
+	}
+	getEl("presetsmenu").style.display = "block";
+	clearInterval(loadSavesIntervalId)
+	occupied = false
+	loadSavesIntervalId=setInterval(function(){
+		if (occupied) return
+		else occupied = true
+		if (loadedPresets == poData.length) {
+			clearInterval(loadSavesIntervalId)
+			return
+		} else if (!onLoading) {
+			latestRow = getEl("presets").insertRow(loadedPresets)
+			onLoading = true
+		}
+		try {
+			var id = poData[loadedPresets]
+			latestRow.innerHTML = getPresetLayout(id, loadedPresets + 1)
+			changePresetTitle(id, loadedPresets + 1)
+			loadedPresets++
+			onLoading = false
+		} catch (e) { console.error(e) }
+		occupied = false
+	}, 0)
+}
+
+function focus_preset(id, placement) {
+	if (presets.editing) {
+		changePresetTitle(presets.editing, placement, false)
+		delete presets.editing
+	}
+	presets[id].dilation = getEl("preset_" + id + "_dilation").checked
+	presets.editing = placement
+	changePresetTitle(id, placement, true)
+}
+
+function getPresetLayout(id, placement) {
+	return "<b id='preset_" + id + "_title'>Preset #" + placement + "</b><br>" +
+		"<span id='preset_" + id + "_dilation_div'>Dilation run: <input id='preset_" + id + "_dilation' type='checkbox' onchange='focus_preset(" + id + ", " + placement + ")'></span><br>" +
+		"<input id='preset_" + id +"_data' style='width: 75%' onchange='focus_preset(" + id + ", " + placement + ")'><br>" +
+
+		"<button class='storebtn' onclick='save_preset(" + id + ", " + placement + ")'>Save</button>" +
+		"<button class='storebtn' onclick='load_preset(" + id + ", " + placement + ")'>Load</button>" +
+		"<button class='storebtn' onclick='rename_preset(" + id + ", " + placement + ")'>Rename</button>" +
+		"<button class='storebtn' onclick='delete_preset(" + id + ", " + placement + ")'>Delete</button>" +
+
+		"<span class='metaOpts'>" +
+			"<button class='storebtn' onclick='move_preset(" + id + ", -1)'>⭡</button>" +
+			"<button class='storebtn' onclick='move_preset(" + id + ", -1)'>⭣</button>" +
+		"</span>"
+}
+
+function changePresetTitle(id, placement, editing) {
+	if (!placement) {
+		placement = 0
+		while (poData[placement] != id) placement++
+	}
+
+	getEl("preset_" + id + "_dilation_div").style.display = hasDilationStudy(1) || pH.has("quantum")
+
+	if (editing) {
+		getEl("preset_" + id + "_title").textContent = (presets[id].title ? presets[id].title : "Preset #" + placement) + "*"
+		return
+	}
+
+	if (presets[id] === undefined) {
+		var preset = localStorage.getItem(btoa(presetPrefix + id))
+		if (preset === null) {
+			presets[id] = {preset: "|0", title: "Deleted preset #" + placement, dilation: false}
+			localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
+		} else presets[id] = JSON.parse(atob(preset))
+		getEl("preset_" + id + "_dilation").checked = presets[id].dilation
+	}
+	getEl("preset_" + id + "_title").textContent = presets[id].title ? presets[id].title : "Preset #" + placement
+	getEl("preset_" + id + "_data").value = presets[id].preset
+}

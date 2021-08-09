@@ -1,7 +1,8 @@
 function dimShiftDisplay(){
 	var shiftRequirement = getShiftRequirement();
 	var isShift = getMaxUnlockableDimensions() < (haveSixDimensions() ? 6 : 8)
-	getEl("resetLabel").textContent = 'Dimension ' + (isShift ? "Shift" : player.resets < getSupersonicStart() ? "Boost" : "Supersonic") + ' (' + getFullExpansion(Math.ceil(player.resets)) + (getTotalDBs() > player.resets ? " + " + getFullExpansion(Math.ceil(getExtraDBs())) : "") +'): requires ' + getFullExpansion(Math.ceil(shiftRequirement.amount)) + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions"
+	getEl("resetLabel").innerHTML = 'Dimension ' + (isShift ? "Shift" : player.resets < getSupersonicStart() ? "Boost" : "Supersonic") + ' (' + getFullExpansion(Math.ceil(player.resets)) + (getTotalDBs() > player.resets ? " + " + getFullExpansion(Math.ceil(getExtraDBs())) : "") +'): requires ' + getFullExpansion(Math.ceil(shiftRequirement.amount)) + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions" +
+		(hasDilationStudy(6) && shiftDown ? "<br>Power: " + shorten(getDimensionBoostPower()) + "x, Multiplier: " + shorten(getDimensionBoostPower().pow(getTotalDBs())) + "x" : "")
 	getEl("softReset").textContent = "Reset the game for a " + (isShift ? "new Dimension" : "Boost")
 }
 
@@ -37,7 +38,7 @@ function dimensionTabDisplay(){
 			getEl("A" + tier).textContent = getDimensionDescription(tier)
 		}
 	}
-	setAndMaybeShow("mp10d", aarMod.newGameMult, "'Multiplier per 10 Dimensions: '+shorten(getDimensionPowerMultiplier(\"non-random\"))+'x'")
+	setAndMaybeShow("mp10d", aarMod.newGameMult || (shiftDown && pos.unl()), "'Multiplier per 10 Dimensions: '+shorten(getDimensionPowerMultiplier(\"non-random\"))+'x'")
 	dimShiftDisplay()
 	tickspeedBoostDisplay()
 	galaxyReqDisplay()
@@ -631,7 +632,7 @@ function replicantiDisplay() {
 		let replGal = player.replicanti.gal
 		let replGalScale = replGal >= (tmp.ngC ? 250 : 400) ? 2 : replGal >= 100 ? 1 : 0
 		let replGalName = (replGalScale ? getGalaxyScaleName(replGalScale) : "Max ") + "Replicated Galaxies"
-		let replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
+		let replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) && player.replicanti.galCost.lt(1/0) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
 		getEl("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(replGal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
 		getEl("replicantireset").innerHTML = (
 			hasAch("ngpp16") ? "Get "

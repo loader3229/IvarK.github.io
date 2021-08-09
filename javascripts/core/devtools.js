@@ -33,11 +33,11 @@ dev.forceMaxDB = function(){
 		player.resets += Decimal.gte(getAmount(getShiftRequirement().tier), getShiftRequirement().amount) ? 1 : 0
 		return
 	}
-	player.resets += doBulkSpent(getAmount(8), getShiftRequirement, 0, true).toBuy
+	player.resets += doBulkSpent(getAmount(8), getShiftRequirement, 0, true, 1/0, player.resets).toBuy
 }
 
-dev.forceMaxTDB = function(){
-	player.tickspeedBoosts += doBulkSpent(getAmount(8), getTickspeedBoostRequirement, player.resets, true).toBuy
+dev.forceMaxTSB = function(){
+	player.tickspeedBoosts += doBulkSpent(getAmount(8), getTickspeedBoostRequirement, player.tickspeedBoosts, true, 1/0).toBuy
 }
 
 dev.doubleEverything = function() {
@@ -198,6 +198,16 @@ dev.quickQuantum = function(n, quick) {
 	if (!quick) updateColorCharge()
 }
 
+dev.giveAllPCs = function() {
+	let array = []
+	for (var i = 1; i <= 8; i++) for (var j = 1; j < i; j++) array.push(j * 10 + i)
+	PCs_save.comps = array
+	PCs_save.lvl = 29
+
+	PCs.updateTmp()
+	PCs.updateDisp()
+}
+
 dev.addReward = function(){
 	qu_save.nanofield.rewards += 1
 }
@@ -251,7 +261,7 @@ dev.boosts = {
 		let data = { on: this.on }
 
 		if (this.on) {
-			for (var i = 1; i <= 5; i++) {
+			for (var i = 1; i <= 7; i++) {
 				if (this[i].unl()) {
 					if (this.tmp[i] === undefined) console.log("Activating boost #" + i)
 					data[i] = this[i].eff()
@@ -296,12 +306,11 @@ dev.boosts = {
 	},
 	4: {
 		unl() {
-			return tmp.eterUnl
+			return enB.active("pos", 6)
 		},
 		eff(x) {
-			//Eternal Bent: Decoherence tiers (scaled by antimatter) raise Infinite Time reward.
-			if (x === undefined) x = Math.log10(player.money.add(1).log10() + 1)
-			return Math.max(x / 6 - 1, 1)
+			//Eternal Bent: Transfinite Time raise all Time Dimensions to an exponent, but reduce the multiplier by ^0.5.
+			return enB.active("pos", 6) ? enB_tmp.pos6 : 1
 		},
 	},
 	5: {
@@ -311,6 +320,24 @@ dev.boosts = {
 		eff(x) {
 			//Again and again...: Raise Infinitied and Eternitied gains to an exponent.
 			return 1.5
+		},
+	},
+	6: {
+		unl() {
+			return enB.active("pos", 6)
+		},
+		eff(x) {
+			//Eternal Bent+: Transfinite Time is squared, but it no longer boosts Infinite Time.
+			return enB.active("pos", 6) ? enB_tmp.pos6 : 1
+		},
+	},
+	7: {
+		unl() {
+			return hasMTS(311)
+		},
+		eff(x) {
+			//???: MS81 boosts Antimatter Galaxies.
+			return 1
 		},
 	}
 }

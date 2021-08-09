@@ -16,6 +16,7 @@ function quantum(auto, force, attrs, mode, quick) {
 		data.qc = PCs.convBack(PCs_save.challs[attrs.pc])
 	}
 	if (mode == "restart") {
+		data.pc = PCs_save.in
 		data.qc = QCs_save.in
 		data.mod = QCs_save.mod
 	}
@@ -93,14 +94,6 @@ function quarkGain(base) {
 	if (!base) log *= getAQSGainExp(Decimal.pow(10, log))
 
 	return Decimal.pow(10, log)
-}
-
-function getAQSGainExp(x) {
-	if (!x) x = quarkGain(true)
-
-	let r = 1
-	if (PCs.unl()) r = Math.pow(x.log10() / 2 + 1, PCs_tmp.eff2)
-	return Math.min(r, 1e5)
 }
 
 function quarkGainNextAt(qk) {

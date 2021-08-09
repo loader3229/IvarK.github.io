@@ -2224,7 +2224,7 @@ function setupNGP31Versions() {
 		delete qu_save.nonMAGoalReached
 	}
 	if (aarMod.ngp3Build < 20210519) qu_save.quarkEnergy = qu_save.bestEnergy || 0
-	if (aarMod.ngp3Build < 20210529) QCs_save.qc5 = 0
+	if (aarMod.ngp3Build < 20210529) QCs_save.qc5 = new Decimal(0)
 	if (aarMod.ngp3Build < 20210614 && player.masterystudies.includes("d7")) {
 		alert("Your mastery studies has been respecced due to the rework of Positronic-era studies.")
 		mTs.respec(true)

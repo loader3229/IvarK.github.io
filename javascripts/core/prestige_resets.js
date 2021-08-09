@@ -332,7 +332,6 @@ function doEternityResetStuff(layer = 4, chall) {
 
 	player.replicanti.unl = getEternitied() >= 50
 	resetReplicantiUpgrades()
-	player.replicanti.galaxies = 0
 	player.replicanti.galaxybuyer = (getEternitied() > 2) ? player.replicanti.galaxybuyer : undefined
 
 	if (chall == 14) player.replicanti.kept = player.replicanti.amount

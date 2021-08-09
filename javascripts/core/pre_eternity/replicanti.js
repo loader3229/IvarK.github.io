@@ -32,7 +32,12 @@ function replicantiIncrease(diff) {
 
 	player.replicanti.amount = player.replicanti.amount.min(lim)
 	if (player.replicanti.amount.eq(lim)) replicantiTicks = 0
-	if (QCs_tmp.qc5) QCs_save.qc5 += player.replicanti.amount.div(old).log10() * QCs_tmp.qc5.mult
+	if (QCs_tmp.qc5) {
+		let exp = QCs.data[5].exp()
+		if (exp > 1) QCs_save.qc5 = QCs_save.qc5.pow(1 / exp)
+		QCs_save.qc5 = QCs_tmp.qc5.mult.times(player.replicanti.amount.div(old).max(1).log10()).add(QCs_save.qc5)
+		if (exp > 1) QCs_save.qc5 = QCs_save.qc5.pow(exp)
+	}
 
 	let auto = player.replicanti.galaxybuyer
 	if (auto && tmp.ngC) ngC.condense.rep.buy()
@@ -70,7 +75,9 @@ function isReplicantiLimitBroken() {
 function getReplEff() {
 	if (dev.noRep) return new Decimal(1)
 	if (QCs.in(5)) return new Decimal(1)
-	return getReplBaseEff().max(tmp.rmPseudo || 0)
+
+	var x = getReplBaseEff().max(tmp.rmPseudo || 0)
+	return x
 }
 
 function getReplBaseEff(x) {
@@ -150,19 +157,21 @@ function isIntervalAffordable() {
 
 function getRGCost(offset = 0, costChange) {
 	let ret = player.replicanti.galCost
-	if (offset > 0) {
+	let gal = player.replicanti.gal
+	if (tmp.ngp3 && !hasMTS(266) && gal + offset >= 500) return new Decimal(1/0)
+	else if (offset > 0) {
 		let increase = 0
-		if (player.currentEternityChall == "eterc6") increase = offset * ((offset + player.replicanti.gal * 2) + 3)
-		else increase = offset * (2.5 * (offset + player.replicanti.gal * 2) + 22.5)
-		if (player.replicanti.gal + offset > 99) increase += (offset - Math.max(99 - player.replicanti.gal, 0)) * (25 * (offset - Math.max(99 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, 99) * 2) - 4725)
+		if (player.currentEternityChall == "eterc6") increase = offset * ((offset + gal * 2) + 3)
+		else increase = offset * (2.5 * (offset + gal * 2) + 22.5)
+		if (gal + offset > 99) increase += (offset - Math.max(99 - gal, 0)) * (25 * (offset - Math.max(99 - gal, 0) + Math.max(gal, 99) * 2) - 4725)
 		
 		let scaleStart = tmp.ngC ? 250 : 400
-		if (player.replicanti.gal + offset > scaleStart - 1) {
-			if (player.exdilation != undefined) for (var g = Math.max(player.replicanti.gal, scaleStart - 1); g < player.replicanti.gal + offset; g++) increase += Math.pow(g - 389, 2)
+		if (gal + offset > scaleStart - 1) {
+			if (player.exdilation != undefined) for (var g = Math.max(gal, scaleStart - 1); g < gal + offset; g++) increase += Math.pow(g - 389, 2)
 			if (player.meta != undefined) {
 				var isReduced = tmp.ngp3 && hasMTS(266)
-				if (isReduced) increase += (Math.pow(player.replicanti.gal + offset - scaleStart, 3) - Math.pow(Math.max(player.replicanti.gal - scaleStart, 0), 3)) * 10 / doubleMSMult(1)
-				else for (var g = Math.max(player.replicanti.gal, scaleStart - 1); g < player.replicanti.gal + offset; g++) increase += 5 * Math.floor(Math.pow(1.2, g - scaleStart + 6))
+				if (isReduced) increase += (Math.pow(gal + offset - scaleStart, 3) - Math.pow(Math.max(gal - scaleStart, 0), 3)) * 10 / doubleMSMult(1)
+				else for (var g = Math.max(gal, scaleStart - 1); g < gal + offset; g++) increase += 5 * Math.floor(Math.pow(1.2, g - scaleStart + 6))
 			}
 		}
 		ret = ret.times(Decimal.pow(10, increase))
@@ -219,7 +228,7 @@ function getMaxRG() {
 function autoBuyRG() {
 	if (!player.infinityPoints.gte(getRGCost())) return
 
-	let data = doBulkSpent(player.infinityPoints, getRGCost, 0, false, hasMTS(265) ? undefined : 200 + Math.max(400 - player.replicanti.gal, 0))
+	let data = doBulkSpent(player.infinityPoints, getRGCost, 0, false, hasMTS(265) ? undefined : 200 + Math.max(400 - player.replicanti.gal, 0), player.replicanti.gal)
 	player.replicanti.infinityPoints = data.res
 	player.replicanti.galCost = getRGCost(data.toBuy, true)
 	player.replicanti.gal += data.toBuy
@@ -270,7 +279,7 @@ function getReplGalaxyEff() {
 	else if (ECComps("eterc8") > 0) x = getECReward(8)
 
 	if (hasMTS(301)) x *= getTSReplEff()
-	if (hasMTS(311)) x *= Math.pow(tsMults[232](), getMTSMult(311))
+	if (hasMTS(311)) x *= getMTSMult(311).eff
 	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 
 	return x
@@ -281,9 +290,8 @@ function replicantiGalaxyAutoToggle() {
 	getEl("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
 }
 
-function getReplicantiBaseInterval(speed, debug) {
-	if (speed === undefined) speed = player.replicanti.interval
-	speed = new Decimal(speed)
+function getReplicantiBaseInterval(speed) {
+	speed = new Decimal(speed || player.replicanti.interval)
 
 	var upgs = Math.round(Decimal.div(speed, 1e3).log(0.9))
 	if (enB.active("glu", 5)) {
@@ -310,7 +318,7 @@ function getReplicantiIntervalMult() {
 	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))
 	if (player.dilation.upgrades.includes('ngpp1') && aarMod.nguspV && !aarMod.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
-	if (enB.active("pos", 2)) interval = interval.div(enB_tmp.pos2.acc)
+	if (enB.active("pos", 2)) interval = interval.div(enB_tmp.pos2.mult)
 	if (tmp.ngC && ngC.tmp) interval = interval.div(ngC.tmp.rep.eff1)
 	return interval
 }
@@ -346,7 +354,7 @@ function getReplSpeed() {
 }
 
 function getReplSpeedLimit() {
-	return .2 / 15 + 1
+	return 1 / 75 + 1
 }
 
 function getReplSpeedExpMult() {
