@@ -409,7 +409,9 @@ function updateEC14BaseReward() {
 
 		data.baseInt = div
 		data.interval = div
-		data.acc = 1 / Math.sqrt(1 - pow) / 3
+		if (pow > 0.75) data.acc = -Math.log2(1 - pow) / 4 + 1.5
+		else data.acc = 1 / Math.sqrt(1 - pow)
+		data.acc /= 3
 		data.ooms = softcap(div, "ec14").max(1).log10() * data.acc + 1
 	} else {
 		data.baseInt = new Decimal(1)
@@ -428,7 +430,7 @@ function boostReplicateInterval() {
 	if (ECComps("eterc14")) {
 		var ec14Pow = getECReward(14)
 		var ec14Int = data.ec14.baseInt
-		var ec14Acc = getRepSlowdownBase10(data.speeds.exp) * 10 * ec14Pow + 1
+		var ec14Acc = getRepSlowdownBase10(data.speeds.exp) * Math.min(15 * data.ec14.acc, 5)
 		data.ec14.interval = ec14Int.div(ec14Acc)
 		x = x.div(data.ec14.interval)
 

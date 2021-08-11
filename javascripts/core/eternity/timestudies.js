@@ -763,6 +763,9 @@ let tsMults = {
 	221() {
 		return Decimal.pow(1.0025, getTotalDBs())
 	},
+	224() {
+		return Math.floor(getTotalDBs() / 2000)
+	},
 	225() {
 		let x = Math.floor(getReplEff().e / 1e3)
 		if (tmp.ngp3) x = softcap(x, "ts225")
@@ -778,7 +781,11 @@ let tsMults = {
 	231() {
 		let db = getTotalDBs()
 		let x = Decimal.pow(Math.max(db, 1), 0.3)
-		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(2, db * Math.min(Math.pow(Math.log2(db / 2e6 + 2), 2.5) / 3e5, 3e-5)))
+		if (tmp.ngp3 && hasAch("ngpp15")) {
+			let str = Math.min(Math.log2(db / 2e6 + 2), 10)
+			str *= Math.min(str, 10) * 3e-6
+			x = x.max(Decimal.pow(2, db * str))
+		}
 		return x
 	},
 	232() {

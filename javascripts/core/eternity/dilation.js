@@ -616,8 +616,8 @@ function getFreeGalaxyThresholdIncrease() {
 
 	if (tmp.ngp3 && dil2 > 30) {
 		let dil2b = Math.log10(dil2 / 3) //#1 - Boost
-		let dil2b_exp = Math.min(Math.max(dil2b / 3, 0.5), 1) //#2 - Superboost
-		thresholdMult = Math.pow(thresholdMult, 1 / Math.pow(dil2b, dil2b_exp))
+		dil2b *= Math.max(dil2b / 2, 1) //#2 - Superboost
+		thresholdMult = Math.pow(thresholdMult, 1 / Math.sqrt(dil2b))
 	}
 
 	if (player.exdilation != undefined) {

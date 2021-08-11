@@ -55,32 +55,41 @@ function getDistantScalingEffect(){
 function getGalaxyRequirement(offset = 0, display) {
 	tmp.grd = {} //Galaxy requirement data
 	tmp.grd.gals = player.galaxies + offset
-	let mult = getGalaxyReqMultiplier()
-	let base = tmp.grd.gals * mult
-	let amount = 80 + base
+
 	let scaling = 0
-	if (inNGM(2)) amount -= (hasGalUpg(22) && tmp.grd.gals >= 1) ? 80 : 60
-	if (tmp.ngmX > 3) amount -= 10
-	if (inNC(4) || inNGM(5)) amount = player.tickspeedBoosts == undefined ? 99 + base : amount + (inNGM(4) ? 20 : -30)
-	if (tmp.be) {
-		amount *= 50
-		if (qu_save.breakEternity.upgrades.includes(2)) amount /= getBreakUpgMult(2)
-		if (player.currentEternityChall == "eterc10" && qu_save.breakEternity.upgrades.includes(9)) amount /= getBreakUpgMult(9)
+	let mult = getGalaxyReqMultiplier()
+	let exp = 0.5
+	let isNum = true
+
+	let base = 80
+	if (inNGM(2)) base -= (hasGalUpg(22) && tmp.grd.gals >= 1) ? 80 : 60
+	if (inNGM(4)) base -= 10
+	if (inNC(4) || inNGM(5)) base = inNGM(3) ? base + (inNGM(4) ? 20 : -30) : 99
+
+	let amt = base
+	if (tmp.grd.gals * mult > 0) {
+		if (exp == 1) amt += tmp.grd.gals * mult
+		else {
+			isNum = false
+			amt = Decimal.pow(amt / mult, 1 / exp).add(tmp.grd.gals).pow(exp).times(mult)
+			scaling--
+		}
 	}
+
 	if (!player.boughtDims) {
 		let distantStart = getDistantScalingStart()
+		let add = 0
 		if (tmp.grd.gals >= distantStart) {
 			let speed = getDistantScalingEffect()
-			amount += getDistantAdd(tmp.grd.gals - distantStart + 1) * speed
+			add += getDistantAdd(tmp.grd.gals - distantStart + 1) * speed
 			if (tmp.grd.gals >= distantStart * 2.5 && inNGM(2)) {
 				// 5 times worse scaling
-				amount += 4 * speed * getDistantAdd(tmp.grd.gals - distantStart * 2.5 + 1)
+				add += 4 * speed * getDistantAdd(tmp.grd.gals - distantStart * 2.5 + 1)
 				scaling = Math.max(scaling, 2)
 			} else scaling = Math.max(scaling, 1)
 		}
-
-		let darkStart = getDarkScalingStart()
-		if (tmp.grd.gals >= darkStart) scaling = Math.max(scaling, 4)
+		if (isNum) amt += add
+		else amt = amt.add(add)
 
 		let hasRemote = !tmp.be && !hasNU(6) && !hasAch("ng3p117")
 		if (hasRemote) {
@@ -89,17 +98,24 @@ function getGalaxyRequirement(offset = 0, display) {
 				let speed2 = 1
 				if (dev.boosts.on) speed2 /= remoteStart / 8e3 + 1 //- FUTURE BOOST
 
-				if (display) amount = Decimal.pow(getRemoteScalingBase(), (tmp.grd.gals - remoteStart + 1) * speed2).times(amount)
-				else amount *= Math.pow(getRemoteScalingBase(), (tmp.grd.gals - remoteStart + 1) * speed2)
+				let pow = Decimal.pow(getRemoteScalingBase(), (tmp.grd.gals - remoteStart + 1) * speed2)
+				if (pow.gte(1e3)) {
+					pow = pow.pow(Math.pow(pow.log10() / 3, 2))
+					scaling = Math.max(scaling, 4)
+				}
+				if (display) isNum = false
+				if (isNum) amt *= pow.toNumber()
+				else amt = pow.times(amt)
+
 				scaling = Math.max(scaling, 3)
 			}
 		}
 	}
-	if (amount + 0 === amount) amount = Math.ceil(amount - getGalaxyReqSub())
-	else amount = amount.sub(getGalaxyReqSub()).ceil()
+	if (!display || isNum) amt = Math.ceil(amt - getGalaxyReqSub())
+	else amt = amt.sub(getGalaxyReqSub()).ceil()
 
-	if (display) return {amount: amount, scaling: scaling}
-	return amount
+	if (display) return {amt: amt, scaling: scaling}
+	return amt
 }
 
 function getGalaxyReqMultiplier() {
@@ -130,7 +146,7 @@ function getDistantScalingStart() {
 	let n = tmp.ngC ? 1 : 100
 	n += getECReward(5)
 	if (hasTimeStudy(223)) n += 7
-	if (hasTimeStudy(224)) n += Math.floor(getTotalDBs() / 2000)
+	if (hasTimeStudy(224)) n += tsMults[224]()
 	if (hasDilationUpg("ngmm11")) n += 25
 	if (tmp.ngp3) {
 		if (inBigRip() && qu_save.bigRip.upgrades.includes(15)) n += tmp.bru[15]

@@ -81,14 +81,7 @@ function updateInfiniteTimeTemp() {
 
 	var x = (3 - getTickspeed().log10()) * 5e-6
 	if (tmp.ngp3) x = softcap(Decimal.pow(10, x), "it").log10()
-	tmp.it = Decimal.pow(10, x * getInfiniteTimePow())
-	tmp.baseIt = Decimal.pow(10, x)
-}
-
-function getInfiniteTimePow() {
-	var x = 1
-	if (enB.active("pos", 6) && !dev.boosts.tmp[6]) x *= enB_tmp.pos6
-	return x
+	tmp.it = Decimal.pow(10, x)
 }
 
 function getTimeDimensionPower(tier) {
@@ -126,6 +119,12 @@ function getTimeDimensionPower(tier) {
 	if (tmp.ngC) ret = softcap(ret, "tds_ngC")
 
 	if (dev.boosts.tmp[4]) ret = ret.pow(dev.boosts.tmp[4])
+	return ret.pow(getTimeDimensionExp())
+}
+
+function getTimeDimensionExp() {
+	let ret = 1
+	if (enB.active("pos", 6)) ret = enB_tmp.pos6
 	return ret
 }
 
@@ -206,7 +205,7 @@ function updateTimeShards() {
 	if (tmp.inEC12) p = p.div(tmp.ec12Mult)
 	if (inNGM(5)) p = p.times(getPDAcceleration())
 
-	getEl("itmult").textContent = hasAch('r105') ? 'Infinite Time: ' + shorten(tmp.it) + 'x to Time Dimensions' + (tmp.ngp3 && shiftDown ? " (Base: " + shorten(tmp.baseIt) + ", raised by ^" + shorten(getInfiniteTimePow()) + ")" : "") : ''
+	getEl("itmult").textContent = hasAch('r105') ? 'Infinite Time: ' + shorten(tmp.it.pow(getTimeDimensionExp())) + 'x to all Time Dimensions' : ''
 	getEl("timeShardAmount").textContent = shortenMoney(player.timeShards)
 	getEl("tickThreshold").textContent = shortenMoney(player.tickThreshold)
 	if (player.currentEternityChall == "eterc7") getEl("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Eighth Infinity Dimensions per second."

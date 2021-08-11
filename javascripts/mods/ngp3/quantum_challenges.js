@@ -87,35 +87,36 @@ var QCs = {
 			ttScaling() {
 				return tmp.dtMode ? 2 : tmp.exMode ? 1.75 : 1.5
 			},
-			scalings: [4],
+			scalings: [4, 30],
 			updateTmp() {
 				delete QCs_tmp.qc1
 				if (!QCs.in(1) && !QCs.done(1)) return
 
+				let eff = QCs.modIn(1, "up") ? 0.5 : 1
 				let boosts = QCs_save.qc1.boosts
 				let maxBoosts = QCs_save.qc1.max
-				let brokenBoosts = Math.max(QCs_save.qc1.boosts - this.scalings[0], 0)
-				let eff = QCs.modIn(1, "up") ? 0.5 : 1
+
+				let distantBoosts = Math.max(QCs_save.qc1.boosts - this.scalings[0], 0)
 
 				let data = {
-					req: Decimal.pow(10, 1e6 * (brokenBoosts + 1)),
+					req: Decimal.pow(10, 1e6 * (distantBoosts + 1)),
 					limit: new Decimal("1e6000000"),
 
-					speedMult: Decimal.pow(2, - boosts - brokenBoosts),
-					scalingMult: Math.pow(2, Math.max(boosts - 30, 0) / 10),
+					speedMult: Decimal.pow(2, - boosts - distantBoosts),
+					scalingMult: Math.pow(4, Math.max(boosts - 30, 0) / 15),
 					scalingExp: 1 / Math.min(1 + boosts / 20, 2.5),
 
 					effMult: (boosts / 5 - maxBoosts / 10) * eff + 1,
-					effExp: 1 + boosts / 20 * eff
+					effExp: Math.min(1 + boosts / 20 * eff, 2.5)
 				}
 				QCs_tmp.qc1 = data
 
 				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
 				if (PCs.milestoneDone(11)) {
 					let pow = (PCs_save.lvl - 1) / 28
-					data.limit = data.req.pow(1 - pow / 2)
-					data.effMult = Math.min(Math.pow(1.1, boosts * pow), 10) * (data.effMult - 1) + 1
-					data.effExp = (1 + pow / 2) * (data.effExp - 1) + 1
+					data.limit = data.req.pow(Math.pow(4, -pow))
+					data.effMult *= Math.pow(4, boosts * eff * pow / 20)
+					data.effExp *= 1 + Math.min(boosts * eff * pow / 30, 1) / 2
 				}
 
 				data.limit = data.limit.max(data.req)
@@ -139,7 +140,7 @@ var QCs = {
 				if (!QCs.data[1].can()) return false
 
 				QCs_save.qc1.boosts++
-				player.replicanti.amount = Decimal.pow(10, Math.pow(player.replicanti.amount.log10(), 0.9))
+				player.replicanti.amount = new Decimal(1)
 				eternity(false, true)
 
 				return true

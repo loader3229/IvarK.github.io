@@ -1,10 +1,10 @@
 body {
-    background: black;
+    background: #222222;
     background-position: center; 
 }
 
 button {
-    color: #E0E0E0;
+    color: #757575;
     background-color: #455A64 !important;
     border: 1px solid black;
     box-shadow: 0px 0px 7px 2px #111111;
@@ -22,7 +22,7 @@ button {
 
 .storebtn {
     color: #fff;
-    background-color: #333 !important;
+    background-color: #585858 !important;
     border: 1px solid black;
     box-shadow: 0px 0px 7px 2px #111111;
 }
@@ -98,11 +98,11 @@ input {
 }
 
 .container {
-    color: #333 !important;
+    color: #989898 !important;
 }
 
 .completedrow {
-    color: #333 !important;
+    color: #585858 !important;
 }
 
 .challengesbtn {
@@ -171,12 +171,12 @@ input {
 }
 
 .IPAmount1 {
-    color: #000 !important;
+    color: #bfbebe !important;
     text-shadow: 0px 0px 7px #fff;
 }
 
 .IPAmount2 {
-    color: #000 !important;
+    color: #bfbebe !important;
     text-shadow: 0px 0px 7px #fff;
 }
 
@@ -185,11 +185,11 @@ input {
 }
 
 .unavailablebtn {
-    background: #222 !important;
+    background: #505050 !important;
 }
 
 .unavailablebtn:hover {
-    background: #500 !important;
+    background: #A00000 !important;
 }
 
 .postinfcrunch {
@@ -265,7 +265,7 @@ input {
     border: 1px solid black !important;
 }
 
-#infPowAmount, #infPowEffectPower {
+#infPowAmount {
     color: #000 !important;
     text-shadow: 0px 0px 7px #ff9800;
 }
@@ -290,7 +290,7 @@ input {
     text-shadow: 0px 0px 7px #fff;
 }
 
-#replicantimult, #replCond, #replCond1, #replCond2 {
+#replicantimult {
     color: #000 !important;
     text-shadow: 0px 0px 7px #fff;
 }
@@ -452,8 +452,8 @@ input {
 }
 
 .timestudylocked, .eternitychallengestudylocked {
-    background: #23292a !important;
-    color: black !important;
+    background: #2f3638 !important;
+    color: rgb(20, 10, 10) !important;
 }
 
 .timestudylocked.normaldimstudylocked {
@@ -523,6 +523,13 @@ input {
     animation: studyGlowIn 7s infinite;
 }
 
+.galStonerewardlocked {
+    color: #0072ff !important;
+    background: black !important;
+    border: 1px solid #0072ff !important;
+    animation: galaxyStudyGlowIn 7s infinite;
+}
+
 .greedbtn {
     background-color: #f2d729 !important;
     color: black !important;
@@ -578,7 +585,7 @@ input {
     border: 1px solid #B84B5F !important;
 }
 
-#tachyonParticleAmount, #tachyonParticleAmount2 {
+#tachyonParticleAmount {
     color: #64ddad !important;
     text-shadow: 0px 0px 7px #64ddad;
 }

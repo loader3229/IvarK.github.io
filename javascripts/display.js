@@ -19,12 +19,13 @@ function galaxyReqDisplay(){
 	var nextGal = getGalaxyRequirement(0, true)
 	var totalReplGalaxies = getTotalRGs()
 	var totalTypes = player.dilation.freeGalaxies ? 3 : totalReplGalaxies ? 2 : 1
-	getEl("secondResetLabel").innerHTML = getGalaxyScaleName(nextGal.scaling) + (nextGal.scaling <= 3 ? "Antimatter " : "") + ' Galaxies ('+ getFullExpansion(player.galaxies) + (totalTypes >= 2 ? ' + ' + getFullExpansion(totalReplGalaxies) : '') + (totalTypes >= 3 ? ' + ' + getFullExpansion(Math.round(player.dilation.freeGalaxies)) : '') +'): requires ' + getFullExpansion(nextGal.amount) + ' '+DISPLAY_NAMES[inNC(4) || player.pSac != undefined ? 6 : 8]+' Dimensions'
+	getEl("secondResetLabel").innerHTML = getGalaxyScaleName(nextGal.scaling) + 'Antimatter Galaxies ('+ getFullExpansion(player.galaxies) + (totalTypes >= 2 ? ' + ' + getFullExpansion(totalReplGalaxies) : '') + (totalTypes >= 3 ? ' + ' + getFullExpansion(Math.round(player.dilation.freeGalaxies)) : '') +'): requires ' + getFullExpansion(nextGal.amt) + ' '+DISPLAY_NAMES[inNC(4) || player.pSac != undefined ? 6 : 8]+' Dimensions'
 }
 
-var galaxyScalings = ["", "Distant ", "Further ", "Remote ", "Dark Matter ", "Ghostly ", "Ethereal ", "Ethereal+ ", "Ethereal++ ", "Ethereal IV ", "Ethereal V "]
+var galaxyScalings = ["", "Distant ", "Further ", "Remote ", "Obsure "]
+var negGalaxyScalings = ["", "Dense "]
 function getGalaxyScaleName(x) {
-	return galaxyScalings[x]
+	return (x < 0 ? negGalaxyScalings : galaxyScalings)[Math.abs(x)]
 }
 
 function dimensionTabDisplay(){
@@ -709,6 +710,7 @@ function initialTimeStudyDisplay(){
 	getEl("212desc").textContent = "Currently: " + ((tsMults[212]() - 1) * 100).toFixed(2) + "%"
 	getEl("214desc").textContent = "Currently: " + shortenMoney(((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1)).div(tmp.sacPow)).max(1).min(new Decimal("1e125000"))) + "x"
 	getEl("221desc").textContent = "Currently: " + shorten(tsMults[221]()) + "x"
+	getEl("224desc").textContent = "Currently: +" + getFullExpansion(tsMults[224]()) + " extra RGs" 
 	getEl("225desc").textContent = "Currently: +" + getFullExpansion(Math.floor(tsMults[225]() * extraReplMulti)) + " extra RGs" 
 	getEl("226desc").textContent = "Currently: +" + getFullExpansion(Math.floor(tsMults[226]() * extraReplMulti)) + " extra RGs"
 	getEl("227desc").textContent = "Currently: " + shorten(tsMults[227]()) + "x"

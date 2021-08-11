@@ -973,8 +973,11 @@ var enB = {
 			tier: 1,
 			type: "r",
 			eff(x) {
-				let eff = Math.min((tmp.ngp3_mul ? 0.0025 : 0.002) * Math.log2(x / 30 + 1), 0.02)
-				return Math.pow(player.galaxies * eff + 1, 1.5)
+				let gal = player.galaxies
+				gal /= Math.max(Math.log2(gal) / 10, 1)
+				gal *= 0.0007 * Math.log2(x + 1)
+				gal *= Math.min(Math.log2(x + 1), 30)
+				return Math.pow(gal + 1, 1.5)
 			},
 			effDisplay(x) {
 				return "^" + shorten(x)
@@ -1024,11 +1027,8 @@ var enB = {
 			tier: 3,
 			type: "r",
 			eff(x) {
-				let r = Math.log10(x / 100 + 1) / 2 + 1
-				r = Math.sqrt(r)
-				if (r > 1.2 && !tmp.ngp3_exp) r = (r + 1.2) / 2
-				if (dev.boosts.tmp[4] && !dev.boosts.tmp[6]) r = Math.sqrt(r)
-				return r
+				let r = Math.log10(x / 400 + 1) / 2 + 1
+				return Math.sqrt(r)
 			},
 			effDisplay(x) {
 				return "^" + x.toFixed(3)
@@ -1043,7 +1043,7 @@ var enB = {
 			tier: 2,
 			type: "g",
 			eff(x) {
-				return Math.log10(Math.log10(x + 1) / (tmp.ngp3_mul ? 1 : 2) + 1)
+				return Math.log10(x + 1) / 5
 			},
 			effDisplay(x) {
 				return formatReductionPercentage(x + 1) + "%"
@@ -1076,8 +1076,8 @@ var enB = {
 			anti: true,
 			eff(x) {
 				var sqrt = Math.sqrt(Decimal.max(getInfinitied(), 1).log10())
-				var exp = Math.min(Math.pow(x / 1000 + 1, 0.2) - 1, 1e3)
-				return Math.max(sqrt, 1) * Math.min(sqrt, exp) + 1
+				var exp = Math.log2(x / 500 + 1) * 5 + 1
+				return Math.max(sqrt, 1) * exp + 1
 			},
 			effDisplay(x) {
 				return "^" + shorten(x)

@@ -51,6 +51,7 @@ var softcap_data = {
 			func: "dilate",
 			start: Decimal.pow(10, 1e9),
 			base: 10,
+			mul: () => Math.log10(Math.pow(10, 0.2) * Decimal.log10(player.eternities)),
 			pow: 3/5
 		},
 	},
@@ -68,7 +69,7 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: new Decimal("1e5000"),
-			pow: 0.05,
+			pow: 0.1,
 			derv: false
 		}
 	},
@@ -503,7 +504,7 @@ function getSoftcapAmtFromId(id){
 	return { // for amount
 		rep: () => getReplEff(),
 		rInt: () => tmp.rep ? tmp.rep.baseBaseEst.pow(1 - getECReward(14)) : new Decimal(1),
-		it: () => tmp.baseIt.max(1),
+		it: () => tmp.it.max(1),
 		eu2: () => ETER_UPGS[2].mult(),
 		ec14: () => tmp.rep ? tmp.rep.ec14.baseInt : new Decimal(1),
 		tt: () => getTTGenPart(player.dilation.tachyonParticles),
@@ -545,6 +546,7 @@ function hasSoftcapStarted(id, num){
 		*/
 		rep: tmp.ngp3,
 		rInt: ECComps("eterc14"),
+		it: tmp.ngp3 && tmp.it,
 		eu2: tmp.ngp3,
 		ts83: tmp.ngp3,
 		ts225: tmp.ngp3,

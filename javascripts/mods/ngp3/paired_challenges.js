@@ -137,7 +137,7 @@ var PCs = {
 
 		//Boosts
 		var eff = (PCs_save.lvl - 1) / 28
-		data.eff1 = 1 + 0.75 * eff
+		data.eff1 = 1 + 0.4 * eff
 		data.eff1_start = (tmp.ngp3_mul ? 125 : 150)
 		data.eff2 = eff / (tmp.ngp3_exp ? 1 : tmp.ngp3_mul ? 1.5 : 2)
 

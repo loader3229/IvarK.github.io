@@ -306,11 +306,10 @@ dev.boosts = {
 	},
 	4: {
 		unl() {
-			return enB.active("pos", 6)
+			return false
 		},
 		eff(x) {
-			//Eternal Bent: Transfinite Time raise all Time Dimensions to an exponent, but reduce the multiplier by ^0.5.
-			return enB.active("pos", 6) ? enB_tmp.pos6 : 1
+			return 1
 		},
 	},
 	5: {
@@ -324,19 +323,18 @@ dev.boosts = {
 	},
 	6: {
 		unl() {
-			return enB.active("pos", 6)
+			return false
 		},
 		eff(x) {
-			//Eternal Bent+: Transfinite Time is squared, but it no longer boosts Infinite Time.
-			return enB.active("pos", 6) ? enB_tmp.pos6 : 1
+			return 1
 		},
 	},
 	7: {
 		unl() {
-			return hasMTS(311)
+			return false
 		},
 		eff(x) {
-			//???: MS81 boosts Antimatter Galaxies.
+			//???: MS81 boosts Antimatter Galaxies. (not implemented)
 			return 1
 		},
 	}
