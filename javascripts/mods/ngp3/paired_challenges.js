@@ -28,7 +28,7 @@ var PCs = {
 	},
 	setupData() {
 		var data = {
-			goal_divs: [null, 0.2, 0.6, 0.35, 1, 0.5, 0.8, 0.55, 0.7],
+			goal_divs: [null, 0.1, 1, 0.35, 1, 0.45, 0.5, 0.45, 0.7],
 			milestoneReqs: [null, 1, 2, 4],
 			all: [],
 			setup: true
@@ -147,7 +147,6 @@ var PCs = {
 			if (data.temp > 0) data.temp /= 2
 			data.temp -= 0.1
 		}
-		if (tmp.exMode) data.temp += 0.01
 	},
 	occupy(x, c) {
 		var d = PCs_tmp.occupied

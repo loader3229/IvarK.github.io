@@ -663,8 +663,8 @@ function replicantiDisplay() {
 			let qc1Explain = QCs_save.qc1.boosts == 0
 			getEl("repCompress").innerHTML = "Compress for a " + (qc1Explain ? "small multiplier " : "") + "boost" +
 				(!qc1Explain ? "." : ", but reduce the interval scaling.") +
-				"<br><div style='font-size: 10px'>(Requires " + shortenCosts(QCs_tmp.qc1.req) + " replicantis)</div>" +
-				(!qc1Explain ? "(" + getFullExpansion(QCs_save.qc1.boosts) + " / " + getFullExpansion(QCs.data[1].max()) + (QCs_save.qc1.boosts > QCs.data[1].scalings[0] ? " Distant" : "") + (QCs_save.qc1.max ? ", " + getFullExpansion(QCs_save.qc1.max) + " Max" : "") + ")" : "")
+				"<br><span style='font-size: 10px'>(Requires " + shortenCosts(QCs_tmp.qc1.req) + " replicantis)</span>" +
+				(!qc1Explain ? "<br>(" + getFullExpansion(QCs_save.qc1.boosts) + " / " + getFullExpansion(QCs.data[1].max()) + (QCs_save.qc1.boosts > QCs.data[1].scalings[0] ? " Distant" : "") + (QCs_save.qc1.max ? ", " + getFullExpansion(QCs_save.qc1.max) + " Max" : "") + ")" : "")
 			getEl("repCompress").style["font-size"] = qc1Explain ? "11px" : "12px"
 			getEl("repCompress").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
 		}

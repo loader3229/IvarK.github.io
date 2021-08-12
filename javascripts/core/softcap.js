@@ -78,7 +78,8 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: 100,
-			pow: 1/4,
+			pow: (x) => 0.25 * softcap_data.ts225[1].eff(x),
+			eff: (x) => Math.min(Math.max(Math.log10(getReplEff().max(1).log10()) / 10, 1), 2),
 			derv: false
 		}
 	},

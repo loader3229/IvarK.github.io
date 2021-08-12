@@ -230,11 +230,11 @@ var mTs = {
 			}
 		},
 		312() {
-			let exp = Math.min(Math.log10(Math.log10(qu_save.colorPowers.g / 20 + 1) / 2 + 1), 1)
+			let mul = Math.min(Math.log10(qu_save.colorPowers.g + 1) / 40, 1)
 			let eff = getReplGalaxyEff()
-			eff = Math.pow(eff, exp)
+			eff = (eff - 1) * mul + 1
 			return {
-				exp: exp,
+				mul: mul,
 				eff: eff
 			}
 		},
@@ -321,7 +321,7 @@ var mTs = {
 			return formatPercentage(x.eff - 1) + "% (^" + x.exp.toFixed(3) + " power)"
 		},
 		312(x) {
-			return formatPercentage(x.eff - 1) + "% (^" + x.exp.toFixed(3) + " power)"
+			return formatPercentage(x.eff - 1) + "% (" + formatPercentage(x.mul) + "% power)"
 		},
 		313(x) {
 			return "^" + shorten(x)

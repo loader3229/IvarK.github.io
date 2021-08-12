@@ -1556,7 +1556,7 @@ function updatePerformanceTicks() {
 		if (player.options.updateRate < 5) {
 			clearInterval(gameLoopIntervalId)
 			player.options.updateRate = 5
-			sliderText.textContent="Update rate: " + player.options.updateRate + "ms"
+			sliderText.textContent = "Update rate: " + player.options.updateRate + "ms"
 			startInterval()
 		}
 	}

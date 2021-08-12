@@ -1027,7 +1027,7 @@ var enB = {
 			tier: 3,
 			type: "r",
 			eff(x) {
-				let r = Math.log10(x / 400 + 1) / 2 + 1
+				let r = Math.log10(x / 600 + 1) / 3 + 1
 				return Math.sqrt(r)
 			},
 			effDisplay(x) {
