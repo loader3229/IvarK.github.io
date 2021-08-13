@@ -358,6 +358,8 @@ function getECReward(x) {
 	if (x == 12) return 1 - c * (m2 ? .06 : 0.008)
 	if (x == 13) return Math.sqrt(1 + c / 5)
 	if (x == 14) {
+		if (!hasTS(192)) return 0
+
 		let r = [0, 0.125, 0.25, 0.5, 0.75, 0.875][c]
 		if (enB.active("pos", 7)) r = (r + enB_tmp.pos7) / (enB_tmp.pos7 + 1)
 		return r

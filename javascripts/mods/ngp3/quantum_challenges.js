@@ -22,6 +22,7 @@ var QCs = {
 		QCs_save = data
 
 		if (QCs_save.qc1 === undefined) this.reset()
+		if (QCs_save.qc1.best === undefined) QCs_save.qc1.best = QCs_save.qc1.boosts
 		if (QCs_save.qc1.expands === undefined) QCs_save.qc1.expands = 0
 		if (QCs_save.qc1.autoExpand === undefined) QCs_save.qc1.autoExpand = {
 			value: 0,
@@ -51,6 +52,8 @@ var QCs = {
 		QCs_save.qc1 = {
 			boosts: 0,
 			max: 0,
+			best: QCs_save.qc1 && QCs_save.qc1.best,
+
 			expands: 0,
 			autoExpand: QCs_save.qc1 && QCs_save.qc1.autoExpand
 		}
@@ -113,8 +116,8 @@ var QCs = {
 
 				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
 				if (PCs.milestoneDone(11)) {
-					let pow = (PCs_save.lvl - 1) / 28
-					data.limit = data.req.pow(Math.pow(4, -pow))
+					let pow = 0.2 + (PCs_save.lvl - 1) / 35
+					data.limit = data.limit.pow(Math.pow(4, -pow))
 					data.effMult *= Math.pow(4, boosts * eff * pow / 20)
 					data.effExp *= 1 + Math.min(boosts * eff * pow / 30, 1) / 2
 				}
@@ -140,6 +143,7 @@ var QCs = {
 				if (!QCs.data[1].can()) return false
 
 				QCs_save.qc1.boosts++
+				if (!QCs.inAny()) QCs_save.qc1.best = Math.max(QCs_save.qc1.boosts, QCs_save.qc1.best)
 				player.replicanti.amount = new Decimal(1)
 				eternity(false, true)
 
@@ -635,21 +639,9 @@ var QCs = {
 			}
 		}
 
-		getEl("qc_perks").style.display = QCs.done(8) ? "" : "none"
+		getEl("qc_perks").style.display = QCs.done(8) ? "inline" : "none"
 		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Nerfed modifier'
 		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Nerfed modifier doesn\'t have its secondary goals. And perks only work in any Quantum Challenge!' : ""
-
-		//Big Rip
-		getEl("bigrip").style.display = player.masterystudies.includes("d14") ? "" : "none"
-		if (hasMTS("d14")) {
-			var max = getMaxBigRipUpgrades()
-			getEl("spaceShards").textContent = shortenDimensions(qu_save.bigRip.spaceShards)
-			for (var u = 18; u <= 20; u++) getEl("bigripupg" + u).parentElement.style.display = u > max ? "none" : ""
-			for (var u = 1; u <= max; u++) {
-				getEl("bigripupg" + u).className = qu_save.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : qu_save.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
-				getEl("bigripupg" + u + "cost").textContent = shortenDimensions(new Decimal(bigRipUpgCosts[u]))
-			}
-		}
 	},
 	updateDispOnTick() {
 		if (!this.divInserted) return

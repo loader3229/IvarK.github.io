@@ -312,7 +312,10 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	//Paired Challenges
 	if (PCs.unl()) {
 		if (PCs_save.in) {
-			if (!force) console.log("PC completed!")
+			if (PCs_save.in != data.pc && !PCs.posDone(PCs_save.in)) {
+				delete PCs_save.challs[PCs_save.in]
+				PCs.updateUsed()
+			}
 			PCs.updateButton(PCs_save.in, true)
 		}
 		delete PCs_save.in
@@ -430,22 +433,21 @@ function quantumReset(force, auto, data, mode, implode = false) {
 }
 
 function handleDispOnQuantum(bigRip, prestige) {
-	if (!bigRip) bigRip = inBigRip()
-	handleDispOutOfQuantum(bigRip)
+	handleDispOutOfQuantum()
 	handleQuantumDisplays(prestige)
 
 	if (!tmp.ngp3) return
 
-	let keepECs = bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 2
+	let keepECs = qMs.tmp.amt >= 2
 	if (!keepECs && getEl("eternitychallenges").style.display == "block") showChallengesTab('normalchallenges')
 
-	let keepDil = bigRip ? tmp.bruActive[10] : player.dilation.studies.includes(1)
+	let keepDil = player.dilation.studies.includes(1)
 	if (!keepDil && getEl("dilation").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display=="block")
 
-	let keepMDs = bigRip ? tmp.bruActive[12] : keepDil && qMs.tmp.amt >= 6
+	let keepMDs = keepDil && qMs.tmp.amt >= 6
 	if (!keepMDs && getEl("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
 
-	let keepMSs = bigRip || mTs.unl()
+	let keepMSs = mTs.unl()
 	getEl("masterystudyunlock").style.display = keepMSs ? "" : "none"
 	getEl("respecMastery").style.display = keepMSs ? "block" : "none"
 	getEl("respecMastery2").style.display = keepMSs ? "block" : "none"
@@ -477,8 +479,6 @@ function handleDispOnQuantum(bigRip, prestige) {
 }
 
 function handleDispOutOfQuantum(bigRip) {
-	if (!bigRip) bigRip = inBigRip()
-
 	let keepQuantum = pH.shown("quantum")
 	let keepQCs = keepQuantum && QCs.unl()
 	let keepPCs = keepQuantum && PCs.unl()

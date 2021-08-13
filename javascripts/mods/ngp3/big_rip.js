@@ -85,9 +85,6 @@ function buyBigRipUpg(id) {
 		qu_save.bigRip.upgrades.push(9)
 		if (qu_save.bigRip.active) tweakBigRip(9, true)
 	}
-	for (var u = 1; u <= getMaxBigRipUpgrades(); u++) {
-		getEl("bigripupg" + u).className = qu_save.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : qu_save.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
-	}
 }
 
 function tweakBigRip(id, reset) {
@@ -129,37 +126,6 @@ function tweakBigRip(id, reset) {
 		player.dilation.tachyonParticles = player.dilation.tachyonParticles.max(player.dilation.bestTP.sqrt())
 		player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.max(player.dilation.bestTP.sqrt())
 	}
-}
-
-function updateActiveBigRipUpgrades() {
-	let data = []
-	tmp.bruActive = data
-	if (!tmp.quUnl) return
-
-	let upgs = qu_save.bigRip.upgrades
-	for (let i = 0; i < upgs.length; i++) data[upgs[i]] = true
-	if (data[9]) {
-		delete data[3]
-		for (let u = 5; u <= 7; u++) delete data[u]
-	}
-	if (data[9] && !hasNU(11)) delete data[8]
-	if (data[11]) delete data[4]
-	if (!data[17]) {
-		for (let u = 3; u <= 16; u++) { 
-			if (data[u]) {
-				delete data[upgs[1]]
-				break
-			}
-		}
-	}
-}
-
-function isBigRipUpgradeActive(id, bigRipped) {
-	return false //Game-breaking
-
-	if (!tmp.quActive) return false
-	if (bigRipped === undefined ? !qu_save.bigRip.active : !bigRipped) return false
-	return tmp.bruActive[id]
 }
 
 function updateBreakEternity() {

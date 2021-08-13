@@ -635,7 +635,6 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	player.old = false
 	player.dontWant = true
 	player.unstableThisGhostify = 0
-	updateActiveBigRipUpgrades()
 }
 
 function doPreInfinityGhostifyResetStuff(implode){

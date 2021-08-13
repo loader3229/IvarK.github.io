@@ -476,11 +476,6 @@ function softcap(x, id) {
 	change some softcaps to just not being active
 	*/
 	var data = softcap_data[id]
-	if (inBigRip()) {
-		let big_rip_data = softcap_data[id + "_big_rip"]
-		if (big_rip_data !== undefined) data = big_rip_data
-	}
-
 	if (data == undefined) {
 		console.log("your thing broke at " + id)
 		return
@@ -543,7 +538,7 @@ function hasSoftcapStarted(id, num){
 		that is: if it is false it does not display, but if it is true,
 		it continues as if nothing happens
 		NOTE: this excludes Big Rip, and other endings that are at the end of words 
-		This currently includes: _ngC, _big_rip, _dilation, _ngmX for integers of length 1 X
+		This currently includes: _ngC, _dilation, _ngmX for integers of length 1 X
 		*/
 		rep: tmp.ngp3,
 		rInt: ECComps("eterc14"),
@@ -561,7 +556,6 @@ function hasSoftcapStarted(id, num){
 		if (!isNaN(int)) if (!(tmp.ngmX >= int)) return false
 	}
 	if (!player.dilation.active && l > 9 && id.slice(l - 9, l) == "_dilation") return false
-	if (!inBigRip() && l > 8 && id.slice(l - 8, l) == "_big_rip") return false
 	if (check[id] !== undefined && !check[id]) return false
 	
 	let amt = getSoftcapAmtFromId(id)
@@ -696,8 +690,8 @@ function updateSoftcapStatsTab(){
 		}
 
 		var elDisp = getEl(elname + "_disp")
-		if (elDisp) elDisp.style.display = started ? "" : "none"
-		if (started && elDisp) {
+		if (elDisp) elDisp.style.display = started && shiftDown ? "" : "none"
+		if (started && elDisp && shiftDown) {
 			var sc = 0
 			var amt = getSoftcapAmtFromId(id)
 			for (var j = 1; j <= numSoftcapsTotal(id); j++) {

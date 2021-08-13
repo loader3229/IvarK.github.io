@@ -221,7 +221,6 @@ function getDimensionFinalMultiplier(tier) {
 	let useHigherNDReplMult = player.dilation.active && hasMTS("t323")
 	if (useHigherNDReplMult) mult = mult.times(tmp.nrm)
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) mult = mult.pow(tmp.nf.effects.dil_effect_exp)
-	if (isBigRipUpgradeActive(1)) mult = mult.times(tmp.bru[1])
 
 	if (tmp.ngC) {
 		mult = softcap(mult, "nds_ngC")

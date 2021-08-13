@@ -327,7 +327,7 @@ function updateTickspeed() {
 		let tick = getTickspeed()
 		label = (tick.e <= -1e9 ? "Ticks" : "Tickspeed") + ": " + getTickspeedText(tick)
 	}
-	if (player.currentChallenge == "postc3" || player.challenges.includes("postc3") || isIC3Trapped()) label = (showTickspeed ? label + ", Tickspeed m" : "M") + "ultiplier: " + formatValue(player.options.notation, player.postC3Reward, 2, 3)
+	if (isIC3Trapped()) label = (showTickspeed ? label + ", Tickspeed m" : "M") + "ultiplier: " + formatValue(player.options.notation, player.postC3Reward, 2, 3)
 	let speeds = []
 	let speedDescs = []
 	if (gameSpeed != 1) {

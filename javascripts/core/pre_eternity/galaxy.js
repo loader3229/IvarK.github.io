@@ -149,7 +149,6 @@ function getDistantScalingStart() {
 	if (hasTimeStudy(224)) n += tsMults[224]()
 	if (hasDilationUpg("ngmm11")) n += 25
 	if (tmp.ngp3) {
-		if (inBigRip() && qu_save.bigRip.upgrades.includes(15)) n += tmp.bru[15]
 		if (pl.on()) n -= fNu.tmp.nerfMu
 	}
 

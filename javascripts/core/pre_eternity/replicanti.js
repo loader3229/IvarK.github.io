@@ -309,7 +309,6 @@ function getReplicantiIntervalMult() {
 
 	if (hasTimeStudy(62)) interval /= tsMults[62]()
 	if (hasTimeStudy(213)) interval /= tsMults[213]()
-	if (isBigRipUpgradeActive(4)) interval /= 10
 
 	if (player.replicanti.amount.gt(Number.MAX_VALUE) || hasTimeStudy(133)) interval *= 10
 	if (player.replicanti.amount.lt(Number.MAX_VALUE) && hasAch("r134")) interval /= 2

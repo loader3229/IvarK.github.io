@@ -10,7 +10,7 @@ function updateGPHUnlocks() {
 
 function getGPHProduction() {
 	let ret = new Decimal(0)
-	if (inBigRip()) ret = player.dilation.dilatedTime.div("1e480")
+	if (false) ret = player.dilation.dilatedTime.div("1e480")
 	if (hasAch("ng3p92")) ret = ret.add(1)
 	if (ret.gt(1)) ret = ret.pow(0.02)
 	return ret.times(getFinalPhotonicFlow())
@@ -18,7 +18,7 @@ function getGPHProduction() {
 
 function getDMProduction() {
 	let ret = new Decimal(0)
-	if (!inBigRip()) ret = player.dilation.dilatedTime.div("1e930")
+	if (true) ret = player.dilation.dilatedTime.div("1e930")
 	if (hasAch("ng3p92")) ret = ret.add(1)
 	if (ret.gt(1)) ret = ret.pow(0.02)
 	return ret.times(getFinalPhotonicFlow())

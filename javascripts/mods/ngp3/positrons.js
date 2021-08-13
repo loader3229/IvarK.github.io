@@ -116,8 +116,8 @@ var pos = {
 			base_pc: QCs.done(5) ? 1 / 100 : 1 / 125
 		}
 		if (PCs.milestoneDone(51)) {
-			data.mults.mdb_eff *= 1.05
-			data.mults.base_pc *= 1.05
+			data.mults.mdb_eff *= Math.sqrt(data.mults.mdb_eff / 20 + 1)
+			data.mults.base_pc *= 1.1
 		}
 
 		this.updateCloud()

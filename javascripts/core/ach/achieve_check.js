@@ -246,7 +246,7 @@ function preHiggsNGp3AchieveCheck() {
 	let ableToGetRid6 = ableToGetRid2 && QCs.in(6) && QCs.in(8)
 
 	if (player.meta.bestAntimatter.gte(Number.MAX_VALUE)) giveAchievement("I don't have enough fuel!")
-	if (usedQuarks.r.min(usedQuarks.g).min(usedQuarks.b).gt(0) && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
+	if (usedQuarks.r.max(usedQuarks.g).max(usedQuarks.b).gt(0) && colorCharge.normal.chargeAmt.eq(0)) giveAchievement("Hadronization")
 	if (player.galaxies >= 1100 && !player.dilation.studies.includes(1)) giveAchievement("No more tax fraud!")
 	if (player.money.gte(getOldAgeRequirement())) giveAchievement("Old age")
 	if (player.infinityPoints.log10() >= 3e5 && ableToGetRid3) giveAchievement("I already got rid of you...")

@@ -59,7 +59,7 @@ function tickspeedDisplay(){
 		else label = 'reduce the tick interval by ' + ((1 - multNum) * 100).toFixed(e) + '%'
 		labels.push(label)
 
-		if (player.currentChallenge == "postc3" || player.challenges.includes("postc3") || isIC3Trapped()) labels.push("multiply all Dimensions by " + formatValue(player.options.notation, getIC3Mult(), 2, 4) + "x")
+		if (isIC3Trapped()) labels.push("multiply all Dimensions by " + formatValue(player.options.notation, getIC3Mult(), 2, 4) + "x")
 
 		getEl("tickLabel").innerHTML = wordizeList(labels, true) + "."
 
@@ -152,13 +152,15 @@ function bestEternityDisplay(){
 	} else getEl("eternityStatistics").style.display = "none"
 }
 
-function bestQuantumDisplay(){
+function quantumStatDisplay(){
 	if (!pH.shown("quantum")) getEl("quantumStatistics").style.display = "none"
 	else {
 		getEl("quantumStatistics").style.display = ""
 		getEl("quantumed").textContent = "You have gone Quantum " + getFullExpansion(qu_save.times) + " times."
 		getEl("thisQuantum").textContent = "You have spent " + timeDisplay(qu_save.time) + " in this Quantum."
 		getEl("bestQuantum").textContent = "Your fastest Quantum is in " + timeDisplay(qu_save.best) + "."
+		getEl("bestCompressors").textContent = QCs.done(1) ? "You have a best of " + getFullExpansion(QCs_save.qc1.best) + " Replicated Compressors." : ""
+		getEl("bestPCs").textContent = PCs_save.lvl > 1 ? "You have a best of " + getFullExpansion(PCs_save.best) + " Paired Challenge completions." : ""
 	}
 }
 
@@ -364,7 +366,7 @@ function STATSDisplay(){
 	galaxySacDisplay()
 	bestInfinityDisplay()
 	bestEternityDisplay()
-	bestQuantumDisplay()
+	quantumStatDisplay()
 	bestGhostifyDisplay()
 	ng3p51Display()
 	dilationStatsDisplay()
@@ -645,12 +647,12 @@ function replicantiDisplay() {
 			" replicated galax" + (getTotalRGs() == 1 ? "y" : "ies") + " created."
 
 		getEl("replicantiapprox").innerHTML = 
-			tmp.ngp3 && player.dilation.upgrades.includes("ngpp1") && player.timestudy.studies.includes(192) && player.replicanti.amount.gte(Number.MAX_VALUE) && (!aarMod.nguspV || aarMod.nguepV) ? 
+			hasTS(192) ? 
 				"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
 				"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
-				"(2x slower per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp * Math.log10(2) / Math.log10(tmp.rep.speeds.inc))) + " OoMs)" :
+				(shiftDown && hasDilationUpg("ngpp2") ? "(2x slower per " + getFullExpansion(Math.floor(getRepSlowdownBase2(tmp.rep.speeds.exp))) + " OoMs)" : "") :
 			"Approximately "+ timeDisplay(Math.max((Math.log(Number.MAX_VALUE) - tmp.rep.ln) / tmp.rep.est.toNumber(), 0) * 10 * tmp.ec12Mult) + " until " + shorten(Number.MAX_VALUE) + " Replicantis."
-		getEl("replicantibaseinterval").innerHTML = ECComps("eterc14") ? "<br>The base interval was " + timeDisplayShort(Decimal.div(10, tmp.rep.baseBaseEst), true, 2) + (tmp.rep.intBoost.neq(1) ? ", which is slowed down by " + shorten(tmp.rep.intBoost.pow(-1)) + "x to " + timeDisplayShort(Decimal.div(10, tmp.rep.baseEst), true, 2) + "." : "") : ""
+		getEl("replicantibaseinterval").innerHTML = ECComps("eterc14") && shiftDown ? "<br>The base interval was " + timeDisplayShort(Decimal.div(10, tmp.rep.baseBaseEst), true, 2) + (tmp.rep.intBoost.neq(1) ? ", which is slowed down by " + shorten(tmp.rep.intBoost.pow(-1)) + "x to " + timeDisplayShort(Decimal.div(10, tmp.rep.baseEst), true, 2) + "." : "") : ""
 
 		getEl("replicantichance").className = (player.infinityPoints.gte(player.replicanti.chanceCost) && isChanceAffordable()) ? "storebtn" : "unavailablebtn"
 		getEl("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable()) ? "storebtn" : "unavailablebtn"
@@ -710,7 +712,7 @@ function initialTimeStudyDisplay(){
 	getEl("212desc").textContent = "Currently: " + ((tsMults[212]() - 1) * 100).toFixed(2) + "%"
 	getEl("214desc").textContent = "Currently: " + shortenMoney(((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1)).div(tmp.sacPow)).max(1).min(new Decimal("1e125000"))) + "x"
 	getEl("221desc").textContent = "Currently: " + shorten(tsMults[221]()) + "x"
-	getEl("224desc").textContent = "Currently: +" + getFullExpansion(tsMults[224]()) + " extra RGs" 
+	getEl("224desc").textContent = "Currently: +" + getFullExpansion(tsMults[224]())
 	getEl("225desc").textContent = "Currently: +" + getFullExpansion(Math.floor(tsMults[225]() * extraReplMulti)) + " extra RGs" 
 	getEl("226desc").textContent = "Currently: +" + getFullExpansion(Math.floor(tsMults[226]() * extraReplMulti)) + " extra RGs"
 	getEl("227desc").textContent = "Currently: " + shorten(tsMults[227]()) + "x"

@@ -1598,7 +1598,6 @@ function doNGp3Init2(){
 		delete tmp.badm
 	}
 
-	updateActiveBigRipUpgrades()
 	updateBosonicLimits()
 
 	if (tmp.ngp3) {

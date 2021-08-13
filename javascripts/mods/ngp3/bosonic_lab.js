@@ -956,8 +956,8 @@ var bu = {
 		},
 		41() {
 			return {
-				ig: Decimal.pow(inBigRip() ? 1e5 : 1.05, Math.pow(Decimal.max(tmp.it, 1).log10(), 2)),
-				it: Decimal.pow(inBigRip() ? 1.01 : 5, Math.sqrt(Decimal.max(tmp.ig, 1).log10()))
+				ig: Decimal.pow(1.05, Math.pow(Decimal.max(tmp.it, 1).log10(), 2)),
+				it: Decimal.pow(5, Math.sqrt(Decimal.max(tmp.ig, 1).log10()))
 			}
 		},
 		42() {
@@ -967,12 +967,12 @@ var bu = {
 		},
 		43() {
 			if (!tmp.quActive) return 1
-			return Math.sqrt(colorBoosts.g) / (inBigRip() ? 100 : 40) + 1
+			return Math.sqrt(colorBoosts.g) / 40 + 1
 		},
 		52() {
 			let log = player.replicanti.amount.max(1).log10()
 			let div1 = bu62.active("rep") ? 5e8 : 7.5e8
-			let div2 = inBigRip() ? 200 : 1e3
+			let div2 = 1e3
 
 			return {
 				ig: Math.pow(log / div1 + 1, bu62.active("rep") ? 0.125 : 0.1),

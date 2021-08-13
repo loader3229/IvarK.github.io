@@ -205,7 +205,7 @@ function updateTimeShards() {
 	if (tmp.inEC12) p = p.div(tmp.ec12Mult)
 	if (inNGM(5)) p = p.times(getPDAcceleration())
 
-	getEl("itmult").textContent = hasAch('r105') ? 'Infinite Time: ' + shorten(tmp.it.pow(getTimeDimensionExp())) + 'x to all Time Dimensions' : ''
+	getEl("itmult").textContent = hasAch('r105') && shiftDown ? 'Infinite Time: ' + shorten(tmp.it.pow(getTimeDimensionExp())) + 'x to all Time Dimensions' : ''
 	getEl("timeShardAmount").textContent = shortenMoney(player.timeShards)
 	getEl("tickThreshold").textContent = shortenMoney(player.tickThreshold)
 	if (player.currentEternityChall == "eterc7") getEl("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Eighth Infinity Dimensions per second."

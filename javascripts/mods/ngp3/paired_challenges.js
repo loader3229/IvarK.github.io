@@ -5,7 +5,7 @@ var PCs = {
 		21: "The QC2 reward is squared.",
 		31: "You sacrifice 33% MDBs instead of 30%.",
 		41: "You sacrifice Replicated Galaxies more.",
-		51: "You gain 5% more from sacrificed things.",
+		51: "You gain 15% more from sacrificed things.",
 		61: "The QC6 reward is squared.",
 		71: "Meta Accelerator accelerates 2% faster per PC level.",
 		81: "Unlock Galactic Clusters.",
@@ -28,7 +28,7 @@ var PCs = {
 	},
 	setupData() {
 		var data = {
-			goal_divs: [null, 0.1, 1, 0.35, 1, 0.45, 0.5, 0.45, 0.7],
+			goal_divs: [null, 0.1, 0.95, 0.25, 0.95, 0.45, 0.5, 0.4, 0.7],
 			milestoneReqs: [null, 1, 2, 4],
 			all: [],
 			setup: true
@@ -48,6 +48,7 @@ var PCs = {
 			challs: {},
 			comps: [],
 			lvl: 1,
+			best: PCs_save.best,
 			shrunkers: 0
 		}
 		qu_save.pc = PCs_save
@@ -64,6 +65,7 @@ var PCs = {
 
 		let data = qu_save.pc
 		if (data === undefined) data = this.setup()
+		if (data.best === undefined) data.best = data.lvl - 1
 		PCs_save = data
 
 		this.updateTmp()
@@ -134,10 +136,11 @@ var PCs = {
 		var comps = PCs_save.comps.length
 		while (PCs_save.lvl < 17 && comps >= PCs_save.lvl) PCs_save.lvl++
 		if (PCs.data.setupHTML && PCs_save.lvl > oldLvl) this.resetButtons()
+		PCs_save.best = Math.max(PCs_save.best, comps)
 
 		//Boosts
 		var eff = (PCs_save.lvl - 1) / 28
-		data.eff1 = 1 + 0.4 * eff
+		data.eff1 = 1 + 0.6 * eff
 		data.eff1_start = (tmp.ngp3_mul ? 125 : 150)
 		data.eff2 = eff / (tmp.ngp3_exp ? 1 : tmp.ngp3_mul ? 1.5 : 2)
 
@@ -261,10 +264,15 @@ var PCs = {
 	done(pc) {
 		return PCs.unl() && PCs_save.comps.includes(this.sort(pc))
 	},
+	posDone(pc) {
+		return PCs.done(PCs_save.challs[pc])
+	},
 	milestoneDone(pos) {
 		return PCs.unl() && PCs_tmp.comps && PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
 	},
 	lvlReq(pc) {
+		if (PCs_tmp.debug) return pc > 40 ? 1/0 : 0
+
 		var x = Math.floor(pc / 10 - 1) * 3
 		if (pc < 20) x = 1
 		else if (tmp.dtMode) x++
@@ -311,7 +319,7 @@ var PCs = {
 		//Setup rows
 		for (var y = 1; y <= 4; y++) {
 			var html = "<td>Set #" + y +
-			"<br><button class='storebtn' style='height: 24px; width: 60px' onclick='PCs.respec(" + y + ")'>Respec</button>" +
+			"<br><button class='storebtn' id='pc_respec" + y + "' style='height: 24px; width: 60px' onclick='PCs.respec(" + y + ")'>Respec</button>" +
 			"</td>"
 			for (var x = 1; x <= 4; x++) html += this.setupButton(y * 10 + x)
 			el.insertRow(y).innerHTML = html
@@ -330,10 +338,14 @@ var PCs = {
 		}
 
 		el.style.display = ""
-		el.className = PCs_tmp.pick ? (PCs_tmp.pick == pc ? "onchallengebtn" : "lockedchallengesbtn") :
+		el.className = PCs_tmp.debug ? (
+			pc >= 33 ? "completedchallengesbtn" : pc > 30 ? "onchallengebtn" : pc % 10 >= 3 ? "challengesbtn" : "lockedchallengesbtn"
+		) : (
+			PCs_tmp.pick ? (PCs_tmp.pick == pc ? "onchallengebtn" : "lockedchallengesbtn") :
 			PCs_save.in == pc && !exit ? "onchallengebtn" :
 			PCs_save.challs[pc] && PCs_save.comps.includes(PCs.sort(PCs_save.challs[pc])) ? "completedchallengesbtn" :
 			"challengesbtn"
+		)
 		el.innerHTML = this.buttonTxt(pc)
 	},
 	resetButtons(force) {
@@ -355,12 +367,15 @@ var PCs = {
 
 		getEl("pc_lvl").textContent = getFullExpansion(PCs_save.lvl)
 		getEl("pc_comps").textContent = getFullExpansion(PCs_save.comps.length) + " / " + getFullExpansion(Math.min(PCs_save.lvl, 16))
+		for (var i = 1; i <= 4; i++) {
+			getEl("pc_respec" + i).style.display = PCs.posDone(i * 10 + 1) || PCs.posDone(i * 10 + 2) || PCs.posDone(i * 10 + 3) || PCs.posDone(i * 10 + 4) ? "" : "none"
+		}
 
 		getEl("pc_eff1").textContent = "^" + PCs_tmp.eff1.toFixed(3)
 		getEl("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
 
 		getEl("pc_enter").style.display = PCs_tmp.pick ? "none" : ""
-		getEl("pc_penalty").style.display = tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp ? "" : "none"
+		getEl("pc_penalty").style.display = tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp ? "none" : ""
 		getEl("pc_pick").style.display = PCs_tmp.pick ? "" : "none"
 		if (PCs_tmp.pick) {
 			for (var i = 1; i <= 8; i++) {
@@ -373,8 +388,10 @@ var PCs = {
 
 		getEl("pc_comps2").textContent = getFullExpansion(PCs_save.comps.length)
 		getEl("pc_temp").innerHTML = formatPercentage(Math.abs(PCs_tmp.temp)) + "<sup>o</sup> " + (PCs_tmp.temp > 0 ? "hotter" : "cooler")
+		getEl("pc_temp_color").style.display = PCs_tmp.temp != 0 ? "" : "none"
 		getEl("pc_temp_color").className = PCs_tmp.temp > 0 ? "hot" : "cool"
 
+		getEl("pc_shrunker_div").style.display = QCs.done(8) ? "" : "none"
 		getEl("pc_shrunker").textContent = getFullExpansion(PCs_save.shrunkers)
 		getEl("pc_shrunker_eff").textContent = shortenCosts(this.shrunkerEff()) + "x"
 
@@ -389,7 +406,7 @@ var PCs = {
 	showMilestones(qc) {
 		PCs_tmp.milestone = qc
 		getEl("qc_milestone_div").style.display = qc ? "" : "none"
-		getEl("pc_info").style.display = qc ? "none" : ""
+		getEl("pc_info").style.display = qc || PCs_save.lvl == 1 ? "none" : ""
 		if (qc) {
 			getEl("qc_milestone_header").textContent = "QC" + qc + " Milestones"
 			for (var i = 1; i < PCs.data.milestoneReqs.length; i++) {

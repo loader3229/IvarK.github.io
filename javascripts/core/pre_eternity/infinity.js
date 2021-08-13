@@ -57,7 +57,6 @@ function gainedInfinityPoints(next) {
 		ret = ret.times(Decimal.pow(Math.max(1e4/player.thisInfinityTime),player.timestudy.ers_studies[5]+(next==5?1:0)))
 		ret = ret.times(Decimal.pow(player.thisInfinityTime/10,player.timestudy.ers_studies[6]+(next==6?1:0)))
 	}
-	if (isBigRipUpgradeActive(4)) ret = ret.times(player.replicanti.amount.pow(0.34).max(1))
 	if (player.tickspeedBoosts != undefined && hasAch("r95") && player.eightAmount > 5000) ret = ret.times(Decimal.pow(player.eightAmount, 2))
 	if (tmp.ngC) {
 		ret = softcap(ret, "ip_ngC")

@@ -182,7 +182,6 @@ function getBranchSpeedText(){
 	if (new Decimal(getTreeUpgradeEffect(3)).gt(1)) text += "Tree Upgrade 3: " + shorten(getTreeUpgradeEffect(3)) + "x, "
 	if (new Decimal(getTreeUpgradeEffect(5)).gt(1)) text += "Tree Upgrade 5: " + shorten(getTreeUpgradeEffect(5)) + "x, "
 	if (hasMTS(431)) if (getMTSMult(431).gt(1)) text += "Mastery Study 431: " + shorten(getMTSMult(431)) + "x, "
-	if (qu_save.bigRip.active && isBigRipUpgradeActive(19)) text += "19th Big Rip upgrade: " + shorten(tmp.bru[19]) + "x, "
 	if (hasNU(4)) if (tmp.nu[4].gt(1)) text += "Fourth Neutrino Upgrade: " + shorten(tmp.nu[4]) + "x, "
 	if (hasAch("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
 	if (player.ghostify.milestones >= 14) text += "Brave Milestone 14: " + shorten(getMilestone14SpinMult()) + "x, "
@@ -203,7 +202,6 @@ function getBranchSpeedText(){
 function getBranchSpeed() { 
 	let x = Decimal.times(getTreeUpgradeEffect(3), getTreeUpgradeEffect(5))
 	if (hasMTS(431)) x = x.times(getMTSMult(431))
-	if (qu_save.bigRip.active && isBigRipUpgradeActive(19)) x = x.times(tmp.bru[19])
 	if (hasNU(4)) x = x.times(tmp.nu[4])
 	if (hasAch("ng3p48")) x = x.times(Math.sqrt(player.meta.resets + 1))
 	if (player.ghostify.milestones >= 14) x = x.times(getMilestone14SpinMult())
@@ -240,7 +238,6 @@ function getQuarkSpinProduction(branch) {
 	if (hasNU(4)) ret = ret.times(tmp.nu[4])
 	if (hasAch("ng3p74")) if (qu_save.tod[branch].decays) ret = ret.times(1 + qu_save.tod[branch].decays)
 	if (qu_save.bigRip.active) {
-		if (isBigRipUpgradeActive(18)) ret = ret.times(tmp.bru[18])
 		if (hasNU(12)) ret = ret.times(tmp.nu[12].normal)
 	}
 	ret = ret.times(Decimal.pow(1.1, qu_save.nanofield.rewards - 12))

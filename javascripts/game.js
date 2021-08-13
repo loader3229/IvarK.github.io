@@ -1525,7 +1525,7 @@ function updateCoinPerSec() {
 	var element = getEl("coinsPerSec");
 	var ret = getDimensionProductionPerSecond(1)
 	if (tmp.inEC12) ret = ret.div(tmp.ec12Mult)
-	element.innerHTML = ret.gt(0) && ret.lte("1e100000") ? 'You are getting ' + shortenND(ret) + ' antimatter per second.' : "<br>"
+	element.innerHTML = ret.gt(0) ? 'You are getting ' + shortenND(ret) + ' antimatter per second.' : "<br>"
 }
 
 var clickedAntimatter
@@ -2275,13 +2275,7 @@ function gainedEternityPoints() {
 	if (hasTimeStudy(122)) ret = ret.times(hasAch("ngpp11") ? 50 : 35)
 	if (hasTimeStudy(123)) ret = ret.times(Math.sqrt(1.39*player.thisEternity/10))
 	if (hasGalUpg(51)) ret = ret.times(galMults.u51())
-	if (tmp.ngp3) {
-		if (player.quantum.bigRip.active) {
-			if (isBigRipUpgradeActive(5)) ret = ret.times(qu_save.bigRip.spaceShards.max(1))
-			if (isBigRipUpgradeActive(8)) ret = ret.times(tmp.bru[8])
-		}
-		if (tmp.be) ret = ret.times(getBreakUpgMult(7))
-	}
+	if (tmp.ngp3 && tmp.be) ret = ret.times(getBreakUpgMult(7))
 	if (tmp.ngC) ret = softcap(ret, "ep_ngC")
 	if (hasTS(172) && tmp.ngC) ret = ret.times(tsMults[172]())
 	if (uEPM) ret = ret.times(player.epmult)
@@ -4078,10 +4072,6 @@ function requiredInfinityUpdating(diff){
 	player.totalmoney = player.totalmoney.plus(amProd)
 
 	if (isInfiniteDetected()) return
-	if (inBigRip()) {
-		qu_save.bigRip.totalAntimatter = qu_save.bigRip.totalAntimatter.add(amProd)
-		qu_save.bigRip.bestThisRun = qu_save.bigRip.bestThisRun.max(player.money)
-	}
 	if (player.totalmoney.gt("1e9000000000000000")) changingDecimalSystemUpdating()
 	tmp.ri=player.money.gte(getLimit()) && ((player.currentChallenge != "" && player.money.gte(player.challengeTarget)) || !onPostBreak())
 }
@@ -4165,7 +4155,7 @@ function ghostifyAutomationUpdating(diff){
 			ag.t = ag.t - times
 		}
 	}
-	if (isAutoGhostActive(15)) if ((hasNU(16) || inBigRip()) && getGHPGain().gte(player.ghostify.automatorGhosts[15].a)) ghostify(true)
+	if (isAutoGhostActive(15) && hasNU(16) && getGHPGain().gte(player.ghostify.automatorGhosts[15].a)) ghostify(true)
 
 	//Quantum Layer
 	if (!tmp.quUnl) return
@@ -4965,24 +4955,22 @@ function setTachyonParticles(x) {
 }
 
 function passiveQuantumLevelStuff(diff){
-	let inBR = inBigRip()
-
-	if ((inBR ? hasAch("ng3p103") : hasAch("ng3p112")) && pH.can("ghostify")) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
+	if (hasAch("ng3p112") && pH.can("ghostify")) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
 	if (hasAch("ng3p112")) player.ghostify.times = nA(player.ghostify.times, nM(getGhostifiedGain(), diff))
 
-	if (inBR || hasBosonicUpg(24)) qu_save.bigRip.spaceShards = qu_save.bigRip.spaceShards.add(getSpaceShardsGain().times(diff / 100))
+	if (hasBosonicUpg(24)) qu_save.bigRip.spaceShards = qu_save.bigRip.spaceShards.add(getSpaceShardsGain().times(diff / 100))
 	if (hasBosonicUpg(51) || (tmp.be && player.ghostify.milestones > 14)) qu_save.breakEternity.eternalMatter = qu_save.breakEternity.eternalMatter.add(getEMGain().times(diff / 100))
-	if (!inBR) {
-		qu_save.quarks = qu_save.quarks.add(quarkGain().sqrt().times(diff))
-		var p = ["rg", "gb", "br"]
-		for (var i = 0; i < 3; i++) {
-			var r = qu_save.usedQuarks[p[i][0]].min(qu_save.usedQuarks[p[i][1]])
-			if (hasAch("ng3p71")) r = r.div(100)
-			else r = r.sqrt()
-			qu_save.gluons[p[i]] = qu_save.gluons[p[i]].add(r.times(diff))
-		}
-		if (player.ghostify.milestones >= 16) qu_save.quarks = qu_save.quarks.add(quarkGain().times(diff / 100))
+
+	qu_save.quarks = qu_save.quarks.add(quarkGain().sqrt().times(diff))
+	var p = ["rg", "gb", "br"]
+	for (var i = 0; i < 3; i++) {
+		var r = qu_save.usedQuarks[p[i][0]].min(qu_save.usedQuarks[p[i][1]])
+		if (hasAch("ng3p71")) r = r.div(100)
+		else r = r.sqrt()
+		qu_save.gluons[p[i]] = qu_save.gluons[p[i]].add(r.times(diff))
 	}
+	if (player.ghostify.milestones >= 16) qu_save.quarks = qu_save.quarks.add(quarkGain().times(diff / 100))
+
 	updateQuarkDisplay()
 	updateQuantumWorth("quick")
 }
@@ -5057,12 +5045,7 @@ function gameLoop(diff) {
 		}
 
 		if (tmp.ngp3) {
-			if (hasDilationStudy(1)) {
-				if (isBigRipUpgradeActive(20)) {
-					let gain = getTPGain()
-					if (player.dilation.tachyonParticles.lt(gain)) setTachyonParticles(gain)
-				} else if (player.dilation.active) ngp3DilationUpdating()
-			}
+			if (hasDilationStudy(1) && player.dilation.active) ngp3DilationUpdating()
 			if (player.ghostify.milestones >= 8 && tmp.quActive) passiveQuantumLevelStuff(diff)
 			if (ETER_UPGS.has(15)) updateEternityUpgrades() // to fix the 5ep upg display
 			if (pH.did("ghostify")) {

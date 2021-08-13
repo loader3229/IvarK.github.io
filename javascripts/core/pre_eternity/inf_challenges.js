@@ -403,10 +403,6 @@ function getIC3Base() {
 	if (player.currentChallenge=="postcngmm_3") return 1
 	let perGalaxy = 0.005;
 	if (inNGM(4)) perGalaxy = 0.002
-	if (inBigRip()) {
-		if (ghostified && player.ghostify.neutrinos.boosts>8) perGalaxy *= tmp.nb[9]
-		if (hasNU(12)) perGalaxy *= tmp.nu[12].free
-	}
 	if (!inNGM(2)) return player.galaxies * perGalaxy + 1.05
 	if (tmp.cp > 1) {
 		if (player.tickspeedBoosts != undefined) perGalaxy *= tmp.cp / 10 + .9

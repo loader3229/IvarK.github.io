@@ -39,7 +39,7 @@ function buyWithEP() {
 }
 
 function canBuyTTWithEP() {
-	return player.timeDimension1.bought || inBigRip()
+	return player.timeDimension1.bought
 }
 
 function maxTheorems() {
@@ -435,15 +435,14 @@ function respecTimeStudies(force) {
 			if (temp > player.timestudy.theorem) gotAch = false
 			player.timestudy.ers_studies = [null, 0, 0, 0, 0, 0, 0]
 		} else {
-			var bru7activated = isBigRipUpgradeActive(7)
 			for (var i = 0; i < all.length; i++) {
-				if (player.timestudy.studies.includes(all[i]) && (!bru7activated || all[i] !== 192)) {
+				if (player.timestudy.studies.includes(all[i])) {
 					player.timestudy.theorem += studyCosts[all[i]]
 					gotAch = false
 				}
 			}
 			if (player.masterystudies) if (player.timestudy.studies.length>1) qu_save.wasted = false
-			player.timestudy.studies = bru7activated ? [192] : []
+			player.timestudy.studies = []
 		}
 
 		updateTimeStudyButtons(true, true)
@@ -701,11 +700,9 @@ function hasTimeStudy(x) {
 //Time Study Effects
 let tsMults = {
 	11() {
-		let bigRipped = inBigRip()
 		let log = -player.tickspeed.div(1e3).pow(0.005).times(0.95).plus(player.tickspeed.div(1e3).pow(0.0003).times(0.95)).log10()
 
-		if (bigRipped && log > 900) log = Math.sqrt(log * 900)
-		else if (tmp.ngp3_mul) log = Math.min(log, 25000) // buff to NG*+3
+		if (tmp.ngp3_mul) log = Math.min(log, 25000) // buff to NG*+3
 		else log = Math.min(log, 2500)
 
 		if (log < 0) log = 0

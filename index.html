@@ -605,14 +605,15 @@
 						</td>
 						<td>
 							<button id="epmult" class="eternityupbtn" onclick="buyEPMult()">You gain 5 times more EP<p>Cost: 500 EP</button>
+							<br>
+							<div><button class="storebtn" onclick="buyMaxEPMult()" style="height: 25px; width: 190px; font-size:10px; margin-top: -3px;">Max EP mult</button>
+							<button id="epmultauto" class="storebtn" onclick="toggleAutoEter('epmult')" style="height: 25px; width: 190px; font-size:10px; margin-top: 3px;"></button></div>
 						</td>
 						<td>
 							<div class="eternityupbtnbought" style="opacity: 0"></div>
 						</td>
 					</tr>
 				</table>
-				<div><button class="storebtn" onclick="buyMaxEPMult()" style="height: 25px; width: 190px; font-size:10px; margin-top: -3px;">Max EP mult</button></div>
-				<div><button id="epmultauto" class="storebtn" onclick="toggleAutoEter('epmult')" style="height: 25px; width: 190px; font-size:10px; margin-top: 3px;"></button></div>
 				<div class="footer bottom"></div>
 			</div>
 			<div class="eternitytab" id="milestones">
@@ -1558,7 +1559,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/11/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/12/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -1595,6 +1596,8 @@
 					<div id="quantumed"></div>
 					<div id="bestQuantum"></div>
 					<div id="thisQuantum"></div>
+					<div id="bestCompressors"></div>
+					<div id="bestPCs"></div>
 					<br>
 				</div>
 				<div id="bigRipStatistics">
@@ -3377,50 +3380,9 @@
 			</div>
 			<div id="quantumchallenges" class="challengeTab">
 				<button class="secondarytabbtn" id="qc_perks" style="width: 200px" onclick="QCs.viewPerks()">View perks</button>
-				<br>
 				<span id="qc_effects"></span>
 				<span id="qc_perks_note"></span>
 				<table class="table" id="qcs_div" style="margin: 0 auto"></table>
-
-				<div id="bigrip">
-					<b style="font-size: 35px">Big Rip</b><br>
-					To big rip the universe, you need to assign a PC with QC6 & 8 first.<br>
-					You have <span class="SSAmount" id="spaceShards" style="font-size:35px">0</span> Space Shards.
-					<table class="table" align="center" style="margin: auto">
-						<tr>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg1" onclick='buyBigRipUpg(1)' style='font-size: 10px'>Infinity Points boost Normal Dimensions, but buying other upgrades except for the 2nd nullify it.<br>Currently: <span id="bigripupg1current">1.00</span>x<br>Cost: <span id="bigripupg1cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg2" onclick='buyBigRipUpg(2)'>Start with all ECs completed, and 100,000 eternities.<br>Cost: <span id="bigripupg2cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg3" onclick='buyBigRipUpg(3)'>Gain 5 Time Theorems.<br>Cost: <span id="bigripupg3cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg4" style='font-size: 10px' onclick='buyBigRipUpg(4)'>Replicantis multiply the gain of Infinity Points at a reduced rate, and replicates 10x faster.<br>Cost: <span id="bigripupg4cost"></span> Space Shards</button></td>
-						</tr>
-						<tr>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg5" onclick='buyBigRipUpg(5)'>Gain 20 Time Theorems.<br>Cost: <span id="bigripupg5cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg6" onclick='buyBigRipUpg(6)'>Space Shards boost Eternity Point gain.<br>Cost: <span id="bigripupg6cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg7" onclick='buyBigRipUpg(7)'>You start with Time Study 192.<br>Cost: <span id="bigripupg7cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg8" onclick='buyBigRipUpg(8)' style='font-size: 10px'>Each replicated galaxy doubles your EP gain.<br>Currently: <span id="bigripupg8current"></span><br>Cost: <span id="bigripupg8cost"></span> Space Shards</button></td>
-						</tr>
-						<tr>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg9" onclick='buyBigRipUpg(9)' style='font-size: 10px'>Gain 1,350 Time Theorems, but reset the study tree, and nullify upgrades 3 & 5 - 8.<br>Cost: <span id="bigripupg9cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg10" onclick='buyBigRipUpg(10)'>Start with dilation unlocked, but activate the 9th Big Rip upgrade.<br>Cost: <span id="bigripupg10cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg11" style='font-size: 10px' onclick='buyBigRipUpg(11)'>Start with Tachyon particles, but reset the study tree, all upgrades can boost dilation except your best TP, and nullify upgrade 4.<br>Cost: <span id="bigripupg11cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg12" style='font-size: 10px' onclick='buyBigRipUpg(12)'>You keep your time studies, dilation upgrades, eternity upgrades, and mastery studies.<br>Cost: <span id="bigripupg12cost"></span> Space Shards</button></td>
-						</tr>
-						<tr>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg13" onclick='buyBigRipUpg(13)'>Replicantis boost Time Dimensions at a greatly reduced rate.<br>Cost: <span id="bigripupg13cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg14" style='font-size: 10px' onclick='buyBigRipUpg(14)'>TS101 is stronger based on your Space Shards while outside of dilation runs.<br>Currently: ^<span id="bigripupg14current">1.00</span><br>Cost: <span id="bigripupg14cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg15" style='font-size: 10px' onclick='buyBigRipUpg(15)'>Eternity Points make the Distant Antimatter Galaxies scaling start later.<br>Currently: +<span id="bigripupg15current">0</span><br>Cost: <span id="bigripupg15cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg16" style='font-size: 10px' onclick='buyBigRipUpg(16)'>Dilated time boosts the Seventh Time Dimension.<br>Currently: <span id="bigripupg16current">1.00</span>x<br>Cost: <span id="bigripupg16cost"></span> Space Shards</button></td>
-						</tr>
-					</table>
-					<table class="table" align="center" style="margin: auto">
-						<tr>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg17" onclick='buyBigRipUpg(17)'>Reactivate the first upgrade and make its effect <span id="bigripupg17current">3</span>x stronger.<br>Cost: <span id="bigripupg17cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg18" onclick='buyBigRipUpg(18)'>Space Shards boost quark spin production.<br>Currently: <span id="bigripupg18current"></span>x<br>Cost: <span id="bigripupg18cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg19" onclick='buyBigRipUpg(19)'>Time Shards speed up Branches.<br>Currently: <span id="bigripupg19current"></span>x<br>Cost: <span id="bigripupg19cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg20" onclick='buyBigRipUpg(20)'>You passively gain Tachyon particles without dilating time.<br>Cost: <span id="bigripupg20cost"></span> Space Shards</button></td>
-						</tr>
-					</table>
-				</div>
 			</div>
 			<div id="pairedChalls" class="challengeTab">
 				<table id="qc_milestones" align="center" style="margin: auto"></table>
@@ -3443,22 +3405,22 @@
 						</tr>
 					</table>
 				</div>
-				<br>
 				<div id="pc_info">
+					<br>
 					<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 20px">0 / 1</span>)</span><br>
 					Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and make aQs gain boosts itself by <span id="pc_eff2" style="font-size: 20px"></span>.
 				</div>
 				<span id="pc_enter">
 					<br>
-					<button class="storebtn" style="font-size: 100%; width:200px" onclick="exitChallenge()">Exit Challenge</button>
 					<p id="pc_penalty">Note: Starting a Paired Challenge reduces Meta Dimensions by ^0.95! (acts like you are in QC7)</p>
+					Note 2: Exiting a Paired Challenge automatically unassigns it, unless it is completed!
 				</span>
 				<span id="pc_pick">
 				</span>
 				<table id="pc_table" align="center" style="margin: auto"></table>
 				<span id="pc_temp_color" style="font-size: 15px">Your <span id="pc_comps2" style="font-size: 20px"></span> completions are making PC goals <span id="pc_temp"></span>!</span>
 				<br>
-				Your <span id="pc_shrunker" style="font-size: 20px"></span> PC shrunkers are reducing the PC goal by <span id="pc_shrunker_eff" style="font-size: 15px"></span>.
+				<span id="pc_shrunker_div">Your <span id="pc_shrunker" style="font-size: 20px"></span> PC shrunkers are reducing the PC goal by <span id="pc_shrunker_eff" style="font-size: 15px"></span>.</span>
 			</div>
 			<div class="footer"></div>
 		</div>
@@ -4229,10 +4191,9 @@
 				<div id="eterc8repl" style="display: none;"></div>
 				<p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti, translated to <span id="replicantimult" style="font-size:23px; color: black">0</span>x <span id="replDesc"></span></p>
 				<span id="softcap_rep_disp"></span>
-				<p id="qc5_div">
-					During this quantum, Replicantis also produced <span id="qc5_eng" style="font-size: 15px">0</span> energy<sup id="qc5_eng_exp">1</sup> in total<span id="qc5_eng_mult" style="font-size: 15px">0</span>,<br>
-					which translated to +<span id="qc5_eff_glu" style="font-size: 15px">0</span> quantum energy and +<span id="qc5_eff_pos" style="font-size: 15px">0</span> positronic charge.<br>
-					<span style="font-size: 8px">(effectively)</span>
+				<p id="qc5_div" class="font-size: 8px">
+					During this quantum, Replicantis also produced <span id="qc5_eng" style="font-size: 16px">0</span> energy<sup id="qc5_eng_exp">1</sup> in total<span id="qc5_eng_mult" style="font-size: 12px"></span>,<br>
+					which translated to +<span id="qc5_eff_glu" style="font-size: 12px">0</span> extra quantum energy and +<span id="qc5_eff_pos" style="font-size: 12px">0</span> positronic charge.
 				</p>
 				<br>
 				<button class="storebtn" id="replicantichance" onclick="upgradeReplicantiChance()" style="width:180px; height: 50px; font-size: 10px">Replicate chance: 1%<br>+1% Costs: 1e6969 IP</button>
@@ -4354,12 +4315,13 @@
 	<div class='tab' id='repMajor'></div>
 	<div class='tab' id='quantumtab'>
 		<br>
-		<div>Your quantum worth (sum of anti-quarks, colored anti-quarks, and gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.</div>
-		<br>
+		<div id="qw_info" style="display: none">Your quantum worth (sum of anti-quarks, colored anti-quarks, and gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.<br></div>
 		<span style="font-size: 15px">You have <span class="QKAmount" id="quarkEnergy" style="font-size:30px">0.0</span> quantum energy.</span>
-		<span id="quarkEnergyMult" style="font-size: 15px">(1.00x)</span>
-		<br>You have made a best-ever of <span id="bestQE" style="font-size:15px">0.0</span> energy. (no divisors)
-		<br>Quark Efficiency: <span id="qeEff" style="font-size:15px"></span> (<span id="qeFrac"></span>)
+		<span id="qe_info" style="display: none">
+			<span id="quarkEnergyMult" style="font-size: 15px">(1.00x)</span>
+			<br>You have made a best-ever of <span id="bestQE" style="font-size:15px">0.0</span> energy. (no divisors)
+			<br>Quark Efficiency: <span id="qeEff" style="font-size:15px"></span> (<span id="qeFrac"></span>)
+		</span>
 		<br><button id="qc_restart" class="storebtn" style="font-size: 100%; width:200px" onclick="QCs.restart()">Restart Challenge</button>
 		<table class="table" align="center" style="margin: auto">
 			<tr>
@@ -4865,7 +4827,7 @@
 						<br>
 						<span id="enB_pos5_full"></span>
 						<br><br>
-						Reduce the gluon nerf by <span id="enB_pos5_eff" style="font-size:24px"></span>.
+						Reduce the gluon penalties by <span id="enB_pos5_eff" style="font-size:24px"></span>.
 					</td>
 					<td id="enB_pos6">
 						<b id="enB_pos6_name" style="font-size: 24px"></b>

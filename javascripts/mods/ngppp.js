@@ -50,6 +50,9 @@ var quantumTabs = {
 function updateQuantumTabs() {
 	getEl("quarkEnergy").textContent = shorten(qu_save.quarkEnergy)
 	getEl("quarkEnergyMult").textContent = "(" + (tmp.qe.div != 1 && shiftDown ? shorten(tmp.qe.mult) + "x, /" + shorten(tmp.qe.div) : shorten(tmp.qe.mult / tmp.qe.div) + "x") + ")"
+
+	getEl("qw_info").style.display = shiftDown ? "" : "none"
+	getEl("qe_info").style.display = shiftDown ? "" : "none"
 	getEl("bestQE").textContent = shorten(qu_save.bestEnergy)
 	getEl("qeEff").textContent = "^" + qu_save.expEnergy.toFixed(3)
 	getEl("qeFrac").textContent = shorten(tmp.qe.expNum) + "/" + shorten(tmp.qe.expDen)
@@ -958,7 +961,7 @@ function getAQSGainExp(x) {
 	if (!x) x = quarkGain(true)
 
 	let r = 1
-	if (PCs.unl()) r = Math.pow(x.log10() / 2 + 1, PCs_tmp.eff2)
+	if (PCs.unl()) r = Math.pow(x.log10() + 1, PCs_tmp.eff2)
 	return Math.min(r, 1e5)
 }
 

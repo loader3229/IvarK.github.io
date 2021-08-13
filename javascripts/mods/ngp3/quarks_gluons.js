@@ -750,7 +750,7 @@ var enB = {
 			title: "Dilation Overflow II",
 			type: "g",
 			eff(x) {
-				var lowLim = tmp.ngp3_mul ? 1.4 : 1.49
+				var lowLim = tmp.ngp3_mul ? 1.4 : 1.45
 				return Math.max(lowLim + (2 - lowLim) / (Math.log2(x / 20 + 1) / 3 + 1), 1.5)
 			},
 			effDisplay(x) {
@@ -1310,7 +1310,7 @@ function updateQuarksTabOnUpdate(mode) {
 		var color = colorShorthands[colorCharge.normal.color]
 		getEl("colorCharge").innerHTML =
 			'<span class="' + color + '">' + color + '</span> charge of <span style="font-size: 25px">' + shorten(colorCharge.normal.charge * tmp.qe.eff1) + "</span>" +
-			(hasAch("ng3p13") ? ", which cancelling the subtraction of gluon effects by " + shorten(colorCharge.subCancel) : "")
+			(hasAch("ng3p13") ? ",<br>which is translated to -" + shorten(colorCharge.subCancel) + " to gluon penalties" : "")
 		getEl("colorChargeAmt").innerHTML = shortenDimensions(colorCharge.normal.chargeAmt) + " " + color + " anti-quarks"
 		getEl("colorChargeColor").className = color
 
