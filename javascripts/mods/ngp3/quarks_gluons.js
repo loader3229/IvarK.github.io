@@ -837,7 +837,7 @@ var enB = {
 			return Math.pow(x / 2 + 1, 1.5)
 		},
 		target() {
-			return Math.pow(this.engAmt(), 1 / 1.5) * 2
+			return Math.pow(this.engAmt(), 1 / 1.5) * 2 - 1
 		},
 
 		amt() {

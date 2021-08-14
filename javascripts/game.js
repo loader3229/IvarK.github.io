@@ -1888,13 +1888,17 @@ function changeSaveDesc(saveId, placement) {
 			else if (temp.masterystudies.includes('d14')) msg+="Total antimatter in Big Rips: "+shortenDimensions(new Decimal(temp.quantum.bigRip.totalAntimatter))+", Space Shards: "+shortenDimensions(new Decimal(temp.quantum.bigRip.spaceShards))+(temp.achievements.includes("ng3p55")?", Eternal Matter: "+shortenDimensions(new Decimal(temp.quantum.breakEternity.eternalMatter)):"")
 			else {
 				var quantum = temp.quantum
-				msg+="Quarks: "+shortenDimensions(Decimal.add(quantum.quarks,quantum.usedQuarks.r).add(quantum.usedQuarks.g).add(quantum.usedQuarks.b))
-				if (quantum.gluons.rg) msg+=", Gluons: "+shortenDimensions(Decimal.add(quantum.gluons.rg,quantum.gluons.gb).add(quantum.gluons.br))
+				var qk = Decimal.add(quantum.quarks,quantum.usedQuarks.r).add(quantum.usedQuarks.g).add(quantum.usedQuarks.b)
+				if (quantum.gluons.rg) qk = qk.add(quantum.gluons.rg,quantum.gluons.gb).add(quantum.gluons.br)
+				if (quantum.qc && quantum.qc.comps >= 1) msg+=", Quantum Energy: "+shorten(quantum.quarkEnergy)+", Replicated Compressors: "+getFullExpansion(quantum.qc.qc1.boosts)
+				else msg+=", Quantum Worth: "+shortenDimensions(qk)+", Quantum Energy: "+shorten(quantum.quarkEnergy)
+
 				if (temp.masterystudies.includes('d13')) msg+=", Quark Spins: "+shortenDimensions(Decimal.add(quantum.tod.r.spin, quantum.tod.g.spin).add(quantum.tod.b.spin))
 				else if (temp.masterystudies.includes('d12')) msg+=", Preon charge: "+shortenDimensions(new Decimal(quantum.nanofield.charge))+", Preon energy: "+shortenDimensions(new Decimal(quantum.nanofield.energy))+", Preon anti-energy: "+shortenDimensions(new Decimal(quantum.nanofield.antienergy))+", Nanofield Rewards: "+getFullExpansion(quantum.nanofield.rewards)
 				else if (temp.masterystudies.includes('d10')) msg+=", Replicants: "+shortenDimensions(getTotalReplicants(temp))+", Worker replicants: "+shortenDimensions(getTotalWorkers(temp))
-				else if (temp.masterystudies.includes('d9')) msg+=", Paired challenges: N/A (not implemented yet)"
+				else if (quantum.qc && quantum.qc.comps >= 7) msg+=", PC level: "+(quantum.pc?getFullExpansion(quantum.pc.lvl):"This has been rewritten while you are away!")
 				else if (temp.masterystudies.includes('d8')) msg+=", Challenge completions: "+(quantum.qc?getFullExpansion(quantum.qc.comps):"This has been rewritten while you are away!")
+				else if (temp.masterystudies.includes('d7')) msg+=", Positronic Charge: "+(quantum.pos?getFullExpansion(quantum.pos.eng):"This has been rewritten while you are away!")
 				else msg+=", Best quantum: "+timeDisplayShort(quantum.best)
 			}
 		} else if (temp.exdilation==undefined?false:temp.blackhole.unl) {

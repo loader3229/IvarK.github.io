@@ -48,7 +48,7 @@ var PCs = {
 			challs: {},
 			comps: [],
 			lvl: 1,
-			best: PCs_save.best,
+			best: PCs_save && PCs_save.best,
 			shrunkers: 0
 		}
 		qu_save.pc = PCs_save
