@@ -399,11 +399,11 @@ function boostReplSpeedExp(exp) {
 function updateEC14BaseReward() {
 	var data = {}
 	var est = tmp.rep.baseEst
+	var pow = getECReward(14)
 	tmp.rep.ec14 = data
 
-	if (est.gt(1) && ECComps("eterc14")) {
+	if (est.gt(1) && pow > 0) {
 		//Sub-1ms reduction -> Lower replicanti scaling
-		var pow = getECReward(14)
 		var div = est.pow(pow)
 
 		data.baseInt = div
@@ -423,13 +423,14 @@ function updateEC14BaseReward() {
 function boostReplicateInterval() {
 	let x = new Decimal(1)
 	let data = tmp.rep
+	let pow = getECReward(14)
 
 	data.baseBaseEst = data.baseEst
 
-	if (ECComps("eterc14")) {
+	if (pow > 0) {
 		var ec14Pow = getECReward(14)
 		var ec14Int = data.ec14.baseInt
-		var ec14Acc = getRepSlowdownBase10(data.speeds.exp) * Math.min(15 * data.ec14.acc, 5)
+		var ec14Acc = getRepSlowdownBase10(data.speeds.exp) * Math.min(15 * data.ec14.acc, 5) + 1
 		data.ec14.interval = ec14Int.div(ec14Acc)
 		x = x.div(data.ec14.interval)
 
