@@ -407,12 +407,18 @@ function buyInfinityUpgrade(name, cost) {
 	}
 }
 
-var ipMultPower = 2
-var ipMultCostIncrease = 10
+//INFINITY UPGRADES: IP MULTIPLIER
 function getIPMultPower() {
-	let ret = ipMultPower
+	let ret = 2
+	if (hasMTS(241)) ret = 2.2
 	if (hasGalUpg(53)) ret += Math.pow(1.25, -15e4 / player.galacticSacrifice.galaxyPoints.log10())
 	return ret
+}
+
+var ipMultCostIncrease = 10
+function doInitInfMultStuff() {
+	if (aarMod.newGameExpVersion !== undefined) ipMultCostIncrease=4
+	else ipMultCostIncrease=10
 }
 
 getEl("infiMult").onclick = function() {
@@ -431,15 +437,6 @@ function canBuyIPMult() {
 	return player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost") && player.infinityPoints.gte(player.infMultCost)
 }
 
-
-function doInitInfMultStuff() {
-	ipMultPower=2
-	if (hasMTS(241)) ipMultPower=2.2
-
-	if (aarMod.newGameExpVersion !== undefined) ipMultCostIncrease=4
-	else ipMultCostIncrease=10
-}
-
 function bumpInfMult() {
 	var otherMults = 1
 	if (hasAch("r85")) otherMults *= 4
@@ -447,13 +444,4 @@ function bumpInfMult() {
 	var old = getIPMultPower()
 	doInitInfMultStuff()
 	player.infMult = player.infMult.div(otherMults).pow(Math.log10(getIPMultPower()) / Math.log10(old)).times(otherMults)
-}
-
-function maxAutobuyerUpgrades() {
-	let order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-	for (var i = order.length; i > 0; i--) {
-		var id = order[i - 1]
-		if (player.autobuyers[id - 1] % 1 !== 0) while (buyAutobuyer(id - 1, true)) {}
-	}
-	updateAutobuyers()
 }

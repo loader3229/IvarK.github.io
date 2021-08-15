@@ -1570,6 +1570,7 @@ function updateCosts() {
 		for (var i=1; i<9; i++) {
 			var cost = player[TIER_NAMES[i] + "Cost"]
 			var resource = getOrSubResource(i)
+			getEl('B'+i).style.display = pH.did("quantum") ? "none" : ""
 			getEl('B'+i).className = cost.lte(resource) ? 'storebtn' : 'unavailablebtn'
 			getEl('B'+i).textContent = costPart + shortenPreInfCosts(cost)
 			getEl('M'+i).className = cost.times(10 - dimBought(i)).lte(resource) ? 'storebtn' : 'unavailablebtn'
@@ -3370,6 +3371,8 @@ function eternity(force, auto, forceRespec, dilated) {
 
 		var autoPreset = targetAutoPreset()
 		var canSwitch = autoOn && player.timestudy.auto[autoPreset] && player.timestudy.auto[autoPreset] != "" && autoPresetUnlocked(autoPreset)
+		if (autoOn && !player.timestudy.auto[autoPreset]) refreshAutoPreset(autoPreset)
+		getEl("autoPresetTarget").textContent = "Assigning updates the preset you are choosing. (" + autoPresets[autoPreset] + ")"
 
 		if (canSwitch) forceRespec = true
 		if (player.respec || player.respecMastery || forceRespec) respecTimeStudies(forceRespec)

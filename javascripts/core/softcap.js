@@ -38,12 +38,6 @@ var softcap_data = {
 			base: 10,
 			pow: 3/4
 		},
-		2: {
-			func: "pow",
-			start: Decimal.pow(10, 1.5e7),
-			pow: 0.5,
-			derv: false
-		},
 	},
 	eu2: {
 		name: "Eternity Upgrade 2",
@@ -120,8 +114,8 @@ var softcap_data = {
 			start: 1.5,
 			base: 1.5,
 			pow: 1,
-			mul: 0.2,
-			add: 1.3
+			mul: 0.3,
+			add: 1.2
 		}
 	},
 	gp: {

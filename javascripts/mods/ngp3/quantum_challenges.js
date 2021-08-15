@@ -87,57 +87,14 @@ var QCs = {
 
 			overlapReqs: [1/0, 1/0],
 
+			//QC1 Effects
 			ttScaling() {
 				return tmp.dtMode ? 2 : tmp.exMode ? 1.75 : 1.5
 			},
-			scalings: [4, 30],
-			updateTmp() {
-				delete QCs_tmp.qc1
-				if (!QCs.in(1) && !QCs.done(1)) return
 
-				let eff = QCs.modIn(1, "up") ? 0.5 : 1
-				let boosts = QCs_save.qc1.boosts
-				let maxBoosts = QCs_save.qc1.max
-
-				let distantBoosts = Math.max(QCs_save.qc1.boosts - this.scalings[0], 0)
-
-				let data = {
-					req: Decimal.pow(10, 1e6 * (distantBoosts + 1)),
-					limit: new Decimal("1e6000000"),
-
-					speedMult: Decimal.pow(2, - boosts - distantBoosts),
-					scalingMult: Math.pow(4, Math.max(boosts - 30, 0) / 15),
-					scalingExp: 1 / Math.min(1 + boosts / 20, 2.5),
-
-					effMult: (boosts / 5 - maxBoosts / 10) * eff + 1,
-					effExp: Math.min(1 + boosts / 20 * eff, 2.5)
-				}
-				QCs_tmp.qc1 = data
-
-				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
-				if (PCs.milestoneDone(11)) {
-					let pow = 0.2 + (PCs_save.lvl - 1) / 35
-					data.limit = data.limit.pow(Math.pow(4, -pow))
-					data.effMult *= Math.pow(4, boosts * eff * pow / 20)
-					data.effExp *= 1 + Math.min(boosts * eff * pow / 30, 1) / 2
-				}
-
-				data.limit = data.limit.max(data.req)
-				if (PCs.milestoneDone(12)) data.limit = data.limit.pow(QCs_save.qc1.expands / 10 + 1)
-			},
-			convert(x) {
-				if (!QCs_tmp.qc1) return x
-
-				var dilMult = Math.log2(getReplSpeedLimit()) / 1024
-				var log = x.log(2) * dilMult
-				if (log > 1) log = Math.pow(log, QCs_tmp.qc1.effExp)
-				log *= QCs_tmp.qc1.effMult / dilMult
-
-				x = Decimal.pow(2, log)
-				return x
-			},
-
+			//Replicanti Compressors
 			can: () => QCs_tmp.qc1 && pH.can("eternity") && player.replicanti.amount.gte(QCs_tmp.qc1.req) && QCs_save.qc1.boosts < QCs.data[1].max(),
+			compressScalings: [5],
 			max: () => 30, //1 + 30 / 20 = 2.5 / 2 = 1.25
 			boost() {
 				if (!QCs.data[1].can()) return false
@@ -149,7 +106,93 @@ var QCs = {
 
 				return true
 			},
+			extra: () => 0,
+			updateTmp() {
+				let qc1 = QCs_save.qc1
+				delete QCs_tmp.qc1
+				if (!QCs.in(1) && !QCs.done(1)) return
 
+				//Boosts
+				let boosts = qc1.boosts
+				let distantBoosts = Math.max(boosts - this.compressScalings[0], 0)
+
+				//Efficiency
+				let str = QCs.modIn(1, "up") ? 0.5 : 1
+				let extra = this.extra()
+				let eff = (boosts + extra) * str
+				let maxEff = (qc1.max + extra) * str
+
+				//Setup
+				let data = {
+					req: Decimal.pow(10, 1e6 * (distantBoosts + 1)),
+					limit: new Decimal("1e6000000"),
+
+					speedMult: Decimal.pow(2, - boosts),
+					scalingMult: 1,
+					scalingExp: 1 / (1 + boosts / 20),
+
+					effMult: (eff * 3 - maxEff * 2) / 10 + 1,
+					effExp: 1 + eff / 20,
+				}
+				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
+				QCs_tmp.qc1 = data
+
+				//Paired Challenges
+				if (PCs.milestoneDone(11)) {
+					let pc11 = 0.2 + (PCs_save.lvl - 1) / 35
+					data.limit = data.limit.pow(Math.pow(4, -pc11))
+					data.effMult *= Math.pow(data.effMult, pc11 / 2)
+				}
+				if (PCs.milestoneDone(12)) data.limit = data.limit.pow(qc1.expands / 10 + 1)
+
+				//Limit > Req
+				data.limit = data.limit.max(data.req)
+			},
+
+			//Conversion
+			convert(x) {
+				if (!QCs_tmp.qc1) return x
+
+				var dilMult = Math.log10(getReplSpeedLimit()) / 1024
+				var log = x.log10() * dilMult
+				if (log > 1) log = Math.pow(log, QCs_tmp.qc1.effExp)
+				log *= QCs_tmp.qc1.effMult / dilMult
+
+				x = Decimal.pow(10, log)
+				return x
+			},
+
+			updateDisp() {		
+				getEl("repCompress").style.display = QCs_tmp.qc1 ? "" : "none"
+				getEl("repExpand").style.display = PCs.milestoneDone(12) ? "" : "none"
+			},
+			updateDispOnTick() {
+				let qc1 = QCs_save.qc1
+				let data = QCs.data[1]
+				if (QCs_tmp.qc1) {
+					let qc1Explain = qc1.boosts + data.extra() == 0
+					let extra = data.extra()
+					getEl("repCompress").innerHTML = "Compress for a " + (qc1Explain ? "small multiplier " : "") + "boost" +
+						(!qc1Explain ? "." : ", but reduce the interval scaling.") +
+						"<br><span style='font-size: 10px'>(Requires " + shortenCosts(QCs_tmp.qc1.req) + " replicantis)</span>" +
+						(!qc1Explain ? "<br>(" +
+							getFullExpansion(qc1.boosts) + " / " + getFullExpansion(data.max()) +
+							(qc1.boosts > data.compressScalings[0] ? " Distant" : "") +
+							(qc1.max || extra > 0 ? ", " + getFullExpansion(qc1.max) + " Max" : "") +
+							(extra > 0 ? " + " + getFullExpansion(Math.floor(extra)) : "") +
+						")" : "")
+					getEl("repCompress").style["font-size"] = qc1Explain ? "11px" : "12px"
+					getEl("repCompress").className = data.can() ? "storebtn" : "unavailablebtn"
+				}
+				if (PCs.milestoneDone(12)) {
+					getEl("repExpand").innerHTML = "Energize the Replicantis and expand their space." +
+						"<br>Cost: " + shorten(data.expandCost()) + " Replicanti Energy" +
+						"<br>(" + getFullExpansion(qc1.expands) + " Expansions)"
+					getEl("repExpand").className = data.canExpand() ? "storebtn" : "unavailablebtn"
+				}
+			},
+
+			//PC1x2 Milestone: Replicanti Expanders
 			expandCost: () => Decimal.pow(4, QCs_save.qc1.expands).times(1e7),
 			canExpand: () => QCs_tmp.qc5 && QCs_save.qc5.gte(QCs.data[1].expandCost()),
 			expandGain: () => Math.floor(QCs_save.qc5.div(QCs.data[1].expandCost()).times(3).add(1).log(4)),
@@ -609,8 +652,7 @@ var QCs = {
 
 		//In Quantum Challenges
 		getEl("qc_restart").style.display = QCs.in(2) || QCs.in(3) ? "" : "none"
-		getEl("repCompress").style.display = QCs_tmp.qc1 ? "" : "none"
-		getEl("repExpand").style.display = PCs.milestoneDone(12) ? "" : "none"
+		this.data[1].updateDisp()
 		this.data[2].updateCloudDisp()
 		this.data[4].updateDisp()
 		this.data[5].updateDisp()

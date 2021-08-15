@@ -908,11 +908,20 @@ function isAtEndGame() {
 }
 
 //Auto-Preset
+let autoPresets = {
+	eternity: "Eternity",
+	dilation: "Dilation",
+	qc: "Quantum Challenge",
+	qc7: "Quantum Challenge 7"
+}
+
 function openAutoPresets() {
 	closeToolTip()
 	getEl("autoPresets").style.display = "flex"
 
 	getEl("autoPresetToggle").textContent = player.timestudy.auto.on ? "Auto: ON" : "Auto: OFF"
+	getEl("autoPresetTarget").textContent = "Assigning updates the preset you are choosing. (" + autoPresets[targetAutoPreset()] + ")"
+
 	getEl("autoPresetEternity").value = player.timestudy.auto.eternity || ""
 	getEl("autoPresetDilation").value = player.timestudy.auto.dilation || ""
 
@@ -953,8 +962,10 @@ function autoPresetUnlocked(x) {
 //Recent boosts
 function getReplDilBonus() {
 	let log = getReplEff().max(1).log10()
-	log *= Math.log10(log / 1e5 + 1) / 3 + 1
-	return Decimal.pow(tmp.ngp3_exp ? 2.25 : 1.75, Math.sqrt(log / 1e4 + 1) - 1)
+	let x = Math.sqrt(log / 1e4 + 1) - 1
+	x *= Math.pow(log / 1e7 + 1, 1/6)
+	x *= Math.min(Math.log10(log / 1e6 + 1) / 2 + 1, 5)
+	return Decimal.pow(1.6, x)
 }
 
 function getAQSGainExp(x) {

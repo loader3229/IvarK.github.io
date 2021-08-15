@@ -39,7 +39,13 @@ function dimensionTabDisplay(){
 			getEl("A" + tier).textContent = getDimensionDescription(tier)
 		}
 	}
-	setAndMaybeShow("mp10d", aarMod.newGameMult || (shiftDown && pos.unl()), "'Multiplier per 10 Dimensions: '+shorten(getDimensionPowerMultiplier(\"non-random\"))+'x'")
+
+	setAndMaybeShow("mp10d", aarMod.newGameMult || (shiftDown && pos.unl()), function() {
+		let pow = getDimensionPowerMultiplier("non-random")
+		return 'Multiplier per 10 Dimensions: ' + shorten(pow) + 'x' +
+			(shiftDown ? ", " + shortenCosts(pow.pow(player.firstBought / 10)) + "x to First Dimensions" : "")
+	})
+
 	dimShiftDisplay()
 	tickspeedBoostDisplay()
 	galaxyReqDisplay()
@@ -614,74 +620,85 @@ function updateDimensionsDisplay() {
 
 function replicantiDisplay() {
 	if (player.replicanti.unl) {
-		let replGalOver = getMaxRG() - player.replicanti.gal
-		let chance = tmp.rep.chance
 		let limit = getReplicantiLimit(true)
+		let time = hasDilationUpg(6)
+		let dil = hasAch("r137") && tmp.ngp3_boost
 		getEl("replicantiamount").textContent = shortenDimensions(player.replicanti.amount) + (limit.lt(1/0) ? (" / ") + shortenDimensions(limit) : "")
-		getEl("replicantimult").textContent = shorten(getIDReplMult())
-		
-		let chanceDisplayEnding = (isChanceAffordable() && player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1% Cost: " + shortenCosts(player.replicanti.chanceCost) + " IP" : "")
-	
-		getEl("replicantichance").innerHTML = "Replicate " + (tmp.rep.freq ? "amount: " + shorten(tmp.rep.freq) + "x" : "chance: " + formatPercentage(chance, 0) + "%") + chanceDisplayEnding
+		getEl("replicantieff").textContent = shiftDown ? "Effective Replicantis: " + shorten(getReplEff()) : ""
+		getEl("replicantimult").textContent = dil ? shorten(getReplDilBonus()) : time ? shorten(tmp.rm.pow(0.1)) : shorten(getIDReplMult())
+		getEl("replDesc").textContent = (shiftDown ? "multiplier to " : "") +
+			(dil ? "dilated time" : time ? "Time Dimensions" : tmp.ngC ? "IP gain (after softcaps) & all Normal Dimensions" : " Infinity Dimensions")
 
-		let baseInt = player.replicanti.interval
-		let interval = Decimal.div(tmp.rep.interval, 1e3).times(10)
-		getEl("replicantiinterval").innerHTML = "Interval: " + timeDisplayShort(interval, true, 3) +
-			(isIntervalAffordable() && player.infinityPoints.lt(Decimal.pow(10, 1e10)) ?
-				"<br> -> " + timeDisplayShort(interval.times(getReplicantiBaseInterval(baseInt * 0.9).div(getReplicantiBaseInterval(baseInt))), true, 3) + 
-				" Cost: " + shortenCosts(player.replicanti.intervalCost)+" IP"
-			: "")
-
-		let replGal = player.replicanti.gal
-		let replGalScale = replGal >= (tmp.ngC ? 250 : 400) ? 2 : replGal >= 100 ? 1 : 0
-		let replGalName = (replGalScale ? getGalaxyScaleName(replGalScale) : "Max ") + "Replicated Galaxies"
-		let replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) && player.replicanti.galCost.lt(1/0) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
-		getEl("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(replGal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
-		getEl("replicantireset").innerHTML = (
-			hasAch("ngpp16") ? "Get "
-			: (aarMod.ngp3c && ETER_UPGS.has(6)) ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get "
-			: "Reset replicanti amount, but get "
-		) + "1 free galaxy.<br>" +
-			getFullExpansion(player.replicanti.galaxies) +
-			(tmp.extraRG > 0 ? " + " + getFullExpansion(tmp.extraRG) : "") +
-			" replicated galax" + (getTotalRGs() == 1 ? "y" : "ies") + " created."
-
-		getEl("replicantiapprox").innerHTML = 
-			hasTS(192) ? 
-				"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
-				"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
-				(shiftDown && hasDilationUpg("ngpp2") ? "(2x slower per " + getFullExpansion(Math.floor(getRepSlowdownBase2(tmp.rep.speeds.exp))) + " OoMs)" : "") :
-			"Approximately "+ timeDisplay(Math.max((Math.log(Number.MAX_VALUE) - tmp.rep.ln) / tmp.rep.est.toNumber(), 0) * 10 * tmp.ec12Mult) + " until " + shorten(Number.MAX_VALUE) + " Replicantis."
-		getEl("replicantibaseinterval").innerHTML = ECComps("eterc14") && shiftDown ? "<br>The base interval was " + timeDisplayShort(Decimal.div(10, tmp.rep.baseBaseEst), true, 2) + (tmp.rep.intBoost.neq(1) ? ", which is slowed down by " + shorten(tmp.rep.intBoost.pow(-1)) + "x to " + timeDisplayShort(Decimal.div(10, tmp.rep.baseEst), true, 2) + "." : "") : ""
-
-		getEl("replicantichance").className = (player.infinityPoints.gte(player.replicanti.chanceCost) && isChanceAffordable()) ? "storebtn" : "unavailablebtn"
-		getEl("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable()) ? "storebtn" : "unavailablebtn"
-		getEl("replicantimax").className = (player.infinityPoints.gte(getRGCost())) ? "storebtn" : "unavailablebtn"
-		getEl("replicantireset").className = (canGetReplicatedGalaxy()) ? "storebtn" : "unavailablebtn"
-		getEl("replDesc").textContent = tmp.ngC ? "multiplier to IP gain (after softcaps) & all Normal Dimensions" : "multiplier on all infinity dimensions"
-		if (tmp.ngC) ngC.condense.rep.update()
-
-		if (QCs_tmp.qc1) {
-			let qc1Explain = QCs_save.qc1.boosts == 0
-			getEl("repCompress").innerHTML = "Compress for a " + (qc1Explain ? "small multiplier " : "") + "boost" +
-				(!qc1Explain ? "." : ", but reduce the interval scaling.") +
-				"<br><span style='font-size: 10px'>(Requires " + shortenCosts(QCs_tmp.qc1.req) + " replicantis)</span>" +
-				(!qc1Explain ? "<br>(" + getFullExpansion(QCs_save.qc1.boosts) + " / " + getFullExpansion(QCs.data[1].max()) + (QCs_save.qc1.boosts > QCs.data[1].scalings[0] ? " Distant" : "") + (QCs_save.qc1.max ? ", " + getFullExpansion(QCs_save.qc1.max) + " Max" : "") + ")" : "")
-			getEl("repCompress").style["font-size"] = qc1Explain ? "11px" : "12px"
-			getEl("repCompress").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
-		}
-		if (PCs.milestoneDone(12)) {
-			getEl("repExpand").innerHTML = "Energize the Replicantis and expand their space." +
-				"<br>Cost: " + shorten(QCs.data[1].expandCost()) + " Replicanti Energy" +
-				"<br>(" + getFullExpansion(QCs_save.qc1.expands) + " Expansions)"
-			getEl("repExpand").className = QCs.data[1].canExpand() ? "storebtn" : "unavailablebtn"
-		}
-		if (QCs_tmp.qc5) QCs.data[5].updateDispOnTick()
+		repApproxDisplay()
+		repChanceDisplay()
+		repIntervalDisplay()
+		repGalDisplay()
+		repModDisplay()
 	} else {
 		let cost = getReplUnlCost()
 		getEl("replicantiunlock").innerHTML = "Unlock Replicantis<br>Cost: " + shortenCosts(cost) + " IP"
 		getEl("replicantiunlock").className = player.infinityPoints.gte(cost) ? "storebtn" : "unavailablebtn"
 	}
+}
+
+function repApproxDisplay() {
+	//ESTIMATE
+	getEl("replicantiapprox").innerHTML = 
+		hasTS(192) ? 
+			"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
+			"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
+			(shiftDown && hasDilationUpg("ngpp2") ? "(2x slower per " + getFullExpansion(Math.floor(getRepSlowdownBase2(tmp.rep.speeds.exp))) + " OoMs)" : "") :
+		"Approximately "+ timeDisplay(Math.max((Math.log(Number.MAX_VALUE) - tmp.rep.ln) / tmp.rep.est.toNumber(), 0) * 10 * tmp.ec12Mult) + " until " + shorten(Number.MAX_VALUE) + " Replicantis."
+	getEl("replicantibaseinterval").innerHTML = ECComps("eterc14") && shiftDown ? "<br>The base interval was " + timeDisplayShort(Decimal.div(10, tmp.rep.baseBaseEst), true, 2) + (tmp.rep.intBoost.neq(1) ? ", which is slowed down by " + shorten(tmp.rep.intBoost.pow(-1)) + "x to " + timeDisplayShort(Decimal.div(10, tmp.rep.baseEst), true, 2) + "." : "") : ""
+}
+
+function repChanceDisplay() {
+	//CHANCE
+	let chance = tmp.rep.chance
+	let chanceDisplayEnding = (isChanceAffordable() && player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1% Cost: " + shortenCosts(player.replicanti.chanceCost) + " IP" : "")
+	getEl("replicantichance").innerHTML = "Replicate " + (tmp.rep.freq ? "amount: " + shorten(tmp.rep.freq) + "x" : "chance: " + formatPercentage(chance, 0) + "%") + chanceDisplayEnding
+	getEl("replicantichance").className = (player.infinityPoints.gte(player.replicanti.chanceCost) && isChanceAffordable()) ? "storebtn" : "unavailablebtn"
+}
+
+function repIntervalDisplay() {
+	//INTERVAL
+	let baseInt = player.replicanti.interval
+	let interval = Decimal.div(tmp.rep.interval, 1e3).times(10)
+	getEl("replicantiinterval").innerHTML = "Interval: " + timeDisplayShort(interval, true, 3) +
+		(isIntervalAffordable() && player.infinityPoints.lt(Decimal.pow(10, 1e10)) ?
+			"<br> -> " + timeDisplayShort(interval.times(getReplicantiBaseInterval(baseInt * 0.9).div(getReplicantiBaseInterval(baseInt))), true, 3) + 
+			" Cost: " + shortenCosts(player.replicanti.intervalCost)+" IP"
+		: "")
+	getEl("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable()) ? "storebtn" : "unavailablebtn"
+}
+
+function repGalDisplay() {
+	//GALAXIES
+	let replGal = player.replicanti.gal
+	let replGalOver = getMaxRG() - replGal
+	let replGalScale = replGal >= (tmp.ngC ? 250 : 400) ? 2 : replGal >= 100 ? 1 : 0
+	let replGalName = (replGalScale ? getGalaxyScaleName(replGalScale) : "Max ") + "Replicated Galaxies"
+	let replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) && player.replicanti.galCost.lt(1/0) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
+	getEl("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(replGal) + (replGalOver > 0 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
+	getEl("replicantireset").innerHTML = (
+		hasAch("ngpp16") ? "Get "
+		: (aarMod.ngp3c && ETER_UPGS.has(6)) ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get "
+		: "Reset replicanti amount, but get "
+	) + "1 free galaxy.<br>" +
+		getFullExpansion(player.replicanti.galaxies) +
+		(tmp.extraRG > 0 ? " + " + getFullExpansion(tmp.extraRG) : "") +
+		" replicated galax" + (getTotalRGs() == 1 ? "y" : "ies") + " created."
+	getEl("replicantimax").className = (player.infinityPoints.gte(getRGCost())) ? "storebtn" : "unavailablebtn"
+	getEl("replicantireset").className = (canGetReplicatedGalaxy()) ? "storebtn" : "unavailablebtn"
+}
+
+function repModDisplay() {
+	//NG+3
+	if (QCs_tmp.qc1) QCs.data[1].updateDispOnTick()
+	if (QCs_tmp.qc5) QCs.data[5].updateDispOnTick()
+
+	//CONDENSED
+	if (tmp.ngC) ngC.condense.rep.update()
 }
 
 function initialTimeStudyDisplay(){

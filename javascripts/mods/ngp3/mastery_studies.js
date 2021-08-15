@@ -164,7 +164,7 @@ var mTs = {
 		251() {
 			if (hasNU(6)) return 0
 
-			let x = player.meta.resets
+			var x = player.meta.resets
 			x *= Math.sqrt(x / 100 + 1)
 			x *= (13 / (x / 50 + 1) + 2)
 			if (tmp.ngp3_mul) x *= 1.25
@@ -173,39 +173,44 @@ var mTs = {
 		252() {
 			if (hasNU(6)) return 0
 
-			let x = Math.floor(getEffectiveTGs() / 9)
+			var x = Math.floor(getEffectiveTGs() / 9)
 			if (tmp.ngp3_mul) x *= 1.25
 			return x
 		},
 		253() {
 			if (hasNU(6)) return 0
 
-			let x = Math.floor(getTotalRGs() / 7) * 2
+			var x = Math.floor(getTotalRGs() / 7) * 2
 			if (tmp.ngp3_mul) x *= 1.25
 			return x
 		},
 		265() {
-			let x = doubleMSMult(tmp.rep ? tmp.rep.baseChance : 0)
+			var x = doubleMSMult(tmp.rep ? tmp.rep.baseChance : 0)
 			return Decimal.pow(x, hasMTS(283) ? getMTSMult(283, "update") : 0.6)
 		},
 
 		271() {
-			let log = tmp.rm.log10()
-			let dLog = Math.max(Math.log10(log), 0)
-			let str = Math.pow(Math.max(dLog / 5 + 1, 1), 2)
-
-			return Decimal.pow(10, Math.pow(log, 2 - 1 / str) * Math.pow(10, 5 / str - 5) * str).max(tmp.rm)
+			var x = tmp.rm.max(1).log10()
+			var pow = Math.min(Math.log10(x / 1e5 + 1) / 5, 1)
+			if (x > 1) x *= Math.pow(x, pow)
+			x /= Math.log10(x / 1e9 + 1) / 2 + 1
+			return {
+				eff: Decimal.pow(10, x),
+				exp: pow
+			}
 		},
 		281() {
-			return Math.sqrt(player.dilation.dilatedTime.add(1).log10()) * 1.2
+			var x = player.dilation.dilatedTime.add(1).log10()
+			x = Math.pow(x, 0.75) / 3
+			return x
 		},
 		283() {
-			let x = tmp.rep ? tmp.rep.baseChance : 0
-			let log = Math.max(Math.log10(x), 0)
+			var x = tmp.rep ? tmp.rep.baseChance : 0
+			var log = Math.max(Math.log10(x), 0)
 			return Math.pow(x / 2e7 + 1, 0.1) - 0.4
 		},
 		284() {
-			let x = Math.pow(
+			var x = Math.pow(
 				Math.pow(player.galaxies, 0.75) +
 				Math.pow(getTotalRGs(), 0.75) +
 				Math.pow(getEffectiveTGs(), 0.75)
@@ -213,25 +218,25 @@ var mTs = {
 			return x
 		},
 		291() {
-			let rep = getReplEff().max(1).log10()
+			var rep = getReplEff().max(1).log10()
 			return Math.log10(rep / 5e5 + 1) / 10 + 1
 		},
 		292() {
-			let rg = getFullEffRGs()
+			var rg = getFullEffRGs()
 			return Math.log2(rg / 2e3 + 1) / 5 + 1
 		},
 
 		311() {
-			let exp = Math.min(Math.log10(Math.log10(qu_save.colorPowers.r / 10 + 1) + 1), 1)
-			let eff = hasTS(232) ? Math.pow(tsMults[232](), exp) : 1
+			var exp = Math.min(Math.log10(Math.log10(qu_save.colorPowers.r / 10 + 1) + 1), 1)
+			var eff = hasTS(232) ? Math.pow(tsMults[232](), exp) : 1
 			return {
 				exp: exp,
 				eff: eff
 			}
 		},
 		312() {
-			let mul = Math.min(Math.log10(qu_save.colorPowers.g + 1) / 40, 1)
-			let eff = getReplGalaxyEff()
+			var mul = Math.min(Math.log10(qu_save.colorPowers.g + 1) / 30, 1)
+			var eff = getReplGalaxyEff()
 			eff = (eff - 1) * mul + 1
 			return {
 				mul: mul,
@@ -239,8 +244,8 @@ var mTs = {
 			}
 		},
 		313() {
-			let tpLog = player.dilation.tachyonParticles.max(1).log10()
-			let bpLog = colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0
+			var tpLog = player.dilation.tachyonParticles.max(1).log10()
+			var bpLog = colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0
 
 			return Math.pow(tpLog / 90, 0.6) * Math.pow(bpLog / 3, 0.2)
 		},
@@ -304,6 +309,9 @@ var mTs = {
 		},
 		265(x) {
 			return "^" + shorten(x)
+		},
+		271(x) {
+			return shorten(x.eff) + "x" + (shiftDown ? " (^" + (x.exp + 1).toFixed(3) + ")" : "")
 		},
 		281(x) {
 			return "+" + shorten(x * getReplSpeedExpMult()) + " OoMs"
@@ -372,6 +380,9 @@ var mTs = {
 		}
 		player.masterystudies = respecedMS
 
+		mTs.bought = 0
+		mTs.latestBoughtRow = 0
+
 		if (player.respecMastery) respecMasteryToggle()
 		if (player.eternityChallUnlocked >= 13) resetEternityChallUnlocks()
 		respecUnbuyableTimeStudies()
@@ -417,26 +428,33 @@ function convertMasteryStudyIdToDisplay(x) {
 	return ec ? "ec" + ec + "unl" : dil ? "dilstudy" + dil : "mts" + x
 }
 
-function updateMasteryStudyCosts() {
-	mTs.baseCostMult = hasAch("ng3p12") ? 0.5 : 1
-	if (PCs.milestoneDone(72)) mTs.baseCostMult /= 5
-
-	mTs.costMult = mTs.baseCostMult
-	mTs.ttSpent = 0
-
+function updateMasteryStudyBoughts() {
 	var oldBought = mTs.bought
+
 	mTs.bought = 0
 	mTs.latestBoughtRow = 0
-	for (id = 0; id<player.masterystudies.length; id++) {
+	for (id = 0; id < player.masterystudies.length; id++) {
 		var t = player.masterystudies[id].split("t")[1]
 		if (t) {
 			mTs.latestBoughtRow = Math.max(mTs.latestBoughtRow, Math.floor(t / 10))
-			var costMult = getMasteryStudyCostMult("t" + t)
+			mTs.bought++
+		}
+	}
+}
 
+function updateMasteryStudyCosts() {
+	mTs.baseCostMult = hasAch("ng3p12") ? 0.5 : 1
+	if (PCs.milestoneDone(72)) mTs.baseCostMult /= 5
+	mTs.costMult = mTs.baseCostMult
+
+	mTs.ttSpent = 0
+	for (id = 0; id < player.masterystudies.length; id++) {
+		var t = player.masterystudies[id].split("t")[1]
+		if (t) {
+			var costMult = getMasteryStudyCostMult("t" + t)
 			setMasteryStudyCost(t, "t")
 			mTs.ttSpent += mTs.costs.time[t] < 1/0 ? mTs.costs.time[t] : 0
 			mTs.costMult = costMult == "reset" ? mTs.baseCostMult : mTs.costMult * costMult
-			mTs.bought++
 		}
 	}
 	for (id = 0; id < mTs.timeStudies.length; id++) {
@@ -453,7 +471,7 @@ function updateMasteryStudyCosts() {
 		if (!mTs.studyUnl.includes("d" + id)) break
 		setMasteryStudyCost(id, "d")
 	}
-	if (oldBought != mTs.bought) updateSpentableMasteryStudies()
+
 	updateMasteryStudyTextDisplay()
 }
 
@@ -490,6 +508,7 @@ function setupMasteryStudies() {
 		pos++
 	}
 
+	updateMasteryStudyBoughts()
 	updateUnlockedMasteryStudies()
 	updateSpentableMasteryStudies()
 }
@@ -633,41 +652,10 @@ function buyingDilStudyForQC() {
 	QCs.updateDisp()
 }
 
-function buyingDilStudyReplicant() {
-	showTab("quantumtab")
-	showQuantumTab("replicants")
-	updateReplicants()
-}
-
-function buyingDilStudyED() {
-	showTab("dimensions")
-	showDimTab("emperordimensions")
-	getEl("edtabbtn").style.display = ""
-	updateReplicants()
-}
-
-function buyingDilStudyNanofield() {
-	showTab("quantumtab")
-	showQuantumTab("nanofield")
-	getEl("nanofieldtabbtn").style.display = ""
-	updateNanoRewardTemp()
-}
-
-function buyingDilStudyToD() {
-	showTab("quantumtab")
-	showQuantumTab("tod")
-	updateColorCharge()
-	updateTODStuff()
-}
-
 function buyingDilationStudy(id){
 	if (id == 7) buyingD7Changes()
-	if (id == 8 || id == 9 || id == 14) buyingDilStudyForQC()
+	if (id == 8) buyingDilStudyForQC()
 	if (id == 9) updateGluonsTabOnUpdate()
-	if (id == 10) buyingDilStudyReplicant()
-	if (id == 11) buyingDilStudyED()
-	if (id == 12) buyingDilStudyNanofield()
-	if (id == 13) buyingDilStudyToD()
 }
 
 function buyMasteryStudy(type, id, quick=false) {
@@ -704,6 +692,8 @@ function buyMasteryStudy(type, id, quick=false) {
 		} else if (type == "d") {
 			updateUnlockedMasteryStudies()
 			updateSpentableMasteryStudies()
+		} else {
+			updateMasteryStudyBoughts()
 		}
 		updateMasteryStudyCosts()
 		updateMasteryStudyButtons()
@@ -714,11 +704,13 @@ function buyMasteryStudy(type, id, quick=false) {
 
 function canBuyMasteryStudy(type, id) {
 	if (type == 't') {
-		var row = Math.floor(id / 10)
+		if (player.masterystudies.includes('t' + id)) return false
+		if (player.eternityChallUnlocked > 12) return false
 
-		if (player.timestudy.theorem < mTs.costs.time[id] || player.masterystudies.includes('t' + id) || player.eternityChallUnlocked > 12 || !mTs.timeStudies.includes(id)) return false
-		if (!hasAch("ng3p26") && mTs.latestBoughtRow - (tmp.bgMode || tmp.ngp3_mul && !tmp.exMode ? 1 : 0) > row) return false
+		var row = Math.floor(id / 10)
 		if (!mTs.spentable.includes(id)) return false
+		if (player.timestudy.theorem < mTs.costs.time[id]) return false
+		if (!hasAch("ng3p26") && mTs.latestBoughtRow - (tmp.bgMode || tmp.ngp3_mul && !tmp.exMode ? 1 : 0) > row) return false
 		if (mTs.unlockReqConditions[id] && !mTs.unlockReqConditions[id]()) return false
 
 		//Death Mode

@@ -57,7 +57,7 @@ function getMDGlobalMult() {
 	if (hasAch("ngpp12")) ret = ret.times(1.1)
 	if (tmp.ngp3) {
 		//Achievement Rewards
-		if (hasAch("ng3p11")) ret = ret.times(Math.min(Math.max(Math.log10(player.eternityPoints.max(1).log10()), 1) / 2, 2.5))
+		if (hasAch("ng3p11")) ret = ret.times(Math.min(Math.max(Math.log10(player.eternityPoints.max(1).log10()) / 2, 1), 2.5))
 		if (hasAch("ng3p13")) ret = ret.times(Decimal.plus(quantumWorth, 1).log10() * 5 + 1)
 		if (hasAch("ng3p57")) ret = ret.times(1 + player.timeShards.plus(1).log10())
 	}
@@ -316,7 +316,7 @@ function getDil17Bonus() {
 
 function getDil17Exp() {
 	if (enB.active("glu", 4)) return enB_tmp.glu4
-	return 0.0045
+	return 0.003
 }
 
 function updateOverallMetaDimensionsStuff(){

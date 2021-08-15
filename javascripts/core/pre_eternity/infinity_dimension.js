@@ -360,7 +360,7 @@ function loadInfAutoBuyers() {
 var infDimPow = 1
 
 function getIDReplMult() {
-	return hasMTS(271) ? getMTSMult(271) : tmp.rm
+	return hasMTS(271) ? getMTSMult(271).eff : tmp.rm
 }
 
 function updateInfPower() {

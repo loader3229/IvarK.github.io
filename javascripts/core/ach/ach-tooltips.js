@@ -265,7 +265,7 @@ function setR13Tooltip() {
 	//Setup rewards
 	let potato3Reward = []
 	if (inNGM(2)) potato3Reward.push("the Galaxy boost to Galaxy points gain is buffed based on a specific value (~663 galaxies)")
-	if (tmp.ngp3_boost) potato3Reward.push((tmp.bgMode ? "" : "Above " + shortenCosts(Decimal.pow(10, tmp.dtMode ? 8e6 : tmp.exMode ? 4e6 : 2e6)) + " ticks/s, ") + "TS131 doesn't disable RG autobuyer anymore")
+	if (tmp.ngp3_boost) potato3Reward.push("TS131 doesn't disable RG autobuyer anymore")
 	potato3Reward = wordizeList(potato3Reward, true)
 
 	let thisisReward = [] // for the achievement "This is what I have to do to get rid of you."

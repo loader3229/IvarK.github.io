@@ -21,9 +21,9 @@ function updateQuantumWorth(mode) {
 				getEl("autoGhost"+player.ghostify.automatorGhosts.ghosts).style.visibility="visible"
 				if (player.ghostify.automatorGhosts.ghosts == MAX_AUTO_GHOSTS) getEl("nextAutomatorGhost").parentElement.style.display="none"
 				else {
-					getEl("automatorGhostsAmount").textContent=player.ghostify.automatorGhosts.ghosts
-					getEl("nextAutomatorGhost").parentElement.style.display=""
-					getEl("nextAutomatorGhost").textContent=autoGhostRequirements[player.ghostify.automatorGhosts.ghosts-3].toFixed(1)
+					getEl("automatorGhostsAmount").textContent = player.ghostify.automatorGhosts.ghosts
+					getEl("nextAutomatorGhost").parentElement.style.display = ""
+					getEl("nextAutomatorGhost").textContent = autoGhostRequirements[player.ghostify.automatorGhosts.ghosts-3].toFixed(1)
 				}
 			}
 		}
@@ -625,13 +625,21 @@ var enB = {
 			r *= tmp.glB[enB.mastered("glu", x) ? "masAmt" : "enAmt"]
 			return r
 		},
-		boosterEff(x) {
+		boosterEff() {
 			var amt = this.target(true)
 			if (pos.on()) amt += enB.pos.target()
-			if (PCs.unl() && amt >= PCs_tmp.eff1_start) amt = Math.pow(amt / PCs_tmp.eff1_start, PCs_tmp.eff1) * PCs_tmp.eff1_start
+			if (PCs.unl() && amt >= PCs_tmp.eff1_start) amt = Math.pow(amt / PCs_tmp.eff1_start, this.boosterExp()) * PCs_tmp.eff1_start
 			if (QCs.perkActive(2)) amt *= 1.5
 
 			return amt
+		},
+		boosterExp(amt) {
+			amt = amt || this.target(true)
+			if (PCs.unl() && amt >= PCs_tmp.eff1_start) {
+				var exp = PCs_tmp.eff1
+				return exp
+			}
+			return 1
 		},
 		gluonEff(x) {
 			let l = Decimal.add(x, 1).log10()
@@ -697,8 +705,8 @@ var enB = {
 			title: "Meta Resynergizer",
 			type: "r",
 			eff(x) {
-				x = Math.pow(1 + Math.log10(Math.log10(x + 1) + 1) / (tmp.ngp3_mul ? 1 : 2), 1.5)
-				return 0.0045 * Math.min(x, 2.5)
+				x = Math.sqrt(1 + Math.log10(x / 10 + 1))
+				return Math.min(0.003 * x, 0.012)
 			},
 			effDisplay(x) {
 				return x.toFixed(4)
@@ -706,7 +714,7 @@ var enB = {
 		},
 		5: {
 			req: 9,
-			masReq: 80,
+			masReq: 75,
 
 			title: "Otherworldly Galaxies",
 			type: "b",
@@ -759,7 +767,7 @@ var enB = {
 		},
 		8: {
 			req: 12,
-			masReq: 80,
+			masReq: 75,
 
 			title: "Meta Resynergizer II",
 			type: "r",
@@ -786,7 +794,7 @@ var enB = {
 		},
 		10: {
 			req: 36,
-			masReq: 80,
+			masReq: 75,
 
 			title: "Blue Saturation",
 			type: "g",
@@ -800,7 +808,7 @@ var enB = {
 		},
 		11: {
 			req: 45,
-			masReq: 80,
+			masReq: 75,
 
 			title: "Blue Unseeming",
 			type: "r",
@@ -812,8 +820,8 @@ var enB = {
 			}
 		},
 		12: {
-			req: 65,
-			masReq: 80,
+			req: 60,
+			masReq: 75,
 
 			title: "Color Subcharge",
 			type: "b",
@@ -975,8 +983,7 @@ var enB = {
 			eff(x) {
 				let gal = player.galaxies
 				gal /= Math.max(Math.log2(gal) / 10, 1)
-				gal *= 0.0007 * Math.log2(x + 1)
-				gal *= Math.min(Math.log2(x + 1), 30)
+				gal *= 0.0007 * Math.min(Math.pow(Math.log2(x + 1), 2), 30)
 				return Math.pow(gal + 1, 1.5)
 			},
 			effDisplay(x) {
@@ -1109,7 +1116,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return 1e-11 * Math.min(Math.sqrt(x), 1e3)
+				return 1e-11 * Math.min(Math.sqrt(x), 1e4)
 			},
 			effDisplay(x) {
 				return shorten(player.eternityPoints.max(1).pow(x * getAQSGainExp())) + "x"
@@ -1292,7 +1299,8 @@ function updateGluonsTab() {
 	}
 
 	enB.updateOnTick("glu")
-	getEl("enB_eff").textContent = "Effective Boosters: " + shorten(enB.glu.boosterEff())
+	getEl("enB_eff").textContent = !shiftDown ? "" :
+		"Effective Boosters: " + shorten(enB.glu.boosterEff()) + (enB.glu.boosterExp() > 1 ? " (^" + shorten(enB.glu.boosterExp()) + ")" : "")
 }
 
 //Display: On load

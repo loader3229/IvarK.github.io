@@ -69,7 +69,7 @@ function getReplicantiLimit(cap = false) {
 }
 
 function isReplicantiLimitBroken() {
-	return hasTimeStudy(192) && !tmp.ngC
+	return hasTS(192) && !tmp.ngC
 }
 
 function getReplEff() {
@@ -106,9 +106,9 @@ function getReplMult(next) {
 
 	let repl = getReplBaseEff()
 	let replmult = Decimal.max(repl.log(2), 1).pow(exp)
-	if (hasTimeStudy(21) && !tmp.ngC) replmult = replmult.plus(repl.pow(0.032))
+	if (hasTS(21) && !tmp.ngC) replmult = replmult.plus(repl.pow(0.032))
 
-	if (hasTimeStudy(102)) {
+	if (hasTS(102)) {
 		let rg = getFullEffRGs()
 		let base = new Decimal(replmult)
 
@@ -138,7 +138,7 @@ function upgradeReplicantiInterval() {
 	player.infinityPoints = player.infinityPoints.minus(player.replicanti.intervalCost)
 
 	player.replicanti.interval *= 0.9
-	if (!isIntervalAffordable()) player.replicanti.interval = (hasTimeStudy(22) || player.boughtDims ? 1 : 50)
+	if (!isIntervalAffordable()) player.replicanti.interval = (hasTS(22) || player.boughtDims ? 1 : 50)
 
 	if (player.replicanti.interval < 1) {
 		let x = 1 / player.replicanti.interval
@@ -152,7 +152,7 @@ function upgradeReplicantiInterval() {
 
 function isIntervalAffordable() {
 	if (hasMTS(282)) return true
-	return player.replicanti.interval > (hasTimeStudy(22) || player.boughtDims ? 1 : 50)
+	return player.replicanti.interval > (hasTS(22) || player.boughtDims ? 1 : 50)
 }
 
 function getRGCost(offset = 0, costChange) {
@@ -177,7 +177,7 @@ function getRGCost(offset = 0, costChange) {
 		ret = ret.times(Decimal.pow(10, increase))
 	}
 
-	if (hasTimeStudy(233) && !costChange) ret = ret.dividedBy(tsMults[233]())
+	if (hasTS(233) && !costChange) ret = ret.dividedBy(tsMults[233]())
 
 	return ret
 }
@@ -214,14 +214,14 @@ function canGetReplicatedGalaxy() {
 }
 
 function canAutoReplicatedGalaxy() {
-	return (hasAch("r136") && tmp.ngp3_boost && (tmp.bgMode || Decimal.div(1e3, getTickspeed()).log10() >= tmp.dtMode ? 8e6 : tmp.exMode ? 4e6 : 2e6)) || !hasTimeStudy(131) || tmp.ngC
+	return (hasAch("r135") && tmp.ngp3_boost) || !hasTS(131) || tmp.ngC
 }
 
 function getMaxRG() {
 	if (QCs.in(1)) return 0
 
 	let ret = player.replicanti.gal
-	if (hasTimeStudy(131) && !hasMTS(304)) ret += Math.floor(ret * 0.5)
+	if (hasTS(131)) ret += Math.floor(ret * 0.5)
 	return ret
 }
 
@@ -237,8 +237,8 @@ function autoBuyRG() {
 var extraReplBase = 0
 function updateExtraReplBase() {
 	extraReplBase = 0
-	if (hasTimeStudy(225)) extraReplBase += tsMults[225]()
-	if (hasTimeStudy(226)) extraReplBase += tsMults[226]()
+	if (hasTS(225)) extraReplBase += tsMults[225]()
+	if (hasTS(226)) extraReplBase += tsMults[226]()
 }
 
 var extraReplMulti = 1
@@ -307,10 +307,10 @@ function getReplicantiIntervalMult() {
 	let interval = 1
 	if (tmp.ngC) interval /= 20
 
-	if (hasTimeStudy(62)) interval /= tsMults[62]()
-	if (hasTimeStudy(213)) interval /= tsMults[213]()
+	if (hasTS(62)) interval /= tsMults[62]()
+	if (hasTS(213)) interval /= tsMults[213]()
 
-	if (player.replicanti.amount.gt(Number.MAX_VALUE) || hasTimeStudy(133)) interval *= 10
+	if (player.replicanti.amount.gt(Number.MAX_VALUE) || hasTS(133)) interval *= 10
 	if (player.replicanti.amount.lt(Number.MAX_VALUE) && hasAch("r134")) interval /= 2
 
 	interval = new Decimal(interval)
@@ -408,9 +408,11 @@ function updateEC14BaseReward() {
 
 		data.baseInt = div
 		data.interval = div
+
 		if (pow > 0.75) data.acc = -Math.log2(1 - pow) / 4 + 1.5
 		else data.acc = 1 / Math.sqrt(1 - pow)
 		data.acc /= 3
+
 		data.ooms = softcap(div, "ec14").max(1).log10() * data.acc + 1
 	} else {
 		data.baseInt = new Decimal(1)

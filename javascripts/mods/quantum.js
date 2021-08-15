@@ -355,8 +355,6 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		player.eternityBuyer.tpUpgraded = false
 		player.eternityBuyer.slowStopped = false
 		qu_save.notrelative = true
-		updateMasteryStudyCosts()
-		updateMasteryStudyButtons()
 	} // bounds if tmp.ngp3
 	if (qMs.tmp.amt < 1) {
 		getEl("infmultbuyer").textContent = "Autobuy IP mult: OFF"

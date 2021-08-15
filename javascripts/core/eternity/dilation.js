@@ -44,7 +44,7 @@ function hasDilationStudy(x) {
 }
 
 function getDilTimeGainPerSecond() {
-	let gain = getTPBoostToDT().times(Decimal.pow(2, getDilUpgPower(1)))
+	let gain = player.dilation.tachyonParticles.times(Decimal.pow(2, getDilUpgPower(1)))
 
 	//Boosts
 	gain = gain.times(getEternityBoostToDT()) //Eternities -> DT (e25 DT upgrade)
@@ -58,7 +58,7 @@ function getDilTimeGainPerSecond() {
 	if (tmp.ngp3) {
 		if (hasAch("r138")) gain = gain.times(tmp.ngp3_exp ? 3 : 2)
 		if (hasAch("ngpp13")) gain = gain.times(2)
-		if (hasAch("ng3p11")) gain = gain.times(Math.min(Math.max(Math.log10(player.eternityPoints.max(1).log10()), 1) / 2, 2.5))
+		if (hasAch("ng3p11")) gain = gain.times(Math.min(Math.max(Math.log10(player.eternityPoints.max(1).log10()) / 2, 1) / 2, 2.5))
 		if (enB.active("pos", 2)) gain = gain.times(enB_tmp.pos2.mult)
 		if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 	}
@@ -81,13 +81,6 @@ function getDilTimeGainPerSecond() {
 	//Light Speed
 	gain = gain.times(ls.mult("dil"))
 	return gain
-}
-
-function getTPBoostToDT() {
-	let exp = 1
-	//if (pH.has("ghostify") && player.ghostify && player.ghostify.ghostlyPhotons.unl) exp *= tmp.le[0]
-
-	return player.dilation.tachyonParticles.pow(exp)
 }
 
 function hasDilationUpg(x) {

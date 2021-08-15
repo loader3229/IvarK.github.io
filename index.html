@@ -1559,7 +1559,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/13/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/14/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -4190,12 +4190,12 @@
 			<button class="storebtn" id="replicantiunlock" onclick="unlockReplicantis()" style="width:200px; height: 80px">Unlock Replicantis<br>Cost: 1e140 IP</button>
 			<div id="replicantidiv" style="display: none; width: 1000px">
 				<div id="eterc8repl" style="display: none;"></div>
-				<p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti, translated to <span id="replicantimult" style="font-size:23px; color: black">0</span>x <span id="replDesc"></span></p>
-				<span id="softcap_rep_disp"></span>
-				<p id="qc5_div" class="font-size: 8px">
-					During this quantum, Replicantis also produced <span id="qc5_eng" style="font-size: 16px">0</span> energy<sup id="qc5_eng_exp">1</sup> in total<span id="qc5_eng_mult" style="font-size: 12px"></span>,<br>
+				<p id="qc5_div" style="font-size: 9px">
+					During this quantum, Replicantis also produced <span id="qc5_eng" style="font-size: 15px">0</span> energy<sup id="qc5_eng_exp">1</sup> in total<span id="qc5_eng_mult" style="font-size: 12px"></span>,
 					which translated to +<span id="qc5_eff_glu" style="font-size: 12px">0</span> extra quantum energy and +<span id="qc5_eff_pos" style="font-size: 12px">0</span> positronic charge.
 				</p>
+				<p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti, which is translated to <span id="replicantimult" style="font-size:23px; color: black">0</span>x <span id="replDesc"></span>.</p>
+				<span id="replicantieff"></span> <span id="softcap_rep_disp"></span>
 				<br>
 				<button class="storebtn" id="replicantichance" onclick="upgradeReplicantiChance()" style="width:180px; height: 50px; font-size: 10px">Replicate chance: 1%<br>+1% Costs: 1e6969 IP</button>
 				<button class="storebtn" id="replicantiinterval" onclick="upgradeReplicantiInterval()" style="width:180px; height: 50px; font-size: 10px">Interval: 1000ms<br>-> 900 Costs: 1e6969 IP</button>
@@ -4554,7 +4554,7 @@
 					<br>
 					<span id="enB_glu4_type"></span>
 					<br><br>
-					Meta-antimatter boosts dilated time by ^<span id="enB_glu4_eff" style="font-size:24px"></span>. (from ^0.0045)
+					Meta-antimatter boosts dilated time by ^<span id="enB_glu4_eff" style="font-size:24px"></span>. (from ^0.003)
 				</td>
 				<td id="enB_glu5">
 					<b id="enB_glu5_name" style="font-size: 25px"></b>
@@ -5840,10 +5840,17 @@
 			</div>
 		</p>
 	</div>
-	<div class="popup optionmenu" id="autoPresets">
+	<div class="popup optionmenu" id="autoPresets" style="width: 480px">
 		<button class="closebtn storebtn" onclick="closeToolTip()">&times;</button>
-		<button class="storebtn" id="autoPresetToggle" onclick="toggleAutoPreset()">Auto: ON</button>
-		<button class="storebtn" onclick="refreshAutoPreset(true)">Update</button>
+		<span>
+			<p style="font-size: 12px">
+				Note: Auto-Presets get automatically assigned on buying a preset!<br>
+				Note 2: Respeccing turns the Auto-Presets off.
+			</p>
+			<button class="storebtn" id="autoPresetToggle" onclick="toggleAutoPreset()">Auto: ON</button>
+			<button class="storebtn" onclick="refreshAutoPreset(true)">Assign</button>
+			<p  id="autoPresetTarget" style="font-size: 12px">Assigning updates the preset you are choosing.</p>
+		</span>
 		<p>
 			<b>Eternity</b> (Normal)<br>
 			<input id="autoPresetEternity" style="width: 170px" onchange="changeAutoPreset('eternity', 'autoPresetEternity')"></input>
