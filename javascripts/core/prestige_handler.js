@@ -31,10 +31,10 @@ var pH = {
 				getQuarkGain().gte(1)
 		},
 		ghostify() {
-			return qu_save.bigRip.active ? this.quantum() : false //hasNU(16) || pl.on()
+			return false
 		},
 		planck() {
-			return pl.on() ? pl.canTier() : pl.can()
+			return false
 		}
 	},
 	modReqs: {
@@ -60,7 +60,7 @@ var pH = {
 			return tmp.ngp3
 		},
 		planck() {
-			return false //tmp.ngp3
+			return false
 		}
 	},
 	resetFuncs: {
@@ -95,7 +95,7 @@ var pH = {
 			ghostify()
 		},
 		planck() {
-			pl.reset()
+			alert("Coming soon...")
 		}
 	},
 	tabLocs: {
@@ -154,7 +154,7 @@ var pH = {
 			return player.ghostify.times >= 1
 		},
 		planck() {
-			return pl.did()
+			return false
 		}
 	},
 	did(id) {
@@ -260,7 +260,7 @@ var pH = {
 		if (player.dilation.active) getEl("eternitybtn").className = "presBtn presPos" + (tmp_pH.eternity.shown ? tmp_pH.eternity.order : tmp_pH.shown + 1) + " dilationbtn"
 
 		//Quantum (after Neutrino Upgrade 16)
-		let bigRipAndQuantum = !hasNU(16) && !pl.on()
+		let bigRipAndQuantum = !hasNU(16)
 		if (!bigRipAndQuantum && !QCs.inAny()) getEl("quantumbtn").style.display = "none"
 
 		//Big Rip
@@ -279,9 +279,8 @@ var pH = {
 		}
 	},
 	updateActive() {
-		tmp.eterUnl = pH.did("eternity") && !pl.on() //&& !QCs.inModifier("tb")
-
-		tmp.quUnl = tmp.ngp3 && pH.did("quantum") && !pl.on()
+		tmp.eterUnl = pH.did("eternity")
+		tmp.quUnl = tmp.ngp3 && pH.did("quantum")
 		tmp.quActive = tmp.quUnl
 	},
 	onPrestige(layer) {

@@ -248,7 +248,11 @@ amNewsArray = [
 ["That's how NG+++ works!", true, "am34"],
 ["var add ad + gamebreakingcontent ngplusthree", true, "am35"],
 ["BREAKING NEWS: wAFFLE found a game-breaking bug that I have to release a new update to beat him!", "player.masterystudies", "am36"],
-["", true, "am37"],
+[function() {
+	//coded by Naruyoko
+	var m = ""
+	for (var i = 0; i < 256; i++) m += String.fromCharCode(Math.random() * 95 + 32);
+}, true, "am37"],
 ["Because Article 13 was passed, this mod will be blocked in European Union soon.", true, "am38"],
 ["Quantum is just Eternity but with quarks.", "pH.did('quantum')", "am39"],
 ["Don't use antimatter anti-aging cream. You'll find yourself wondering how you got to be 873 eternities old.", "(player.eternities > 872 || pH.did('quantum'))", "am40"],
@@ -408,8 +412,8 @@ amNewsArray = [
 ["Are we in the Gravity Well or outside of it?", "GDs.unlocked()", "am195"],
 ["'The Power of Relativity'", "GDs.unlocked()", "am196"],
 ["Gravity Well is basically the time part of dilation, but better.", "GDs.unlocked()", "am197"],
-["Can you please stop having too many types of Dimensions?", "GDs.unlocked()", "am198"],
-["As you go deeper in scale, we don't see you anymore.", "pl.on()", "am199"],
+["Can you please stop having too many types of Dimensions?", "tmp.quUnl", "am198"],
+["As you go deeper in scale, we don't see you anymore.", "pH.did('quantum')", "am199"],
 ["You have played a lot of time in Bosonic Lab. Congratulations!", "hasAch('ng3p81') && tmp.bl.ticks.log10() >= 100", "am200"],
 ["Scientists discovered a brand new universe which is made of Replicantis!", "hasAch('ng3p113')", "am201"],
 ["Matter Decay goes brrr!", "true", "am202"],
@@ -462,7 +466,14 @@ amNewsArray = [
 ["That awkward moment when you play antimatter dimensions on a computer made of matter", true, "am249"],
 ["250th Aarex's Modifications newsticker. That's not even close to have infinite storage. Silly!", true, "am250"],
 ["Do you know Omnisity? It is an actual layer for NG+3 contributors, where golden and diamond intrastructures side together in a island.", true, "am251"],
-/*NEXT ID: am252*/
+["Lightning loves NG+3R! He even recommend World Restoration players with it! Have fun!", true, "am252"],
+["The year is 2022. Aarex has released Hadronize. But due to a lot of uprising competition, NG+3 became unfairly popular. NG+3 will be likely to be at least dead. He has finally moved on.", true, "am253"],
+["antimatter dimensions NG+3R! Now with 100% more balancing! + less boosts that become useless. + hyperexponential upgrades.", "tmp.ngp3", "am254"],
+[() => "This number changes dependent on the notation you are using: " + shorten(player.break ? Decimal.pow(10, 1.23413e251) : 1.23413e251) + " (can you actually change it?)", true, "am255"],
+["According to the lore, we can confirm that Omnisity is going to be the last layer.", "tmp.ngp3", "am256"],
+["NG+3R Starter Pack: Creative mechanics, ideal dump, focuses on balancing a lot, a bit of development every day.", "tmp.ngp3", "am257"],
+["I bet you can't see the reference: An astronaut wearing the red suit.", true, "am258"],
+/*NEXT ID: am256*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
@@ -485,9 +496,10 @@ function scrollNextMessage() {
 			nextMsgCond = false
 			while (!nextMsgCond) {
 				// randomly choose from either normal news or aarex news
-				var array = (hasAch("r22") && Math.random() > 0.5) ? amNewsArray : newsArray;
-				nextMsgIndex = Math.min(Math.floor(Math.random() * array.length), array.length);
-				nextMsgCond = eval(array[nextMsgIndex][1]);
+				var array = amNewsArray //(hasAch("r22") && Math.random() > 0.5) ? amNewsArray : newsArray;
+				nextMsgIndex = amNewsArray.length - 1 //Math.min(Math.floor(Math.random() * array.length), array.length);
+				var func = array[nextMsgIndex][1]
+				nextMsgCond = typeof(func) == "function" ? func() : eval(func);
 				nextMsgId = array[nextMsgIndex][2];
 			}
         } catch(e) {
@@ -498,11 +510,7 @@ function scrollNextMessage() {
 
         //set the text
         var m = array[nextMsgIndex][0];
-        if (nextMsgId == "am37") {
-			//coded by Naruyoko
-			var m = ""
-			for (var i = 0; i < 256; i++) m += String.fromCharCode(Math.random() * 95 + 32);
-        }
+		if (typeof(m) == "function") m = m()
         s.textContent = m
         
         //get the parent width so we can start the message beyond it

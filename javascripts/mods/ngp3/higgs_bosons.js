@@ -102,7 +102,7 @@ function bosonicLabReset() {
 
 function higgsReset(auto) {
 	let oldHiggs = player.ghostify.hb.higgs
-	let resetNothing = pl.on() && hasAch("ng3p112")
+	let resetNothing = hasAch("ng3p112")
 	if (!player.ghostify.bl.am.gte(getHiggsRequirement())) return
 	if (!auto && !resetNothing && !aarMod.higgsNoConf && !confirm("You will exchange all your Bosonic Lab stuff for Higgs Bosons. Everything that Light Empowerments resets initally will be reset. Are you ready to proceed?")) return
 	addHiggs(getHiggsGain())

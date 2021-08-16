@@ -39,9 +39,6 @@ function updateTmp(init) {
 	tmp.nrm = 1
 	if (hasTimeStudy(101)) tmp.nrm = (tmp.rmPseudo || getReplBaseEff()).max(1)
 
-	tmp.rg4 = false
-	if (tmp.ngpX >= 5) pl.updateTmp()
-
 	updateGhostifyTempStuff()
 	updateNGP3TempStuff(init)
 
@@ -208,12 +205,8 @@ function updateTS431ExtraGalTemp() {
 
 function updateMatterSpeed(){
 	//mv: Matter speed
-	let exp = 1
-	if (GDs.boostUnl('mf')) exp *= GDs.tmp.mf * fNu.radioactivityToMatter() / fNu.tmp.nerfOmega
-
 	tmp.mv = 1.03 + player.resets / 200 + player.galaxies / 100
 	if (inNGM(4)) tmp.mv += player.money.log10() / 1000
-	if (exp != 1) tmp.mv = Decimal.pow(tmp.mv, exp)
 }
 
 function updatePPTITemp() {

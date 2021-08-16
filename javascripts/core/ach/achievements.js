@@ -231,15 +231,6 @@ const allAchievements = {
         ng3p107 : "Brutally Challenging",  // NO REWARD
         ng3p108 : "Auto-Ghost Speedrunning",  // NO REWARD
 
-        ng3p111 : "Quantum Scality",
-        ng3p112 : "Infinitely Massive",
-        ng3p113 : "Replicated Universes",
-        ng3p114 : "The Supervoid",
-        ng3p115 : "Truly Dilating Time",
-        ng3p116 : "Spectre Prisms",
-        ng3p117 : "Universe Immortality",
-        ng3p118 : "Chaos, Chaos, Chaos!",
-
         s11 : "The first one's always free",
         s12 : "Just in case",
         s13 : "It pays to have respect",
@@ -331,7 +322,7 @@ const allAchievementNums = Object.invert(allAchievements)
 const allAchievementRows = [
 	"r1", "ngm5p1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", 
 	"r10", "r11", "r12", "r13", "ngud1", "ngpp1", "ng3p1", "ng3p2", "ng3p3", "ng3p4",
-	"ng3p5", "ng3p6", "ng3p7", "ng3p8", "ng3p9", "ng3p10", "ng3p11"
+	"ng3p5", "ng3p6", "ng3p7", "ng3p8", "ng3p9", "ng3p10"
 ]
 const allAchievementReplacements = {
 	r35() {
@@ -387,7 +378,7 @@ function checkAchievement(id) {
 	if (id.split("ngm5p")[1]) return inNGM(5)
 	if (id.split("ngud")[1]) return player.exdilation != undefined
 	if (id.split("ngpp")[1]) return player.meta != undefined
-	if (ngp3) return tmp.ngpX >= (ngp3 >= 110 ? 5 : 3)
+	if (ngp3) return tmp.ngpX >= 3
 
 	//Vanilla check
 	let r = parseInt(id.split("r")[1])
@@ -402,7 +393,7 @@ function checkAchievementRow(id) {
 	if (id.split("ngm5p")[1]) return inNGM(5)
 	if (id.split("ngud")[1]) return player.exdilation != undefined
 	if (id.split("ngpp")[1]) return player.meta != undefined
-	if (ngp3) return tmp.ngpX >= (ngp3 >= 11 ? 5 : 3)
+	if (ngp3) return tmp.ngpX >= 3
 
 	//Vanilla check
 	let r = parseInt(id.split("r")[1])

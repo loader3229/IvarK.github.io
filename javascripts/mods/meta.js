@@ -83,11 +83,12 @@ function getMetaBoostPower() {
 }
 
 function getMDDescription(tier) {
-	if (tier == Math.min(8, player.meta.resets + 4)) return getFullExpansion(player.meta[tier].bought) + ' (' + dimMetaBought(tier) + ')';
+	var boughtEnd = player.meta.antimatter.e >= 1e3 ? "" : ' (' + dimMetaBought(tier) + ')'
+	if (tier == Math.min(8, player.meta.resets + 4)) return getFullExpansion(player.meta[tier].bought) + boughtEnd;
 	else {
 		let a = shortenDimensions(player.meta[tier].amount)
-		if (tmp.ngp3 && player.meta.bestOverGhostifies.log10() > 1e4) return a
-		let b = ' (' + dimMetaBought(tier) + ')  (+' + formatValue(player.options.notation, getMDRateOfChange(tier), 2, 2) + dimDescEnd
+		if (player.meta.antimatter.e >= 1e3) return a
+		let b = boughtEnd + ' (+' + formatValue(player.options.notation, getMDRateOfChange(tier), 2, 2) + dimDescEnd
 		return a+b
 	}
 }
@@ -371,6 +372,7 @@ function updateMetaDimensions () {
 	getEl("metaAccelerator").innerHTML = enB.active("pos", 2) ?
 		"Meta Accelerator: " + shorten(enB_tmp.pos2.mult) + "x to MA, DT, and replicate interval" +
 		(enB_tmp.pos2.igal ? ", ^" + shorten(enB_tmp.pos2.igal) + " to MA effect" : "") +
+		(enB_tmp.pos2.igal_softcap && shiftDown ? ", ^" + shorten(enB_tmp.pos2.igal_softcap) + " to MA softcap start" : "") +
 		(shiftDown ? "<br>(Base: " + shorten(enB_tmp.pos2.base) + ", raised by ^" + shorten(enB_tmp.pos2.exp) + ", exp speed: +" + enB_tmp.pos2.speed.toFixed(3) + "/MDB" + ", accelerator: +^" + enB_tmp.pos2.acc.toFixed(3) + " speed/MDB" + ", slowdown start: " + shorten(enB_tmp.pos2.slowdown) + " MDBs)" : "")
 	: ""
 }

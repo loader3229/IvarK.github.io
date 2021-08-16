@@ -148,11 +148,6 @@ function getDistantScalingStart() {
 	if (hasTimeStudy(223)) n += 7
 	if (hasTimeStudy(224)) n += tsMults[224]()
 	if (hasDilationUpg("ngmm11")) n += 25
-	if (tmp.ngp3) {
-		if (pl.on()) n -= fNu.tmp.nerfMu
-	}
-
-	if (tmp.grd.speed == 1) return Math.max(n, 0)
 	return n
 }
 

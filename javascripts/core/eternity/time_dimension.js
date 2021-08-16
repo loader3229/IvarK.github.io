@@ -165,7 +165,7 @@ function getTimeDimensionDescription(tier) {
 	if (tierAdd <= tierMax) toGain = getTimeDimensionProduction(tierAdd).div(10)
 	if (tmp.inEC12) toGain = toGain.div(getEC12Mult())
 
-	return (!toGain.gt(0) ? getFullExpansion(bgt) : shortenND(amt)) + (toGain.gt(0) && player.timeShards.e <= 1e9 ? getDimensionRateOfChangeDisplay(amt, toGain) : "")
+	return (!toGain.gt(0) ? getFullExpansion(bgt) : shortenND(amt)) + (player.timeShards.e <= 1e6 ? getDimensionRateOfChangeDisplay(amt, toGain) : "")
 }
 
 function updateTimeDimensions() {

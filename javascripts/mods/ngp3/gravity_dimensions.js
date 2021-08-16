@@ -94,8 +94,8 @@ let GDs = {
 
 		getEl("gvCharge").textContent = (GDs.tmp.gc * 100).toFixed(2) + "%"
 		getEl("gvSupercharge").textContent = (GDs.tmp.gsc * 100).toFixed(2) + "%"
-		
-		getEl("plReq").textContent = pl.reqText()
+
+		getEl("plReq").textContent = "(not implemented)"
 	},
 	updateDisplayOnTick() {
 		getEl("gdWatt").textContent = shorten(tmp.bl.speed)
@@ -268,7 +268,6 @@ let GDs = {
 	charge(ge, id) {
 		let mult = 1
 		if (GDs.save.gc == id) mult += GDs.tmp.gc
-		if (pl.on()) mult += GDs.tmp.gsc
 
 		return ge * mult
 	},
@@ -278,7 +277,7 @@ let GDs = {
 		return x
 	},
 	superchargeMult() {
-		return tmp.ngpX >= 5 ? (pl.save.layer - 1) / 5 : 0
+		return 0
 	},
 	chargeBoost(id) {
 		if (GDs.save.gc == id) return
@@ -309,11 +308,11 @@ let GDs = {
 		getEl("gvUncharge").className = !c ? "chosenbtn" : "storebtn gv"
 	},
 	boosts: {
-		list: ["rep", "nf", "tod", "gph", "bl", "mf"],
+		list: ["rep", "nf", "tod", "gph", "bl"],
 		rep: {
 			desc: "x{{x}} OoMs to replicate interval increase",
 			unl() {
-				return hasBosonicUpg(63) || !pl.on()
+				return true
 			},
 			eff(x) {
 				return Math.log10(x + 1) + 1
@@ -323,7 +322,7 @@ let GDs = {
 		nf: {
 			desc: "^{{x}} to Nanospeed",
 			unl() {
-				return !pl.on()
+				return true
 			},
 			eff(x) {
 				return x + 1
@@ -333,7 +332,7 @@ let GDs = {
 		tod: {
 			desc: "^{{x}} to Branch speed",
 			unl() {
-				return !pl.on()
+				return true
 			},
 			eff(x) {
 				let e = Math.pow(x / 2 + 1, 1/3)
@@ -355,16 +354,6 @@ let GDs = {
 				x = Math.sqrt(x / 3 + 1)
 				if (bu62.active("tod")) x += tmp.blu[62] || 0
 				return x
-			},
-			rdExp: 1
-		},
-		mf: {
-			desc: "^{{x}} to Matterius Foam speed",
-			unl() {
-				return pl.on()
-			},
-			eff(x) {
-				return x + 1
 			},
 			rdExp: 1
 		},

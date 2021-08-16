@@ -1559,7 +1559,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/14/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/15/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -2472,32 +2472,6 @@
 							</td>
 							<td>
 								<div id="Auto-Ghost Speedrunning" class="achievement achievementlocked" style="background-image: url(images/190.png)" ach-tooltip="Reach e??? in the first 10 seconds of Ghostify."></div>
-							</td>
-						</tr>
-						<tr id="achRowng3p11">
-							<td>
-								<div id="Quantum Scality" class="achievement achievementlocked" style="background-image: url(images/191.png)" ach-tooltip="Reduce the universe to Planck Scale. Reward: Start with 9 Neutrino Boosts, 3 Light Empowerments, and 1 Higgs Boson."></div>
-							</td>
-							<td>
-								<div id="Infinitely Massive" class="achievement achievementlocked" style="background-image: url(images/192.png)" ach-tooltip="Get 308 Higgs Bosons. Reward: Passively generate Ghost Particles and Ghostifies, no matter what, and Higgs resets nothing in Planck runs."></div>
-							</td>
-							<td>
-								<div id="Replicated Universes" class="achievement achievementlocked" style="background-image: url(images/193.png)" ach-tooltip="Get e10,000,000,000 replicantis. Reward: Replicantis boost Bosonic Antimatter at an extremely reduced rate."></div>
-							</td>
-							<td>
-								<div id="The Supervoid" class="achievement achievementlocked" style="background-image: url(images/194.png)" ach-tooltip="Get a Intergalactic multiplier of e???. Reward: Intergalactic is 30% stronger, but after Bosonic Upgrade 22."></div>
-							</td>
-							<td>
-								<div id="Truly Dilating Time" class="achievement achievementlocked" style="background-image: url(images/195.png)" ach-tooltip="Reach a supercharge of ???%. Reward: Start with 1e25 Ghost Particles and Neutrino Upgrade 6, and add +25% to charge."></div>
-							</td>
-							<td>
-								<div id="Spectre Prisms" class="achievement achievementlocked" style="background-image: url(images/196.png)" ach-tooltip="Reach ??? Light Empowerments. Reward: Divide the Light Empowerment requirement by 2 prior to cost subtraction."></div>
-							</td>
-							<td>
-								<div id="Universe Immortality" class="achievement achievementlocked" style="background-image: url(images/197.png)" ach-tooltip="Get e??? antimatter without Big Ripping after any Planck run."></div>
-							</td>
-							<td>
-								<div id="Chaos, Chaos, Chaos!" class="achievement achievementlocked" style="background-image: url(images/198.png)" ach-tooltip="???"></div>
 							</td>
 						</tr>
 				</table>
@@ -5536,97 +5510,6 @@
 			<br><br>
 			<div class="footer bottom"></div>
 		</div>
-		<div class="tab" id="plTab">
-			<br>
-			<button id="plTierUp" class="gluonupgrade planckbtn" onclick="pl.tier()" style="width: 300px; height: 120px">
-				<b style="font-size: 15px">Tier up the Planck Scale!</b>
-				<br>
-				By compressing the universe, feel the power of supercharging.
-				<br><br>
-				(Requires <span id="plTierReq"></span> antimatter in the Planck Scale)
-			</button>
-			<button id="plExit" onclick="pl.exit()" style="width: 300px; height: 120px">
-				<b style="font-size: 15px">Scale yourself up to Quantum again.</b>
-				<br>
-				"The anomaly of Matteria Foam is already discovered, but only in the Planck Scale..."
-			</button>
-			<br><br>
-			<table class="table" align="center" style="margin: auto">
-				<tr>
-					<td><button class="secondarytabbtn" onclick="pl.showTab('null')">Foam Nullify</button></td>
-					<td id="plBtn_entangle"><button class="secondarytabbtn" onclick="pl.showTab('entangle')">Entanglement</button></td>
-					<td id="plBtn_higgs"><button class="secondarytabbtn" onclick="pl.showTab('higgs')">Higgs Field</button></td>
-					<td id="plBtn_dark"><button class="secondarytabbtn" onclick="pl.showTab('dark')">Endarkenments</button></td>
-				</tr>
-			</table>
-			<div class="pltab" id="pl_null">
-				You have <span class="pl" id="nulliFoam" style="font-size: 35px"></span> Nulli Foam.
-				<br>
-				<button class="gluonupgrade planckbtn" id="mfDecay" onclick="fNu.decay()">
-					Nullify all your Matteria Foam for x<span id="dfGain">1.00</span> Nulli Foam.
-				</button>
-				<button class="gluonupgrade planckbtn" onclick="fNu.annihilate()">
-					Annilhilate all your Nulli Foam.
-					<br>
-					(resets this mechanic)
-				</button>
-				<br><br>
-				Your Nulli Foam is composed to:
-				<table class="qTable">
-					<tr class="nulliPows">
-						<td class="omega">
-							<b id="dfAmountOmega">0.0</b> Ω<sup>-</sup> Power
-						</td>
-						<td class="mu">
-							<b id="dfAmountMu">0.0</b> M<sup>+</sup> Power
-						</td>
-						<td class="neutral">
-							<b id="dfAmountNeutral">0.0</b> N<sup>0</sup> Power
-						</td>
-					</tr>
-					<tr>
-						<td>
-							+<span class="pl" id="dfBuffOmega" style="font-size: 25px"></span> to base Bosonic Watt gain
-						</td>
-						<td>
-							<span class="pl" id="dfBuffMu" style="font-size: 25px"></span>x to Bosonic Watt gain (before Gravity Well)
-						</td>
-						<td>
-							<span class="pl" id="dfBuffNeutral" style="font-size: 25px"></span>x to Intergalactic amount
-						</td>
-					</tr>
-					<tr>
-						<td>
-							(powered up by having low Matteria Foam)
-						</td>
-						<td>
-							(powered up by having high Matteria Foam)
-						</td>
-						<td>
-							Boost the nerfs of Omega and Mu Powers by <span class="pl" id="dfBuffNeutral2" style="font-size: 25px"></span>x.
-						</td>
-					</tr>
-					<tr style="background: rgba(255, 0, 0, 0.25)">
-						<td>
-							/<span class="pl" id="dfNerfOmega" style="font-size: 25px"></span> to Matteria Foam growth
-						</td>
-						<td>
-							Distant Antimatter Galaxies starts <span class="pl" id="dfNerfMu" style="font-size: 25px"></span> earlier
-						</td>
-						<td>
-							Reduce the Photonic Flow base from 2.00x to <span class="pl" id="dfNerfNeutral" style="font-size: 25px"></span>x
-						</td>
-					</tr>
-					<tr style="background: rgba(255, 0, 0, 0.25)">
-						<td></td>
-						<td></td>
-						<td>
-							Nerf the boosts of Omega and Mu Powers by <span class="pl" id="dfNerfNeutral2" style="font-size: 25px"></span>x.
-						</td>
-					</tr>
-				</table>
-			</div>
-		</div>
 	</div>
 	<div class="popup" id="challfail">
 		<div id="failPopup">You have failed this challenge. Better luck next time. :(</div>
@@ -5948,7 +5831,6 @@
 <script type="text/javascript" src="javascripts/mods/ngp3/neutrinos.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/paired_challenges.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/positrons.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/planck.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/quantum_challenges.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/quantum_milestones.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/quarks_gluons.js"></script>

@@ -159,7 +159,7 @@ function getNCName(x) {
 }
 
 function inMatterChallenge() {
-	return inNC(12) || player.currentChallenge == "postc1" || player.currentChallenge == "postc6" || pl.on()
+	return inNC(12) || player.currentChallenge == "postc1" || player.currentChallenge == "postc6"
 }
 
 var worstChallengeTime = 1

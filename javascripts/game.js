@@ -709,7 +709,6 @@ function updateNewPlayer(mode, preset) {
 		if (modsChosen.ngpp) doNGPlusTwoNewPlayer()
 		if (modsChosen.ngpp === 2) doNGPlusThreeNewPlayer()
 		if (modsChosen.ngp === 2) doNGPlusFourPlayer()
-		if (modsChosen.ngp >= 3) convertToNGP5(true)
 
 		// NG-x
 		if (modsChosen.ngm === 1) aarMod.newGameMinusVersion = 2.2
@@ -1502,13 +1501,11 @@ function showTab(tabName, init) {
 
 function updateMoney() {
 	getEl("coinAmount").textContent = shortenMoney(player.money)
-	var matterName = pl.on() ? "Matteria Foam" : "matter"
+
 	var element2 = getEl("matter");
-	if (player.currentChallenge == "postc6") element2.textContent = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " " + matterName + "."; //TODO
-	else if (inNC(12) || player.currentChallenge == "postc1" || pl.on()) {
-		var txt = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " " + matterName + "."
-		element2.innerHTML = txt
-	}
+	if (player.currentChallenge == "postc6") element2.textContent = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " " + "matter."; //TODO
+	else if (inNC(12) || player.currentChallenge == "postc1") element2.innerHTML = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " matter."
+
 	var element3 = getEl("chall13Mult");
 	if (isADSCRunning()) {
 		var mult = getProductBoughtMult()
@@ -1854,87 +1851,82 @@ function changeSaveDesc(saveId, placement) {
 		if (diffNum == 0) msg = (msg == "NG" ? "" : msg + ", ") + "Beginner Mode (Easy)"
 		if (diffNum == 2) msg = (msg == "NG" ? "" : msg + ", ") + "Expert Mode (Normal+)"
 		if (diffNum == 3) msg = (msg == "NG" ? "" : msg + ", ") + "Death Mode 💀 (Hard)"
-		msg = (msg == "NG" ? "(<b>Vanilla</b>)<br>" : "(<b>" + msg + "</b>)<br>") + (isSaveCurrent ? "Selected" : "Played for " + timeDisplayShort(temp.totalTimePlayed)) + "<br>"
-		var originalBreak = player.break
-		var originalNotation = player.options.notation
-		var originalCommas = player.options.commas
-		if (!isSaveCurrent) {
-			player.break = temp.achievements.includes("r51")
-			player.options.notation = temp.options.notation
-			player.options.commas = temp.options.commas
-		}
+		msg = (msg == "NG" ? "(<b>Vanilla</b>)<br>" : "(<b>" + msg + "</b>)<br>") +
+			(isSaveCurrent ? "Selected" : "Played for " + timeDisplayShort(temp.totalTimePlayed)) + "<br>" +
+			"<span style='font-size: 16px'>" + shortenMoney(new Decimal(temp.totalmoney)) + " antimatter</span><br>"
+
 		var isSaveGhostified = temp.ghostify ? temp.ghostify.times > 0 : false
 		var isSaveQuantumed = temp.quantum ? temp.quantum.times > 0 : false
-		var isSavePlancked = temp.aarexModifications.ngpX >= 5
-		if (isSavePlancked) {
-			msg += "Planck Tier: " + getFullExpansion(temp.pl.layer)
-		} else if (isSaveGhostified) {
+
+		msg += "<span style='font-size: 12px'>"
+		if (isSaveGhostified) {
 			if (temp.achievements.includes("ng3p101")) {
 				var data=temp.ghostify.gds
-				msg+="Gravitons: "+shorten(new Decimal(data.gv))+", Extra Gravity Dimension Shifts / Boosts: "+getFullExpansion(data.extraGDBs || 0)
+				msg += "Gravitons: " + shorten(new Decimal(data.gv)) + ", Extra Gravity Dimension Shifts / Boosts: " + getFullExpansion(data.extraGDBs || 0)
 			} else if (temp.achievements.includes("ng3p91")) {
 				var data=temp.ghostify.hb
-				msg+="Bosonic Antimatter: "+shorten(new Decimal(temp.ghostify.bl.am))+", Higgs Bosons: "+getFullExpansion(data.higgs)
+				msg += "Bosonic Antimatter: " + shorten(new Decimal(temp.ghostify.bl.am)) + ", Higgs Bosons: " + getFullExpansion(data.higgs)
 			} else if (temp.achievements.includes("ng3p81")) {
 				var data=temp.ghostify.wzb
-				msg+="Bosonic Antimatter: "+shorten(new Decimal(temp.ghostify.bl.am))+", W+ Bosons: "+shortenDimensions(new Decimal(data.wpb))+", W- Bosons: "+shortenDimensions(new Decimal(data.wnb))+", Z Bosons: "+shortenDimensions(new Decimal(data.zb))
+				msg += "Bosonic Antimatter: " + shorten(new Decimal(temp.ghostify.bl.am)) + ", W + Bosons: " + shortenDimensions(new Decimal(data.wpb)) + ", W- Bosons: " + shortenDimensions(new Decimal(data.wnb)) + ", Z Bosons: " + shortenDimensions(new Decimal(data.zb))
 			} else if (temp.achievements.includes("ng3p71")) {
 				var data=temp.ghostify.ghostlyPhotons
 				var lights=0
-				for (var l=0;l<8;l++) lights+=data.lights[l]
-				msg+="Ghostly Photons: "+shortenDimensions(new Decimal(data.amount))+", Dark Matter: "+shortenDimensions(new Decimal(data.darkMatter))+", Ghostly Rays: "+shortenDimensions(new Decimal(data.ghostlyRays))+", Lights: "+getFullExpansion(lights)+", Light Empowerments: "+getFullExpansion(data.enpowerments)
-			} else msg+="Ghost Particles: "+shortenDimensions(new Decimal(temp.ghostify.ghostParticles))+", Neutrinos: "+shortenDimensions(Decimal.add(temp.ghostify.neutrinos.electron, temp.ghostify.neutrinos.mu).add(temp.ghostify.neutrinos.tau).round())
+				for (var l=0;l<8;l ++ ) lights += data.lights[l]
+				msg += "Ghostly Photons: " + shortenDimensions(new Decimal(data.amount)) + ", Dark Matter: " + shortenDimensions(new Decimal(data.darkMatter)) + ", Ghostly Rays: " + shortenDimensions(new Decimal(data.ghostlyRays)) + ", Lights: " + getFullExpansion(lights) + ", Light Empowerments: " + getFullExpansion(data.enpowerments)
+			} else msg += "Ghost Particles: " + shortenDimensions(new Decimal(temp.ghostify.ghostParticles)) + ", Neutrinos: " + shortenDimensions(Decimal.add(temp.ghostify.neutrinos.electron, temp.ghostify.neutrinos.mu).add(temp.ghostify.neutrinos.tau).round())
 		} else if (isSaveQuantumed) {
-			if (!temp.masterystudies) msg+="Endgame of NG++"
-			else if (temp.masterystudies.includes('d14')) msg+="Total antimatter in Big Rips: "+shortenDimensions(new Decimal(temp.quantum.bigRip.totalAntimatter))+", Space Shards: "+shortenDimensions(new Decimal(temp.quantum.bigRip.spaceShards))+(temp.achievements.includes("ng3p55")?", Eternal Matter: "+shortenDimensions(new Decimal(temp.quantum.breakEternity.eternalMatter)):"")
+			if (!temp.masterystudies) msg += "Endgame of NG++"
 			else {
 				var quantum = temp.quantum
 				var qk = Decimal.add(quantum.quarks,quantum.usedQuarks.r).add(quantum.usedQuarks.g).add(quantum.usedQuarks.b)
 				if (quantum.gluons.rg) qk = qk.add(quantum.gluons.rg,quantum.gluons.gb).add(quantum.gluons.br)
-				if (quantum.qc && quantum.qc.comps >= 1) msg+=", Quantum Energy: "+shorten(quantum.quarkEnergy)+", Replicated Compressors: "+getFullExpansion(quantum.qc.qc1.boosts)
-				else msg+=", Quantum Worth: "+shortenDimensions(qk)+", Quantum Energy: "+shorten(quantum.quarkEnergy)
+				if (quantum.qc && quantum.qc.comps >= 1) msg += "Quantum Energy: " + shorten(quantum.bestEnergy || quantum.quarkEnergy) + ", Replicated Compressors: " + getFullExpansion(quantum.qc.qc1.best || quantum.qc.qc1.boosts)
+				else msg += ", Quantum Worth: " + shortenDimensions(qk) + "Quantum Energy: " + shorten(quantum.bestEnergy || quantum.quarkEnergy)
 
-				if (temp.masterystudies.includes('d13')) msg+=", Quark Spins: "+shortenDimensions(Decimal.add(quantum.tod.r.spin, quantum.tod.g.spin).add(quantum.tod.b.spin))
-				else if (temp.masterystudies.includes('d12')) msg+=", Preon charge: "+shortenDimensions(new Decimal(quantum.nanofield.charge))+", Preon energy: "+shortenDimensions(new Decimal(quantum.nanofield.energy))+", Preon anti-energy: "+shortenDimensions(new Decimal(quantum.nanofield.antienergy))+", Nanofield Rewards: "+getFullExpansion(quantum.nanofield.rewards)
-				else if (temp.masterystudies.includes('d10')) msg+=", Replicants: "+shortenDimensions(getTotalReplicants(temp))+", Worker replicants: "+shortenDimensions(getTotalWorkers(temp))
-				else if (quantum.qc && quantum.qc.comps >= 7) msg+=", PC level: "+(quantum.pc?getFullExpansion(quantum.pc.lvl):"This has been rewritten while you are away!")
-				else if (temp.masterystudies.includes('d8')) msg+=", Challenge completions: "+(quantum.qc?getFullExpansion(quantum.qc.comps):"This has been rewritten while you are away!")
-				else if (temp.masterystudies.includes('d7')) msg+=", Positronic Charge: "+(quantum.pos?getFullExpansion(quantum.pos.eng):"This has been rewritten while you are away!")
-				else msg+=", Best quantum: "+timeDisplayShort(quantum.best)
+				if (quantum.qc && quantum.qc.comps >= 7) msg += ", Paired Challenges: " + (quantum.pc ? getFullExpansion(quantum.pc.best || 0) : "This has been rewritten while you are away!")
+				else if (temp.masterystudies.includes('d8')) msg += ", Quantum Challenges: " + (quantum.qc ? getFullExpansion(quantum.qc.comps) : "This has been rewritten while you are away!")
+				else if (temp.masterystudies.includes('d7')) msg += ", Positronic Charge: " + (quantum.pos ? getFullExpansion(quantum.pos.eng) : "This has been rewritten while you are away!")
+				else msg += ", Best quantum: " + timeDisplayShort(quantum.best)
 			}
-		} else if (temp.exdilation==undefined?false:temp.blackhole.unl) {
-			var tempstart="Eternity points: "+shortenDimensions(new Decimal(temp.eternityPoints))
-			var tempend=", Black hole power: "+shortenMoney(new Decimal(temp.blackhole.power))
-			if (temp.exdilation.times > 0) msg+=tempstart+tempend+", Ex-dilation: "+shortenDimensions(new Decimal(temp.exdilation.unspent))
-			else msg+=tempstart+", Dilated time: "+shortenMoney(new Decimal(temp.dilation.dilatedTime))+", Banked infinities: "+getFullExpansion(temp.infinitiedBank)+", Replicanti: "+shortenMoney(new Decimal(temp.replicanti.amount))+tempend
-		} else if (temp.dilation?temp.dilation.studies.includes(1):false) {
-			var temp2="Tachyon particles: "+shortenMoney(new Decimal(temp.dilation.totalTachyonParticles))+", Dilated time: "+shortenMoney(new Decimal(temp.dilation.dilatedTime))
-			if (temp.dilation.studies.includes(6)) temp2+=", Best meta-antimatter: "+shortenMoney(new Decimal(temp.meta.bestAntimatter))+", Meta-dimension shifts/boosts: "+temp.meta.resets
-			else if (!temp.dilation.studies.includes(5)) temp2="Time Theorems: "+shortenMoney(getTotalTT(temp))+", "+temp2
-			else if (!temp.dilation.upgrades.includes(10)) temp2="Eternity points: "+shortenDimensions(temp.eternityPoints)+", "+temp2
-			msg+=temp2
-		} else {
-			var totalChallengeCompletions=(temp.aarexModifications.newGameMinusVersion?-6:0)
-			for (ec=1;ec<13;ec++) totalChallengeCompletions+=(temp.eternityChalls['eterc'+ec]?temp.eternityChalls['eterc'+ec]:0)
-			if (totalChallengeCompletions>0) {
-				msg+="Time Theorems: "+getFullExpansion(getTotalTT(temp))+", Challenge completions: "+totalChallengeCompletions
-			} else if (temp.eternities>(temp.aarexModifications.newGameMinusVersion?-20:0)) msg+="Eternity points: "+shortenDimensions(new Decimal(temp.eternityPoints))+", Eternities: "+temp.eternities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+", Time Theorems: "+getTotalTT(temp)
-			else if (temp.achievements.includes("r51")) {
-				msg+="Antimatter: "+shortenMoney(new Decimal(temp.money))+", Infinity points: "+shortenDimensions(new Decimal(temp.infinityPoints))
-				if (temp.postChallUnlocked>0&&!temp.replicanti.unlocked) {
-					var totalChallengeCompletions=0
-					for (ic=1;ic<13;ic++) totalChallengeCompletions+=temp.challenges.includes("postc"+ic)?1:0
-					msg+=", Challenge completions: "+totalChallengeCompletions
-				}
-			} else if (temp.infinitied>(temp.aarexModifications.newGameMinusVersion?990:temp.aarexModifications.newGamePlusVersion?1:0)) msg+="Infinity points: "+shortenDimensions(new Decimal(temp.infinityPoints))+", Infinities: "+temp.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+", Challenge completions: "+temp.challenges.length
-			else if (temp.galacticSacrifice?temp.galacticSacrifice.times>0:false) msg+="Antimatter: "+shortenMoney(new Decimal(temp.money))+", Galaxy points: "+shortenDimensions(new Decimal(temp.galacticSacrifice.galaxyPoints))
-			else msg+="Antimatter: "+shortenMoney(new Decimal(temp.money))+", Dimension Shifts/Boosts: "+temp.resets+((temp.tickspeedBoosts != undefined ? (temp.resets > 0 || temp.tickspeedBoosts > 0 || temp.galaxies > 0 || temp.infinitied > 0 || temp.eternities != 0 || isSaveQuantumed) : false)?", Tickspeed boosts: "+getFullExpansion(temp.tickspeedBoosts):"")+", Galaxies: "+temp.galaxies
-		}
-		player.break=originalBreak
-		player.options.notation=originalNotation
-		player.options.commas=originalCommas
+		} else if (temp.dilation && temp.dilation.studies.includes(1)) {
+			var temp2 = ""
+			var mastery = temp.masterystudies && temp.dilation.upgrades.includes("ngpp6")
+			if (!mastery) temp2 = "Tachyon particles: " + shortenMoney(new Decimal(temp.dilation.totalTachyonParticles)) +
+				", Dilated time: " + shortenMoney(new Decimal(temp.dilation.dilatedTime))
 
-		getEl("save_"+saveId+"_title").textContent=temp.aarexModifications.save_name?temp.aarexModifications.save_name:"Save #"+placement
+			if (temp.dilation.studies.includes(6)) temp2 += ", Meta-antimatter: " + shortenMoney(new Decimal(temp.meta.bestAntimatter))
+			else if (!temp.dilation.upgrades.includes(10)) temp2 = "Eternity points: " + shorten(new Decimal(temp.eternityPoints)) + ", " + temp2
+			else temp2 = "Time Theorems: " + shortenMoney(getTotalTT(temp)) + ", " + temp2
+			if (mastery) temp2 += ", Mastery Studies: " + getFullExpansion(temp.masterystudies.length)
+
+			msg += temp2
+		} else {
+			var totalChallengeCompletions = (temp.aarexModifications.newGameMinusVersion ? -6 : 0)
+			for (ec = 1; ec <= 12; ec++) totalChallengeCompletions += temp.eternityChalls['eterc' + ec] || 0
+			if (totalChallengeCompletions > 0) {
+				msg += "Time Theorems: " + getFullExpansion(getTotalTT(temp)) + ", Challenge completions: " + totalChallengeCompletions
+			} else if (temp.eternities>(temp.aarexModifications.newGameMinusVersion?-20:0)) msg += "Eternity points: " + shortenDimensions(new Decimal(temp.eternityPoints)) + ", Eternities: " + temp.eternities.toString().replace(/\B(?=(\d{3}) + (?!\d))/g, ",") + ", Time Theorems: " + getTotalTT(temp)
+			else if (temp.achievements.includes("r51")) {
+				msg += ", Infinity points: " + shortenDimensions(new Decimal(temp.infinityPoints))
+				if (temp.infDimensionsUnlocked[0]) msg += ", Infinity Power: " + shorten(new Decays(temp.infinityPower))
+
+				if (temp.replicanti.gal) msg += ", Max Replicated Galaxies: " + getFullExpansion(temp.replicanti.gal)
+				else if (temp.replicanti.unl) msg += ", Replicantis: " + shorten(new Decimal(temp.replicanti.amount))
+				else {
+					var comps = 0
+					for (var i = 0; i < temp.challenges.length; i++) if (temp.challenges[i].includes("postc")) comps++
+					msg += ", Infinity Challenges: " + getFullExpansion(comps)
+				}
+			} else if (temp.infinited > 0 || temp.challenges.length > 0) msg += ", Infinity points: " + shortenDimensions(new Decimal(temp.infinityPoints)) +
+				", Challenge completions: " + getFullExpansion(temp.challenges.length)
+			else if (temp.galacticSacrifice && temp.galacticSacrifice.times) msg += ", Galaxy points: " + shortenDimensions(new Decimal(temp.galacticSacrifice.galaxyPoints))
+			else msg += ", Dimension Boosts: " + getFullExpansion(temp.resets) +
+				", Galaxies: " + getFullExpansion(temp.galaxies)
+		}
+		msg += "</span>"
+
+		getEl("save_" + saveId + "_title").textContent = temp.aarexModifications.save_name?temp.aarexModifications.save_name : "Save #" + placement
 	} catch (_) {
 		var msg = "New game"
 	}
@@ -2342,7 +2334,6 @@ function onNotationChange() {
 		else if (!player.ghostify.wzb.unl) updateBLUnlockDisplay()
 		else updateBosonUnlockDisplay()
 		GDs.updateDisplay()
-		if (pH.did("planck")) pl.updateDisplay()
 	}
 	getEl("achmultlabel").textContent = "Current achievement multiplier on each Dimension: " + shortenMoney(player.achPow) + "x"
 	if (hasAch("ng3p18") || hasAch("ng3p37")) {
@@ -3760,9 +3751,7 @@ function doNGP3UnlockStuff(){
 	var inEasierModeCheck = !inEasierMode()
 	if (player.masterystudies && (hasMTS("d14")||hasAch("ng3p51")) && !metaSave.ngp4 && !inEasierModeCheck) doNGP4UnlockStuff()
 	if (player.eternityPoints.gte("1e1200") && qu_save.bigRip.active && !qu_save.breakEternity.unlocked) doBreakEternityUnlockStuff()
-	if (pl.did()) {
-		pl.unlCheck()
-	} else if (tmp.quActive) {
+	if (tmp.quActive) {
 		if (!player.ghostify.reached && qu_save.bigRip.active && qu_save.bigRip.bestThisRun.gte(Decimal.pow(10, QCs.getGoalMA(undefined, true)))) doGhostifyUnlockStuff()
 		if (!player.ghostify.ghostlyPhotons.unl && qu_save.bigRip.active && qu_save.bigRip.bestThisRun.gte(Decimal.pow(10, 6e9))) doPhotonsUnlockStuff()
 		if (!player.ghostify.wzb.unl && canUnlockBosonicLab()) doBosonsUnlockStuff()
@@ -4048,7 +4037,6 @@ function changingDecimalSystemUpdating(){
 
 function incrementTimesUpdating(diffStat){
 	player.totalTimePlayed += diffStat
-	if (tmp.ngpX >= 5) pl.save.time += diffStat
 	if (tmp.ngp3) player.ghostify.time += diffStat
 	if (qu_save && implosionCheck !== 2) qu_save.time += diffStat
 	if (player.currentEternityChall == "eterc12") diffStat /= 1e3
@@ -4596,16 +4584,15 @@ function doEternityButtonDisplayUpdating(diff){
 	var currentEPmin = updateEPminpeak(diff, EPminpeakUnits)
 	EPminpeakUnits = (EPminpeakType == 'logarithm' ? ' log(' + EPminpeakUnits + ')' : ' ' + EPminpeakUnits)
 	if (getEl("eternitybtn").style.display != "none") {
-		getEl("eternitybtnFlavor").textContent = (((!player.dilation.active&&gainedEternityPoints().lt(1e6))||player.eternities<1||player.currentEternityChall!=="")
-									    ? ((player.currentEternityChall!=="" ? "Other challenges await..." : player.eternities>0 ? "" : "Other times await...") + " I need to become Eternal.") : "")
+		getEl("eternitybtnFlavor").textContent = (((!player.dilation.active && gainedEternityPoints().lt(1e6)) || player.eternities < 1 || player.currentEternityChall!=="") ? ((player.currentEternityChall!=="" ? "Other challenges await..." : player.eternities > 0 && !showEPmin ? "" : "Other times await...") + " I need to become Eternal.") : "")
 		if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getTPGain())) getEl("eternitybtnEPGain").innerHTML = getReqForTPGainDisp()
 		else {
-			getEl("eternitybtnEPGain").innerHTML = ((player.eternities > 0 && (player.currentEternityChall == "" || player.options.theme == "Aarex's Modifications")) ?
+			getEl("eternitybtnEPGain").innerHTML = ((tmp.eterUnl && player.currentEternityChall == "") ?
 				EPminUnits == "EP" && gainedEternityPoints().e >= 1e9 ? "<b>Other times await... I need to become Eternal.</b>" :
-				"Gain <b>" + (player.dilation.active?shortenMoney(getTPGain().sub(player.dilation.totalTachyonParticles)):shortenDimensions(gainedEternityPoints()))+"</b> "+(EPminpeakType == "logarithm" ? EPminUnits + "." : player.dilation.active?"Tachyon particles.": tmp.be ?"EP and <b>"+shortenDimensions(getEMGain())+"</b> Eternal Matter." : "Eternity points.")
+				"Gain <b>" + (player.dilation.active?shortenMoney(getTPGain().sub(player.dilation.totalTachyonParticles)):shortenDimensions(gainedEternityPoints()))+"</b> " + (EPminpeakType == "logarithm" ? EPminUnits + "." : player.dilation.active? "Tachyon particles." : "Eternity points.")
 			: "")
 		}
-		var showEPmin = pH.did("eternity") && gainedEternityPoints().e < 1e9 && Decimal.gt(EPminpeak, 0)
+		var showEPmin = tmp.eterUnl && gainedEternityPoints().e < 1e9 && Decimal.gt(EPminpeak, 0)
 		if (EPminUnits != "TP") {
 			getEl("eternitybtnRate").textContent = (showEPmin
 										  ? rateFormat(currentEPmin, EPminpeakUnits) : "")

@@ -134,7 +134,7 @@ function getTimeAbbreviation(seconds) {
 	}
 	if (data.year >= 100) {	
 		if (player.options.commas === "Commas") {
-			if (data.year >= 1e12) return formatValue("Mixed scientific", data.year, 3, 3) + " years"
+			if (data.year >= 1e9) return formatValue("Mixed scientific", data.year, 3, 3) + " years"
 		} else {
 			if (data.year >= 1e5) return formatValue(player.options.commas, data.year, 3, 3) + " years"
 		}
@@ -282,7 +282,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			if (reduced < 1000) var infPlaces = 4
 			else var infPlaces = 3
 			if (player.options.commas === "Commas") {
-				if (reduced>=1e12) return formatValue("Mixed scientific", reduced, 3, 3) + "∞"
+				if (reduced>=1e9) return formatValue("Mixed scientific", reduced, 3, 3) + "∞"
 				var splits=reduced.toFixed(Math.max(infPlaces, places)).split(".")
 				return splits[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + splits[1] + "∞"
 			} else {
@@ -309,8 +309,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 				prefix = "e"
 			} else {
 				power = new Decimal(value).log(base)
-				if (base >= 1e15) var prefix = formatValue("Scientific", base, 2, 0)
-				else if (base >= 1e3) var prefix = formatValue("Mixed scientific", base, 2, 0)
+				if (base >= 1e3) var prefix = formatValue("Mixed scientific", base, 2, 0)
 				else prefix = base
 				prefix += "^"
 			}
@@ -320,7 +319,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 					return prefix + prefix + (Math.log10(power) / Math.log(base)).toFixed(3)
 				}
 				else if (player.options.commas !== "Commas") return prefix + formatValue(player.options.commas, power, 3, 3)
-				else if (power >= 1e12) return prefix + formatValue("Mixed scientific", power, 3, 3)
+				else if (power >= 1e9) return prefix + formatValue("Mixed scientific", power, 3, 3)
 				else return prefix + power.toFixed(places).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 			}
 			return prefix + power.toFixed(places)
@@ -329,7 +328,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 		if (notation === "Brackets") {
 		  var table = [")", "[", "{", "]", "(", "}"];
 		  var log6 = Math.LN10 / Math.log(6) * Decimal.log10(value);
-		  if (log6 >= 1e12) return "e" + formatValue("Brackets", log6)
+		  if (log6 >= 1e9) return "e" + formatValue("Brackets", log6)
 		  var wholePartOfLog = Math.floor(log6);
 		  var decimalPartOfLog = log6 - wholePartOfLog;
 		  //Easier to convert a number between 0-35 to base 6 than messing with fractions and shit
@@ -540,7 +539,7 @@ function formatPsi(mantissa,power){
     }
     if(player.options.psi.side=="l"){
 		var formattedValue=numbers[0]
-		if (player.options.psi.letter[0]==1) if (numbers[0]>=1e12) formattedValue=formatValue("Mixed scientific",numbers[0],2,2)
+		if (player.options.psi.letter[0]==1) if (numbers[0]>=1e9) formattedValue=formatValue("Mixed scientific",numbers[0],2,2)
     	return numbers.slice(2).join("").slice(0,player.options.psi.chars).replace(/[-$]$/,"")+letters.map(letter).join("")+formattedValue
     }
     if(numbers.length==1&&numbers[0]=="1"&&!player.options.psi.forceNumbers){
@@ -552,11 +551,11 @@ function formatPsi(mantissa,power){
 function convTo(notation, num) {
 	var result = ""
 	var rest = ""
-	if (num >= 1e12) {
+	if (num >= 1e9) {
 		var log = Math.floor(Math.log10(num))
 		var step = Math.max(Math.floor(log / 3 - 3), 0)
-		num = Math.round(num / Math.pow(10, Math.max(log - 9, 0))) * Math.pow(10, Math.max(log - 9, 0) % 3)
-		if (num >= 1e12) {
+		num = Math.round(num / Math.pow(10, Math.max(log - 6, 0))) * Math.pow(10, Math.max(log - 6, 0) % 3)
+		if (num >= 1e9) {
 			num /= 1000
 			step++
 		}
@@ -780,7 +779,7 @@ function rateFormat(apm, unit) {
 
 function formatPercentage(x, digits = 1) {
 	x = Decimal.times(x, 100)
-	if (x.gt(1e12)) return shorten(x)
+	if (x.gt(1e9)) return shorten(x)
 
 	let n = x.toFixed(digits)
 	if (parseFloat(n) < 1e3 && !FORMAT_INTS_DIFFERENTLY.includes(player.options.notation)) return n

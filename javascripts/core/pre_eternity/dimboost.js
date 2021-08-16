@@ -39,7 +39,7 @@ function softReset(bulk, tier = 1) {
 
 	if (moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[0] && tier == 1) {
 		skipResets()
-		if (!pl.on()) player.matter = new Decimal(0)
+		player.matter = new Decimal(0)
 		player.postC8Mult = new Decimal(1)
 		player.dbPower = getDimensionBoostPower()
 		return

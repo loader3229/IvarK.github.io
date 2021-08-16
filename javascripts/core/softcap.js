@@ -63,7 +63,7 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: new Decimal("1e5000"),
-			pow: 0.1,
+			pow: (x) => 1 / (10 + Math.log10(x.log10() / 5000)),
 			derv: false
 		}
 	},
@@ -72,8 +72,9 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: 100,
-			pow: (x) => 0.25 * softcap_data.ts225[1].eff(x),
-			eff: (x) => Math.min(Math.max(Math.log10(getReplEff().max(1).log10()) / 10, 1), 2),
+			mul: (x) => 1 / Math.max(softcap_data.ts225[1].eff(x) - 1, 1),
+			pow: (x) => Math.min(0.25 * softcap_data.ts225[1].eff(x), 2/3),
+			eff: (x) => Math.max(Math.log10(getReplEff().max(1).log10()) / 4 - 1, 1),
 			derv: false
 		}
 	},
@@ -90,7 +91,7 @@ var softcap_data = {
 		name: "effective meta-antimatter",
 		1: {
 			func: "pow",
-			start: () => new Decimal(Number.MAX_VALUE),
+			start: () => new Decimal(Number.MAX_VALUE).pow((enB.active("pos", 2) && enB_tmp.pos2.igal_softcap) || 1),
 			pow(x) {
 				let l2 = Decimal.log(x, 2)
 				return 1 / (Math.log2(l2 / softcap_data.ma[1].start().log(2)) / 4 + 2)
@@ -114,8 +115,8 @@ var softcap_data = {
 			start: 1.5,
 			base: 1.5,
 			pow: 1,
-			mul: 0.3,
-			add: 1.2
+			mul: 0.25,
+			add: 1.25
 		}
 	},
 	gp: {

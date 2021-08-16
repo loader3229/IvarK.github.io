@@ -876,24 +876,6 @@ function getNGP3EterMilestones() {
 	return r
 }
 
-function convertToNGP5(setup) {
-	aarMod.ngpX = 5
-	tmp.ngpX = 5
-
-	player.pl = pl.setup()
-	pl.compile()
-
-	if (setup) {
-		player.ghostify.milestones = 16
-		for (let x = 1; x <= 8; x++) player.achievements.push("ngpp1" + x)
-		for (let y = 1; y <= 8; y++) for (let x = 1; x <= 8; x++) if (!hasAch("ng3p" + (y  * 10 + x))) player.achievements.push("ng3p" + (y  * 10 + x))
-		player.achievements.push("ng3p91")
-		player.achievements.push("ng3p101")
-		player.achievements.push("ng3p111")
-		pl.save.on = true
-	} else pH.reset()
-}
-
 function doubleMSMult(x) {
 	//For NG*+3
 	if (tmp.ngp3_mul) {
@@ -973,10 +955,33 @@ function getAQSGainExp(x) {
 
 	let r = 1
 	if (PCs.unl()) r = Math.pow(x.log10() + 1, PCs_tmp.eff2)
-	return Math.min(r, 1e5)
+	return Math.min(r, 5e3)
 }
 
 //Update Messages
 var ngp3WelcomeMsgs = {
 	0.6: "<b class='lime'>Paired Challenges!</b> Can you complete 2 challenges at once, and level up your progression? Unlocks after completing Quantum Challenge 7!"
 }
+
+/*
+dump
+
+
+getEl("plAniTier").textContent = "Tier " + getFullExpansion(pl.save.layer) + " -> " + getFullExpansion(pl.save.layer + 1)
+getEl("plAniBg").style.display = ""
+getEl("plAniBg2").style.display = "none"
+getEl("plAniTxt").style.display = "none"
+getEl("plAni").style.display = ""
+setTimeout(function() {
+	getEl("plAniBg2").style.display = ""
+	getEl("plAniTxt").style.display = ""
+}, 1000)
+setTimeout(function() {
+	getEl("plAni").style.animation = "plEnd 2s ease"
+}, 4000)
+setTimeout(function() {
+	getEl("plAni").style.display = "none"
+	getEl("plAni").style.animation = ""
+	getEl("plAniBg").style.display = "none"
+}, 5000)
+*/

@@ -191,8 +191,10 @@ var mTs = {
 
 		271() {
 			var x = tmp.rm.max(1).log10()
-			var pow = Math.min(Math.log10(x / 1e5 + 1) / 5, 1)
+
+			var pow = Math.min(Math.pow(Math.log10(x / 1e5 + 1), 1.5) / 5, 1)
 			if (x > 1) x *= Math.pow(x, pow)
+
 			x /= Math.log10(x / 1e9 + 1) / 2 + 1
 			return {
 				eff: Decimal.pow(10, x),
@@ -235,7 +237,7 @@ var mTs = {
 			}
 		},
 		312() {
-			var mul = Math.min(Math.log10(qu_save.colorPowers.g + 1) / 30, 1)
+			var mul = Math.min(Math.log10(qu_save.colorPowers.g / 10 + 1) / 40, 1)
 			var eff = getReplGalaxyEff()
 			eff = (eff - 1) * mul + 1
 			return {

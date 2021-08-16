@@ -53,7 +53,6 @@ function getLightThresholdIncrease(l) {
 
 function getPhotonicFlow() {
 	let x = new Decimal(1)
-	if (hasAch("ng3p81")) x = new Decimal(pl.on() ? fNu.tmp.nerfNeutral : 2.5)
 	if (GDs.boostUnl('gph')) x = Decimal.pow(x, GDs.tmp.gph)
 	return x
 }

@@ -141,7 +141,9 @@ var QCs = {
 				if (PCs.milestoneDone(11)) {
 					let pc11 = 0.2 + (PCs_save.lvl - 1) / 35
 					data.limit = data.limit.pow(Math.pow(4, -pc11))
-					data.effMult *= Math.pow(data.effMult, pc11 / 2)
+					data.speedMult = data.speedMult.pow(1 - pc11)
+					data.scalingExp = 1 / (1 + boosts / (20 + pc11 * 5))
+					data.effMult = (eff * 3 - maxEff * 2 * (1 - pc11)) / 10 + 1
 				}
 				if (PCs.milestoneDone(12)) data.limit = data.limit.pow(qc1.expands / 10 + 1)
 
@@ -154,9 +156,9 @@ var QCs = {
 				if (!QCs_tmp.qc1) return x
 
 				var dilMult = Math.log10(getReplSpeedLimit()) / 1024
-				var log = x.log10() * dilMult
+				var log = x.log10() * dilMult * QCs_tmp.qc1.effMult
 				if (log > 1) log = Math.pow(log, QCs_tmp.qc1.effExp)
-				log *= QCs_tmp.qc1.effMult / dilMult
+				log /= dilMult
 
 				x = Decimal.pow(10, log)
 				return x

@@ -115,10 +115,7 @@ var pos = {
 			gal: QCs.done(5) ? 0.2 : 0.25,
 			base_pc: QCs.done(5) ? 1 / 100 : 1 / 125
 		}
-		if (PCs.milestoneDone(51)) {
-			data.mults.mdb_eff *= data.mults.mdb_eff / 20 + 1
-			data.mults.base_pc *= 1.1
-		}
+		if (PCs.milestoneDone(51)) data.mults.base_pc *= 1.2
 
 		this.updateCloud()
 	},
@@ -188,7 +185,11 @@ var pos = {
 
 			data.sac_mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
 			data.sac_qe = qu_save.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)
-			pos_save.amt = Math.sqrt(Math.min(data.sac_mdb * pos_tmp.mults.mdb_eff, Math.pow(data.sac_qe * (tmp.bgMode ? 2 : 1.5), 2))) * 300
+			pos_save.amt = Math.sqrt(Math.min(
+				data.sac_mdb * (PCs.milestoneDone(51) ? Math.max(data.sac_mdb / 30, 1) : 1) * pos_tmp.mults.mdb_eff,
+				Math.pow(data.sac_qe * (tmp.bgMode ? 2 : 1.5), 2)
+			)) * 300
+
 		} else {
 			data.sac_mdb = 0
 			data.sac_qe = 0

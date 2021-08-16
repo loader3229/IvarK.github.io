@@ -323,21 +323,9 @@ function atGravDimsAchCheck(){
 	if (player.ghostify.time <= 100 && player.money.plus(1).log10() >= 1/0) giveAchievement("Auto-Ghost Speedrunning")
 }
 
-function atPlankAchCheck(){
-	giveAchievement("Quantum Scality")
-	if (player.ghostify.hb.higgs >= 308) giveAchievement("Infinitely Massive")
-	if (player.replicanti.amount.plus(1).log10() >= 1e10) giveAchievement("Replicated Universes")
-	if (tmp.ig.plus(1).log10() >= 1/0) giveAchievement("The Supervoid")
-	if (GDs.tmp.gsc >= 1/0) giveAchievement("Truly Dilating Time")
-	if (player.ghostify.ghostlyPhotons.enpowerments >= 1/0) giveAchievement("Spectre Prisms")
-	if (!pl.on() && pl.save.immortal && player.money.plus(1).log10() >= 1/0) giveAchievement("Universe Immortality")
-	//
-}
-
 function beyondHiggsAchieveCheck(){
 	atHiggsAchCheck()
 	atGravDimsAchCheck()
-	if (tmp.ngpX >= 5) atPlankAchCheck()
 }
 
 function ALLACHIEVECHECK(){

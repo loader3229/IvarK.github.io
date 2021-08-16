@@ -429,8 +429,7 @@ function setAarexModIfUndefined(){
 
 function doNGp3Init1() {
 	tmp.ngp3 = player.masterystudies !== undefined
-	tmp.ngpX = hasAch("ng3p111") && player.pl && pl.save ? 5 :
-		tmp.ngp3 ? 3 :
+	tmp.ngpX = tmp.ngp3 ? 3 :
 		player.meta !== undefined ? 2 :
 		0
 	tmp.ngp3_boost = tmp.ngpX >= 3 || (aarMod.newGamePlusVersion && tmp.ngpX != 2)
@@ -2206,7 +2205,6 @@ function setupNGP31Versions() {
 	if (aarMod.newGame3PlusVersion < 3) player.ghostify.gds = GDs.setup()
 	else {
 		if (player.ghostify.gds.gdBoosts === undefined) player.ghostify.gds = GDs.setup()
-		if (!hasAch("ng3p111") && tmp.ngpX < 5) delete player.pl
 		if (!qu_save.pos) qu_save.pos = pos.setup()
 	}
 	aarMod.newGame3PlusVersion = 3
@@ -2833,10 +2831,6 @@ function conToDeciGhostify(){
 	GDs.compile()
 }
 
-function conToDeciPlanck() {
-	pl.compile()
-}
-
 function transformSaveToDecimal() {
 	conToDeciPreEter()
 	player.eternities = nP(player.eternities)
@@ -2844,7 +2838,6 @@ function transformSaveToDecimal() {
 	conToDeciLateEter()
 	conToDeciMS()
 	conToDeciGhostify()
-	conToDeciPlanck()
 }
 
 

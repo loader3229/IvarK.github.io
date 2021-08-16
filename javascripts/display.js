@@ -615,7 +615,6 @@ function updateDimensionsDisplay() {
 	if (getEl("eternitystore").style.display == "block") ETERNITYSTOREDisplay()
    	if (getEl("quantumtab").style.display == "block") updateQuantumTabs()
    	if (getEl("ghostify").style.display == "block") updateGhostifyTabs()
-   	if (getEl("plTab").style.display == "block") pl.updateDisplayOnTick()
 }
 
 function replicantiDisplay() {

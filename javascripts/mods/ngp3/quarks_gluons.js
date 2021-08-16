@@ -965,7 +965,8 @@ var enB = {
 					speed: speed / rel_speed,
 					acc: accSpeed / rel_speed,
 					mult: mult,
-					igal: hasAch("ng3p27") ? Math.pow(mult.log10() / 20 + 1, 0.25) : undefined
+					igal: hasAch("ng3p27") ? Math.sqrt(mult.log10() / 30 + 1) : undefined,
+					igal_softcap: hasAch("ng3p27") ? Math.max(mult.log10() / 10 - 2, 1) : undefined
 				}
 			},
 			effDisplay(x) {
@@ -983,7 +984,7 @@ var enB = {
 			eff(x) {
 				let gal = player.galaxies
 				gal /= Math.max(Math.log2(gal) / 10, 1)
-				gal *= 0.0007 * Math.min(Math.pow(Math.log2(x + 1), 2), 30)
+				gal *= 0.0007 * Math.min(Math.pow(Math.log2(x + 1), 2), 100)
 				return Math.pow(gal + 1, 1.5)
 			},
 			effDisplay(x) {
@@ -1116,7 +1117,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return 1e-11 * Math.min(Math.sqrt(x), 1e4)
+				return 1e-11 * Math.min(Math.sqrt(x), 5e3)
 			},
 			effDisplay(x) {
 				return shorten(player.eternityPoints.max(1).pow(x * getAQSGainExp())) + "x"
