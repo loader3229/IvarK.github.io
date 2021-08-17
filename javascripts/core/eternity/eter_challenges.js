@@ -361,7 +361,7 @@ function getECReward(x) {
 		if (!hasTS(192)) return 0
 
 		let r = [0, 0.125, 0.25, 0.5, 0.75, 0.875][c]
-		if (enB.active("pos", 7)) r = (r + enB_tmp.pos7) / (enB_tmp.pos7 + 1)
+		if (enB.active("pos", 8)) r = (r + enB_tmp.pos8) / (enB_tmp.pos8 + 1)
 		return r
 	}
 }

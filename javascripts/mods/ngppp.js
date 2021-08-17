@@ -74,12 +74,16 @@ const MAX_DIL_UPG_PRIORITIES = [6, 4, 3, 1, 2]
 
 function preQuantumAutoNGP3(diff) {
 	//Pre-Quantum Automation
-	let tickPerDiff = qMs.tmp.metaSpeed
+	if (qMs.tmp.amt >= 27) {
+		doAutoMetaTick(1/0)
+	} else {
+		let tickPerDiff = qMs.tmp.metaSpeed
 
-	qu_save.metaAutobuyerWait += diff
-	if (qu_save.metaAutobuyerWait >= tickPerDiff) {
-		doAutoMetaTick(Math.floor(qu_save.metaAutobuyerWait / tickPerDiff))
-		qu_save.metaAutobuyerWait = qu_save.metaAutobuyerWait % tickPerDiff
+		qu_save.metaAutobuyerWait += diff
+		if (qu_save.metaAutobuyerWait >= tickPerDiff) {
+			doAutoMetaTick(Math.floor(qu_save.metaAutobuyerWait / tickPerDiff))
+			qu_save.metaAutobuyerWait = qu_save.metaAutobuyerWait % tickPerDiff
+		}
 	}
 
 	if (qMs.tmp.amt >= 20) {
@@ -956,6 +960,11 @@ function getAQSGainExp(x) {
 	let r = 1
 	if (PCs.unl()) r = Math.pow(x.log10() + 1, PCs_tmp.eff2)
 	return Math.min(r, 5e3)
+}
+
+function getIntergalacticExp(log) {
+	let x = log / 30 + 1
+	return Math.sqrt(x) * Math.max(Math.log10(x), 1)
 }
 
 //Update Messages

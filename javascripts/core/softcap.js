@@ -45,7 +45,7 @@ var softcap_data = {
 			func: "dilate",
 			start: Decimal.pow(10, 1e9),
 			base: 10,
-			mul: () => Math.log10(Math.pow(10, 0.2) * Decimal.log10(player.eternities)),
+			mul: (x) => Math.log10(x.log10() / 1e9 + 10),
 			pow: 3/5
 		},
 	},
@@ -63,7 +63,7 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: new Decimal("1e5000"),
-			pow: (x) => 1 / (10 + Math.log10(x.log10() / 5000)),
+			pow: 0.1,
 			derv: false
 		}
 	},
@@ -72,9 +72,10 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: 100,
-			mul: (x) => 1 / Math.max(softcap_data.ts225[1].eff(x) - 1, 1),
-			pow: (x) => Math.min(0.25 * softcap_data.ts225[1].eff(x), 2/3),
-			eff: (x) => Math.max(Math.log10(getReplEff().max(1).log10()) / 4 - 1, 1),
+			mul: 0.5,
+			pow: (x) => Math.min(Math.max(
+				Math.log10(x + 1) / 5 - 1
+			, 1/4), 2/3),
 			derv: false
 		}
 	},
@@ -122,10 +123,10 @@ var softcap_data = {
 	gp: {
 		name: "Green power effect",
 		1: {
-			func: "log",
-			start: 4,
-			pow: 1,
-			mul: Math.log2(10) * 2
+			func: "pow",
+			start: 3,
+			pow: 0.5,
+			mul: 0.5
 		}
 	},
 

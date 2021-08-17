@@ -1882,7 +1882,7 @@ function changeSaveDesc(saveId, placement) {
 				var qk = Decimal.add(quantum.quarks,quantum.usedQuarks.r).add(quantum.usedQuarks.g).add(quantum.usedQuarks.b)
 				if (quantum.gluons.rg) qk = qk.add(quantum.gluons.rg,quantum.gluons.gb).add(quantum.gluons.br)
 				if (quantum.qc && quantum.qc.comps >= 1) msg += "Quantum Energy: " + shorten(quantum.bestEnergy || quantum.quarkEnergy) + ", Replicated Compressors: " + getFullExpansion(quantum.qc.qc1.best || quantum.qc.qc1.boosts)
-				else msg += ", Quantum Worth: " + shortenDimensions(qk) + "Quantum Energy: " + shorten(quantum.bestEnergy || quantum.quarkEnergy)
+				else msg += "Quantum Worth: " + shortenDimensions(qk) + ", Quantum Energy: " + shorten(quantum.bestEnergy || quantum.quarkEnergy)
 
 				if (quantum.qc && quantum.qc.comps >= 7) msg += ", Paired Challenges: " + (quantum.pc ? getFullExpansion(quantum.pc.best || 0) : "This has been rewritten while you are away!")
 				else if (temp.masterystudies.includes('d8')) msg += ", Quantum Challenges: " + (quantum.qc ? getFullExpansion(quantum.qc.comps) : "This has been rewritten while you are away!")

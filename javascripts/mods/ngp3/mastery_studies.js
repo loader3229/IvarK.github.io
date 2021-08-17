@@ -194,8 +194,9 @@ var mTs = {
 
 			var pow = Math.min(Math.pow(Math.log10(x / 1e5 + 1), 1.5) / 5, 1)
 			if (x > 1) x *= Math.pow(x, pow)
+			x /= Math.pow(30, pow)
+			x = Math.min(x, 1e24)
 
-			x /= Math.log10(x / 1e9 + 1) / 2 + 1
 			return {
 				eff: Decimal.pow(10, x),
 				exp: pow
@@ -225,7 +226,7 @@ var mTs = {
 		},
 		292() {
 			var rg = getFullEffRGs()
-			return Math.log2(rg / 2e3 + 1) / 5 + 1
+			return Math.min(Math.log2(rg / 2e3 + 1) / 5 + 1, 3)
 		},
 
 		311() {

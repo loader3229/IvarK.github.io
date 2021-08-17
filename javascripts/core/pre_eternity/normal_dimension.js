@@ -647,7 +647,7 @@ function getInfBoostInput(inf) {
 function getInfEffExp(x) {
 	let exp = 1
 	if (hasTS(31)) exp *= 4
-	if (enB.active("pos", 9)) exp *= enB_tmp.pos9
+	if (enB.active("pos", 10)) exp *= enB_tmp.pos10
 	return exp
 }
 

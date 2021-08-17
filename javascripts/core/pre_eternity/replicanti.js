@@ -409,7 +409,7 @@ function updateEC14BaseReward() {
 		data.baseInt = div
 		data.interval = div
 
-		if (pow > 0.75) data.acc = -Math.log2(1 - pow) / 4 + 1.5
+		if (pow > 0.75) data.acc = 1.5 - Math.log2(1 - pow) / 4
 		else data.acc = 1 / Math.sqrt(1 - pow)
 		data.acc /= 3
 

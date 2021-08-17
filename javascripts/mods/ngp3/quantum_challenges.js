@@ -127,7 +127,7 @@ var QCs = {
 					req: Decimal.pow(10, 1e6 * (distantBoosts + 1)),
 					limit: new Decimal("1e6000000"),
 
-					speedMult: Decimal.pow(2, - boosts),
+					speedMult: Decimal.pow(2, -boosts),
 					scalingMult: 1,
 					scalingExp: 1 / (1 + boosts / 20),
 
@@ -143,9 +143,9 @@ var QCs = {
 					data.limit = data.limit.pow(Math.pow(4, -pc11))
 					data.speedMult = data.speedMult.pow(1 - pc11)
 					data.scalingExp = 1 / (1 + boosts / (20 + pc11 * 5))
-					data.effMult = (eff * 3 - maxEff * 2 * (1 - pc11)) / 10 + 1
+					data.effMult = Math.min((eff * 3 - maxEff * 2 * (1 - pc11)) / 10 + 1, 5)
 				}
-				if (PCs.milestoneDone(12)) data.limit = data.limit.pow(qc1.expands / 10 + 1)
+				if (PCs.milestoneDone(12)) data.limit = data.limit.pow(Math.log2(qc1.expands + 2))
 
 				//Limit > Req
 				data.limit = data.limit.max(data.req)
@@ -156,9 +156,9 @@ var QCs = {
 				if (!QCs_tmp.qc1) return x
 
 				var dilMult = Math.log10(getReplSpeedLimit()) / 1024
-				var log = x.log10() * dilMult * QCs_tmp.qc1.effMult
+				var log = x.log10() * dilMult
 				if (log > 1) log = Math.pow(log, QCs_tmp.qc1.effExp)
-				log /= dilMult
+				log *= QCs_tmp.qc1.effMult / dilMult
 
 				x = Decimal.pow(10, log)
 				return x
@@ -231,7 +231,7 @@ var QCs = {
 
 			rewardDesc: (x) => "Color charge boosts itself by " + shorten(x) + "x.",
 			rewardEff(str) {
-				let x = Math.log10((str || colorCharge.normal.charge) + 1) / 2 + 1
+				let x = Math.log10((str || colorCharge.normal.charge) + 1) + 1
 				if (PCs.milestoneDone(21)) x *= x
 				return x
 			},

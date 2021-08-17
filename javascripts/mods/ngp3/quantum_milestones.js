@@ -201,7 +201,7 @@ let qMs = {
 	},
 	12: {
 		req: 13,
-		eff: () => "Reduce the interval of auto-dilation upgrades and MDs by 10% per milestone" + (qMs.tmp.amt >= 12 ? " (" + shorten(1 / qMs.tmp.metaSpeed) + "/s)" : ""),
+		eff: () => "Reduce the interval of auto-dilation upgrades and MDs by 10% per milestone" + (qMs.tmp.amt >= 12 && qMs.tmp.amt < 27 ? " (" + shorten(1 / qMs.tmp.metaSpeed) + "/s)" : ""),
 		effGot: () => "The interval of auto-dilation upgrades and MDs is now reduced by 10% per milestone."
 	},
 	13: {
@@ -277,7 +277,7 @@ let qMs = {
 	},
 	27: {
 		req: 200,
-		eff: () => "Able to purchase all time studies without blocking",
-		effGot: () => "You now can buy every single time study."
+		eff: () => "Able to purchase all time studies without blocking, and Meta Dimension autobuyer is unlimited",
+		effGot: () => "You now can buy every single time study, and Meta Dimension autobuyer is now unlimited."
 	},
 }

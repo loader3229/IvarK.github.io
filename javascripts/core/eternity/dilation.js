@@ -542,7 +542,7 @@ function updateDilationUpgradeButtons() {
 	}
 
 	getEl("dil11desc").textContent = "Currently: " + shorten(Decimal.pow(2, getDilUpgPower(1))) + "x"
-	getEl("dil12eff").textContent = "Scaling: +" + formatPercentage(getFreeGalaxyThresholdIncrease() - 1) + "%"
+	getEl("dil12eff").textContent = "Scaling: +" + formatPercentage(getFreeGalaxyThresholdIncrease() - 1, 1, true) + "%"
 
 	var power = getDil3Power()
 	getEl("dil13desc").innerHTML = "You gain " + shorten(power) + "x more Tachyon Particles."

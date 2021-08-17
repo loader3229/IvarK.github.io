@@ -325,7 +325,7 @@ function updateTickspeed() {
 	let label = ""
 	if (showTickspeed) {
 		let tick = getTickspeed()
-		label = (tick.e <= -1e9 ? "Ticks" : "Tickspeed") + ": " + getTickspeedText(tick)
+		label = "Tickspeed: " + getTickspeedText(tick)
 	}
 	if (isIC3Trapped()) label = (showTickspeed ? label + ", Tickspeed m" : "M") + "ultiplier: " + formatValue(player.options.notation, player.postC3Reward, 2, 3)
 	let speeds = []

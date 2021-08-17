@@ -205,9 +205,6 @@ function updateColorCharge(update) {
 			Decimal.add(usedQuarks[sorted[0]], 1)
 		)
 	var chargeMult = 1
-	if (pos_tmp.cloud[1] == 2) chargeMult *= 1.25
-	if (pos_tmp.cloud[2] == 4) chargeMult *= 1.25
-	if (pos_tmp.cloud[3] == 6) chargeMult *= 1.25
 	if (QCs.done(2)) chargeMult *= QCs.data[2].rewardEff(charge * chargeMult) //Avoid recursion
 
 	//Color Subcharge
@@ -222,7 +219,7 @@ function updateColorCharge(update) {
 			: 1)
 		}
 		colorCharge.sub.charge *= chargeMult
-		colorCharge.sub.eff = Math.log10(Math.log2(colorCharge.sub.charge + 1) + 1) + 1
+		colorCharge.sub.eff = Math.log10(Math.log2(colorCharge.sub.charge + 1) / 2 + 1) * 2 + 1
 		chargeMult *= colorCharge.sub.eff
 	} else delete colorCharge.sub
 
@@ -587,9 +584,9 @@ var enB = {
 	types: ["glu", "pos"],
 	priorities: [
 		["glu", 6], ["glu", 9],
-		["pos", 8], ["pos", 10], ["pos", 11], ["pos", 12],
+		["pos", 7], ["pos", 9], ["pos", 11], ["pos", 12],
 
-		["pos", 1], ["pos", 2], ["pos", 3], ["pos", 4], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 9],
+		["pos", 1], ["pos", 2], ["pos", 3], ["pos", 4], ["pos", 5], ["pos", 6], ["pos", 8], ["pos", 10],
 		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 4], ["glu", 5], ["glu", 7], ["glu", 8], ["glu", 10], ["glu", 11], ["glu", 12],
 	],
 	glu: {
@@ -767,7 +764,7 @@ var enB = {
 		},
 		8: {
 			req: 12,
-			masReq: 75,
+			masReq: 80,
 
 			title: "Meta Resynergizer II",
 			type: "r",
@@ -794,7 +791,7 @@ var enB = {
 		},
 		10: {
 			req: 36,
-			masReq: 75,
+			masReq: 80,
 
 			title: "Blue Saturation",
 			type: "g",
@@ -808,7 +805,7 @@ var enB = {
 		},
 		11: {
 			req: 45,
-			masReq: 75,
+			masReq: 80,
 
 			title: "Blue Unseeming",
 			type: "r",
@@ -821,7 +818,7 @@ var enB = {
 		},
 		12: {
 			req: 60,
-			masReq: 75,
+			masReq: 80,
 
 			title: "Color Subcharge",
 			type: "b",
@@ -937,16 +934,16 @@ var enB = {
 			type: "b",
 			eff(x) {
 				var slowStart = 4
-				if (enB.active("pos", 8)) slowStart += enB_tmp.pos8
+				if (enB.active("pos", 9)) slowStart += enB_tmp.pos9
 				if (PCs.milestoneDone(33)) slowStart += 0.1 * PCs_save.lvl
 
 				var accSpeed = 3 / (slowStart - 1)
 				if (enB.active("glu", 9)) accSpeed *= enB_tmp.glu9
 				if (QCs.done(7)) accSpeed *= 1.25
-				if (PCs.milestoneDone(71)) accSpeed *= 1 + 0.02 * PCs_save.lvl
+				if (PCs.milestoneDone(71)) accSpeed *= 1 + 0.03 * PCs_save.lvl
 
 				var mdb = player.meta.resets
-				var base = player.meta.bestAntimatter.add(1).log10() * getPataAccelerator() + 1
+				var base = Math.min(player.meta.bestAntimatter.add(1).log10() * getPataAccelerator() + 1, 1e10)
 				var exp = mdb
 				var rel_speed = tmp.ngp3_mul || tmp.ngp3_exp ? 30 : 60
 
@@ -965,7 +962,10 @@ var enB = {
 					speed: speed / rel_speed,
 					acc: accSpeed / rel_speed,
 					mult: mult,
-					igal: hasAch("ng3p27") ? Math.sqrt(mult.log10() / 30 + 1) : undefined,
+
+					igal: hasAch("ng3p27") ?
+						getIntergalacticExp(mult.log10())
+					: undefined,
 					igal_softcap: hasAch("ng3p27") ? Math.max(mult.log10() / 10 - 2, 1) : undefined
 				}
 			},
@@ -983,7 +983,6 @@ var enB = {
 			type: "r",
 			eff(x) {
 				let gal = player.galaxies
-				gal /= Math.max(Math.log2(gal) / 10, 1)
 				gal *= 0.0007 * Math.min(Math.pow(Math.log2(x + 1), 2), 100)
 				return Math.pow(gal + 1, 1.5)
 			},
@@ -1043,7 +1042,23 @@ var enB = {
 			}
 		},
 		7: {
-			req: 40,
+			req: 25,
+			masReq: 0,
+			chargeReq: 10,
+
+			title: "Timeless Capability",
+			tier: 3,
+			type: "r",
+			anti: true,
+			eff(x) {
+				return Math.log10(player.dilation.tachyonParticles.max(1).log10() * Math.log10(x / 10 + 1) / 10 + 10)
+			},
+			effDisplay(x) {
+				return x.toFixed(3) + "x"
+			}
+		},
+		8: {
+			req: 50,
 			masReq: 0,
 			chargeReq: 15,
 
@@ -1057,7 +1072,7 @@ var enB = {
 				return formatReductionPercentage(x + 1) + "%"
 			}
 		},
-		8: {
+		9: {
 			req: 90,
 			masReq: 0,
 			chargeReq: 25,
@@ -1073,7 +1088,7 @@ var enB = {
 				return shorten(x)
 			}
 		},
-		9: {
+		10: {
 			req: 96,
 			masReq: 0,
 			chargeReq: 30,
@@ -1084,27 +1099,11 @@ var enB = {
 			anti: true,
 			eff(x) {
 				var sqrt = Math.sqrt(Decimal.max(getInfinitied(), 1).log10())
-				var exp = Math.log2(x / 500 + 1) * 5 + 1
+				var exp = 10 - 10 / (Math.log2(x / 500 + 1) / 10 + 1)
 				return Math.max(sqrt, 1) * exp + 1
 			},
 			effDisplay(x) {
 				return "^" + shorten(x)
-			}
-		},
-		10: {
-			req: 120,
-			masReq: 0,
-			chargeReq: 0,
-
-			title: "Timeless Capability",
-			tier: 3,
-			type: "r",
-			anti: true,
-			eff(x) {
-				return Math.pow(player.dilation.tachyonParticles.add(1).log10() * Math.log10(x / 10 + 1) / 100 + 1, tmp.ngp3_mul ? 0.4 : 1/3)
-			},
-			effDisplay(x) {
-				return x.toFixed(3) + "x"
 			}
 		},
 		11: {

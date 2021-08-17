@@ -395,7 +395,7 @@ function getMetaUnlCost() {
 function getPataAccelerator() {
 	var x = qu_save.time / 24000
 	if (enB.pos.charged(2)) x *= enB.pos.chargeEff(2) / 2 + 1
-	if (enB.active("pos", 10)) x *= enB_tmp.pos10
+	if (enB.active("pos", 7)) x *= enB_tmp.pos7
 
 	x = Math.min(x, 1)
 	if (QCs.perkActive(3)) x = 1

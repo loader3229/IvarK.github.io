@@ -777,8 +777,9 @@ function rateFormat(apm, unit) {
 	return shorten(apm) + (unit ? " " + unit : "") + "/" + time
 }
 
-function formatPercentage(x, digits = 1) {
+function formatPercentage(x, digits = 1, reduction) {
 	x = Decimal.times(x, 100)
+	if (x.lt(100) && reduction) digits += Math.ceil(-x.log10() + 2)
 	if (x.gt(1e9)) return shorten(x)
 
 	let n = x.toFixed(digits)

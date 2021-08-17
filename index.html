@@ -1559,7 +1559,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/15/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/16/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -4438,34 +4438,31 @@
 				<td class="red">
 					<span style="font-size: 15px"><span id="rg" style="font-size: 30px">0</span> green-antired</span>
 					<br>
-					<span id="entangle_rg_bonus"></span>
+					(<span class="red" id="rPowerBuff" style="font-size:15px">1.00</span>x to red power, -<span class="green" id="gPowerNerf" style="font-size:15px">0.00</span> to green power)
 					<br>
 					<button id="entangle_rg" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('rg')">Use boosts with RG</button>
 				</td>
 				<td class="green">
 					<span style="font-size: 15px"><span id="gb" style="font-size: 30px">0</span> blue-antigreen</span>
 					<br>
-					<span id="entangle_gb_bonus"></span>
+					(<span class="green" id="gPowerBuff" style="font-size:15px">1.00</span>x to green power, -<span class="blue" id="bPowerNerf" style="font-size:15px">0.00</span> to blue power)
 					<br>
 					<button id="entangle_gb" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('gb')">Use boosts with GB</button>
 				</td>
 				<td class="blue">
 					<span style="font-size: 15px"><span id="br" style="font-size: 30px">0</span> red-antiblue</span>
 					<br>
-					<span id="entangle_br_bonus"></span>
+					(<span class="blue" id="bPowerBuff" style="font-size:15px">1.00</span>x to blue power, -<span class="red" id="rPowerNerf" style="font-size:15px">0.00</span> to red power)
 					<br>
 					<button id="entangle_br" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('br')">Use boosts with BR</button>
 				</td>
 			</tr>
 			<tr>
-				<td class="green">
-					(<span class="red" id="rPowerBuff" style="font-size:15px">1.00</span>x to red power, -<span class="green" id="gPowerNerf" style="font-size:15px">0.00</span> to green power)
+				<td id="entangle_rg_bonus" class="green">
 				</td>
-				<td class="blue">
-					(<span class="green" id="gPowerBuff" style="font-size:15px">1.00</span>x to green power, -<span class="blue" id="bPowerNerf" style="font-size:15px">0.00</span> to blue power)
+				<td id="entangle_gb_bonus" class="blue">
 				</td>
-				<td class="red">
-					(<span class="blue" id="bPowerBuff" style="font-size:15px">1.00</span>x to blue power, -<span class="red" id="rPowerNerf" style="font-size:15px">0.00</span> to red power)
+				<td id="entangle_br_bonus" class="red">
 				</td>
 			</tr>
 			<tr>
@@ -4822,7 +4819,7 @@
 						<br>
 						<span id="enB_pos7_full"></span>
 						<br><br>
-						The exponent of EC14 is <span id="enB_pos7_eff" style="font-size:24px"></span> closer to ^1.
+						Tachyon particles speed up Pata Accelerator production by <span id="enB_pos7_eff" style="font-size:24px"></span>.
 					</td>
 					<td id="enB_pos8">
 						<b id="enB_pos8_name" style="font-size: 24px"></b>
@@ -4831,7 +4828,7 @@
 						<br>
 						<span id="enB_pos8_full"></span>
 						<br><br>
-						Meta Accelerator slowdown starts <span id="enB_pos8_eff" style="font-size:24px"></span> later.
+						The exponent of EC14 is <span id="enB_pos8_eff" style="font-size:24px"></span> closer to ^1.
 					</td>
 					<td id="enB_pos9">
 						<b id="enB_pos9_name" style="font-size: 24px"></b>
@@ -4840,7 +4837,7 @@
 						<br>
 						<span id="enB_pos9_full"></span>
 						<br><br>
-						Infinitied stat boosts itself by <span id="enB_pos9_eff" style="font-size:24px"></span> to effect.
+						Meta Accelerator slowdown starts <span id="enB_pos9_eff" style="font-size:24px"></span> later.
 					</td>
 				</tr>
 				<tr>
@@ -4851,7 +4848,7 @@
 						<br>
 						<span id="enB_pos10_full"></span>
 						<br><br>
-						Tachyon particles speed up Pata Accelerator production by <span id="enB_pos10_eff" style="font-size:24px"></span>.
+						Infinitied stat boosts itself by <span id="enB_pos10_eff" style="font-size:24px"></span> to effect.
 					</td>
 					<td id="enB_pos11">
 						<b id="enB_pos11_name" style="font-size: 24px"></b>
