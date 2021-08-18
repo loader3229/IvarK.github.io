@@ -10,7 +10,7 @@ function togglePerformanceTicks() {
 
 function toggleLogRateChange() {
 	aarMod.logRateChange=!aarMod.logRateChange
-	getEl("toggleLogRateChange").textContent = "Logarithm rate: O" + (aarMod.logRateChange ? "N" : "FF")
+	getEl("toggleLogRateChange").textContent = "Rate in logarithms: O" + (aarMod.logRateChange ? "N" : "FF")
 	dimDescEnd = (aarMod.logRateChange?" OoM":"%")+"/s)"
 }
 

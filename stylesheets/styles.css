@@ -2450,6 +2450,11 @@ td.grey {
 	text-shadow: 0px 0px 6px #bf9f00, 2px 1px 3px #bf9f00, -2px -1px 3px #bf9f00
 }
 
+.undercharged {
+	color: #ff9f7f;
+	text-shadow: 0px 0px 6px #bf0000, 2px 1px 3px #bf0000, -2px -1px 3px #bf0000
+}
+
 #pc_table td {
 	height: 108px;
 	width: 108px;

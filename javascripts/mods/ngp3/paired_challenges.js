@@ -30,6 +30,7 @@ var PCs = {
 		var data = {
 			goal_divs: [null, 0.1, 0.95, 0.25, 0.95, 0.45, 0.5, 0.4, 0.7],
 			milestoneReqs: [null, 1, 2, 4],
+			letters: [null, "A", "B", "C", "D", "Ω<sup>1</sup>", "Ω<sup>2</sup>", "Ω<sup>3</sup>", "Θ"],
 			all: [],
 			setup: true
 		}
@@ -242,6 +243,12 @@ var PCs = {
 		r = r.div(this.shrunkerEff())
 		return r
 	},
+	done(pc) {
+		return PCs.unl() && PCs_save.comps.includes(this.sort(pc))
+	},
+	posDone(pc) {
+		return PCs.done(PCs_save.challs[pc])
+	},
 	conv(c1, c2) {
 		if (!c1) { //Current (No augments)
 			c1 = QCs_tmp.in[0]
@@ -263,11 +270,8 @@ var PCs = {
 		}
 		return Math.min(pc, Math.floor(pc / 10) + (pc % 10) * 10)
 	},
-	done(pc) {
-		return PCs.unl() && PCs_save.comps.includes(this.sort(pc))
-	},
-	posDone(pc) {
-		return PCs.done(PCs_save.challs[pc])
+	name(pc) {
+		return PCs.data.letters[Math.floor(pc / 10)] + pc % 10
 	},
 	milestoneDone(pos) {
 		return PCs.unl() && PCs_tmp.comps && PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
@@ -287,10 +291,10 @@ var PCs = {
 		return Math.floor(x / 10) == x % 10
 	},
 
-	setupButton: (pc) => '<td><button id="pc' + pc + '" class="challengesbtn" onclick="PCs.start(' + pc + ')"></button></td>',
+	setupButton: (pc) => '<td><button id="pc' + pc + '" class="challengesbtn" style="border-radius: 10px" onclick="PCs.start(' + pc + ')"></button></td>',
 	buttonTxt(pc) {
 		var id = PCs.sort(PCs_save.challs[pc])
-		return '<b style="font-size: 18px">PC' + pc + '</b><br>' + (
+		return '<b style="font-size: 18px">' + PCs.name(pc) + '</b><br>' + (
 			PCs_tmp.pick ? (PCs_tmp.pick == pc ? "Click to cancel" : "") :
 			!PCs_save.challs[pc] ? "Click to assign" :
 			"QC " + wordizeList(PCs.convBack(id), false, " + ", false) +
@@ -311,7 +315,7 @@ var PCs = {
 
 		//Setup buttons
 		var html = "<br>"
-		for (var i = 1; i <= 8; i++) html += "<button id='pc_pick" + i + "' class='challengesbtn' style='height: 60px; width: 60px' onclick='PCs.assign(" + i + ")'>QC" + i + "</button>"
+		for (var i = 1; i <= 8; i++) html += "<button id='pc_pick" + i + "' style='height: 60px; width: 60px' onclick='PCs.assign(" + i + ")'>QC" + i + "</button>"
 		getEl("pc_pick").innerHTML = html
 
 		//Setup header
@@ -321,7 +325,7 @@ var PCs = {
 
 		//Setup rows
 		for (var y = 1; y <= 4; y++) {
-			var html = "<td>Set #" + y +
+			var html = "<td>Set " + this.data.letters[y] +
 			"<br><button class='storebtn' id='pc_respec" + y + "' style='height: 24px; width: 60px' onclick='PCs.respec(" + y + ")'>Respec</button>" +
 			"</td>"
 			for (var x = 1; x <= 4; x++) html += this.setupButton(y * 10 + x)
@@ -347,6 +351,7 @@ var PCs = {
 			PCs_tmp.pick ? (PCs_tmp.pick == pc ? "onchallengebtn" : "lockedchallengesbtn") :
 			PCs_save.in == pc && !exit ? "onchallengebtn" :
 			PCs_save.challs[pc] && PCs_save.comps.includes(PCs.sort(PCs_save.challs[pc])) ? "completedchallengesbtn" :
+			PCs_save.challs[pc] ? "quantumbtn" :
 			"challengesbtn"
 		)
 		el.innerHTML = this.buttonTxt(pc)
@@ -382,9 +387,9 @@ var PCs = {
 		getEl("pc_pick").style.display = PCs_tmp.pick ? "" : "none"
 		if (PCs_tmp.pick) {
 			for (var i = 1; i <= 8; i++) {
-				getEl("pc_pick" + i).className = PCs_tmp.picked.includes(i) ? "onchallengebtn" :
-					PCs_tmp.occupied.includes(i) ? "lockedchallengesbtn" :
-					"challengesbtn"
+				getEl("pc_pick" + i).className = PCs_tmp.picked.includes(i) ? "chosenbtn" :
+					PCs_tmp.occupied.includes(i) ? "unavailablebtn" :
+					"storebtn"
 				getEl("pc_pick" + i).style.display = QCs.done(i) ? "" : "none"
 			}
 		}

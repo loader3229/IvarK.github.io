@@ -882,10 +882,9 @@ var enB = {
 			return eng
 		},
 
-		chargeReq(x, next) {
-			var lvl = this.lvl(x, next)
-			var req = this[x].chargeReq * (tmp.exMode ? 1.25 : 1) * Math.pow(lvl, tmp.dtMode ? 2.5 : tmp.bgMode ? 1 : 2)
-			if (PCs.milestoneDone(42) && lvl == 1) req *= req
+		chargeReq(x, next, lvl) {
+			var lvl = lvl || this.lvl(x, next)
+			var req = this[x].chargeReq * Math.pow(1.5, Math.max(pos_tmp.cloud && pos_tmp.cloud.total || 0, 2)) * Math.pow(2, lvl - this[x].tier)
 			return req
 		},
 		chargeEff(x) {
@@ -894,8 +893,8 @@ var enB = {
 			if (PCs.milestoneDone(42) && lvl == 1) eff *= 4
 			return eff
 		},
-		charged(x) {
-			return this.activeReq(x) && this.engAmt() >= this.chargeReq(x) && (enB.mastered("pos", x) || enB.colorMatch("pos", x))
+		charged(x, lvl) {
+			return this.activeReq(x) && this.engAmt() >= this.chargeReq(x, false, lvl) && (enB.mastered("pos", x) || enB.colorMatch("pos", x))
 		},
 
 		lvl(x, next) {
@@ -929,7 +928,7 @@ var enB = {
 		2: {
 			req: 3,
 			masReq: 6,
-			chargeReq: 2,
+			chargeReq: 1.5,
 
 			title: "Pata Accelerator",
 			tier: 2,
@@ -977,7 +976,7 @@ var enB = {
 		3: {
 			req: 6,
 			masReq: 7,
-			chargeReq: 4,
+			chargeReq: 2,
 
 			title: "Classical Positrons",
 			tier: 1,
@@ -996,7 +995,7 @@ var enB = {
 			masReq: 9,
 			masReqExpert: 10,
 			masReqDeath: 12,
-			chargeReq: 3,
+			chargeReq: 2.5,
 
 			title: "Quantum Scope",
 			tier: 3,
@@ -1013,7 +1012,7 @@ var enB = {
 			req: 8,
 			masReq: 9,
 			masReqExpert: 10,
-			chargeReq: 4,
+			chargeReq: 3,
 
 			title: "Gluon Flux",
 			tier: 2,
@@ -1029,7 +1028,7 @@ var enB = {
 		6: {
 			req: 9,
 			masReq: 16,
-			chargeReq: 1.5,
+			chargeReq: 3.5,
 
 			title: "Transfinite Time",
 			tier: 3,
@@ -1045,7 +1044,7 @@ var enB = {
 		7: {
 			req: 25,
 			masReq: 0,
-			chargeReq: 10,
+			chargeReq: 4,
 
 			title: "Looped Dimensionality",
 			tier: 3,
@@ -1059,10 +1058,10 @@ var enB = {
 		8: {
 			req: 50,
 			masReq: 0,
-			chargeReq: 15,
+			chargeReq: 5,
 
 			title: "308% Completionist",
-			tier: 2,
+			tier: 3,
 			eff(x) {
 				return Math.log10(x + 1) / 5
 			},
@@ -1073,10 +1072,10 @@ var enB = {
 		9: {
 			req: 90,
 			masReq: 0,
-			chargeReq: 25,
+			chargeReq: 6,
 
 			title: "MT-Force Preservation",
-			tier: 3,
+			tier: 2,
 			eff(x) {
 				return Math.pow(x / 15 + 1, 0.1) - 1
 			},
@@ -1085,9 +1084,9 @@ var enB = {
 			}
 		},
 		10: {
-			req: 96,
+			req: 99,
 			masReq: 0,
-			chargeReq: 30,
+			chargeReq: 8,
 
 			title: "Overpowered Infinities",
 			tier: 2,
@@ -1103,7 +1102,7 @@ var enB = {
 		11: {
 			req: 120,
 			masReq: 0,
-			chargeReq: 0,
+			chargeReq: 10,
 
 			title: "Eternity Transfinition",
 			tier: 3,
@@ -1117,7 +1116,7 @@ var enB = {
 		12: {
 			req: 120,
 			masReq: 0,
-			chargeReq: 0,
+			chargeReq: 12,
 
 			title: "Timeless Capability",
 			tier: 3,
@@ -1175,7 +1174,11 @@ var enB = {
 		}
 		var data = enB
 		var typeData = data[type]
-		return !data.active(type, e) ? "black" : type == "pos" && typeData.charged(e) ? "yellow" : data.mastered(type, e) || !typeData[e].type ? "lime" : enB.colorMatch(type, e) ? colors[typeData[e].type] + (data.anti(type, e) ? "_anti" : "") : "grey"
+		return type == "pos" && shiftDown ? (!typeData.charged(e) ? "black" : [null, "red", "green", "blue"][typeData.lvl(e)]) :
+			!data.active(type, e) ? "black" :
+			type == "pos" && typeData.charged(e) ? "yellow" :
+			data.mastered(type, e) || !typeData[e].type ? "lime" :
+			enB.colorMatch(type, e) ? colors[typeData[e].type] + (data.anti(type, e) ? "_anti" : "") : "grey"
 	},
 	updateUnlock() {
 		let gluUnl = enB.glu.unl()

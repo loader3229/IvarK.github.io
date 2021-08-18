@@ -736,6 +736,7 @@ let tsMults = {
 	},
 	83() {
 		let x = Decimal.pow(1.0004, player.totalTickGained)
+		if (tmp.ngpX < 2) x = x.min(1e30)
 		if (tmp.ngp3) x = softcap(x, "ts83")
 		return x
 	},

@@ -1557,7 +1557,7 @@ function updatePerformanceTicks() {
 			startInterval()
 		}
 	}
-	getEl("performanceTicks").textContent = "Performance ticks: " + ["OFF", "LOW", "MEDIUM", "HIGH"][(aarMod.performanceTicks || 0) + 0]
+	getEl("performanceTicks").textContent = "Optimization: " + ["OFF", "LOW", "MEDIUM", "HIGH"][(aarMod.performanceTicks || 0) + 0]
 }
 
 function updateCosts() {

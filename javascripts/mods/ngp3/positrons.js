@@ -189,7 +189,6 @@ var pos = {
 				data.sac_mdb * (PCs.milestoneDone(51) ? Math.max(data.sac_mdb / 30, 1) : 1) * pos_tmp.mults.mdb_eff,
 				Math.pow(data.sac_qe * (tmp.bgMode ? 2 : 1.5), 2)
 			)) * 300
-
 		} else {
 			data.sac_mdb = 0
 			data.sac_qe = 0
@@ -300,9 +299,12 @@ var pos = {
 		}
 	},
 	updateCharge(i) {
-		var charged = enB.pos.charged(i) && enB.pos.lvl(i, true) == enB.pos.lvl(i)
-		getEl("pos_boost" + i + "_charge").textContent = charged ? "Charged (" + enB.pos.chargeEff(i) + "x)" : "Charge: " + shorten(enB.pos.chargeReq(i, true))
-		getEl("pos_boost" + i + "_charge").className = charged ? "charged" : ""
+		var lvl = enB.pos.lvl(i)
+		var match = enB.pos.lvl(i, true) == lvl
+		var charged = match && enB.pos.charged(i)
+		var undercharged = match && lvl < 3 && lvl == enB.pos[i].tier && enB.pos.charged(i, lvl + 1)
+		getEl("pos_boost" + i + "_charge").textContent = undercharged ? "Undercharged! (Switch to Tier " + (lvl + 1) + ")" : charged ? "Charged (" + enB.pos.chargeEff(i) + "x)" : "Charge: " + shorten(enB.pos.chargeReq(i, true))
+		getEl("pos_boost" + i + "_charge").className = undercharged ? "undercharged" : charged ? "charged" : ""
 	},
 	switchTab() {
 		pos_tmp.tab = pos_tmp.tab == "cloud" ? "boost" : "cloud"
