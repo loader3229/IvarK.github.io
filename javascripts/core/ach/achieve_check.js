@@ -255,7 +255,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.meta.bestAntimatter.gte(Decimal.pow(Number.MAX_VALUE, 3)) && player.meta[5].amount.lt(Math.sqrt(Number.MAX_VALUE))) giveAchievement("Old memories come true")
 	if (player.timestudy.theorem >= 1e85 && !QCs.isntCatched()) giveAchievement("Infinity Morals")
 	if (PCs_save.lvl >= 3) giveAchievement("Twice in a row")
-	if (player.eightBought >= (tmp.exMode ? 3e7 : 17e6) && (player.replicanti.galaxies + tmp.extraRG) == 0) giveAchievement("Intergalactic")
+	if (player.eightBought >= (tmp.exMode ? 3e7 : 17e6) && (tmp.dtMode ? getTotalRG() : player.replicanti.galaxies) == 0) giveAchievement("Intergalactic")
 	if (player.eternityPoints.e >= 1/0 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 
 	if (player.meta.bestAntimatter.log10() >= 333 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")

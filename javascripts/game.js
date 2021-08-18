@@ -1881,7 +1881,7 @@ function changeSaveDesc(saveId, placement) {
 				var quantum = temp.quantum
 				var qk = Decimal.add(quantum.quarks,quantum.usedQuarks.r).add(quantum.usedQuarks.g).add(quantum.usedQuarks.b)
 				if (quantum.gluons.rg) qk = qk.add(quantum.gluons.rg,quantum.gluons.gb).add(quantum.gluons.br)
-				if (quantum.qc && quantum.qc.comps >= 1) msg += "Quantum Energy: " + shorten(quantum.bestEnergy || quantum.quarkEnergy) + ", Replicated Compressors: " + getFullExpansion(quantum.qc.qc1.best || quantum.qc.qc1.boosts)
+				if (quantum.qc && quantum.qc.comps >= 1) msg += "Quantum Energy: " + shorten(quantum.bestEnergy || quantum.quarkEnergy) + ", Replicanti Compressors: " + getFullExpansion(quantum.qc.qc1.best || quantum.qc.qc1.boosts)
 				else msg += "Quantum Worth: " + shortenDimensions(qk) + ", Quantum Energy: " + shorten(quantum.bestEnergy || quantum.quarkEnergy)
 
 				if (quantum.qc && quantum.qc.comps >= 7) msg += ", Paired Challenges: " + (quantum.pc ? getFullExpansion(quantum.pc.best || 0) : "This has been rewritten while you are away!")
@@ -4040,7 +4040,7 @@ function incrementTimesUpdating(diffStat){
 	if (tmp.ngp3) player.ghostify.time += diffStat
 	if (qu_save && implosionCheck !== 2) qu_save.time += diffStat
 	if (player.currentEternityChall == "eterc12") diffStat /= 1e3
-	player.thisEternity += diffStat
+	player.thisEternity += diffStat * (QCs.perkActive(6) ? 0.5 : 1)
    	player.thisInfinityTime += diffStat
 	if (inNGM(2)) player.galacticSacrifice.time += diffStat
 	if (player.pSac) player.pSac.time += diffStat
@@ -4391,28 +4391,39 @@ function metaDimsUpdating(diff){
 	}
 }
 
-function infinityTimeMetaBlackHoleDimUpdating(diff){
+function specialDimUpdating(diff){
 	var step = inNGM(5) ? 2 : 1
-	var stepT = inNC(7) && inNGM(4) ? 2 : step
-	var stepM = step
-	var stepB = step
-
 	var max = inNGM(5) ? 6 : 8
 
-	for (let tier = max; tier >= 1; tier--) {
-		if (!QCs.in(3)) {
-			// Infinity
+	// Infinity
+	if (!QCs.in(3)) {
+		for (let tier = max; tier >= 1; tier--) {
 			if (tier <= max - step) player["infinityDimension" + tier].amount = player["infinityDimension"+tier].amount.plus(infDimensionProduction(tier + step).times(diff / 10))
+		}
+	}
 
-			// Time
+	// Time
+	var stepT = inNC(7) && inNGM(4) ? 2 : step
+	if (!QCs.in(3) || QCs.modIn(3, "up")) {
+		for (let tier = max; tier >= 1; tier--) {
 			if ((tmp.eterUnl || inNGM(4)) && tier <= max - stepT) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + stepT).times(diff / 10))
+		}
+	}
 
-			// Black Hole
+	// Black Hole
+	var stepB = step
+	if (!QCs.in(3)) {
+		for (let tier = max; tier >= 1; tier--) {
 			if (isBHDimUnlocked(tier + stepB) && tier <= max - stepB) player["blackholeDimension"+tier].amount = player["blackholeDimension" + tier].amount.plus(getBlackholeDimensionProduction(tier + stepB).times(diff / 10))
 		}
+	}
 
-		// Emperor
-		if (hasDilationStudy(6) && tier <= max - stepM) player.meta[tier].amount = player.meta[tier].amount.plus(getMDProduction(tier + stepM).times(diff / 10))
+	// Meta
+	var stepM = step
+	if (hasDilationStudy(6)) {
+		for (let tier = max; tier >= 1; tier--) {
+			if (tier <= max - stepM) player.meta[tier].amount = player.meta[tier].amount.plus(getMDProduction(tier + stepM).times(diff / 10))
+		}
 	}
 }
 
@@ -5022,7 +5033,7 @@ function gameLoop(diff) {
 		incrementTimesUpdating(diffStat)
 
 		if (player.meta) metaDimsUpdating(diff)
-		infinityTimeMetaBlackHoleDimUpdating(diff) //production of those dims
+		specialDimUpdating(diff) //production of those dims
 		otherDimsUpdating(diff)
 		giveBlackHolePowerUpdating(diff)
 		freeTickspeedUpdating()

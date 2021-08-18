@@ -113,7 +113,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 			!qMs.isOn(5) ? [] :
 			qMs.tmp.amt >= 9 ? [1, 2, 3, 4, 5, 6] : qMs.tmp.amt >= 6 ? [1, 2, 3, 4, 5] : [1],
 		active: false,
-		tachyonParticles: new Decimal(0),
+		tachyonParticles: new Decimal(QCs.perkActive(3) ? 1 : 0),
 		dilatedTime: new Decimal(0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
@@ -315,7 +315,7 @@ function doEternityResetStuff(layer = 4, chall) {
 	player.autoIP = new Decimal(0)
 	player.autoTime = 1e300
 
-	if (layer >= 5 || !QCs.perkActive(8)) player.thisEternity = 0
+	player.thisEternity = QCs.perkActive(6) ? 5 : 0
 	player.bestInfinityTime = 9999999999
 	player.lastTenRuns = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
 

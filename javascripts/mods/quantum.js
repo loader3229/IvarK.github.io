@@ -202,6 +202,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 			getEl("bestAntimatterType").textContent = "Your best meta-antimatter for this quantum"
 			getEl("quarksAnimBtn").style.display = "inline-block"
 
+			updateMasteryStudyBoughts()
 			updateUnlockedMasteryStudies()
 			updateSpentableMasteryStudies()
 		}
@@ -299,7 +300,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 			if (QCs_save.kept) {
 				player.timestudy.theorem = QCs_save.kept.tt
-				player.masterystudies = QCs_save.kept.ms
+				player.masterystudies = [...QCs_save.kept.ms]
 				delete QCs_save.kept
 			}
 		}

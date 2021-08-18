@@ -11,7 +11,7 @@ function initialGalaxies() {
 	let g = player.galaxies
 
 	if (pos.on()) g -= pos_save.gals.ng.sac
-	if (QCs.in(4) && QCs_save.qc4 == "ng") g = 0
+	if (QCs.in(4) && QCs_save.qc4[QCs_tmp.qc4.type] == "ng") g = 0
 	if (tmp.ngC) g *= 2
 	if ((inNC(15) || player.currentChallenge == "postc1") && tmp.ngmX == 3) g = 0
 

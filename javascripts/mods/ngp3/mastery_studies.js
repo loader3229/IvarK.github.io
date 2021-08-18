@@ -165,8 +165,7 @@ var mTs = {
 			if (hasNU(6)) return 0
 
 			var x = player.meta.resets
-			x *= Math.sqrt(x / 100 + 1)
-			x *= (13 / (x / 50 + 1) + 2)
+			x *= 13 / (x / 50 + 1) + Math.max(Math.log2(x / 25), 1) * 2
 			if (tmp.ngp3_mul) x *= 1.25
 			return x
 		},
@@ -194,8 +193,7 @@ var mTs = {
 
 			var pow = Math.min(Math.pow(Math.log10(x / 1e5 + 1), 1.5) / 5, 1)
 			if (x > 1) x *= Math.pow(x, pow)
-			x /= Math.pow(30, pow)
-			x = Math.min(x, 1e24)
+			x /= Math.pow(100, pow)
 
 			return {
 				eff: Decimal.pow(10, x),
@@ -226,7 +224,7 @@ var mTs = {
 		},
 		292() {
 			var rg = getFullEffRGs()
-			return Math.min(Math.log2(rg / 2e3 + 1) / 5 + 1, 3)
+			return Math.min(Math.log2(rg / 2e3 + 1) / 5 + 1, 2)
 		},
 
 		311() {
@@ -383,8 +381,8 @@ var mTs = {
 		}
 		player.masterystudies = respecedMS
 
-		mTs.bought = 0
-		mTs.latestBoughtRow = 0
+		updateMasteryStudyBoughts()
+		updateSpentableMasteryStudies()
 
 		if (player.respecMastery) respecMasteryToggle()
 		if (player.eternityChallUnlocked >= 13) resetEternityChallUnlocks()

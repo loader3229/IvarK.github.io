@@ -519,7 +519,8 @@ var enB = {
 	getMastered(type, x) {
 		var data = this[type]
 		var r = (tmp.dtMode && data[x].masReqDeath) || (tmp.exMode && data[x].masReqExpert) || data[x].masReq
-		if (type == "glu" && QCs.perkActive(2)) r *= 20
+		if (type == "glu" && QCs.perkActive(8) && !this.colorMatch("glu", x)) r = 0
+		else if (type == "glu" && QCs.perkActive(2)) r *= 20
 		return r
 	},
 	anti(type, x) {
@@ -538,6 +539,7 @@ var enB = {
 	colorMatch(type, x) {
 		var data = this[type][x]
 		var gluon = enB.colorUsed()
+		if (!data.type) return true
 		if (!gluon) return
 
 		var r = data.type == gluon[0] || data.type == gluon[1]
@@ -899,7 +901,7 @@ var enB = {
 		lvl(x, next) {
 			if (pos_save === undefined) return this[x].tier
 
-			var swaps = next ? pos_tmp.next_swaps : pos_save.swaps
+			var swaps = next ? pos_tmp.next_swaps : pos.on() ? pos_save.swaps : {}
 			if (swaps[x]) x = swaps[x]
 			return this[x].tier
 		},
@@ -955,6 +957,7 @@ var enB = {
 				if (mdb <= slowStart) speed += (mdb - 1) * accSpeed
 
 				var mult = Decimal.pow(base, exp)
+				var igal = hasAch("ng3p27") ? getIntergalacticExp(mult.log10()) : undefined
 				return {
 					base: base,
 					exp: exp,
@@ -963,10 +966,8 @@ var enB = {
 					acc: accSpeed / rel_speed,
 					mult: mult,
 
-					igal: hasAch("ng3p27") ?
-						getIntergalacticExp(mult.log10())
-					: undefined,
-					igal_softcap: hasAch("ng3p27") ? Math.max(mult.log10() / 10 - 2, 1) : undefined
+					igal: hasAch("ng3p27") ? igal : undefined,
+					igal_softcap: hasAch("ng3p27") ? Math.pow(igal, 2) : undefined
 				}
 			},
 			effDisplay(x) {
@@ -1002,7 +1003,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return Math.log10(x / 10 + 1) * Math.pow(tmp.ngp3_mul ? x + 1 : x / 200 + 1, 0.25) / 3 + 1
+				return Math.log10(x / 10 + 1) * Math.pow(x / (tmp.ngp3_mul ? 100 : 200) + 1, 0.25) / 3 + 1
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
@@ -1046,10 +1047,8 @@ var enB = {
 			masReq: 0,
 			chargeReq: 10,
 
-			title: "Timeless Capability",
+			title: "Looped Dimensionality",
 			tier: 3,
-			type: "r",
-			anti: true,
 			eff(x) {
 				return Math.log10(player.dilation.tachyonParticles.max(1).log10() * Math.log10(x / 10 + 1) / 10 + 10)
 			},
@@ -1064,7 +1063,6 @@ var enB = {
 
 			title: "308% Completionist",
 			tier: 2,
-			type: "g",
 			eff(x) {
 				return Math.log10(x + 1) / 5
 			},
@@ -1079,8 +1077,6 @@ var enB = {
 
 			title: "MT-Force Preservation",
 			tier: 3,
-			type: "g",
-			anti: true,
 			eff(x) {
 				return Math.pow(x / 15 + 1, 0.1) - 1
 			},
@@ -1095,8 +1091,6 @@ var enB = {
 
 			title: "Overpowered Infinities",
 			tier: 2,
-			type: "b",
-			anti: true,
 			eff(x) {
 				var sqrt = Math.sqrt(Decimal.max(getInfinitied(), 1).log10())
 				var exp = 10 - 10 / (Math.log2(x / 500 + 1) / 10 + 1)
@@ -1113,8 +1107,6 @@ var enB = {
 
 			title: "Eternity Transfinition",
 			tier: 3,
-			type: "b",
-			anti: true,
 			eff(x) {
 				return 1e-11 * Math.min(Math.sqrt(x), 5e3)
 			},
@@ -1127,10 +1119,8 @@ var enB = {
 			masReq: 0,
 			chargeReq: 0,
 
-			title: "Looped Dimensionality",
+			title: "Timeless Capability",
 			tier: 3,
-			type: "g",
-			anti: true,
 			eff(x) {
 				return Math.pow(Math.log10(getReplEff().add(1).log10() + 1) / (tmp.ngp3_mul ? 8 : 10) + 1, 3) - 1
 			},
@@ -1185,7 +1175,7 @@ var enB = {
 		}
 		var data = enB
 		var typeData = data[type]
-		return !data.active(type, e) ? "black" : type == "pos" && typeData.charged(e) ? "yellow" : data.mastered(type, e) ? "lime" : enB.colorMatch(type, e) ? colors[typeData[e].type] + (data.anti(type, e) ? "_anti" : "") : "grey"
+		return !data.active(type, e) ? "black" : type == "pos" && typeData.charged(e) ? "yellow" : data.mastered(type, e) || !typeData[e].type ? "lime" : enB.colorMatch(type, e) ? colors[typeData[e].type] + (data.anti(type, e) ? "_anti" : "") : "grey"
 	},
 	updateUnlock() {
 		let gluUnl = enB.glu.unl()
@@ -1209,7 +1199,7 @@ var enB = {
 			if (!active) list.push("Inactive")
 			if (charged) list.push("<b class='charged'>Charged (" + data.chargeEff(i) + "x)</b>")
 			else if (mastered) list.push("Mastered")
-			if (!mastered || shiftDown) list.push((this.anti(type, i) ? "anti-" : "") + data[i].type.toUpperCase() + "-type boost")
+			if (data[i].type && (!mastered || shiftDown)) list.push((this.anti(type, i) ? "anti-" : "") + data[i].type.toUpperCase() + "-type boost")
 			if (!mastered && !QCs.in(8)) list.push("Get " + getFullExpansion(enB.getMastered(type, i)) + " " + data.name + " Boosters to master")
 
 			getEl("enB_" + type + i + "_name").textContent = shiftDown ? (data[i].title || "Unknown title.") : (data.name + " Boost #" + i)

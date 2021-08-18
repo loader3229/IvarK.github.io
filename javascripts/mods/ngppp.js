@@ -958,13 +958,12 @@ function getAQSGainExp(x) {
 	if (!x) x = quarkGain(true)
 
 	let r = 1
-	if (PCs.unl()) r = Math.pow(x.log10() + 1, PCs_tmp.eff2)
-	return Math.min(r, 5e3)
+	if (PCs.unl()) r = Math.log10(x.log10() + 1) * PCs_tmp.eff2 + 1
+	return Math.min(r, 10)
 }
 
 function getIntergalacticExp(log) {
-	let x = log / 30 + 1
-	return Math.sqrt(x) * Math.max(Math.log10(x), 1)
+	return Math.sqrt(log / 100 + 1) * Math.max(Math.log2(log / 5) / 2, 1)
 }
 
 //Update Messages

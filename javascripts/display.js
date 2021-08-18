@@ -165,7 +165,7 @@ function quantumStatDisplay(){
 		getEl("quantumed").textContent = "You have gone Quantum " + getFullExpansion(qu_save.times) + " times."
 		getEl("thisQuantum").textContent = "You have spent " + timeDisplay(qu_save.time) + " in this Quantum."
 		getEl("bestQuantum").textContent = "Your fastest Quantum is in " + timeDisplay(qu_save.best) + "."
-		getEl("bestCompressors").textContent = QCs.done(1) ? "You have a best of " + getFullExpansion(QCs_save.qc1.best) + " Replicated Compressors." : ""
+		getEl("bestCompressors").textContent = QCs.done(1) ? "You have a best of " + getFullExpansion(QCs_save.qc1.best) + " Replicanti Compressors." : ""
 		getEl("bestPCs").textContent = PCs_save.lvl > 1 ? "You have a best of " + getFullExpansion(PCs_save.best) + " Paired Challenge completions." : ""
 	}
 }

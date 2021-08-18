@@ -258,7 +258,7 @@ function getTotalRGs() {
 function getEffectiveRGs(type = "rg") {
 	let rg = type == "eg" ? tmp.extraRG || 0 : player.replicanti.galaxies
 	if (pos.on()) rg -= pos_save.gals[type].sac
-	if (QCs.in(4) && QCs_save.qc4 == type) rg = 0
+	if (QCs.in(4) && QCs_save.qc4[QCs_tmp.qc4.type] == type) rg = 0
 	return rg
 }
 
@@ -441,6 +441,7 @@ function boostReplicateInterval() {
 		if (sclessEst.gt(scEst)) x = x.div(sclessEst.div(scEst))
 	}
 	if (QCs_tmp.qc1) x = x.times(QCs_tmp.qc1.speedMult)
+	if (QCs.perkActive(5)) x = x.div(QCs_save.qc1.expands / 2 + 1)
 
 	data.intBoost = x
 	data.baseInt = data.baseInt.div(x)

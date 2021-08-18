@@ -31,9 +31,10 @@ var QCs = {
 		getEl("setAutoExpand_value").value = QCs_save.qc1.autoExpand.value
 		getEl("setAutoExpand_percentage").value = QCs_save.qc1.autoExpand.percentage
 
+		if (QCs_save.qc4 === undefined || QCs_save.qc4.normal === undefined) QCs_save.qc4 = { normal: QCs_save.qc4 || "ng", dil: "ng" }
+
 		if (typeof(QCs_save.qc2) !== "number") QCs_save.qc2 = QCs_save.cloud_disable || 1
 		QCs_save.qc5 = new Decimal(QCs_save.qc5)
-
 		if (QCs_save.qc8 === undefined) QCs_save.qc8 = {
 			index: 0,
 			order: []
@@ -59,7 +60,6 @@ var QCs = {
 		}
 		if (!QCs_save.qc2) QCs_save.qc2 = 1
 		QCs_save.qc3 = undefined
-		QCs_save.qc4 = "ng"
 		QCs_save.qc5 = new Decimal(0)
 		QCs_save.qc6 = 0
 		QCs_save.qc7 = 0
@@ -68,19 +68,19 @@ var QCs = {
 		max: 8,
 		1: {
 			unl: () => true,
-			desc: () => "There are Replicated Compressors instead of Replicated Galaxies, and TT cost multipliers are doubled.",
+			desc: () => "There are Replicanti Compressors instead of Replicated Galaxies, and TT cost multipliers are doubled.",
 			goal: () => player.money.e >= (tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11),
 			goalDisp: () => shortenCosts(Decimal.pow(10, tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11)) + " antimatter",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.35),
 			hint: "Figure out how to get more Replicanti Chance. (MS35)",
 
-			rewardDesc: (x) => "You can keep Replicated Compressors.",
+			rewardDesc: (x) => "You can keep Replicanti Compressors.",
 			rewardEff(str) {
 				return 0.1
 			},
 
-			upsideDesc: (x) => "Replicated Compressors are 50% weaker, and the replicate interval is " + (tmp.exMode ? "inverted" : "always 1s") + ".",
-			perkDesc: (x) => "Each Replicated Compressor gives 10s of Quantum-layer ticks. (not implemented)",
+			nerfDesc: (x) => "Replicanti Compressors are 50% weaker, and the replicate interval is " + (tmp.exMode ? "inverted" : "always 1s") + ".",
+			perkDesc: (x) => "Replicanti Compressors increase the exponent of Replicanti Energy.",
 			perkEff() {
 				return 1
 			},
@@ -236,7 +236,7 @@ var QCs = {
 				return x
 			},
 
-			upsideDesc: (x) => "Only excluded Positronic Boosts work.",
+			nerfDesc: (x) => "Only excluded Positronic Boosts work.",
 			perkDesc: (x) => "Entangled Boosts are 50% stronger, but mastery requires 20x more and always anti'd.",
 			perkEff() {
 				return 1
@@ -263,7 +263,7 @@ var QCs = {
 		},
 		3: {
 			unl: () => true,
-			desc: () => "There are only Meta Dimensions that produce AM and IP, but successfully dilating reduces the AM production, and you only gain TP by exiting dilation.",
+			desc: () => "There are only Meta Dimensions that produce AM and IP, but successfully dilating reduces AM production, and you only gain TP by exiting dilation.",
 			goal: () => player.dilation.tachyonParticles.gte(1e6),
 			goalDisp: () => shortenCosts(1e6) + " Tachyon Particles",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 0.2),
@@ -274,8 +274,8 @@ var QCs = {
 				return 1
 			},
 
-			upsideDesc: (x) => "???",
-			perkDesc: (x) => "Time multiplier is always 1x for the Meta Accelerator base.",
+			nerfDesc: (x) => "There are Time Dimensions, but Meta Dimensions only get boosted by antimatter.",
+			perkDesc: (x) => "Start at 1 TP, and Eternity Points boost Meta Dimensions.",
 			perkEff() {
 				return 1
 			},
@@ -302,14 +302,10 @@ var QCs = {
 				return
 			},
 
-			upsideDesc: (x) => "???",
-			perkDesc: (x) => "Total galaxies reduce the QC goal by " + shorten(x) + "x",
+			nerfDesc: (x) => "Changing the exclusion restarts this challenge.",
+			perkDesc: (x) => "You can exclude separately in dilation runs.",
 			perkEff() {
-				return Math.pow(
-					Math.sqrt(player.galaxies) +
-					Math.sqrt(getTotalRGs()) +
-					Math.sqrt(player.dilation.freeGalaxies)
-				, 2)
+				return 1
 			},
 
 			overlapReqs: [1/0, 1/0],
@@ -318,16 +314,19 @@ var QCs = {
 				delete QCs_tmp.qc4
 				if (!QCs.in(4)) return
 
+				var type = QCs.perkActive(4) && player.dilation.active ? "dil" : "normal"
 				var gals = {
 					ng: player.galaxies,
 					rg: player.replicanti.galaxies,
 					eg: tmp.extraRG || 0,
 					tg: player.dilation.freeGalaxies,
 				}
+				var galType = QCs_save.qc4[type]
 				var sum = gals.ng + gals.rg + gals.eg + gals.tg
 				
 				QCs_tmp.qc4 = {
-					diff: Math.abs(gals[QCs_save.qc4] - (sum - gals[QCs_save.qc4]) / 3)
+					diff: Math.abs(gals[galType] - (sum - gals[galType]) / 3),
+					type: type
 				}
 				QCs_tmp.qc4.boost = Math.log2(QCs_tmp.qc4.diff / 500 + 1) / 5 + 1
 			},
@@ -341,18 +340,24 @@ var QCs = {
 				var types = ["ng", "rg", "eg", "tg"]
 				for (var t = 0; t < types.length; t++) {
 					var type = types[t]
-					getEl("qc4_" + type).className = (QCs_save.qc4 == type ? "chosenbtn" : "storebtn")
+					getEl("qc4_" + type).className = (QCs_save.qc4[QCs_tmp.qc4.type] == type ? "chosenbtn" : "storebtn")
 				}
 			},
 			switch(x) {
-				QCs_save.qc4 = x
-				eternity(true)
-				this.updateDisp()
+				QCs_save.qc4[QCs_tmp.qc4.type] = x
+				if (QCs.modIn(4, "up")) {
+					if (QCs_tmp.qc4.type == "dil" && !confirm("This exits your dilation run, and also restarts this challenge! Are you sure?")) return
+					quantum(false, true, {}, "restart")
+				} else {
+					if (QCs_tmp.qc4.type == "dil" && !confirm("This exits your dilation run! Are you sure?")) return
+					eternity(true)
+					this.updateDisp()
+				}
 			}
 		},
 		5: {
 			unl: () => true,
-			desc: () => "You gain Replicanti Energy based on how many Replicantis you gained. However, Eternitying resets Replicantis, and you start at 1x replicate interval. (reduces over eternity time)",
+			desc: () => "Replicantis generate Replicanti Energy instead, and get resetted on Eternities. Replicate interval gets stronger over time.",
 			goal: () => player.eternityPoints.gte(Decimal.pow(10, 2.8e6)),
 			goalDisp: () => shortenCosts(Decimal.pow(10, 2.8e6)) + " Eternity Points",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.7),
@@ -363,15 +368,19 @@ var QCs = {
 				return 1
 			},
 
-			upsideDesc: (x) => "???",
-			perkDesc: (x) => "Replicated Energy effect is doubled.",
+			nerfDesc: (x) => "You must spend Replicanti Energy to unlock a tier of Positronic Cloud. (not implemented)",
+			perkDesc: (x) => "Replicated Expanders speed up Replicantis at a linear rate.",
 			perkEff() {
 				return 1
 			},
 
 			overlapReqs: [1/0, 1/0],
 
-			exp: () => 1, //(QCs_save.qc1.boosts + 1) * Math.sqrt(QCs_save.qc1.expands + 1),
+			exp() {
+				var x = 1
+				if (QCs.perkActive(1)) x *= QCs_save.qc1.boosts / 3 + 1
+				return x
+			},
 			updateTmp() {
 				delete QCs_tmp.qc5
 				if (!QCs.in(5) && !QCs.done(6)) return
@@ -403,7 +412,7 @@ var QCs = {
 		},
 		6: {
 			unl: () => true,
-			desc: () => "There is a increasing variable, which nerfs replicanti slowdown; but eternitying subtracts it, and dilating reduces the gain.",
+			desc: () => "There is an increasing variable, which nerfs replicanti slowdown. Eternitying subtracts it, and Dilating reduces its gain.",
 			goal: () => (player.replicanti.amount.e >= 1e6 && QCs_save.qc1.boosts == 4) || QCs_save.qc1.boosts >= 5,
 			goalDisp: () => shortenCosts(Decimal.pow(10, 1e6)) + " Replicantis + " + getFullExpansion(4) + " Replicanti Compressors",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.45),
@@ -422,8 +431,8 @@ var QCs = {
 				return x
 			},
 
-			upsideDesc: (x) => "QC6 variable is inverted.",
-			perkDesc: (x) => "QC6 variable can’t go below 0.",
+			nerfDesc: (x) => "QC6 variable is inverted. (x -> -x)",
+			perkDesc: (x) => "Start with 5s Eternity time, but Eternity time is 2x slower.",
 			perkEff() {
 				return 1
 			},
@@ -439,7 +448,7 @@ var QCs = {
 		},
 		7: {
 			unl: () => true,
-			desc: () => "You can’t have all Mastery Studies in a row (except one-column rows), and Meta Dimensions and Time Theorems are reduced to ^0.95.",
+			desc: () => "You can’t fill the rows in Mastery Studies except singles. MD and TT productions are reduced by ^0.95.",
 			goal: () => player.timestudy.theorem >= 5e82,
 			goalDisp: () => shortenDimensions(5e82) + " Time Theorems",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.3),
@@ -450,8 +459,8 @@ var QCs = {
 				return 1
 			},
 
-			upsideDesc: (x) => "You can't passively generate TT, and QC7 applies to Time Studies. (partly implemented)",
-			perkDesc: (x) => "You passively generate 10x more TT.",
+			nerfDesc: (x) => "You can't passively generate TT, and QC7 applies to Time Studies. (partly implemented)",
+			perkDesc: (x) => "You can bank 10% of sacrificed RGs that last one quantum. (not implemented)",
 			perkEff() {
 				return 1
 			},
@@ -459,8 +468,8 @@ var QCs = {
 			overlapReqs: [1/0, 1/0],
 		},
 		8: {
-			unl: () => true,
-			desc: () => "All Entangled Boosts are unmastered and anti'd. You have to setup a cycle of 2 chosen gluons, and Big Crunching switches your gluon kind to the next one.",
+			unl: () => PCs_save.lvl >= 4,
+			desc: () => "All Entangled Boosts are anti'd. You have to setup a cycle of 2 entanglements, and Big Crunching switches your gluon kind to the next one.",
 			goal: () => enB.glu.boosterEff() >= 130,
 			goalDisp: () => "130 Effective Boosters",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.8),
@@ -471,8 +480,8 @@ var QCs = {
 				return 1
 			},
 
-			upsideDesc: (x) => "You must setup a cycle on Positronic Boosts. (not implemented)",
-			perkDesc: (x) => "You can’t lose your Eternity time.",
+			nerfDesc: (x) => "You must setup a cycle on Positronic Boosts. (not implemented)",
+			perkDesc: (x) => "For Entangled Boosts that doesn’t match, they get mastered.",
 			perkEff() {
 				return 1
 			},
@@ -671,7 +680,7 @@ var QCs = {
 			getEl("qc_" + qc + "_div").style.display = cUnl ? "" : "none"
 			if (QCs_tmp.show_perks) {
 				var reqs = this.data[qc].overlapReqs
-				getEl("qc_" + qc + "_desc").textContent = this.data[qc].upsideDesc()
+				getEl("qc_" + qc + "_desc").textContent = this.data[qc].nerfDesc()
 				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.getGoalMA(qc, "up")) + " meta-antimatter"
 				getEl("qc_" + qc + "_btn").textContent = this.modIn(qc, "up") ? "Running" : this.modDone(qc, "up") ? (this.perkActive(qc) ? "Perk Activated" : "Completed") : "Start"
 				getEl("qc_" + qc + "_btn").className = this.modIn(qc, "up") ? "onchallengebtn" : this.modDone(qc, "up") ? "completedchallengesbtn" : "challengesbtn"

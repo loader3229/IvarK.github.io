@@ -1,7 +1,7 @@
 //PAIRED CHALLENGES
 var PCs = {
 	milestones: {
-		11: "Replicated Compressors are better. (per PC level)",
+		11: "Replicanti Compressors are better. (per PC level)",
 		21: "The QC2 reward is squared.",
 		31: "You sacrifice 33% MDBs instead of 30%.",
 		41: "You sacrifice Replicated Galaxies more.",
@@ -142,10 +142,10 @@ var PCs = {
 		var eff = (PCs_save.lvl - 1) / 28
 		data.eff1 = 1 + 0.75 * eff
 		data.eff1_start = (tmp.ngp3_mul ? 125 : 150)
-		data.eff2 = eff / (tmp.ngp3_exp ? 1 : tmp.ngp3_mul ? 1.5 : 2)
+		data.eff2 = eff
 
 		//Temperature
-		data.temp = (PCs_save.comps.length / 21 - (tmp.exMode ? 0 : 1/3)) * PCs_save.comps.length / 28
+		data.temp = Math.min(Math.floor(comps / 3) / 5 - 0.1, 1) * comps / 28
 		if (tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp) {
 			if (data.temp > 0) data.temp /= 2
 			data.temp -= 0.1
@@ -237,6 +237,8 @@ var PCs = {
 		div -= PCs_tmp.temp
 
 		var r = qc1.pow(qc2.log(base) / div)
+		var pow = Math.max(PCs_tmp.comps[list[0]], PCs_tmp.comps[list[1]]) / 8 + 1
+		r = r.pow(pow)
 		r = r.div(this.shrunkerEff())
 		return r
 	},
@@ -273,11 +275,12 @@ var PCs = {
 	lvlReq(pc) {
 		if (PCs_tmp.debug) return pc > 40 ? 1/0 : 0
 
-		var x = Math.floor(pc / 10 - 1) * 3
-		if (pc < 20) x = 1
-		else if (tmp.dtMode) x++
+		var x = Math.floor(pc / 10 - 1) * 4
+		if (pc <= 20) x = 1
+		else if (!tmp.exMode && pc >= 30) x--
 		else if (tmp.bgMode) x--
-		if (pc < 50) x += pc % 10 - 1
+
+		x += pc % 10 - 1
 		return x
 	},
 	overlapped(x) {

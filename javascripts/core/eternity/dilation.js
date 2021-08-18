@@ -522,7 +522,6 @@ function getTTProduction(display) {
 function getTTGenPart(x) {
 	x = x.div(2e4)
 	if (tmp.ngp3) x = softcap(x, "tt")
-	if (QCs.perkActive(7)) x = x.times(10)
 	return x
 }
 
@@ -655,7 +654,7 @@ function resetDilationGalaxies() {
 function getEffectiveTGs() {
 	let tg = player.dilation.freeGalaxies
 	if (pos.on()) tg -= pos_save.gals.tg.sac
-	if (QCs.in(4) && QCs_save.qc4 == "tg") tg = 0
+	if (QCs.in(4) && QCs_save.qc4[QCs_tmp.qc4.type] == "tg") tg = 0
 	return tg
 }
 
