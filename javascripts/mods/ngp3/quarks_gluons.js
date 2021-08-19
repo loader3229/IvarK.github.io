@@ -1292,7 +1292,7 @@ function updateGluonsTab() {
 	}
 
 	enB.updateOnTick("glu")
-	getEl("enB_eff").textContent = !shiftDown ? "" :
+	getEl("enB_eff").textContent = !shiftDown && !QCs.in(8) ? "" :
 		"Effective Boosters: " + shorten(enB.glu.boosterEff()) + (enB.glu.boosterExp() > 1 ? " (^" + shorten(enB.glu.boosterExp()) + ")" : "")
 }
 

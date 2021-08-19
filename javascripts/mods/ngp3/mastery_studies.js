@@ -449,19 +449,17 @@ function updateMasteryStudyCosts() {
 	mTs.costMult = mTs.baseCostMult
 
 	mTs.ttSpent = 0
-	for (id = 0; id < player.masterystudies.length; id++) {
-		var t = player.masterystudies[id].split("t")[1]
-		if (t) {
+	for (id = 0; id < mTs.timeStudies.length; id++) {
+		var t = mTs.timeStudies[id]
+		if (!mTs.studyUnl.includes(t)) break
+
+		setMasteryStudyCost(t, "t")
+		if (player.masterystudies.includes("t" + t)) {
 			var costMult = getMasteryStudyCostMult("t" + t)
 			setMasteryStudyCost(t, "t")
 			mTs.ttSpent += mTs.costs.time[t] < 1/0 ? mTs.costs.time[t] : 0
 			mTs.costMult = costMult == "reset" ? mTs.baseCostMult : mTs.costMult * costMult
 		}
-	}
-	for (id = 0; id < mTs.timeStudies.length; id++) {
-		var name = mTs.timeStudies[id]
-		if (!mTs.studyUnl.includes(name)) break
-		if (!player.masterystudies.includes("t"+name)) setMasteryStudyCost(name,"t")
 	}
 	for (id = 13; id <= mTs.ecsUpTo; id++) {
 		if (!mTs.studyUnl.includes("ec" + id)) break
@@ -620,8 +618,6 @@ function setMasteryStudyCost(id, type) {
 }
 
 function getMasteryStudyCostMult(id) {
-	if (id.split("t")[1] < mTs.latestBoughtRow * 10) return 1
-
 	let d = mTs.costs.mults
 	let r = d[id] || 1
 
@@ -630,7 +626,7 @@ function getMasteryStudyCostMult(id) {
 	if (tmp.dtMode) r = d[id + "_dt"] || r
 
 	if (id.split("t")[1] < 290 && tmp.ngp3_mul && tmp.bgMode) r = Math.sqrt(r)
-	if (r + 0 === r && !QCs.isntCatched() && QCs.in(1)) r *= 2
+	if (r != "reset" && !QCs.isntCatched() && QCs.in(1)) r *= 2
 
 	return r
 }

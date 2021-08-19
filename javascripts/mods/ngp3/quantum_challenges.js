@@ -264,8 +264,8 @@ var QCs = {
 		3: {
 			unl: () => true,
 			desc: () => "There are only Meta Dimensions that produce AM and IP, but successfully dilating reduces AM production, and you only gain TP by exiting dilation.",
-			goal: () => player.dilation.tachyonParticles.gte(1e6),
-			goalDisp: () => shortenCosts(1e6) + " Tachyon Particles",
+			goal: () => player.dilation.tachyonParticles.gte(3e4),
+			goalDisp: () => shortenCosts(3e4) + " Tachyon Particles",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 0.2),
 			hint: "Try not to automate dilation, and also not to dilate time frequently.",
 
@@ -470,9 +470,9 @@ var QCs = {
 		8: {
 			unl: () => PCs_save.lvl >= 4,
 			desc: () => "All Entangled Boosts are anti'd. You have to setup a cycle of 2 entanglements, and Big Crunching switches your gluon kind to the next one.",
-			goal: () => enB.glu.boosterEff() >= 130,
-			goalDisp: () => "130 Effective Boosters",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 1.8),
+			goal: () => enB.glu.boosterEff() >= 220,
+			goalDisp: () => "220 Effective Boosters",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 2.1),
 			hint: "Make your Auto-Crunch faster than Auto-Eternity.",
 
 			rewardDesc: (x) => "Unlock new comprehensive content for Paired Challenges.",
