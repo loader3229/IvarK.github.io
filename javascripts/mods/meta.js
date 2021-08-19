@@ -1,4 +1,20 @@
 //meta dimensions
+function metaDimsUpdating(diff){
+	if (!hasDilationStudy(6)) return
+
+	// Meta
+	var step = inNGM(5) ? 2 : 1
+	var max = inNGM(5) ? 6 : 8
+	for (var tier = max - step; tier >= 1; tier--) player.meta[tier].amount = player.meta[tier].amount.plus(getMDProduction(tier + step).times(diff / 10))
+
+	player.meta.antimatter = player.meta.antimatter.plus(getMDProduction(1).times(diff))
+	player.meta.bestAntimatter = player.meta.bestAntimatter.max(player.meta.antimatter)
+	if (tmp.ngp3) {
+		player.meta.bestOverQuantums = player.meta.bestOverQuantums.max(player.meta.antimatter)
+		player.meta.bestOverGhostifies = player.meta.bestOverGhostifies.max(player.meta.antimatter)
+	}
+}
+
 function getMetaAntimatterStart(bigRip) {
 	let x = 10
 	if (hasAch("ngpp12") || (moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3]))) x = 100

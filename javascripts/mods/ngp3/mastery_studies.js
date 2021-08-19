@@ -449,17 +449,20 @@ function updateMasteryStudyCosts() {
 	mTs.costMult = mTs.baseCostMult
 
 	mTs.ttSpent = 0
-	for (id = 0; id < mTs.timeStudies.length; id++) {
-		var t = mTs.timeStudies[id]
-		if (!mTs.studyUnl.includes(t)) break
-
-		setMasteryStudyCost(t, "t")
-		if (player.masterystudies.includes("t" + t)) {
+	for (id = 0; id < player.masterystudies.length; id++) {
+		var t = player.masterystudies[id].split("t")
+		if (t[1]) {
+			t = t[1]
 			var costMult = getMasteryStudyCostMult("t" + t)
 			setMasteryStudyCost(t, "t")
 			mTs.ttSpent += mTs.costs.time[t] < 1/0 ? mTs.costs.time[t] : 0
 			mTs.costMult = costMult == "reset" ? mTs.baseCostMult : mTs.costMult * costMult
 		}
+	}
+	for (id = 0; id < mTs.timeStudies.length; id++) {
+		var t = mTs.timeStudies[id]
+		if (!mTs.studyUnl.includes(t)) break
+		if (!player.masterystudies.includes("t" + t)) setMasteryStudyCost(t, "t")
 	}
 	for (id = 13; id <= mTs.ecsUpTo; id++) {
 		if (!mTs.studyUnl.includes("ec" + id)) break

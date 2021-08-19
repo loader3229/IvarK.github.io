@@ -241,7 +241,7 @@ function preHiggsNGp3AchieveCheck() {
 	//Able to get "Rid of you"
 	let ableToGetRid2 = checkEmpty && player.dilation.active
 	let ableToGetRid3 = ableToGetRid2
-	let ableToGetRid4 = pos.unl() && pos_tmp.cloud.exclude >= 4
+	let ableToGetRid4 = pos.unl() && pos_tmp.cloud.exclude >= 5
 	let ableToGetRid5 = ableToGetRid2 && QCs.in(2) && player.dontWant
 	let ableToGetRid6 = ableToGetRid2 && QCs.in(6) && QCs.in(8)
 
@@ -252,10 +252,16 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.infinityPoints.log10() >= 3e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
 
 	if (QCs.done(3)) giveAchievement("We are not going squared.")
-	if (player.meta.bestAntimatter.gte(Decimal.pow(Number.MAX_VALUE, 3)) && player.meta[5].amount.lt(Math.sqrt(Number.MAX_VALUE))) giveAchievement("Old memories come true")
+	if (
+		player.meta.bestAntimatter.gte(Decimal.pow(Number.MAX_VALUE, 3)) &&
+		player.meta[5].bought == 0 &&
+		player.meta[6].bought == 0 &&
+		player.meta[7].bought == 0 &&
+		player.meta[8].bought == 0
+	) giveAchievement("Old memories come true")
 	if (player.timestudy.theorem >= 1e85 && !QCs.isntCatched()) giveAchievement("Infinity Morals")
-	if (PCs_save.lvl >= 3) giveAchievement("Twice in a row")
-	if (player.eightBought >= (tmp.exMode ? 3e7 : 17e6) && (tmp.dtMode ? getTotalRG() : player.replicanti.galaxies) == 0) giveAchievement("Intergalactic")
+	if (PCs_save.comps.length >= 3) giveAchievement("Twice in a row")
+	if (player.eightBought >= 3e7 && (tmp.dtMode ? getTotalRG() : player.replicanti.galaxies) == 0) giveAchievement("Intergalactic")
 	if (player.eternityPoints.e >= 1/0 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 
 	if (player.meta.bestAntimatter.log10() >= 333 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")

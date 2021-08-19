@@ -214,7 +214,7 @@ var pos = {
 	},
 
 	canSwap(x) {
-		return !pos_tmp.next_swaps[x] && Math.abs(enB.pos.lvl(pos_tmp.chosen, true) - enB.pos.lvl(x, true)) == 1
+		return !pos_tmp.next_swaps[x] && (PCs.milestoneDone(22) || Math.abs(enB.pos.lvl(pos_tmp.chosen, true) - enB.pos.lvl(x, true)) == 1)
 	},
 	swap(x) {
 		if (!pos_tmp.chosen) {
@@ -252,7 +252,7 @@ var pos = {
 		return ([0, 2, 4, 8, 16])[x / 2]
 	},
 	excluded(x) {
-		return QCs.in(2) ? enB.pos.lvl(x) == QCs_save.qc2 : false
+		return (PCs.milestoneDone(22) ? QCs.inAny() : QCs.in(2)) ? enB.pos.lvl(x) == QCs_save.qc2 : false
 	},
 
 	getCloudBtn: (x) => '<button id="pos_boost' + x + '_btn" onclick="pos.swap(' + x + ')">' +

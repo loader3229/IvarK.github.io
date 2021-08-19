@@ -1559,7 +1559,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/18/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Enconnected Effects // 8/19/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -2254,7 +2254,7 @@
 								<div id="Old memories come true" class="achievement achievementlocked" style="background-image: url(images/116.png)"><br></div>
 							</td>
 							<td>
-								<div id="Twice in a row" class="achievement achievementlocked" style="background-image: url(images/117.png)" ach-tooltip="Reach Paired Challenge level 3. Reward: Unlock auto-presets for Quantum Challenges."><br></div>
+								<div id="Twice in a row" class="achievement achievementlocked" style="background-image: url(images/117.png)" ach-tooltip="Complete 3 Paired Challenge completions. Reward: Unlock Quantum Challenge 8, and unlock auto-presets for Quantum Challenges."><br></div>
 							</td>
 							<td>
 								<div id="Infinity Morals" class="achievement achievementlocked" style="background-image: url(images/118.png)"><br></div>
@@ -3366,17 +3366,16 @@
 					<br>
 					<button class="secondarytabbtn" onclick="PCs.showMilestones(0)">Close</button>
 					<br>
-					Completing a challenge of the same combination gives you 2 completions instead of 1!
 					<table class="table" align="center" style="margin: auto">
 						<tr>
 							<td>1 completion</td>
 							<td>2 completions</td>
-							<td>4 completions</td>
+							<!-- <td>4 completions</td> -->
 						</tr>
 						<tr>
 							<td><button class="qMs_reward" id="qc_milestone1">???</button></td>
 							<td><button class="qMs_reward" id="qc_milestone2">???</button></td>
-							<td><button class="qMs_reward" id="qc_milestone3">???</button></td>
+							<!-- <td><button class="qMs_reward" id="qc_milestone3">???</button></td> -->
 						</tr>
 					</table>
 				</div>
@@ -5720,7 +5719,7 @@
 			</div>
 		</p>
 	</div>
-	<div class="popup optionmenu" id="autoPresets" style="width: 480px">
+	<div class="popup optionmenu" id="autoPresets" style="width: 480px; height: 360px">
 		<button class="closebtn storebtn" onclick="closeToolTip()">&times;</button>
 		<span>
 			<p style="font-size: 12px">
@@ -5739,9 +5738,9 @@
 			<b>Dilation</b><br>
 			<input id="autoPresetDilation" style="width: 170px" onchange="changeAutoPreset('dilation', 'autoPresetDilation')"></input>
 		</p>
-		<p id="autoPresetQCDiv">
-			<b>Quantum Challenge</b><br>
-			<input id="autoPresetQC" style="width: 170px" onchange="changeAutoPreset('qc', 'autoPresetQC')"></input>
+		<p id="autoPresetQC1Div">
+			<b>Quantum Challenge 1</b><br>
+			<input id="autoPresetQC1" style="width: 170px" onchange="changeAutoPreset('qc1', 'autoPresetQC1')"></input>
 		</p>
 		<p id="autoPresetQC7Div">
 			<b>Quantum Challenge 7</b><br>

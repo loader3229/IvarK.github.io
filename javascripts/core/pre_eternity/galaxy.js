@@ -96,7 +96,10 @@ function getGalaxyRequirement(offset = 0, display) {
 			let remoteStart = getRemoteScalingStart()
 			if (tmp.grd.gals >= remoteStart) {
 				let speed2 = 1
-				if (dev.boosts.on) speed2 /= remoteStart / 8e3 + 1 //- FUTURE BOOST
+				if (PCs.milestoneDone(82)) {
+					let pc82 = (PCs_save.lvl - 1) / 8e3 / 28
+					speed2 /= remoteStart * pc82 + 1
+				}
 
 				let pow = Decimal.pow(getRemoteScalingBase(), (tmp.grd.gals - remoteStart + 1) * speed2)
 				/*if (pow.gte(1e3)) {

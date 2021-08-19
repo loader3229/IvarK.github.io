@@ -897,7 +897,7 @@ function isAtEndGame() {
 let autoPresets = {
 	eternity: "Eternity",
 	dilation: "Dilation",
-	qc: "Quantum Challenge",
+	qc1: "Quantum Challenge 1",
 	qc7: "Quantum Challenge 7"
 }
 
@@ -911,10 +911,9 @@ function openAutoPresets() {
 	getEl("autoPresetEternity").value = player.timestudy.auto.eternity || ""
 	getEl("autoPresetDilation").value = player.timestudy.auto.dilation || ""
 
-	getEl("autoPresetQCDiv").style.display = autoPresetUnlocked("qc") ? "" : "none"
-	getEl("autoPresetQC").value = player.timestudy.auto.qc || ""
-
+	getEl("autoPresetQC1Div").style.display = autoPresetUnlocked("qc1") ? "" : "none"
 	getEl("autoPresetQC7Div").style.display = autoPresetUnlocked("qc7") ? "" : "none"
+	getEl("autoPresetQC1").value = player.timestudy.auto.qc1 || ""
 	getEl("autoPresetQC7").value = player.timestudy.auto.qc7 || ""
 }
 
@@ -932,7 +931,9 @@ function loadAutoPreset(x) {
 }
 
 function targetAutoPreset() {
-	return QCs.in(7) ? "qc7" : QCs.inAny() ? "qc" : player.dilation.active ? "dilation" : "eternity"
+	if (QCs.in(1) && autoPresetUnlocked("qc1")) return "qc1"
+	if (QCs.in(7) && autoPresetUnlocked("qc7")) return "qc7"
+	return player.dilation.active ? "dilation" : "eternity"
 }
 
 function refreshAutoPreset(update) {
@@ -942,7 +943,7 @@ function refreshAutoPreset(update) {
 }
 
 function autoPresetUnlocked(x) {
-	return qMs.tmp.amt >= 2 && (!(x == "qc" || x == "qc7") || hasAch("ng3p26"))
+	return qMs.tmp.amt >= 2 && (x == "qc1" || x == "qc7" ? hasAch("ng3p25") : true)
 }
 
 //Recent boosts

@@ -7,29 +7,29 @@ var PCs = {
 		41: "You sacrifice Replicated Galaxies more.",
 		51: "Sacrificed sources are greatly stronger.",
 		61: "The QC6 reward is squared.",
-		71: "Meta Accelerator accelerates 3% faster per PC level.",
-		81: "Unlock Galactic Clusters.",
+		71: "Meta Accelerator accelerates faster based on your PC level.",
+		81: "EC14 reward power speeds up Replicantis more.",
 		12: "Unlock Replicated Expanders.",
-		22: "You can exclude a Positron Cloud tier in any QC, and unlock the Perked modifier. (not implemented)",
+		22: "You can swap Positronic Boosts between 2 of any tiers.",
 		32: "25 MP milestone is activated in QC3.",
-		42: "Tier-1 Positronic Boosts can charge more by 4x, but the requirement is squared than normal.",
-		52: "You gain 2x more Replicanti Energy.",
-		62: "Eternitying timewraps by 3 seconds.",
-		72: "Mastery Study cost multiplier is divided by 5x, permanently.",
-		82: "First 50 galaxies of every type don't get sacrficed.",
-		13: "Unlock Replicated Dilaters. (not implemented)",
-		23: "You can exclude matched Boosts instead. (not implemented)",
-		33: "Meta Accelerator starts 0.1 later per PC level.",
-		43: "Extra Replicated Galaxies contribute to Positronic Charge.",
-		53: "Replicanti Energy formula is stronger.",
-		63: "Eternity time stat is 3x slower.",
-		73: "Remove the second softcap of TT generation.",
-		83: "Kept galaxies increase the effective sacrificed galaxies.",
+		42: "Tier 1 charge is 8x, but require 2x more.",
+		52: "Replicanti Energy is raised by ^1.2.",
+		62: "Eternitying timewraps Meta Dimensions and Replicantis by 3 seconds.",
+		72: "Mastery Study cost multiplier is divided by 5x.",
+		82: "Remote Galaxies scaling is slower based on its starting point.",
+		// 13: "Unlock Replicated Dilaters. (not implemented)",
+		// 23: "You can exclude matched Boosts instead. (not implemented)",
+		// 33: "Meta Accelerator starts 0.1 later per PC level.",
+		// 43: "Extra Replicated Galaxies contribute to Positronic Charge.",
+		// 53: "Replicanti Energy formula is stronger.",
+		// 63: "Eternity time stat is 3x slower.",
+		// 73: "Remove the second softcap of TT generation.",
+		// 83: "???",
 	},
 	setupData() {
 		var data = {
-			goal_divs: [null, 0.1, 0.95, 0.25, 0.95, 0.45, 0.5, 0.4, 0.7],
-			milestoneReqs: [null, 1, 2, 4],
+			goal_divs: [null, 0.1, 0.95, 0.25, 0.95, 0.45, 0.5, 0.4, 0.65],
+			milestoneReqs: [null, 1, 2/*, 4*/],
 			letters: [null, "A", "B", "C", "D", "Ω<sup>1</sup>", "Ω<sup>2</sup>", "Ω<sup>3</sup>", "Θ"],
 			all: [],
 			setup: true
@@ -143,10 +143,10 @@ var PCs = {
 		var eff = (PCs_save.lvl - 1) / 28
 		data.eff1 = 1 + 0.75 * eff
 		data.eff1_start = (tmp.ngp3_mul ? 125 : 150)
-		data.eff2 = eff
+		data.eff2 = Math.sqrt(eff) / 4
 
 		//Temperature
-		data.temp = Math.min(Math.floor(comps / 3) / 5 - 0.1, 1) * comps / 28
+		data.temp = Math.min(Math.floor(comps / 4) / 4 - 0.3, 1) * comps / 28
 		if (tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp) {
 			if (data.temp > 0) data.temp /= 2
 			data.temp -= 0.1
@@ -238,7 +238,7 @@ var PCs = {
 		div -= PCs_tmp.temp
 
 		var r = qc1.pow(qc2.log(base) / div)
-		var pow = Math.max(PCs_tmp.comps[list[0]], PCs_tmp.comps[list[1]]) / 8 + 1
+		var pow = (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) * 0.25 + 1
 		r = r.pow(pow)
 		r = r.div(this.shrunkerEff())
 		return r
@@ -277,6 +277,7 @@ var PCs = {
 		return PCs.unl() && PCs_tmp.comps && PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
 	},
 	lvlReq(pc) {
+		if (QCs_save.comps / 2 < pc % 10) return 1/0
 		if (PCs_tmp.debug) return pc > 40 ? 1/0 : 0
 
 		var x = Math.floor(pc / 10 - 1) * 4
@@ -399,7 +400,7 @@ var PCs = {
 		getEl("pc_temp_color").style.display = PCs_tmp.temp != 0 ? "" : "none"
 		getEl("pc_temp_color").className = PCs_tmp.temp > 0 ? "hot" : "cool"
 
-		getEl("pc_shrunker_div").style.display = QCs.done(8) ? "" : "none"
+		getEl("pc_shrunker_div").style.display = futureBoost("nerfed_modifier") ? "" : "none"
 		getEl("pc_shrunker").textContent = getFullExpansion(PCs_save.shrunkers)
 		getEl("pc_shrunker_eff").textContent = shortenCosts(this.shrunkerEff()) + "x"
 
@@ -421,7 +422,6 @@ var PCs = {
 				getEl("qc_milestone" + i).className = "qMs_" + (this.milestoneDone(qc * 10 + i) ? "reward" : "locked")
 				getEl("qc_milestone" + i).textContent = PCs.milestones[qc * 10 + i] || "???"
 			}
-			getEl("qc_milestone2").style["font-size"] = (qc == 2 || qc == 4) ? "11px" : "12px"
 		}
 	},
 
@@ -454,7 +454,7 @@ var PCs = {
 	},
 	shrunkerEff() {
 		let x = PCs_save.shrunkers
-		return Decimal.pow(10, x * (x + 3) * 2)
+		return Decimal.pow(10, x * (x + 2) * 2)
 	}
 }
 var PCs_save = undefined

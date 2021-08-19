@@ -142,7 +142,6 @@ function upgradeReplicantiInterval() {
 
 	if (player.replicanti.interval < 1) {
 		let x = 1 / player.replicanti.interval
-		// if (x > 1e10) x = Math.pow(x / 1e5, 2)
 		player.replicanti.intervalCost = Decimal.pow(10, Math.pow(x, 4) * 1200)
 	} else player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
 
@@ -432,7 +431,12 @@ function boostReplicateInterval() {
 	if (pow > 0) {
 		var ec14Pow = getECReward(14)
 		var ec14Int = data.ec14.baseInt
-		var ec14Acc = getRepSlowdownBase10(data.speeds.exp) * Math.min(15 * data.ec14.acc, 5) + 1
+
+		var ec14Acc = getRepSlowdownBase10(data.speeds.exp)
+		if (PCs.milestoneDone(81)) ec14Acc *= Math.pow(3, data.ec14.acc * 3)
+		else ec14Acc *= Math.min(15 * data.ec14.acc, 5)
+		ec14Acc += 1
+
 		data.ec14.interval = ec14Int.div(ec14Acc)
 		x = x.div(data.ec14.interval)
 

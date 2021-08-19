@@ -222,7 +222,7 @@ function canBuyStudy(name) {
 	}
 
 	var always = row > 1 && (
-		qMs.tmp.amt >= 27 || //NG+3
+		futureBoost("all_time_studies") || //NG+3
 		(tmp.ngp3_mul && player.eternityUpgrades.includes(15)) //NG*+3
 	)
 	if (!always && tmp.ngC) {

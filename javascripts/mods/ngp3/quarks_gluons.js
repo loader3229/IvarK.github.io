@@ -863,7 +863,7 @@ var enB = {
 			if (pos_tmp.sac_qe < pos.swapCost(pos_tmp.cloud.swaps)) return false
 			var mas = enB.mastered("pos", x)
 
-			return QCs.in(2) ? (pos.on() && mas && (
+			return (PCs.milestoneDone(22) ? QCs.inAny() : QCs.in(2)) ? (pos.on() && mas && (
 				QCs.modIn(2, "up") ? enB.pos.lvl(x) == QCs_save.qc2 :
 				enB.pos.lvl(x) != QCs_save.qc2
 			)) :
@@ -884,13 +884,16 @@ var enB = {
 
 		chargeReq(x, next, lvl) {
 			var lvl = lvl || this.lvl(x, next)
-			var req = this[x].chargeReq * Math.pow(1.5, Math.max(pos_tmp.cloud && pos_tmp.cloud.total || 0, 2)) * Math.pow(2, lvl - this[x].tier)
+			var req = this[x].chargeReq *
+				Math.pow(1.5, Math.max(pos_tmp.cloud && pos_tmp.cloud.total || 0, 2)) *
+				Math.pow(2, lvl - this[x].tier)
+			if (PCs.milestoneDone(42) && lvl == 1) req *= 2
 			return req
 		},
 		chargeEff(x) {
 			var lvl = this.lvl(x)
 			var eff = 2 * lvl
-			if (PCs.milestoneDone(42) && lvl == 1) eff *= 4
+			if (PCs.milestoneDone(42) && lvl == 1) eff = 8
 			return eff
 		},
 		charged(x, lvl) {
@@ -941,7 +944,7 @@ var enB = {
 				var accSpeed = 3 / (slowStart - 1)
 				if (enB.active("glu", 9)) accSpeed *= enB_tmp.glu9
 				if (QCs.done(7)) accSpeed *= 1.25
-				if (PCs.milestoneDone(71)) accSpeed *= 1 + 0.03 * PCs_save.lvl
+				if (PCs.milestoneDone(71)) accSpeed *= 1 + 0.03 * Math.sqrt(PCs_save.lvl)
 
 				var mdb = player.meta.resets
 				var base = Math.min(player.meta.bestAntimatter.add(1).log10() * getPataAccelerator() + 1, 1e10)
@@ -1049,7 +1052,7 @@ var enB = {
 			title: "Looped Dimensionality",
 			tier: 3,
 			eff(x) {
-				return Math.log10(player.dilation.tachyonParticles.max(1).log10() * Math.log10(x / 10 + 1) / 10 + 10)
+				return Math.log10(player.dilation.tachyonParticles.max(1).log10() / 100 + 1) * Math.log10(x / 10 + 1) / 2 + 1
 			},
 			effDisplay(x) {
 				return x.toFixed(3) + "x"
@@ -1092,7 +1095,7 @@ var enB = {
 			tier: 2,
 			eff(x) {
 				var sqrt = Math.sqrt(Decimal.max(getInfinitied(), 1).log10())
-				var exp = 10 - 10 / (Math.log2(x / 500 + 1) / 10 + 1)
+				var exp = 5 - 5 / (Math.log10(x / 1e3 + 1) + 1)
 				return Math.max(sqrt, 1) * exp + 1
 			},
 			effDisplay(x) {
@@ -1100,21 +1103,21 @@ var enB = {
 			}
 		},
 		11: {
-			req: 120,
+			req: 150,
 			masReq: 0,
 			chargeReq: 10,
 
 			title: "Eternity Transfinition",
 			tier: 3,
 			eff(x) {
-				return 1e-11 * Math.min(Math.sqrt(x), 5e3)
+				return Math.min(5e-8 * Math.log2(x / 500 + 1), 1e-5)
 			},
 			effDisplay(x) {
 				return shorten(player.eternityPoints.max(1).pow(x * getAQSGainExp())) + "x"
 			}
 		},
 		12: {
-			req: 120,
+			req: 150,
 			masReq: 0,
 			chargeReq: 12,
 
@@ -1443,52 +1446,3 @@ function drawQuarkAnimation(ts){
 		requestAnimationFrame(drawQuarkAnimation);
 	}
 }
-
-/*
-//Quantum Tiers: Strong boosts to Color Powers
-let QT = {
-	effs: {
-		qe: () => qu_save.quarkEnergy,
-		cc: () => colorCharge.normal.amt,
-		gb_rg: () => qu_save.gluons.rg,
-		gb_gb: () => qu_save.gluons.gb,
-		gb_br: () => qu_save.gluons.br,
-	},
-	tiers: {
-		qe: () => 1,
-		cc: () => 1,
-		gl_rg: () => 1,
-		gl_gb: () => 1,
-		gl_br: () => 1
-	},
-	funcs: {
-		1(x, y) { //Add
-			return x.add(y)
-		},
-		2(x, y) { //Multiply
-			y = y.add(1).log10() + 1
-			return x.times(y)
-		},
-		3(x, y) { //Exponent
-			y = Math.log10(y.add(1).log10() + 1) + 1
-			return x.pow(y)
-		},
-		4(x, y) { //Anti-Dilation
-			y = 1 - 1 / (Math.log10(y.add(1).log10() + 1) / 2 + 1)
-			return x.pow(Math.pow(Decimal.max(x, 1).log10(), y))
-		},
-		5(x, y, t) { //Superexponent
-			y = 0
-			return x.pow(Math.pow(2, Math.pow(x.max(1).log(2), 0.1) * y))
-		}
-	},
-	boost(x, type, tier) {
-		if (!tier) tier = QT.tiers[type]()
-
-		x = new Decimal(x)
-		let eff = new Decimal(QT.effs[type]())
-
-		return QT.funcs[tier](x, eff)
-	}
-}
-*/

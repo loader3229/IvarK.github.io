@@ -339,3 +339,7 @@ dev.boosts = {
 		},
 	}
 }
+
+function futureBoost() {
+	return dev.boosts.on
+}

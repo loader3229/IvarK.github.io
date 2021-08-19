@@ -3368,6 +3368,11 @@ function eternity(force, auto, forceRespec, dilated) {
 		if (canSwitch) forceRespec = true
 		if (player.respec || player.respecMastery || forceRespec) respecTimeStudies(forceRespec)
 		if (canSwitch) loadAutoPreset(autoPreset)
+
+		if (PCs.milestoneDone(62)) {
+			metaDimsUpdating(3)
+			replicantiIncrease(3)
+		}
 	}
 
 	doEternityResetStuff(4, dilated ? "dil" : 0)
@@ -4109,7 +4114,7 @@ function incrementParadoxUpdating(diff) {
 function dimensionButtonDisplayUpdating() {
 	getEl("pdtabbtn").style.display = pH.shown("paradox") && player.galacticSacrifice.times >= 25 ? "" : "none"
    	getEl("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || pH.did("eternity")) && (inNGM(5) || pH.shown("infinity"))) ? "" : "none"
-	getEl("tdtabbtn").style.display = ((pH.shown("eternity") || inNGM(4)) && (!QCs.in(8) || tmp.be)) ? "" : "none"
+	getEl("tdtabbtn").style.display = (pH.shown("eternity") || inNGM(4)) ? "" : "none"
 	getEl("mdtabbtn").style.display = (!pH.did("quantum") || pH.shown("quantum")) && hasDilationStudy(6) ? "" : "none"
 	getEl('toggleallmetadims').style.display = moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3]) ? "" : "none"
 }
@@ -4381,16 +4386,6 @@ function quantumOverallUpdating(diff){
 	}
 }
 
-function metaDimsUpdating(diff){
-	player.meta.antimatter = player.meta.antimatter.plus(getMDProduction(1).times(diff))
-	if (QCs.in(4)) player.meta.antimatter = player.meta.antimatter.plus(getMDProduction(2).times(diff))
-	player.meta.bestAntimatter = player.meta.bestAntimatter.max(player.meta.antimatter)
-	if (tmp.ngp3) {
-		player.meta.bestOverQuantums = player.meta.bestOverQuantums.max(player.meta.antimatter)
-		player.meta.bestOverGhostifies = player.meta.bestOverGhostifies.max(player.meta.antimatter)
-	}
-}
-
 function specialDimUpdating(diff){
 	var step = inNGM(5) ? 2 : 1
 	var max = inNGM(5) ? 6 : 8
@@ -4418,13 +4413,7 @@ function specialDimUpdating(diff){
 		}
 	}
 
-	// Meta
-	var stepM = step
-	if (hasDilationStudy(6)) {
-		for (let tier = max; tier >= 1; tier--) {
-			if (tier <= max - stepM) player.meta[tier].amount = player.meta[tier].amount.plus(getMDProduction(tier + stepM).times(diff / 10))
-		}
-	}
+	metaDimsUpdating(diff)
 }
 
 function dimensionPageTabsUpdating(){
@@ -5032,7 +5021,6 @@ function gameLoop(diff) {
 		passiveIPperMUpdating(diff)
 		incrementTimesUpdating(diffStat)
 
-		if (player.meta) metaDimsUpdating(diff)
 		specialDimUpdating(diff) //production of those dims
 		otherDimsUpdating(diff)
 		giveBlackHolePowerUpdating(diff)

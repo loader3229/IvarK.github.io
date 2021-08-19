@@ -140,7 +140,7 @@ var QCs = {
 				//Paired Challenges
 				if (PCs.milestoneDone(11)) {
 					let pc11 = 0.2 + (PCs_save.lvl - 1) / 35
-					data.limit = data.limit.pow(Math.pow(4, -pc11))
+					data.limit = data.limit.pow(Math.pow(2, -pc11))
 					data.speedMult = data.speedMult.pow(1 - pc11)
 					data.scalingExp = 1 / (1 + boosts / (20 + pc11 * 5))
 					data.effMult = Math.min((eff * 3 - maxEff * 2 * (1 - pc11)) / 10 + 1, 5)
@@ -176,7 +176,7 @@ var QCs = {
 					let extra = data.extra()
 					getEl("repCompress").innerHTML = "Compress for a " + (qc1Explain ? "small multiplier " : "") + "boost" +
 						(!qc1Explain ? "." : ", but reduce the interval scaling.") +
-						"<br><span style='font-size: 10px'>(Requires " + shortenCosts(QCs_tmp.qc1.req) + " replicantis)</span>" +
+						"<br><span style='font-size: 10px'>(" + (qc1Explain ? "Requires " : "") + shortenCosts(QCs_tmp.qc1.req) + " replicantis)</span>" +
 						(!qc1Explain ? "<br>(" +
 							getFullExpansion(qc1.boosts) + " / " + getFullExpansion(data.max()) +
 							(qc1.boosts > data.compressScalings[0] ? " Distant" : "") +
@@ -247,7 +247,7 @@ var QCs = {
 			updateCloudDisp() {
 				if (!pos_tmp.cloud) return
 
-				let unl = QCs.in(2)
+				let unl = PCs.milestoneDone(22) ? QCs.inAny() : QCs.in(2)
 				for (let t = 1; t <= 3; t++) {
 					getEl("pos_cloud" + t + "_toggle").parentElement.style.display = unl && pos_tmp.cloud[t] ? "" : "none"
 					getEl("pos_cloud" + t + "_cell").colspan = unl && pos_tmp.cloud[t] ? 1 : 2
@@ -378,6 +378,7 @@ var QCs = {
 
 			exp() {
 				var x = 1
+				if (futureBoost("exclude_any_qc")) x = 1.2
 				if (QCs.perkActive(1)) x *= QCs_save.qc1.boosts / 3 + 1
 				return x
 			},
@@ -391,7 +392,10 @@ var QCs = {
 					eff_pos: QCs_save.qc5.div(2e6).add(1).log(2) * 10,
 				}
 				if (QCs.isRewardOn(6)) QCs_tmp.qc5.mult = QCs_tmp.qc5.mult.times(QCs_tmp.rewards[6])
-				if (PCs.milestoneDone(52)) QCs_tmp.qc5.mult = QCs_tmp.qc5.mult.times(2)
+				if (PCs.milestoneDone(53)) {
+					QCs_tmp.qc5.eff_glu = Math.pow(QCs_tmp.qc5.eff_glu, 1.1)
+					QCs_tmp.qc5.eff_pos = Math.pow(QCs_tmp.qc5.eff_pos, 1.1)
+				}
 				if (QCs.perkActive(5)) {
 					QCs_tmp.qc5.eff_glu *= 2
 					QCs_tmp.qc5.eff_pos *= 2
@@ -468,14 +472,14 @@ var QCs = {
 			overlapReqs: [1/0, 1/0],
 		},
 		8: {
-			unl: () => PCs_save.lvl >= 4,
+			unl: () => hasAch("ng3p26"),
 			desc: () => "All Entangled Boosts are anti'd. You have to setup a cycle of 2 entanglements, and Big Crunching switches your gluon kind to the next one.",
 			goal: () => enB.glu.boosterEff() >= 220,
 			goalDisp: () => "220 Effective Boosters",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.1),
 			hint: "Make your Auto-Crunch faster than Auto-Eternity.",
 
-			rewardDesc: (x) => "Unlock new comprehensive content for Paired Challenges.",
+			rewardDesc: (x) => "Unlock the fourth column of Paired Challenges.",
 			rewardEff(str) {
 				return 1
 			},
@@ -616,7 +620,7 @@ var QCs = {
 	},
 
 	perkUnl(x) {
-		return this.modDone(x, "up")
+		return futureBoost("nerfed_modifier") && this.modDone(x, "up")
 	},
 	perkActive(x) {
 		return QCs_tmp.perks[x] && this.perkUnl(x) && this.inAny()
@@ -662,7 +666,7 @@ var QCs = {
 		let unl = this.divInserted && this.unl() && pH.shown("quantum")
 
 		//In Quantum Challenges
-		getEl("qc_restart").style.display = QCs.in(2) || QCs.in(3) ? "" : "none"
+		getEl("qc_restart").style.display = QCs.in(3) ? "" : "none"
 		this.data[1].updateDisp()
 		this.data[2].updateCloudDisp()
 		this.data[4].updateDisp()
@@ -692,7 +696,7 @@ var QCs = {
 			}
 		}
 
-		getEl("qc_perks").style.display = QCs.done(8) ? "inline" : "none"
+		getEl("qc_perks").style.display = futureBoost("nerfed_modifier") ? "inline" : "none"
 		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Nerfed modifier'
 		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Nerfed modifier doesn\'t have its secondary goals. And perks only work in any Quantum Challenge!' : ""
 	},

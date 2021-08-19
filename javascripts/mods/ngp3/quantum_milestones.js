@@ -277,7 +277,7 @@ let qMs = {
 	},
 	27: {
 		req: 200,
-		eff: () => "Able to purchase all time studies without blocking, and Meta Dimension autobuyer is unlimited",
-		effGot: () => "You now can buy every single time study, and Meta Dimension autobuyer is now unlimited."
+		eff: () => "Meta Dimension autobuyer is unlimited",
+		effGot: () => "Meta Dimension autobuyer is now unlimited."
 	},
 }
