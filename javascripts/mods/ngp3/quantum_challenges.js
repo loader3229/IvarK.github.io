@@ -1,13 +1,13 @@
 var QCs = {
 	setup() {
-		QCs_save = {
+		qu_save.qc = {
 			in: [],
 			comps: 0,
 			mod_comps: [],
 			best: {},
 			cloud_disable: 1
 		}
-		return QCs_save
+		return qu_save.qc
 	},
 	compile() {
 		QCs_save = undefined

@@ -74,7 +74,7 @@ const MAX_DIL_UPG_PRIORITIES = [6, 4, 3, 1, 2]
 
 function preQuantumAutoNGP3(diff) {
 	//Pre-Quantum Automation
-	if (qMs.tmp.amt >= 27) {
+	if (qMs.tmp.amt >= 25) {
 		doAutoMetaTick(1/0)
 	} else {
 		let tickPerDiff = qMs.tmp.metaSpeed

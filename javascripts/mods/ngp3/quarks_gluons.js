@@ -193,10 +193,12 @@ function updateColorCharge(update) {
 	var sorted = []
 	for (var s = 0; s < 3; s++) {
 		var search = ''
-		for (var i = 0; i < 3; i++) if (!sorted.includes(colors[i]) && (search == '' || usedQuarks[colors[i]].gte(usedQuarks[search]))) search = colors[i]
+		for (var i = 0; i < 3; i++) {
+			var color = colors[i]
+			if (!sorted.includes(color) && (!search || usedQuarks[color].gt(usedQuarks[search]))) search = color
+		}
 		sorted.push(search)
 	}
-
 
 	//Color Charge
 	var charge = colorPowers[sorted[0]]

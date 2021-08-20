@@ -431,18 +431,16 @@ function boostReplicateInterval() {
 	if (pow > 0) {
 		var ec14Pow = getECReward(14)
 		var ec14Int = data.ec14.baseInt
+		var ec14Mult = Math.min(15 * data.ec14.acc, 5)
+		if (PCs.milestoneDone(81)) ec14Acc = Math.max(data.ec14Acc * 10, ec14Acc)
 
-		var ec14Acc = getRepSlowdownBase10(data.speeds.exp)
-		if (PCs.milestoneDone(81)) ec14Acc *= Math.pow(3, data.ec14.acc * 3)
-		else ec14Acc *= Math.min(15 * data.ec14.acc, 5)
-		ec14Acc += 1
-
+		var ec14Acc = getRepSlowdownBase10(data.speeds.exp) * ec14Mult + 1
 		data.ec14.interval = ec14Int.div(ec14Acc)
-		x = x.div(data.ec14.interval)
 
 		var sclessEst = data.baseEst.div(ec14Int)
 		var scEst = softcap(sclessEst, "rInt")
 		if (sclessEst.gt(scEst)) x = x.div(sclessEst.div(scEst))
+		x = x.div(data.ec14.interval)
 	}
 	if (QCs_tmp.qc1) x = x.times(QCs_tmp.qc1.speedMult)
 	if (QCs.perkActive(5)) x = x.div(QCs_save.qc1.expands / 2 + 1)

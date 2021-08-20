@@ -22,7 +22,7 @@ function galaxyReqDisplay(){
 	getEl("secondResetLabel").innerHTML = getGalaxyScaleName(nextGal.scaling) + 'Antimatter Galaxies ('+ getFullExpansion(player.galaxies) + (totalTypes >= 2 ? ' + ' + getFullExpansion(totalReplGalaxies) : '') + (totalTypes >= 3 ? ' + ' + getFullExpansion(Math.round(player.dilation.freeGalaxies)) : '') +'): requires ' + getFullExpansion(nextGal.amt) + ' '+DISPLAY_NAMES[inNC(4) || player.pSac != undefined ? 6 : 8]+' Dimensions'
 }
 
-var galaxyScalings = ["", "Distant ", "Further ", "Remote ", "Obsure "]
+var galaxyScalings = ["", "Distant ", "Farther ", "Remote ", "Obsure "]
 var negGalaxyScalings = ["", "Dense "]
 function getGalaxyScaleName(x) {
 	return (x < 0 ? negGalaxyScalings : galaxyScalings)[Math.abs(x)]

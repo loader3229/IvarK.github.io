@@ -201,7 +201,7 @@ let qMs = {
 	},
 	12: {
 		req: 13,
-		eff: () => "Reduce the interval of auto-dilation upgrades and MDs by 10% per milestone" + (qMs.tmp.amt >= 12 && qMs.tmp.amt < 27 ? " (" + shorten(1 / qMs.tmp.metaSpeed) + "/s)" : ""),
+		eff: () => "Reduce the interval of auto-dilation upgrades and MDs by 10% per milestone" + (qMs.tmp.amt >= 12 && qMs.tmp.amt < 25 ? " (" + shorten(1 / qMs.tmp.metaSpeed) + "/s)" : ""),
 		effGot: () => "The interval of auto-dilation upgrades and MDs is now reduced by 10% per milestone."
 	},
 	13: {
@@ -267,8 +267,8 @@ let qMs = {
 	},
 	25: {
 		req: 100,
-		eff: () => "Meta-Dimension Boosts reset nothing",
-		effGot: () => "Meta-Dimension Boosts no longer reset anything."
+		eff: () => "Meta-Dimension Boosts reset nothing, and Meta Dimension autobuyer is unlimited",
+		effGot: () => "Meta-Dimension Boosts no longer reset anything, and Meta Dimension autobuyer is now unlimited."
 	},
 	26: {
 		req: 150,
@@ -277,7 +277,7 @@ let qMs = {
 	},
 	27: {
 		req: 200,
-		eff: () => "Meta Dimension autobuyer is unlimited",
-		effGot: () => "Meta Dimension autobuyer is now unlimited."
+		eff: () => "???",
+		effGot: () => "???"
 	},
 }

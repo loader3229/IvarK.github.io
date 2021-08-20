@@ -299,7 +299,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 			QCs_tmp.in = []
 
 			if (QCs_save.kept) {
-				player.timestudy.theorem = QCs_save.kept.tt
+				player.timestudy.theorem += QCs_save.kept.tt
 				player.masterystudies = [...QCs_save.kept.ms]
 				delete QCs_save.kept
 			}
@@ -326,6 +326,10 @@ function quantumReset(force, auto, data, mode, implode = false) {
 			PCs.updateButton(data.pc)
 		}
 
+		if (!PCs_tmp.unl) {
+			PCs_tmp.unl = true
+			PCs.updateUsed()
+		}
 		PCs.updateTmp()
 		PCs.updateDisp()
 	}

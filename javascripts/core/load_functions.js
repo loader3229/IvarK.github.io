@@ -1671,7 +1671,7 @@ function setConfirmationsDisplay(){
 
 function setOptionsDisplaysStuff1(){
         getEl("progressBarBtn").textContent = (aarMod.progressBar?"Hide":"Show")+" progress bar"
-        getEl("toggleLogRateChange").textContent = "Rate in logarithms: O"+(aarMod.logRateChange?"N":"FF")
+        getEl("toggleLogRateChange").textContent = "Rate displays: "+(aarMod.logRateChange?"Logarithm":"Percentage")
         getEl("tabsSave").textContent = "Saved tabs: O"+(aarMod.tabsSave.on?"N":"FF")
         updatePerformanceTicks()
         dimDescEnd = (aarMod.logRateChange?" OoM":"%")+"/s)"

@@ -113,7 +113,7 @@ var mTs = {
 			return QCs.in(7) || mTs.bought >= (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10)
 		},
 		d7() {
-			return enB.glu.engAmt() >= 5.3
+			return enB.glu.engAmt() >= (tmp.exMode ? 5.3 : 3)
 		},
 		d8() {
 			return enB.pos.engAmt() >= 5
@@ -127,7 +127,7 @@ var mTs = {
 			return QCs.in(7) ? "" : (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10) + " bought mastery studies"
 		},
 		d7() {
-			return "5.3 quantum energy"
+			return (tmp.exMode ? 5.3 : 3) + " quantum energy"
 		},
 		d8() {
 			return "5 positronic charge"
