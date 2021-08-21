@@ -53,7 +53,7 @@ function getMDMultiplier(tier) {
 	//Achievements:
 	if (tier <= 3 && hasAch("ng3p17")) ret = ret.times(Math.sqrt(player.totalmoney.max(1).log10() / 1e10 + 1, 0.5))
 	if (tier == 1 && hasAch("ng3p21")) ret = ret.times(player.meta.bestAntimatter.max(1).log10() / 5 + 1)
-	if (tier % 2 == 1 && hasAch("ng3p24")) ret = ret.times(player.meta[tier + 1].amount.add(1).pow(0.01))
+	//if (tier % 2 == 1 && hasAch("ng3p24")) ret = ret.times(player.meta[tier + 1].amount.max(1).pow(0.01))
 
 	//Positronic Boosts:
 	if (tier == 1 && enB.active("pos", 2)) ret = ret.times(enB_tmp.pos2.mult)
@@ -418,8 +418,10 @@ function getPataAccelerator() {
 	if (enB.pos.charged(2)) x *= enB.pos.chargeEff(2) / 2 + 1
 	if (enB.active("pos", 7)) x *= enB_tmp.pos7
 
-	x = Math.min(x, 1)
-	if (QCs.perkActive(3)) x = 1
-	if (enB.active("pos", 12)) x += enB_tmp.pos12
+	var cap = 1
+	if (enB.active("pos", 12)) cap += enB_tmp.pos12
+
+	x = Math.min(x, cap)
+	if (QCs.perkActive(3)) x = cap
 	return x
 }

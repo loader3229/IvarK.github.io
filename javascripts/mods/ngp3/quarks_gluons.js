@@ -530,7 +530,7 @@ var enB = {
 		return this[type][x].anti
 	},
 
-	colorUsed(x) {
+	colorUsed(type, x) {
 		if (QCs.in(8)) {
 			var qc8 = QCs_save.qc8
 			return qc8.order.length ? qc8.order[qc8.index] : ""
@@ -889,7 +889,8 @@ var enB = {
 			var req = this[x].chargeReq *
 				Math.pow(1.5, Math.max(pos_tmp.cloud && pos_tmp.cloud.total || 0, 2)) *
 				Math.pow(2, lvl - this[x].tier)
-			if (PCs.milestoneDone(42) && lvl == 1) req *= 2
+			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
+			if (PCs.milestoneDone(42) && lvl == 1) req *= 8
 			return req
 		},
 		chargeEff(x) {
@@ -1054,7 +1055,9 @@ var enB = {
 			title: "Looped Dimensionality",
 			tier: 3,
 			eff(x) {
-				return Math.log10(player.dilation.tachyonParticles.max(1).log10() / 100 + 1) * Math.log10(x / 10 + 1) / 2 + 1
+				x = Math.log10(player.dilation.tachyonParticles.max(1).log10() / 100 + 1) * Math.log10(x / 10 + 1) / 4 + 1
+				x *= x
+				return x
 			},
 			effDisplay(x) {
 				return x.toFixed(3) + "x"
@@ -1126,7 +1129,7 @@ var enB = {
 			title: "Timeless Capability",
 			tier: 3,
 			eff(x) {
-				return Math.pow(Math.log10(getReplEff().add(1).log10() + 1) / (tmp.ngp3_mul ? 8 : 10) + 1, 3) - 1
+				return Math.log10(Math.pow(getReplEff().log10() * Math.log10(x + 1), 0.2) + 10) - 1
 			},
 			effDisplay(x) {
 				return x.toFixed(3)

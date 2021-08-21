@@ -138,7 +138,7 @@ let qMs = {
 		getEl("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
 	},
 
-	max: 27,
+	max: 26,
 	1: {
 		req: 1,
 		eff: () => "Completing an EC only exits your challenge.",
@@ -274,10 +274,5 @@ let qMs = {
 		req: 150,
 		eff: () => "Unlock the autobuyer for Replicated Expanders.",
 		effGot: () => "Unlock the autobuyer for Replicated Expanders."
-	},
-	27: {
-		req: 200,
-		eff: () => "???",
-		effGot: () => "???"
 	},
 }

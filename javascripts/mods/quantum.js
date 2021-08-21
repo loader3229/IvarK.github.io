@@ -258,6 +258,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	if (pos.unl()) {
 		pos_save.swaps = {...pos_tmp.next_swaps}
 		pos.updateCloud()
+		pos.updateTmp()
 	}
 
 	// Quantum Challenges

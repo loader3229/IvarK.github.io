@@ -931,8 +931,8 @@ function loadAutoPreset(x) {
 }
 
 function targetAutoPreset() {
-	if (QCs.in(1) && autoPresetUnlocked("qc1")) return "qc1"
 	if (QCs.in(7) && autoPresetUnlocked("qc7")) return "qc7"
+	if (QCs.in(1) && autoPresetUnlocked("qc1")) return "qc1"
 	return player.dilation.active ? "dilation" : "eternity"
 }
 

@@ -358,10 +358,10 @@ function setR16Tooltip() {
 	let seriously = getEl("Seriously, I already got rid of you.")
 
 	//ACHIEVEMENT ROW 16
-	memories.setAttribute('ach-tooltip', "Reach " + shorten(Decimal.pow(Number.MAX_VALUE, 3)) + " meta-antimatter without buying 5th - 8th Meta Dimensions. Reward: Even Meta Dimensions boost odd Meta Dimensions.")
+	memories.setAttribute('ach-tooltip', "Reach " + shorten(Decimal.pow(Number.MAX_VALUE, 2)) + " meta-antimatter without buying 5th - 8th Meta Dimensions. Reward: Even Meta Dimensions boost odd Meta Dimensions.")
 	morals.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e85) + " TT in any Quantum Challenge. Reward: You can buy Mastery Studies from a row above the latest bought row.")
 	intergal.setAttribute('ach-tooltip', "Get " + getFullExpansion(3e7) + " Eighth Dimensions without " + (tmp.dtMode ? "" : "max ") + "Replicated Galaxies. Reward: Meta Accelerator boosts the MA effect.")
-	seriously.setAttribute('ach-tooltip', "Get " + shortenCosts(1/0) + " Eternity Points with at least 5 excluded Positronic Boosts.")
+	seriously.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 2e7)) + " Eternity Points with at least 5 excluded Positronic Boosts. Reward: Charging Positronic Boosts requires less.")
 }
 
 function setR17Tooltip() {
@@ -398,7 +398,7 @@ function setR18Tooltip() {
 	//ACHIEVEMENT ROW 18
 	notrelative.setAttribute('ach-tooltip', "Get " + shorten(Decimal.pow(10, 411))+" dilated time without gaining tachyon particles. Reward: You gain more DT based on the amount of Nanorewards.")
 	error404.setAttribute('ach-tooltip', "Get " + shorten(Decimal.pow(10, 1.6e12))+" antimatter while having only the 1st Dimensions of each type of Dimension and at least 2 normal galaxies.")
-	ie.setAttribute('ach-tooltip', "Get " + shorten(Decimal.pow(10, 8e6)) + " antimatter in a paired challenge with the PC6+8 combination. Reward: Automatically buy the Quark multiplier to dimensions every second if you have the 8th brave milestone.")
+	ie.setAttribute('ach-tooltip', "???")
 	wasted.setAttribute('ach-tooltip', "Get " + shorten(1.1e7) + " TT without having TT generation, keeping your previous TT, and respeccing studies. Reward: While you have less than 1 hour worth of TT production, you gain 10x as much TT.")
 	protonsDecay.setAttribute('ach-tooltip', "Unlock Tree of Decay. Reward: You keep the two thirds power of your preons upon quantum when outside of a Quantum Challenge.")
 	stop.setAttribute('ach-tooltip', "Get the replicanti reset requirement to " + shorten(Decimal.pow(10, 1.25e7)) + ". Reward: Getting a normal replicant manually doesn't reset your replicanti and can be automated.")

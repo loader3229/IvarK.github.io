@@ -168,6 +168,15 @@ const allAchievements = {
         ng3p37 : "No dilation means no production.",
         ng3p38 : "I don't want you to live anymore.", // NO REWARD
 
+        ng3pr11 : "ng3pr11",
+        ng3pr12 : "ng3pr12",
+        ng3pr13 : "ng3pr13",
+        ng3pr14 : "ng3pr14",
+        ng3pr15 : "ng3pr15",
+        ng3pr16 : "ng3pr16",
+        ng3pr17 : "ng3pr17",
+        ng3pr18 : "ng3pr18",
+
         ng3p41 : "Time is not relative",
         ng3p42 : "ERROR 404: DIMENSIONS NOT FOUND", // NO REWARD
         ng3p43 : "Impossible expectations",
@@ -321,7 +330,7 @@ const allAchievementNums = Object.invert(allAchievements)
 // to retrieve by value: Object.keys(allAchievements).find(key => allAchievements[key] === "L4D: Left 4 Dimensions");
 const allAchievementRows = [
 	"r1", "ngm5p1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", 
-	"r10", "r11", "r12", "r13", "ngud1", "ngpp1", "ng3p1", "ng3p2", "ng3p3", "ng3p4",
+	"r10", "r11", "r12", "r13", "ngud1", "ngpp1", "ng3p1", "ng3p2", "ng3p3", "ng3pr1", "ng3p4",
 	"ng3p5", "ng3p6", "ng3p7", "ng3p8", "ng3p9", "ng3p10"
 ]
 const allAchievementReplacements = {
@@ -430,7 +439,7 @@ function giveAchievement(name, noUpdate) {
 		getEl('bestTP').style.display = ""
 		getEl('bestTP').textContent = "Your best ever Tachyon particles was "+shorten(player.dilation.bestTP)+"."
 	}
-	if (name == "Twice in the row") getEl('toggleautoquantummode').style.display = ""
+	if (name == "Twice in the row") $.notify("Congratulations! You have unlocked Quantum Challenge 8!")
 	if (name == "Stop blocking me!") getEl('autoReset').style.display = ""
 	if (name == "To the new dimension!") qu_save.bigRip.bestGals = 1
 	if (name == "Quantum doesn't take so long") {

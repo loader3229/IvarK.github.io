@@ -99,11 +99,17 @@ var QCs = {
 			boost() {
 				if (!QCs.data[1].can()) return false
 
+				QCs.data[1].fix = true
 				QCs_save.qc1.boosts++
 				if (!QCs.inAny()) QCs_save.qc1.best = Math.max(QCs_save.qc1.boosts, QCs_save.qc1.best)
+
+				tmp.rm = new Decimal(1)
+				tmp.rmPseudo = new Decimal(1)
 				player.replicanti.amount = new Decimal(1)
+
 				eternity(false, true)
 
+				QCs.data[1].fix = false
 				return true
 			},
 			extra: () => 0,
@@ -145,7 +151,7 @@ var QCs = {
 					data.scalingExp = 1 / (1 + boosts / (20 + pc11 * 5))
 					data.effMult = Math.min((eff * 3 - maxEff * 2 * (1 - pc11)) / 10 + 1, 5)
 				}
-				if (PCs.milestoneDone(12)) data.limit = data.limit.pow(Math.log2(qc1.expands + 2))
+				if (PCs.milestoneDone(12)) data.limit = data.limit.pow(Math.log2(qc1.expands + 1) / 10 + 1)
 
 				//Limit > Req
 				data.limit = data.limit.max(data.req)
@@ -247,7 +253,7 @@ var QCs = {
 			updateCloudDisp() {
 				if (!pos_tmp.cloud) return
 
-				let unl = PCs.milestoneDone(22) ? QCs.inAny() : QCs.in(2)
+				let unl = futureBoost("exclude_any_qc") ? QCs.inAny() : QCs.in(2)
 				for (let t = 1; t <= 3; t++) {
 					getEl("pos_cloud" + t + "_toggle").parentElement.style.display = unl && pos_tmp.cloud[t] ? "" : "none"
 					getEl("pos_cloud" + t + "_cell").colspan = unl && pos_tmp.cloud[t] ? 1 : 2
@@ -378,7 +384,7 @@ var QCs = {
 
 			exp() {
 				var x = 1
-				if (futureBoost("exclude_any_qc")) x = 1.2
+				if (PCs.milestoneDone(52)) x = 1.2
 				if (QCs.perkActive(1)) x *= QCs_save.qc1.boosts / 3 + 1
 				return x
 			},
@@ -425,13 +431,10 @@ var QCs = {
 			rewardDesc: (x) => "Replicantis also produce Replicanti Energy; but also boosted by time since Eternity. (" + shorten(QCs_tmp.rewards[6]) + "x)",
 			rewardEff(str) {
 				let t = player.thisEternity / 10
-				let t_puzzle = t
-				if (PCs.milestoneDone(61)) t_puzzle /= 2
-				if (PCs.milestoneDone(62)) t_puzzle = Math.sqrt(t)
 
 				let x = Math.log2(t + 2)
 				if (PCs.milestoneDone(61)) x *= x
-				x *= (9 / (Math.abs(5 - t_puzzle) + 1) + 1) //Hindrance... >_<
+				x *= (9 / (Math.abs(5 - t) + 1) + 1) //Hindrance... >_<
 				return x
 			},
 
@@ -472,7 +475,7 @@ var QCs = {
 			overlapReqs: [1/0, 1/0],
 		},
 		8: {
-			unl: () => hasAch("ng3p26"),
+			unl: () => hasAch("ng3p25"),
 			desc: () => "All Entangled Boosts are anti'd. You have to setup a cycle of 2 entanglements, and Big Crunching switches your gluon kind to the next one.",
 			goal: () => enB.glu.boosterEff() >= 220,
 			goalDisp: () => "220 Effective Boosters",

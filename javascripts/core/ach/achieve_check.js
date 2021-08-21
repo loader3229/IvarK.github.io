@@ -253,7 +253,7 @@ function preHiggsNGp3AchieveCheck() {
 
 	if (QCs.done(3)) giveAchievement("We are not going squared.")
 	if (
-		player.meta.bestAntimatter.gte(Decimal.pow(Number.MAX_VALUE, 3)) &&
+		player.meta.bestAntimatter.gte(Decimal.pow(Number.MAX_VALUE, 2)) &&
 		player.meta[5].bought == 0 &&
 		player.meta[6].bought == 0 &&
 		player.meta[7].bought == 0 &&
@@ -262,7 +262,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.timestudy.theorem >= 1e85 && !QCs.isntCatched()) giveAchievement("Infinity Morals")
 	if (PCs_save.comps.length >= 3) giveAchievement("Twice in a row")
 	if (player.eightBought >= 3e7 && (tmp.dtMode ? getTotalRG() : player.replicanti.galaxies) == 0) giveAchievement("Intergalactic")
-	if (player.eternityPoints.e >= 1/0 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
+	if (player.eternityPoints.e >= 2e7 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 
 	if (player.meta.bestAntimatter.log10() >= 333 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
 	if (player.money.log10() >= 6.2e11 && player.currentEternityChall == "eterc11") giveAchievement("I can’t get my multipliers higher!")
@@ -275,7 +275,7 @@ function preHiggsNGp3AchieveCheck() {
 			else if (player.money.log10() >= 1.6e12 && d == 8) giveAchievement("ERROR 404: DIMENSIONS NOT FOUND")
 		}
 	}
-	if (player.money.log10() >= 8e6 && QCs.in(6) && QCs.in(8)) giveAchievement("Impossible expectations")
+	if (false) giveAchievement("Impossible expectations")
 	if (player.timestudy.theorem >= 1.1e7 && qu_save.wasted) giveAchievement("Studies are wasted")
 	if (qu_save.replicants.requirement.gte("1e12500000")) giveAchievement("Stop blocking me!")
 	if (player.infinityPoints.gte(Decimal.pow(10, 2.75e5)) && ableToGetRid6) giveAchievement("Are you currently dying?")

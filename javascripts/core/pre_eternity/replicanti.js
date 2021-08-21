@@ -17,7 +17,7 @@ function unlockReplicantis() {
 }
 
 function replicantiIncrease(diff) {
-	if (!player.replicanti.unl || player.currentEternityChall == "eterc14" || dev.noRep) {
+	if (!player.replicanti.unl || player.currentEternityChall == "eterc14" || dev.noRep || QCs.data[1].fix) {
 		replicantiTicks = 0
 		return
 	}

@@ -3371,7 +3371,7 @@ function eternity(force, auto, forceRespec, dilated) {
 
 		if (PCs.milestoneDone(62)) {
 			metaDimsUpdating(3)
-			replicantiIncrease(3)
+			replicantiIncrease(30)
 		}
 	}
 
@@ -4588,11 +4588,11 @@ function doEternityButtonDisplayUpdating(diff){
 		if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getTPGain())) getEl("eternitybtnEPGain").innerHTML = getReqForTPGainDisp()
 		else {
 			getEl("eternitybtnEPGain").innerHTML = ((tmp.eterUnl && player.currentEternityChall == "") ?
-				EPminUnits == "EP" && gainedEternityPoints().e >= 1e9 ? "<b>Other times await... I need to become Eternal.</b>" :
+				EPminUnits == "EP" && gainedEternityPoints().e >= 1e8 ? "<b>Other times await... I need to become Eternal.</b>" :
 				"Gain <b>" + (player.dilation.active?shortenMoney(getTPGain().sub(player.dilation.totalTachyonParticles)):shortenDimensions(gainedEternityPoints()))+"</b> " + (EPminpeakType == "logarithm" ? EPminUnits + "." : player.dilation.active? "Tachyon particles." : "Eternity points.")
 			: "")
 		}
-		var showEPmin = tmp.eterUnl && gainedEternityPoints().e < 1e9 && Decimal.gt(EPminpeak, 0)
+		var showEPmin = tmp.eterUnl && gainedEternityPoints().e < 1e8 && Decimal.gt(EPminpeak, 0)
 		if (EPminUnits != "TP") {
 			getEl("eternitybtnRate").textContent = (showEPmin
 										  ? rateFormat(currentEPmin, EPminpeakUnits) : "")

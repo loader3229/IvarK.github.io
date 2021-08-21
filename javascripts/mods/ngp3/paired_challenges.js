@@ -12,7 +12,7 @@ var PCs = {
 		12: "Unlock Replicated Expanders.",
 		22: "You can swap Positronic Boosts between 2 of any tiers.",
 		32: "25 MP milestone is activated in QC3.",
-		42: "Tier 1 charge is 8x, but require 2x more.",
+		42: "Tier 1 charge is 8x, but require 8x more.",
 		52: "Replicanti Energy is raised by ^1.2.",
 		62: "Eternitying timewraps Meta Dimensions and Replicantis by 3 seconds.",
 		72: "Mastery Study cost multiplier is divided by 5x.",
@@ -28,7 +28,7 @@ var PCs = {
 	},
 	setupData() {
 		var data = {
-			goal_divs: [null, 0.1, 0.95, 0.25, 0.95, 0.45, 0.5, 0.4, 0.65],
+			goal_divs: [null, 0.1, 0.95, 0.25, 0.95, 0.45, 0.5, 0.4, 0.75],
 			milestoneReqs: [null, 1, 2/*, 4*/],
 			letters: [null, "A", "B", "C", "D", "Ω<sup>1</sup>", "Ω<sup>2</sup>", "Ω<sup>3</sup>", "Θ"],
 			all: [],
@@ -146,7 +146,7 @@ var PCs = {
 		data.eff2 = Math.sqrt(eff) / 4
 
 		//Temperature
-		data.temp = Math.min(Math.floor(comps / 4) / 4 - 0.3, 1) * comps / 28
+		data.temp = Math.min(Math.floor(comps / 4 + 0.25) / 4 - 0.3, 1) * comps / 28
 		if (tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp) {
 			if (data.temp > 0) data.temp /= 2
 			data.temp -= 0.1
@@ -238,7 +238,7 @@ var PCs = {
 		div -= PCs_tmp.temp
 
 		var r = qc1.pow(qc2.log(base) / div)
-		var pow = (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) * 0.25 + 1
+		var pow = Math.sqrt((PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) * 0.5 + 1)
 		r = r.pow(pow)
 		r = r.div(this.shrunkerEff())
 		return r
@@ -280,10 +280,8 @@ var PCs = {
 		if (QCs_save.comps / 2 < pc % 10) return 1/0
 		if (PCs_tmp.debug) return pc > 40 ? 1/0 : 0
 
-		var x = Math.floor(pc / 10 - 1) * 4
-		if (pc <= 20) x = 1
-		else if (!tmp.exMode && pc >= 30) x--
-		else if (tmp.bgMode) x--
+		var x = Math.floor(pc / 10) * 4 - 4
+		if (pc < 20) x++
 
 		x += pc % 10 - 1
 		return x
