@@ -145,6 +145,7 @@ let ETER_UPGS = {
 			}
 		}
 
+		getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 		getEl("epmult").className = player.eternityPoints.gte(player.epmultCost) ? "eternityupbtn" : "eternityupbtnlocked"
 	},
 	updateDisplayOnSecond() {
@@ -154,8 +155,6 @@ let ETER_UPGS = {
 			getEl("eter" + i).parentElement.style.display = unl ? "" : "none"
 			if (unl) getEl("eter" + i).className = ETER_UPGS.has(i) ? "eternityupbtnbought" : player.eternityPoints.gte(this[i].cost) ? "eternityupbtn" : "eternityupbtnlocked"
 		}
-
-		getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 	}
 }
 

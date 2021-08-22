@@ -63,7 +63,6 @@ button, div.storebtn {
 }
 
 #progress {
-    bottom: 5px !important;
     background-color: #191919 !important;
     border-radius: 0px !important
 }

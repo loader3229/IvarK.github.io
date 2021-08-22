@@ -1481,8 +1481,8 @@ function showTab(tabName, init) {
 	}
 	if (oldTab !== tabName) {
 		aarMod.tabsSave.tabMain = tabName
-		if ((getEl("antimatterdimensions").style.display != "none" || getEl("metadimensions").style.display != "none") && aarMod.progressBar && tabName == "dimensions") getEl("progress").style.display = "block";
-		else getEl("progress").style.display = "none"
+		setProgressBar()
+
 		if ((getEl("timestudies").style.display != "none" || getEl("ers_timestudies").style.display != "none" || getEl("masterystudies").style.display != "none") && tabName=="eternitystore") getEl("TTbuttons").style.display = "block";
 		else getEl("TTbuttons").style.display = "none"
 		if (tabName == "eternitystore") {
@@ -3691,9 +3691,9 @@ function dilationStuffABTick(){
 	getEl('dilUpgsauto').style.display = canAutoUpgs ? "" : "none"
 	getEl('distribEx').style.display = hasAch("ngud14") && aarMod.nguspV !== undefined ? "" : "none"
 
+	if (!isGamePaused()) return
 	if (canAutoUpgs && player.autoEterOptions.dilUpgs) autoBuyDilUpgs()
-
-	if (qMs.isOn(21) && player.dilation.active && getTPGain().gt(player.dilation.tachyonParticles)) {
+	if (qMs.tmp.amt >= 21 && player.dilation.active && getTPGain().gt(player.dilation.tachyonParticles)) {
 		setTachyonParticles(getTPGain())
 		player.eternityBuyer.alwaysDilCond = false
 	}
@@ -3933,6 +3933,8 @@ setInterval(function() {
 }, 1000)
 
 function autoPerSecond() {
+	dilationStuffABTick()
+
 	if (isGamePaused()) return
 
 	if (qMs.tmp.amt < 20) {
@@ -3940,7 +3942,6 @@ function autoPerSecond() {
 		runIDBuyersTick()
 	}
 	doAutoEterTick()
-	dilationStuffABTick()
 	updateNGpp17Reward()
 	updateNGpp16Reward()
 	doPerSecondNGP3Stuff()
@@ -4812,9 +4813,12 @@ function preQuantumNormalProgress(){
 }
 
 function progressBarUpdating(){
-	if (!aarMod.progressBar) return
-	getEl("progressbar").className=""
-	if (getEl("metadimensions").style.display == "block") doQuantumProgress() 
+	if (getEl("progress").style.display == "none") return
+	getEl("progressbar").className = ""
+	getEl("progress").style.bottom = aarMod.noFooter || getEl("TTbuttons").style.display == "block" ? "5px" : ""
+
+	if (aarMod.featureProgress) doFeatureProgress()
+	else if (getEl("metadimensions").style.display == "block") doQuantumProgress() 
 	else if (player.currentChallenge !== "") {
 		currentChallengeProgress()
 	} else if (!player.break) {
@@ -4831,7 +4835,7 @@ function progressBarUpdating(){
 		r138Progress()
 	} else if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getTPGain())) {
 		gainTPProgress()
-	} else if ((QCs.inAny() || gainedEternityPoints().gte(Decimal.pow(2,1048576))) && player.meta) doQuantumProgress()
+	} else if ((QCs.inAny() || gainedEternityPoints().gte(Decimal.pow(2, 1048576))) && player.meta) doQuantumProgress()
 	else preQuantumNormalProgress()
 }
 
@@ -5526,9 +5530,9 @@ function showDimTab(tabName) {
 			tab.style.display = 'none';
 		}
 	}
+
 	aarMod.tabsSave.tabDims = tabName
-	if (getEl("dimensions").style.display !== "none" && aarMod.progressBar && (tabName === 'antimatterdimensions' || tabName === 'metadimensions')) getEl("progress").style.display = "block"
-	else getEl("progress").style.display = "none"
+	setProgressBar()
 }
 
 function showChallengesTab(tabName) {
@@ -5628,8 +5632,6 @@ function initGame() {
 	let tabsSave = tabsSaveData&&tabsSaveData.on
 	showTab((tabsSave && tabsSaveData.tabMain) || "dimensions",true)
 	showOptionTab((tabsSave && tabsSaveData.tabOptions) || "saving")
-	if (aarMod.progressBar && getEl("dimensions").style.display != "none") getEl("progress").style.display = "block"
-	else getEl("progress").style.display = "none"
 	tmp.tickUpdate = true
 	updateAutobuyers()
 	updateChallengeTimes()

@@ -1,49 +1,47 @@
 var QCs = {
 	setup() {
-		qu_save.qc = {
+		QCs_save = {
 			in: [],
 			comps: 0,
 			mod_comps: [],
 			best: {},
 			cloud_disable: 1
 		}
-		return qu_save.qc
+		qu_save.qc = QCs_save
 	},
 	compile() {
-		QCs_save = undefined
 		if (!tmp.ngp3 || qu_save === undefined) {
 			this.updateTmp()
 			this.updateDisp()
 			return
 		}
 
-		let data = qu_save.qc
-		if (data === undefined) data = this.setup()
-		QCs_save = data
+		if (QCs_save === undefined) this.setup()
+		let data = QCs_save
 
-		if (QCs_save.qc1 === undefined) this.reset()
-		if (QCs_save.qc1.best === undefined) QCs_save.qc1.best = QCs_save.qc1.boosts
-		if (QCs_save.qc1.expands === undefined) QCs_save.qc1.expands = 0
-		if (QCs_save.qc1.autoExpand === undefined) QCs_save.qc1.autoExpand = {
+		let qc1 = data.qc1
+		if (qc1 === undefined) this.reset()
+		if (qc1.best === undefined) qc1.best = qc1.boosts
+		if (qc1.expands === undefined) qc1.expands = 0
+		if (qc1.autoExpand === undefined) qc1.autoExpand = {
 			value: 0,
 			percentage: 0
 		}
-		getEl("setAutoExpand_value").value = QCs_save.qc1.autoExpand.value
-		getEl("setAutoExpand_percentage").value = QCs_save.qc1.autoExpand.percentage
+		getEl("setAutoExpand_value").value = qc1.autoExpand.value
+		getEl("setAutoExpand_percentage").value = qc1.autoExpand.percentage
 
-		if (QCs_save.qc4 === undefined || QCs_save.qc4.normal === undefined) QCs_save.qc4 = { normal: QCs_save.qc4 || "ng", dil: "ng" }
-
-		if (typeof(QCs_save.qc2) !== "number") QCs_save.qc2 = QCs_save.cloud_disable || 1
-		QCs_save.qc5 = new Decimal(QCs_save.qc5)
-		if (QCs_save.qc8 === undefined) QCs_save.qc8 = {
+		if (typeof(data.qc2) !== "number") data.qc2 = data.cloud_disable || 1
+		if (data.qc4 === undefined || data.qc4.normal === undefined) data.qc4 = { normal: data.qc4 || "ng", dil: "ng" }
+		data.qc5 = new Decimal(data.qc5)
+		if (data.qc8 === undefined) data.qc8 = {
 			index: 0,
 			order: []
 		}
 
-		if (QCs_save.best_exclusion || QCs_save.perks_unl || (QCs_save.mod_comps && !QCs_save.mod_comps.length)) {
-			QCs_save.mod_comps = []
-			delete QCs_save.best_exclusion
-			delete QCs_save.perks_unl
+		if (data.best_exclusion || data.perks_unl || (data.mod_comps && !data.mod_comps.length)) {
+			data.mod_comps = []
+			delete data.best_exclusion
+			delete data.perks_unl
 		}
 
 		this.updateTmp()
@@ -238,7 +236,7 @@ var QCs = {
 			rewardDesc: (x) => "Color charge boosts itself by " + shorten(x) + "x.",
 			rewardEff(str) {
 				let x = Math.log10((str || colorCharge.normal.charge) + 1) + 1
-				if (PCs.milestoneDone(21)) x *= x
+				if (PCs.milestoneDone(21)) x *= 2
 				return x
 			},
 

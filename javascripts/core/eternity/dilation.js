@@ -472,8 +472,7 @@ function buyDilationUpgrade(pos, max, isId) {
 			if (!tmp.ngp3) player.dilation.dilatedTime = new Decimal(0)
 			resetDilationGalaxies()
 		}
-		if (id[1] == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(getDil3Power()))
-		else if (id[1] >= 3 && player.eternityBuyer.alwaysDil && (!player.dilation.active || !qMs.on(21))) player.eternityBuyer.alwaysDilCond = true
+		if (id[1] >= 3) onBuyDilationUpgrade(id[1], 1)
 	} else {
 		// Not rebuyable
 		if (hasDilationUpg(id)) return
@@ -506,6 +505,11 @@ function buyDilationUpgrade(pos, max, isId) {
 	if (max) return true
 	if (rebuyable) updateDilationUpgradeCost(pos, id)
 	updateDilationUpgradeButtons()
+}
+
+function onBuyDilationUpgrade(x, b) {
+	if (id == 3 && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), b)))
+	else if (player.eternityBuyer.alwaysDil && (!player.dilation.active || qMs.tmp.amt < 21)) player.eternityBuyer.alwaysDilCond = true
 }
 
 function getTTProduction(display) {

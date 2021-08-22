@@ -1471,6 +1471,7 @@
 					</tr>
 					<tr>
 						<td><div><button id="notation" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:10px"></button></div></td>
+						<td><div><button id="featureProgress" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px;" onclick="setProgressBar('toggle', 'featureProgress')"></button></div></td>
 						<!--
 						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Menu: OFF</button></div></td>
 						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Gameplay Tabs: Combined</button></div></td>
@@ -1559,7 +1560,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Entangled Challenges // 8/20/21a Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.5: Entangled Challenges // 8/21/21a Alpha Build)</p>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -2277,7 +2278,7 @@
 								<div id="Never make paradoxes!" class="achievement achievementlocked" style="background-image: url(images/129.png)"></div>
 							</td>
 							<td>
-								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/130.png)" ach-tooltip="Complete 24 unique paired challenge combinations. Reward: Matter can bypass antimatter in QC6."></div>
+								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/130.png)" ach-tooltip="Complete 12 Paired Challenge combinations. Reward: Cooler temperatures are doubled."></div>
 							</td>
 							<td>
 								<div id="An ant office?" class="achievement achievementlocked" style="background-image: url(images/131.png)" ach-tooltip="Promote a worker into the second Emperor Dimension. Reward: Duplicants feed babies 10x faster."></div>
@@ -5641,7 +5642,7 @@
 		<div class="scrollablemenu">
 			<button id="footerBtn" onclick="showHideFooter(true)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="newsbtn" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
-			<button id="progressBarBtn" onclick="toggleProgressBar()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
+			<button id="progressBarBtn" onclick="setProgressBar('toggle', 'progressBar')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="showStats" onclick="setStatsDisplay(true)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="hideRepresentation" onclick="toggleRepresentation()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="showAuto" onclick="toggleAutoTab()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>

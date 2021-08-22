@@ -890,7 +890,7 @@ var enB = {
 				Math.pow(1.5, Math.max(pos_tmp.cloud && pos_tmp.cloud.total || 0, 2)) *
 				Math.pow(2, lvl - this[x].tier)
 			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
-			if (PCs.milestoneDone(42) && lvl == 1) req *= 8
+			if (PCs.milestoneDone(42) && lvl == 1) req *= 4
 			return req
 		},
 		chargeEff(x) {
@@ -972,7 +972,7 @@ var enB = {
 					mult: mult,
 
 					igal: hasAch("ng3p27") ? igal : undefined,
-					igal_softcap: hasAch("ng3p27") ? Math.pow(igal, 2) : undefined
+					igal_softcap: hasAch("ng3p27") ? Math.pow(Math.max(igal - 0.5, 1), 2) : undefined
 				}
 			},
 			effDisplay(x) {

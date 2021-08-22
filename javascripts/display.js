@@ -594,9 +594,6 @@ function ETERNITYSTOREDisplay(){
 			getEl("blackholeunlock").className = (player.eternityPoints.gte("1e4000")) ? "storebtn" : "unavailablebtn"
 		}
 	}
-	if (getEl("breakEternity").style.display == "block") {
-		breakEternityDisplay()
-	}
 }
 
 function updateDimensionsDisplay() {
@@ -973,4 +970,90 @@ function moveAutoTab(id, abb, btn, pos, autoShown, back) {
 	}
 	if (elm.className == "autotab" && !autoShown && autoTab == id) elm.style.display = "none"
 	getEl(id).className = autoShown ? "autotab" : pos + "tab"
+}
+
+function setProgressBar(mode, id) {
+	//OPTIONS
+	if (mode == "toggle") {
+		aarMod[id] = !aarMod[id]
+		if (id == "featureProgress") showHideFooter()
+	}
+	if (mode == "setup" || mode == "toggle") {
+		getEl("progressBarBtn").textContent = (aarMod.progressBar ? "Hide" : "Show") + " progress bar"
+		getEl("featureProgress").style.display = aarMod.progressBar && tmp.ngmX < 2 ? "" : "none"
+		getEl("featureProgress").textContent = "Feature progress bar: " + (aarMod.featureProgress ? "ON" : "OFF")
+	}
+	if (mode == "setup") return
+
+	//PROGRESS BAR DISPLAY
+	getEl("progress").style.display = getEl("options").style.display == "block" ? "none" :
+		!aarMod.progressBar ? "none" :
+		aarMod.featureProgress ? "block" :
+		getEl("dimensions").style.display != "block" ? "none" :
+		getEl("antimatterdimensions").style.display == "block" ? "block" :
+		getEl("metadimensions").style.display == "block" ? "block" :
+		"none"
+}
+
+function doFeatureProgress() {
+	let percentage
+	let feature
+	let res
+	let req
+	let reqNum
+
+	if (PCs.unl()) {
+		res = PCs_save.comps.length
+		reqNum = 8
+		req = reqNum + " PC combinations"
+		percentage = res / reqNum
+		feature = "Strings"
+	} else if (QCs.unl()) {
+		res = QCs_save.comps
+		reqNum = 7
+		req = reqNum + " QC completions"
+		percentage = res / reqNum
+		feature = "Paired Challenges"
+	} else if (pos.unl()) {
+		res = pos_save.energy
+		reqNum = 5
+		req = reqNum + " Positronic Charge"
+		percentage = res / reqNum
+		feature = "Quantum Challenges"
+	} else if (tmp.quUnl) {
+		res = qu_save.quarkEnergy
+		reqNum = tmp.exMode ? 5.3 : 3
+		req = reqNum + " Quantum Energy"
+		percentage = res / reqNum
+		feature = "Positrons"
+	} else if (hasDilationStudy(6)) {
+		res = player.meta.antimatter
+		reqNum = getQuantumReq()
+		req = reqNum + " meta-antimatter"
+		percentage = res.log(reqNum)
+		feature = "Quantum"
+	} else if (pH.did("eternity")) {
+		res = getTotalTT()
+		reqNum = 13000
+		req = reqNum + " total TT"
+		percentage = res / reqNum
+		feature = "Dilation (approximately)"
+	} else if (pH.did("infinity")) {
+		res = player.infinityPoints
+		reqNum = Number.MAX_VALUE
+		req = reqNum + " Infinity points"
+		percentage = res.log(reqNum)
+		feature = "Eternity"
+	} else {
+		res = player.money
+		reqNum = Number.MAX_VALUE
+		req = reqNum + " antimatter"
+		percentage = res.log(reqNum)
+		feature = "Infinity"
+	}
+
+	percentage = percentage === undefined ? "100%" : Math.min(percentage * 100, 100).toFixed(1) + "%"
+	getEl("progressbar").style.width = percentage
+	getEl("progresspercent").textContent = percentage
+	getEl("progresspercent").setAttribute('ach-tooltip', feature ? "Reach " + req + " to unlock " + feature + ". (" + res + ")" : "All features unlocked!")
 }

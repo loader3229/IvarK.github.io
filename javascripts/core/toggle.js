@@ -109,11 +109,6 @@ function toggleRepresentation() {
 	getEl("hideRepresentation").textContent=(aarMod.hideRepresentation?"Show":"Hide")+" antimatter representation"
 }
 
-function toggleProgressBar() {
-	aarMod.progressBar=!aarMod.progressBar
-	getEl("progressBarBtn").textContent = (aarMod.progressBar?"Hide":"Show")+" progress bar"	
-}
-
 function toggleReplAuto(i) {
 	if (i == "chance") {
 		if (player.replicanti.auto[0]) {

@@ -70,32 +70,42 @@ function maxTheorems() {
 }
 
 function updateTheoremButtons() {
+	var offset = 80
+	if (getEl("progress").style.display == "block") offset += 30
 	if (hasDilationUpg(10) && getTTProduction() > 10) {
+		offset -= 80
 		getEl("theoremmax").style.display = "none"
 		getEl("theoremam").style.display = "none"
 		getEl("theoremip").style.display = "none"
 		getEl("theoremep").style.display = "none"
-		getEl("timetheorems").style.bottom = "0"
-		getEl("presetsbtn").style.bottom = "-3px"
 		getEl("autopresetsbtn").style.display = player.timestudy.auto && qMs.tmp.amt >= 2 ? "" : "none"
-		getEl("theorembuybackground").style.bottom = "-80px"
 	} else {
-		getEl("theoremmax").style.display = ""
 		getEl("theoremam").style.display = ""
 		getEl("theoremip").style.display = ""
 		getEl("theoremep").style.display = ""
-		getEl("timetheorems").style.bottom = "80px"
-		getEl("presetsbtn").style.bottom = "77px"
-		getEl("autopresetsbtn").style.display = "none"
-		getEl("theorembuybackground").style.bottom = "0"
+		getEl("theoremmax").style.display = ""
+		getEl("theoremmax").innerHTML = qMs.tmp.amt >= 2 ? ("Auto max: "+(player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max Theorems"
+
+		getEl("theoremam").style.bottom = (offset - 75) + "px"
+		getEl("theoremip").style.bottom = (offset - 75) + "px"
+		getEl("theoremep").style.bottom = (offset - 75) + "px"
+
 		getEl("theoremam").className = player.money.gte(player.timestudy.amcost) ? "timetheorembtn" : "timetheorembtnlocked"
+		getEl("theoremam").innerHTML = "+1 Time Theorem<br>Cost: " + shortenCosts(player.timestudy.amcost)
 		getEl("theoremip").className = player.infinityPoints.gte(player.timestudy.ipcost) ? "timetheorembtn" : "timetheorembtnlocked"
+		getEl("theoremip").innerHTML = "+1 Time Theorem<br>Cost: " + shortenCosts(player.timestudy.ipcost) + " IP"
 		getEl("theoremep").className = player.eternityPoints.gte(player.timestudy.epcost) && canBuyTTWithEP() ? "timetheorembtn" : "timetheorembtnlocked"
 		getEl("theoremep").innerHTML = (!canBuyTTWithEP() ? "(requires 1 Time Dimension)" : "+1 Time Theorem<br>Cost: " + shortenDimensions(player.timestudy.epcost) + " EP")
-		getEl("theoremip").innerHTML = "+1 Time Theorem<br>Cost: " + shortenCosts(player.timestudy.ipcost) + " IP"
-		getEl("theoremam").innerHTML = "+1 Time Theorem<br>Cost: " + shortenCosts(player.timestudy.amcost)
-		getEl("theoremmax").innerHTML = qMs.tmp.amt >= 2 ? ("Auto max: "+(player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max Theorems"
+
+		getEl("autopresetsbtn").style.display = "none"
 	}
+
+	getEl("timetheorems").style.bottom = (offset) + "px"
+	getEl("theoremmax").style.bottom = (offset - 3) + "px"
+	getEl("presetsbtn").style.bottom = (offset - 3) + "px"
+	getEl("autopresetsbtn").style.bottom = (offset - 3) + "px"
+	getEl("theorembuybackground").style.bottom = (offset - 80) + "px"
+
 	var tt = player.timestudy.theorem
 	var html = "<span style='display:inline' class=\"TheoremAmount\">" + (tt >= 1e5 ? shortenMoney(tt) : getFullExpansion(Math.floor(tt))) + "</span> "
 	if (tt >= 1e100) html += " Time Theorems" + (player.timestudy.theorem == 1e200 ? " (cap)" : "")

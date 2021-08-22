@@ -437,6 +437,8 @@ function doNGp3Init1() {
 	tmp.ngp3_exp = tmp.ngp3 && aarMod.newGameExpVersion !== undefined
 	tmp.ngp3_em = getNGP3EterMilestones()
 
+	setupSaveDataNGP3()
+
 	transformSaveToDecimal();
 	tmp.tickUpdate = true;
 	updateAchievements();
@@ -1669,43 +1671,43 @@ function setConfirmationsDisplay(){
         getEl("leConfirmBtn").textContent = "Light Empowerment confirmation: O" + (aarMod.leNoConf ? "FF" : "N")
 }
 
-function setOptionsDisplaysStuff1(){
-        getEl("progressBarBtn").textContent = (aarMod.progressBar?"Hide":"Show")+" progress bar"
-        getEl("toggleLogRateChange").textContent = "Rate displays: "+(aarMod.logRateChange?"Logarithm":"Percentage")
-        getEl("tabsSave").textContent = "Saved tabs: O"+(aarMod.tabsSave.on?"N":"FF")
-        updatePerformanceTicks()
-        dimDescEnd = (aarMod.logRateChange?" OoM":"%")+"/s)"
+function setOptionsDisplaysStuff1() {
+	setProgressBar("setup")
+	getEl("toggleLogRateChange").textContent = "Rate displays: "+(aarMod.logRateChange?"Logarithm":"Percentage")
+	getEl("tabsSave").textContent = "Saved tabs: O"+(aarMod.tabsSave.on?"N":"FF")
+	updatePerformanceTicks()
+	dimDescEnd = (aarMod.logRateChange?" OoM":"%")+"/s)"
 
-        getEl("maxHighestTD").parentElement.parentElement.style.display = tmp.ngmX > 3 ? "" : "none"
-        getEl("maxHighestTD").textContent = "Max only highest Time Dimensions: O"+(aarMod.maxHighestTD?"N":"FF")
+	getEl("maxHighestTD").parentElement.parentElement.style.display = tmp.ngmX > 3 ? "" : "none"
+	getEl("maxHighestTD").textContent = "Max only highest Time Dimensions: O"+(aarMod.maxHighestTD?"N":"FF")
 
-        getEl("chartDurationInput").value = player.options.chart.duration;
-        getEl("chartUpdateRateInput").value = player.options.chart.updateRate;
-        if (player.options.chart.on) getEl("chartOnOff").checked = true
-        else getEl("chartOnOff").checked = false
-        if (player.options.chart.dips) getEl("chartDipsOnOff").checked = true
-        else getEl("chartDipsOnOff").checked = false
- 
-        if (player.options.theme == "Dark" || player.options.theme == "Dark Metro") {
-                Chart.defaults.global.defaultFontColor = '#888';
-                normalDimChart.data.datasets[0].borderColor = '#888'
-        } else {
-                Chart.defaults.global.defaultFontColor = 'black';
-                normalDimChart.data.datasets[0].borderColor = '#000'
-        }
+	getEl("chartDurationInput").value = player.options.chart.duration;
+	getEl("chartUpdateRateInput").value = player.options.chart.updateRate;
+	if (player.options.chart.on) getEl("chartOnOff").checked = true
+	else getEl("chartOnOff").checked = false
+	if (player.options.chart.dips) getEl("chartDipsOnOff").checked = true
+	else getEl("chartDipsOnOff").checked = false
 
-        getEl("infmultbuyer").style.display = getEternitied()>0||player.masterystudies?"inline-block":"none"
-        if (!player.options.hotkeys) getEl("hotkeys").textContent = "Enable hotkeys"
+	if (player.options.theme == "Dark" || player.options.theme == "Dark Metro") {
+			Chart.defaults.global.defaultFontColor = '#888';
+			normalDimChart.data.datasets[0].borderColor = '#888'
+	} else {
+			Chart.defaults.global.defaultFontColor = 'black';
+			normalDimChart.data.datasets[0].borderColor = '#000'
+	}
 
-        document.getElementsByClassName("hideInMorse").display = player.options.notation == "Morse code" ? "none" : ""
+	getEl("infmultbuyer").style.display = getEternitied()>0||player.masterystudies?"inline-block":"none"
+	if (!player.options.hotkeys) getEl("hotkeys").textContent = "Enable hotkeys"
 
-        getEl("hideProductionTab").textContent = (aarMod.hideProductionTab?"Show":"Hide")+" production tab"
-		setStatsDisplay()
-        getEl("hideRepresentation").textContent=(aarMod.hideRepresentation?"Show":"Hide")+" antimatter representation"
-		setAchsDisplay()
-        getEl("showAchRowNums").textContent=(aarMod.showAchRowNums?"Hide":"Show")+" achievement row info"
-        getEl("hideCompletedAchs").textContent=(aarMod.hideCompletedAchs?"Show":"Hide")+" completed achievement rows"
-        getEl("hideSecretAchs").textContent=(aarMod.hideSecretAchs?"Show":"Hide")+" secret achievements"
+	document.getElementsByClassName("hideInMorse").display = player.options.notation == "Morse code" ? "none" : ""
+
+	getEl("hideProductionTab").textContent = (aarMod.hideProductionTab?"Show":"Hide")+" production tab"
+	setStatsDisplay()
+	getEl("hideRepresentation").textContent=(aarMod.hideRepresentation?"Show":"Hide")+" antimatter representation"
+	setAchsDisplay()
+	getEl("showAchRowNums").textContent=(aarMod.showAchRowNums?"Hide":"Show")+" achievement row info"
+	getEl("hideCompletedAchs").textContent=(aarMod.hideCompletedAchs?"Show":"Hide")+" completed achievement rows"
+	getEl("hideSecretAchs").textContent=(aarMod.hideSecretAchs?"Show":"Hide")+" secret achievements"
 }
 
 function setDisplaysStuff1(){

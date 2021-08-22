@@ -6,18 +6,16 @@ var pos = {
 			boosts: 0,
 			exictons: {}
 		}
-		return pos_save
+		qu_save.pos = pos_save
 	},
 	compile() {
-		pos_save = undefined
 		if (!tmp.ngp3 || qu_save === undefined) {
 			this.updateTmp()
 			return
 		}
 
-		let data = qu_save.pos
-		if (data === undefined) data = this.setup()
-		pos_save = data
+		if (pos_save === undefined) this.setup()
+		let data = pos_save
 
 		if (!data.on) {
 			data.amt = 0

@@ -2,7 +2,7 @@
 var PCs = {
 	milestones: {
 		11: "Replicanti Compressors are better. (per PC level)",
-		21: "The QC2 reward is squared.",
+		21: "The QC2 reward is doubled.",
 		31: "You sacrifice 33% MDBs instead of 30%.",
 		41: "You sacrifice Replicated Galaxies more.",
 		51: "Sacrificed sources are greatly stronger.",
@@ -12,7 +12,7 @@ var PCs = {
 		12: "Unlock Replicated Expanders.",
 		22: "You can swap Positronic Boosts between 2 of any tiers.",
 		32: "25 MP milestone is activated in QC3.",
-		42: "Tier 1 charge is 8x, but require 8x more.",
+		42: "Tier 1 charge is 8x, but require 4x more.",
 		52: "Replicanti Energy is raised by ^1.2.",
 		62: "Eternitying timewraps Meta Dimensions and Replicantis by 3 seconds.",
 		72: "Mastery Study cost multiplier is divided by 5x.",
@@ -56,7 +56,6 @@ var PCs = {
 		return PCs_save
 	},
 	compile() {
-		PCs_save = undefined
 		PCs.data = {}
 		PCs_tmp = { unl: PCs.unl() }
 		if (!tmp.ngp3 || qu_save === undefined) {
@@ -64,10 +63,10 @@ var PCs = {
 			return
 		}
 
-		let data = qu_save.pc
-		if (data === undefined) data = this.setup()
+		if (PCs_save === undefined) this.setup()
+		let data = PCs_save
+
 		if (data.best === undefined) data.best = data.lvl - 1
-		PCs_save = data
 
 		this.updateTmp()
 		this.updateUsed()
@@ -81,7 +80,7 @@ var PCs = {
 	},
 
 	unl() {
-		return qu_save && qu_save.qc && qu_save.qc.comps >= 7
+		return PCs_tmp.unl || QCs_save.comps >= 7
 	},
 	updateTmp() {
 		PCs_tmp.unl = PCs.unl()
@@ -146,7 +145,8 @@ var PCs = {
 		data.eff2 = Math.sqrt(eff) / 4
 
 		//Temperature
-		data.temp = Math.min(Math.floor(comps / 4 + 0.25) / 4 - 0.3, 1) * comps / 28
+		data.temp = Math.min(comps / 28 - 0.5, 1) * comps / 28
+		if (data.temp > 0) data.temp *= 2
 		if (tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp) {
 			if (data.temp > 0) data.temp /= 2
 			data.temp -= 0.1
@@ -238,7 +238,7 @@ var PCs = {
 		div -= PCs_tmp.temp
 
 		var r = qc1.pow(qc2.log(base) / div)
-		var pow = Math.sqrt((PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) * 0.5 + 1)
+		var pow = Math.sqrt(Math.max(PCs_tmp.comps[list[0]], PCs_tmp.comps[list[1]]) / 3 + 1)
 		r = r.pow(pow)
 		r = r.div(this.shrunkerEff())
 		return r
@@ -442,7 +442,7 @@ var PCs = {
 	},
 
 	resetShrunkers() {
-		var qc = qu_save.qc
+		var qc = QCs_save
 		if (!PCs.unl() || !qc.mod_comps || !qc.mod_comps.length) return
 
 		let x = 0

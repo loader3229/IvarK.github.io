@@ -206,8 +206,7 @@ function maxAllDilUpgs() {
 					player.dilation.rebuyables[num] = (player.dilation.rebuyables[num] || 0) + data.toBuy
 					update = true
 
-					if (num == 3 && !tmp.dtMode && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), data.toBuy)))
-					else if (player.eternityBuyer.alwaysDil) player.eternityBuyer.alwaysDilCond = true
+					if (num >= 3) onBuyDilationUpgrade(num, data.toBuy)
 				}
 			}
 		}
@@ -944,6 +943,12 @@ function refreshAutoPreset(update) {
 
 function autoPresetUnlocked(x) {
 	return qMs.tmp.amt >= 2 && (x == "qc1" || x == "qc7" ? hasAch("ng3p25") : true)
+}
+
+function setupSaveDataNGP3() {
+	pos_save = qu_save && qu_save.pos
+	QCs_save = qu_save && qu_save.qc
+	PCs_save = qu_save && qu_save.pc
 }
 
 //Recent boosts
