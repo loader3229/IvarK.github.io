@@ -7,7 +7,9 @@ var QCs = {
 			best: {},
 			cloud_disable: 1
 		}
+		this.reset()
 		qu_save.qc = QCs_save
+		return QCs_save
 	},
 	compile() {
 		if (!tmp.ngp3 || qu_save === undefined) {
@@ -16,8 +18,7 @@ var QCs = {
 			return
 		}
 
-		if (QCs_save === undefined) this.setup()
-		let data = QCs_save
+		let data = QCs_save || this.setup()
 
 		let qc1 = data.qc1
 		if (qc1 === undefined) this.reset()
@@ -31,6 +32,7 @@ var QCs = {
 		getEl("setAutoExpand_percentage").value = qc1.autoExpand.percentage
 
 		if (typeof(data.qc2) !== "number") data.qc2 = data.cloud_disable || 1
+		delete QCs_save.qc3
 		if (data.qc4 === undefined || data.qc4.normal === undefined) data.qc4 = { normal: data.qc4 || "ng", dil: "ng" }
 		data.qc5 = new Decimal(data.qc5)
 		if (data.qc8 === undefined) data.qc8 = {
@@ -38,6 +40,7 @@ var QCs = {
 			order: []
 		}
 
+		if (data.disable_swaps === undefined) data.disable_swaps = {}
 		if (data.best_exclusion || data.perks_unl || (data.mod_comps && !data.mod_comps.length)) {
 			data.mod_comps = []
 			delete data.best_exclusion
@@ -57,7 +60,6 @@ var QCs = {
 			autoExpand: QCs_save.qc1 && QCs_save.qc1.autoExpand
 		}
 		if (!QCs_save.qc2) QCs_save.qc2 = 1
-		QCs_save.qc3 = undefined
 		QCs_save.qc5 = new Decimal(0)
 		QCs_save.qc6 = 0
 		QCs_save.qc7 = 0
@@ -382,7 +384,7 @@ var QCs = {
 
 			exp() {
 				var x = 1
-				if (PCs.milestoneDone(52)) x = 1.2
+				if (PCs.milestoneDone(52)) x = QCs_save.qc1.boosts / 20 + 1
 				if (QCs.perkActive(1)) x *= QCs_save.qc1.boosts / 3 + 1
 				return x
 			},
@@ -590,6 +592,18 @@ var QCs = {
 		return this.done(x) && QCs_tmp.rewards[x]
 	},
 
+	tp() {
+		showTab("challenges")
+		showChallengesTab("quantumchallenges")
+	},
+	start(x) {
+		quantum(false, true, { qc: x }, "qc")
+	},
+	restart(x) {
+		if (!QCs.inAny()) return
+		quantum(false, true, {}, "restart")
+	},
+
 	modData: {
 		up: {
 			name: 'Nerfed',
@@ -634,15 +648,9 @@ var QCs = {
 		return pos_tmp.cloud.total >= data.overlapReqs[0] && pos_tmp.cloud.exclude >= data.overlapReqs[1]
 	},
 
-	tp() {
-		showTab("challenges")
-		showChallengesTab("quantumchallenges")
-	},
-	start(x) {
-		quantum(false, true, { qc: x }, "qc")
-	},
-	restart(x) {
-		quantum(false, true, {}, "restart")
+	disable_swaps() {
+		QCs_save.disable_swaps.on = !QCs_save.disable_swaps.on
+		getEl("swaps_toggle").textContent = (QCs_save.disable_swaps.on ? "Enable" : "Disable") + " swaps in challenge"
 	},
 
 	setupDiv() {

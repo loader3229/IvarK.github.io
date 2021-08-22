@@ -1890,7 +1890,6 @@ function updateNGp3DisplayStuff(){
 	getEl('autoAssign').textContent="Auto: O"+(qu_save.autoOptions.assignQK?"N":"FF")
 	getEl('autoAssignRotate').textContent="Rotation: "+(qu_save.autoOptions.assignQKRotate>1?"Left":qu_save.autoOptions.assignQKRotate?"Right":"None")
 	getEl('autoReset').textContent="Auto: O"+(qu_save.autoOptions.replicantiReset?"N":"FF")
-	getEl("nanofieldtabbtn").style.display=player.masterystudies.includes("d12")?"":"none"
 	getEl("ghostifyAnimBtn").textContent="Ghostify: O"+(player.options.animations.ghostify?"N":"FF")
 	getEl("gphUnl").textContent="To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
 	updateBLUnlockDisplay()
@@ -2255,9 +2254,11 @@ function setupNGP31Versions() {
 
 	welcomeUpdates = []
 	if (aarMod.ngp3Build) {
-		//if (aarMod.ngp3Build < 20210729) welcomeUpdates.push(0.6)
+		if (!aarMod.ngp3r) aarMod.ngp3r = 0
+		if (aarMod.ngp3r < 0.5) welcomeUpdates.push(0.5)
 	}
-	aarMod.ngp3Build = 20210805
+	aarMod.ngp3r = 0.5
+	aarMod.ngp3Build = 20210822
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) {
 		player.timestudy.auto = {}
@@ -2783,9 +2784,6 @@ function conToDeciMS(){
 			qu_save.tod.b.spin = new Decimal(qu_save.tod.b.spin)
 		}
 	}
-	PCs.compile()
-	QCs.compile()
-	pos.compile()
 }
 
 function conToDeciGhostify(){
@@ -2975,9 +2973,9 @@ function migrateOldSaves() {
 }
 
 //Save Storage System
-var betaId = "G"
-var correctBetaId = "G"
-var betaLink = "v3.0-Respecced"
+var betaId = ""
+var correctBetaId = ""
+var betaLink = "Respecced-Alpha"
 function checkCorrectBeta() {
 	if (betaId == "" || betaId == correctBetaId) return
 
@@ -2985,7 +2983,8 @@ function checkCorrectBeta() {
 	getEl("welcomeMessage").innerHTML = "Wait a moment! It is appeared that you are at a wrong test server! Click the 'test server' link to go to the one we are currently testing."
 }
 
-var prefix = betaId + "ds"
+//Was "ds" before Respecced happened.
+var prefix = "Gds"
 var savePrefix = prefix + "AM_"
 var presetPrefix = prefix + "AM_ST_"
-var metaSaveId = betaId + "AD_aarexModifications"
+var metaSaveId = "GAD_aarexModifications"

@@ -1002,7 +1002,8 @@ function doFeatureProgress() {
 	let req
 	let reqNum
 
-	if (PCs.unl()) {
+	if (str.unl()) {}
+	else if (PCs.unl()) {
 		res = PCs_save.comps.length
 		reqNum = 8
 		req = reqNum + " PC combinations"

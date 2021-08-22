@@ -270,6 +270,17 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")
 	if (player.infinityPoints.gte(Decimal.pow(Number.MAX_VALUE, 1000)) && ableToGetRid5) giveAchievement("I don't want you to live anymore.")
 
+	if (mTs.bought == mTs.timeStudies.length && QCs.in(1) && PCs.in()) giveAchievement("Mastery Mayhem")
+	if (str.unl()) giveAchievement("Completing the Quantum")
+	if (!hasAch("ng3pr13")) {
+		var cond = PCs.milestoneDone(42) && pos_save.swaps >= 8
+		for (var i = 1; i <= 12; i++) {
+			if (!enB.pos.charged(i)) cond = false
+		}
+		if (cond) giveAchievement("Bursted Em All!")
+	}
+	if (tmp.qe.exp >= 0.85) giveAchievement("Sciencing Around The Core")
+
 	if (player.dilation.dilatedTime.log10() >= 411 && qu_save.notrelative) giveAchievement("Time is not relative")
 	if (!hasAch("ng3p42")) {
 		for (d = 2; d < 9; d++) {

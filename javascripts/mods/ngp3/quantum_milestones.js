@@ -105,6 +105,11 @@ let qMs = {
 		getEl('respec_quarks').style.display = autoAssignUnl ? "" : "none"
         getEl('autoAssign').style.display = autoAssignUnl ? "" : "none"
         getEl('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
+
+		if (QCs.unl()) {
+			getEl("swaps_toggle").style.display = qMs.tmp.amt >= 27 ? "" : "none"
+			getEl("swaps_toggle").textContent = (QCs_save.disable_swaps.on ? "Enable" : "Disable") + " swaps in challenge"
+		}
 	},
 	updateDisplayOnTick() {
 		let types = qMs.data.types
@@ -138,7 +143,7 @@ let qMs = {
 		getEl("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
 	},
 
-	max: 26,
+	max: 27,
 	1: {
 		req: 1,
 		eff: () => "Completing an EC only exits your challenge.",
@@ -267,12 +272,17 @@ let qMs = {
 	},
 	25: {
 		req: 100,
-		eff: () => "Meta-Dimension Boosts reset nothing, and Meta Dimension autobuyer is unlimited",
-		effGot: () => "Meta-Dimension Boosts no longer reset anything, and Meta Dimension autobuyer is now unlimited."
+		eff: () => "Meta Dimension autobuyer is unlimited",
+		effGot: () => "Meta Dimension autobuyer is now unlimited."
 	},
 	26: {
 		req: 150,
 		eff: () => "Unlock the autobuyer for Replicated Expanders.",
 		effGot: () => "Unlock the autobuyer for Replicated Expanders."
+	},
+	27: {
+		req: 200,
+		eff: () => "You can disable swaps in any Quantum Challenge.",
+		effGot: () => "You now can disable swaps in any Quantum Challenge."
 	},
 }

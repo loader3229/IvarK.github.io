@@ -2247,6 +2247,9 @@ td.orange {
 td.yellow {
 	background: rgba(191, 191, 0, 0.25)
 }
+td.yellow.light {
+	background: rgba(255, 255, 127, 0.25)
+}
 
 .dark_yellow {
 	color: #7f7f00

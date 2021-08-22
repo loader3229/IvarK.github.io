@@ -364,6 +364,20 @@ function setR16Tooltip() {
 	seriously.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 2e7)) + " Eternity Points with at least 5 excluded Positronic Boosts. Reward: Charging Positronic Boosts requires less.")
 }
 
+function setR16p5Tooltip() {
+	// Row 16.5 (ng3pr1) (1/8)
+	let mayhem = getEl("Mastery Mayhem")
+	//ng3pr12/////
+	//ng3pr13/////
+	//ng3pr14/////
+	//ng3pr15/////
+	//ng3pr16/////
+	//ng3pr17/////
+	//ng3pr18/////
+
+	mayhem.setAttribute('ach-tooltip', "Max out Mastery Studies in QC1, and any other QC. Reward: Start with " + shortenCosts(1e72) + " TT in any QC.")
+}
+
 function setR17Tooltip() {
 	// Row 17 (ng3p3) (6/8)
 	let internal = getEl("ERROR 500: INTERNAL DIMENSION ERROR")
@@ -570,6 +584,7 @@ function setNGP3AchievementTooltip() {
 	setBMTooltip()
 	setR15Tooltip()
 	setR16Tooltip()
+	setR16p5Tooltip()
 	setR17Tooltip()
 	setR18Tooltip()
 	setR19Tooltip()

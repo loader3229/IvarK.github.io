@@ -630,6 +630,7 @@ var enB = {
 			var amt = this.target(true)
 			if (pos.on()) amt += enB.pos.target()
 			if (PCs.unl() && amt >= PCs_tmp.eff1_start) amt = Math.pow(amt / PCs_tmp.eff1_start, this.boosterExp()) * PCs_tmp.eff1_start
+			if (hasAch("ng3pr14")) amt *= 1.1
 			if (QCs.perkActive(2)) amt *= 1.5
 
 			return amt
@@ -862,10 +863,10 @@ var enB = {
 		},
 
 		activeReq(x) {
-			if (pos_tmp.sac_qe < pos.swapCost(pos_tmp.cloud.swaps)) return false
+			if (pos_tmp.sac_qe < pos.swapCost(pos_tmp.cloud.swaps_amt)) return false
 			var mas = enB.mastered("pos", x)
 
-			return (PCs.milestoneDone(22) ? QCs.inAny() : QCs.in(2)) ? (pos.on() && mas && (
+			return (futureBoost("exclude_any_boost") ? QCs.inAny() : QCs.in(2)) ? (pos.on() && mas && (
 				QCs.modIn(2, "up") ? enB.pos.lvl(x) == QCs_save.qc2 :
 				enB.pos.lvl(x) != QCs_save.qc2
 			)) :
@@ -887,10 +888,11 @@ var enB = {
 		chargeReq(x, next, lvl) {
 			var lvl = lvl || this.lvl(x, next)
 			var req = this[x].chargeReq *
-				Math.pow(1.5, Math.max(pos_tmp.cloud && pos_tmp.cloud.total || 0, 2)) *
+				Math.pow(1.5, Math.max((pos_tmp.cloud && pos_tmp.cloud.total) || 0, 2)) *
 				Math.pow(2, lvl - this[x].tier)
 			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
-			if (PCs.milestoneDone(42) && lvl == 1) req *= 4
+			if (hasAch("ng3pr13")) req *= 0.75
+			if (PCs.milestoneDone(42) && lvl == 1) req *= hasAch("ng3pr12") ? 3 : 4
 			return req
 		},
 		chargeEff(x) {
@@ -906,7 +908,7 @@ var enB = {
 		lvl(x, next) {
 			if (pos_save === undefined) return this[x].tier
 
-			var swaps = next ? pos_tmp.next_swaps : pos.on() ? pos_save.swaps : {}
+			var swaps = next ? pos_tmp.next_swaps : pos_tmp.cloud.swaps
 			if (swaps[x]) x = swaps[x]
 			return this[x].tier
 		},

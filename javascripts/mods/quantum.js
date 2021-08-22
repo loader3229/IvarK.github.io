@@ -248,17 +248,32 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	// ng-2 display
 	getEl("galaxyPoints2").innerHTML = "You have <span class='GPAmount'>0</span> Galaxy points."
 
-	// ng+3
-	if (tmp.ngp3) {
-		qMs.update()
-		qu_save.quarkEnergy = 0
-	} else qu_save.gluons = 0;
+	/*
+		NEW GAME PLUS 3: Goes in reverse feature order
+	*/
 
-	// Positrons
-	if (pos.unl()) {
-		pos_save.swaps = {...pos_tmp.next_swaps}
-		pos.updateCloud()
-		pos.updateTmp()
+	//Paired Challenges
+	if (PCs.unl()) {
+		if (PCs_save.in) {
+			if (PCs_save.in != data.pc && !PCs.posDone(PCs_save.in)) {
+				delete PCs_save.challs[PCs_save.in]
+				PCs.updateUsed()
+			}
+			PCs.updateButton(PCs_save.in, true)
+		}
+		delete PCs_save.in
+
+		if (data.pc) {
+			PCs_save.in = data.pc
+			PCs.updateButton(data.pc)
+		}
+
+		if (!PCs_tmp.unl) {
+			PCs_tmp.unl = true
+			PCs.updateUsed()
+		}
+		PCs.updateTmp()
+		PCs.updateDisp()
 	}
 
 	// Quantum Challenges
@@ -286,6 +301,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 		delete QCs_save.mod
 		if (data.mod) QCs_save.mod = data.mod
+		QCs_save.disable_swaps.active = isQC && QCs_save.disable_swaps.on
 
 		if (isQC) {
 			QCs_save.in = qcData
@@ -311,29 +327,17 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		QCs.updateDisp()
 	}
 
-	//Paired Challenges
-	if (PCs.unl()) {
-		if (PCs_save.in) {
-			if (PCs_save.in != data.pc && !PCs.posDone(PCs_save.in)) {
-				delete PCs_save.challs[PCs_save.in]
-				PCs.updateUsed()
-			}
-			PCs.updateButton(PCs_save.in, true)
-		}
-		delete PCs_save.in
-
-		if (data.pc) {
-			PCs_save.in = data.pc
-			PCs.updateButton(data.pc)
-		}
-
-		if (!PCs_tmp.unl) {
-			PCs_tmp.unl = true
-			PCs.updateUsed()
-		}
-		PCs.updateTmp()
-		PCs.updateDisp()
+	// Positrons
+	if (pos.unl()) {
+		pos_save.swaps = {...pos_tmp.next_swaps}
+		pos.updateCloud()
+		pos.updateTmp()
 	}
+
+	if (tmp.ngp3) {
+		qMs.update()
+		qu_save.quarkEnergy = 0
+	} else qu_save.gluons = 0;
 
 	doQuantumResetStuff(5, false, isQC, QCs_save.in)
 
@@ -465,20 +469,15 @@ function handleDispOnQuantum(bigRip, prestige) {
 
 	let keepQuantum = tmp.quActive && qMs.tmp.amt >= 16
 	if (tmp.quActive && !bigRip) {
-		let keepPos = keepQuantum && player.masterystudies.includes("d7")
-		let keepAnts = keepQuantum && player.masterystudies.includes("d10")
-		let keepNf = keepQuantum && player.masterystudies.includes("d11")
-		let keepToD = keepQuantum && player.masterystudies.includes("d12")
+		let keepPos = keepQuantum && pos.unl()
+		let keepStr = keepQuantum && str.unl()
 
 		getEl("positronstabbtn").style.display = keepPos ? "" : "none"
-		getEl("replicantstabbtn").style.display = keepAnts ? "" : "none"
-		getEl("nanofieldtabbtn").style.display = keepNf ? "" : "none"
-		getEl("todtabbtn").style.display = keepToD ? "" : "none"
+		getEl("stringstabbtn").style.display = keepStr ? "" : "none"
+		str.update()
 	
 		if (!keepPos && getEl("positrons").style.display == "block") showQuantumTab("uquarks")
-		if (!keepAnts && getEl("replicants").style.display == "block") showQuantumTab("uquarks")
-		if (!keepNf && getEl("nanofield").style.display == "block") showQuantumTab("uquarks")
-		if (!keepToD && getEl("tod").style.display == "block") showQuantumTab("uquarks")
+		if (!keepStr && getEl("strings").style.display == "block") showQuantumTab("uquarks")
 	}
 }
 

@@ -1,12 +1,14 @@
 var pos = {
 	setup() {
 		pos_save = {
+			on: false,
 			amt: 0,
 			eng: 0,
 			boosts: 0,
-			exictons: {}
+			swaps: {}
 		}
 		qu_save.pos = pos_save
+		return pos_save
 	},
 	compile() {
 		if (!tmp.ngp3 || qu_save === undefined) {
@@ -14,8 +16,7 @@ var pos = {
 			return
 		}
 
-		if (pos_save === undefined) this.setup()
-		let data = pos_save
+		let data = pos_save || this.setup()
 
 		if (!data.on) {
 			data.amt = 0
@@ -33,6 +34,7 @@ var pos = {
 		if (data.consumedQE) delete data.consumedQE
 		if (data.sacGals) delete data.sacGals
 		if (data.sacBoosts) delete data.sacBoosts
+		if (data.excitons) delete data.excitons
 		if (data.excite) delete data.excite
 
 		pos_tmp.tab = enB.mastered("pos", 2) ? "cloud" : "boost"
@@ -127,15 +129,19 @@ var pos = {
 		getEl("pos_boost_div").style.display = pos_tmp.tab == "boost" ? "" : "none"
 		getEl("pos_cloud_div").style.display = pos_tmp.tab == "cloud" ? "" : "none"
 		getEl("pos_cloud_req").innerHTML = unl || !enB.has("pos", 2) ? "" : "<br>To unlock Positron Cloud, you need to get " + getFullExpansion(enB.getMastered("pos", 2)) + " Positronic Boosters."
+		getEl("pos_cloud_disabled").style.display = this.swapsDisabled() ? "" : "none"
 
-		//Mechanic
 		data = {
 			total: 0,
 			exclude: 0,
-			swaps: 0,
+			swaps: pos.getSwaps(),
+			swaps_amt: 0,
 			swaps_next: 0,
 		}
 		pos_tmp.cloud = data
+
+		//Mechanic
+		data.swaps = pos.getSwaps()
 		for (var i = 1; i <= enB.pos.max; i++) {
 			var originalLvl = enB.pos[i].tier
 			var lvl = enB.pos.lvl(i)
@@ -153,10 +159,9 @@ var pos = {
 					excluded ? "unavailablebtn posbtn" :
 					(pos_tmp.next_swaps[i] ? "chosenbtn posbtn" : lvl != nextLvl ? "chosenbtn2 posbtn" : "storebtn posbtn")
 				getEl("pos_boost" + i + "_excite").innerHTML = (lvl != nextLvl ? "(Next: " + lvl + " -> " + nextLvl + ")" : "Tier " + originalLvl + (originalLvl != lvl ? " -> " + lvl : "") + (pos_tmp.chosen == i ? "<br>(Selected)" : originalLvl != lvl ? "<br>(from PB" + pos_save.swaps[i] + ")" : ""))
-				this.updateCharge(i)
 				data[lvl] = (data[lvl] || 0) + 1
 
-				if (originalLvl != lvl) data.swaps++
+				if (originalLvl != lvl) data.swaps_amt++
 				if (originalLvl != nextLvl) data.swaps_next++
 
 				if (excluded) data.exclude++
@@ -248,8 +253,14 @@ var pos = {
 		if (!confirm("Do you want to apply the changes immediately? This restarts your Quantum run!")) return
 		quantum(false, true, {}, "restart")
 	},
+	getSwaps() {
+		return this.swapsDisabled() ? pos_save.swaps : {}
+	},
+	swapsDisabled() {
+		return !pos.on() || (QCs_save.disable_swaps && QCs_save.disable_swaps.active)
+	},
 	swapCost(x) {
-		return ([0, 2, 4, 8, 16])[x / 2]
+		return Math.pow(2, x / 2)
 	},
 	excluded(x) {
 		return (futureBoost("exclude_any_qc") ? QCs.inAny() : QCs.in(2)) ? enB.pos.lvl(x) == QCs_save.qc2 : false

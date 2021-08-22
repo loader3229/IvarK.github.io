@@ -35,15 +35,13 @@ function showQuantumTab(tabName) {
 }
 
 var quantumTabs = {
-	tabIds: ["uquarks", "gluons", "speedruns", "positrons", "replicants", "nanofield", "tod"],
+	tabIds: ["uquarks", "gluons", "speedruns", "positrons", "strings"],
 	update: {
 		uquarks: updateQuarksTab,
 		gluons: updateGluonsTab,
 		speedruns: qMs.updateDisplayOnTick,
-		positrons: pos.updateTab, //temp
-		replicants: updateReplicantsTab,
-		nanofield: updateNanofieldTab,
-		tod: updateTreeOfDecayTab
+		positrons: pos.updateTab,
+		strings: () => undefined
 	}
 }
 
@@ -946,9 +944,15 @@ function autoPresetUnlocked(x) {
 }
 
 function setupSaveDataNGP3() {
-	pos_save = qu_save && qu_save.pos
-	QCs_save = qu_save && qu_save.qc
-	PCs_save = qu_save && qu_save.pc
+	pos_save = (qu_save && qu_save.pos)
+	QCs_save = (qu_save && qu_save.qc)
+	PCs_save = (qu_save && qu_save.pc)
+
+	if (!tmp.ngp3) return
+
+	pos.compile()
+	QCs.compile()
+	PCs.compile()
 }
 
 //Recent boosts
@@ -972,9 +976,25 @@ function getIntergalacticExp(log) {
 	return Math.sqrt(log / 100 + 1) * Math.max(Math.log2(log / 5) / 2, 1)
 }
 
+//Strings (temporaily in ngppp.js, will be moved into strings.js when v0.6 releases)
+let str = {
+	unl: () => PCs_save.best >= 8,
+	update() {
+		getEl("stringstabbtn").style.display = PCs.unl() ? "" : "none"
+		getEl("str_unl").style.display = !this.unl() ? "" : "none"
+		getEl("str_div").style.display = this.unl() ? "" : "none"
+	}
+}
+let STRINGS = str
+
 //Update Messages
-var ngp3WelcomeMsgs = {
-	0.6: "<b class='lime'>Paired Challenges!</b> Can you complete 2 challenges at once, and level up your progression? Unlocks after completing Quantum Challenge 7!"
+var ngp3Welcomes = {
+	msgs: {
+		0.5: "<b class='lime'>Paired Challenges!</b> Can you complete 2 challenges at once, and level up your progression? Unlocks after completing Quantum Challenge 7!"
+	},
+	goals: {
+		0.5: () => getFullExpansion(8) + " PC combinations + " + shortenCosts(Decimal.pow(10, 1e13)) + " antimatter"
+	}
 }
 
 /*

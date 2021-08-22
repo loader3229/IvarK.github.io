@@ -13,7 +13,7 @@ var PCs = {
 		22: "You can swap Positronic Boosts between 2 of any tiers.",
 		32: "25 MP milestone is activated in QC3.",
 		42: "Tier 1 charge is 8x, but require 4x more.",
-		52: "Replicanti Energy is raised by ^1.2.",
+		52: "Replicated Compressors boosts Replicanti Energy exponent.",
 		62: "Eternitying timewraps Meta Dimensions and Replicantis by 3 seconds.",
 		72: "Mastery Study cost multiplier is divided by 5x.",
 		82: "Remote Galaxies scaling is slower based on its starting point.",
@@ -63,8 +63,7 @@ var PCs = {
 			return
 		}
 
-		if (PCs_save === undefined) this.setup()
-		let data = PCs_save
+		let data = PCs_save || this.setup()
 
 		if (data.best === undefined) data.best = data.lvl - 1
 
@@ -80,7 +79,7 @@ var PCs = {
 	},
 
 	unl() {
-		return PCs_tmp.unl || QCs_save.comps >= 7
+		return PCs_save && (PCs_tmp.unl || QCs.done(7))
 	},
 	updateTmp() {
 		PCs_tmp.unl = PCs.unl()
@@ -369,7 +368,7 @@ var PCs = {
 
 		for (var i = 1; i <= 8; i++) {
 			getEl("pc_comp" + i + "_div").style.display = PCs_tmp.comps[i] ? "" : "none"
-			getEl("pc_comp" + i).textContent = PCs_tmp.comps[i] + " / 4"
+			getEl("pc_comp" + i).textContent = PCs_tmp.comps[i] + " / 7"
 		}
 
 		getEl("pc_lvl").textContent = getFullExpansion(PCs_save.lvl)

@@ -96,10 +96,7 @@ function updateTreeOfDecayTab(){
 }
 
 function updateTODStuff() {
-	if (!tmp.ngp3 || !player.masterystudies.includes("d13")) {
-		getEl("todtabbtn").style.display = "none"
-		return
-	} else getEl("todtabbtn").style.display = ""
+	return
 	var colors = ["red", "green", "blue"]
 	var shorthands = ["r", "g", "b"]
 	for (var c = 0; c < 3; c++) {

@@ -1550,17 +1550,14 @@
 			<p id='hotkeysDesc'></p>
 			<br>
 			<span id='versionDesc'>
-				<b id='modVersionDesc' style="font-size: 18px">You are playing New Game Plus 3.</b>
+				<b id='modVersionDesc' style="font-size: 18px">You are playing New Game Plus 3 Respecced.</b>
+				<p id='versionDescCreator'>Created by Aarex.</p>
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
-				<br>
-				<br>
-				<p id='versionDescCreator'>Created by Aarex with help from pg132 and usavictor.</p>
-				<br>
-				<br>
+				<p id='versionDescBeta'>(Beta v0.5: Entangled Challenges)</p>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.5: Entangled Challenges // 8/21/21a Alpha Build)</p>
+				<br>
 			</span>
 			<div class="footer bottom" style="display: block !important"></div>
 		</div>
@@ -2267,6 +2264,32 @@
 								<div id="Seriously, I already got rid of you." class="achievement achievementlocked" style="background-image: url(images/120.png)"><br></div>
 							</td>
 						</tr>
+						<tr id="achRowng3pr1">
+							<td>
+								<div id="Mastery Mayhem" class="achievement achievementlocked" style="background-image: url(images/ng3pr/11.png)"></div>
+							</td>
+							<td>
+								<div id="Completing the Quantum" class="achievement achievementlocked" style="background-image: url(images/ng3pr/12.png)" ach-tooltip="Unlock Strings. Reward: Decrease QC4x2 requirement multiplier to 3x."></div>
+							</td>
+							<td>
+								<div id="Bursted Em All!" class="achievement achievementlocked" style="background-image: url(images/ng3pr/13.png)" ach-tooltip="Charge all Positronic Boosts with QC4x2 milestone and 4 swaps. Reward: Charging requires 25% less."></div>
+							</td>
+							<td>
+								<div id="Sciencing Around The Core" class="achievement achievementlocked" style="background-image: url(images/ng3pr/14.png)" ach-tooltip="Reach ^0.85 quark efficiency. Reward: Effective Boosters x1.1."></div>
+							</td>
+							<td>
+								<div id="ng3pr15" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
+							</td>
+							<td>
+								<div id="ng3pr16" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
+							</td>
+							<td>
+								<div id="ng3pr17" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
+							</td>
+							<td>
+								<div id="ng3pr18" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
+							</td>
+						</tr>
 						<tr id="achRowng3p3">
 							<td>
 								<div id="ERROR 500: INTERNAL DIMENSION ERROR" class="achievement achievementlocked" style="background-image: url(images/127.png)"></div>
@@ -2291,32 +2314,6 @@
 							</td>
 							<td>
 								<div id="I don't want you to live anymore." class="achievement achievementlocked" style="background-image: url(images/134.png)"></div>
-							</td>
-						</tr>
-						<tr id="achRowng3pr1">
-							<td>
-								<div id="ng3pr11" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
-							</td>
-							<td>
-								<div id="ng3pr12" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
-							</td>
-							<td>
-								<div id="ng3pr13" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
-							</td>
-							<td>
-								<div id="ng3pr14" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
-							</td>
-							<td>
-								<div id="ng3pr15" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
-							</td>
-							<td>
-								<div id="ng3pr16" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
-							</td>
-							<td>
-								<div id="ng3pr17" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
-							</td>
-							<td>
-								<div id="ng3pr18" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
 							</td>
 						</tr>
 						<tr id="achRowng3p4">
@@ -3384,6 +3381,9 @@
 				<br>
 				<span id="qc_effects"></span>
 				<span id="qc_perks_note"></span>
+				<br>
+				<button class="storebtn" style="width: 120px; height: 48px" onclick="QCs.restart()">Restart Challenge</button>
+				<button class="storebtn" id="swaps_toggle" style="width: 120px; height: 48px" onclick="QCs.disable_swaps()">Disable swaps in challenge</button>
 				<table class="table" id="qcs_div" style="margin: 0 auto"></table>
 			</div>
 			<div id="pairedChalls" class="challengeTab">
@@ -4329,10 +4329,16 @@
 				<td><button class="secondarytabbtn" onclick="showQuantumTab('uquarks')">Anti-Quarks</button></td>
 				<td id='gluonstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Gluons</button></td>
 				<td id='positronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('positrons')">Positrons</button></td>
+				<td id='stringstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('strings')">Strings</button></td>
+				<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Milestones</button></td>
+
+				<!--
+				OLD MECHANICS
+
 				<td id='replicantstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('replicants')">Duplicants</button></td>
 				<td id='nanofieldtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('nanofield')">Nanofield</button></td>
 				<td id='todtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('tod')">Tree of Decay</button></td>
-				<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Milestones</button></td>
+				-->
 			</tr>
 		</table>
 		<div class='quantumtab' id='uquarks'>
@@ -4484,11 +4490,11 @@
 				</td>
 			</tr>
 			<tr>
-				<td id="entangle_rg_bonus" class="green">
+				<td id="entangle_rg_bonus" class="green light">
 				</td>
-				<td id="entangle_gb_bonus" class="blue">
+				<td id="entangle_gb_bonus" class="blue light">
 				</td>
-				<td id="entangle_br_bonus" class="red">
+				<td id="entangle_br_bonus" class="red light">
 				</td>
 			</tr>
 			<tr>
@@ -4695,6 +4701,7 @@
 				<tr>
 					<td><button class="qMs_locked" id="qMs_reward_25" onclick="qMs.toggle(25)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_26" onclick="qMs.toggle(26)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_27" onclick="qMs.toggle(27)"></button></td>
 				</tr>
 			</table>
 		</div>
@@ -4713,7 +4720,7 @@
 					<br>
 					<button class="storebtn" id="pos_toggle" style="width: 180px" onclick="pos.toggle()"></button>
 				</td>
-				<td class="dark_yellow">
+				<td class="yellow light">
 					<span id="pos_charge_formula"></span>
 					<br>
 					<span id="enB_pos_eng" style="font-size:25px">0.0</span> Positronic Charge
@@ -4731,6 +4738,7 @@
 		<div id="pos_cloud_div" style="vertical-align: top">
 			Note: You can swap Positronic Boosts, only if they are mastered, and are in different tiers.<br>
 			Note 2: Swaps take effect when you start a Quantum run with Positrons on.<br>
+			<b class="warning" id="pos_cloud_disabled">WARNING! Swaps have been disabled in this quantum!</b>
 			<p id="pos_cloud_total" style="font-size: 15px"></p>
 			<table class="qTable_2col">
 				<tr>
@@ -4896,6 +4904,10 @@
 				</tr>
 			</table>
 		</div>
+		</div>
+		<div class='quantumtab' id='strings'>
+			<p id="str_unl">Complete 8 PC completions to unlock Strings.</p>
+			<p id="str_div">You have reached the current end-game! Wait until the next beta releases...</p>
 		</div>
 		<div class='quantumtab' id='replicants'>
 			You have <span id="replicantiAmount2">1</span> replicantis.<br>

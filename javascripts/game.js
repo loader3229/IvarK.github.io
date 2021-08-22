@@ -27,15 +27,15 @@ function setupFooterHTML() {
 			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
 			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a> |-| " + 
 			"<a href='http://ng-plus-plus-plus.fandom.com' target='_newtab'>Wiki</a> | " +  
-			"<a href='http://discord.gg/KsjcgskgTj' target='_newtab'>Discord</a> | " +
+			"<a href='http://discord.gg/KsjcgskgTj' target='_newtab'>Discord</a>" +
 			(betaId != "" ?
 				(
 					betaId != correctBetaId ?
-					"<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Correct Test Server</a>" :
-					"<a href='http://discord.gg/7v82CAX'>Test Server: Discord</a>"
+					" | <a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Correct Test Server</a>" :
+					" | <a href='http://discord.gg/7v82CAX'>Test Server: Discord</a>"
 				)
 			: 
-				"<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Test server</a>"
+				betaLink != "" ? " | <a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Test server</a>" : ""
 			) + 
 		"</div></tr></td></table>"
 
@@ -1921,7 +1921,7 @@ function changeSaveDesc(saveId, placement) {
 			} else if (temp.infinited > 0 || temp.challenges.length > 0) msg += ", Infinity points: " + shortenDimensions(new Decimal(temp.infinityPoints)) +
 				", Challenge completions: " + getFullExpansion(temp.challenges.length)
 			else if (temp.galacticSacrifice && temp.galacticSacrifice.times) msg += ", Galaxy points: " + shortenDimensions(new Decimal(temp.galacticSacrifice.galaxyPoints))
-			else msg += ", Dimension Boosts: " + getFullExpansion(temp.resets) +
+			else msg += "Dimension Boosts: " + getFullExpansion(temp.resets) +
 				", Galaxies: " + getFullExpansion(temp.galaxies)
 		}
 		msg += "</span>"
@@ -2122,9 +2122,10 @@ function showNextModeMessage(click) {
 		var ver = welcomeUpdates.pop()
 		getEl("welcome").style.display = "flex"
 		getEl("welcomeMessage").innerHTML = "<b class='lime'>Welcome to NG+3 Respecced v" + ver + "!</b><br>This update introduces...<br><br>" +
-			(ngp3WelcomeMsgs[ver] || "???") +
+			(ngp3Welcomes.msgs[ver] || "???") +
 			"<br><br><b>Discord</b>: <a href='http://discord.gg/KsjcgskgTj' target='_newtab'>http://discord.gg/KsjcgskgTj</a>" +
-			"<br><br>Thank you for playing NG+3R!<br>~Aarex"
+			"<br><br>Thank you for playing NG+3R!<br>~Aarex" +
+			"<br><br>Goal: " + ngp3Welcomes.goals[ver]()
 	} else if (click) getEl("welcome").style.display = "none"
 }
 
@@ -3691,7 +3692,7 @@ function dilationStuffABTick(){
 	getEl('dilUpgsauto').style.display = canAutoUpgs ? "" : "none"
 	getEl('distribEx').style.display = hasAch("ngud14") && aarMod.nguspV !== undefined ? "" : "none"
 
-	if (!isGamePaused()) return
+	if (isGamePaused()) return
 	if (canAutoUpgs && player.autoEterOptions.dilUpgs) autoBuyDilUpgs()
 	if (qMs.tmp.amt >= 21 && player.dilation.active && getTPGain().gt(player.dilation.tachyonParticles)) {
 		setTachyonParticles(getTPGain())

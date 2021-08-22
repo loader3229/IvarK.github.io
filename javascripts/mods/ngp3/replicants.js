@@ -64,7 +64,7 @@ function updateReplicantsTab(){
 }
 
 function updateReplicants(mode) {
-	if (getEl("replicantstabbtn").style == "none") return
+	return
 
 	if (player.masterystudies == undefined ? true : player.ghostify.milestones < 8) mode = undefined
 	if (mode === undefined || mode === "display") {

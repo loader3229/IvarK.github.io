@@ -284,7 +284,7 @@ var mTs = {
 
 		311: () => "Red power boosts Replicated Galaxies with TS232's power.",
 		312: () => "Green power boosts Tachyonic Galaxies with Replicated Galaxies' strength.",
-		313: () => "Blue power boosts itself, and Tachyon Particles boost this.",
+		313: () => "Tachyon Particles greatly boost blue power.",
 		314: () => "Every color power adds the suceeding color power.",
 	},
 	timeStudyTitles: {
