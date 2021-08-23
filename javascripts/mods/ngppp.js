@@ -948,9 +948,9 @@ function setupSaveDataNGP3() {
 	QCs_save = (qu_save && qu_save.qc)
 	PCs_save = (qu_save && qu_save.pc)
 
-	pos.compile()
 	QCs.compile()
 	PCs.compile()
+	pos.compile()
 }
 
 //Recent boosts
@@ -988,10 +988,12 @@ let STRINGS = str
 //Update Messages
 var ngp3Welcomes = {
 	msgs: {
-		0.5: "<b class='lime'>Paired Challenges!</b> Can you complete 2 challenges at once, and level up your progression? Unlocks after completing Quantum Challenge 7!"
+		0.5: "<b class='lime'>Paired Challenges!</b> Can you complete 2 challenges at once, and level up your progression? Unlocks after completing Quantum Challenge 7!",
+		0.6: "<b class='lime'>Strings!</b> Can you vibrate a string of boosts, which adjusts them at a sawtooth rate?"
 	},
 	goals: {
-		0.5: () => getFullExpansion(8) + " PC combinations + " + shortenCosts(Decimal.pow(10, 1e13)) + " antimatter"
+		0.5: () => getFullExpansion(8) + " PC combinations + " + shortenCosts(Decimal.pow(10, 1e13)) + " antimatter",
+		0.6: () => getFullExpansion(16) + " PC combinations + " + shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter",
 	}
 }
 

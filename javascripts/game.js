@@ -27,9 +27,9 @@ function setupFooterHTML() {
 			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
 			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a> |-| " + 
 			"<a href='http://ng-plus-plus-plus.fandom.com' target='_newtab'>Wiki</a> | " +  
-			(betaId != "" ?
+			(beta ?
 				(
-					betaId != correctBetaId ?
+					!checkCorrectBeta() ?
 					"<a href='http://rawgit.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Correct Test Server</a>" :
 					"<a href='http://discord.gg/7v82CAX'>Test Server: Discord</a>"
 				)
@@ -2110,7 +2110,7 @@ function calcDifficulty(x) {
 
 function showOptions(id) {
 	closeToolTip();
-	getEl(id).style.display = id == "notationmenu" ? "inline" : "flex"
+	getEl(id).style.display = id == "advnotationmenu" ? "inline" : "flex"
 }
 
 function showNextModeMessage(click) {
@@ -2118,21 +2118,21 @@ function showNextModeMessage(click) {
 		getEl("welcome").style.display = "flex"
 		getEl("welcomeMessage").innerHTML = ngModeMessages[ngModeMessages.length - 1]
 		ngModeMessages.pop()
-	} else if (welcomeUpdates[0] == "alpha") {
+	} else if (welcomeUpdates.length > 0) {
 		var ver = welcomeUpdates.pop()
 		getEl("welcome").style.display = "flex"
-		getEl("welcomeMessage").innerHTML = "<b class='red'>Welcome to NG+3 v" + aarMod.ngp3r + ": Alpha Test Server!</b><br>You are in alpha test server. I recommend you to use the save bank so you can start testing a new feature.<br><br>" +
+		getEl("welcomeMessage").innerHTML = ver == "alpha" ? (
+			"<b class='red'>Welcome to NG+3 v" + aarMod.ngp3r + ": Alpha Test Server!</b><br>You are in alpha test server. I recommend you to use the save bank so you can start testing a new feature.<br><br>" +
 			"<b class='warning'>Anything will break! If this happens, report it in the server below!</b>" +
 			"<br><br><b>Test Discord</b>: <a href='http://discord.gg/7v82CAX' target='_newtab'>http://discord.gg/7v82CAX</a>" +
 			"<br><br>Thank you for testing NG+3R!<br>~Aarex"
-	}else if (welcomeUpdates.length > 0) {
-		var ver = welcomeUpdates.pop()
-		getEl("welcome").style.display = "flex"
-		getEl("welcomeMessage").innerHTML = "<b class='lime'>Welcome to NG+3 Respecced v" + ver + "!</b><br>This update introduces...<br><br>" +
+		) : (
+			"<b class='lime'>Welcome to NG+3 Respecced v" + ver + "!</b><br>This update introduces...<br><br>" +
 			(ngp3Welcomes.msgs[ver] || "???") +
 			"<br><br><b>Discord</b>: <a href='http://discord.gg/KsjcgskgTj' target='_newtab'>http://discord.gg/KsjcgskgTj</a>" +
 			"<br><br>Thank you for playing NG+3R!<br>~Aarex" +
 			"<br><br>Goal: " + ngp3Welcomes.goals[ver]()
+		)
 	} else if (click) getEl("welcome").style.display = "none"
 }
 
@@ -2288,25 +2288,24 @@ function gainedEternityPoints() {
 }
 
 //notation stuff
-var notationArray = ["Scientific", "Engineering", "Logarithm", "Mixed scientific", 
-		     "Mixed engineering", "Mixed logarithm", "Letters", "Standard",
-		     "Emojis","Brackets", "Infinity", "Greek", "Game percentages", 
-		     "Hexadecimal", "Tetration", "Hyperscientific", "Psi", "Morse code",
-		     "Spazzy", "Country Codes", "Iroha", "Symbols", "Lines", 
-		     "Simplified Written", "Time", "Base-64", "AF2019", "AAS", "AF5LN"]
+var notationArray = [
+	"Scientific", "Engineering", "Logarithm",
+	"Mixed scientific", "Mixed engineering", "Mixed logarithm",
+	"Explained scientific", "Explained engineering", "Explained logarithm",
+
+	"Letters", "Standard", "Emojis", "Brackets", "Infinity", "Greek", "Game percentages", "Hexadecimal", "Tetration", "Hyperscientific", "Psi", "Morse code", "Spazzy", "Country Codes", "Iroha", "Symbols", "Lines", "Simplified Written", "Time", "Base-64", "Myriads", /*"Layered Symbols",*/ "AF2019", "AAS", "AF5LN", "Blind"
+]
 
 function updateNotationOption() {
-	var notationMsg = "Notation: " + (player.options.notation == "Emojis" ? "Cancer" : player.options.notation)
+	var notationMsg = (player.options.notation == "Emojis" ? "Cancer" : player.options.notation)
 	var commasMsg = (player.options.commas == "Emojis" ? "Cancer" : player.options.commas) + " on exponents"
-	getEl("notation").innerHTML = "<p style='font-size:15px'>Notations</p>" + notationMsg + "<br>" + commasMsg
-	getEl("chosenNotation").textContent = player.options.notation=="AF5LN"?"Notation: Aarex's Funny 5-letter Notation":notationMsg
+	getEl("notation").innerHTML = "<p style='font-size:15px'>Notations</p>" + notationMsg
+	getEl("chosenNotation").textContent = player.options.notation=="AF5LN"?"Notation: Aarex's Funny 5-letter Notation":"Notation: " + notationMsg
 	getEl("chosenCommas").textContent = player.options.commas=="AF5LN"?"Aarex's Funny 5-letter Notation on exponents":commasMsg
 	
 	let tooltip=""
 	if (player.options.notation=="AAS") tooltip="Notation: Aarex's Abbreviation System"
 	if (player.options.notation=="AF5LN") tooltip="Notation: Aarex's Funny 5-letter Notation"
-	if (player.options.commas=="AAS") tooltip+=(tooltip==""?"":"\n")+"Aarex's Abbreviation System on exponents"
-	if (player.options.commas=="AF5LN") tooltip+=(tooltip==""?"":"\n")+"Aarex's Funny 5-letter Notation on exponents"
 	if (tooltip=="") getEl("notation").removeAttribute('ach-tooltip')
 	else getEl("notation").setAttribute('ach-tooltip', tooltip)
 }
@@ -2350,13 +2349,19 @@ function onNotationChange() {
 	}
 }
 
-function switchNotation(id) {
+function setNotation(id) {
+	player.options.notation = id
+	player.options.commas = "Commas"
+	onNotationChange()
+}
+
+function setAdvNotation(id) {
 	if (player.options.notation == notationArray[id]) return
 	player.options.notation = notationArray[id]
 	onNotationChange()
 }
 
-function switchCommas(id) {
+function setCommas(id) {
 	if (id > 1) id = notationArray[id-2]
 	else if (id > 0) id = "Same notation"
 	else id = "Commas"
@@ -2366,7 +2371,7 @@ function switchCommas(id) {
 }
 
 var notationMenuDone = false
-getEl("notation").onclick = function () {
+function openAdvNotations() {
 	if (!notationMenuDone) {
 		notationMenuDone = true
 		let notationsTable = getEl("notationOptions")
@@ -2375,16 +2380,16 @@ getEl("notation").onclick = function () {
 		let selectList = ""
 		
 		var row = commasTable.insertRow(0)
-		row.innerHTML = "<button class='storebtn' style='width:160px; height: 40px' onclick='switchCommas(0)'>Commas on exponents</button>"
+		row.innerHTML = "<button class='storebtn' style='width:160px; height: 40px' onclick='setCommas(0)'>Commas on exponents</button>"
 		row = commasTable.insertRow(1)
-		row.innerHTML = "<button class='storebtn' style='width:160px; height: 40px' onclick='switchCommas(1)'>Same notation on exponents</button>"
+		row.innerHTML = "<button class='storebtn' style='width:160px; height: 40px' onclick='setCommas(1)'>Same notation on exponents</button>"
 		
 		for (n = 0; n < notationArray.length; n++) {
 			var name = notationArray[n] == "Emojis" ? "Cancer" : notationArray[n]
 			row = notationsTable.insertRow(n)
-			row.innerHTML = "<button class='storebtn' id='select" + name + "' style='width:160px; height: 40px' onclick='switchNotation(" + n + ")'>Select " + name + "</button>"
+			row.innerHTML = "<button class='storebtn' id='select" + name + "' style='width:160px; height: 40px' onclick='setAdvNotation(" + n + ")' ach-tooltip='Examples: " + formatValue(notationArray[n], 4.16e19, 2, 2) + ", " + formatValue(notationArray[n], new Decimal("4.12e619"), 2, 2, true) + "'>Select " + name + "</button>"
 			row = commasTable.insertRow(n + 2)
-			row.innerHTML="<button class='storebtn' id='selectCommas" + name + "' style='width:160px; height: 40px' onclick='switchCommas(" + (n + 2) + ")'>" + name + " on exponents</button>"
+			row.innerHTML="<button class='storebtn' id='selectCommas" + name + "' style='width:160px; height: 40px' onclick='setCommas(" + (n + 2) + ")'>" + name + " on exponents</button>"
 			if (n > 18) {
 				row = subTable.insertRow(n - 1)
 				row.innerHTML="<button class='storebtn' id='selectSub" + name + "' style='width:160px; height: 40px' onclick='switchSubNotation(" + n + ")'>Select " + name + "</button>"
@@ -2393,12 +2398,8 @@ getEl("notation").onclick = function () {
 				row.innerHTML = "<button class='storebtn' style='width:160px; height: 40px' onclick='switchSubNotation(" + n + ")'>Select " + name + "</button>"	
 			}
 		}
-		getEl("selectAAS").setAttribute("ach-tooltip", "Select Aarex's Abbreviation System")
-		getEl("selectCommasAAS").setAttribute("ach-tooltip", "Aarex's Abbreviation System on exponents")
-		getEl("selectAF5LN").setAttribute("ach-tooltip", "Select Aarex's Funny 5-letter Notation")
-		getEl("selectCommasAF5LN").setAttribute("ach-tooltip", "Aarex's Funny 5-letter Notation on exponents")
 	}
-	showOptions("notationmenu")
+	showOptions("advnotationmenu")
 };
 
 function openNotationOptions() {
@@ -2429,7 +2430,7 @@ function openNotationOptions() {
 	}
 }
 
-function switchOption(notation,id) {
+function switchNotationOption(notation,id) {
 	if (notation == "scientific") {
 		if (id === "significantDigits") {
 			var value = parseFloat(getEl(id).value)
@@ -5654,7 +5655,18 @@ function initGame() {
 	clearInterval(stuckTimeout)
 
 	//Check for Test Server
-	checkCorrectBeta()
+	if (!checkCorrectBeta()) {
+		getEl("welcome").style.display = "flex"
+		getEl("welcomeMessage").innerHTML = "Wait a moment! It is appeared that you are at a wrong test server! Click the 'test server' link to go to the one we are currently testing."
+	}
+}
+
+function checkCorrectBeta() {
+	if (!beta) return true
+	if (!window.location.href.includes("https")) return true
+	if (window.location.href.includes(betaLink)) return true
+
+	return false
 }
 
 window.addEventListener('keydown', function(event) {

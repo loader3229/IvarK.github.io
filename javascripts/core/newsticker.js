@@ -473,6 +473,19 @@ amNewsArray = [
 ["According to the lore, we can confirm that Omnisity is going to be the last layer.", "tmp.ngp3", "am256"],
 ["NG+3R Starter Pack: Creative mechanics, ideal dump, focuses on balancing a lot, a bit of development every day.", "tmp.ngp3", "am257"],
 ["I bet you can't see the reference: An astronaut wearing the red suit.", true, "am258"],
+['"Our world would be deadly as matter, if there are holes leading into matter cultists..." ~ Antimatter cultist', true, "am259"],
+['"Get me out of my head... I can\'t control myself..." ~ Kids after seeing matter apocalypses', true, "am260"],
+['"Spacetime generators? Eh, more like Dimensions!"', true, "am261"],
+["For no reason, replicants and ghosts have been censored in this news ticker.", "str.unl()", "am262"],
+["Replicants and ghosts reported that Aarex went missing from Bosonic Lab! He is planning to destroy our places!", "str.unl()", "am263"],
+["Florida man reports that replicants and ghosts were erdiciated by Aarex!", "str.unl()", "am264"],
+["Strings are for smart nerds.", "str.unl()", "am265"],
+["Sorry, but we actually made of strings. That's what everything does.", "str.unl()", "am266"],
+["Strings can't fold like that! It actually become complex shapes!", "str.unl()", "am267"],
+["Down deep at the microscopic scale, walls seem to be really cool decorations there. Thanks, strings for arranging on my [walls!", "str.unl()", "am268"],
+["Welcome to Deep Quantum, where strings are everywhere.", "str.unl()", "am269"],
+["Number of perfect lines: Absolutely zero.", "str.unl()", "am270"],
+["Absolute zero. That's how many particles didn't contain.", "str.unl()", "am271"],
 /*NEXT ID: am256*/
 ];}
 

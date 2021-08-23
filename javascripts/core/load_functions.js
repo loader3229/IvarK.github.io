@@ -1926,9 +1926,8 @@ function setSomeQuantumAutomationDisplay(){
         getEl('versionDesc').style.display = tmp.ngp3 ? "" : "none"
         getEl('autoReset').style.display = hasAch("ng3p47") ? "" : "none"
 		if (tmp.ngp3) {
-			var alpha = betaId != ""
-			getEl('versionDescAlpha').style.display = alpha ? "" : "none"
-			getEl('warningBeta').textContent = alpha ? "THIS BETA IS CURRENTLY IN ALPHA, ANYTHING CAN BREAK" :
+			getEl('versionDescAlpha').style.display = beta ? "" : "none"
+			getEl('warningBeta').textContent = beta ? "THIS BETA IS CURRENTLY IN ALPHA, ANYTHING CAN BREAK" :
 				"THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK"
 		}
 }
@@ -2262,12 +2261,14 @@ function setupNGP31Versions() {
 	if (aarMod.ngp3Build) {
 		if (!aarMod.ngp3r) aarMod.ngp3r = 0
 		if (aarMod.ngp3r < 0.5) welcomeUpdates.push(0.5)
-		//if (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.6 : aarMod.ngp3r < 0.6) welcomeUpdates.push(0.6)
-		if (aarMod.ngp3r < 0.6) welcomeUpdates.push("alpha")
+
+		//Recent: v0.6
+		if (!beta && (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.6 : aarMod.ngp3r < 0.6)) welcomeUpdates.push(0.6)
+		if (beta && aarMod.ngp3r < 0.6) welcomeUpdates.push("alpha")
 	}
 	aarMod.ngp3r = 0.6
-	aarMod.ngp3Alpha = true
-	aarMod.ngp3Build = 20210822
+	aarMod.ngp3Alpha = beta
+	aarMod.ngp3Build = 20210823
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) {
 		player.timestudy.auto = {}
@@ -2982,18 +2983,13 @@ function migrateOldSaves() {
 }
 
 //Save Storage System
-var betaId = "A-"
+var beta = true
+var betaId = beta ? "A-" : ""
 var correctBetaId = "A-"
 var betaLink = "Respecced-Alpha"
-function checkCorrectBeta() {
-	if (betaId == "" || betaId == correctBetaId) return
-
-	getEl("welcome").style.display = "flex"
-	getEl("welcomeMessage").innerHTML = "Wait a moment! It is appeared that you are at a wrong test server! Click the 'test server' link to go to the one we are currently testing."
-}
 
 //Was "ds" before Respecced happened.
 var prefix = "Gds"
-var savePrefix = prefix + "AM_"
-var presetPrefix = prefix + "AM_ST_"
-var metaSaveId = "GAD_aarexModifications"
+var savePrefix = betaId + prefix + "AM_"
+var presetPrefix = betaId + prefix + "AM_ST_"
+var metaSaveId = betaId + "GAD_aarexModifications"

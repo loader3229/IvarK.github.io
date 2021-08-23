@@ -1470,7 +1470,7 @@
 						<td><div><button id="tabsSave" onclick="toggleTabsSave()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button></div></td>
 					</tr>
 					<tr>
-						<td><div><button id="notation" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:10px"></button></div></td>
+						<td><div><button id="notation" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:10px" onclick="showOptions('notationmenu')"></button></div></td>
 						<td><div><button id="featureProgress" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px;" onclick="setProgressBar('toggle', 'featureProgress')"></button></div></td>
 						<!--
 						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Menu: OFF</button></div></td>
@@ -1555,7 +1555,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.6: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(8/22/21a Pre-Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(8/23/21a Pre-Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -4908,7 +4908,7 @@
 		</div>
 		<div class='quantumtab' id='strings'>
 			<p id="str_unl">Complete 8 PC completions to unlock Strings.</p>
-			<p id="str_div">Strings haven't been implemented yet! Check back tomorrow!</p>
+			<p id="str_div">Strings haven't been implemented yet! Check back soon!</p>
 		</div>
 		<div class='quantumtab' id='replicants'>
 			You have <span id="replicantiAmount2">1</span> replicantis.<br>
@@ -5686,7 +5686,14 @@
 			<button id="leConfirmBtn" class="storebtn" onclick="toggleLEConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
 		</div>
 	</div>
-	<div class="popup optionmenu" id="notationmenu" style="overflow-y:hidden; width: 450px">
+	<div class="popup optionmenu" id="notationmenu">
+		<button class="closebtn storebtn" onclick="closeToolTip()">&times;</button>
+		<button class='storebtn' onclick="setNotation('Mixed scientific')" style='width: 240px; height: 40px'>Default (Mixed scientific)<br>41.6 Qt, 4.12e619</button>
+		<button class='storebtn' onclick="setNotation('Scientific')" style='width: 240px; height: 40px'>Scientific<br>4.16e19, 4.12e619</button>
+		<button class='storebtn' onclick="setNotation('Logarithm')" style='width: 240px; height: 40px'>Logarithm<br>e19.62, e619.61</button>
+		<button class='storebtn' onclick="openAdvNotations()" style='width: 240px; height: 40px'>More notations</button>
+	</div>
+	<div class="popup optionmenu" id="advnotationmenu" style="overflow-y:hidden; width: 450px">
 		<button class="closebtn storebtn" onclick="closeToolTip()">&times;</button>
 		<p id='chosenNotation'></p>
 		<p id='chosenCommas'></p>
@@ -5699,42 +5706,42 @@
 		</div>
 		<div id='notationoptions' class='notationOptions' style="display: none; width: 450px; overflow-y: scroll">
 			<b>Scientific notation</b>
-			Significant digits (min: 1, max: 10, leave 0 for variable): <input id="significantDigits" style="width: 170px" type="number" min=0 max=10 onchange="switchOption('scientific','significantDigits')"></input><br>
+			Significant digits (min: 1, max: 10, leave 0 for variable): <input id="significantDigits" style="width: 170px" type="number" min=0 max=10 onchange="switchNotationOption('scientific','significantDigits')"></input><br>
 			<b>Logarithm notation</b>
-			Base (min: 1.01, max: 1.79e308): <input id="logBase" style="width: 170px" onchange="switchOption('logarithm','base')"></input><br>
+			Base (min: 1.01, max: 1.79e308): <input id="logBase" style="width: 170px" onchange="switchNotationOption('logarithm','base')"></input><br>
 			<b>Tetration notation</b>
-			Base (min: 1.6, max: 1.79e308): <input id="tetrationBase" style="width: 170px" onchange="switchOption('tetration','base')"></input><br>
+			Base (min: 1.6, max: 1.79e308): <input id="tetrationBase" style="width: 170px" onchange="switchNotationOption('tetration','base')"></input><br>
 			<b>Psi notation</b>
-			Max characters (min: 2, max: 30): <input id="maxLength" style="width: 170px" type="number" min=2 max=30 onchange="switchOption('psi','maxLength')"></input><br>
-			Max arguments (min: 1, max: 6): <input id="maxArguments" style="width: 170px" type="number" min=1 max=6 onchange="switchOption('psi','maxArguments')"></input><br>
-			Max letters (min: 1, max: 4): <input id="maxLetters" style="width: 170px" type="number" min=1 max=4 onchange="switchOption('psi','maxLetters')"></input><br>
+			Max characters (min: 2, max: 30): <input id="maxLength" style="width: 170px" type="number" min=2 max=30 onchange="switchNotationOption('psi','maxLength')"></input><br>
+			Max arguments (min: 1, max: 6): <input id="maxArguments" style="width: 170px" type="number" min=1 max=6 onchange="switchNotationOption('psi','maxArguments')"></input><br>
+			Max letters (min: 1, max: 4): <input id="maxLetters" style="width: 170px" type="number" min=1 max=4 onchange="switchNotationOption('psi','maxLetters')"></input><br>
 			<p id='psiSide'></p>
 			<table id="psiSideOptions">
 				<tr>
-					<td><button id="psiSidel" class="storebtn" style="width:160px; height: 40px" onclick="switchOption('psi','psiSidel')">Numbers on left side</button></td>
-					<td><button id="psiSider" class="storebtn" style="width:160px; height: 40px" onclick="switchOption('psi','psiSider')">Numbers on right side</button></td>
+					<td><button id="psiSidel" class="storebtn" style="width:160px; height: 40px" onclick="switchNotationOption('psi','psiSidel')">Numbers on left side</button></td>
+					<td><button id="psiSider" class="storebtn" style="width:160px; height: 40px" onclick="switchNotationOption('psi','psiSider')">Numbers on right side</button></td>
 				</tr>
 			</table>
 			<p id='psiLetter'></p>
 			<table id='psiLetterOptions'>
 				<tr>
-					<td colspan=2 style='text-align:center'><button class="storebtn" style="width:160px; height: 40px" onclick="switchOption('psi','psiLetterNone')">Automatically choose letter</button></td>
+					<td colspan=2 style='text-align:center'><button class="storebtn" style="width:160px; height: 40px" onclick="switchNotationOption('psi','psiLetterNone')">Automatically choose letter</button></td>
 				</tr>
 				<tr>
-					<td><button class="storebtn" style="width:160px; height: 40px" onclick="switchOption('psi','psiLetterE')">Force E</button></td>
-					<td><button class="storebtn" style="width:160px; height: 40px" onclick="switchOption('psi','psiLetterF')">Force F</button></td>
+					<td><button class="storebtn" style="width:160px; height: 40px" onclick="switchNotationOption('psi','psiLetterE')">Force E</button></td>
+					<td><button class="storebtn" style="width:160px; height: 40px" onclick="switchNotationOption('psi','psiLetterF')">Force F</button></td>
 				</tr>
 				<tr>
-					<td><button class="storebtn" style="width:160px; height: 40px" onclick="switchOption('psi','psiLetterG')">Force G</button></td>
-					<td><button class="storebtn" style="width:160px; height: 40px" onclick="switchOption('psi','psiLetterH')">Force H</button></td>
+					<td><button class="storebtn" style="width:160px; height: 40px" onclick="switchNotationOption('psi','psiLetterG')">Force G</button></td>
+					<td><button class="storebtn" style="width:160px; height: 40px" onclick="switchNotationOption('psi','psiLetterH')">Force H</button></td>
 				</tr>
 			</table>
 			<b>Spazzy notation</b>
 			<p id='chosenSubNotation'></p>
 			<table id='subNotationOptions'></table>
 			<b>Aarex's Abbreviation System</b>
-			Use hyphen (-) separators: <input type="checkbox" id="useHyphens" onchange="switchOption('aas','useHyphens')"><br>
-			Use De as 1e33: <input type="checkbox" id="useDe" onchange="switchOption('aas','useDe')">
+			Use hyphen (-) separators: <input type="checkbox" id="useHyphens" onchange="switchNotationOption('aas','useHyphens')"><br>
+			Use De as 1e33: <input type="checkbox" id="useDe" onchange="switchNotationOption('aas','useDe')">
 		</div>
 	</div>
 	<div class="popup optionmenu" id="thememenu">

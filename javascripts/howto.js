@@ -1,10 +1,13 @@
 var player = {};
 
 //Do not remove.
-var betaId = "G"
-var prefix = betaId + "ds"
-var savePrefix = prefix + "AM_"
-var metaSaveId = betaId + "AD_aarexModifications"
+var beta = true
+var betaId = beta ? "A-" : ""
+
+//Was "ds" before Respecced happened.
+var prefix = "Gds"
+var savePrefix = betaId + prefix + "AM_"
+var metaSaveId = betaId + "GAD_aarexModifications"
 
 function changestate(n) {
     var classes = getEl('div'+n).classList

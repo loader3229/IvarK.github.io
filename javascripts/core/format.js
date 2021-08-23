@@ -57,8 +57,8 @@ function getShortAbbreviation(e) {
 	var result = ''
 	var id = Math.floor(e / 3 - 1)
 	var log = Math.floor(Math.log10(id))
-	var step = Math.max(Math.floor(log / 3 - 3),0)
-	id = Math.round(id / Math.pow(10, Math.max(log - 9, 0))) * Math.pow(10, Math.max(log - 9, 0) % 3)
+	var step = Math.max(Math.floor(log / 3 - 2), 0)
+	id = Math.round(id / Math.pow(10, Math.max(log - 6, 0))) * Math.pow(10, Math.max(log - 6, 0) % 3)
 		while (id > 0) {		
 		var partE = id % 1000
 		if (partE > 0) {
@@ -67,7 +67,7 @@ function getShortAbbreviation(e) {
 			if (result == "") result = prefix + prefixes2[step]
 			else result = prefix + prefixes2[step] + '-' + result
 		}
-		id = Math.floor(id/1000)
+		id = Math.floor(id / 1000)
 		step++
 	}
 	return result
@@ -87,8 +87,7 @@ function getAASAbbreviation(x) {
 	const log = Math.floor(Math.log10(x))
 	let result = ""
 	if (log > 8) {
-		var step = Math.floor(log / 3 - 3)
-		if (log > 29) step = Math.floor(log / 3 - 2)
+		var step = Math.floor(log / 3 - 2)
 		x = Math.floor(x / Math.pow(10, step * 3 + log % 3)) * Math.pow(10, log % 3)
 	} else var step = 0
 	while (x > 0) {
@@ -105,7 +104,7 @@ function getAASAbbreviation(x) {
 			if (result != "" && player.options.aas.useHyphens) result = subResult + tier2 + "-" + result
 			else result = subResult + tier2 + result
 		}
-		x = Math.floor(x/1e3)
+		x = Math.floor(x / 1e3)
 		step++
 	}
 	if (log > 8) result += "s"
@@ -152,6 +151,7 @@ function getTimeAbbreviation(seconds) {
 
 const inflog = Math.log10(Number.MAX_VALUE)
 function formatValue(notation, value, places, placesUnder1000, noInf) {
+	if (notation === "Blind") return ""
 	if (notation === "Same notation") notation = player.options.notation
 	if (notation === 'Iroha' && (onPostBreak() || Decimal.lt(value, getLimit()) || noInf)) return iroha(value, 5)
 	if (Decimal.eq(value, 1/0)) return "Infinite"
@@ -240,7 +240,10 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			var power = Math.floor(Math.log10(value))
 			var matissa = value / Math.pow(10, power)
 		}
-		if ((notation === "Mixed scientific" && power >= 33) || notation === "Scientific") {
+		var explained = (notation === "Explained scientific" || notation === "Explained engineering" || notation === "Explained logarithm")
+		var e = explained ? "10^" : "e"
+		var e_m = explained ? "*" : ""
+		if ((notation === "Mixed scientific" && power >= 33) || notation === "Scientific" || notation === "Explained scientific") {
 			if (player.options.scientific !== undefined && player.options.scientific.significantDigits !== undefined) places = player.options.scientific.significantDigits - 1
 			places = Math.min(places, 9 - Math.floor(Math.log10(power)) - 1)
 			if (places >= 0) {
@@ -255,7 +258,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 				else if (power < 1e9) power = getFullExpansion(power)
 				else power = formatValue("Mixed scientific", power, 3, 3)
 			}
-			return matissa + "e" + power;
+			return (matissa ? matissa + e_m : "") + e + power
 		}
 		if (notation === "Psi") {
 			return formatPsi(matissa, power)
@@ -275,6 +278,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			if (notation == "Simplified Written") return "(" + power + ") " + convTo(notation, matissa)
 			return convTo(notation, matissa) + (notation == "Symbols" ? '-' : "e") + power
 		}
+		if (notation === "Layered Symbols") return ""
 		if (notation === "Infinity") {
 			const inflog = Math.log10(Number.MAX_VALUE)
 			const pow = Decimal.log10(value)
@@ -293,7 +297,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 		if (notation === "Game percentages") {
 			return (Math.log10(Decimal.log10(value)) / Math.log10(tmp.ngp3 ? 1e18 : 3.5e8) * 100).toFixed(4) + '%'
 		}
-		if (notation === "Engineering" || notation === "Mixed engineering") pow = power - (power % 3)
+		if (notation === "Engineering" || notation === "Mixed engineering" || notation === "Explained engineering") pow = power - (power % 3)
 		else pow = power
 		if (pow > 100000) {
 			if (player.options.commas !== "Commas") pow = formatValue(player.options.commas, pow, 3, 3)
@@ -301,12 +305,12 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			else pow = getFullExpansion(pow);
 		}
 
-		if (notation === "Logarithm" || notation === 'Iroha' || (notation === "Mixed logarithm" && power > 32)) {
+		if (notation === "Logarithm" || notation === "Explained logarithm" || (notation === "Mixed logarithm" && power > 32) || notation === 'Iroha') {
 			var base = Math.max(player.options.logarithm.base, 1.01)
 			var prefix
 			if (base == 10) {
 				power = Decimal.log10(value)
-				prefix = "e"
+				prefix = e
 			} else {
 				power = new Decimal(value).log(base)
 				if (base >= 1e3) var prefix = formatValue("Mixed scientific", base, 2, 0)
@@ -315,7 +319,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			}
 			if (power > 100000) {
 				if (player.options.commas === "Logarithm") {
-					if (base == 10) return "ee" + Math.log10(power).toFixed(3)
+					if (base == 10) return e + e + Math.log10(power).toFixed(3)
 					return prefix + prefix + (Math.log10(power) / Math.log(base)).toFixed(3)
 				}
 				else if (player.options.commas !== "Commas") return prefix + formatValue(player.options.commas, power, 3, 3)
@@ -376,16 +380,18 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			}
 			return matissa + " " + getTimeAbbreviation(Math.floor(power / 3))
 		}
+		if (notation === "Myriads") return getMyriadStandard(value, places)
+
 		if (matissa >= 1000) {
 			matissa /= 1000;
 			power++;
 		}
-		places = Math.min(places, 14 - Math.floor(Math.log10(power)))
+		places = Math.min(places, 8 - Math.floor(Math.log10(power)))
 		if (places >= 0) {
 			matissa = (matissa * Decimal.pow(10, power % 3)).toFixed(places)
 			if (matissa >= 1e3) {
 				power += 3
-				places = Math.min(places, 14 - Math.floor(Math.log10(power)))
+				places = Math.min(places, 8 - Math.floor(Math.log10(power)))
 				matissa = (1).toFixed(places)
 			}
 		}
@@ -393,14 +399,14 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 
 		if (notation === "Standard" || notation === "Mixed scientific" || notation === "Mixed logarithm") {
 			if (power <= 303) return matissa + " " + FormatList[(power - (power % 3)) / 3];
-			else if (power > 3e11 + 2) return getShortAbbreviation(power) + "s";
+			else if (power >= 3e9 + 3) return getShortAbbreviation(power) + "s";
 			else return matissa + " " + getAbbreviation(power);
 		} else if (notation === "Mixed engineering") {
 			if (power <= 33) return matissa + " " + FormatList[(power - (power % 3)) / 3];
-			else return (matissa + "e" + pow);
-		} else if (notation === "Engineering") {
-			if (power >= 1e9) return "e" + pow
-			return (matissa + "e" + pow);
+			else return (matissa + e_m + e + pow);
+		} else if (notation === "Engineering" || notation === "Explained engineering") {
+			if (power >= 1e9) return e + pow
+			return (matissa + e_m + e + pow);
 		} else if (notation === "Letters") {
 			return matissa + letter(power, 'abcdefghijklmnopqrstuvwxyz');
 		} else if (notation === "Emojis") {
@@ -553,9 +559,9 @@ function convTo(notation, num) {
 	var rest = ""
 	if (num >= 1e9) {
 		var log = Math.floor(Math.log10(num))
-		var step = Math.max(Math.floor(log / 3 - 3), 0)
+		var step = Math.max(Math.floor(log / 3 - 2), 0)
 		num = Math.round(num / Math.pow(10, Math.max(log - 6, 0))) * Math.pow(10, Math.max(log - 6, 0) % 3)
-		if (num >= 1e9) {
+		if (num >= 1e6) {
 			num /= 1000
 			step++
 		}
@@ -594,7 +600,8 @@ function convTo(notation, num) {
 			result = parts[num % 10] + result
 			num = Math.floor(num / 10)
 		}
-	}
+	} else if (notation=="Blind") return ""
+	else if (notation=="Layered Symbols") return ""
 	return result + rest
 }
 
@@ -659,7 +666,47 @@ function iroha (n, depth) {
   return iroha_special[prefix(num)] + (rec.eq(1) ? '' : iroha(rec, depth - 1));
 }
 
-let FORMAT_INTS_DIFFERENTLY = ["Greek", "Morse code", "Symbols", "Lines", "Simplified Written"]
+//Myriads
+function getMyriadAbbreviation(x) {
+	var log2 = Math.floor(Math.max(Math.log2(x), 0))
+	var step = log2
+	var x2 = x
+	var r = ""
+
+	for (var i = 0; i < 10; i++) {
+		var pow2 = Math.pow(2, step)
+		if (x2 >= pow2) {
+			if (step == 0) r = "My" + (r ? ". " + r : "")
+			else r = FormatList[step + 1] + (r ? "." + r : "")
+			x2 -= pow2
+		}
+		if (step == 0) break
+		step--
+	}
+
+	if (x >= 2) r += "yl"
+	return r
+}
+
+function getMyriadStandard(v, places = 2) {
+	v = new Decimal(v)
+
+	var log = Math.floor(v.log10())
+	var mant = v.mantissa
+	var myr = Math.floor(log / 4)
+	var myrLog = Math.floor(Math.max(Math.log2(myr), 0))
+	places = Math.min(places, 9 - myrLog)
+
+	var placesDiff = log - myr * 4 - places
+	mant = Math.floor(mant * Math.pow(10, places))
+	if (placesDiff > 0) mant *= Math.pow(10, placesDiff)
+	else mant /= Math.pow(10, -placesDiff)
+
+	return (places >= 0 ? mant + (myr ? " " : "") : "") + (myr ? getMyriadAbbreviation(myr) : "")
+}
+
+//Formatting
+let FORMAT_INTS_DIFFERENTLY = ["Greek", "Morse code", "Symbols", "Lines", "Simplified Written", "Layered Symbols", "Blind"]
 function getFullExpansion(num) {
 	if (num === null) return "NaN"
 	if (isNaN(num)) return "NaN"
@@ -699,12 +746,13 @@ shortenND = function (money) {
 }
 
 
+//Non-Number Formatting
 function timeDisplay(time) {
+  if (player.options.notation === "Blind") return ""
+
   time = time / 10
   if (time <= 10) return time.toFixed(3) + " seconds"
   time = Math.floor(time)
-
-
 
   if (time >= 31536000) {
       return Math.floor(time / 31536000) + " years, " + Math.floor((time % 31536000) / 86400) + " days, " + Math.floor((time % 86400) / 3600) + " hours, " + Math.floor((time % 3600) / 60) + " minutes, and " + Math.floor(time % 60) + " seconds"
@@ -718,6 +766,7 @@ function timeDisplay(time) {
 }
 
 function preformat(int) {
+	if (player.options.notation === "Blind") return ""
 	if (int.toString().length == 1) return "0"+int
 	else return int
 }
@@ -726,6 +775,7 @@ let small = ['', 'm', 'μ', 'n', 'p', 'f', 'a', 'z', 'y', 'r', 'q']
 let plTime = 5.391247e-44
 
 function timeDisplayShort(time, rep, places) {
+	if (player.options.notation === "Blind") return ""
 	if (Decimal.gt(time, Number.MAX_VALUE)) {
 		if (Decimal.eq(time, 1 / 0)) return 'eternity'
 		return shorten(Decimal.div(time, 31556952e100)) + ' ae'
@@ -762,6 +812,7 @@ function timeDisplayShort(time, rep, places) {
 }
 
 function rateFormat(apm, unit) {
+	if (player.options.notation === "Blind") return ""
 	let time = "min"
 	if (apm.lt(1)) {
 		apm = apm.times(60)
@@ -778,6 +829,7 @@ function rateFormat(apm, unit) {
 }
 
 function formatPercentage(x, digits = 1, reduction) {
+	if (player.options.notation === "Blind") return ""
 	x = Decimal.times(x, 100)
 	if (x.lt(100) && reduction) digits += Math.ceil(-x.log10() + 2)
 	if (x.gt(1e9)) return shorten(x)
@@ -788,6 +840,7 @@ function formatPercentage(x, digits = 1, reduction) {
 }
 
 function formatReductionPercentage(x, digits = 1, maxDigits) {
+	if (player.options.notation === "Blind") return ""
 	digits += Math.floor(Math.log10(x))
 	if (maxDigits) digits = Math.min(digits, maxDigits)
 	return (100 - 100 / x).toFixed(digits)
