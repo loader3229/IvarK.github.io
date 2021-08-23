@@ -27,15 +27,15 @@ function setupFooterHTML() {
 			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
 			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a> |-| " + 
 			"<a href='http://ng-plus-plus-plus.fandom.com' target='_newtab'>Wiki</a> | " +  
-			"<a href='http://discord.gg/KsjcgskgTj' target='_newtab'>Discord</a>" +
 			(betaId != "" ?
 				(
 					betaId != correctBetaId ?
-					" | <a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Correct Test Server</a>" :
-					" | <a href='http://discord.gg/7v82CAX'>Test Server: Discord</a>"
+					"<a href='http://rawgit.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Correct Test Server</a>" :
+					"<a href='http://discord.gg/7v82CAX'>Test Server: Discord</a>"
 				)
 			: 
-				betaLink != "" ? " | <a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Test server</a>" : ""
+				"<a href='http://discord.gg/KsjcgskgTj' target='_newtab'>Discord</a> | " +
+				betaLink != "" ? "<a href='http://rawgit.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Test server</a>" : ""
 			) + 
 		"</div></tr></td></table>"
 
@@ -2118,7 +2118,14 @@ function showNextModeMessage(click) {
 		getEl("welcome").style.display = "flex"
 		getEl("welcomeMessage").innerHTML = ngModeMessages[ngModeMessages.length - 1]
 		ngModeMessages.pop()
-	} else if (welcomeUpdates.length > 0) {
+	} else if (welcomeUpdates[0] == "alpha") {
+		var ver = welcomeUpdates.pop()
+		getEl("welcome").style.display = "flex"
+		getEl("welcomeMessage").innerHTML = "<b class='red'>Welcome to NG+3 v" + aarMod.ngp3r + ": Alpha Test Server!</b><br>You are in alpha test server. I recommend you to use the save bank so you can start testing a new feature.<br><br>" +
+			"<b class='warning'>Anything will break! If this happens, report it in the server below!</b>" +
+			"<br><br><b>Test Discord</b>: <a href='http://discord.gg/7v82CAX' target='_newtab'>http://discord.gg/7v82CAX</a>" +
+			"<br><br>Thank you for testing NG+3R!<br>~Aarex"
+	}else if (welcomeUpdates.length > 0) {
 		var ver = welcomeUpdates.pop()
 		getEl("welcome").style.display = "flex"
 		getEl("welcomeMessage").innerHTML = "<b class='lime'>Welcome to NG+3 Respecced v" + ver + "!</b><br>This update introduces...<br><br>" +

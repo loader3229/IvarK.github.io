@@ -1925,6 +1925,12 @@ function setSomeQuantumAutomationDisplay(){
         getEl('replicantibulkmodetoggle').textContent="Mode: "+(player.galaxyMaxBulk?"Max":"Singles")
         getEl('versionDesc').style.display = tmp.ngp3 ? "" : "none"
         getEl('autoReset').style.display = hasAch("ng3p47") ? "" : "none"
+		if (tmp.ngp3) {
+			var alpha = betaId != ""
+			getEl('versionDescAlpha').style.display = alpha ? "" : "none"
+			getEl('warningBeta').textContent = alpha ? "THIS BETA IS CURRENTLY IN ALPHA, ANYTHING CAN BREAK" :
+				"THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK"
+		}
 }
 
 function setReplAutoDisplay(){
@@ -2256,8 +2262,11 @@ function setupNGP31Versions() {
 	if (aarMod.ngp3Build) {
 		if (!aarMod.ngp3r) aarMod.ngp3r = 0
 		if (aarMod.ngp3r < 0.5) welcomeUpdates.push(0.5)
+		//if (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.6 : aarMod.ngp3r < 0.6) welcomeUpdates.push(0.6)
+		if (aarMod.ngp3r < 0.6) welcomeUpdates.push("alpha")
 	}
-	aarMod.ngp3r = 0.5
+	aarMod.ngp3r = 0.6
+	aarMod.ngp3Alpha = true
 	aarMod.ngp3Build = 20210822
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) {
@@ -2973,8 +2982,8 @@ function migrateOldSaves() {
 }
 
 //Save Storage System
-var betaId = ""
-var correctBetaId = ""
+var betaId = "A-"
+var correctBetaId = "A-"
 var betaLink = "Respecced-Alpha"
 function checkCorrectBeta() {
 	if (betaId == "" || betaId == correctBetaId) return
