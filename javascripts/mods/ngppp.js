@@ -948,8 +948,6 @@ function setupSaveDataNGP3() {
 	QCs_save = (qu_save && qu_save.qc)
 	PCs_save = (qu_save && qu_save.pc)
 
-	if (!tmp.ngp3) return
-
 	pos.compile()
 	QCs.compile()
 	PCs.compile()

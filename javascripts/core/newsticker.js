@@ -496,8 +496,8 @@ function scrollNextMessage() {
 			nextMsgCond = false
 			while (!nextMsgCond) {
 				// randomly choose from either normal news or aarex news
-				var array = amNewsArray //(hasAch("r22") && Math.random() > 0.5) ? amNewsArray : newsArray;
-				nextMsgIndex = amNewsArray.length - 1 //Math.min(Math.floor(Math.random() * array.length), array.length);
+				var array = (hasAch("r22") && Math.random() > 0.5) ? amNewsArray : newsArray
+				nextMsgIndex = Math.min(Math.floor(Math.random() * array.length), array.length)
 				var func = array[nextMsgIndex][1]
 				nextMsgCond = typeof(func) == "function" ? func() : eval(func);
 				nextMsgId = array[nextMsgIndex][2];
