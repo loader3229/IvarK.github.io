@@ -2262,10 +2262,10 @@ function setupNGP31Versions() {
 		if (!aarMod.ngp3r) aarMod.ngp3r = 0
 		if (aarMod.ngp3r < 0.5) welcomeUpdates.push(0.5)
 
-		// if (!beta && (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.6 : aarMod.ngp3r < 0.6)) welcomeUpdates.push(0.6)
-		// if (beta && aarMod.ngp3r < 0.6) welcomeUpdates.push("alpha")
+		if (!beta && (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.6 : aarMod.ngp3r < 0.6)) welcomeUpdates.push(0.6)
+		if (beta && aarMod.ngp3r < 0.6) welcomeUpdates.push("alpha")
 	}
-	aarMod.ngp3r = 0.501
+	aarMod.ngp3r = 0.6
 	aarMod.ngp3Alpha = beta
 	aarMod.ngp3Build = 20210823
 
@@ -2982,7 +2982,7 @@ function migrateOldSaves() {
 }
 
 //Save Storage System
-var beta = false
+var beta = true
 var betaId = beta ? "A-" : ""
 var correctBetaId = "A-"
 var betaLink = "Respecced-Alpha"
