@@ -291,6 +291,7 @@ var pH = {
 		//getEl("resetDispOptions").style.display = ""
 		getEl("hide_" + layer).style.display = ""
 		getEl("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+
 		pH.updateActive()
 	},
 	setupHTML(layer) {

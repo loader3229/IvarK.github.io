@@ -967,7 +967,8 @@ function getAQSGainExp(x) {
 
 	let r = 1
 	if (PCs.unl()) r = Math.log10(x.log10() + 1) * PCs_tmp.eff2 + 1
-	return Math.min(r, 10)
+	if (futureBoost("quark_gluon_plasma")) r = Math.pow(x.log10() * r / 100 + 1, 1/3)
+	return Math.min(r, 1e3)
 }
 
 function getIntergalacticExp(log) {

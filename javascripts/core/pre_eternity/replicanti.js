@@ -141,8 +141,10 @@ function upgradeReplicantiInterval() {
 	if (!isIntervalAffordable()) player.replicanti.interval = (hasTS(22) || player.boughtDims ? 1 : 50)
 
 	if (player.replicanti.interval < 1) {
-		let x = 1 / player.replicanti.interval
-		player.replicanti.intervalCost = Decimal.pow(10, Math.pow(x, 4) * 1200)
+		let x = player.replicanti.interval
+		let expCost = Math.pow(x, -4) * 1200
+		if (futureBoost("fiery_workup")) expCost = Math.min(expCost, Math.pow(1 - Math.log10(x), 10) * 1e15)
+		player.replicanti.intervalCost = Decimal.pow(10, expCost)
 	} else player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
 
 	if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
@@ -289,16 +291,18 @@ function replicantiGalaxyAutoToggle() {
 	getEl("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
 }
 
-function getReplicantiBaseInterval(speed) {
+function getReplicantiBaseInterval(speed, next = 0) {
 	speed = new Decimal(speed || player.replicanti.interval)
 
 	var upgs = Math.round(Decimal.div(speed, 1e3).log(0.9))
-	if (enB.active("glu", 5)) {
-		upgs *= enB_tmp.glu5.int
-		upgs = Math.pow(upgs, enB_tmp.glu5.exp)
-	}
-	speed = Decimal.pow(0.9, upgs).times(1e3)
+	upgs += next
 
+	if (enB.active("glu", 5)) {
+		upgs = Math.pow(upgs, enB_tmp.glu5.exp)
+		upgs *= enB_tmp.glu5.int
+	}
+
+	speed = Decimal.pow(0.9, upgs).times(1e3)
 	return speed
 }
 
@@ -457,7 +461,10 @@ function updateReplicantiTemp() {
 	data.ln = player.replicanti.amount.ln()
 
 	data.baseChance = Math.round(player.replicanti.chance * 100)
-	if (enB.active("glu", 5)) data.baseChance = Math.pow(data.baseChance, enB_tmp.glu5.exp)
+	if (enB.active("glu", 5)) {
+		data.baseChance = Math.pow(data.baseChance, enB_tmp.glu5.exp)
+		data.baseChance *= enB_tmp.glu5.int
+	}
 
 	let pow = 1
 	if (hasMTS(265)) pow = getMTSMult(265, "update")

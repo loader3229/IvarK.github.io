@@ -662,8 +662,8 @@ function repIntervalDisplay() {
 	let interval = Decimal.div(tmp.rep.interval, 1e3).times(10)
 	getEl("replicantiinterval").innerHTML = "Interval: " + timeDisplayShort(interval, true, 3) +
 		(isIntervalAffordable() && player.infinityPoints.lt(Decimal.pow(10, 1e10)) ?
-			"<br> -> " + timeDisplayShort(interval.times(getReplicantiBaseInterval(baseInt * 0.9).div(getReplicantiBaseInterval(baseInt))), true, 3) + 
-			" Cost: " + shortenCosts(player.replicanti.intervalCost)+" IP"
+			"<br> -> " + timeDisplayShort(interval.times(getReplicantiBaseInterval(baseInt, 1).div(getReplicantiBaseInterval(baseInt))), true, 3) + 
+			" Cost: " + shortenCosts(player.replicanti.intervalCost) + " IP"
 		: "")
 	getEl("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable()) ? "storebtn" : "unavailablebtn"
 }

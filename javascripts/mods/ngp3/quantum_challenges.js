@@ -94,8 +94,6 @@ var QCs = {
 
 			//Replicanti Compressors
 			can: () => QCs_tmp.qc1 && pH.can("eternity") && player.replicanti.amount.gte(QCs_tmp.qc1.req) && QCs_save.qc1.boosts < QCs.data[1].max(),
-			compressScalings: [5],
-			max: () => 30, //1 + 30 / 20 = 2.5 / 2 = 1.25
 			boost() {
 				if (!QCs.data[1].can()) return false
 
@@ -112,6 +110,13 @@ var QCs = {
 				QCs.data[1].fix = false
 				return true
 			},
+			scalings: [5],
+			max: () => 30, //1 + 30 / 20 = 2.5 / 2 = 1.25
+
+			eff(boosts, eff, max, pc11 = 0) {
+				var eff = Math.min((eff * 3 - max * 2 * (1 - pc11)) / 10 + 1, 5)
+				return eff
+			},
 			extra: () => 0,
 			updateTmp() {
 				let qc1 = QCs_save.qc1
@@ -120,7 +125,7 @@ var QCs = {
 
 				//Boosts
 				let boosts = qc1.boosts
-				let distantBoosts = Math.max(boosts - this.compressScalings[0], 0)
+				let distantBoosts = Math.max(boosts - this.scalings[0], 0)
 
 				//Efficiency
 				let str = QCs.modIn(1, "up") ? 0.5 : 1
@@ -137,7 +142,7 @@ var QCs = {
 					scalingMult: 1,
 					scalingExp: 1 / (1 + boosts / 20),
 
-					effMult: (eff * 3 - maxEff * 2) / 10 + 1,
+					effMult: this.eff(boosts, eff, maxEff),
 					effExp: 1 + eff / 20,
 				}
 				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
@@ -149,11 +154,11 @@ var QCs = {
 					data.limit = data.limit.pow(Math.pow(2, -pc11))
 					data.speedMult = data.speedMult.pow(1 - pc11)
 					data.scalingExp = 1 / (1 + boosts / (20 + pc11 * 5))
-					data.effMult = Math.min((eff * 3 - maxEff * 2 * (1 - pc11)) / 10 + 1, 5)
+					data.effMult = this.eff(boosts, eff, maxEff, pc11)
 				}
 				if (PCs.milestoneDone(12)) data.limit = data.limit.pow(Math.log2(qc1.expands + 1) / 10 + 1)
 
-				//Limit > Req
+				//Penalties
 				data.limit = data.limit.max(data.req)
 			},
 
@@ -185,7 +190,7 @@ var QCs = {
 						"<br><span style='font-size: 10px'>(" + (qc1Explain ? "Requires " : "") + shortenCosts(QCs_tmp.qc1.req) + " replicantis)</span>" +
 						(!qc1Explain ? "<br>(" +
 							getFullExpansion(qc1.boosts) + " / " + getFullExpansion(data.max()) +
-							(qc1.boosts > data.compressScalings[0] ? " Distant" : "") +
+							(qc1.boosts > data.scalings[0] ? " Distant" : "") +
 							(qc1.max || extra > 0 ? ", " + getFullExpansion(qc1.max) + " Max" : "") +
 							(extra > 0 ? " + " + getFullExpansion(Math.floor(extra)) : "") +
 						")" : "")

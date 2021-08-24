@@ -507,8 +507,8 @@ function buyDilationUpgrade(pos, max, isId) {
 	updateDilationUpgradeButtons()
 }
 
-function onBuyDilationUpgrade(x, b) {
-	if (id == 3 && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), b)))
+function onBuyDilationUpgrade(x, b = 1) {
+	if (x == 3 && qMs.tmp.amt >= 5) setTachyonParticles(player.dilation.tachyonParticles.times(Decimal.pow(getDil3Power(), b)))
 	else if (player.eternityBuyer.alwaysDil && (!player.dilation.active || qMs.tmp.amt < 21)) player.eternityBuyer.alwaysDilCond = true
 }
 

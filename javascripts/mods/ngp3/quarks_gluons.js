@@ -722,13 +722,13 @@ var enB = {
 			type: "b",
 			eff(x) {
 				let r = {
-					int: Math.log10(x / 2 + 1) / 2 + 1,
-					exp: Math.min(Math.log10(Math.log10(x / 2e3 + 1) + 1) * (tmp.ngp3_mul ? 1.5 : 1) + 1, 1.75)
+					int: Math.min(Math.log10(x / 2 + 1) / 2 + 1, 5),
+					exp: Math.min(Math.log10(Math.log10(x / 2e3 + 1) + 1) * (tmp.ngp3_mul ? 1.5 : 1) + 1, 2)
 				}
 				return r
 			},
 			effDisplay(x) {
-				return "Strengthen replicate interval upgrades by <span style='font-size:25px'>" + shorten(x.int) + "x</span>, and ^<span style='font-size:24px'>" + shorten(x.exp) + "</span> to all replicanti upgrades."
+				return "Strengthen all replicanti upgrades by <span style='font-size:24px'>^" + shorten(x.exp) + "</span>, <span style='font-size:24px'>+" + formatPercentage(x.int - 1) + "%</span>."
 			}
 		},
 		6: {

@@ -467,10 +467,9 @@ function handleDispOnQuantum(bigRip, prestige) {
 
 	enB.updateUnlock()
 
-	let keepQuantum = tmp.quActive && qMs.tmp.amt >= 16
-	if (tmp.quActive && !bigRip) {
-		let keepPos = keepQuantum && pos.unl()
-		let keepStr = keepQuantum && str.unl()
+	if (tmp.quActive) {
+		let keepPos = pos.unl()
+		let keepStr = str.unl()
 
 		getEl("positronstabbtn").style.display = keepPos ? "" : "none"
 		getEl("stringstabbtn").style.display = keepStr ? "" : "none"

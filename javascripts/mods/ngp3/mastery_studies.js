@@ -154,7 +154,7 @@ var mTs = {
 	types: {t: "time", ec: "ec", d: "dil"},
 	studies: [],
 	unl() {
-		return pH.did("quantum") || (tmp.ngp3 && hasDilationUpg("ngpp6"))
+		return tmp.ngp3 && (tmp.quUnl || hasDilationUpg("ngpp6"))
 	},
 	has(x) {
 		return mTs.unl() && mTs.studyUnl.includes(x) && (player.masterystudies.includes("t" + x) || player.masterystudies.includes(x))
@@ -185,7 +185,9 @@ var mTs = {
 		},
 		265() {
 			var x = doubleMSMult(tmp.rep ? tmp.rep.baseChance : 0)
-			return Decimal.pow(x, hasMTS(283) ? getMTSMult(283, "update") : 0.6)
+			var r = Decimal.pow(Math.min(x, 1e9), hasMTS(283) ? getMTSMult(283, "update") : 0.6)
+			if (x > 1e9) r = r.div(Math.log10(x) / 9)
+			return r
 		},
 
 		271() {

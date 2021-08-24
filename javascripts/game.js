@@ -3391,6 +3391,7 @@ function eternity(force, auto, forceRespec, dilated) {
 		showTab("dimensions")
 		showDimTab("timedimensions")
 		loadAutoBuyerSettings()
+		pH.onPrestige("eternity")
 	}
 	doAutoEterTick()
 	if (QCs.in(6)) QCs_save.qc6 = Math.max(QCs_save.qc6 - 30 / (player.dilation.active ? 2 : 1), QCs.perkActive(6) ? 0 : -30)
