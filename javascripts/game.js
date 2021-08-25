@@ -226,18 +226,6 @@ function setupDimensionsHTML() {
 			'<td id="pA' + d + '"></td>' +
 			'<td align="right" width="10%"><button id="pB'+d+'" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyPD('+d+')"></button></td></tr>'
 	}
-
-	var edsDiv = getEl("empDimTable")
-	for (let d = 1; d <= 8; d++) {
-		var row=edsDiv.insertRow(d - 1)
-		row.id = "empRow" + d
-		row.style["font-size"] = "15px"
-		row.innerHTML = '<td id="empD' + d + '" width="41%"></td>' +
-			'<td id="empAmount' + d + '"></td>' +
-			'<td><span class="empQuarks" id="empQuarks' + d + '">0</span> preons/s</td>' +
-			'<td align="right" width="2.5%"><button id="empFeedMax' + d + '" style="color:black; width:70px; font-size:10px" class="storebtn" align="right" onclick="feedReplicant('+d+', true)">Max</button></td>' +
-			'<td align="right" width="7.5%"><button id="empFeed' + d + '" style="color:black; width:195px; height:25px; font-size:10px" class="storebtn" align="right" onclick="feedReplicant('+d+')">Feed (0%)</button></td>'
-	}
 }
 
 function setupToDHTMLandData(){
@@ -859,26 +847,6 @@ function doNGMinusTwoNewPlayer(){
 	player.options.gSacrificeConfirmation = true
 }
 
-function getBrandNewReplicantsData(){
-	return {
-		amount: 0,
-		requirement: "1e3000000",
-		quarks: 0,
-		quantumFood: 0,
-		quantumFoodCost: 2e46,
-		limit: 1,
-		limitDim: 1,
-		limitCost: 1e49,
-		eggonProgress: 0,
-		eggons: 0,
-		hatchSpeed: 20,
-		hatchSpeedCost: 1e49,
-		babyProgress: 0,
-		babies: 0,
-		ageProgress: 0
-	}
-}
-
 function getBrandNewTodData(){
 	return {
 		r: {
@@ -1062,9 +1030,6 @@ function doNGPlusThreeNewPlayer(){
 	player.old = true
 	qu_save.autoOptions = {}
 	qu_save.qc = QCs.setup()
-	qu_save.replicants = getBrandNewReplicantsData()
-	qu_save.emperorDimensions = {}
-	for (d = 1; d < 9; d++) qu_save.emperorDimensions[d] = {workers: 0, progress: 0, perm: 0}
 	player.dontWant = false
 	qu_save.nanofield = getBrandNewNanofieldData()
 	qu_save.reachedInfQK = false
@@ -2293,7 +2258,9 @@ var notationArray = [
 	"Mixed scientific", "Mixed engineering", "Mixed logarithm",
 	"Explained scientific", "Explained engineering", "Explained logarithm",
 
-	"Letters", "Standard", "Emojis", "Brackets", "Infinity", "Greek", "Game percentages", "Hexadecimal", "Tetration", "Hyperscientific", "Psi", "Morse code", "Spazzy", "Country Codes", "Iroha", "Symbols", "Lines", "Simplified Written", "Time", "Base-64", "Myriads", /*"Layered Symbols",*/ "AF2019", "AAS", "AF5LN", "Blind"
+	"Tetration", "Hyperscientific", "Layered scientific", "Layered logarithm", "E notation", "Hyper-E", "Psi",
+
+	"Letters", "Standard", "Emojis", "Brackets", "Infinity", "Greek", "Game percentages", "Hexadecimal", "Morse code", "Spazzy", "Country Codes", "Iroha", "Symbols", "Lines", "Simplified Written", "Time", "Base-64", "Myriads", /*"Layered Symbols",*/ "AF2019", "AAS", "AF5LN", "Blind"
 ]
 
 function updateNotationOption() {
@@ -2332,7 +2299,6 @@ function onNotationChange() {
 		updateQuantumWorth("notation")
 		QCs.updateDisp()
 		updateMasteryStudyTextDisplay()
-		updateReplicants("notation")
 		updateTODStuff()
 		updateBreakEternity()
 		onNotationChangeNeutrinos()
@@ -2413,6 +2379,7 @@ function openNotationOptions() {
 		getEl("significantDigits").value = player.options.scientific.significantDigits ? player.options.scientific.significantDigits : 0
 		getEl("logBase").value = player.options.logarithm.base
 		getEl("tetrationBase").value = player.options.tetration.base
+		getEl("hypersciBump").value = player.options.hypersci.bump || 10
 		getEl("maxLength").value = player.options.psi.chars
 		getEl("maxArguments").value = Math.min(player.options.psi.args, 4)
 		getEl("maxLetters").value = player.options.psi.maxletters
@@ -2454,9 +2421,18 @@ function switchNotationOption(notation,id) {
 			var value=parseFloat(getEl("tetrationBase").value)
 		}
 		if (isNaN(value)) return
-		if (id === "base") {
+		if (id == "base") {
 			if (value < 1.6 || value > Number.MAX_VALUE) return
 			else player.options.tetration.base = value
+		}
+	} else if (notation === "hypersci") {
+		if (id == "bump") {
+			var value = parseFloat(getEl("hypersciBump").value)
+		}
+		if (isNaN(value)) return
+		if (id == "bump") {
+			if (value < 10 || value > 1e3) return
+			else player.options.hypersci.bump = value
 		}
 	} else if (notation === "psi") {
 		if (id.slice(0, 7) === "psiSide") {
@@ -3493,17 +3469,15 @@ function challengesCompletedOnEternity() {
 }
 
 function gainEternitiedStat() {
-	let ret = 1
-	if (pH.did("ghostify")) {
-		if (tmp.quActive && hasNU(9)) ret = nM(ret, qu_save.bigRip.spaceShards.max(1).pow(.1))
-	}
-	if (hasTS(34) && tmp.ngC) ret = nM(ret, 10)
-	if (hasTS(35) && tmp.ngC) ret = nM(ret, tsMults[35]())
-	if (hasAch("r132") && tmp.ngp3_boost) ret = nM(ret, getInfBoostInput(player.infinitied).add(1).log10() / 5 + 1)
-	if (tmp.ngp3 && hasAch("ngpp18")) ret = nM(ret, 10)
-	let exp = getEternitiesAndDTBoostExp()
-	if (exp > 0) ret = nM(player.dilation.dilatedTime.max(1).pow(exp), ret)
-	if (tmp.ngC & exp > 0) ret = nM(ret, Decimal.pow(player.dilation.tachyonParticles.plus(1).log10() + 1, exp))
+	var dtExp = getEternitiesAndDTBoostExp()
+	var ret = nF_m([
+		[hasTS(34) && tmp.ngC, 10],
+		[hasTS(35) && tmp.ngC, () => tsMults[35]()],
+		[hasAch("r132") && tmp.ngp3_boost, () => getInfBoostInput(player.infinitied).add(1).log10() / 5 + 1],
+		[tmp.ngp3 && hasAch("ngpp18"), 10],
+		[dtExp > 0, () => player.dilation.dilatedTime.max(1).pow(dtExp)],
+		[tmp.ngC & dtExp > 0, () => Decimal.pow(player.dilation.tachyonParticles.plus(1).log10() + 1, dtExp)]
+	])
 	if (dev.boosts.tmp[5]) ret = nM(ret, Decimal.pow(ret, dev.boosts.tmp[5] - 1))
 	if (typeof(ret) == "number") ret = Math.floor(ret)
 	return ret
@@ -3576,14 +3550,16 @@ var nextAt
 var goals
 var order
 
+function evalData(x, attrs, allowEval) {
+	var type = typeof(x)
+	return type == "string" && allowEval ? eval(x) : type == "function" ? (attrs ? x(attrs[0], attrs[1], attrs[2], attrs[3], attrs[4], attrs[5]) : x()) : x
+}
+
 function setAndMaybeShow(elementName, condition, contents) {
 	var elem = getEl(elementName)
 	var type = typeof(contents)
 	if (condition) {
-		elem.innerHTML =
-			type == "string" ? eval(contents) :
-			type == "function" ? contents() :
-			contents
+		elem.innerHTML = evalData(contents, null, true)
 		elem.style.display = ""
 	} else {
 		elem.innerHTML = ""
@@ -3843,12 +3819,6 @@ function ghostifyAutomationUpdatingPerSecond() {
 	if (isAutoGhostActive(14)) maxBuyBEEPMult()
 	if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode=="t") rotateAutoUnstable()
 	if (isAutoGhostActive(10)) maxBuyLimit()
-	if (isAutoGhostActive(9) && qu_save.replicants.quantumFood > 0) {
-		for (d = 1;d < 9; d++) if (canFeedReplicant(d) && (d == qu_save.replicants.limitDim || (!tmp.eds[d + 1].perm && tmp.eds[d].workers.lt(11)))) {
-			feedReplicant(d, true);
-			break;
-		} 
-	}
 	if (isAutoGhostActive(8)) buyMaxQuantumFood()
 	if (isAutoGhostActive(7)) {
 		enB.maxBuy("glu")
@@ -4306,78 +4276,6 @@ function treeOfDecayUpdating(diff){
 	}
 }
 
-function emperorDimUpdating(diff){
-	for (dim=8;dim>1;dim--) {
-		var promote = hasNU(2) ? 1/0 : getWorkerAmount(dim-2)
-		if (canFeedReplicant(dim-1,true)) {
-			if (dim>2) promote = tmp.eds[dim-2].workers.sub(10).round().min(promote)
-			tmp.eds[dim-1].progress = tmp.eds[dim-1].progress.add(tmp.eds[dim].workers.times(getEmperorDimensionMultiplier(dim)).times(diff/200)).min(promote)
-			var toAdd = tmp.eds[dim-1].progress.floor()
-			if (toAdd.gt(0)) {
-				if (!hasNU(2)) {
-					if (dim>2 && toAdd.gt(getWorkerAmount(dim-2))) tmp.eds[dim-2].workers = new Decimal(0)
-					else if (dim>2) tmp.eds[dim-2].workers = tmp.eds[dim-2].workers.sub(toAdd).round()
-					else if (toAdd.gt(qu_save.replicants.amount)) qu_save.replicants.amount = new Decimal(0)
-					else qu_save.replicants.amount = qu_save.replicants.amount.sub(toAdd).round()
-				}
-				if (toAdd.gt(tmp.eds[dim-1].progress)) tmp.eds[dim-1].progress = new Decimal(0)
-				else tmp.eds[dim-1].progress = tmp.eds[dim-1].progress.sub(toAdd)
-				tmp.eds[dim-1].workers = tmp.eds[dim-1].workers.add(toAdd).round()
-			}
-		}
-		if (!canFeedReplicant(dim-1,true)) tmp.eds[dim-1].progress = new Decimal(0)
-	}
-}
-
-function replicantEggonUpdating(diff){
-	var newBabies = tmp.twr.times(getEmperorDimensionMultiplier(1)).times(getSpinToReplicantiSpeed()).times(diff/200)
-	if (hasAch("ng3p35")) newBabies = newBabies.times(10)
-	qu_save.replicants.eggonProgress = qu_save.replicants.eggonProgress.add(newBabies)
-	var toAdd = qu_save.replicants.eggonProgress.floor()
-	if (toAdd.gt(0)) {
-		if (toAdd.gt(qu_save.replicants.eggonProgress)) qu_save.replicants.eggonProgress = new Decimal(0)
-		else qu_save.replicants.eggonProgress = qu_save.replicants.eggonProgress.sub(toAdd)
-		qu_save.replicants.eggons = qu_save.replicants.eggons.add(toAdd).round()
-	}
-}
-
-function replicantBabyHatchingUpdating(diff){
-	if (qu_save.replicants.eggons.gt(0)) {
-		qu_save.replicants.babyProgress = qu_save.replicants.babyProgress.add(diff/getHatchSpeed()/10)
-		var toAdd = hasNU(2) ? qu_save.replicants.eggons : qu_save.replicants.babyProgress.floor().min(qu_save.replicants.eggons)
-		if (toAdd.gt(0)) {
-			if (toAdd.gt(qu_save.replicants.eggons)) qu_save.replicants.eggons = new Decimal(0)
-			else qu_save.replicants.eggons = qu_save.replicants.eggons.sub(toAdd).round()
-			if (toAdd.gt(qu_save.replicants.babyProgress)) qu_save.replicants.babyProgress = new Decimal(0)
-			else qu_save.replicants.babyProgress = qu_save.replicants.babyProgress.sub(toAdd)
-			qu_save.replicants.babies = qu_save.replicants.babies.add(toAdd).round()
-		}
-	}
-}
-
-function replicantBabiesGrowingUpUpdating(diff){
-	if (qu_save.replicants.babies.gt(0)&&tmp.tra.gt(0)) {
-		qu_save.replicants.ageProgress = qu_save.replicants.ageProgress.add(getGrowupRatePerMinute().div(60).times(diff)).min(qu_save.replicants.babies)
-		var toAdd = qu_save.replicants.ageProgress.floor()
-		if (toAdd.gt(0)) {
-			if (toAdd.gt(qu_save.replicants.babies)) qu_save.replicants.babies = new Decimal(0)
-			else qu_save.replicants.babies = qu_save.replicants.babies.sub(toAdd).round()
-			if (toAdd.gt(qu_save.replicants.ageProgress)) qu_save.replicants.ageProgress = new Decimal(0)
-			else qu_save.replicants.ageProgress = qu_save.replicants.ageProgress.sub(toAdd)
-			qu_save.replicants.amount = qu_save.replicants.amount.add(toAdd).round()
-		}
-	}
-}
-
-function replicantOverallUpdating(diff){
-	replicantEggonUpdating(diff)
-	replicantBabyHatchingUpdating(diff)
-	if (qu_save.replicants.eggons.lt(1)) qu_save.replicants.babyProgress = new Decimal(0)
-	replicantBabiesGrowingUpUpdating(diff)
-	if (qu_save.replicants.babies.lt(1)) qu_save.replicants.ageProgress = new Decimal(0)
-	if (!qu_save.nanofield.producingCharge) qu_save.replicants.quarks = qu_save.replicants.quarks.add(getGatherRate().total.max(0).times(diff))
-}
-
 function quantumOverallUpdating(diff){
 	if (tmp.quActive) {
 		//Quantum Challenges
@@ -4390,7 +4288,8 @@ function quantumOverallUpdating(diff){
 		var colorShorthands=["r","g","b"]
 		for (var c = 0; c < 3; c++) qu_save.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
 
-		if (hasMTS("d10")) replicantOverallUpdating(diff)
+		if (str.unl()) str.updateFeatureOnTick() //Strings
+
 		if (hasMTS("d11")) emperorDimUpdating(diff)
 		if (hasMTS("d12")) nanofieldUpdating(diff)
 		if (hasMTS("d13")) treeOfDecayUpdating(diff)

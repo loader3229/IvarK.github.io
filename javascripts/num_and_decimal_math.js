@@ -93,3 +93,29 @@ function dS(a,b) {
 	if (typeof(a)=="number"&&typeof(b)=="number") return a-b
 	return Decimal.sub(a,b)
 }
+
+//Functions
+function nF_m(list) { //Multiplication
+	var d = new Decimal(1)
+	var n = 1
+	for (var i = 0; i < list.length; i++) {
+		var j = list[i]
+		if (j.length !== undefined) {
+			if (!j[0]) continue
+			j = evalData(j[1])
+		}
+
+		if (j.e !== undefined) d = d.times(j)
+		else if (n * j == 1/0) {
+			d = d.times(n)
+			n = j
+		} else n *= j
+	}
+
+	var r = n
+	if (d.gt(1)) {
+		r = d.times(n)
+		if (r.lt(Number.MAX_VALUE)) r = r.toNumber()
+	}
+	return r
+}

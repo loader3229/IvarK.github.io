@@ -252,7 +252,10 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		NEW GAME PLUS 3: Goes in reverse feature order
 	*/
 
-	//Paired Challenges
+	// Strings
+	if (str.unl()) str.updateTmp()
+
+	// Paired Challenges
 	if (PCs.unl()) {
 		if (PCs_save.in) {
 			if (PCs_save.in != data.pc && !PCs.posDone(PCs_save.in)) {
@@ -360,7 +363,6 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		pH.updateActive()
 
 		if (!isQC && player.ghostify.milestones < 6) qu_save.replicants.amount = new Decimal(0)
-		replicantsResetOnQuantum(isQC)
 		nanofieldResetOnQuantum()
 		player.eternityBuyer.tpUpgraded = false
 		player.eternityBuyer.slowStopped = false
@@ -473,7 +475,7 @@ function handleDispOnQuantum(bigRip, prestige) {
 
 		getEl("positronstabbtn").style.display = keepPos ? "" : "none"
 		getEl("stringstabbtn").style.display = keepStr ? "" : "none"
-		str.update()
+		str.updateDisp()
 	
 		if (!keepPos && getEl("positrons").style.display == "block") showQuantumTab("uquarks")
 		if (!keepStr && getEl("strings").style.display == "block") showQuantumTab("uquarks")
@@ -484,17 +486,14 @@ function handleDispOutOfQuantum(bigRip) {
 	let keepQuantum = pH.shown("quantum")
 	let keepQCs = keepQuantum && QCs.unl()
 	let keepPCs = keepQuantum && PCs.unl()
-	let keepEDs = keepQuantum && player.masterystudies.includes("d11")
 	let keepBE = false
 
 	if (!keepQCs && getEl("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
 	if (!keepPCs && getEl("pairedChalls").style.display == "block") showChallengesTab("normalchallenges")
-	if (!keepEDs && getEl("emperordimensions").style.display == "block") showDimTab("antimatterdimensions")
 	if (!keepBE && getEl("breakEternity").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
 
 	getEl("qctabbtn").parentElement.style.display = keepQCs ? "" : "none"
 	getEl("pctabbtn").parentElement.style.display = keepPCs ? "" : "none"
-	getEl("edtabbtn").style.display = keepEDs ? "" : "none"
 	getEl("breakEternityTabbtn").style.display = keepBE? "" : "none"
 }
 
@@ -513,10 +512,7 @@ function handleQuantumDisplays(prestige) {
 	QCs.updateDisp()
 	QCs.updateBest()
 
-	updateReplicants(prestige ? "prestige" : "")
-
 	updateTODStuff()
-
 	updateBreakEternity()
 }
 
@@ -534,4 +530,8 @@ function updateQuarkDisplay() {
 function metaReset2() {
 	if (tmp.ngp3 && qu_save.bigRip.active) ghostify()
 	else quantum()
+}
+
+function restartQuantum() {
+	quantum(false, true, {}, "restart")
 }

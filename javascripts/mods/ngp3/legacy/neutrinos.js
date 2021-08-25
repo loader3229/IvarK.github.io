@@ -99,10 +99,6 @@ function buyNeutrinoUpg(id) {
 	if (sum.lt(cost) || player.ghostify.neutrinos.upgrades.includes(id)) return
 	player.ghostify.neutrinos.upgrades.push(id)
 	subNeutrinos(cost)
-	if (id == 2) {
-		getEl("eggonsCell").style.display="none"
-		getEl("workerReplWhat").textContent="babies"
-	}
 }
 
 function updateNeutrinoBoosts() {

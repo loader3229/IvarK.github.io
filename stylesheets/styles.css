@@ -2413,22 +2413,18 @@ td.grey {
     background: #eeff32;
 	border-color: #8e991e
 }
-
 .pos_tier {
 	font-size: 10px
 }
-
 .pos_tier b {
 	font-size: 15px
 }
-
 .posbtn {
 	margin: 2px;
 	position: relative;
 	width: 90px !important;
 	height: 90px !important;
 }
-
 .posbtn span {
 	position: absolute;
 	left: 0px;
@@ -2437,23 +2433,47 @@ td.grey {
 	width: 100%;
 	font-size: 10px
 }
-
 .posbtn b {
 	font-size: 15px
 }
-
 .posbtn p {
 	margin: 0
 }
-
 .charged {
 	color: #ffdf7f;
 	text-shadow: 0px 0px 6px #bf9f00, 2px 1px 3px #bf9f00, -2px -1px 3px #bf9f00
 }
-
 .undercharged {
 	color: #ff9f7f;
 	text-shadow: 0px 0px 6px #bf0000, 2px 1px 3px #bf0000, -2px -1px 3px #bf0000
+}
+
+#str_boosts {
+	width: 100%;
+	margin: 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space: nowrap
+}
+.str_boost {
+	display: inline-block;
+	width: 60px !important;
+	height: 120px !important;
+	position: relative;
+}
+.str_boost button {
+	width: 60px !important;
+	height: 60px !important;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 30px;
+	left: 0px;
+	z-index: 1;
+	font-size: 8px;
+}
+.str_boost button span {
+	position: revert
 }
 
 #pc_table td {

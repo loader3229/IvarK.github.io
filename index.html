@@ -1068,7 +1068,6 @@
 					<td id="tdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('timedimensions')">Time Dimensions</button></td>
 					<td id="pdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('pdims')">Paradox Dimensions</button></td>
 					<td id="mdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('metadimensions')">Meta Dimensions</button></td>
-					<td id="edtabbtn"><button class="secondarytabbtn" onclick="showDimTab('emperordimensions')">Emperor Dimensions</button></td>
 					<td id="gdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('gdims')">Gravity Dimensions</button></td>
 					<td id="prodtabbtn"><button class="secondarytabbtn" onclick="showDimTab('production')">Production</button></td>
 				</tr>
@@ -1299,26 +1298,6 @@
 				</table>
 				<button id="metaboostauto" style="width:160px; height: 30px; font-size: 12px" onclick="toggleAutoEter('metaboost')" class="storebtn">Toggle all ON/OFF</button>
 				<button id="toggleallmetadims" style="width:300px; height: 30px; font-size: 12px" onclick="toggleAllMetaDims()" class="storebtn">Toggle all meta-dims autobuyer ON/OFF</button>
-			</div>
-			<div id="emperordimensions" class="dimtab">
-				You have <span class="rqC" id="rgEDs">1</span> red-green, <span class="gqC" id="gbEDs">1</span> green-blue, and <span class="bqC" id="brEDs">1</span> blue-red gluons.<br>
-				<div>
-					<p>You have <span id="replicantAmountED" style="font-size:35px; color: black">0</span> normal duplicants.</p>
-				</div>
-				<p>You have <span id="quantumFoodAmountED">0</span> quantum food.</p>
-				<button class='gluonupgrade storebtn' id='buyQuantumFoodED' onclick='buyQuantumFood()' style="width: 210px"></button><br>
-				<button class='storebtn' id='buyMaxQuantumFoodED' onclick='buyMaxQuantumFood()' style="width: 210px">Buy maximum quantum food</button>
-				<table class="table" id="empDimTable">
-					<tr style="font-size: 15px">
-						<td>Total: </td>
-						<td id="totalWorkers"></td>
-						<td>
-							<span class="empQuarks" id="totalQuarkProduction"></span> preons/s
-						</td>
-					</tr>
-				</table>
-				<button id='breakLimitED' class='storebtn' style='width: 280px; height: 60px' onclick='breakLimit()'></button><br>
-				<button class='storebtn' style='width: 280px' onclick='maxBuyLimit()'>Max limit upgrades</button><br><br><br>
 			</div>
 			<div id="gdims" class="dimtab">
 				<button class="gluonupgrade bl" onclick="teleportToBL()">Teleport to Bosonic Lab.</button>
@@ -1555,7 +1534,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.6: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(8/23/21b Pre-Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(8/24/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -4908,37 +4887,13 @@
 		</div>
 		<div class='quantumtab' id='strings'>
 			<p id="str_unl">Complete 8 PC completions to unlock Strings.</p>
-			<p id="str_div">Strings haven't been implemented yet! Check back soon!</p>
-		</div>
-		<div class='quantumtab' id='replicants'>
-			You have <span id="replicantiAmount2">1</span> replicantis.<br>
-			You have <span class="rqC" id="rgRepl">1</span> red-green, <span class="gqC" id="gbRepl">1</span> green-blue, and <span class="bqC" id="brRepl">1</span> blue-red gluons.<br>
-			<table class='qTable'><tr><td>
-				You have <span id="replicantAmount" style="font-size:35px">0</span> normal duplicants.<br>
-				They are gathering <span id="normalReplGatherRate" style="font-size:25px">0</span> preons per second.<br>
-				<button class="storebtn" id="replicantReset" style="width: 220px; height: 60px; font-size: 11px" onclick='replicantReset()'></button><br><button class="storebtn" id="autoReset" style="width: 220px" onclick='toggleAutoReset()'></button>
-			</td><td>
-				You have <span id="workerReplAmount" style="font-size:35px">0</span> total worker duplicants.<br>
-				They are gathering <span id="workerReplGatherRate" style="font-size:25px">0</span> preons per second and producing <span id="eggonRate" style="font-size:25px">0</span> <span id="workerReplWhat">eggons</span> per <span id="eggonRateTimeframe">minute</span>.<br>
-				Feed your normal duplicant to become a worker. <span id="workerProgress" style="font-size:15px">0.0%</span><br>
-				<button class='storebtn' id='feedNormal' style='width: 280px' onclick="feedReplicant(1)">Feed one with quantum food</button><br>
-				<button id='breakLimit' class='storebtn' style='width: 280px; height: 60px' onclick='breakLimit()'></button><br>
-				<button class='storebtn' style='width: 280px' onclick='maxBuyLimit()'>Max limit upgrades</button>
-			</td><td>
-				You have <span id="babyReplAmount" style="font-size:35px">0</span> baby duplicants.<br>
-				They are gathering <span id="babyReplGatherRate" style="font-size:25px">0</span> preons per second.<br>
-				They will become normal duplicants at <span id="growupRate" style="font-size:15px"></span> per <span id="growupRateUnit"></span>. <span id="growupProgress" style="font-size:15px">0.0%</span>.<br>
-			</td></tr><tr><td>
-				You have <span id="gatheredQuarks" style="font-size:35px">0</span> preons. <span id="gatherRate" style="font-size:25px">+0/s</span>
-			</td><td>
-				You have <span id="quantumFoodAmount" style="font-size:35px">0</span> quantum food.<br>
-				<button class='gluonupgrade storebtn' id='buyQuantumFood' onclick='buyQuantumFood()' style="width: 210px"></button><br>
-				<button class='storebtn' id='buyMaxQuantumFood' onclick='buyMaxQuantumFood()' style="width: 210px">Max buy quantum food</button>
-			</td><td id="eggonsCell">
-				You have <span id="eggonAmount" style="font-size:35px">0</span> eggons. <span id="hatchProgress" style="font-size:15px">0.0%</span><br>
-				<button class='storebtn' id='reduceHatchSpeed' style='width: 240px; height: 80px' onclick='reduceHatchSpeed()'></button><br>
-				<button class='storebtn' id='maxReduceHatchSpeed' onclick='maxReduceHatchSpeed()' style="width: 240px">Max reduce the hatch speed</button>
-			</td></tr></table>
+			<div id="str_div">
+				<span style="font-size: 15px">You have made <span id="str_ve" style="font-size: 30px">0.00</span> Vibration Energy.</span>
+				<p style="font-size: 8px">(based on Quantum Energy and Replicanti Energy)</p>
+				<br>
+				<b class="warning" style="font-size: 15px">WARNING: Vibrating boosts costs Vibration Energy!</b>
+			</div>
+			<div id="str_boosts"></div>
 		</div>
 		<div class='quantumtab' id='nanofield'>
 			<table id='nftabs' align="center" style="margin: auto">
@@ -5711,6 +5666,8 @@
 			Base (min: 1.01, max: 1.79e308): <input id="logBase" style="width: 170px" onchange="switchNotationOption('logarithm','base')"></input><br>
 			<b>Tetration notation</b>
 			Base (min: 1.6, max: 1.79e308): <input id="tetrationBase" style="width: 170px" onchange="switchNotationOption('tetration','base')"></input><br>
+			<b>Hyperscientific notations</b>
+			Bump to next F at: <input id="hypersciBump" style="width: 170px" onchange="switchNotationOption('hypersci','bump')"></input><br>
 			<b>Psi notation</b>
 			Max characters (min: 2, max: 30): <input id="maxLength" style="width: 170px" type="number" min=2 max=30 onchange="switchNotationOption('psi','maxLength')"></input><br>
 			Max arguments (min: 1, max: 6): <input id="maxArguments" style="width: 170px" type="number" min=1 max=6 onchange="switchNotationOption('psi','maxArguments')"></input><br>
@@ -5862,24 +5819,25 @@
 <script type="text/javascript" src="javascripts/core/ach/ach-tooltips.js"></script>
 
 
-<script type="text/javascript" src="javascripts/mods/ngp3/big_rip.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/bosonic_lab.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/expert_mode.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/ghostly_photons.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/gravity_dimensions.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/higgs_bosons.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/mastery_studies.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/nanofield.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/neutrinos.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/paired_challenges.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/positrons.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/quantum_challenges.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/quantum_milestones.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/quarks_gluons.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/replicants.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/tod.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/quantum/quarks_gluons.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/quantum/positrons.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/quantum/challenges.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/quantum/paired_challenges.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/quantum/strings.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/quantum/milestones.js"></script>
+
+<script type="text/javascript" src="javascripts/mods/ngp3/legacy/big_rip.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/legacy/bosonic_lab.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/legacy/ghostly_photons.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/legacy/gravity_dimensions.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/legacy/higgs_bosons.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/legacy/nanofield.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/legacy/neutrinos.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/legacy/tod.js"></script>
 
 <script type="text/javascript" src="javascripts/mods/condensed.js"></script>
+<script type="text/javascript" src="javascripts/mods/expert_mode.js"></script>
 <script type="text/javascript" src="javascripts/mods/ers.js"></script>
 <script type="text/javascript" src="javascripts/mods/irs.js"></script>
 <script type="text/javascript" src="javascripts/mods/light_speed.js"></script>

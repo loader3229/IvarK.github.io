@@ -226,7 +226,7 @@ var mTs = {
 		},
 		292() {
 			var rg = getFullEffRGs()
-			return Math.min(Math.log2(rg / 2e3 + 1) / 5 + 1, 2)
+			return Math.log2(rg / 2e3 + 1) / 5 + 1
 		},
 
 		311() {
@@ -842,7 +842,7 @@ function drawMasteryTree() {
 	for (var x = 0; x < mTs.timeStudies.length; x++) {
 		var id = mTs.timeStudies[x]
 		var d = mTs[shiftDown ? "timeStudyTitles" : "timeStudyDescs"][id]
-		getEl("mts" + id + "Desc").innerHTML = (typeof(d)=="function" ? d() : d) || (shiftDown ? "Unknown title." : "Unknown desc.")
+		getEl("mts" + id + "Desc").innerHTML = evalData(d) || (shiftDown ? "Unknown title." : "Unknown desc.")
 
 		if (shiftDown) {
 			if (!mTs.studyUnl.includes(id)) break

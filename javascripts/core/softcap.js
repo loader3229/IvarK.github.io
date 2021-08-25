@@ -561,11 +561,11 @@ function hasSoftcapStarted(id, num){
 function hasSoftcapStartedArg(id, num, arg){
 	let a = softcap_data[id][num].active
 	if (a != undefined) {
-		if (typeof a == "function") a = a()
+		a = evalData(a)
 		if (a == false) return false
 	}
 	let start = softcap_data[id][num].start
-	return Decimal.gt(arg, typeof(start) == "function" ? start() : start)
+	return Decimal.gt(arg, evalData(start))
 }
 
 function hasAnySoftcapStarted(id){
@@ -602,7 +602,7 @@ function getSoftcapStringEffect(id, num, amt, namenum){
 	var vars = softcap_vars[func]
 
 	var v = [data[vars[0]], data[vars[1]], data[vars[2]], data[vars[3]], data[vars[4]]]
-	for (let i = 0; i < 5; i++) if (typeof v[i] == "function") v[i] = v[i](amt)
+	for (let i = 0; i < 5; i++) v[i] = evalData(v[i], [amt])
 
 	if (func == "pow"){
 		let inside = "Start: " + softcapShorten(v[0]) + ", Exponent: " + softcapShorten(v[1])

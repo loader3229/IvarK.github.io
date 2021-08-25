@@ -347,7 +347,7 @@ amNewsArray = [
 ["Congratulations for beating NG-3! (for now...)", "player.tickspeedBoosts !== undefined && player.postChallUnlocked > 5", "am130"],
 ["Progressing as a Ghost...", "pH.did('ghostify') && player.ghostify.ghostlyPhotons.unl", "am131"],
 ["VROOOOOOM!!!", "player.infinityUpgrades.includes('postGalaxy')", "am132"],
-["Quantum Challenges are not challenging enough.", "player.masterystudies !== undefined && player.masterystudies.includes('d9')", "am133"],
+["Quantum Challenges are not challenging enough.", "str.unl()", "am133"],
 ["U is the new M", "hasAch('ng3p45')", "am134"],
 ["Antimatter has just declared war on Matter. We are no longer safe. We are no longer free.", true, "am135"],
 ["Which one looks different? Preons or anti-preons?", 'hasAch("ng3p81")', "am136"],

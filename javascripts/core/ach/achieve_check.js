@@ -290,7 +290,6 @@ function preHiggsNGp3AchieveCheck() {
 	}
 	if (false) giveAchievement("Impossible expectations")
 	if (player.timestudy.theorem >= 1.1e7 && qu_save.wasted) giveAchievement("Studies are wasted")
-	if (qu_save.replicants.requirement.gte("1e12500000")) giveAchievement("Stop blocking me!")
 	if (player.infinityPoints.gte(Decimal.pow(10, 2.75e5)) && ableToGetRid6) giveAchievement("Are you currently dying?")
 	if (qu_save.nanofield.rewards >= 21 && noTree) giveAchievement("But I don't want to grind!")
 	if (player.replicanti.amount.log10() >= 1/0) giveAchievement("Will it be enough?")

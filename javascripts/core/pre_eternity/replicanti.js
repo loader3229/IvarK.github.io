@@ -43,7 +43,6 @@ function replicantiIncrease(diff) {
 	if (auto && tmp.ngC) ngC.condense.rep.buy()
 	if (auto && canGetReplicatedGalaxy() && (canAutoReplicatedGalaxy() || player.currentEternityChall == "eterc14")) replicantiGalaxy()
 
-	if (tmp.ngp3 && player.masterystudies.includes("d10") && qu_save.autoOptions.replicantiReset && player.replicanti.amount.gt(qu_save.replicants.requirement)) replicantReset(true)
 	if (QCs.data[1].can() && player.replicanti.amount.eq(lim)) {
 		QCs_save.qc1.max++
 		QCs.data[1].boost()
@@ -140,15 +139,27 @@ function upgradeReplicantiInterval() {
 	player.replicanti.interval *= 0.9
 	if (!isIntervalAffordable()) player.replicanti.interval = (hasTS(22) || player.boughtDims ? 1 : 50)
 
-	if (player.replicanti.interval < 1) {
-		let x = player.replicanti.interval
-		let expCost = Math.pow(x, -4) * 1200
-		if (futureBoost("fiery_workup")) expCost = Math.min(expCost, Math.pow(1 - Math.log10(x), 10) * 1e15)
-		player.replicanti.intervalCost = Decimal.pow(10, expCost)
-	} else player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
+	if (player.replicanti.interval < 1) player.replicanti.intervalCost = replicantiIntervalCost(player.replicanti.interval)
+	else player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
 
 	if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
 	getEl("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
+}
+
+function replicantiIntervalUpgCost(upgs) {
+	return replicantiIntervalCost(Decimal.pow(0.9, upgs).times(1e3))
+}
+
+function replicantiIntervalCost(interval) {
+	let x = new Decimal(interval)
+	let expCost
+	if (x.lte(1)) {
+		expCost = Math.pow(x.toNumber(), -4) * 1200
+		if (futureBoost("fiery_workup")) expCost = Math.min(expCost, Math.pow(1 - x.log10() * 5, 10) * 1200)
+	} else {
+		expCost = x.div(1e3).log(0.9) * 10 + 140
+	}
+	return Decimal.pow(10, expCost)
 }
 
 function isIntervalAffordable() {
@@ -463,7 +474,7 @@ function updateReplicantiTemp() {
 	data.baseChance = Math.round(player.replicanti.chance * 100)
 	if (enB.active("glu", 5)) {
 		data.baseChance = Math.pow(data.baseChance, enB_tmp.glu5.exp)
-		data.baseChance *= enB_tmp.glu5.int
+		data.baseChance *= enB.glu[5].adjustChance(enB_tmp.glu5.int)
 	}
 
 	let pow = 1

@@ -34,7 +34,7 @@ var pos = {
 		if (data.consumedQE) delete data.consumedQE
 		if (data.sacGals) delete data.sacGals
 		if (data.sacBoosts) delete data.sacBoosts
-		if (data.excitons) delete data.excitons
+		if (data.exictons) delete data.exictons
 		if (data.excite) delete data.excite
 
 		pos_tmp.tab = enB.mastered("pos", 2) ? "cloud" : "boost"
@@ -49,7 +49,7 @@ var pos = {
 	toggle() {
 		if (pos_save.on && !confirm("You will lose access to Positronic Boosts except the mastered ones. Are you sure?")) return
 		pos_save.on = !pos_save.on
-		quantum(false, true, {}, "restart")
+		restartQuantum()
 	},
 	types: {
 		ng: {
@@ -251,7 +251,7 @@ var pos = {
 	},
 	applySwaps() {
 		if (!confirm("Do you want to apply the changes immediately? This restarts your Quantum run!")) return
-		quantum(false, true, {}, "restart")
+		restartQuantum()
 	},
 	getSwaps() {
 		return this.swapsDisabled() ? pos_save.swaps : {}

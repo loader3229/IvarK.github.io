@@ -30,6 +30,7 @@ function showQuantumTab(tabName) {
 			resizeCanvas()
 			requestAnimationFrame(drawQuarkAnimation)
 		}
+		if (tabName == "strings") str.setupHTML()
 	}
 	closeToolTip()
 }
@@ -41,7 +42,7 @@ var quantumTabs = {
 		gluons: updateGluonsTab,
 		speedruns: qMs.updateDisplayOnTick,
 		positrons: pos.updateTab,
-		strings: () => undefined
+		strings: str.updateDispOnTick
 	}
 }
 
@@ -947,10 +948,12 @@ function setupSaveDataNGP3() {
 	pos_save = (qu_save && qu_save.pos)
 	QCs_save = (qu_save && qu_save.qc)
 	PCs_save = (qu_save && qu_save.pc)
+	str_save = (qu_save && qu_save.str)
 
 	QCs.compile()
 	PCs.compile()
 	pos.compile()
+	str.compile()
 }
 
 //Recent boosts
@@ -968,23 +971,12 @@ function getAQSGainExp(x) {
 	let r = 1
 	if (PCs.unl()) r = Math.log10(x.log10() + 1) * PCs_tmp.eff2 + 1
 	if (futureBoost("quark_gluon_plasma")) r = Math.pow(x.log10() * r / 100 + 1, 1/3)
-	return Math.min(r, 1e3)
+	return Math.min(r, 2e4)
 }
 
 function getIntergalacticExp(log) {
 	return Math.sqrt(log / 100 + 1) * Math.max(Math.log2(log / 5) / 2, 1)
 }
-
-//Strings (temporaily in ngppp.js, will be moved into strings.js when v0.6 releases)
-let str = {
-	unl: () => PCs_save.best >= 8,
-	update() {
-		getEl("stringstabbtn").style.display = PCs.unl() ? "" : "none"
-		getEl("str_unl").style.display = !this.unl() ? "" : "none"
-		getEl("str_div").style.display = this.unl() ? "" : "none"
-	}
-}
-let STRINGS = str
 
 //Update Messages
 var ngp3Welcomes = {

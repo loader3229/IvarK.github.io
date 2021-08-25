@@ -228,10 +228,6 @@ function updateNGP3TempStuff(init) {
 			if (tmp.nrm.log10() > 1e9) tmp.nrm = Decimal.pow(10, 1e9 * Math.pow(tmp.nrm.log10() / 1e9, 2/3))
 		}
 		if (player.masterystudies.includes("d13")) updateTS431ExtraGalTemp()
-		if (player.masterystudies.includes("d9")) {
-			tmp.twr = getTotalWorkers()
-			tmp.tra = getTotalReplicants()
-		}
 	}
 	if (tmp.quActive || init) {
 		//Quantum
@@ -260,7 +256,6 @@ function updateNGP3TempStuff(init) {
 				updateNanoRewardEffects()
 			}
 		}
-		if (player.masterystudies.includes("d10")) tmp.edgm = getEmperorDimensionGlobalMultiplier() //Update global multiplier of all Emperor Dimensions
 		tmp.be = inBigRip() && qu_save.breakEternity.break
 		tmp.tue = getTreeUpgradeEfficiency()
 	} else tmp.be = false

@@ -22,7 +22,7 @@ function galaxyReqDisplay(){
 	getEl("secondResetLabel").innerHTML = getGalaxyScaleName(nextGal.scaling) + 'Antimatter Galaxies ('+ getFullExpansion(player.galaxies) + (totalTypes >= 2 ? ' + ' + getFullExpansion(totalReplGalaxies) : '') + (totalTypes >= 3 ? ' + ' + getFullExpansion(Math.round(player.dilation.freeGalaxies)) : '') +'): requires ' + getFullExpansion(nextGal.amt) + ' '+DISPLAY_NAMES[inNC(4) || player.pSac != undefined ? 6 : 8]+' Dimensions'
 }
 
-var galaxyScalings = ["", "Distant ", "Farther ", "Remote ", "Obsure "]
+var galaxyScalings = ["", "Distant ", "Farther ", "Remote ", "Obscure "]
 var negGalaxyScalings = ["", "Dense "]
 function getGalaxyScaleName(x) {
 	return (x < 0 ? negGalaxyScalings : galaxyScalings)[Math.abs(x)]
@@ -603,7 +603,6 @@ function updateDimensionsDisplay() {
 		if (getEl("timedimensions").style.display == "block") updateTimeDimensions()
 		if (getEl("pdims").style.display == "block") paradoxDimDisplay()
 		if (getEl("metadimensions").style.display == "block") updateMetaDimensions()
-		if (getEl("emperordimensions").style.display == "block") updateEmperorDimensions()
 		if (getEl("gdims").style.display == "block") GDs.updateDisplayOnTick()
 	}
 	tickspeedDisplay()

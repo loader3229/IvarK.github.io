@@ -20,26 +20,6 @@ function NC10NDCostsOnReset() {
 	}
 }
 
-function replicantsResetOnQuantum(isQC){
-	qu_save.replicants.requirement = new Decimal("1e3000000")
-	qu_save.replicants.quarks = (!isQC && hasAch("ng3p45")) ? qu_save.replicants.quarks.pow(2/3) : new Decimal(0)
-	qu_save.replicants.eggonProgress = new Decimal(0)
-	qu_save.replicants.eggons = new Decimal(0)
-	qu_save.replicants.babyProgress = new Decimal(0)
-	qu_save.replicants.babies = new Decimal(0)
-	qu_save.replicants.growupProgress = new Decimal(0)
-	for (let d = 1; d <= 8; d++) {
-		if (d == 8 || tmp.eds[d].perm < 10) qu_save.replicants.quantumFood += Math.round(tmp.eds[d].progress.toNumber() * 3) % 3
-		if (d != 1 || !hasAch("ng3p46") || isQC) {
-			tmp.eds[d].workers = new Decimal(tmp.eds[d].perm)
-			tmp.eds[d].progress = new Decimal(0)
-		} else {
-			tmp.eds[d].workers = tmp.eds[d].workers.pow(1/3)
-			tmp.eds[d].progress = new Decimal(0)
-		}
-	}
-}
-
 function nanofieldResetOnQuantum(){
 	qu_save.nanofield.charge = new Decimal(0)
 	qu_save.nanofield.energy = new Decimal(0)
@@ -480,8 +460,6 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			br: 0,
 			total: 0
 		},
-		replicants: getReplicantsOnGhostifyData(),
-		emperorDimensions: {},
 		nanofield: {
 			charge: new Decimal(0),
 			energy: new Decimal(0),
@@ -740,16 +718,6 @@ function doQuantumGhostifyResetStuff(implode, bm){
 	QKminpeakValue = new Decimal(0)
 	if (implode) showQuantumTab("uquarks")
 	var permUnlocks = [7,9,10,10,11,11,12,12]
-	for (var i = 1; i < 9; i++) {
-		var num = bm >= permUnlocks[i - 1] ? 10 : 0
-		tmp.eds[i] = {workers: new Decimal(num), progress: new Decimal(0), perm: num}
-		if (num > 9) qu_save.replicants.limitDim = i
-	}
-	if (bm > 6) {
-		qu_save.replicants.limit = 10
-		qu_save.replicants.limitCost = Decimal.pow(200, qu_save.replicants.limitDim * 9).times(1e49)
-		qu_save.replicants.quantumFoodCost = Decimal.pow(5, qu_save.replicants.limitDim * 30).times(2e46)
-	}
 	if (bm > 3) {
 		var colors = ['r', 'g', 'b']
 		for (var c = 0; c < 3; c++) qu_save.tod[colors[c]].upgrades[1] = 5
@@ -769,7 +737,6 @@ function doQuantumGhostifyResetStuff(implode, bm){
 	updateQuantumWorth("quick")
 	QCs.updateTmp()
 	QCs.updateDisp()
-	updateReplicants("prestige")
 	updateNanoRewardTemp()
 	updateTODStuff()
 }

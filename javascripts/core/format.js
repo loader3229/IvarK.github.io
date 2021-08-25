@@ -212,26 +212,25 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			}
 			return result
 		}
-		if (notation === "Hyperscientific") {
+		if (notation === "Hyperscientific" || notation === "Layered scientific" || notation === "Layered logarithm" || notation === "E notation" || notation === "Hyper-E") {
 			value = new Decimal(value)
-			var e
-			var f
-			if (value.gt("1e10000000000")) {
-				e = Math.log10(Math.log10(value.log10()))
-				f = 3
-			} else if (value.gt(1e10)) {
-				e = Math.log10(value.log10())
-				f = 2
-			} else {
-				e = value.log10()
-				f = 1
+			var e = value
+			var f = 0
+			var bump = player.options.hypersci.bump || 10
+			while (e.gt(bump)) {
+				e = new Decimal(e.log10())
+				f ++
 			}
 			e = e.toFixed(2 + f)
-			if (e == 10) {
-				e = (1).toFixed(3 + f)
+			if (e >= bump) {
+				e = Math.log10(e).toFixed(3 + f)
 				f++
 			}
-			return e + "F" + f
+			if (notation === "Hyperscientific") return e + "F" + f
+			if (notation === "Layered scientific") return "e".repeat(f - 1) + Math.pow(10, e % 1).toFixed(1 + f) + "e" + Math.floor(e)
+			if (notation === "Layered logarithm") return "e".repeat(f) + e
+			if (notation === "E notation") return "E(" + f + ")" + e
+			if (notation === "Hyper-E") return "E" + e + "#" + f
 		}
 		if (value instanceof Decimal) {
 			var power = value.e

@@ -164,7 +164,7 @@ function respecQuarks() {
 		qu_save.usedQuarks[color] = new Decimal(0)
 	}
 	qu_save.quarks = qu_save.quarks.add(sum)
-	quantum(false, true, {}, "restart")
+	restartQuantum()
 
 	if (qu_save.autoOptions.assignQK) assignAll(true)
 }
@@ -566,7 +566,7 @@ var enB = {
 		}
 		if (!confirm("This will perform a quantum reset without gaining anything. Are you sure?")) return
 		qu_save.entColor = x
-		quantum(false, true, {}, "restart")
+		restartQuantum()
 	},
 
 	updateTmp() {
@@ -722,13 +722,18 @@ var enB = {
 			type: "b",
 			eff(x) {
 				let r = {
-					int: Math.min(Math.log10(x / 2 + 1) / 2 + 1, 5),
+					int: Math.log10(x / 2 + 1) / 2 + 1,
 					exp: Math.min(Math.log10(Math.log10(x / 2e3 + 1) + 1) * (tmp.ngp3_mul ? 1.5 : 1) + 1, 2)
 				}
 				return r
 			},
 			effDisplay(x) {
 				return "Strengthen all replicanti upgrades by <span style='font-size:24px'>^" + shorten(x.exp) + "</span>, <span style='font-size:24px'>+" + formatPercentage(x.int - 1) + "%</span>."
+			},
+
+			adjustChance(x) {
+				if (futureBoost("replicante_clever")) x = Math.pow(x, 10)
+				return x
 			}
 		},
 		6: {
