@@ -13,6 +13,8 @@ let str = {
 	},
 	compile() {
 		str_tmp = { unl: this.unl() }
+		if (!tmp.ngp3 || qu_save === undefined) return
+
 		var data = str_save || this.setup()
 
 		this.updateTmp()
