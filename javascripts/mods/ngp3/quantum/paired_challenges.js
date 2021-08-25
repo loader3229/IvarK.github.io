@@ -165,7 +165,8 @@ var PCs = {
 			p1: [],
 			p2: [],
 
-			d1_tmp: {}
+			d1_tmp: {},
+			p_tmp: []
 		}
 		for (var y = 1; y <= 4; y++) {
 			for (var x = 1; x <= 4; x++) {
@@ -179,24 +180,31 @@ var PCs = {
 		}
 	},
 	increaseUsed(x, dig) {
-		var d = PCs_tmp.used["d1_tmp"]
-		d[x] = (d[x] || 0) + 1
-		if (d[x] == 7) PCs_tmp.used.d1.push(x)
+		var used = PCs_tmp.used
 
-		var p = PCs_tmp.used["p" + dig]
-		if (!p.includes(x)) p.push(x)
+		var d = used["d1_tmp"]
+		d[x] = (d[x] || 0) + 1
+		if (d[x] == 7) used.d1.push(x)
+
+		if (!used.p_tmp.includes(x)) {
+			var p = used["p" + dig]
+			if (p.includes(x)) p = used["p" + (dig == 2 ? 1 : 2)]
+			p.push(x)
+			used.p_tmp.push(x)
+		}
 	},
 
 	assign(x) {
-		if (PCs_tmp.picked.includes(x)) {
+		var picked = PCs_tmp.picked
+		if (picked.includes(x)) {
 			PCs_tmp.picked = []
 		} else if (PCs_tmp.occupied.includes(x)) return
 		else {
-			PCs_tmp.picked.push(x)
-			if (PCs_tmp.picked.length == 2) {
-				if (PCs_tmp.used.p1.includes(x)) PCs_tmp.picked = [PCs_tmp.picked[1], PCs_tmp.picked[0]]
+			picked.push(x)
+			if (picked.length == 2) {
+				if (PCs_tmp.used.p2.includes(picked[0])) picked = [picked[1], picked[0]]
 
-				PCs_save.challs[PCs_tmp.pick] = PCs_tmp.picked[0] * 10 + PCs_tmp.picked[1]
+				PCs_save.challs[PCs_tmp.pick] = picked[0] * 10 + picked[1]
 				PCs.updateUsed()
 
 				delete PCs_tmp.pick

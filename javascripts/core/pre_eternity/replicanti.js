@@ -308,10 +308,8 @@ function getReplicantiBaseInterval(speed, next = 0) {
 	var upgs = Math.round(Decimal.div(speed, 1e3).log(0.9))
 	upgs += next
 
-	if (enB.active("glu", 5)) {
-		upgs = Math.pow(upgs, enB_tmp.glu5.exp)
-		upgs *= enB_tmp.glu5.int
-	}
+	if (enB.active("glu", 5)) upgs = Math.pow(upgs, enB_tmp.glu5.exp)
+	upgs *= tmp.rep.str
 
 	speed = Decimal.pow(0.9, upgs).times(1e3)
 	return speed
@@ -469,13 +467,12 @@ function updateReplicantiTemp() {
 	var data = {}
 	tmp.rep = data
 
+	data.str = getReplStealth()
 	data.ln = player.replicanti.amount.ln()
 
 	data.baseChance = Math.round(player.replicanti.chance * 100)
-	if (enB.active("glu", 5)) {
-		data.baseChance = Math.pow(data.baseChance, enB_tmp.glu5.exp)
-		data.baseChance *= enB.glu[5].adjustChance(enB_tmp.glu5.int)
-	}
+	if (enB.active("glu", 5)) data.baseChance = Math.pow(data.baseChance, enB_tmp.glu5.exp)
+	data.baseChance *= enB.glu[5].adjustChance(enB_tmp.glu5.int)
 
 	let pow = 1
 	if (hasMTS(265)) pow = getMTSMult(265, "update")

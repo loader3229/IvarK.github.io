@@ -728,7 +728,7 @@ var enB = {
 				return r
 			},
 			effDisplay(x) {
-				return "Strengthen all replicanti upgrades by <span style='font-size:24px'>^" + shorten(x.exp) + "</span>, <span style='font-size:24px'>+" + formatPercentage(x.int - 1) + "%</span>."
+				return "Strengthen all replicanti upgrades by <span style='font-size:24px'>^" + shorten(x.exp) + "</span>, <span style='font-size:24px'>+" + formatPercentage(x.int - 1) + "%</span> (stealth)."
 			},
 
 			adjustChance(x) {
@@ -1281,10 +1281,7 @@ function updateQuarksTab(tab) {
 
 	//Post-Quantum content
 	if (player.ghostify.milestones >= 8) {
-		var assortAmount = getAssortAmount()
-		var colors = ['r','g','b']
-		getEl("assort_amount").textContent = shortenDimensions(assortAmount.times(getQuarkAssignMult()))
-		getEl("assignAllButton").className = (assortAmount.lt(1) ? "unavailabl" : "stor") + "ebtn"
+		updateQuarkAssort()
 		updateQuantumWorth("display")
 	}
 }
@@ -1349,13 +1346,7 @@ function updateQuarksTabOnUpdate(mode) {
 	getEl("greenQuarks").textContent = shortenDimensions(qu_save.usedQuarks.g)
 	getEl("blueQuarks").textContent = shortenDimensions(qu_save.usedQuarks.b)
 
-	var assortAmount = getAssortAmount()
-	var canAssign = assortAmount.gt(0)
-
-	getEl("assort_amount").textContent = shortenDimensions(assortAmount.times(getQuarkAssignMult()))
-	getEl("redAssort").className = canAssign ? "storebtn" : "unavailablebtn"
-	getEl("greenAssort").className = canAssign ? "storebtn" : "unavailablebtn"
-	getEl("blueAssort").className = canAssign ? "storebtn" : "unavailablebtn"
+	updateQuarkAssort()
 
 	var uq = qu_save.usedQuarks
 	var gl = qu_save.gluons
@@ -1366,14 +1357,16 @@ function updateQuarksTabOnUpdate(mode) {
 		getEl(pair + "_prev").textContent = shortenDimensions(uq[pair[0]])
 		getEl(pair + "_next").textContent = shortenDimensions(uq[pair[0]].sub(diff).round())
 	}
-	getEl("assignAllButton").className = canAssign ? "storebtn" : "unavailablebtn"
+}
 
-	//Old stuff.
-	if (hasMTS("d13")) {
-		getEl("redQuarksToD").textContent = shortenDimensions(qu_save.usedQuarks.r)
-		getEl("greenQuarksToD").textContent = shortenDimensions(qu_save.usedQuarks.g)
-		getEl("blueQuarksToD").textContent = shortenDimensions(qu_save.usedQuarks.b)	
-	}
+function updateQuarkAssort() {
+	var assortAmount = getAssortAmount()
+	var canAssign = assortAmount.gt(0)
+	getEl("assort_amount").textContent = shortenDimensions(assortAmount.times(getQuarkAssignMult()))
+	getEl("redAssort").className = canAssign ? "storebtn" : "unavailablebtn"
+	getEl("greenAssort").className = canAssign ? "storebtn" : "unavailablebtn"
+	getEl("blueAssort").className = canAssign ? "storebtn" : "unavailablebtn"
+	getEl("assignAllButton").className = canAssign ? "storebtn" : "unavailablebtn"
 }
 
 function updateGluonsTabOnUpdate(mode) {

@@ -257,24 +257,25 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 	// Paired Challenges
 	if (PCs.unl()) {
-		if (PCs_save.in) {
-			if (PCs_save.in != data.pc && !PCs.posDone(PCs_save.in)) {
-				delete PCs_save.challs[PCs_save.in]
-				PCs.updateUsed()
-			}
-			PCs.updateButton(PCs_save.in, true)
-		}
+		var pc_pos = PCs_save.in
 		delete PCs_save.in
-
 		if (data.pc) {
 			PCs_save.in = data.pc
 			PCs.updateButton(data.pc)
 		}
 
-		if (!PCs_tmp.unl) {
-			PCs_tmp.unl = true
-			PCs.updateUsed()
+		var qcDataPrev = QCs_save.in
+		if (qcDataPrev.length == 2) {
+			var pc = PCs.conv(qcDataPrev)
+			if (!PCs_save.comps.includes(pc)) {
+				if (force) delete PCs_save.challs[pc_pos]
+				else PCs_save.comps.push(pc)
+				PCs.updateButton(pc_pos)
+			}
 		}
+
+		if (!PCs_tmp.unl) PCs_tmp.unl = true
+		PCs.updateUsed()
 		PCs.updateTmp()
 		PCs.updateDisp()
 	}
@@ -296,9 +297,6 @@ function quantumReset(force, auto, data, mode, implode = false) {
 				var qc = qcDataPrev[0]
 				QCs_save.comps = Math.max(QCs_save.comps, qc)
 				QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, qu_save.best)
-			} else if (qcDataPrev.length == 2) {
-				var pc = PCs.conv(qcDataPrev)
-				if (!PCs_save.comps.includes(pc)) PCs_save.comps.push(pc)
 			}
 		}
 
