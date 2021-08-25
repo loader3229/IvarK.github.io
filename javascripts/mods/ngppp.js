@@ -975,6 +975,12 @@ function getIntergalacticExp(log) {
 	return Math.sqrt(log / 100 + 1) * Math.max(Math.log2(log / 5) / 2, 1)
 }
 
+function getReplStealth() {
+	var x = 1
+	if (enB.active("glu", 5)) x *= enB_tmp.glu5.int
+	return x
+}
+
 //Strings (temporaily in ngppp.js, will be moved into strings.js when v0.6 releases)
 let str = {
 	unl: () => PCs_save.best >= 8,
