@@ -1,5 +1,5 @@
 let str = {
-	unl: () => str_tmp.unl || PCs_save.best >= 8,
+	unl: () => str_tmp.unl || (PCs_save && PCs_save.best >= 8),
 
 	//Save Data
 	setup() {
@@ -103,7 +103,7 @@ let str = {
 
 		if (data[id]) delete data[id]
 		else {
-			if (str.veUnspent() < str.veCost(str_tmp.vibrated + 1)) return
+			if (str_save.energy < str.veCost(str_tmp.vibrated + 1)) return
 			data[id] = true
 		}
 
