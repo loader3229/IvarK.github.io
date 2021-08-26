@@ -254,7 +254,7 @@ var pos = {
 		quantum(false, true, {}, "restart")
 	},
 	getSwaps() {
-		return this.swapsDisabled() ? pos_save.swaps : {}
+		return this.swapsDisabled() ? {} : pos_save.swaps
 	},
 	swapsDisabled() {
 		return !pos.on() || (QCs_save.disable_swaps && QCs_save.disable_swaps.active)
