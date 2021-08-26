@@ -329,7 +329,11 @@ function getReplicantiIntervalMult() {
 	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))
 	if (player.dilation.upgrades.includes('ngpp1') && aarMod.nguspV && !aarMod.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
-	if (enB.active("pos", 2)) interval = interval.div(enB_tmp.pos2.mult)
+	if (enB.active("pos", 2)) {
+		var pos2 = enB_tmp.pos2.mult
+		if (futureBoost("replicante_tunneling")) pos2 = pos2.pow(tmp.rep.str)
+		interval = interval.div(pos2)
+	}
 	if (tmp.ngC && ngC.tmp) interval = interval.div(ngC.tmp.rep.eff1)
 	return interval
 }
@@ -472,7 +476,7 @@ function updateReplicantiTemp() {
 
 	data.baseChance = Math.round(player.replicanti.chance * 100)
 	if (enB.active("glu", 5)) data.baseChance = Math.pow(data.baseChance, enB_tmp.glu5.exp)
-	data.baseChance *= enB.glu[5].adjustChance(enB_tmp.glu5.int)
+	data.baseChance *= enB.glu[5].adjustChance(data.str)
 
 	let pow = 1
 	if (hasMTS(265)) pow = getMTSMult(265, "update")

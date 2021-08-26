@@ -231,6 +231,7 @@ function updateNGP3TempStuff(init) {
 	}
 	if (tmp.quActive || init) {
 		//Quantum
+		str.updateTmpOnTick() //Strings
 		QCs.updateTmpOnTick() //Quantum Challenges
 		pos.updateTmpOnTick() //Positrons
 		updateQEGainTmp() //Quantum Energy + Quark Efficiency

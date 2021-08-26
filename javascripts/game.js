@@ -3478,7 +3478,7 @@ function gainEternitiedStat() {
 		[dtExp > 0, () => player.dilation.dilatedTime.max(1).pow(dtExp)],
 		[tmp.ngC & dtExp > 0, () => Decimal.pow(player.dilation.tachyonParticles.plus(1).log10() + 1, dtExp)]
 	])
-	if (dev.boosts.tmp[5]) ret = nM(ret, Decimal.pow(ret, dev.boosts.tmp[5] - 1))
+	if (futureBoost("again_and_again") && dev.boosts.tmp[4]) ret = nM(ret, Decimal.pow(ret, dev.boosts.tmp[4] - 1))
 	if (typeof(ret) == "number") ret = Math.floor(ret)
 	return ret
 }
@@ -4217,7 +4217,6 @@ function nanofieldProducingChargeUpdating(diff){
 		qu_save.nanofield.producingCharge = false
 		getEl("produceQuarkCharge").innerHTML="Start production of preon charge.<br>(You will not get preons when you do this.)"
 	} else if (!hasBosonicUpg(51)) {
-		qu_save.replicants.quarks = qu_save.replicants.quarks.sub(toSub)
 		qu_save.nanofield.charge = qu_save.nanofield.charge.add(toSub.div(loss).times(rate))
 	}
 }
@@ -5056,7 +5055,6 @@ function simulateTime(seconds, real, id) {
 	if (player.meta !== undefined) storage.ma = player.meta.antimatter
 	if (tmp.ngp3) {
 		storage.dt = player.dilation.dilatedTime
-		storage.nr = qu_save.replicants.amount
 		storage.bAm = player.ghostify.bl.am
 	}
 	if (ticks > 1000 && !real) {
@@ -5079,7 +5077,6 @@ function simulateTime(seconds, real, id) {
 	if (storage.bp && player.blackhole.power.gt(storage.bp)) popupString += ",<br> black hole power increased "+shortenMoney(player.blackhole.power.log10() - (Decimal.max(storage.bp, 1)).log10())+" orders of magnitude"
 	if (storage.ma && player.meta.antimatter.gt(storage.ma) && !pH.did("ghostify")) popupString += ",<br> meta-antimatter increased "+shortenMoney(player.meta.antimatter.log10() - (Decimal.max(storage.ma, 1)).log10())+" orders of magnitude"
 	if (storage.dt) {
-		if (qu_save.replicants.amount.gt(storage.nr) && !pH.did("ghostify")) popupString += ",<br> normal replicants increased "+shortenMoney(qu_save.replicants.amount.log10() - (Decimal.max(storage.nr, 1)).log10())+" orders of magnitude"
 		if (Decimal.gt(player.ghostify.bl.am, storage.bAm) && pH.did("ghostify")) popupString += ",<br> Bosonic Antimatter increased "+shortenMoney(player.ghostify.bl.am.log10() - (Decimal.max(storage.bAm, 1)).log10())+" orders of magnitude"
 	}
 	if (player.infinitied > playerStart.infinitied || player.eternities > playerStart.eternities) popupString += ","

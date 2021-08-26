@@ -261,9 +261,9 @@ dev.boosts = {
 		let data = { on: this.on }
 
 		if (this.on) {
-			for (var i = 1; i <= 7; i++) {
+			for (var i = 1; i <= 8; i++) {
 				if (this[i].unl()) {
-					if (this.tmp[i] === undefined) console.log("Activating boost #" + i)
+					if (this.tmp[i] === undefined) console.log("Activating boost #" + i + " (" + this[i].name + ")")
 					data[i] = this[i].eff()
 				}
 			}
@@ -273,6 +273,7 @@ dev.boosts = {
 		this.tmp = data
 	},
 	1: {
+		name: "Timeless Fuse",
 		unl() {
 			return tmp.eterUnl
 		},
@@ -284,6 +285,7 @@ dev.boosts = {
 		},
 	},
 	2: {
+		name: "Excited Positrons",
 		unl() {
 			return pos.on()
 		},
@@ -295,6 +297,7 @@ dev.boosts = {
 		}
 	},
 	3: {
+		name: "Potential Strings",
 		unl() {
 			return tmp.quActive
 		},
@@ -305,14 +308,7 @@ dev.boosts = {
 		},
 	},
 	4: {
-		unl() {
-			return false
-		},
-		eff(x) {
-			return 1
-		},
-	},
-	5: {
+		name: "Again and again...",
 		unl() {
 			return true
 		},
@@ -321,23 +317,47 @@ dev.boosts = {
 			return 1.5
 		},
 	},
-	6: {
+	5: {
+		name: "Quantum Tunneling",
 		unl() {
-			return false
+			return tmp.quActive
 		},
 		eff(x) {
-			return 1
+			//Quantum Tunneling: Green power effect boosts Replicanti Stealth at a reduced rate.
+			return Math.pow(colorBoosts.g, 1/4)
+		},
+	},
+	6: {
+		name: "Replicanti Release",
+		unl() {
+			return QCs_tmp.qc1
+		},
+		eff(x) {
+			//Replicanti Release: Raise the replicanti limit and slow down Replicanti Slowdown, both at a same multiplier.
+			return 2
 		},
 	},
 	7: {
+		name: "Condenser Pressure",
 		unl() {
-			return false
+			return PCs.milestoneDone(52)
 		},
 		eff(x) {
-			//???: MS81 boosts Antimatter Galaxies. (not implemented)
-			return 1
+			//Condenser Pressure: Replicanti Compressors boost Replicanti Energy more.
+			var qc1 = QCs_save.qc1.boosts
+			return Math.pow(qc1 / 20 + 1, qc1 / 30 + 1)
 		},
-	}
+	},
+	8: {
+		name: "Replicante Clovers",
+		unl() {
+			return true
+		},
+		eff(x) {
+			//Replicante Clovers: Replicanti Stealth boosts chance upgrades more by an exponent.
+			return 10
+		},
+	},
 }
 
 function futureBoost() {

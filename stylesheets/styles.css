@@ -2457,18 +2457,18 @@ td.grey {
 }
 .str_boost {
 	display: inline-block;
-	width: 60px !important;
-	height: 120px !important;
+	width: 72px !important;
+	height: 216px !important;
 	position: relative;
 }
 .str_boost button {
-	width: 60px !important;
-	height: 60px !important;
+	width: 72px !important;
+	height: 72px !important;
 	margin: 0;
 	padding: 0;
 	position: absolute;
-	top: 30px;
-	left: 0px;
+	left: 0;
+	top: 72px;
 	z-index: 1;
 	font-size: 8px;
 }

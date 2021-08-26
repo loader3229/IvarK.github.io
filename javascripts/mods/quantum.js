@@ -360,7 +360,6 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 		pH.updateActive()
 
-		if (!isQC && player.ghostify.milestones < 6) qu_save.replicants.amount = new Decimal(0)
 		nanofieldResetOnQuantum()
 		player.eternityBuyer.tpUpgraded = false
 		player.eternityBuyer.slowStopped = false

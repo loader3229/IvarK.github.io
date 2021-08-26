@@ -118,7 +118,6 @@ function getTimeDimensionPower(tier) {
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
 	if (tmp.ngC) ret = softcap(ret, "tds_ngC")
 
-	if (dev.boosts.tmp[4]) ret = ret.pow(dev.boosts.tmp[4])
 	return ret.pow(getTimeDimensionExp())
 }
 

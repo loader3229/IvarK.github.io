@@ -237,7 +237,7 @@ function resetEternityChallenges(bigRip, ngpp) {
 function doMetaDimensionsReset(bigRip, headstart, isQC) {
 	player.meta.antimatter = getMetaAntimatterStart(bigRip)
 	if (!headstart) player.meta.bestAntimatter = false ? Decimal.max(player.meta.antimatter, player.meta.bestOverQuantums) : player.meta.antimatter
-	player.meta.resets = qMs.tmp.amt >= 14 ? 4 : 0 //(!isQC && player.ghostify.milestones >= 5 && (bigRip !== undefined || bigRip == qu_save.bigRip.active) ? player.meta.resets : 4)
+	player.meta.resets = qMs.tmp.amt >= 14 ? 4 : 0
 	clearMetaDimensions()
 }
 
@@ -705,14 +705,6 @@ function doEternityGhostifyResetStuff(implode, bm){
 
 function doQuantumGhostifyResetStuff(implode, bm){
 	qu_save.quarkEnergy = new Decimal(0)
-	qu_save.replicants.amount = new Decimal(0)
-	qu_save.replicants.requirement = new Decimal("1e3000000")
-	qu_save.replicants.quarks = new Decimal(0)
-	qu_save.replicants.eggonProgress = new Decimal(0)
-	qu_save.replicants.eggons = new Decimal(0)
-	qu_save.replicants.babyProgress = new Decimal(0)
-	qu_save.replicants.babies = new Decimal(0)
-	qu_save.replicants.growupProgress = new Decimal(0)
 	tmp.eds = qu_save.emperorDimensions
 	QKminpeak = new Decimal(0)
 	QKminpeakValue = new Decimal(0)

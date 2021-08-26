@@ -981,6 +981,7 @@ function getIntergalacticExp(log) {
 function getReplStealth() {
 	var x = 1
 	if (enB.active("glu", 5)) x *= enB_tmp.glu5.int
+	if (futureBoost("quantum_tunneling") && dev.boosts.tmp[5]) x *= dev.boosts.tmp[5]
 	return x
 }
 

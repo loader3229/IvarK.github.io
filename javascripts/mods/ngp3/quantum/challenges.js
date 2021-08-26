@@ -162,7 +162,7 @@ var QCs = {
 
 				//Release
 				var release = 1
-				if (futureBoost("replicanti_release")) release *= 2
+				if (futureBoost("replicanti_release") && dev.boosts.tmp[6]) release *= dev.boosts.tmp[6]
 				if (release > 1) {
 					data.req = data.req.pow(release)
 					data.limit = data.limit.pow(release)
@@ -407,9 +407,9 @@ var QCs = {
 			exp() {
 				var x = 1
 				if (PCs.milestoneDone(52)) {
-					var qc1 = QCs_save.qc1.boosts
-					x = qc1 / 20 + 1
-					if (futureBoost("condenser_pressure")) x = Math.pow(x, qc1 / 30 + 1)
+					var y = QCs_save.qc1.boosts / 20 + 1
+					if (futureBoost("condenser_pressure") && dev.boosts.tmp[7]) y = dev.boosts.tmp[7]
+					x *= y
 				}
 				return x
 			},

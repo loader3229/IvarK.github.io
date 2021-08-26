@@ -732,7 +732,7 @@ var enB = {
 			},
 
 			adjustChance(x) {
-				if (futureBoost("replicante_clever")) x = Math.pow(x, 10)
+				if (futureBoost("replicante_clovers") && dev.boosts.tmp[8]) x = Math.pow(x, dev.boosts.tmp[8])
 				return x
 			}
 		},
@@ -886,7 +886,7 @@ var enB = {
 		},
 		eff(x) {
 			var eng = this.engEff()
-			if (this.charged(x)) eng *= 2 * this.lvl(x)
+			if (this.charged(x)) eng *= this.chargeEff(x)
 			return eng
 		},
 

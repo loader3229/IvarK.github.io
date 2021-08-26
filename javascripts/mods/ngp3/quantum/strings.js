@@ -1,5 +1,5 @@
 let str = {
-	unl: () => str_tmp.unl || (PCs_save && PCs_save.best >= 8),
+	unl: (force) => (!force && str_tmp.unl) || (PCs_save && PCs_save.best >= 8),
 
 	//Save Data
 	setup() {
@@ -37,30 +37,39 @@ let str = {
 		getEl("stringstabbtn").style.display = PCs.unl() ? "" : "none"
 		getEl("str_unl").style.display = !this.unl() ? "" : "none"
 		getEl("str_div").style.display = this.unl() ? "" : "none"
+		getEl("str_boosts").style.display = this.unl() ? "" : "none"
+		if (!this.unl()) getEl("str_strength").textContent = ""
 
 		if (!str_tmp.setupHTML) return
 
 		for (var e = 1; e <= 12; e++) {
 			var alt = this.altitude("eb", e)
 			getEl("str_eb" + e).className = (this.vibrated("eb", e) ? "chosenbtn" : "storebtn") + " posbtn"
-			getEl("str_eb" + e).style.top = (1 - alt) * 30 + "px"
+			getEl("str_eb" + e).style.top = (1 - alt) * 72 + "px"
 			getEl("str_eb" + e + "_altitude").textContent = alt.toFixed(2)
 
 			var alt = this.altitude("pb", e)
 			getEl("str_pb" + e).className = (this.vibrated("pb", e) ? "chosenbtn" : "storebtn") + " posbtn"
-			getEl("str_pb" + e).style.top = (1 - alt) * 30 + "px"
+			getEl("str_pb" + e).style.top = (1 - alt) * 72 + "px"
 			getEl("str_pb" + e + "_altitude").textContent = alt.toFixed(2)
 		}
 	},
 
 	//Updates on tick
-	updateFeatureOnTick() {
-		str_save.energy = Math.max(str_save.energy, this.veGain())
+	updateTmpOnTick() {
+		var data = str_tmp
+		if (!data.unl) return
+
+		data.str = 1
 	},
 	updateDispOnTick() {
-		if (!str_tmp.setupHTML) return
+		if (!str_tmp.setupHTML || !str_tmp.unl) return
 
 		getEl("str_ve").textContent = shorten(str.veUnspent())
+		getEl("str_strength").textContent = "Altitude Power: " + formatPercentage(str_tmp.str) + "%"
+	},
+	updateFeatureOnTick() {
+		str_save.energy = Math.max(str_save.energy, this.veGain())
 	},
 
 	//HTML + DOM elements
@@ -70,7 +79,7 @@ let str = {
 			(type == "bb" ?
 				'<button class="unavailablebtn posbtn" id="str_' + id + '"></button>'
 			:
-				'<button id="str_' + id + '" onclick="str.vibrate(\'' + type + '\', ' + x + ')"><b>' + id.toUpperCase() + '</b><br>Altitude: <span id="str_' + id + '_altitude"></span></button>'
+				'<button id="str_' + id + '" onclick="str.vibrate(\'' + type + '\', ' + x + ')"><b>' + id.toUpperCase() + '</b><br><span id="str_' + id + '_altitude"></span><br>altitude</button>'
 			) +
 			'</div>'
 	},

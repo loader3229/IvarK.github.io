@@ -196,8 +196,6 @@ function getTickSpeedCostMultiplierIncrease() {
 
 		ret = Math.pow(ret, exp / galeff)
 	}
-
-	if (dev.boosts.tmp[6]) ret = Math.pow(ret, 1 / dev.boosts.tmp[6])
 	return ret
 }
 
