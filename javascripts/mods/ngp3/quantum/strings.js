@@ -1,6 +1,12 @@
 let str = {
 	unl: (force) => (!force && str_tmp.unl) || (PCs_save && PCs_save.best >= 8),
 
+	//Data
+	data: {
+		all: [],
+		pos: {}
+	},
+
 	//Save Data
 	setup() {
 		str_save = {
@@ -15,6 +21,16 @@ let str = {
 		str_tmp = { unl: this.unl() }
 		if (!tmp.ngp3 || qu_save === undefined) return
 
+		this.data.all = []
+		for (var i = 12; i >= 1; i--) {
+			this.data.all.push("pb" + i)
+			this.data.pos["pb" + i] = (13 - i)
+		}
+		for (var i = 1; i <= 12; i++) {
+			this.data.all.push("eb" + i)
+			this.data.pos["eb" + i] = i + 12
+		}
+
 		var data = str_save || this.setup()
 
 		this.updateTmp()
@@ -24,34 +40,40 @@ let str = {
 	updateTmp() {
 		var data = str_tmp
 		var effs = str_save.effs
+		var all = this.data.all
 		if (!data.unl) return
 
+		data.alt = {}
 		data.vibrated = 0
-		for (var e = 1; e <= 12; e++) {
-			if (effs["eb" + e + "_vib"]) data.vibrated++
-			if (effs["pb" + e + "_vib"]) data.vibrated++
+		for (var e = 0; e < all.length; e++) {
+			var id = all[e]
+			if (this.vibrated(id)) {
+				data.vibrated++
+				this.onVibrate(id)
+			}
 		}
 		str_save.spent = str.veCost(data.vibrated)
+
 	},
 	updateDisp() {
 		getEl("stringstabbtn").style.display = PCs.unl() ? "" : "none"
-		getEl("str_unl").style.display = !this.unl() ? "" : "none"
-		getEl("str_div").style.display = this.unl() ? "" : "none"
-		getEl("str_boosts").style.display = this.unl() ? "" : "none"
-		if (!this.unl()) getEl("str_strength").textContent = ""
+
+		var unl = this.unl()
+		getEl("str_unl").style.display = !unl ? "" : "none"
+		getEl("str_div").style.display = unl ? "" : "none"
+		getEl("str_boosts").style.display = unl ? "" : "none"
+		if (!unl) getEl("str_strength").textContent = ""
+		if (unl) getEl("str_cost").textContent = "(the next one costs " + shorten(this.veCost(str_tmp.vibrated + 1) - this.veCost(str_tmp.vibrated)) + ")"
 
 		if (!str_tmp.setupHTML) return
 
-		for (var e = 1; e <= 12; e++) {
-			var alt = this.altitude("eb", e)
-			getEl("str_eb" + e).className = (this.vibrated("eb", e) ? "chosenbtn" : "storebtn") + " posbtn"
-			getEl("str_eb" + e).style.top = (1 - alt) * 72 + "px"
-			getEl("str_eb" + e + "_altitude").textContent = alt.toFixed(2)
-
-			var alt = this.altitude("pb", e)
-			getEl("str_pb" + e).className = (this.vibrated("pb", e) ? "chosenbtn" : "storebtn") + " posbtn"
-			getEl("str_pb" + e).style.top = (1 - alt) * 72 + "px"
-			getEl("str_pb" + e + "_altitude").textContent = alt.toFixed(2)
+		var all = this.data.all
+		for (var e = 0; e < all.length; e++) {
+			var id = all[e]
+			var alt = this.altitude(id)
+			getEl("str_" + id).className = (this.vibrated(id) ? "chosenbtn" : "storebtn") + " posbtn"
+			getEl("str_" + id).style.top = (1 - alt) * 72 + "px"
+			getEl("str_" + id + "_altitude").textContent = alt.toFixed(2) + " altitude"
 		}
 	},
 
@@ -67,6 +89,14 @@ let str = {
 
 		getEl("str_ve").textContent = shorten(str.veUnspent())
 		getEl("str_strength").textContent = "Altitude Power: " + formatPercentage(str_tmp.str) + "%"
+
+		for (var i = 1; i <= 12; i++) {
+			getEl("str_eb" + i + "_eff").textContent = formatPercentage(str.eff_eb(i) - 1) + "% stronger"
+			getEl("str_pb" + i + "_eff").textContent = "+" + shorten(str.eff_pb(i)) + "x charge"
+
+			getEl("str_eb" + i + "_nerf").innerHTML = str.altitude("eb" + i) < 0 ? "+" + shorten(str.nerf_eb(i)) + " mastery<br>requirement" : ""
+			getEl("str_pb" + i + "_nerf").innerHTML = str.altitude("pb" + i) < 0 ? shorten(str.nerf_pb(i)) + "x charge<br>requirement" : ""
+		}
 	},
 	updateFeatureOnTick() {
 		str_save.energy = Math.max(str_save.energy, this.veGain())
@@ -79,7 +109,10 @@ let str = {
 			(type == "bb" ?
 				'<button class="unavailablebtn posbtn" id="str_' + id + '"></button>'
 			:
-				'<button id="str_' + id + '" onclick="str.vibrate(\'' + type + '\', ' + x + ')"><b>' + id.toUpperCase() + '</b><br><span id="str_' + id + '_altitude"></span><br>altitude</button>'
+				'<button id="str_' + id + '" onclick="str.vibrate(\'' + type + '\', ' + x + ')"><b>' + id.toUpperCase() + '</b><br>' +
+				'<span id="str_' + id + '_eff"></span><br>' +
+				'<b class="warning" id="str_' + id + '_nerf" style="font-size: 8px"></b></button><br>' +
+				'<span id="str_' + id + '_altitude"></span>'
 			) +
 			'</div>'
 	},
@@ -104,7 +137,7 @@ let str = {
 		return str_save.energy - str_save.spent
 	},
 	veCost(x) {
-		return x ? Math.pow(1.1, x - 1) : 0
+		return x ? Math.pow(2, x - 1) : 0
 	},
 
 	//Vibrations
@@ -118,13 +151,38 @@ let str = {
 			data[id] = true
 		}
 
-		restartQuantum()
+		restartQuantum(true)
 	},
-	vibrated(type, x) {
-		return str_save.effs[type  + x + "_vib"]
+	vibrated(x) {
+		return str_save.effs[x + "_vib"]
 	},
-	altitude(type, x) {
-		return this.vibrated(type, x) ? (type == "pb" ? 1 : -1) / x : 0
+	onVibrate(x) {
+		var pos = this.data.pos[x]
+		for (var x = -3; x <= 3; x++) {
+			var id = this.data.all[pos + x - 1]
+			if (id) {
+				str_tmp.alt[id] = (str_tmp.alt[id] || 0) + (1 - 2 * ((x + 3) % 2)) / (Math.abs(x) + 1) / 2
+			}
+		}
+	},
+
+	//Altitudes
+	altitude(x) {
+		return this.unl() ? Math.max(Math.min(str_tmp.alt[x] || 0, 1), -1) : 0
+	},
+	eff_eb(x) {
+		return 1 + Math.abs(this.altitude("eb" + x)) * str_tmp.str
+	},
+	eff_pb(x) {
+		return Math.abs(this.altitude("pb" + x)) * 8 * str_tmp.str
+	},
+	nerf_eb(x) {
+		var alt = this.altitude("eb" + x) * str_tmp.str
+		return alt < 0 ? -alt * 1e3 : 0
+	},
+	nerf_pb(x) {
+		var alt = this.altitude("pb" + x) * str_tmp.str
+		return alt < 0 ? 1 - alt : 1
 	}
 }
 let str_tmp = {}

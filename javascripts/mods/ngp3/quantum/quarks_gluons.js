@@ -164,7 +164,7 @@ function respecQuarks() {
 		qu_save.usedQuarks[color] = new Decimal(0)
 	}
 	qu_save.quarks = qu_save.quarks.add(sum)
-	restartQuantum()
+	restartQuantum(true)
 
 	if (qu_save.autoOptions.assignQK) assignAll(true)
 }
@@ -521,8 +521,11 @@ var enB = {
 	getMastered(type, x) {
 		var data = this[type]
 		var r = (tmp.dtMode && data[x].masReqDeath) || (tmp.exMode && data[x].masReqExpert) || data[x].masReq
-		if (type == "glu" && QCs.perkActive(8) && !this.colorMatch("glu", x)) r = 0
-		else if (type == "glu" && QCs.perkActive(2)) r *= 20
+		if (type == "glu") {
+			if (QCs.perkActive(8) && !this.colorMatch("glu", x)) r = 0
+			else if (QCs.perkActive(2)) r *= 20
+			if (str.unl()) r += str.nerf_eb(x)
+		}
 		return r
 	},
 	anti(type, x) {
@@ -566,7 +569,7 @@ var enB = {
 		}
 		if (!confirm("This will perform a quantum reset without gaining anything. Are you sure?")) return
 		qu_save.entColor = x
-		restartQuantum()
+		restartQuantum(true)
 	},
 
 	updateTmp() {
@@ -624,6 +627,7 @@ var enB = {
 
 			var r = Math.max(amt * 2 / 3 - 1, 1)
 			r *= tmp.glB[enB.mastered("glu", x) ? "masAmt" : "enAmt"]
+			if (str.unl()) r *= str.eff_eb(x)
 			return r
 		},
 		boosterEff() {
@@ -665,7 +669,7 @@ var enB = {
 				return Math.cbrt(x) * 0.75
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return shorten(x + 1) + "x"
 			}
 		},
 		2: {
@@ -680,7 +684,7 @@ var enB = {
 				return Math.sqrt(Math.log10(x + 1) * 1.5 + 1)
 			},
 			effDisplay(x) {
-				return x.toFixed(3)
+				return x.toFixed(3) + "x"
 			}
 		},
 		3: {
@@ -695,7 +699,7 @@ var enB = {
 				return Math.pow(x / 2 + 1, tmp.ngp3_mul ? 0.5 : 0.4)
 			},
 			effDisplay(x) {
-				return formatReductionPercentage(x, 2, 3)
+				return formatReductionPercentage(x, 2, 3) + "%"
 			}
 		},
 		4: {
@@ -711,7 +715,7 @@ var enB = {
 				return Math.min(0.003 * x, 0.012)
 			},
 			effDisplay(x) {
-				return x.toFixed(4)
+				return "^" + x.toFixed(4)
 			}
 		},
 		5: {
@@ -728,7 +732,7 @@ var enB = {
 				return r
 			},
 			effDisplay(x) {
-				return "Strengthen all replicanti upgrades by <span style='font-size:24px'>^" + shorten(x.exp) + "</span>, <span style='font-size:24px'>+" + formatPercentage(x.int - 1) + "%</span> (stealth)."
+				return "Strengthen all replicanti upgrades by <span style='font-size:24px'>^" + shorten(x.exp) + "</span>, <span style='font-size:18px'>+" + formatPercentage(x.int - 1) + "%</span>. (stealth)"
 			},
 
 			adjustChance(x) {
@@ -752,8 +756,8 @@ var enB = {
 				}
 			},
 			effDisplay(x) {
-				return pos.on() ? "Positrons on: Meta-Dimension Boosts are <span style='font-size:24px'>" + formatPercentage(x - 1) + "</span>% stronger."
-				: "Positrons off: Add +<span style='font-size:24px'>" + shorten(x) + "</span> Positronic Charge to all mastered Positronic Boosts."
+				return pos.on() ? "Positrons on: Meta-Dimension Boosts are <span style='font-size:24px'>" + formatPercentage(x - 1) + "%</span> stronger."
+				: "Positrons off: Add <span style='font-size:24px'>+" + shorten(x) + "</span> Positronic Charge to all mastered Positronic Boosts."
 			}
 		},
 		7: {
@@ -823,7 +827,7 @@ var enB = {
 				return Math.log10(Math.log10(x + 1) / (tmp.ngp3_mul ? 4 : 5) + 1)
 			},
 			effDisplay(x) {
-				return x.toFixed(4)
+				return "^" + (x / 2 + 1).toFixed(4)
 			}
 		},
 		12: {
@@ -868,7 +872,7 @@ var enB = {
 		},
 
 		activeReq(x) {
-			if (pos_tmp.sac_qe < pos.swapCost(pos_tmp.cloud.swaps_amt)) return false
+			if (pos_tmp.sac.qe < pos.swapCost(pos_tmp.cloud.swaps_amt)) return false
 			var mas = enB.mastered("pos", x)
 
 			return (futureBoost("exclude_any_boost") ? QCs.inAny() : QCs.in(2)) ? (pos.on() && mas && (
@@ -898,12 +902,14 @@ var enB = {
 			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
 			if (hasAch("ng3pr13")) req *= 0.75
 			if (PCs.milestoneDone(42) && lvl == 1) req *= hasAch("ng3pr12") ? 3 : 4
+			if (str.unl()) req *= str.nerf_pb(x)
 			return req
 		},
 		chargeEff(x) {
 			var lvl = this.lvl(x)
 			var eff = 2 * lvl
 			if (PCs.milestoneDone(42) && lvl == 1) eff = 8
+			if (str.unl()) eff += str.eff_pb(x)
 			return eff
 		},
 		charged(x, lvl) {
@@ -913,7 +919,7 @@ var enB = {
 		lvl(x, next) {
 			if (pos_save === undefined) return this[x].tier
 
-			var swaps = next ? pos_tmp.next_swaps : pos_tmp.cloud.swaps
+			var swaps = next ? pos_tmp.cloud.next : pos_tmp.cloud.swaps
 			if (swaps[x]) x = swaps[x]
 			return this[x].tier
 		},
@@ -935,7 +941,7 @@ var enB = {
 				return Math.log10(rep.max(1).log10() / 1e6 * eff + 1) * eff
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return "(" + shorten(x) + ")"
 			}
 		},
 		2: {
@@ -1139,7 +1145,7 @@ var enB = {
 				return Math.log10(Math.pow(getReplEff().log10() * Math.log10(x + 1), 0.2) + 10) - 1
 			},
 			effDisplay(x) {
-				return x.toFixed(3)
+				return "+" + x.toFixed(3) + "x"
 			}
 		},
 	},
@@ -1215,7 +1221,7 @@ var enB = {
 
 			var list = []
 			if (!active) list.push("Inactive")
-			if (charged) list.push("<b class='charged'>Charged (" + data.chargeEff(i) + "x)</b>")
+			if (charged) list.push("<b class='charged'>" + shortenDimensions(data.chargeEff(i)) + "x Charged</b>")
 			else if (mastered) list.push("Mastered")
 			if (data[i].type && (!mastered || shiftDown)) list.push((this.anti(type, i) ? "anti-" : "") + data[i].type.toUpperCase() + "-type boost")
 			if (!mastered && !QCs.in(8)) list.push("Get " + getFullExpansion(enB.getMastered(type, i)) + " " + data.name + " Boosters to master")
@@ -1272,8 +1278,8 @@ function updateQuarksTab(tab) {
 	getEl("bluePower").textContent = shorten(qu_save.colorPowers.b)
 
 	getEl("redTranslation").textContent = "+" + formatPercentage(colorBoosts.r - 1)
-	getEl("greenTranslation").textContent = shorten(colorBoosts.g)
-	getEl("blueTranslation").textContent = shorten(colorBoosts.b)
+	getEl("greenTranslation").textContent = shorten(colorBoosts.g) + "x"
+	getEl("blueTranslation").textContent = shorten(colorBoosts.b) + "x"
 	getEl("blueTransInfo").textContent = shiftDown ? "(Base: " + shorten(colorBoosts.b_base) + ", raised by ^" + shorten(colorBoosts.b_exp) + ")" : ""
 
 	getEl("quarkEnergyEffect1").textContent = formatPercentage(tmp.qe.eff1 - 1)

@@ -2458,8 +2458,16 @@ td.grey {
 .str_boost {
 	display: inline-block;
 	width: 72px !important;
-	height: 216px !important;
+	height: 228px !important;
 	position: relative;
+}
+.str_boost span {
+	position: absolute;
+	width: 72px;
+	left: 0;
+	bottom: 0;
+	font-size: 8px;
+	text-align: center
 }
 .str_boost button {
 	width: 72px !important;
@@ -2472,8 +2480,9 @@ td.grey {
 	z-index: 1;
 	font-size: 8px;
 }
-.str_boost button span {
-	position: revert
+.str_boost button span, .str_boost button div {
+	position: revert;
+	font-size: 8px;
 }
 
 #pc_table td {

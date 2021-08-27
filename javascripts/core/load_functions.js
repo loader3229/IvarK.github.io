@@ -1694,7 +1694,7 @@ function setChallengeDisplay(){
         getEl("autoDSChallengeDesc").textContent=player.tickspeedBoosts==undefined?"Per-ten multiplier is always 1x, but the product of dimensions bought multiplies all dimensions.":"The product of amount is used instead of the product of bought."
         getEl("autoGSChallengeDesc").textContent=tmp.ngmX>=4?"You can hold up to 10 total Dimension Boosts, Time Dimension Boosts, Tickspeed Boosts, and Galaxies.":(tmp.ngmX>2?"All galaxy upgrades from the third column are disabled and Tickspeed Boosts give 20 free tickspeed purchases each instead.":"You can only get 308 tickspeed upgrades. This count does not reset on resets.")
         getEl("autoTBChallengeDesc").textContent=tmp.ngmX>=4?"Dimension Boosts and Time Dimension Boosts divide Tickspeed Multiplier instead.":"Dimension Boosts and Galaxies only boost Galaxy point gain and Tickspeed Boosts are nerfed, but Galaxy points boost Tickspeed Boosts."
-        getEl("infPowEffectPowerDiv").innerHTML = inNGM(2) || tmp.ngC ? "which is raised to the power of <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, and then t" : "which is t"
+        getEl("infPowEffectPowerDiv").innerHTML = inNGM(2) || tmp.ngC ? "which is raised by <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, and then t" : "which is t"
         getEl("ngmmchalls").style.display=inNGM(2)?"":"none"
         getEl("ngmmmchalls").style.display=player.tickspeedBoosts==undefined?"none":""
         getEl("ngm4chall").style.display=tmp.ngmX>3?"":"none"

@@ -49,7 +49,7 @@ var pos = {
 	toggle() {
 		if (pos_save.on && !confirm("You will lose access to Positronic Boosts except the mastered ones. Are you sure?")) return
 		pos_save.on = !pos_save.on
-		restartQuantum()
+		restartQuantum(true)
 	},
 	types: {
 		ng: {
@@ -102,12 +102,11 @@ var pos = {
 		}
 	},
 	updateTmp() {
-		var data = { tab: pos_tmp.tab }
+		var data = {
+			tab: pos_tmp.tab
+		}
 		pos_tmp = data
 		if (pos_save === undefined) return
-
-		data.next_swaps = {...pos_save.swaps}
-		data.cloud_div = {}
 
 		data.mults = {
 			mdb: QCs.done(3) ? (PCs.milestoneDone(31) ? 1/3 : 0.3) : 0.25,
@@ -117,10 +116,24 @@ var pos = {
 		}
 		if (PCs.milestoneDone(51)) data.mults.base_pc *= 1.2
 
+		if (!data.sac) data.sac = {}
+		if (!data.pow) data.pow = {}
+
+		if (!data.cloud) data.cloud = {}
+		data.cloud.swaps = pos.on() ? {... pos_save.swaps} : {}
+		data.cloud.next = {... pos_save.swaps}
+		data.cloud.div = {}
+
 		this.updateCloud()
 	},
 	updateCloud(quick) {
-		pos_tmp.cloud = {}
+		var data = pos_tmp.cloud
+		data = {
+			div: data.div,
+			swaps: data.swaps,
+			next: data.next,
+		}
+		pos_tmp.cloud = data
 
 		//Unlocks
 		var unl = enB.mastered("pos", 2)
@@ -131,14 +144,11 @@ var pos = {
 		getEl("pos_cloud_req").innerHTML = unl || !enB.has("pos", 2) ? "" : "<br>To unlock Positron Cloud, you need to get " + getFullExpansion(enB.getMastered("pos", 2)) + " Positronic Boosters."
 		getEl("pos_cloud_disabled").style.display = this.swapsDisabled() ? "" : "none"
 
-		data = {
-			total: 0,
-			exclude: 0,
-			swaps: pos.getSwaps(),
-			swaps_amt: 0,
-			swaps_next: 0,
-		}
-		pos_tmp.cloud = data
+		var data = pos_tmp.cloud
+		data.total = 0
+		data.exclude = 0
+		data.swaps_amt = 0
+		data.next_amt = 0
 
 		//Mechanic
 		data.swaps = pos.getSwaps()
@@ -152,17 +162,17 @@ var pos = {
 
 			getEl("pos_boost" + i + "_btn").style.display = has ? "" : "none"
 			if (has) {
-				if (pos_tmp.cloud_div[i] != nextLvl) getEl("pos_cloud" + nextLvl + "_boosts").appendChild(getEl("pos_boost" + i + "_btn"))
-				pos_tmp.cloud_div[i] = nextLvl
+				if (data.div[i] != nextLvl) getEl("pos_cloud" + nextLvl + "_boosts").appendChild(getEl("pos_boost" + i + "_btn"))
+				data.div[i] = nextLvl
 
 				getEl("pos_boost" + i + "_btn").className = pos_tmp.chosen ? (pos_tmp.chosen == i ? "chosenbtn posbtn" : this.canSwap(i) ? "storebtn posbtn" : "unavailablebtn posbtn") :
 					excluded ? "unavailablebtn posbtn" :
-					(pos_tmp.next_swaps[i] ? "chosenbtn posbtn" : lvl != nextLvl ? "chosenbtn2 posbtn" : "storebtn posbtn")
+					(data.next[i] ? "chosenbtn posbtn" : lvl != nextLvl ? "chosenbtn2 posbtn" : "storebtn posbtn")
 				getEl("pos_boost" + i + "_excite").innerHTML = (lvl != nextLvl ? "(Next: " + lvl + " -> " + nextLvl + ")" : "Tier " + originalLvl + (originalLvl != lvl ? " -> " + lvl : "") + (pos_tmp.chosen == i ? "<br>(Selected)" : originalLvl != lvl ? "<br>(from PB" + pos_save.swaps[i] + ")" : ""))
 				data[lvl] = (data[lvl] || 0) + 1
 
 				if (originalLvl != lvl) data.swaps_amt++
-				if (originalLvl != nextLvl) data.swaps_next++
+				if (originalLvl != nextLvl) data.next_amt++
 
 				if (excluded) data.exclude++
 				else data.total++
@@ -174,7 +184,7 @@ var pos = {
 			getEl("pos_cloud" + i + "_cell").className = "pos_tier " + (data[i] >= i * 2 ? "green" : "")
 			getEl("pos_cloud" + i + "_cell").style.display = data[i] ? "" : "none"
 		}
-		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " excluded" : "") + (data.swaps_next == 0 ? "" : " (Requires " + shortenDimensions(this.swapCost(data.swaps_next)) + " sacrificed quantum energy)")
+		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " excluded" : "") + (data.next_amt == 0 ? "" : " (Requires " + shortenDimensions(this.swapCost(data.next_amt)) + " sacrificed quantum energy)")
 	},
 	updateTmpOnTick() {
 		if (!this.unl()) return
@@ -186,15 +196,15 @@ var pos = {
 			let mdbStart = 0
 			let mdbMult = pos_tmp.mults.mdb
 
-			data.sac_mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
-			data.sac_qe = qu_save.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)
+			data.sac.mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
+			data.sac.qe = qu_save.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)
 			pos_save.amt = Math.sqrt(Math.min(
-				data.sac_mdb * (PCs.milestoneDone(51) ? Math.max(data.sac_mdb / 30, 1) : 1) * pos_tmp.mults.mdb_eff,
-				Math.pow(data.sac_qe * (tmp.bgMode ? 2 : 1.5), 2)
+				data.sac.mdb * (PCs.milestoneDone(51) ? Math.max(data.sac.mdb / 30, 1) : 1) * pos_tmp.mults.mdb_eff,
+				Math.pow(data.sac.qe * (tmp.bgMode ? 2 : 1.5), 2)
 			)) * 300
 		} else {
-			data.sac_mdb = 0
-			data.sac_qe = 0
+			data.sac.mdb = 0
+			data.sac.qe = 0
 			pos_save.amt = 0
 		}
 		if (futureBoost("excited_positrons") && dev.boosts.tmp[2]) pos_save.amt *= dev.boosts.tmp[2]
@@ -202,12 +212,13 @@ var pos = {
 		//Galaxies -> Charge
 		let types = ["ng", "rg", "eg", "tg"]
 		let pcSum = 0
+		let pow = data.pow
 		for (var i = 0; i < types.length; i++) {
 			var type = types[i]
 			var save_data = pos_save.gals[type]
 
-			data["pow_" + type] = this.types[type].pow(pos_save.amt)
-			save_data.sac = Math.floor(this.types[type].sacGals(data["pow_" + type]))
+			pow[type] = this.types[type].pow(pos_save.amt)
+			save_data.sac = Math.floor(this.types[type].sacGals(pow[type]))
 			save_data.pc = this.types[type].basePcGain(save_data.sac)
 			pcSum += save_data.pc
 		}
@@ -219,14 +230,14 @@ var pos = {
 	canSwap(x) {
 		var old = enB.pos.lvl(x, true)
 		var nw = enB.pos.lvl(pos_tmp.chosen, true)
-		return !pos_tmp.next_swaps[x] && (PCs.milestoneDone(22) ? old != nw : Math.abs(old - nw) == 1)
+		return !pos_tmp.cloud.next[x] && (PCs.milestoneDone(22) ? old != nw : Math.abs(old - nw) == 1)
 	},
 	swap(x) {
 		if (!pos_tmp.chosen) {
-			if (pos_tmp.next_swaps[x]) {
-				var y = pos_tmp.next_swaps[x]
-				delete pos_tmp.next_swaps[x]
-				delete pos_tmp.next_swaps[y]
+			if (pos_tmp.cloud.next[x]) {
+				var y = pos_tmp.cloud.next[x]
+				delete pos_tmp.cloud.next[x]
+				delete pos_tmp.cloud.next[y]
 			} else {
 				pos_tmp.chosen = x
 			}
@@ -234,27 +245,27 @@ var pos = {
 			delete pos_tmp.chosen
 		} else {
 			if (!this.canSwap(x)) return
-			pos_tmp.next_swaps[x] = pos_tmp.chosen
-			pos_tmp.next_swaps[pos_tmp.chosen] = x
+			pos_tmp.cloud.next[x] = pos_tmp.chosen
+			pos_tmp.cloud.next[pos_tmp.chosen] = x
 			delete pos_tmp.chosen
 		}
 		this.updateCloud()
 	},
 	clearSwaps() {
-		pos_tmp.next_swaps = {}
+		pos_tmp.cloud.next = {}
 		pos.updateCloud()
 	},
 	cancelSwaps() {
 		if (!confirm("Do you want to cancel changes on Positronic Cloud?")) return
-		pos_tmp.next_swaps = {... pos_save.swaps}
+		pos_tmp.cloud.next = {... pos_save.swaps}
 		pos.updateCloud()
 	},
 	applySwaps() {
 		if (!confirm("Do you want to apply the changes immediately? This restarts your Quantum run!")) return
-		restartQuantum()
+		restartQuantum(true)
 	},
 	getSwaps() {
-		return this.swapsDisabled() ? pos_save.swaps : {}
+		return this.swapsDisabled() ? {} : pos_tmp.cloud.swaps
 	},
 	swapsDisabled() {
 		return !pos.on() || (QCs_save.disable_swaps && QCs_save.disable_swaps.active)
@@ -280,7 +291,7 @@ var pos = {
 	},
 
 	updateTab() {
-		getEl("pos_formula").textContent = getFullExpansion(pos_tmp.sac_mdb) + " Meta Dimension Boosts + " + shorten(pos_tmp.sac_qe) + " Quantum Energy ->"
+		getEl("pos_formula").textContent = getFullExpansion(pos_tmp.sac.mdb) + " Meta Dimension Boosts + " + shorten(pos_tmp.sac.qe) + " Quantum Energy ->"
 		getEl("pos_toggle").textContent = pos_save.on ? "ON" : "OFF"
 		getEl("pos_amt").textContent = getFullExpansion(pos_save.amt)
 
@@ -295,8 +306,8 @@ var pos = {
 
 		enB.updateOnTick("pos")
 		if (pos_tmp.tab == "boost") {
-			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "^" + (1 / enB_tmp.pos4).toFixed(3)
-			if (enB.has("pos", 11)) getEl("enB_pos11_exp").textContent = "x^1/" + shorten(1 / enB_tmp.pos11 / getAQSGainExp())
+			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "(^" + (1 / enB_tmp.pos4).toFixed(3) + ")"
+			if (enB.has("pos", 11)) getEl("enB_pos11_exp").textContent = "(x^1/" + shorten(1 / enB_tmp.pos11 / getAQSGainExp()) + ")"
 
 			for (var i = 1; i <= enB.pos.max; i++) {
 				if (!enB.has("pos", i)) return
@@ -314,7 +325,7 @@ var pos = {
 		var match = enB.pos.lvl(i, true) == lvl
 		var charged = match && enB.pos.charged(i)
 		var undercharged = match && lvl < 3 && lvl == enB.pos[i].tier && enB.pos.charged(i, lvl + 1)
-		getEl("pos_boost" + i + "_charge").textContent = undercharged ? "Undercharged! (Switch to Tier " + (lvl + 1) + ")" : charged ? "Charged (" + enB.pos.chargeEff(i) + "x)" : "Charge: " + shorten(enB.pos.chargeReq(i, true))
+		getEl("pos_boost" + i + "_charge").textContent = undercharged ? "Undercharged! (Switch to Tier " + (lvl + 1) + ")" : charged ? shortenDimensions(enB.pos.chargeEff(i)) + "x Charged" : "Charge: " + shorten(enB.pos.chargeReq(i, true))
 		getEl("pos_boost" + i + "_charge").className = undercharged ? "undercharged" : charged ? "charged" : ""
 	},
 	switchTab() {

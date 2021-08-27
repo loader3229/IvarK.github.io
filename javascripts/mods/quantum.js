@@ -330,7 +330,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 	// Positrons
 	if (pos.unl()) {
-		pos_save.swaps = {...pos_tmp.next_swaps}
+		pos_save.swaps = {...pos_tmp.cloud.next}
 		pos.updateCloud()
 		pos.updateTmp()
 	}
@@ -529,6 +529,7 @@ function metaReset2() {
 	else quantum()
 }
 
-function restartQuantum() {
-	quantum(false, true, {}, "restart")
+function restartQuantum(autoReset) {
+	var auto = autoReset && isQuantumReached()
+	quantum(auto, !auto, {}, "restart")
 }

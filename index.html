@@ -192,7 +192,7 @@
 					<tr>
 						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
 						<td><button id="33" onclick="buyTimeStudy(33)"><span id="ts33desc">You keep half of your Replicated Galaxies on Infinity</span><span>Cost: 2 Time Theorems</button></td>
-						<td><button id="31" onclick="buyTimeStudy(31)">Power up bonuses that are based on your Infinities (to the power of 4)<span>Cost: 3 Time Theorems</button></td>
+						<td><button id="31" onclick="buyTimeStudy(31)">Power up bonuses that are based on your Infinities (by ^4)<span>Cost: 3 Time Theorems</button></td>
 						<td><button id="32" onclick="buyTimeStudy(32)"><span id="32desc">You gain x1 more infinitied stat (based on dimension boosts)</span>Cost: 2 Time Theorems</button></td>
 						<td><button id="34" onclick="buyTimeStudy(34)">Gain x10 eternitied stat<span>Cost: 5 Time Theorems</button></td>
 						<td><button id="35" onclick="buyTimeStudy(35)" style="font-size: 8px;">Gain more infinitied & eternitied stat based on your IP, and Break Infinity Upgrade 7 is impacted by infinitied stat gain multipliers<span id="35eff"></span>Cost: 10 Time Theorems<span id="35req"></span></button></td>
@@ -1152,7 +1152,7 @@
 					  <p>You have <span id="metaAntimatterAmount" style="font-size:35px; color: black">0</span> meta-antimatter.<p>
 					  <p>
 						  <span id="bestAntimatterType"></span> was <span id="metaAntimatterBest" style="font-size: 35px; color: black">0</span>, which is
-						  <span id="metaAntimatterTranslation">raised to the power of <span id="metaAntimatterPower" style="font-size:25px; color: black"></span>, and then</span>
+						  <span id="metaAntimatterTranslation">raised by ^<span id="metaAntimatterPower" style="font-size:25px; color: black"></span>, and then</span>
 						  translated to <span id="metaAntimatterEffect" style="font-size:35px; color: black">0</span>x <span id="metaAntimatterEffectType"></span>.
 						  <span class="softcap" id="softcap_ma_disp"></span>
 					  </p>
@@ -1534,7 +1534,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.6: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(8/25/21b Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(8/26/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -3016,7 +3016,7 @@
 									<button id="postc4" class="challengesbtn" onclick="startChallenge('postc4')">Start</button>
 									<br>
 									<span id="postc4goal" >Goal: 1e13000</span><br>
-									<span>Reward: All Normal Dimension multipliers are raised to the power of 1.05.</span>
+									<span>Reward: All Normal Dimension multipliers are raised by ^1.05.</span>
 								</div>
 							</div>
 						</td>
@@ -4371,7 +4371,7 @@
 						You have <span id="greenPower" style="font-size: 25px">0.0</span> green power.
 					</td>
 					<td rowspan=2>
-						Translated to <span class="green" id="greenTranslation" style="font-size: 25px"></span>x slower replicanti interval scaling.
+						Translated to <span class="green" id="greenTranslation" style="font-size: 25px"></span> slower replicanti interval scaling.
 						<span class="softcap" id="softcap_gp_disp"></span>
 					</td>
 				</tr>
@@ -4393,7 +4393,7 @@
 						You have <span id="bluePower" style="font-size: 25px">0.0</span> blue power.
 					</td>
 					<td rowspan=2>
-						Translated to <span class="blue" id="blueTranslation" style="font-size: 25px"></span>x multiplier to Tachyon particles.<br>
+						Translated to <span class="blue" id="blueTranslation" style="font-size: 25px"></span> more Tachyon particles.<br>
 						<span id="blueTransInfo"></span>
 					</td>
 				</tr>
@@ -4515,21 +4515,21 @@
 					<br>
 					<span id="enB_glu1_type"></span>
 					<br><br>
-					Increase the quantum energy multiplier by +<span id="enB_glu1_eff" style="font-size:25px"></span>x.
+					You gain <span id="enB_glu1_eff" style="font-size:25px"></span> more quantum energy.
 				</td>
 				<td id="enB_glu2">
 					<b id="enB_glu2_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_glu2_type"></span>
 					<br><br>
-					Increase extra replicated galaxies by <span id="enB_glu2_eff" style="font-size:25px"></span>x.
+					You gain <span id="enB_glu2_eff" style="font-size:25px"></span> more extra Replicated Galaxies.
 				</td>
 				<td id="enB_glu3">
 					<b id="enB_glu3_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_glu3_type"></span>
 					<br><br>
-					The cost superscaling of 3x TP upgrade is <span id="enB_glu3_eff" style="font-size:25px"></span>% slower.
+					3x TP upgrade scales <span id="enB_glu3_eff" style="font-size:25px"></span> slower after e100 DT.
 				</td>
 			</tr>
 			<tr>
@@ -4538,7 +4538,7 @@
 					<br>
 					<span id="enB_glu4_type"></span>
 					<br><br>
-					Meta-antimatter boosts dilated time by ^<span id="enB_glu4_eff" style="font-size:24px"></span>. (from ^0.003)
+					Meta-antimatter boosts dilated time by <span id="enB_glu4_eff" style="font-size:24px"></span>. (from ^0.003)
 				</td>
 				<td id="enB_glu5">
 					<b id="enB_glu5_name" style="font-size: 25px"></b>
@@ -4561,7 +4561,7 @@
 					<br>
 					<span id="enB_glu7_type"></span>
 					<br><br>
-					Reduce the cost scaling of 4th rebuyable dilation upgrade to <span id="enB_glu7_eff" style="font-size:24px"></span> (after 1e100 DT)
+					TP formula upgrades scale at <span id="enB_glu7_eff" style="font-size:24px"></span> after e100 DT.
 				</td>
 				<td id="enB_glu8">
 					<b id="enB_glu8_name" style="font-size: 25px"></b>
@@ -4584,14 +4584,14 @@
 					<br>
 					<span id="enB_glu10_type"></span>
 					<br>
-					Before exponents, multiply the blue power effect by <span id="enB_glu10_eff" style="font-size:24px"></span>.
+					Multiply the blue power base by <span id="enB_glu10_eff" style="font-size:24px"></span>.
 				</td>
 				<td id="enB_glu11">
 					<b id="enB_glu11_name" style="font-size: 25px"></b>
 					<br>
 					<span id="enB_glu11_type"></span>
 					<br>
-					Before boosts, add <span id="enB_glu11_eff" style="font-size:24px"></span> to the exponent of blue power effect.
+					Raise the blue power effect by <span id="enB_glu11_eff" style="font-size:24px"></span>.
 				</td>
 				<td id="enB_glu12">
 					<b id="enB_glu12_name" style="font-size: 25px"></b>
@@ -4771,7 +4771,7 @@
 						<br>
 						<span id="enB_pos1_full"></span>
 						<br><br>
-						The numerator of quark efficiency is based on Replicantis (<span id="enB_pos1_eff" style="font-size:24px"></span>), but the denominator is decreased to 1.
+						Quark efficiency is based on Replicantis <span id="enB_pos1_eff" style="font-size:24px"></span>, but the denominator is decreased to 1.
 					</td>
 					<td id="enB_pos2">
 						<b id="enB_pos2_name" style="font-size: 24px"></b>
@@ -4784,7 +4784,7 @@
 						<br>
 						(with a base multiplier of <span id="enB_pos2_eff" style="font-size: 15px"></span>, based on time since quantum)
 						<br>
-						(See Meta Dimensions tab)
+						(at Meta Dimensions tab)
 					</td>
 					<td id="enB_pos3">
 						<b id="enB_pos3_name" style="font-size: 24px"></b>
@@ -4793,7 +4793,7 @@
 						<br>
 						<span id="enB_pos3_full"></span>
 						<br><br>
-						Galaxies raise the multiplier per ten normal Dimensions by <span id="enB_pos3_eff" style="font-size:24px"></span>.
+						Galaxies raise the per-10 multiplier by <span id="enB_pos3_eff" style="font-size:24px"></span>.
 					</td>
 				</tr>
 				<tr>
@@ -4804,7 +4804,7 @@
 						<br>
 						<span id="enB_pos4_full"></span>
 						<br><br>
-						Quantum requirement is reduced to <span id="enB_pos4_eff" style="font-size:24px"></span>. (<span id="enB_pos4_exp" style="font-size:18px"></span>)
+						Quantum requires <span id="enB_pos4_eff" style="font-size:24px"></span> instead. <span id="enB_pos4_exp" style="font-size:18px"></span>
 					</td>
 					<td id="enB_pos5">
 						<b id="enB_pos5_name" style="font-size: 24px"></b>
@@ -4842,7 +4842,7 @@
 						<br>
 						<span id="enB_pos8_full"></span>
 						<br><br>
-						The exponent of EC14 is <span id="enB_pos8_eff" style="font-size:24px"></span> closer to ^1.
+						EC14 reward is <span id="enB_pos8_eff" style="font-size:24px"></span> closer to ^1.
 					</td>
 					<td id="enB_pos9">
 						<b id="enB_pos9_name" style="font-size: 24px"></b>
@@ -4862,7 +4862,7 @@
 						<br>
 						<span id="enB_pos10_full"></span>
 						<br><br>
-						Infinitied stat boosts itself by <span id="enB_pos10_eff" style="font-size:24px"></span> to effect.
+						Infinitied stat raises itself by <span id="enB_pos10_eff" style="font-size:24px"></span>.
 					</td>
 					<td id="enB_pos11">
 						<b id="enB_pos11_name" style="font-size: 24px"></b>
@@ -4871,7 +4871,7 @@
 						<br>
 						<span id="enB_pos11_full"></span>
 						<br><br>
-						Eternity Points boost Anti-Quarks by <span id="enB_pos11_eff" style="font-size:24px"></span>. (<span id="enB_pos11_exp" style="font-size:18px"></span>)
+						Eternity Points boost Anti-Quarks by <span id="enB_pos11_eff" style="font-size:24px"></span>. <span id="enB_pos11_exp" style="font-size:18px"></span>
 					</td>
 					<td id="enB_pos12">
 						<b id="enB_pos12_name" style="font-size: 24px"></b>
@@ -4880,7 +4880,7 @@
 						<br>
 						<span id="enB_pos12_full"></span>
 						<br><br>
-						Replicantis add +<span id="enB_pos12_eff" style="font-size:24px"></span>x to Pata Accelerator cap.
+						Replicantis add <span id="enB_pos12_eff" style="font-size:24px"></span> to Pata Accelerator cap.
 					</td>
 				</tr>
 			</table>
@@ -4893,9 +4893,15 @@
 				<p style="font-size: 8px">(based on Quantum Energy and Replicanti Energy)</p>
 				<br>
 				<b class="warning" style="font-size: 15px">WARNING: Vibrating boosts costs Vibration Energy!</b>
+				<br>
+				<span id="str_cost"></span>
+				<br>
+				<br>
+				<div style="background: rgba(127, 255, 0, 0.25); width: 100%; height: 36px; position: relative">
+					<b class="red">Information coming soon...</b>
+				</div>
 			</div>
-			<div id="str_boosts"></div>
-			<br>
+			<div id="str_boosts"></div><br>
 			<span id="str_strength" style="font-size: 15px"></span>
 		</div>
 		<div class='quantumtab' id='nanofield'>
@@ -5031,7 +5037,7 @@
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow4">
 						<td>They decrease free tickspeed upgrade threshold by -<span class="neutrinos" id="neutrinoBoost10"></span>.</td>
 						<td id="neutrinoBoostCell11">They boost the production and cap of Ghostly Rays by <span class="neutrinos" id="neutrinoBoost11">1.00</span>x.</td>
-						<td id="neutrinoBoostCell12">They raise the Eternal Matter gain to the power of <span class="neutrinos" id="neutrinoBoost12">1.00</span>.</td>
+						<td id="neutrinoBoostCell12">They raise the Eternal Matter gain by <span class="neutrinos" id="neutrinoBoost12">1.00</span>.</td>
 					</tr>
 					<tr>
 						<td><button id="neutrinoUnlock" class="gluonupgrade unavailablebtn" onclick="unlockNeutrinoBoost()">Unlock a new boost based on your neutrinos.<br>Cost: <span id="neutrinoUnlockCost">2</span> GhP</button></td>

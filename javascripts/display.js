@@ -621,7 +621,7 @@ function replicantiDisplay() {
 		getEl("replicantiamount").textContent = shortenDimensions(player.replicanti.amount) + (limit.lt(1/0) ? (" / ") + shortenDimensions(limit) : "")
 		getEl("replicantieff").textContent = shiftDown ? "Effective Replicantis: " + shorten(getReplEff()) : ""
 		getEl("replicantimult").textContent = dil ? shorten(getReplDilBonus()) : time ? shorten(tmp.rm.pow(0.1)) : shorten(getIDReplMult())
-		getEl("replDesc").textContent = (shiftDown ? "multiplier to " : "") +
+		getEl("replDesc").textContent = (shiftDown ? "more " : "") +
 			(dil ? "dilated time" : time ? "Time Dimensions" : tmp.ngC ? "IP gain (after softcaps) & all Normal Dimensions" : " Infinity Dimensions")
 		getEl("replStr").textContent = tmp.rep.str > 1 ? "Replicanti Stealth: " + formatPercentage(tmp.rep.str) + "%" : ""
 
