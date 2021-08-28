@@ -75,7 +75,6 @@ function assignAll(auto) {
 	var ratios = qu_save.assignAllRatios
 	var sum = ratios.r + ratios.g + ratios.b
 	var oldQuarks = getAssortAmount()
-	var colors = ['r','g','b']
 	var mult = getQuarkAssignMult()
 	if (oldQuarks.eq(0)) return
 	for (c = 0; c < 3; c++) {
@@ -98,7 +97,6 @@ function assignAll(auto) {
 			g: qu_save.assignAllRatios.r,
 			b: qu_save.assignAllRatios.g
 		}
-		var colors = ['r','g','b']
 		for (c = 0; c < 3; c++) getEl("ratio_" + colors[c]).value = qu_save.assignAllRatios[colors[c]]
 	}
 	if (mult.gt(1)) updateQuantumWorth()
@@ -142,7 +140,6 @@ function neutralizeQuarks() {
 	if (colorCharge.normal.chargeAmt.eq(0) || !qu_save.quarks.gte(colorCharge.neutralize.total)) return
 
 	var sum = 0
-	var colors = ['r','g','b']
 	for (var c = 0; c < 3; c++) {
 		var color = colors[c]
 		qu_save.usedQuarks[color] = qu_save.usedQuarks[color].add(colorCharge.neutralize[color]).round()
@@ -150,6 +147,7 @@ function neutralizeQuarks() {
 	qu_save.quarks = qu_save.quarks.sub(colorCharge.neutralize.total)
 
 	updateColorCharge()
+	updateQuarksTabOnUpdate()
 	if (player.ghostify.another > 0) player.ghostify.another--
 }
 
@@ -157,7 +155,6 @@ function respecQuarks() {
 	if (!confirm("Are you sure you want to respec your colored quarks? This will restart your Quantum run!")) return
 
 	var sum = 0
-	var colors = ['r','g','b']
 	for (var c = 0; c < 3; c++) {
 		var color = colors[c]
 		sum = qu_save.usedQuarks[color].add(sum)
@@ -178,12 +175,13 @@ colorShorthands = {
 	g: 'green',
 	b: 'blue'
 }
+colors = ['r', 'g', 'b']
+color_names = ['r', 'g', 'b']
 
 function updateColorCharge(update) {
 	if (!tmp.ngp3) return
 	var usedQuarks = qu_save.usedQuarks
 
-	var colors = ['r', 'g', 'b']
 	var colorPowers = {}
 	for (var i = 0; i < 3; i++) {
 		var ret = Decimal.div(usedQuarks[colors[i]], 2).add(1).log10()
@@ -221,7 +219,7 @@ function updateColorCharge(update) {
 			: 1)
 		}
 		colorCharge.sub.charge *= chargeMult
-		colorCharge.sub.eff = Math.log10(Math.log2(colorCharge.sub.charge + 1) / 2 + 1) * 2 + 1
+		colorCharge.sub.eff = Math.log10(Math.log2(colorCharge.sub.charge + 1) / 2 + 1) * 1.5 + 1
 		chargeMult *= colorCharge.sub.eff
 	} else delete colorCharge.sub
 
@@ -250,26 +248,33 @@ function updateColorCharge(update) {
 function getColorPowerQuantity(color, base) {
 	if (QCs.in(2)) return 0
 
-	let ret = 0
-	if (colorCharge.normal.color == color) {
-		let charge = colorCharge.normal.charge
-		ret = Math.pow(Math.abs(charge), 2 * qu_save.expEnergy) * tmp.glB[color].mult
-		if (charge < 0) ret = -ret
-	}
-	if (colorCharge.sub && colorCharge.sub.color == color) {
-		let charge = colorCharge.sub.charge
-		ret = Math.pow(Math.abs(charge), 2 * qu_save.expEnergy) * tmp.glB[color].mult
-		if (charge < 0) ret = -ret
-	}
-	if (tmp.qe) ret = ret * tmp.qe.eff1 + tmp.qe.eff2
-	if (tmp.glB) ret -= tmp.glB[color].sub
-	ret = Math.max(ret, 0)
+	var r = 0
+	if (colorCharge.normal.color == color) r = getColorChargeProduction(colorCharge.normal.charge, color)
+	if (colorCharge.sub && colorCharge.sub.color == color) r = getColorChargeProduction(colorCharge.sub.charge, color)
+
+	if (tmp.qe) r *= tmp.qe.eff1
+	if (tmp.glB) r *= tmp.glB[color].mult
+
+	if (tmp.qe) r += tmp.qe.eff2
+	if (tmp.glB) r -= tmp.glB[color].sub
+	r = Math.max(r, 0)
 
 	if (!base) {
-		if (hasMTS(314)) ret += getColorPowerQuantity(color == "r" ? "g" : color == "g" ? "b" : "r", true) / 5
-		if (color == "r" && hasMTS(272)) ret /= 5
+		if (hasMTS(314)) r += getColorPowerQuantity(color == "r" ? "g" : color == "g" ? "b" : "r", true) / 5
+		if (color == "r" && hasMTS(272)) r /= 5
 	}
-	return ret
+	return r
+}
+
+function getColorChargeProduction(x, color, disp) {
+	var r = Math.pow(Math.abs(x), 2 * qu_save.expEnergy)
+	if (x < 0) r = -r
+	if (disp) {
+		r *= tmp.qe.eff1
+		r *= tmp.glB[color].mult
+		if (color == "r" && hasMTS(272)) r /= 5
+	}
+	return r
 }
 
 colorBoosts = {
@@ -354,7 +359,7 @@ function updateQEGainTmp() {
 	tmp.qe = data
 	if (!tmp.quActive) return
 
-	//Quark Efficiency
+	//Quantum efficiency
 	data.expDen = hasAch("ng3p14") ? 2 : 3
 	if (tmp.ngp3_mul) data.expDen *= 0.8
 	if (enB.active("pos", 1)) data.expDen = 1
@@ -381,12 +386,11 @@ function updateQuarkEnergyEffects() {
 
 	var eng = qu_save.quarkEnergy
 
-	var exp = 4 / 3
-	var exp2 = 4 / 3
-	if (!QCs.isntCatched()) exp2 *= tmp.exMode ? 0 : tmp.bgMode ? 1 : 0.5
+	var exp = tmp.qe.exp
+	var expMult = 2
 
-	tmp.qe.eff1 = Math.pow(Math.log10(eng / 2 + 1) + 1, exp)
-	tmp.qe.eff2 = Math.pow(eng, exp2) * tmp.qe.eff1 / 4 * exp2 / exp
+	tmp.qe.eff1 = Math.pow(Math.log10(eng / 2 + 1) + 1, exp * expMult)
+	tmp.qe.eff2 = Math.pow(eng, exp * expMult) * tmp.qe.eff1 / 3
 }
 
 function buyQuarkMult(name) {
@@ -449,7 +453,13 @@ function updateGluonicBoosts() {
 	data.b = { mult: getGluonEffBuff(gluons.br), sub: getGluonEffNerf(gluons.gb, "b") } //x -> x * [BR effect] - [GB effect]
 
 	let type = enB.colorUsed()
-	data.enAmt = enBData.glu.gluonEff(gluons[type])
+	let another = {
+		rg: "gb",
+		gb: "br",
+		br: "rg",
+	}
+	data.enGlu = type ? gluons[type].add(gluons[another[type]]) : new Decimal(0)
+	data.enAmt = enBData.glu.gluonEff(data.enGlu)
 	data.masAmt = enBData.glu.gluonEff(tmp.exMode ? gluons[type].times(3) : gluons.rg.add(gluons.gb).add(gluons.br))
 
 	//Entangled Boosts
@@ -732,7 +742,7 @@ var enB = {
 				return r
 			},
 			effDisplay(x) {
-				return "Strengthen all replicanti upgrades by <span style='font-size:24px'>^" + shorten(x.exp) + "</span>, <span style='font-size:18px'>+" + formatPercentage(x.int - 1) + "%</span>. (stealth)"
+				return "Strengthen all replicanti upgrades by <span style='font-size: 18px'>^" + shorten(x.exp) + "</span>, <span style='font-size: 15px'>+" + formatPercentage(x.int - 1) + "%</span>. (stealth)"
 			},
 
 			adjustChance(x) {
@@ -901,7 +911,7 @@ var enB = {
 				Math.pow(2, lvl - this[x].tier)
 			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
 			if (hasAch("ng3pr13")) req *= 0.75
-			if (PCs.milestoneDone(42) && lvl == 1) req *= hasAch("ng3pr12") ? 3 : 4
+			if (PCs.milestoneDone(42) && lvl == 1) req *= 4
 			if (str.unl()) req *= str.nerf_pb(x)
 			return req
 		},
@@ -1184,6 +1194,7 @@ var enB = {
 
 		if (type == "pos") {
 			pos.updateCloud()
+			pos_tmp.cloud.allMastered = allMastered
 			getEl("entangle_div_pos").style.display = allMastered ? "none" : ""
 		}
 	},
@@ -1195,10 +1206,11 @@ var enB = {
 		}
 		var data = enB
 		var typeData = data[type]
-		return type == "pos" && shiftDown ? (!typeData.charged(e) ? "black" : [null, "red", "green", "blue"][typeData.lvl(e)]) :
+		var light = data.mastered(type, e) && e % 2 == 1 ? " light" : ""
+		return type == "pos" && (shiftDown || pos_tmp.cloud.allMastered) ? (!typeData.charged(e) ? "black" : [null, "red", "green", "blue"][typeData.lvl(e)]) :
 			!data.active(type, e) ? "black" :
-			type == "pos" && typeData.charged(e) ? "yellow" :
-			data.mastered(type, e) || !typeData[e].type ? "lime" :
+			type == "pos" && typeData.charged(e) ? "yellow" + light :
+			data.mastered(type, e) || !typeData[e].type ? "lime" + light :
 			enB.colorMatch(type, e) ? colors[typeData[e].type] + (data.anti(type, e) ? "_anti" : "") : "grey"
 	},
 	updateUnlock() {
@@ -1221,8 +1233,10 @@ var enB = {
 
 			var list = []
 			if (!active) list.push("Inactive")
+			else if (mastered && type == "pos") list.push("Tier " + data[i].tier)
 			if (charged) list.push("<b class='charged'>" + shortenDimensions(data.chargeEff(i)) + "x Charged</b>")
-			else if (mastered) list.push("Mastered")
+			else if (mastered && (type != "pos" || !pos_tmp.cloud.allMastered)) list.push("Mastered")
+			if (!charged && type == "pos") list.push(!enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched" : "Self-boost is at " + shorten(enB.pos.chargeReq(i)) + " charge")
 			if (data[i].type && (!mastered || shiftDown)) list.push((this.anti(type, i) ? "anti-" : "") + data[i].type.toUpperCase() + "-type boost")
 			if (!mastered && !QCs.in(8)) list.push("Get " + getFullExpansion(enB.getMastered(type, i)) + " " + data.name + " Boosters to master")
 
@@ -1230,7 +1244,6 @@ var enB = {
 			getEl("enB_" + type + i + "_type").innerHTML = "(" + wordizeList(list, false, " - ", false) + ")" + (data[i].activeDispReq ? "<br>Requirement: " + data[i].activeDispReq() : "")
 
 			if (enB_tmp[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(enB_tmp[type + i])
-			if (type == "pos") getEl("enB_pos" + i + "_full").innerHTML = (mastered ? "Tier " + enB.pos.lvl(i) + " - " : "") + (!enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched (No self-boost)" : "Self-boost is at " + shorten(enB.pos.chargeReq(i)) + " charge")
 		}
 	}
 }
@@ -1285,6 +1298,16 @@ function updateQuarksTab(tab) {
 	getEl("quarkEnergyEffect1").textContent = formatPercentage(tmp.qe.eff1 - 1)
 	getEl("quarkEnergyEffect2").textContent = shorten(tmp.qe.eff2)
 
+	var charge = colorCharge.normal
+	getEl("colorChargeEff").textContent = "+" + shorten(getColorChargeProduction(charge.charge, charge.color, true)) + " " + colorShorthands[charge.color] + " power" +
+		(hasAch("ng3p13") ? ", -" + shorten(colorCharge.subCancel) + " gluon penalties" : "")
+
+	var subcharge = colorCharge.sub
+	if (subcharge) {
+		getEl("colorSubchargeEff").textContent = "+" + shorten(getColorChargeProduction(subcharge.charge, subcharge.color, true)) + " " + colorShorthands[subcharge.color] + " power" +
+			", x" + shorten(subcharge.eff) + " color charge"
+	}
+
 	//Post-Quantum content
 	if (player.ghostify.milestones >= 8) {
 		updateQuarkAssort()
@@ -1293,8 +1316,6 @@ function updateQuarksTab(tab) {
 }
 
 function updateGluonsTab() {
-	let colors = ['r','g','b']
-
 	if (player.ghostify.milestones >= 8) updateGluonsTabOnUpdate("display")
 
 	for (var c = 0; c < 3; c++) {
@@ -1305,8 +1326,10 @@ function updateGluonsTab() {
 	}
 
 	let typeUsed = enB.colorUsed()
-	if (typeUsed != "") {
-		getEl("entangle_" + typeUsed + "_bonus").textContent = "+" + shorten(getQEGluonsPortion() * tmp.qe.mult / tmp.qe.div) + " quantum energy, " + shorten(enB.glu.gluonEff(qu_save.gluons[typeUsed])) + "x effective boosters"
+	for (var c = 0; c < 3; c++) {
+		var glu = colors[c] + colors[(c + 1) % 3]
+		getEl("entangle_" + glu).innerHTML = "<b style='font-size: 12px'>Entangle " + glu.toUpperCase() + "</b>" +
+			(glu == typeUsed ? "<br>(" + shortenDimensions(tmp.glB.enGlu) + " power)<br>(+" + shorten(getQEGluonsPortion() * tmp.qe.mult / tmp.qe.div) + " quantum energy, " + shorten(enB.glu.gluonEff(tmp.glB.enGlu)) + "x stronger boosts)" : "")
 	}
 
 	enB.updateOnTick("glu")
@@ -1316,35 +1339,27 @@ function updateGluonsTab() {
 
 //Display: On load
 function updateQuarksTabOnUpdate(mode) {
+	//Quark Assort
+	updateQuarkAssort()
+	getEl("neutralize_req").innerHTML = shortenDimensions(colorCharge.neutralize.total)
+	getEl("neutralize_quarks").className = qu_save.quarks.gte(colorCharge.neutralize.total) ? "storebtn" : "unavailablebtn"
+
 	//Color Charge
-	var colors = ['r','g','b']
-	if (colorCharge.normal.charge == 0) {
-		getEl("colorCharge").innerHTML = 'neutral charge'
-		getEl("colorChargeAmt").innerHTML = 0
-		getEl("colorChargeColor").className = "black"
-
-		getEl("neutralize_req").innerHTML = 0
-		getEl("neutralize_quarks").className = "unavailablebtn"
-	} else {
-		var color = colorShorthands[colorCharge.normal.color]
-		getEl("colorCharge").innerHTML =
-			'<span class="' + color + '">' + color + '</span> charge of <span style="font-size: 25px">' + shorten(colorCharge.normal.charge * tmp.qe.eff1) + "</span>" +
-			(hasAch("ng3p13") ? ",<br>which is translated to -" + shorten(colorCharge.subCancel) + " to gluon penalties" : "")
-		getEl("colorChargeAmt").innerHTML = shortenDimensions(colorCharge.normal.chargeAmt) + " " + color + " anti-quarks"
-		getEl("colorChargeColor").className = color
-
-		getEl("neutralize_req").innerHTML = shortenDimensions(colorCharge.neutralize.total)
-		getEl("neutralize_quarks").className = qu_save.quarks.gte(colorCharge.neutralize.total) ? "storebtn" : "unavailablebtn"
-	}
+	var color = colorShorthands[colorCharge.normal.color]
+	var charge = colorCharge.normal.charge
+	var neutral = charge == 0
+	getEl("colorChargeDiv").className = neutral ? "black" : color
+	getEl("colorCharge").innerHTML = neutral ? "Neutral charge" : "<span style='font-size: 30px'>" + shorten(charge) + "</span> " + color + " charge</span>"
 
 	//Color Subcharge
 	var sub = enB.active("glu", 12)
 	getEl("colorSubchargeDiv").style.visibility = sub ? "visible" : "hidden"
 	if (sub) {
 		var color = colorShorthands[colorCharge.sub.color]
-		getEl("colorSubchargeDiv").className = colorCharge.sub.charge == 0 ? "black" : color + " light"
-		getEl("colorSubcharge").innerHTML= colorCharge.sub.charge == 0 ? "neutral subcharge" : color + " subcharge of <span style='font-size: 25px'>" + shorten(colorCharge.sub.charge) + "</span>"
-		getEl("colorSubchargeEff").textContent = shorten(colorCharge.sub.eff)
+		var charge = colorCharge.sub.charge
+		var neutral = charge == 0
+		getEl("colorSubchargeDiv").className = neutral ? "black" : color + " light"
+		getEl("colorSubcharge").innerHTML = neutral ? "Neutral subcharge" : "<span style='font-size: 30px'>" + shorten(charge) + "</span> " + color + " subcharge</span>"
 	}
 
 	//Colored Quarks
@@ -1352,16 +1367,12 @@ function updateQuarksTabOnUpdate(mode) {
 	getEl("greenQuarks").textContent = shortenDimensions(qu_save.usedQuarks.g)
 	getEl("blueQuarks").textContent = shortenDimensions(qu_save.usedQuarks.b)
 
-	updateQuarkAssort()
-
 	var uq = qu_save.usedQuarks
 	var gl = qu_save.gluons
 	for (var p = 0; p < 3; p++) {
 		var pair = (["rg", "gb", "br"])[p]
 		var diff = uq[pair[0]].min(uq[pair[1]])
-		getEl(pair + "_gain").textContent = shortenDimensions(diff)
-		getEl(pair + "_prev").textContent = shortenDimensions(uq[pair[0]])
-		getEl(pair + "_next").textContent = shortenDimensions(uq[pair[0]].sub(diff).round())
+		getEl(pair + "_info").textContent = shortenDimensions(uq[pair[0]].sub(diff).round()) + " (+" + shortenDimensions(diff) + " gluons)"
 	}
 }
 
@@ -1396,7 +1407,6 @@ function updateGluonsTabOnUpdate(mode) {
 		getEl("entangle_" + type).className = "gluonupgrade " + type
 		getEl("entangle_" + type + "_pos").style.display = tmp.dtMode ? "none" : ""
 		getEl("entangle_" + type + "_pos").className = "gluonupgrade " + type
-		getEl("entangle_" + type + "_bonus").textContent = ""
 	}
 
 	if (typeUsed != "") {

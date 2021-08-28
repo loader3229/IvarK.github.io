@@ -17,19 +17,19 @@ var PCs = {
 		62: "Eternitying timewraps Meta Dimensions and Replicantis by 3 seconds.",
 		72: "Mastery Study cost multiplier is divided by 5x.",
 		82: "Remote Galaxies scaling is slower based on its starting point.",
-		// 13: "Unlock Replicated Dilaters. (not implemented)",
-		// 23: "You can exclude matched Boosts instead. (not implemented)",
-		// 33: "Meta Accelerator starts 0.1 later per PC level.",
-		// 43: "Extra Replicated Galaxies contribute to Positronic Charge.",
-		// 53: "Replicanti Energy formula is stronger.",
-		// 63: "Eternity time stat is 3x slower.",
-		// 73: "Remove the second softcap of TT generation.",
-		// 83: "???",
+		13: "Unlock Replicated Dilaters. (not implemented)",
+		23: "???",
+		33: "Meta Accelerator starts 0.1 later per PC level.",
+		43: "Extra Replicated Galaxies contribute to Positronic Charge.",
+		53: "Replicanti Energy formula is stronger.",
+		63: "Eternity time stat is 3x slower.",
+		73: "Remove the second softcap of TT generation.",
+		83: "???",
 	},
 	setupData() {
 		var data = {
 			goal_divs: [null, 0.1, 0.95, 0.25, 0.95, 0.45, 0.5, 0.4, 0.75],
-			milestoneReqs: [null, 1, 2/*, 4*/],
+			milestoneReqs: [null, 1, 2, 4],
 			letters: [null, "A", "B", "C", "D", "Ω<sup>1</sup>", "Ω<sup>2</sup>", "Ω<sup>3</sup>", "Θ"],
 			all: [],
 			setup: true
@@ -280,8 +280,14 @@ var PCs = {
 	name(pc) {
 		return PCs.data.letters[Math.floor(pc / 10)] + pc % 10
 	},
+	milestoneUnl(pos) {
+		if (!PCs.unl()) return
+		if (!PCs_tmp.comps) return
+		if (pos == 3) return hasAch("ng3pr12")
+		return true
+	},
 	milestoneDone(pos) {
-		return PCs.unl() && PCs_tmp.comps && PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
+		return PCs.milestoneUnl(pos % 10) && PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
 	},
 	lvlReq(pc) {
 		if (QCs_save.comps / 2 < pc % 10) return 1/0
@@ -405,7 +411,7 @@ var PCs = {
 		getEl("pc_temp_color").style.display = PCs_tmp.temp != 0 ? "" : "none"
 		getEl("pc_temp_color").className = PCs_tmp.temp > 0 ? "hot" : "cool"
 
-		getEl("pc_shrunker_div").style.display = futureBoost("nerfed_modifier") ? "" : "none"
+		getEl("pc_shrunker_div").style.display = hasAch("ng3pr12") ? "" : "none"
 		getEl("pc_shrunker").textContent = getFullExpansion(PCs_save.shrunkers)
 		getEl("pc_shrunker_eff").textContent = shortenCosts(this.shrunkerEff()) + "x"
 
@@ -426,6 +432,11 @@ var PCs = {
 			for (var i = 1; i < PCs.data.milestoneReqs.length; i++) {
 				getEl("qc_milestone" + i).className = "qMs_" + (this.milestoneDone(qc * 10 + i) ? "reward" : "locked")
 				getEl("qc_milestone" + i).textContent = PCs.milestones[qc * 10 + i] || "???"
+				if (i >= 3) {
+					var unl = this.milestoneUnl(i)
+					getEl("qc_milestone" + i + "_div").style.display = unl ? "" : "none"
+					getEl("qc_milestone" + i + "_div2").style.display = unl ? "" : "none"
+				}
 			}
 		}
 	},

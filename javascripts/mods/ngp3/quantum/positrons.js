@@ -132,6 +132,7 @@ var pos = {
 			div: data.div,
 			swaps: data.swaps,
 			next: data.next,
+			allMastered: data.allMastered
 		}
 		pos_tmp.cloud = data
 

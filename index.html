@@ -1534,7 +1534,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.6: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(8/26/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(8/27/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -2203,7 +2203,7 @@
 								<div id="Hadronization" class="achievement achievementlocked" style="background-image: url(images/107.png)" ach-tooltip="Have colored quarks, but have no color charge. Reward: Quantum Worth boosts all Meta Dimensions."><br></div>
 							</td>
 							<td>
-								<div id="Work harder." class="achievement achievementlocked" style="background-image: url(images/108.png)" ach-tooltip="Unlock Time Dilation without buying Eternity Upgrades. Reward: Decrease the denominator of quark efficiency to 2."><br></div>
+								<div id="Work harder." class="achievement achievementlocked" style="background-image: url(images/108.png)" ach-tooltip="Unlock Time Dilation without buying Eternity Upgrades. Reward: Decrease the denominator of Quantum efficiency to 2."><br></div>
 							</td>
 							<td>
 								<div id="No more tax fraud!" class="achievement achievementlocked" style="background-image: url(images/109.png)"><br></div>
@@ -2249,13 +2249,13 @@
 								<div id="Mastery Mayhem" class="achievement achievementlocked" style="background-image: url(images/ng3pr/11.png)"></div>
 							</td>
 							<td>
-								<div id="Completing the Quantum" class="achievement achievementlocked" style="background-image: url(images/ng3pr/12.png)" ach-tooltip="Unlock Strings. Reward: Decrease QC4x2 requirement multiplier to 3x."></div>
+								<div id="Completing the Quantum" class="achievement achievementlocked" style="background-image: url(images/ng3pr/12.png)" ach-tooltip="Unlock Strings. Reward: Unlock the first QC modifier: Nerfed modifier."></div>
 							</td>
 							<td>
 								<div id="Bursted Em All!" class="achievement achievementlocked" style="background-image: url(images/ng3pr/13.png)" ach-tooltip="Charge all Positronic Boosts with QC4x2 milestone and 4 swaps. Reward: Charging requires 25% less."></div>
 							</td>
 							<td>
-								<div id="Sciencing Around The Core" class="achievement achievementlocked" style="background-image: url(images/ng3pr/14.png)" ach-tooltip="Reach ^0.85 quark efficiency. Reward: Effective Boosters x1.1."></div>
+								<div id="Sciencing Around The Core" class="achievement achievementlocked" style="background-image: url(images/ng3pr/14.png)" ach-tooltip="Reach ^0.85 Quantum efficiency. Reward: Effective Boosters x1.1."></div>
 							</td>
 							<td>
 								<div id="ng3pr15" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
@@ -3377,12 +3377,12 @@
 						<tr>
 							<td>1 completion</td>
 							<td>2 completions</td>
-							<!-- <td>4 completions</td> -->
+							<td id="qc_milestone3_div">4 completions</td>
 						</tr>
 						<tr>
 							<td><button class="qMs_reward" id="qc_milestone1">???</button></td>
 							<td><button class="qMs_reward" id="qc_milestone2">???</button></td>
-							<!-- <td><button class="qMs_reward" id="qc_milestone3">???</button></td> -->
+							<td id="qc_milestone3_div2"><button class="qMs_reward" id="qc_milestone3">???</button></td>
 						</tr>
 					</table>
 				</div>
@@ -4303,7 +4303,7 @@
 		<span id="qe_info" style="display: none">
 			<span id="quarkEnergyMult" style="font-size: 15px">(1.00x)</span>
 			<br>You have made a best-ever of <span id="bestQE" style="font-size:15px">0.0</span> energy. (no divisors)
-			<br>Quark Efficiency: <span id="qeEff" style="font-size:15px"></span> (<span id="qeFrac"></span>)
+			<br>Quantum efficiency: <span id="qeEff" style="font-size:15px"></span> (<span id="qeFrac"></span>)
 		</span>
 		<br><button id="qc_restart" class="storebtn" style="font-size: 100%; width:200px" onclick="QCs.restart()">Restart Challenge</button>
 		<table class="table" align="center" style="margin: auto">
@@ -4330,23 +4330,26 @@
 				<tr>
 					<td></td>
 					<td id="colorSubchargeDiv">
-						Your colored anti-quarks also have a <span id='colorSubcharge'></span>,<br>
-						which is translated to <span id='colorSubchargeEff'></span>x color charge.
+						<span id='colorSubcharge' style="font-size: 15px"></span><br>
+						(translated to <span id='colorSubchargeEff'></span>)
 					</td>
-					<td id="colorChargeColor" style="vertical-align: middle">
-						Your colored anti-quarks have a net <span id='colorCharge'></span>.
-						<br>
-						(net worth of <span id='colorChargeAmt'></span>)
+					<td id="colorChargeDiv">
+						<span id='colorCharge' style="font-size: 15px"></span><br>
+						(translated to <span id='colorChargeEff'></span>)
 					</td>
 				</tr>
 
 				<!-- Red -->
 				<tr>
-					<td class="red light" style="font-size: 15px">
-						<span id="redQuarks" style="font-size: 30px">0</span> red
+					<td class="red light">
+						<span style="font-size: 15px">
+							<span id="redQuarks" style="font-size: 30px">0</span> red
+						</span>
+						<br>
+						On next quantum: <span id="rg_info">0 (+0 green-antired gluons)</span>
 					</td>
 					<td class="red">
-						You have <span id="redPower" style="font-size: 25px">0.0</span> red power.
+						<span id="redPower" style="font-size: 25px">0.0</span> red power
 					</td>
 					<td rowspan=2>
 						Translated to <span class="red" id="redTranslation" style="font-size: 25px"></span>% stronger galaxies.
@@ -4364,11 +4367,15 @@
 
 				<!-- Green -->
 				<tr>
-					<td class="green light" style="font-size: 15px">
-						<span id="greenQuarks" style="font-size: 30px">0</span> green
+					<td class="green light">
+						<span style="font-size: 15px">
+							<span id="greenQuarks" style="font-size: 30px">0</span> green
+						</span>
+						<br>
+						On next quantum: <span id="gb_info">0 (+0 blue-antigreen gluons)</span>
 					</td>
 					<td class="green">
-						You have <span id="greenPower" style="font-size: 25px">0.0</span> green power.
+						<span id="greenPower" style="font-size: 25px">0.0</span> green power
 					</td>
 					<td rowspan=2>
 						Translated to <span class="green" id="greenTranslation" style="font-size: 25px"></span> slower replicanti interval scaling.
@@ -4386,11 +4393,15 @@
 
 				<!-- Blue -->
 				<tr>
-					<td class="blue light" style="font-size: 15px">
-						<span id="blueQuarks" style="font-size: 30px">0</span> blue
+					<td class="blue light">
+						<span style="font-size: 15px">
+							<span id="blueQuarks" style="font-size: 30px">0</span> blue
+						</span>
+						<br>
+						On next quantum: <span id="br_info">0 (+0 red-antiblue gluons)</span>
 					</td>
 					<td class="blue">
-						You have <span id="bluePower" style="font-size: 25px">0.0</span> blue power.
+						<span id="bluePower" style="font-size: 25px">0.0</span> blue power
 					</td>
 					<td rowspan=2>
 						Translated to <span class="blue" id="blueTranslation" style="font-size: 25px"></span> more Tachyon particles.<br>
@@ -4451,42 +4462,28 @@
 				<td class="red">
 					<span style="font-size: 15px"><span id="rg" style="font-size: 30px">0</span> green-antired</span>
 					<br>
-					(<span class="red" id="rPowerBuff" style="font-size:15px">1.00</span>x to red power, -<span class="green" id="gPowerNerf" style="font-size:15px">0.00</span> to green power)
-					<br>
-					<button id="entangle_rg" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('rg')">Use boosts with RG</button>
+					(translated to <span class="red" id="rPowerBuff">1.00</span>x to red power, -<span class="green" id="gPowerNerf">0.00</span> to green power)
 				</td>
 				<td class="green">
 					<span style="font-size: 15px"><span id="gb" style="font-size: 30px">0</span> blue-antigreen</span>
 					<br>
-					(<span class="green" id="gPowerBuff" style="font-size:15px">1.00</span>x to green power, -<span class="blue" id="bPowerNerf" style="font-size:15px">0.00</span> to blue power)
-					<br>
-					<button id="entangle_gb" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('gb')">Use boosts with GB</button>
+					(translated to <span class="green" id="gPowerBuff">1.00</span>x to green power, -<span class="blue" id="bPowerNerf">0.00</span> to blue power)
 				</td>
 				<td class="blue">
 					<span style="font-size: 15px"><span id="br" style="font-size: 30px">0</span> red-antiblue</span>
 					<br>
-					(<span class="blue" id="bPowerBuff" style="font-size:15px">1.00</span>x to blue power, -<span class="red" id="rPowerNerf" style="font-size:15px">0.00</span> to red power)
-					<br>
-					<button id="entangle_br" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('br')">Use boosts with BR</button>
+					(translated to <span class="blue" id="bPowerBuff">1.00</span>x to blue power, -<span class="red" id="rPowerNerf">0.00</span> to red power)
 				</td>
 			</tr>
 			<tr>
-				<td id="entangle_rg_bonus" class="green light">
+				<td class="green light">
+					<button id="entangle_rg" style="width: 180px; height: 60px; font-size: 8px" onclick="ENTANGLED_BOOSTS.choose('rg')">Entangle RG</button>
 				</td>
-				<td id="entangle_gb_bonus" class="blue light">
+				<td class="blue light">
+					<button id="entangle_gb" style="width: 180px; height: 60px; font-size: 8px" onclick="ENTANGLED_BOOSTS.choose('gb')">Entangle GB</button>
 				</td>
-				<td id="entangle_br_bonus" class="red light">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					(+<span id='rg_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='rg_prev'></span> to <span id='rg_next'>0</span>.)
-				</td>
-				<td>
-					(+<span id='gb_gain'>0</span> on next quantum, but reduce your green anti-quarks from <span id='gb_prev'></span> to <span id='gb_next'>0</span>.)
-				</td>
-				<td>
-					(+<span id='br_gain'>0</span> on next quantum, but reduce your blue anti-quarks from <span id='br_prev'></span> to <span id='br_next'>0</span>.)
+				<td class="red light">
+					<button id="entangle_br" style="width: 180px; height: 60px; font-size: 8px" onclick="ENTANGLED_BOOSTS.choose('br')">Entangle BR</button>
 				</td>
 			</tr>
 			<tr>
@@ -4511,25 +4508,25 @@
 			</tr>
 			<tr>
 				<td id="enB_glu1">
-					<b id="enB_glu1_name" style="font-size: 25px"></b>
+					<b id="enB_glu1_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu1_type"></span>
-					<br><br>
-					You gain <span id="enB_glu1_eff" style="font-size:25px"></span> more quantum energy.
+					<br>
+					You gain <span id="enB_glu1_eff" style="font-size: 18px"></span> more quantum energy.
 				</td>
 				<td id="enB_glu2">
-					<b id="enB_glu2_name" style="font-size: 25px"></b>
+					<b id="enB_glu2_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu2_type"></span>
-					<br><br>
-					You gain <span id="enB_glu2_eff" style="font-size:25px"></span> more extra Replicated Galaxies.
+					<br>
+					You gain <span id="enB_glu2_eff" style="font-size: 18px"></span> more extra Replicated Galaxies.
 				</td>
 				<td id="enB_glu3">
-					<b id="enB_glu3_name" style="font-size: 25px"></b>
+					<b id="enB_glu3_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu3_type"></span>
-					<br><br>
-					3x TP upgrade scales <span id="enB_glu3_eff" style="font-size:25px"></span> slower after e100 DT.
+					<br>
+					3x TP upgrade scales <span id="enB_glu3_eff" style="font-size: 18px"></span> slower after e100 DT.
 				</td>
 			</tr>
 			<tr>
@@ -4537,68 +4534,68 @@
 					<b id="enB_glu4_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu4_type"></span>
-					<br><br>
-					Meta-antimatter boosts dilated time by <span id="enB_glu4_eff" style="font-size:24px"></span>. (from ^0.003)
+					<br>
+					Meta-antimatter boosts dilated time by <span id="enB_glu4_eff" style="font-size: 18px"></span>. (from ^0.003)
 				</td>
 				<td id="enB_glu5">
-					<b id="enB_glu5_name" style="font-size: 25px"></b>
+					<b id="enB_glu5_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu5_type"></span>
-					<br><br>
+					<br>
 					<span id="enB_glu5_eff"></span>
 				</td>
 				<td id="enB_glu6">
-					<b id="enB_glu6_name" style="font-size: 25px"></b>
+					<b id="enB_glu6_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu6_type"></span>
-					<br><br>
+					<br>
 					<span id="enB_glu6_eff"></span>
 				</td>
 			</tr>
 			<tr>
 				<td id="enB_glu7">
-					<b id="enB_glu7_name" style="font-size: 25px"></b>
+					<b id="enB_glu7_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu7_type"></span>
-					<br><br>
-					TP formula upgrades scale at <span id="enB_glu7_eff" style="font-size:24px"></span> after e100 DT.
+					<br>
+					TP formula upgrades scale at <span id="enB_glu7_eff" style="font-size: 18px"></span> after e100 DT.
 				</td>
 				<td id="enB_glu8">
-					<b id="enB_glu8_name" style="font-size: 25px"></b>
+					<b id="enB_glu8_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu8_type"></span>
-					<br><br>
-					Dilated time boosts meta-antimatter by <span id="enB_glu8_eff" style="font-size:24px"></span>.
+					<br>
+					Dilated time boosts meta-antimatter by <span id="enB_glu8_eff" style="font-size: 18px"></span>.
 				</td>
 				<td id="enB_glu9">
-					<b id="enB_glu9_name" style="font-size: 25px"></b>
+					<b id="enB_glu9_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu9_type"></span>
-					<br><br>
-					Meta Accelerator accelerates <span id="enB_glu9_eff" style="font-size:24px"></span> faster.
+					<br>
+					Meta Accelerator accelerates <span id="enB_glu9_eff" style="font-size: 18px"></span> faster.
 				</td>
 			</tr>
 			<tr>
 				<td id="enB_glu10">
-					<b id="enB_glu10_name" style="font-size: 25px"></b>
+					<b id="enB_glu10_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu10_type"></span>
 					<br>
-					Multiply the blue power base by <span id="enB_glu10_eff" style="font-size:24px"></span>.
+					Multiply the blue power base by <span id="enB_glu10_eff" style="font-size: 18px"></span>.
 				</td>
 				<td id="enB_glu11">
-					<b id="enB_glu11_name" style="font-size: 25px"></b>
+					<b id="enB_glu11_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu11_type"></span>
 					<br>
-					Raise the blue power effect by <span id="enB_glu11_eff" style="font-size:24px"></span>.
+					Raise the blue power effect by <span id="enB_glu11_eff" style="font-size: 18px"></span>.
 				</td>
 				<td id="enB_glu12">
-					<b id="enB_glu12_name" style="font-size: 25px"></b>
+					<b id="enB_glu12_name" style="font-size: 24px"></b>
 					<br>
 					<span id="enB_glu12_type"></span>
 					<br>
-					<span id="enB_glu12_eff" style="font-size:24px"></span>
+					<span id="enB_glu12_eff" style="font-size: 18px"></span>
 					<br>(at anti-Quarks tab)
 				</td>
 			</tr>
@@ -4765,22 +4762,18 @@
 			<table class="qTable">
 				<tr>
 					<td id="enB_pos1">
-						<b id="enB_pos1_name" style="font-size: 25px"></b>
+						<b id="enB_pos1_name" style="font-size: 24px"></b>
 						<br>
 						<span id="enB_pos1_type"></span>
 						<br>
-						<span id="enB_pos1_full"></span>
-						<br><br>
-						Quark efficiency is based on Replicantis <span id="enB_pos1_eff" style="font-size:24px"></span>, but the denominator is decreased to 1.
+						Quantum efficiency is based on Replicantis <span id="enB_pos1_eff" style="font-size: 18px"></span>, but the denominator is decreased to 1.
 					</td>
 					<td id="enB_pos2">
 						<b id="enB_pos2_name" style="font-size: 24px"></b>
 						<br>
 						<span id="enB_pos2_type"></span>
 						<br>
-						<span id="enB_pos2_full"></span>
-						<br><br>
-						<span style="font-size:24px">Unlock Meta-Accelerator.</span>
+						<span style="font-size: 18px">Unlock Meta-Accelerator.</span>
 						<br>
 						(with a base multiplier of <span id="enB_pos2_eff" style="font-size: 15px"></span>, based on time since quantum)
 						<br>
@@ -4791,9 +4784,7 @@
 						<br>
 						<span id="enB_pos3_type"></span>
 						<br>
-						<span id="enB_pos3_full"></span>
-						<br><br>
-						Galaxies raise the per-10 multiplier by <span id="enB_pos3_eff" style="font-size:24px"></span>.
+						Galaxies raise the per-10 multiplier by <span id="enB_pos3_eff" style="font-size: 18px"></span>.
 					</td>
 				</tr>
 				<tr>
@@ -4802,27 +4793,21 @@
 						<br>
 						<span id="enB_pos4_type"></span>
 						<br>
-						<span id="enB_pos4_full"></span>
-						<br><br>
-						Quantum requires <span id="enB_pos4_eff" style="font-size:24px"></span> instead. <span id="enB_pos4_exp" style="font-size:18px"></span>
+						Quantum requires <span id="enB_pos4_eff" style="font-size: 18px"></span> instead. <span id="enB_pos4_exp" style="font-size: 18px"></span>
 					</td>
 					<td id="enB_pos5">
 						<b id="enB_pos5_name" style="font-size: 24px"></b>
 						<br>
 						<span id="enB_pos5_type"></span>
 						<br>
-						<span id="enB_pos5_full"></span>
-						<br><br>
-						Reduce the gluon penalties by <span id="enB_pos5_eff" style="font-size:24px"></span>.
+						Reduce the gluon penalties by <span id="enB_pos5_eff" style="font-size: 18px"></span>.
 					</td>
 					<td id="enB_pos6">
 						<b id="enB_pos6_name" style="font-size: 24px"></b>
 						<br>
 						<span id="enB_pos6_type"></span>
 						<br>
-						<span id="enB_pos6_full"></span>
-						<br><br>
-						Raise all Time Dimensions by <span id="enB_pos6_eff" style="font-size:24px"></span>.
+						Raise all Time Dimensions by <span id="enB_pos6_eff" style="font-size: 18px"></span>.
 					</td>
 				</tr>
 				</tr>
@@ -4831,27 +4816,21 @@
 						<br>
 						<span id="enB_pos7_type"></span>
 						<br>
-						<span id="enB_pos7_full"></span>
-						<br><br>
-						Tachyon particles speed up Pata Accelerator production by <span id="enB_pos7_eff" style="font-size:24px"></span>.
+						Tachyon particles speed up Pata Accelerator production by <span id="enB_pos7_eff" style="font-size: 18px"></span>.
 					</td>
 					<td id="enB_pos8">
 						<b id="enB_pos8_name" style="font-size: 24px"></b>
 						<br>
 						<span id="enB_pos8_type"></span>
 						<br>
-						<span id="enB_pos8_full"></span>
-						<br><br>
-						EC14 reward is <span id="enB_pos8_eff" style="font-size:24px"></span> closer to ^1.
+						EC14 reward is <span id="enB_pos8_eff" style="font-size: 18px"></span> closer to ^1.
 					</td>
 					<td id="enB_pos9">
 						<b id="enB_pos9_name" style="font-size: 24px"></b>
 						<br>
 						<span id="enB_pos9_type"></span>
 						<br>
-						<span id="enB_pos9_full"></span>
-						<br><br>
-						Meta Accelerator slowdown starts <span id="enB_pos9_eff" style="font-size:24px"></span> later.
+						Meta Accelerator slowdown starts <span id="enB_pos9_eff" style="font-size: 18px"></span> later.
 					</td>
 				</tr>
 				<tr>
@@ -4860,27 +4839,21 @@
 						<br>
 						<span id="enB_pos10_type"></span>
 						<br>
-						<span id="enB_pos10_full"></span>
-						<br><br>
-						Infinitied stat raises itself by <span id="enB_pos10_eff" style="font-size:24px"></span>.
+						Infinitied stat raises itself by <span id="enB_pos10_eff" style="font-size: 18px"></span>.
 					</td>
 					<td id="enB_pos11">
 						<b id="enB_pos11_name" style="font-size: 24px"></b>
 						<br>
 						<span id="enB_pos11_type"></span>
 						<br>
-						<span id="enB_pos11_full"></span>
-						<br><br>
-						Eternity Points boost Anti-Quarks by <span id="enB_pos11_eff" style="font-size:24px"></span>. <span id="enB_pos11_exp" style="font-size:18px"></span>
+						Eternity Points boost Anti-Quarks by <span id="enB_pos11_eff" style="font-size: 18px"></span>. <span id="enB_pos11_exp" style="font-size: 18px"></span>
 					</td>
 					<td id="enB_pos12">
 						<b id="enB_pos12_name" style="font-size: 24px"></b>
 						<br>
 						<span id="enB_pos12_type"></span>
 						<br>
-						<span id="enB_pos12_full"></span>
-						<br><br>
-						Replicantis add <span id="enB_pos12_eff" style="font-size:24px"></span> to Pata Accelerator cap.
+						Replicantis add <span id="enB_pos12_eff" style="font-size: 18px"></span> to Pata Accelerator cap.
 					</td>
 				</tr>
 			</table>

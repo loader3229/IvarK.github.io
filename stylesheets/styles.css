@@ -2264,6 +2264,9 @@ td.dark_yellow {
 td.lime {
 	background: rgba(95, 191, 0, 0.25)
 }
+td.lime.light {
+	background: rgba(223, 255, 127, 0.25)
+}
 
 .green {
 	color: #00bf00

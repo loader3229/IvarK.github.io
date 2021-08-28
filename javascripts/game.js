@@ -4151,9 +4151,8 @@ function ghostifyAutomationUpdating(diff){
 	if (!tmp.quUnl || !tmp.quActive) return
 
 	if (hasMTS("d12")) {
-		let colorShorthands = ["r", "g", "b"]
 		for (let c = 1; c <= 3; c++) {
-			let shorthand = colorShorthands[c - 1]
+			let shorthand = colors[c - 1]
 			if (isAutoGhostActive(c) && qu_save.usedQuarks[shorthand].gt(0) && qu_save.tod[shorthand].quarks.eq(0)) unstableQuarks(shorthand)
 			if (isAutoGhostActive(12) && getUnstableGain(shorthand).max(qu_save.tod[shorthand].quarks).gte(Decimal.pow(10, Math.pow(2, 50)))) {
 				unstableQuarks(shorthand)
@@ -4252,9 +4251,8 @@ function nanofieldUpdating(diff){
 }
 
 function treeOfDecayUpdating(diff){
-	var colorShorthands=["r","g","b"]
 	for (var c = 0; c < 3; c++) {
-		var shorthand = colorShorthands[c]
+		var shorthand = colors[c]
 		var branch = qu_save.tod[shorthand]
 		if (branch.quarks.gt(0)) {
 			var decayRate = getDecayRate(shorthand)
@@ -4284,8 +4282,7 @@ function quantumOverallUpdating(diff){
 		gainQuantumEnergy()
 
 		//Color Powers
-		var colorShorthands=["r","g","b"]
-		for (var c = 0; c < 3; c++) qu_save.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
+		for (var c = 0; c < 3; c++) qu_save.colorPowers[colors[c]] = getColorPowerQuantity(colors[c])
 
 		if (str.unl()) str.updateFeatureOnTick() //Strings
 

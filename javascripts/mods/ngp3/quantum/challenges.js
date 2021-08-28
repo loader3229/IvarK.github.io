@@ -259,9 +259,9 @@ var QCs = {
 
 			rewardDesc: (x) => "Color charge boosts itself by " + shorten(x) + "x.",
 			rewardEff(str) {
-				let x = Math.log10((str || colorCharge.normal.charge) + 1) + 1
+				let x = Math.log10((str || colorCharge.normal.charge) + 1) / 2
 				if (PCs.milestoneDone(21)) x *= 2
-				return x
+				return x + 1
 			},
 
 			nerfDesc: (x) => "Only excluded Positronic Boosts work.",
@@ -622,6 +622,7 @@ var QCs = {
 		showChallengesTab("quantumchallenges")
 	},
 	start(x) {
+		if (QCs_tmp.show_perks && !this.done(qc)) return
 		quantum(false, true, { qc: x }, "qc")
 	},
 	restart(x) {
@@ -632,7 +633,7 @@ var QCs = {
 	modData: {
 		up: {
 			name: 'Nerfed',
-			maExp: 1.25,
+			maExp: 1.35,
 			shrunker: 1
 		},
 		ol: {
@@ -660,7 +661,7 @@ var QCs = {
 	},
 
 	perkUnl(x) {
-		return futureBoost("nerfed_modifier") && this.modDone(x, "up")
+		return hasAch("ng3pr12") && this.modDone(x, "up")
 	},
 	perkActive(x) {
 		return QCs_tmp.perks[x] && this.perkUnl(x) && this.inAny()
@@ -711,7 +712,7 @@ var QCs = {
 		if (!unl) return
 
 		getEl("qc_effects").innerHTML = QCs_tmp.show_perks ? "" : "All quantum mechanics will change, when entering a Quantum Challenge:<br>" +
-			(tmp.bgMode ? "No" : (tmp.exMode ? "No" : "Reduced") + " global quark energy bonus, no") + " gluon nerfs, and mastered boosts only work."
+			(tmp.bgMode ? "No" : (tmp.exMode ? "No" : "Reduced") + " global Quantum energy bonus, no") + " gluon nerfs, and mastered boosts only work."
 		for (let qc = 1; qc <= this.data.max; qc++) {
 			var cUnl = QCs_tmp.unl.includes(qc)
 
@@ -720,8 +721,8 @@ var QCs = {
 				var reqs = this.data[qc].overlapReqs
 				getEl("qc_" + qc + "_desc").textContent = this.data[qc].nerfDesc()
 				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.getGoalMA(qc, "up")) + " meta-antimatter"
-				getEl("qc_" + qc + "_btn").textContent = this.modIn(qc, "up") ? "Running" : this.modDone(qc, "up") ? (this.perkActive(qc) ? "Perk Activated" : "Completed") : "Start"
-				getEl("qc_" + qc + "_btn").className = this.modIn(qc, "up") ? "onchallengebtn" : this.modDone(qc, "up") ? "completedchallengesbtn" : "challengesbtn"
+				getEl("qc_" + qc + "_btn").textContent = this.modIn(qc, "up") ? "Running" : this.modDone(qc, "up") ? (this.perkActive(qc) ? "Perk Activated" : "Completed") : this.done(qc) ? "Start" : "Locked"
+				getEl("qc_" + qc + "_btn").className = this.modIn(qc, "up") ? "onchallengebtn" : this.modDone(qc, "up") ? "completedchallengesbtn" : this.done(qc) ? "challengesbtn" : "lockedchallengesbtn"
 			} else if (cUnl) {
 				getEl("qc_" + qc + "_desc").textContent = evalData(this.data[qc].desc)
 				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.data[qc].goalMA) + " meta-antimatter and " + evalData(this.data[qc].goalDisp)
@@ -730,7 +731,7 @@ var QCs = {
 			}
 		}
 
-		getEl("qc_perks").style.display = futureBoost("nerfed_modifier") ? "inline" : "none"
+		getEl("qc_perks").style.display = hasAch("ng3pr12") ? "inline" : "none"
 		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Nerfed modifier'
 		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Nerfed modifier doesn\'t have its secondary goals. And perks only work in any Quantum Challenge!' : ""
 	},

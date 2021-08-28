@@ -32,14 +32,12 @@ function todTimeDisplay(t){
 
 function updateTreeOfDecayTab(){
 	var branchNum
-	var colors = ["red", "green", "blue"]
-	var shorthands = ["r", "g", "b"]
 	if (getEl("redBranch").style.display == "block") branchNum = 1
 	if (getEl("greenBranch").style.display == "block") branchNum = 2
 	if (getEl("blueBranch").style.display == "block") branchNum = 3
 	for (var c = 0; c < 3; c++) {
-		var color = colors[c]
-		var shorthand = shorthands[c]
+		var color = color_names[c]
+		var shorthand = colors[c]
 		var branch = qu_save.tod[shorthand]
 		var name = color + " " + getUQNameFromBranch(shorthand) + " quarks"
 		var rate = getDecayRate(shorthand)
@@ -84,11 +82,11 @@ function updateTreeOfDecayTab(){
 			let cost = getTreeUpgradeCost(u)
 			let lvl = getTreeUpgradeLevel(u)
 			let effLvl = getEffectiveTreeUpgLevel(u)
-			getEl("treeupg" + u).className = "gluonupgrade " + (canBuyTreeUpg(u) ? shorthands[getTreeUpgradeLevel(u) % 3] : "unavailablebtn")
+			getEl("treeupg" + u).className = "gluonupgrade " + (canBuyTreeUpg(u) ? colors[getTreeUpgradeLevel(u) % 3] : "unavailablebtn")
 			getEl("treeupg" + u + "current").textContent = getTreeUpgradeEffectDesc(u)
 			let scalingsActive = (lvl >= 1e4 ? 1 : 0) + TREE_UPGRADES[u].scaleAdd(lvl)
 			getEl("treeupg" + u + "lvl").textContent = getGalaxyScaleName(scalingsActive) + "Level: " + getFullExpansion(lvl) + (lvl != effLvl ? " -> " + getFullExpansion(Math.floor(effLvl)) + (effLvl != lvl * tmp.tue ? " (softcapped)" : "") : "")
-			getEl("treeupg" + u + "cost").textContent = start + shortenMoney(cost) + " " + colors[lvl % 3] + end
+			getEl("treeupg" + u + "cost").textContent = start + shortenMoney(cost) + " " + color_names[lvl % 3] + end
 		}
 		setAndMaybeShow("treeUpgradeEff", pH.did("ghostify"), 'getTreeUpgradeEfficiencyDisplayText()')
 	}
@@ -97,11 +95,9 @@ function updateTreeOfDecayTab(){
 
 function updateTODStuff() {
 	return
-	var colors = ["red", "green", "blue"]
-	var shorthands = ["r", "g", "b"]
 	for (var c = 0; c < 3; c++) {
-		var color = colors[c]
-		var shorthand = shorthands[c]
+		var color = color_names[c]
+		var shorthand = colors[c]
 		var branch = qu_save.tod[shorthand]
 		var name = getUQNameFromBranch(shorthand)
 		getEl(shorthand + "UQName").innerHTML = name
@@ -382,15 +378,12 @@ function getTreeUpgradeCost(upg, add) {
 }
 
 function canBuyTreeUpg(upg) {
-	var shorthands = ["r", "g", "b"]
-	return getTreeUpgradeCost(upg).lte(qu_save.tod[shorthands[getTreeUpgradeLevel(upg) % 3]].spin)
+	return getTreeUpgradeCost(upg).lte(qu_save.tod[colors[getTreeUpgradeLevel(upg) % 3]].spin)
 }
 
 function buyTreeUpg(upg) {
 	if (!canBuyTreeUpg(upg)) return
-	var colors = ["red", "green", "blue"]
-	var shorthands = ["r", "g", "b"]
-	var branch = qu_save.tod[shorthands[getTreeUpgradeLevel(upg) % 3]]
+	var branch = qu_save.tod[colors[getTreeUpgradeLevel(upg) % 3]]
 	branch.spin = branch.spin.sub(getTreeUpgradeCost(upg))
 	if (!qu_save.tod.upgrades[upg]) qu_save.tod.upgrades[upg] = 0
 	qu_save.tod.upgrades[upg]++
@@ -459,7 +452,6 @@ function rotateAutoAssign() {
 }
 
 function unstableAll() {
-	var colors = ["r", "g", "b"]
 	for (var c = 0; c < 3; c++) {
 		var bData = qu_save.tod[colors[c]]
 		if (canUnstable(colors[c])) {
@@ -553,7 +545,6 @@ function getUQNameFromBranch(shorthand) {
 
 function maxTreeUpg() {
 	let update = false
-	let colors = ["r", "g", "b"]
 	let data = qu_save.tod
 	for (let u = 1; u <= 8; u++) {
 		let cost = getTreeUpgradeCost(u)

@@ -234,7 +234,7 @@ function updateNGP3TempStuff(init) {
 		str.updateTmpOnTick() //Strings
 		QCs.updateTmpOnTick() //Quantum Challenges
 		pos.updateTmpOnTick() //Positrons
-		updateQEGainTmp() //Quantum Energy + Quark Efficiency
+		updateQEGainTmp() //Quantum Energy + Quantum efficiency
 		updateGluonicBoosts() //Entangled + Positronic Boosts
 		updateColorPowers() //Color Powers
 

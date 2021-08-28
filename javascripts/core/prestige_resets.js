@@ -711,7 +711,6 @@ function doQuantumGhostifyResetStuff(implode, bm){
 	if (implode) showQuantumTab("uquarks")
 	var permUnlocks = [7,9,10,10,11,11,12,12]
 	if (bm > 3) {
-		var colors = ['r', 'g', 'b']
 		for (var c = 0; c < 3; c++) qu_save.tod[colors[c]].upgrades[1] = 5
 	}
 	if (!bm) {
