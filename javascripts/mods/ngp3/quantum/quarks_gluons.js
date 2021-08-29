@@ -463,7 +463,7 @@ var enB = {
 
 	has(type, x) {
 		var data = this[type]
-		return this[type].unl() && data.amt() >= data[x].req
+		return this[type].unl() && Decimal.gte(data.amt(), data[x].req)
 	},
 	active(type, x) {
 		var data = this[type][x]
@@ -569,10 +569,10 @@ var enB = {
 
 		cost(x) {
 			if (x === undefined) x = this.amt()
-			return x.div(3).pow(1.5).add(1)
+			return Decimal.div(x, 3).pow(1.5).add(1)
 		},
-		target(noBest) {
-			var eng = this.engAmt(noBest)
+		target(x, noBest) {
+			var eng = new Decimal(x) || this.engAmt(noBest)
 			eng = eng.sub(eng.min(1))
 			return eng.pow(1 / 1.5).times(3).add(1)
 		},
@@ -599,7 +599,7 @@ var enB = {
 			return r
 		},
 		boosterEff() {
-			var amt = this.target(true)
+			var amt = this.target(undefined, true)
 			if (pos.on()) amt = amt.add(enB.pos.target())
 			if (PCs.unl() && amt.gt(PCs_tmp.eff1_start)) amt = amt.div(PCs_tmp.eff1_start).pow(this.boosterExp()).times(PCs_tmp.eff1_start)
 			if (hasAch("ng3pr14")) amt = amt.times(1.1)
@@ -826,8 +826,11 @@ var enB = {
 			if (x === undefined) x = this.amt()
 			return x.div(2).add(1).pow(1.5)
 		},
-		target() {
-			return this.engAmt().pow(1 / 1.5).times(2).add(1)
+		target(x) {
+			var eng = x || this.engAmt()
+			eng = eng.pow(1 / 1.5)
+			eng = eng.sub(eng.min(1))
+			return eng.times(2).add(1)
 		},
 
 		amt() {

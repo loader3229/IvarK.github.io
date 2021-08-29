@@ -18,7 +18,7 @@ let str = {
 		return str_save
 	},
 	compile() {
-		str_tmp = { unl: this.unl() }
+		str_tmp = { unl: this.unl(true) }
 		if (!tmp.ngp3 || qu_save === undefined) return
 
 		this.data.all = []
@@ -89,7 +89,7 @@ let str = {
 		var data = str_tmp
 		if (!data.unl) return
 
-		data.str = 1
+		data.str = Math.max(str.veUnspent() - 3, 1)
 	},
 	updateDispOnTick() {
 		if (!str_tmp.setupHTML || !str_tmp.unl) return
