@@ -139,7 +139,7 @@ let str = {
 
 	//Vibration Energy
 	veGain() {
-		return Math.log10(qu_save.quarkEnergy + 1) * Math.log10(QCs_save.qc5.add(1).log10() + 1)
+		return qu_save.quarkEnergy.add(1).log10() * Math.log10(QCs_save.qc5.add(1).log10() + 1)
 	},
 	veUnspent() {
 		return str_save.energy - str_save.spent

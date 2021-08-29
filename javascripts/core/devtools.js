@@ -360,6 +360,15 @@ dev.boosts = {
 	},
 }
 
-function futureBoost() {
-	return dev.boosts.on
+dev.quSb = {
+	//^3 effective boosters: Rebalancing
+	k: 3,
+	j: 6,
+	jP: 3,
+
+	on: false //This boost should be enabled in this line, not in dev.boosts.on!
+}
+
+function futureBoost(x) {
+	return x == "quantum_superbalancing" ? dev.quSb.on : dev.boosts.on
 }

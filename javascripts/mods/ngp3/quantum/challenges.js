@@ -93,7 +93,7 @@ var QCs = {
 			},
 
 			//Replicanti Compressors
-			can: () => QCs_tmp.qc1 && pH.can("eternity") && player.replicanti.amount.gte(QCs_tmp.qc1.req) && QCs_save.qc1.boosts < QCs.data[1].max(),
+			can: () => QCs_tmp.qc1 && pH.can("eternity") && player.replicanti.amount.gte(QCs_tmp.qc1.req),
 			boost() {
 				if (!QCs.data[1].can()) return false
 
@@ -111,7 +111,6 @@ var QCs = {
 				return true
 			},
 			scalings: [5],
-			max: () => 30, //1 + 30 / 20 = 2.5 / 2 = 1.25
 
 			eff(boosts, eff, max, pc11 = 0) {
 				var eff = Math.min((eff * 3 - max * 2 * (1 - pc11)) / 10 + 1, 5)
@@ -173,8 +172,8 @@ var QCs = {
 				var reqLog = QCs_tmp.qc1.req.log10()
 				if (reqLog >= 4e7) {
 					var div = reqLog / 4e7
-					data.req = Decimal.pow(10, 4e7)
 					data.limit = data.limit.pow(1 / div)
+					data.req = Decimal.pow(10, 4e7).min(data.limit)
 					data.scalingMult /= div
 				}
 			},
@@ -206,8 +205,7 @@ var QCs = {
 						(!qc1Explain ? "." : ", but reduce the interval scaling.") +
 						"<br><span style='font-size: 10px'>(" + (qc1Explain ? "Requires " : "") + shortenCosts(QCs_tmp.qc1.req) + " replicantis)</span>" +
 						(!qc1Explain ? "<br>(" +
-							getFullExpansion(qc1.boosts) + " / " + getFullExpansion(data.max()) +
-							(qc1.boosts > data.scalings[0] ? " Distant" : "") +
+							getFullExpansion(qc1.boosts) + (qc1.boosts > data.scalings[0] ? " Distant" : "") + " Compressors" +
 							(qc1.max || extra > 0 ? ", " + getFullExpansion(qc1.max) + " Max" : "") +
 							(extra > 0 ? " + " + getFullExpansion(Math.floor(extra)) : "") +
 						")" : "")
@@ -259,9 +257,11 @@ var QCs = {
 
 			rewardDesc: (x) => "Color charge boosts itself by " + shorten(x) + "x.",
 			rewardEff(str) {
-				let x = Math.log10((str || colorCharge.normal.charge) + 1) / 2
-				if (PCs.milestoneDone(21)) x *= 2
-				return x + 1
+				str = str || colorCharge.normal.charge || new Decimal(0)
+				var x = str.add(1).log10() / 2
+				if (futureBoost("quantum_superbalancing")) x = str.div(1e3).max(x)
+				if (PCs.milestoneDone(21)) x = Decimal.times(x, 2)
+				return Decimal.add(x, 1)
 			},
 
 			nerfDesc: (x) => "Only excluded Positronic Boosts work.",

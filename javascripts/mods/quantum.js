@@ -337,7 +337,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 	if (tmp.ngp3) {
 		qMs.update()
-		qu_save.quarkEnergy = 0
+		qu_save.quarkEnergy = new Decimal(0)
 	} else qu_save.gluons = 0;
 
 	doQuantumResetStuff(5, false, isQC, QCs_save.in)

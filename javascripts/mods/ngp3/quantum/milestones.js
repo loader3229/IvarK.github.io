@@ -56,7 +56,7 @@ let qMs = {
 			var unl = typeData.unl ? typeData.unl() : true
 
 			data["targ_" + type] = typeData.targ()
-			data["amt_" + type] = Math.max(Math.floor(typeData.gain(data["targ_" + type])), 0)
+			data["amt_" + type] = Math.min(Math.max(Math.floor(typeData.gain(data["targ_" + type])), 0), 1e3)
 			data.points += data["amt_" + type]
 		}
 

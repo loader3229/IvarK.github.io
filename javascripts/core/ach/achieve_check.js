@@ -279,7 +279,7 @@ function preHiggsNGp3AchieveCheck() {
 		}
 		if (cond) giveAchievement("Bursted Em All!")
 	}
-	if (tmp.qe.exp >= 0.85) giveAchievement("Sciencing Around The Core")
+	if (qu_save.expEnergy >= 0.85) giveAchievement("Sciencing Around The Core")
 
 	if (player.dilation.dilatedTime.log10() >= 411 && qu_save.notrelative) giveAchievement("Time is not relative")
 	if (!hasAch("ng3p42")) {

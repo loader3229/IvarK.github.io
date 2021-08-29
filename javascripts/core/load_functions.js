@@ -2677,6 +2677,11 @@ function conToDeciMS(){
 	if (player.masterystudies) {
 		player.dbPower = new Decimal(player.dbPower)
 		player.meta.bestOverQuantums = Decimal.max(player.meta.bestOverQuantums, player.meta.bestAntimatter)
+		if (qu_save) {
+			qu_save.quarkEnergy = new Decimal(qu_save.quarkEnergy)
+			qu_save.bestEnergy = new Decimal(qu_save.bestEnergy)
+			qu_save.entBoosts = new Decimal(qu_save.entBoosts)
+		}
 		if (qu_save && qu_save.usedQuarks) {
 			qu_save.usedQuarks.r = new Decimal(qu_save.usedQuarks.r)
 			qu_save.usedQuarks.g = new Decimal(qu_save.usedQuarks.g)

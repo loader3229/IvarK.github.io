@@ -163,7 +163,7 @@ function replicantiIntervalCost(interval) {
 }
 
 function isIntervalAffordable() {
-	if (hasMTS(282)) return true
+	if (hasMTS(282)) return player.replicanti.interval > 1e-12
 	return player.replicanti.interval > (hasTS(22) || player.boughtDims ? 1 : 50)
 }
 
@@ -330,9 +330,10 @@ function getReplicantiIntervalMult() {
 	if (player.dilation.upgrades.includes('ngpp1') && aarMod.nguspV && !aarMod.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
 	if (enB.active("pos", 2)) {
-		var pos2 = enB_tmp.pos2.mult
-		if (futureBoost("replicante_tunneling")) pos2 = pos2.pow(tmp.rep.str)
-		interval = interval.div(pos2)
+		var pos2_log = enB_tmp.pos2.mult.log10()
+		if (pos2_log > 1e5) pos2_log = Math.pow(pos2_log / 1e5, 3/4) * 1e5
+		if (futureBoost("replicante_tunneling")) pos2_log *= tmp.rep.str
+		interval = interval.div(Decimal.pow(10, pos2_log))
 	}
 	if (tmp.ngC && ngC.tmp) interval = interval.div(ngC.tmp.rep.eff1)
 	return interval

@@ -1152,7 +1152,7 @@
 					  <p>You have <span id="metaAntimatterAmount" style="font-size:35px; color: black">0</span> meta-antimatter.<p>
 					  <p>
 						  <span id="bestAntimatterType"></span> was <span id="metaAntimatterBest" style="font-size: 35px; color: black">0</span>, which is
-						  <span id="metaAntimatterTranslation">raised by ^<span id="metaAntimatterPower" style="font-size:25px; color: black"></span>, and then</span>
+						  <span id="metaAntimatterTranslation">raised by <span id="metaAntimatterPower" style="font-size:25px; color: black"></span>, and then</span>
 						  translated to <span id="metaAntimatterEffect" style="font-size:35px; color: black">0</span>x <span id="metaAntimatterEffectType"></span>.
 						  <span class="softcap" id="softcap_ma_disp"></span>
 					  </p>
@@ -1534,7 +1534,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.6: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(8/27/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(8/28/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -4174,7 +4174,7 @@
 					During this quantum, Replicantis also produced <span id="qc5_eng" style="font-size: 15px">0</span> energy<sup id="qc5_eng_exp">1</sup> in total<span id="qc5_eng_mult" style="font-size: 12px"></span>,
 					which translated to +<span id="qc5_eff_glu" style="font-size: 12px">0</span> extra quantum energy and +<span id="qc5_eff_pos" style="font-size: 12px">0</span> positronic charge.
 				</p>
-				<p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti, which is translated to <span id="replicantimult" style="font-size:23px; color: black">0</span>x <span id="replDesc"></span>.</p>
+				<p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti, which is translated to <span id="replicantimult" style="font-size:23px; color: black">0</span> <span id="replDesc"></span>.</p>
 				<span id="replicantieff"></span> <span id="softcap_rep_disp"></span>
 				<br>
 				<button class="storebtn" id="replicantichance" onclick="upgradeReplicantiChance()" style="width:180px; height: 50px; font-size: 10px">Replicate chance: 1%<br>+1% Costs: 1e6969 IP</button>
@@ -4352,7 +4352,7 @@
 						<span id="redPower" style="font-size: 25px">0.0</span> red power
 					</td>
 					<td rowspan=2>
-						Translated to <span class="red" id="redTranslation" style="font-size: 25px"></span>% stronger galaxies.
+						Translated to <span class="red" id="redTranslation" style="font-size: 25px"></span> stronger galaxies.
 						<span class="softcap" id="softcap_rp_disp"></span>
 					</td>
 				</tr>
@@ -4420,7 +4420,7 @@
 				<!-- Quantum Energy -->
 				<tr>
 					<td class="lime" colspan=3>
-						Your quantum energy is giving a +<span id="quarkEnergyEffect1" style="font-size:35px">0.0</span>% more color powers and +<span id="quarkEnergyEffect2" style="font-size:35px">0.0</span> total extra color powers.
+						Your quantum energy is giving <span id="quarkEnergyEffect1" style="font-size: 24px">0.0</span> more color powers and <span id="quarkEnergyEffect2" style="font-size: 24px">0.0</span> total extra color powers.
 					</td>
 				</tr>
 
@@ -4462,17 +4462,17 @@
 				<td class="red">
 					<span style="font-size: 15px"><span id="rg" style="font-size: 30px">0</span> green-antired</span>
 					<br>
-					(translated to <span class="red" id="rPowerBuff">1.00</span>x to red power, -<span class="green" id="gPowerNerf">0.00</span> to green power)
+					(translated to <span class="red" id="rPowerBuff">1.00</span>x to red power, <span class="green" id="gPowerNerf">0.00</span> to green power)
 				</td>
 				<td class="green">
 					<span style="font-size: 15px"><span id="gb" style="font-size: 30px">0</span> blue-antigreen</span>
 					<br>
-					(translated to <span class="green" id="gPowerBuff">1.00</span>x to green power, -<span class="blue" id="bPowerNerf">0.00</span> to blue power)
+					(translated to <span class="green" id="gPowerBuff">1.00</span>x to green power, <span class="blue" id="bPowerNerf">0.00</span> to blue power)
 				</td>
 				<td class="blue">
 					<span style="font-size: 15px"><span id="br" style="font-size: 30px">0</span> red-antiblue</span>
 					<br>
-					(translated to <span class="blue" id="bPowerBuff">1.00</span>x to blue power, -<span class="red" id="rPowerNerf">0.00</span> to red power)
+					(translated to <span class="blue" id="bPowerBuff">1.00</span>x to blue power, <span class="red" id="rPowerNerf">0.00</span> to red power)
 				</td>
 			</tr>
 			<tr>
@@ -4830,7 +4830,7 @@
 						<br>
 						<span id="enB_pos9_type"></span>
 						<br>
-						Meta Accelerator slowdown starts <span id="enB_pos9_eff" style="font-size: 18px"></span> later.
+						Meta Accelerator slowdown starts <span id="enB_pos9_eff" style="font-size: 18px"></span> later, but also slows down the acceleration.
 					</td>
 				</tr>
 				<tr>

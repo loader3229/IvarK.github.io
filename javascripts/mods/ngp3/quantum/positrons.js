@@ -31,6 +31,9 @@ var pos = {
 		}
 		if (!data.swaps) data.swaps = {}
 
+		data.boosts = new Decimal(data.boosts)
+		data.eng = new Decimal(data.eng)
+
 		if (data.consumedQE) delete data.consumedQE
 		if (data.sacGals) delete data.sacGals
 		if (data.sacBoosts) delete data.sacBoosts
@@ -59,9 +62,6 @@ var pos = {
 			},
 			sacGals(x) {
 				return Math.min(player.galaxies / 4, x)
-			},
-			basePcGain(x) {
-				return Math.pow(x * pos_tmp.mults.base_pc, 2)
 			}
 		},
 		rg: {
@@ -71,9 +71,6 @@ var pos = {
 			},
 			sacGals(x) {
 				return Math.min(player.replicanti.galaxies / 4, x)
-			},
-			basePcGain(x) {
-				return Math.pow(x * pos_tmp.mults.base_pc, 2)
 			}
 		},
 		eg: {
@@ -83,9 +80,6 @@ var pos = {
 			},
 			sacGals(x) {
 				return Math.min(tmp.extraRG * pos_tmp.mults.gal, x)
-			},
-			basePcGain(x) {
-				return Math.pow(x * pos_tmp.mults.base_pc, 2)
 			}
 		},
 		tg: {
@@ -95,9 +89,6 @@ var pos = {
 			},
 			sacGals(x) {
 				return Math.min(player.dilation.freeGalaxies * pos_tmp.mults.gal, x)
-			},
-			basePcGain(x) {
-				return Math.pow(x * pos_tmp.mults.base_pc, 2)
 			}
 		}
 	},
@@ -112,9 +103,10 @@ var pos = {
 			mdb: QCs.done(3) ? (PCs.milestoneDone(31) ? 1/3 : 0.3) : 0.25,
 			mdb_eff: QCs.done(5) ? 1.5 : 1,
 			gal: QCs.done(5) ? 0.2 : 0.25,
-			base_pc: QCs.done(5) ? 1 / 100 : 1 / 125
+			pc_base: QCs.done(5) ? 1 / 100 : 1 / 125,
+			pc_exp: futureBoost("quantum_superbalancing") ? 4 : 2
 		}
-		if (PCs.milestoneDone(51)) data.mults.base_pc *= 1.2
+		if (PCs.milestoneDone(51)) data.mults.pc_base *= 1.2
 
 		if (!data.sac) data.sac = {}
 		if (!data.pow) data.pow = {}
@@ -185,23 +177,23 @@ var pos = {
 			getEl("pos_cloud" + i + "_cell").className = "pos_tier " + (data[i] >= i * 2 ? "green" : "")
 			getEl("pos_cloud" + i + "_cell").style.display = data[i] ? "" : "none"
 		}
-		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " excluded" : "") + (data.next_amt == 0 ? "" : " (Requires " + shortenDimensions(this.swapCost(data.next_amt)) + " sacrificed quantum energy)")
+		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " excluded" : "")
 	},
 	updateTmpOnTick() {
 		if (!this.unl()) return
 		let data = pos_tmp
 
 		//Meta Dimension Boosts or Quantum Energy -> Positrons
-		pos_save.eng = 0
+		eng = new Decimal(0)
 		if (this.on()) {
 			let mdbStart = 0
 			let mdbMult = pos_tmp.mults.mdb
 
 			data.sac.mdb = Math.floor(Math.max(player.meta.resets - mdbStart, 0) * mdbMult)
-			data.sac.qe = qu_save.quarkEnergy / (tmp.ngp3_mul ? 9 : 3)
+			data.sac.qe = qu_save.quarkEnergy.div(tmp.ngp3_mul ? 9 : 3)
 			pos_save.amt = Math.sqrt(Math.min(
 				data.sac.mdb * (PCs.milestoneDone(51) ? Math.max(data.sac.mdb / 30, 1) : 1) * pos_tmp.mults.mdb_eff,
-				Math.pow(data.sac.qe * (tmp.bgMode ? 2 : 1.5), 2)
+				Math.pow(data.sac.qe.toNumber() * (tmp.bgMode ? 2 : 1.5), 2)
 			)) * 300
 		} else {
 			data.sac.mdb = 0
@@ -220,12 +212,16 @@ var pos = {
 
 			pow[type] = this.types[type].pow(pos_save.amt)
 			save_data.sac = Math.floor(this.types[type].sacGals(pow[type]))
-			save_data.pc = this.types[type].basePcGain(save_data.sac)
+			save_data.pc = Math.pow(save_data.sac * pos_tmp.mults.pc_base, 2)
+			if (save_data.pc > 1e6) save_data.pc /= Math.log10(save_data.pc) / 6
 			pcSum += save_data.pc
 		}
-		if (!pos.on() && enB.active("glu", 6)) pos_save.eng = enB_tmp.glu6
-		else pos_save.eng = Math.pow(pcSum, 2)
-		if (futureBoost("potential_strings") && dev.boosts.tmp[3]) pos_save.eng *= dev.boosts.tmp[3]
+
+		if (!pos.on() && enB.active("glu", 6)) eng = enB_tmp.glu6
+		else eng = Decimal.pow(pcSum, pos_tmp.mults.pc_exp)
+		if (futureBoost("potential_strings") && dev.boosts.tmp[3]) eng = eng.times(dev.boosts.tmp[3])
+
+		pos_save.eng = eng
 	},
 
 	canSwap(x) {
@@ -270,9 +266,6 @@ var pos = {
 	},
 	swapsDisabled() {
 		return !pos.on() || (QCs_save.disable_swaps && QCs_save.disable_swaps.active)
-	},
-	swapCost(x) {
-		return Math.pow(2, x / 2)
 	},
 	excluded(x) {
 		return (futureBoost("exclude_any_qc") ? QCs.inAny() : QCs.in(2)) ? enB.pos.lvl(x) == QCs_save.qc2 : false

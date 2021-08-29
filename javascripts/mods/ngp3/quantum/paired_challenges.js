@@ -19,7 +19,7 @@ var PCs = {
 		82: "Remote Galaxies scaling is slower based on its starting point.",
 		13: "Unlock Replicated Dilaters. (not implemented)",
 		23: "???",
-		33: "Meta Accelerator starts 0.1 later per PC level.",
+		33: "Meta Accelerator slowdown starts 2% later per PC level.",
 		43: "Extra Replicated Galaxies contribute to Positronic Charge.",
 		53: "Replicanti Energy formula is stronger.",
 		63: "Eternity time stat is 3x slower.",
@@ -139,8 +139,8 @@ var PCs = {
 
 		//Boosts
 		var eff = (PCs_save.lvl - 1) / 28
-		data.eff1 = 1 + 0.75 * eff
-		data.eff1_start = (tmp.ngp3_mul ? 125 : 150)
+		data.eff1 = futureBoost("quantum_superbalancing") ? 3 : 1 + 0.75 * eff
+		data.eff1_start = futureBoost("quantum_superbalancing") ? 1000 : tmp.ngp3_mul ? 125 : 150
 		data.eff2 = Math.sqrt(eff) / 4
 
 		//Temperature
