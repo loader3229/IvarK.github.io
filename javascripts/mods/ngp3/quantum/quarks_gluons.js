@@ -489,7 +489,6 @@ var enB = {
 		if (type == "glu") {
 			if (QCs.perkActive(8) && !this.colorMatch("glu", x)) r = 0
 			else if (QCs.perkActive(2)) r *= 20
-			if (str.unl()) r += str.nerf_eb(x)
 		}
 		return r
 	},
@@ -541,6 +540,7 @@ var enB = {
 		var data = {}
 		enB_tmp = data
 
+		data.eff_eb = enB.glu.boosterEff()
 		for (var x = 0; x < this.priorities.length; x++) {
 			var boost = this.priorities[x]
 			var type = boost[0]
@@ -572,13 +572,13 @@ var enB = {
 			return Decimal.div(x, 3).pow(1.5).add(1)
 		},
 		target(x, noBest) {
-			var eng = new Decimal(x) || this.engAmt(noBest)
+			var eng = x ? new Decimal(x) : this.engAmt(noBest)
 			eng = eng.sub(eng.min(1))
 			return eng.pow(1 / 1.5).times(3).add(1)
 		},
 
 		amt() {
-			return qu_save.entBoosts || 0
+			return qu_save.entBoosts || new Decimal(0)
 		},
 		engAmt(noBest) {
 			var x = noBest ? qu_save.quarkEnergy : qu_save.bestEnergy
@@ -590,12 +590,12 @@ var enB = {
 		},
 
 		eff(x) {
-			var amt = this.boosterEff()
+			var amt = enB_tmp.eff_eb
 			var r = amt.times(2 / 3)
 			r = r.sub(r.min(1))
 
 			r = r.times(tmp.glB[enB.mastered("glu", x) ? "masAmt" : "enAmt"])
-			if (str.unl()) r = r.times(str.eff_eb(x))
+			if (str.unl() && amt.gte(str.nerf_eb(str.conv(x, true)))) r = r.times(str.eff_eb(str.conv(x, true)))
 			return r
 		},
 		boosterEff() {
@@ -636,8 +636,11 @@ var enB = {
 			eff(x) {
 				return Decimal.cbrt(x).times(0.75).add(1)
 			},
-			effDisplay(x) {
+			disp(x) {
 				return shorten(x) + "x"
+			},
+			dispFull(x) {
+				return "Gain " + this.disp(x) + " more Quantum Energy."
 			}
 		},
 		2: {
@@ -651,8 +654,11 @@ var enB = {
 			eff(x) {
 				return Math.sqrt(Decimal.add(x, 1).log10() * 1.5 + 1)
 			},
-			effDisplay(x) {
+			disp(x) {
 				return x.toFixed(3) + "x"
+			},
+			dispFull(x) {
+				return "Gain " + this.disp(x) + " more extra Replicated Galaxies."
 			}
 		},
 		3: {
@@ -666,8 +672,11 @@ var enB = {
 			eff(x) {
 				return Decimal.div(x, 2).add(1).pow(tmp.ngp3_mul ? 0.5 : 0.4)
 			},
-			effDisplay(x) {
+			disp(x) {
 				return formatReductionPercentage(x, 2, 3) + "%"
+			},
+			dispFull(x) {
+				return "3x TP upgrade scales " + this.disp(x) + " slower after " + shortenCosts(1e100) + " DT."
 			}
 		},
 		4: {
@@ -682,8 +691,11 @@ var enB = {
 				x = Math.sqrt(1 + Math.log10(x / 10 + 1))
 				return Math.min(0.003 * x, 0.012)
 			},
-			effDisplay(x) {
+			disp(x) {
 				return "^" + x.toFixed(4)
+			},
+			dispFull(x) {
+				return this.disp(x)
 			}
 		},
 		5: {
@@ -699,8 +711,11 @@ var enB = {
 				}
 				return r
 			},
-			effDisplay(x) {
+			disp(x) {
 				return "Strengthen all replicanti upgrades by <span style='font-size: 18px'>^" + shorten(x.exp) + "</span>, <span style='font-size: 15px'>+" + formatPercentage(x.int - 1) + "%</span>. (stealth)"
+			},
+			dispFull(x) {
+				return "Strengthen all replicanti upgrades by ^" + shorten(x.exp) + ", +" + formatPercentage(x.int - 1) + "%."
 			},
 
 			adjustChance(x) {
@@ -723,9 +738,13 @@ var enB = {
 					return Decimal.div(x, 2).sqrt()
 				}
 			},
-			effDisplay(x) {
+			disp(x) {
 				return pos.on() ? "Positrons on: Meta-Dimension Boosts are <span style='font-size: 18px'>" + formatPercentage(x - 1) + "%</span> stronger."
 				: "Positrons off: You gain <span style='font-size: 18px'>+" + shorten(x) + "</span> extra Positronic Charge."
+			},
+			dispFull(x) {
+				return pos.on() ? "Positrons on: Meta-Dimension Boosts are " + formatPercentage(x - 1) + "% stronger."
+				: "Positrons off: You gain +" + shorten(x) + " extra Positronic Charge."
 			}
 		},
 		7: {
@@ -740,8 +759,11 @@ var enB = {
 				var lowLim = tmp.ngp3_mul ? 1.4 : 1.45
 				return Math.max(lowLim + (2 - lowLim) / (Decimal.div(x, 20).add(1).log(2) / 3 + 1), 1.5)
 			},
-			effDisplay(x) {
+			disp(x) {
 				return "^" + x.toFixed(3)
+			},
+			dispFull(x) {
+				return "TP formula upgrade scales at " + this.disp(x) + " after " + shortenCosts(1e100) + " DT."
 			}
 		},
 		8: {
@@ -753,8 +775,11 @@ var enB = {
 			eff(x) {
 				return 0.125 - 0.025 / Math.pow(x + 1, tmp.ngp3_mul ? 0.3 : 0.2)
 			},
-			effDisplay(x) {
+			disp(x) {
 				return "x^" + x.toFixed(3)
+			},
+			dispFull(x) {
+				return "Dilated time boosts Meta Dimensions at " + this.disp(x) + "."
 			}
 		},
 		9: {
@@ -769,8 +794,11 @@ var enB = {
 				if (futureBoost("quantum_superbalancing")) r = Math.max(r, Decimal.pow(x, 1 / 6 / dev.quSb.jP).toNumber() / 100)
 				return r
 			},
-			effDisplay(x) {
+			disp(x) {
 				return shorten(x) + "x"
+			},
+			dispFull(x) {
+				return "Meta Accelerator accelerates " + this.disp(x) + " faster."
 			}
 		},
 		10: {
@@ -783,8 +811,11 @@ var enB = {
 			eff(x) {
 				return Decimal.add(x, 1).pow(tmp.ngp3_exp ? 0.35 : 0.25)
 			},
-			effDisplay(x) {
+			disp(x) {
 				return shorten(x) + "x"
+			},
+			dispFull(x) {
+				return "Multiply the blue power base by " + this.disp(x) + "."
 			}
 		},
 		11: {
@@ -797,8 +828,11 @@ var enB = {
 				var r = Math.log10(Decimal.add(x, 1).log10() / (tmp.ngp3_mul ? 4 : 5) + 1) / 2 + 1
 				return r
 			},
-			effDisplay(x) {
+			disp(x) {
 				return "^" + x.toFixed(4)
+			},
+			dispFull(x) {
+				return "Raise the blue power effect by " + this.disp(x) + "."
 			}
 		},
 		12: {
@@ -811,8 +845,11 @@ var enB = {
 			eff(x) {
 				return 0
 			},
-			effDisplay(x) {
+			disp(x) {
 				return "Unlock Color Subcharge."
+			},
+			dispFull(x) {
+				return this.disp(x)
 			}
 		},
 	},
@@ -875,14 +912,14 @@ var enB = {
 			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
 			if (hasAch("ng3pr13")) req *= 0.75
 			if (PCs.milestoneDone(42) && lvl == 1) req *= 4
-			if (str.unl()) req *= str.nerf_pb(x)
+			if (str.unl()) req *= str.nerf_pb(str.conv(x, true))
 			return req
 		},
 		chargeEff(x) {
 			var lvl = this.lvl(x)
 			var eff = 2 * lvl
 			if (PCs.milestoneDone(42) && lvl == 1) eff = 8
-			if (str.unl()) eff += str.eff_pb(x)
+			if (str.unl()) eff += str.eff_pb(str.conv(x, true))
 			return eff
 		},
 		charged(x, lvl) {
@@ -913,8 +950,11 @@ var enB = {
 				var eff = Decimal.times(x, 4).add(1).log(2)
 				return Math.log10(rep.max(1).log10() / 1e6 * eff + 1) * eff
 			},
-			effDisplay(x) {
+			disp(x) {
 				return "(" + shorten(x) + ")"
+			},
+			dispFull(x) {
+				return "Quantum efficiency is based on Replicantis " + this.disp(x) + ", but the denominator is decreased to 1."
 			}
 		},
 		2: {
@@ -965,8 +1005,11 @@ var enB = {
 					igal_softcap: hasAch("ng3p27") ? Math.pow(Math.max(igal - 0.5, 1), 2) : undefined
 				}
 			},
-			effDisplay(x) {
+			disp(x) {
 				return getPataAccelerator().toFixed(3) + "x"
+			},
+			dispFull(x) {
+				return "Unlock Meta-Accelerator. (with a base multiplier of " + this.disp(x) + ", based on time since quantum)"
 			}
 		},
 		3: {
@@ -983,8 +1026,11 @@ var enB = {
 				gal *= Math.min(Math.pow(Math.log2(x + 1), 2), 100)
 				return Math.pow(gal + 1, 1.5)
 			},
-			effDisplay(x) {
+			disp(x) {
 				return "^" + shorten(x)
+			},
+			dispFull(x) {
+				return "Galaxies raise the per-10 multiplier by " + this.disp(x) + "."
 			}
 		},
 		4: {
@@ -1001,8 +1047,11 @@ var enB = {
 			eff(x) {
 				return Math.log10(x / 10 + 1) * Math.pow(x / (tmp.ngp3_mul ? 100 : 200) + 1, 0.25) / 3 + 1
 			},
-			effDisplay(x) {
+			disp(x) {
 				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
+			},
+			dispFull(x) {
+				return "Quantum requires " + this.disp(x) + " instead."
 			}
 		},
 		5: {
@@ -1018,8 +1067,11 @@ var enB = {
 			eff(x) {
 				return Math.pow(Decimal.div(x, 10).add(1).log(2) + 1, tmp.ngp3_mul ? 2 : 1)
 			},
-			effDisplay(x) {
+			disp(x) {
 				return formatReductionPercentage(x) + "%"
+			},
+			dispFull(x) {
+				return "Reduce the gluon penalties by " + this.disp(x) + "."
 			}
 		},
 		6: {
@@ -1034,8 +1086,11 @@ var enB = {
 				let r = Decimal.div(x, 600).add(1).log10() / 3 + 1
 				return Math.sqrt(r)
 			},
-			effDisplay(x) {
+			disp(x) {
 				return "^" + x.toFixed(3)
+			},
+			dispFull(x) {
+				return "Raise all Time Dimensions by " + this.disp(x) + "."
 			}
 		},
 		7: {
@@ -1050,8 +1105,11 @@ var enB = {
 				x *= x
 				return x
 			},
-			effDisplay(x) {
+			disp(x) {
 				return formatValue(player.options.notation, x, 2, 3) + "x"
+			},
+			dispFull(x) {
+				return "Tachyon particles speed up Pata Accelerator production by " + this.disp(x) + "."
 			}
 		},
 		8: {
@@ -1064,8 +1122,11 @@ var enB = {
 			eff(x) {
 				return Decimal.add(x, 1).log10() / 5
 			},
-			effDisplay(x) {
+			disp(x) {
 				return formatReductionPercentage(x + 1) + "%"
+			},
+			dispFull(x) {
+				return "EC14 reward is " + this.disp(x) + " closer to ^1."
 			}
 		},
 		9: {
@@ -1080,8 +1141,11 @@ var enB = {
 				if (futureBoost("quantum_superbalancing")) r = Math.max(r, Decimal.pow(x, 1 / 6 / dev.quSb.jP).toNumber() / 2)
 				return r
 			},
-			effDisplay(x) {
+			disp(x) {
 				return shorten(x)
+			},
+			dispFull(x) {
+				return "Meta Accelerator slowdown starts " + this.disp(x) + " later, but also slows down the acceleration."
 			}
 		},
 		10: {
@@ -1096,8 +1160,11 @@ var enB = {
 				var exp = 5 - 5 / (Math.log10(x / 1e3 + 1) + 1)
 				return Math.max(sqrt, 1) * exp + 1
 			},
-			effDisplay(x) {
+			disp(x) {
 				return "^" + shorten(x)
+			},
+			dispFull(x) {
+				return "Infinitied stat raises itself by " + this.disp(x) + "."
 			}
 		},
 		11: {
@@ -1110,8 +1177,11 @@ var enB = {
 			eff(x) {
 				return Math.min(5e-8 * Math.log2(x / 500 + 1), 1e-5)
 			},
-			effDisplay(x) {
+			disp(x) {
 				return shorten(player.eternityPoints.max(1).pow(x * getAQSGainExp())) + "x"
+			},
+			dispFull(x) {
+				return "Eternity Points boost Anti-Quarks by " + this.disp(x) + "."
 			}
 		},
 		12: {
@@ -1124,8 +1194,11 @@ var enB = {
 			eff(x) {
 				return Math.log10(Math.pow(getReplEff().log10() * Decimal.add(x, 1).log10(), 0.2) + 10) - 1
 			},
-			effDisplay(x) {
+			disp(x) {
 				return "+" + x.toFixed(3) + "x"
+			},
+			dispFull(x) {
+				return "Replicantis add " + this.disp(x) + " to Pata Accelerator cap."
 			}
 		},
 	},
@@ -1213,7 +1286,7 @@ var enB = {
 			getEl("enB_" + type + i + "_name").textContent = shiftDown ? (data[i].title || "Unknown title.") : (data.name + " Boost #" + i)
 			getEl("enB_" + type + i + "_type").innerHTML = "(" + wordizeList(list, false, " - ", false) + ")" + (data[i].activeDispReq ? "<br>Requirement: " + data[i].activeDispReq() : "")
 
-			if (enB_tmp[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(enB_tmp[type + i])
+			if (enB_tmp[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].disp(enB_tmp[type + i])
 		}
 	}
 }
@@ -1304,7 +1377,7 @@ function updateGluonsTab() {
 
 	enB.updateOnTick("glu")
 	getEl("enB_eff").textContent = !shiftDown && !QCs.in(8) ? "" :
-		"Effective Boosters: " + shorten(enB.glu.boosterEff()) + (enB.glu.boosterExp() > 1 ? " (^" + shorten(enB.glu.boosterExp()) + ")" : "")
+		"Effective Boosters: " + shorten(enB_tmp.eff_eb) + (enB.glu.boosterExp() > 1 ? " (^" + shorten(enB.glu.boosterExp()) + ")" : "")
 }
 
 //Display: On load

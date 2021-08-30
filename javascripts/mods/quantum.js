@@ -253,7 +253,14 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	*/
 
 	// Strings
-	if (str.unl()) str.updateTmp()
+	if (str.unl()) {
+		//Positronic Cloud Fix
+		pos_save.swaps = {...pos_tmp.cloud.next}
+		pos_tmp.cloud.swaps = pos.on() ? {...pos_tmp.cloud.next} : {}
+
+		str.updateTmp()
+		str.updateDisp()
+	}
 
 	// Paired Challenges
 	if (PCs.unl()) {

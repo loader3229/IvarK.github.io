@@ -152,7 +152,7 @@ var QCs = {
 					let pc11 = 0.2 + (PCs_save.lvl - 1) / 35
 					data.limit = data.limit.pow(Math.pow(2, -pc11))
 					data.speedMult = data.speedMult.pow(1 - pc11)
-					data.scalingExp = 1 / (1 + boosts / (20 + pc11 * 5))
+					data.scalingExp *= 1 + pc11 / 4
 					data.effMult = this.eff(boosts, eff, maxEff, pc11)
 				}
 				if (PCs.milestoneDone(12)) data.limit = data.limit.pow(Math.log2(qc1.expands + 1) / 10 + 1)

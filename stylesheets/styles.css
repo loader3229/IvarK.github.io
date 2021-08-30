@@ -2427,6 +2427,7 @@ td.grey {
 	position: relative;
 	width: 90px !important;
 	height: 90px !important;
+	white-space: normal
 }
 .posbtn span {
 	position: absolute;
@@ -2451,7 +2452,7 @@ td.grey {
 	text-shadow: 0px 0px 6px #bf0000, 2px 1px 3px #bf0000, -2px -1px 3px #bf0000
 }
 
-#str_boosts {
+.str_boosts {
 	width: 100%;
 	margin: 0;
 	overflow-x: auto;
@@ -2463,6 +2464,13 @@ td.grey {
 	width: 72px !important;
 	height: 228px !important;
 	position: relative;
+}
+.str_boost.fix {
+	display: inline-block;
+	width: 44px !important;
+	height: 228px !important;
+	position: relative;
+	visibility: hidden
 }
 .str_boost span {
 	position: absolute;
@@ -2480,7 +2488,6 @@ td.grey {
 	position: absolute;
 	left: 0;
 	top: 72px;
-	z-index: 1;
 	font-size: 8px;
 }
 .str_boost button span, .str_boost button div {
