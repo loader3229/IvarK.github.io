@@ -68,13 +68,13 @@ var QCs = {
 		max: 8,
 		1: {
 			unl: () => true,
-			desc: "There are Replicanti Compressors instead of Replicated Galaxies, and TT cost multipliers are doubled.",
-			goal: () => player.money.e >= (tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11),
-			goalDisp: () => shortenCosts(Decimal.pow(10, tmp.exMode ? 1.1e11 : tmp.bgMode ? 5e10 : 1e11)) + " antimatter",
-			goalMA: Decimal.pow(Number.MAX_VALUE, 1.35),
-			hint: "Figure out how to get more Replicanti Chance. (MS35)",
+			desc: "TT cost multipliers are multiplied by 3.5x.",
+			goal: () => mTs.bought >= 10,
+			goalDisp: () => getFullExpansion(10) + " bought mastery studies",
+			goalMA: Decimal.pow(Number.MAX_VALUE, 2.1),
+			hint: "It's the first one, so it's easy!",
 
-			rewardDesc: (x) => "You can keep Replicanti Compressors.",
+			rewardDesc: (x) => "Unlock Replicanti Compressors, but there is a limit on Replicantis. Compressors greatly speed up Replicanti Slowdown!",
 			rewardEff(str) {
 				return 0.1
 			},
@@ -113,14 +113,14 @@ var QCs = {
 			scalings: [5],
 
 			eff(boosts, eff, max, pc11 = 0) {
-				var eff = Math.min((eff * 3 - max * 2 * (1 - pc11)) / 10 + 1, 5)
+				var eff = Math.min(eff * (1 + 2 * pc11) / 10 + 1, 5)
 				return eff
 			},
 			extra: () => 0,
 			updateTmp() {
 				let qc1 = QCs_save.qc1
 				delete QCs_tmp.qc1
-				if (!QCs.in(1) && !QCs.done(1)) return
+				if (!QCs.done(1)) return
 
 				//Boosts
 				let boosts = qc1.boosts
@@ -130,7 +130,6 @@ var QCs = {
 				let str = QCs.modIn(1, "up") ? 0.5 : 1
 				let extra = this.extra()
 				let eff = (boosts + extra) * str
-				let maxEff = (qc1.max + extra) * str
 
 				//Setup
 				let data = {
@@ -141,7 +140,7 @@ var QCs = {
 					scalingMult: 1,
 					scalingExp: 1 / (1 + boosts / 20),
 
-					effMult: this.eff(boosts, eff, maxEff),
+					effMult: this.eff(boosts, eff),
 					effExp: 1 + eff / 20,
 				}
 				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
@@ -152,8 +151,8 @@ var QCs = {
 					let pc11 = 0.2 + (PCs_save.lvl - 1) / 35
 					data.limit = data.limit.pow(Math.pow(2, -pc11))
 					data.speedMult = data.speedMult.pow(1 - pc11)
-					data.scalingExp *= 1 + pc11 / 4
-					data.effMult = this.eff(boosts, eff, maxEff, pc11)
+					data.scalingExp *= 1 + pc11 / 5
+					data.effMult = this.eff(boosts, eff, pc11)
 				}
 				if (PCs.milestoneDone(12)) data.limit = data.limit.pow(Math.log2(qc1.expands + 1) / 10 + 1)
 
@@ -192,25 +191,15 @@ var QCs = {
 			},
 
 			updateDisp() {		
-				getEl("repCompress").style.display = QCs_tmp.qc1 ? "" : "none"
+				getEl("replCompressDiv").style.display = QCs_tmp.qc1 ? "" : "none"
 				getEl("repExpand").style.display = PCs.milestoneDone(12) ? "" : "none"
 			},
 			updateDispOnTick() {
 				let qc1 = QCs_save.qc1
 				let data = QCs.data[1]
 				if (QCs_tmp.qc1) {
-					let qc1Explain = qc1.boosts + data.extra() == 0
-					let extra = data.extra()
-					getEl("repCompress").innerHTML = "Compress for a " + (qc1Explain ? "small multiplier " : "") + "boost" +
-						(!qc1Explain ? "." : ", but reduce the interval scaling.") +
-						"<br><span style='font-size: 10px'>(" + (qc1Explain ? "Requires " : "") + shortenCosts(QCs_tmp.qc1.req) + " replicantis)</span>" +
-						(!qc1Explain ? "<br>(" +
-							getFullExpansion(qc1.boosts) + (qc1.boosts > data.scalings[0] ? " Distant" : "") + " Compressors" +
-							(qc1.max || extra > 0 ? ", " + getFullExpansion(qc1.max) + " Max" : "") +
-							(extra > 0 ? " + " + getFullExpansion(Math.floor(extra)) : "") +
-						")" : "")
-					getEl("repCompress").style["font-size"] = qc1Explain ? "11px" : "12px"
-					getEl("repCompress").className = data.can() ? "storebtn" : "unavailablebtn"
+					getEl("replCompress").textContent = getFullExpansion(qc1.boosts)
+					getEl("replCompressEff").textContent = "^" + shorten(QCs_tmp.qc1.effExp) + ", x" + shorten(QCs_tmp.qc1.effMult)
 				}
 				if (PCs.milestoneDone(12)) {
 					getEl("repExpand").innerHTML = "Energize the Replicantis and expand their space." +
@@ -419,18 +408,11 @@ var QCs = {
 
 				QCs_tmp.qc5 = {
 					mult: new Decimal(QCs_save.qc1.boosts + 1),
-					eff_glu: Math.pow(QCs_save.qc5.div(2e6).add(1).log(2), 12 / 7) * 5,
-					eff_pos: QCs_save.qc5.div(2e6).add(1).log(2) * 10,
+					eff: Math.pow(QCs_save.qc5.div(2e6).add(1).log(2), 12 / 7) * 5
 				}
 				if (QCs.isRewardOn(6)) QCs_tmp.qc5.mult = QCs_tmp.qc5.mult.times(QCs_tmp.rewards[6])
-				if (PCs.milestoneDone(53)) {
-					QCs_tmp.qc5.eff_glu = Math.pow(QCs_tmp.qc5.eff_glu, 1.1)
-					QCs_tmp.qc5.eff_pos = Math.pow(QCs_tmp.qc5.eff_pos, 1.1)
-				}
-				if (QCs.perkActive(5)) {
-					QCs_tmp.qc5.eff_glu *= 2
-					QCs_tmp.qc5.eff_pos *= 2
-				}
+				if (PCs.milestoneDone(53)) QCs_tmp.qc5.eff = Math.pow(QCs_tmp.qc5.eff, 1.1)
+				if (QCs.perkActive(5)) QCs_tmp.qc5.eff *= 2
 			},
 
 			updateDisp() {		
@@ -441,8 +423,7 @@ var QCs = {
 				getEl("qc5_eng").textContent = shorten(QCs_save.qc5)
 				getEl("qc5_eng_mult").textContent = shiftDown ? " (+" + shorten(Math.max(QCs_tmp.qc5.mult, 1)) + " per " + shorten(Decimal.pow(10, 1 / Math.min(QCs_tmp.qc5.mult, 1))) + "x)" : ""
 				getEl("qc5_eng_exp").textContent = exp > 1 ? shorten(exp) : ""
-				getEl("qc5_eff_glu").textContent = shorten(QCs_tmp.qc5.eff_glu)
-				getEl("qc5_eff_pos").textContent = shorten(QCs_tmp.qc5.eff_pos)
+				getEl("qc5_eff").textContent = shorten(QCs_tmp.qc5.eff)
 			},
 		},
 		6: {

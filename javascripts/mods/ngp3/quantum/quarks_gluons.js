@@ -582,7 +582,7 @@ var enB = {
 		},
 		engAmt(noBest) {
 			var x = noBest ? qu_save.quarkEnergy : qu_save.bestEnergy
-			if (noBest && QCs_tmp.qc5) x = x.add(QCs_tmp.qc5.eff_glu)
+			if (noBest && QCs_tmp.qc5) x = x.add(QCs_tmp.qc5.eff)
 			return x
 		},
 		set(x) {
@@ -790,7 +790,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				var r = Decimal.div(x, 100).add(1).log(2) * (tmp.ngp3_exp ? 1.5 : 1) + 1
+				var r = Decimal.div(x, 100).add(1).log(2) * 1.5 + 1
 				if (futureBoost("quantum_superbalancing")) r = Math.max(r, Decimal.pow(x, 1 / 6 / dev.quSb.jP).toNumber() / 100)
 				return r
 			},
@@ -895,7 +895,7 @@ var enB = {
 
 		engEff(x) {
 			var eng = this.engAmt()
-			if (QCs_tmp.qc5) eng = eng.add(QCs_tmp.qc5.eff_pos)
+			if (QCs_tmp.qc5) eng = eng.add(QCs_tmp.qc5.eff)
 			return eng
 		},
 		eff(x) {
@@ -1045,7 +1045,8 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				return Math.log10(x / 10 + 1) * Math.pow(x / (tmp.ngp3_mul ? 100 : 200) + 1, 0.25) / 3 + 1
+				return Math.log10(x / 10 + 1) *
+					Math.pow(x / (tmp.ngp3_mul ? 100 : 200) + 1, 0.25) / 3 + 1
 			},
 			disp(x) {
 				return shorten(Decimal.pow(getQuantumReq(true), 1 / x))
@@ -1137,8 +1138,7 @@ var enB = {
 			title: "MT-Force Preservation",
 			tier: 2,
 			eff(x) {
-				var r = Decimal.div(x, 15).add(1).pow(0.1).toNumber() - 1
-				if (futureBoost("quantum_superbalancing")) r = Math.max(r, Decimal.pow(x, 1 / 6 / dev.quSb.jP).toNumber() / 2)
+				var r = Decimal.times(x, 3).add(1).pow(1 / 18).toNumber() - 0.5
 				return r
 			},
 			disp(x) {

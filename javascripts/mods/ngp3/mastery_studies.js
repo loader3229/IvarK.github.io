@@ -7,7 +7,7 @@ var mTs = {
 			261: 1.5e69, 262: 1.5e69, 263: 1.5e69, 264: 1.5e69, 265: 1.5e69, 266: 1.5e69,
 
 			//Quantum
-			271: 0, 272: 1e77,
+			271: 1e71, 272: 1e77,
 			281: 1e78, 282: 5e76, 283: 5e76, 284: 1e78,
 			291: 2e78, 292: 2e78,
 			301: 1e80, 302: 1e78, 303: 1e80,
@@ -280,7 +280,7 @@ var mTs = {
 		291: () => "Replicantis multiply Dimension Boosts.",
 		292: () => "Replicated Galaxies boost Replicantis.",
 
-		301: () => "Replicated Galaxies work effective equally.",
+		301: () => "Boosts to Replicated Galaxies work across all galaxies.",
 		302: () => "Strengthen some Replicanti boosts.",
 		303: () => "All Replicanti boosts are based on replicanti multiplier instead.",
 
@@ -381,6 +381,7 @@ var mTs = {
 			var d = player.masterystudies[id].split("d")[1]
 			if (d) respecedMS.push(player.masterystudies[id])
 		}
+		if (reset && isInfinityMoralsApplied()) for (var i = 0; i < 10; i++) respecedMS.push("t" + mTs.timeStudies[i])
 		player.masterystudies = respecedMS
 
 		updateMasteryStudyBoughts()
@@ -631,7 +632,7 @@ function getMasteryStudyCostMult(id) {
 	if (tmp.dtMode) r = d[id + "_dt"] || r
 
 	if (id.split("t")[1] < 290 && tmp.ngp3_mul && tmp.bgMode) r = Math.sqrt(r)
-	if (r != "reset" && !QCs.isntCatched() && QCs.in(1)) r *= 2
+	if (r != "reset" && !QCs.isntCatched() && QCs.in(1)) r *= 3.5
 
 	return r
 }
@@ -712,14 +713,14 @@ function canBuyMasteryStudy(type, id) {
 		var row = Math.floor(id / 10)
 		if (!mTs.spentable.includes(id)) return false
 		if (player.timestudy.theorem < mTs.costs.time[id]) return false
-		if (!hasAch("ng3p26") && mTs.latestBoughtRow - (tmp.bgMode || tmp.ngp3_mul && !tmp.exMode ? 1 : 0) > row) return false
+		if (!hasAch("ng3pr11") && mTs.latestBoughtRow - (tmp.bgMode || tmp.ngp3_mul && !tmp.exMode ? 1 : 0) > row) return false
 		if (mTs.unlockReqConditions[id] && !mTs.unlockReqConditions[id]()) return false
 
 		//Death Mode
 		if (tmp.dtMode && mTs.latestBoughtRow <= 26 && (id != "t264" && id != "t265") && (hasMTS(264) || hasMTS(265))) return false
 
 		//QC7
-		if (QCs.in(7)) return !mTs.spentRows[row] || mTs.spentRows[row] < mTs.studyRows[row] - 1
+		if (QCs.in(7)) return (row <= 26 && isInfinityMoralsApplied()) || !mTs.spentRows[row] || mTs.spentRows[row] < mTs.studyRows[row] - 1
 	} else if (type == 'd') {
 		if (player.timestudy.theorem < mTs.costs.dil[id] || player.masterystudies.includes('d' + id)) return false
 		if (!pH.did("ghostify") && !(mTs.unlockReqConditions["d" + id] && mTs.unlockReqConditions["d" + id]())) return false
@@ -881,4 +882,8 @@ function recordUpDown(x) {
 	upDown.point=x
 	upDown.times++
 	if (upDown.times>=200) giveAchievement("Up and Down and Up and Down...")
+}
+
+function isInfinityMoralsApplied() {
+	return QCs.inAny() && (hasAch("ng3pr11") || (!PCs.in() && QCs.done(QCs_save.in[0])))
 }

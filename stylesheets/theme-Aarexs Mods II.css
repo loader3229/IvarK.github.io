@@ -156,7 +156,9 @@ button, div.storebtn {
 	display: none
 }
 
-.IPAmount2, #sacrificedIP, #infPowAmount, #infPowEffectPower, #infDimMultAmount, #replicantiamount, #replicantimult, #replCond, #replCond1, #replCond2, #replicantiAmount2, #InfAndReplMultAmount {
+.IPAmount2, #sacrificedIP, #infPowAmount, #infPowEffectPower, #infDimMultAmount,
+#replicantiamount, #replicantimult, #replCond, #replCond1, #replCond2, #replicantiAmount2, #InfAndReplMultAmount,
+#replCompress, #replCompressEff, #qc5_eng, #qc5_eff {
 	color: #e59900 !important;
 }
 

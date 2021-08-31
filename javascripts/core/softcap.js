@@ -20,7 +20,7 @@ var softcap_data = {
 			start: new Decimal(1e69 / 2e4),
 			base: 10,
 			pow: 2/3,
-			mul: () => (tmp.bgMode ? 1.25 : 1.5) / (QCs.in(1) ? QCs.data[1].ttScaling() : 1),
+			mul: () => tmp.bgMode ? 1.25 : 1.5,
 			sub10: 68 - Math.log10(2e4)
 		},
 		2: {
@@ -126,7 +126,7 @@ var softcap_data = {
 			func: "pow",
 			start: 3,
 			pow: 0.5,
-			mul: 0.5
+			mul: 2/3
 		}
 	},
 

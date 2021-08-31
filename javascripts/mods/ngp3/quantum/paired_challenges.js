@@ -78,11 +78,11 @@ var PCs = {
 		this.updateUsed()
 	},
 
-	unl() {
-		return PCs_save && (PCs_tmp.unl || QCs.done(7))
+	unl(force) {
+		return (!force && PCs_tmp.unl) || (PCs_save && QCs.done(7))
 	},
 	updateTmp() {
-		PCs_tmp.unl = PCs.unl()
+		PCs_tmp.unl = PCs.unl(true)
 		if (!PCs_tmp.unl) return
 		if (!PCs.data.setup) this.setupData()
 		var data = PCs_tmp

@@ -43,10 +43,7 @@ function replicantiIncrease(diff) {
 	if (auto && tmp.ngC) ngC.condense.rep.buy()
 	if (auto && canGetReplicatedGalaxy() && (canAutoReplicatedGalaxy() || player.currentEternityChall == "eterc14")) replicantiGalaxy()
 
-	if (QCs.data[1].can() && player.replicanti.amount.eq(lim)) {
-		QCs_save.qc1.max++
-		QCs.data[1].boost()
-	}
+	if (QCs.data[1].can() && player.replicanti.amount.eq(lim)) QCs.data[1].boost()
 }
 
 function getReplicantiLimit(cap = false) {
@@ -230,8 +227,6 @@ function canAutoReplicatedGalaxy() {
 }
 
 function getMaxRG() {
-	if (QCs.in(1)) return 0
-
 	let ret = player.replicanti.gal
 	if (hasTS(131)) ret += Math.floor(ret * 0.5)
 	return ret
@@ -256,10 +251,7 @@ function updateExtraReplBase() {
 var extraReplMulti = 1
 function updateExtraReplMult() {
 	let x = 1
-	if (QCs.in(1)) x = 0
-	else if (tmp.ngp3) {
-		if (enB.active("glu", 2)) x *= enB_tmp.glu2
-	}
+	if (enB.active("glu", 2)) x *= enB_tmp.glu2
 	extraReplMulti = x
 }
 
@@ -275,8 +267,6 @@ function getEffectiveRGs(type = "rg") {
 }
 
 function getFullEffRGs(min) {
-	if (QCs.in(1)) return 0
-
 	let x = getEffectiveRGs("rg")
 	if (hasMTS(301)) x += getEffectiveRGs("eg")
 	else if (min) x = Math.min(x, player.replicanti.gal)

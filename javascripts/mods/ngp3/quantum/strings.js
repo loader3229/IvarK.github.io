@@ -170,7 +170,9 @@ let str = {
 			str_save.vibrated.push(id)
 		}
 
-		restartQuantum(true)
+		if (dev.noReset) {
+			str.updateTmp()
+		} else restartQuantum(true)
 	},
 	vibrated(x) {
 		return str.unl() && ((str_save.vibrated && str_save.vibrated.includes(x)) || str_tmp.disable[x])

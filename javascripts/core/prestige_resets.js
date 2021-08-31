@@ -558,7 +558,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 		auto: bm ? player.replicanti.auto : [false, false, false]
 	}
 	player.timestudy = bm ? player.timestudy : {
-		theorem: hasAch("ng3pr11") && QCs.inAny() ? 1e72 : 0,
+		theorem: 0,
 		amcost: new Decimal("1e20000"),
 		ipcost: new Decimal(1),
 		epcost: new Decimal(1),

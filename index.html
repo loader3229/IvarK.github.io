@@ -1534,7 +1534,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.6: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(8/29/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(8/30/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -4170,12 +4170,13 @@
 			<button class="storebtn" id="replicantiunlock" onclick="unlockReplicantis()" style="width:200px; height: 80px">Unlock Replicantis<br>Cost: 1e140 IP</button>
 			<div id="replicantidiv" style="display: none; width: 1000px">
 				<div id="eterc8repl" style="display: none;"></div>
-				<p id="qc5_div" style="font-size: 9px">
-					During this quantum, Replicantis also produced <span id="qc5_eng" style="font-size: 15px">0</span> energy<sup id="qc5_eng_exp">1</sup> in total<span id="qc5_eng_mult" style="font-size: 12px"></span>,
-					which translated to +<span id="qc5_eff_glu" style="font-size: 12px">0</span> extra quantum energy and +<span id="qc5_eff_pos" style="font-size: 12px">0</span> positronic charge.
-				</p>
 				<p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti, which is translated to <span id="replicantimult" style="font-size:23px; color: black">0</span> <span id="replDesc"></span>.</p>
 				<span id="replicantieff"></span> <span id="softcap_rep_disp"></span>
+				<p id="replCompressDiv">You have <span id="replCompress" style="font-size: 20px">0</span> Replicanti Compressors, which boosts the exponent of Replicantis by <span id="replCompressEff" style="font-size: 15px">^1.00, x1.00</span>.</p>
+				<p id="qc5_div" style="font-size: 9px">
+					During this quantum, Replicantis also produced <span id="qc5_eng" style="font-size: 15px">0</span> energy<sup id="qc5_eng_exp">1</sup> in total<span id="qc5_eng_mult" style="font-size: 12px"></span>,
+					which translated to +<span id="qc5_eff" style="font-size: 12px">0</span> extra quantum energy and positronic charge.
+				</p>
 				<br>
 				<button class="storebtn" id="replicantichance" onclick="upgradeReplicantiChance()" style="width:180px; height: 50px; font-size: 10px">Replicate chance: 1%<br>+1% Costs: 1e6969 IP</button>
 				<button class="storebtn" id="replicantiinterval" onclick="upgradeReplicantiInterval()" style="width:180px; height: 50px; font-size: 10px">Interval: 1000ms<br>-> 900 Costs: 1e6969 IP</button>
@@ -4192,7 +4193,6 @@
 				<span id="softcap_rInt_disp"></span>
 				<br>
 				<button class="storebtn" id="replicantireset" onclick="replicantiGalaxy()" style="width: 200px; height: 90px; font-size: 12px"></button>
-				<button class="storebtn" id="repCompress" onclick="QCs.data[1].boost()" style="width: 200px; height: 90px; font-size: 12px"></button>
 				<button class="storebtn" id="repExpand" onclick="QCs.data[1].expand()" style="width: 200px; height: 90px; font-size: 12px"></button>
 				<br>
 				<button class="storebtn" id="replicantiresettoggle" onclick="replicantiGalaxyAutoToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Auto galaxy OFF</button><br>

@@ -428,7 +428,8 @@ option {
     color: #7f7 !important;
     text-shadow: 1px 1px #a7f;
 }
-#replicantiamount, #replicantimult {
+#replicantiamount, #replicantimult, #replCond, #replCond1, #replCond2,
+#replCompress, #replCompressEff, #qc5_eng, #qc5_eff {
     animation: repAnim 15s ease-out infinite;
 }
 @keyframes repAnim {
