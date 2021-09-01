@@ -111,7 +111,7 @@ var pos = {
 		if (!data.pow) data.pow = {}
 
 		if (!data.cloud) data.cloud = {}
-		data.cloud.swaps = pos.on() ? {... pos_save.swaps} : {}
+		data.cloud.swaps = !this.swapsDisabled() ? {... pos_save.swaps} : {}
 		data.cloud.next = {... pos_save.swaps}
 		data.cloud.div = {}
 
@@ -149,9 +149,12 @@ var pos = {
 				if (data.div[i] != nextLvl) getEl("pos_cloud" + nextLvl + "_boosts").appendChild(getEl("pos_boost" + i + "_btn"))
 				data.div[i] = nextLvl
 
-				getEl("pos_boost" + i + "_btn").className = pos_tmp.chosen ? (pos_tmp.chosen == i ? "chosenbtn posbtn" : this.canSwap(i) ? "storebtn posbtn" : "unavailablebtn posbtn") :
-					excluded ? "unavailablebtn posbtn" :
-					(data.next[i] ? "chosenbtn posbtn" : lvl != nextLvl ? "chosenbtn2 posbtn" : "storebtn posbtn")
+				getEl("pos_boost" + i + "_btn").className = (pos_tmp.chosen ? 
+					(pos_tmp.chosen == i ? "chosenbtn" : this.canSwap(i) ? "storebtn" : "unavailablebtn") :
+					excluded ? "unavailablebtn" :
+					data.next[i] ? (nextLvl > originalLvl ? "chosenbtn3" : "chosenbtn") :
+					lvl != nextLvl ? "chosenbtn2" : "storebtn"
+				) + " pos_btn"
 				getEl("pos_boost" + i + "_excite").innerHTML = (lvl != nextLvl ? "(Next: " + lvl + " -> " + nextLvl + ")" : "Tier " + originalLvl + (originalLvl != lvl ? " -> " + lvl : "") + (pos_tmp.chosen == i ? "<br>(Selected)" : originalLvl != lvl ? "<br>(from PB" + pos_save.swaps[i] + ")" : ""))
 				data[lvl] = (data[lvl] || 0) + 1
 
@@ -169,7 +172,7 @@ var pos = {
 			getEl("pos_cloud" + i + "_cell").className = "pos_tier " + (data[i] >= i * 2 ? "green" : "")
 			getEl("pos_cloud" + i + "_cell").style.display = data[i] ? "" : "none"
 		}
-		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " excluded" : "")
+		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " disabled" : "")
 
 		//Unlocks
 		var unl = (data.sum >= 4)
@@ -268,7 +271,7 @@ var pos = {
 		return this.swapsDisabled() ? {} : pos_tmp.cloud.swaps
 	},
 	swapsDisabled() {
-		return !pos.on() || (QCs_save.disable_swaps && QCs_save.disable_swaps.active)
+		return QCs_save.disable_swaps && QCs_save.disable_swaps.active
 	},
 	excluded(x) {
 		return (futureBoost("exclude_any_qc") ? QCs.inAny() : QCs.in(2)) ? enB.pos.lvl(x) == QCs_save.qc2 : false
@@ -313,6 +316,8 @@ var pos = {
 		}
 		if (pos_tmp.cloud.shown) {
 			for (var i = 1; i <= enB.pos.max; i++) {
+				if (!enB.mastered("pos", i)) continue
+
 				getEl("pos_boost" + i + "_btn").setAttribute('ach-tooltip', "Boost: " + enB.pos[i].dispFull(enB_tmp["pos" + i]) + (enB.pos.charged(i) ? "\nCharge: " + shortenDimensions(enB.pos.chargeEff(i)) + "x stronger" : ""))
 				if (enB.mastered("pos", i)) pos.updateCharge(i)
 			}

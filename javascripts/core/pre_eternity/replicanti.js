@@ -43,7 +43,7 @@ function replicantiIncrease(diff) {
 	if (auto && tmp.ngC) ngC.condense.rep.buy()
 	if (auto && canGetReplicatedGalaxy() && (canAutoReplicatedGalaxy() || player.currentEternityChall == "eterc14")) replicantiGalaxy()
 
-	if (QCs.data[1].can() && player.replicanti.amount.eq(lim)) QCs.data[1].boost()
+	if (QCs_tmp.qc1 && player.replicanti.amount.eq(lim)) QCs.data[1].boost()
 }
 
 function getReplicantiLimit(cap = false) {
@@ -59,7 +59,7 @@ function getReplicantiLimit(cap = false) {
 			return lim
 		}
 	}
-	if (QCs_tmp.qc1) lim = lim.min(QCs_tmp.qc1.limit)
+	if (QCs_tmp.qc1) lim = lim.min(QCs_tmp.qc1.lim)
 
 	return lim
 }
@@ -489,11 +489,6 @@ function updateReplicantiTemp() {
 		var qc5 = data.baseEst.pow(Math.max(1 - player.thisEternity / 100, 0))
 		data.baseInt = data.baseInt.times(qc5)
 		data.baseEst = data.baseEst.div(qc5)
-	}
-	if (QCs.modIn(1, "up")) {
-		var qc1 = data.baseEst.pow(tmp.exMode ? 2 : 1)
-		data.baseInt = data.baseInt.times(qc1)
-		data.baseEst = data.baseEst.div(qc1)
 	}
 
 	data.speeds = getReplSpeed()

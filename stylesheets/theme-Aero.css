@@ -429,7 +429,7 @@ option {
     text-shadow: 1px 1px #a7f;
 }
 #replicantiamount, #replicantimult, #replCond, #replCond1, #replCond2,
-#replCompress, #replCompressEff, #qc5_eng, #qc5_eff {
+#replCompress, #replCompressEff, #replDilater, #replDilaterEff, #qc5_eng, #qc5_eff {
     animation: repAnim 15s ease-out infinite;
 }
 @keyframes repAnim {
@@ -967,19 +967,19 @@ td .timestudybought.lightstudy {
     filter: none !important;
     box-shadow: inset 0 0 25px #fff7, 0 0 8px #ccc7 !important;
 }
-td .timestudy.elcstudy {
+td .timestudy.pos_study {
     background: linear-gradient(#330, #000) !important;
     color: #ff8 !important;
     border: 1px solid #775 !important;
     box-shadow: inset 0 0 25px #ff83;
     animation: none;
 }
-td .timestudy.elcstudy:hover {
+td .timestudy.pos_study:hover {
     background: linear-gradient(#330, #000) !important;
     color: #ff8 !important;
     box-shadow: inset 0 0 25px #ff83, 0 0 8px #ff87 !important;
 }
-td .timestudybought.elcstudy {
+td .timestudybought.pos_study {
     background: linear-gradient(#220, #550) !important;
     color: #ff8 !important;
     border: 1px solid #775 !important;

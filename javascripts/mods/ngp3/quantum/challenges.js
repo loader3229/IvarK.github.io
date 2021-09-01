@@ -24,6 +24,14 @@ var QCs = {
 		if (qc1 === undefined) this.reset()
 		if (qc1.best === undefined) qc1.best = qc1.boosts
 		if (qc1.expands === undefined) qc1.expands = 0
+		if (qc1.time === undefined) {
+			qc1.time = qu_save.time
+			qc1.timeLast = player.totalTimePlayed
+			qc1.last = []
+
+			qc1.perkBoosts = 0
+			qc1.dilaters = 0
+		}
 		if (qc1.autoExpand === undefined) qc1.autoExpand = {
 			value: 0,
 			percentage: 0
@@ -54,9 +62,14 @@ var QCs = {
 		QCs_save.qc1 = {
 			boosts: 0,
 			max: 0,
+			time: 0,
 			best: QCs_save.qc1 && QCs_save.qc1.best,
+			last: QCs_save.qc1 && QCs_save.qc1.last,
+			timeLast: QCs_save.qc1 && QCs_save.qc1.timeLast,
 
+			perkBoosts: 0,
 			expands: 0,
+			dilaters: 0,
 			autoExpand: QCs_save.qc1 && QCs_save.qc1.autoExpand
 		}
 		if (!QCs_save.qc2) QCs_save.qc2 = 1
@@ -72,17 +85,17 @@ var QCs = {
 			goal: () => mTs.bought >= 10,
 			goalDisp: () => getFullExpansion(10) + " bought mastery studies",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.1),
-			hint: "It's the first one, so it's easy!",
+			hint: "",
 
 			rewardDesc: (x) => "Unlock Replicanti Compressors, but there is a limit on Replicantis. Compressors greatly speed up Replicanti Slowdown!",
 			rewardEff(str) {
 				return 0.1
 			},
 
-			nerfDesc: (x) => "Replicanti Compressors are 50% weaker, and the replicate interval is " + (tmp.exMode ? "inverted" : "always 1s") + ".",
-			perkDesc: (x) => "Replicanti Compressors increase the exponent of Replicanti Energy.",
+			nerfDesc: (x) => "TT softcap is harsher, and QC7 is applied.",
+			perkDesc: (x) => "You gain 0.2 extra Compressors on compressing in at least 5 seconds. (+" + shortenMoney(x) + ")",
 			perkEff() {
-				return 1
+				return QCs_save.qc1.perkBoosts / 5
 			},
 
 			overlapReqs: [1/0, 1/0],
@@ -93,13 +106,17 @@ var QCs = {
 			},
 
 			//Replicanti Compressors
-			can: () => QCs_tmp.qc1 && pH.can("eternity") && player.replicanti.amount.gte(QCs_tmp.qc1.req),
 			boost() {
-				if (!QCs.data[1].can()) return false
+				let qc1 = QCs_save.qc1
+				if (!QCs_tmp.qc1) return false
+
+				if (QCs.perkActive(1) && qc1.time >= 5) qc1.perkBoosts++
+				if (PCs.milestoneDone(13) && tmp.rep.est.gte(1e6)) qc1.dilaters++
 
 				QCs.data[1].fix = true
-				QCs_save.qc1.boosts++
-				if (!QCs.inAny()) QCs_save.qc1.best = Math.max(QCs_save.qc1.boosts, QCs_save.qc1.best)
+				qc1.boosts++
+				qc1.time = 0
+				if (!QCs.inAny() && qc1.boosts > qc1.best) this.recordBest()
 
 				tmp.rm = new Decimal(1)
 				tmp.rmPseudo = new Decimal(1)
@@ -116,7 +133,11 @@ var QCs = {
 				var eff = Math.min(eff * (1 + 2 * pc11) / 10 + 1, 5)
 				return eff
 			},
-			extra: () => 0,
+			extra() {
+				var x = 0
+				if (QCs.perkActive(1)) x += QCs_tmp.perks[1]
+				return x
+			},
 			updateTmp() {
 				let qc1 = QCs_save.qc1
 				delete QCs_tmp.qc1
@@ -125,16 +146,11 @@ var QCs = {
 				//Boosts
 				let boosts = qc1.boosts
 				let distantBoosts = Math.max(boosts - this.scalings[0], 0)
-
-				//Efficiency
-				let str = QCs.modIn(1, "up") ? 0.5 : 1
-				let extra = this.extra()
-				let eff = (boosts + extra) * str
+				let eff = boosts + this.extra()
 
 				//Setup
 				let data = {
-					req: Decimal.pow(10, 1e6 * (distantBoosts + 1)),
-					limit: new Decimal("1e6000000"),
+					lim: Decimal.pow(10, 6e6),
 
 					speedMult: Decimal.pow(2, -boosts),
 					scalingMult: 1,
@@ -143,36 +159,35 @@ var QCs = {
 					effMult: this.eff(boosts, eff),
 					effExp: 1 + eff / 20,
 				}
-				if (QCs.in(1)) data.limit = data.limit.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
+				if (QCs.in(1)) data.lim = data.lim.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
 				QCs_tmp.qc1 = data
 
-				//Paired Challenges
+				//Quantum - Paired Challenges
 				if (PCs.milestoneDone(11)) {
 					let pc11 = 0.2 + (PCs_save.lvl - 1) / 35
-					data.limit = data.limit.pow(Math.pow(2, -pc11))
+					data.lim = data.lim.pow(Math.pow(2, -pc11))
 					data.speedMult = data.speedMult.pow(1 - pc11)
-					data.scalingExp *= 1 + pc11 / 5
+					data.scalingExp = 1 / (1 + boosts / (20 + pc11 * 5))
 					data.effMult = this.eff(boosts, eff, pc11)
 				}
-				if (PCs.milestoneDone(12)) data.limit = data.limit.pow(Math.log2(qc1.expands + 1) / 10 + 1)
+				if (PCs.milestoneDone(13)) data.dilaterEff = qc1.dilaters / 5 + 1
+				if (QCs.perkActive(1)) data.effMult = Math.pow(data.effMult, data.effExp / 2 + 0.5)
 
-				data.limit = data.limit.max(data.req)
+				//Replicanti Limit
+				if (PCs.milestoneDone(12)) data.lim = data.lim.pow(Math.log2(qc1.expands + 1) / 10 + 1)
+				data.lim = data.lim.max(Decimal.pow(10, 1e6 * (distantBoosts + 1)))
 
-				//Release
 				var release = 1
 				if (futureBoost("replicanti_release") && dev.boosts.tmp[6]) release *= dev.boosts.tmp[6]
 				if (release > 1) {
-					data.req = data.req.pow(release)
-					data.limit = data.limit.pow(release)
+					data.lim = data.lim.pow(release)
 					data.scalingMult *= release
 				}
 
-				//Squeeze
-				var reqLog = QCs_tmp.qc1.req.log10()
-				if (reqLog >= 4e7) {
-					var div = reqLog / 4e7
-					data.limit = data.limit.pow(1 / div)
-					data.req = Decimal.pow(10, 4e7).min(data.limit)
+				var limLog = QCs_tmp.qc1.lim.log10()
+				if (limLog >= 4e7) {
+					var div = limLog / 4e7
+					data.lim = Decimal.pow(10, 4e7)
 					data.scalingMult /= div
 				}
 			},
@@ -193,6 +208,24 @@ var QCs = {
 			updateDisp() {		
 				getEl("replCompressDiv").style.display = QCs_tmp.qc1 ? "" : "none"
 				getEl("repExpand").style.display = PCs.milestoneDone(12) ? "" : "none"
+				getEl("replDilaterDiv").style.display = PCs.milestoneDone(13) ? "" : "none"
+
+				if (!tmp.ngp3) return
+				if (!QCs_save) return
+				if (!QCs_save.qc1) return
+				if (!QCs_save.qc1.last) return
+
+				var last = QCs_save.qc1.last
+				var html = "<br><br>"
+				getEl("pastcompressors").style.display = last && last.length >= 1 ? "" : "none"
+				for (var i = last.length; i > 0; i--) {
+					var first = last[i - 2] !== undefined ? last[i - 2][0] : 0
+					var fin = last[i - 1][0]
+
+					html += (first == fin - 1 ? "" : first + " - ") + getFullExpansion(fin) + " Replicanti Compressors: " +
+					timeDisplay(last[i - 1][1]) + "<br>"
+				}
+				getEl("lasttencompressors").innerHTML = html
 			},
 			updateDispOnTick() {
 				let qc1 = QCs_save.qc1
@@ -206,6 +239,10 @@ var QCs = {
 						"<br>Cost: " + shorten(data.expandCost()) + " Replicanti Energy" +
 						"<br>(" + getFullExpansion(qc1.expands) + " Expansions)"
 					getEl("repExpand").className = data.canExpand() ? "storebtn" : "unavailablebtn"
+				}
+				if (PCs.milestoneDone(13)) {
+					getEl("replDilater").textContent = getFullExpansion(qc1.dilaters)
+					getEl("replCompressEff").textContent = formatReductionPercentage(QCs_tmp.qc1.dilaterEff) + "%"
 				}
 			},
 
@@ -223,6 +260,7 @@ var QCs = {
 
 				QCs_save.qc5 = QCs_save.qc5.sub(Decimal.pow(4, bulk).sub(1).div(3).times(cost))
 				QCs_save.qc1.expands += bulk
+				this.updateDisp()
 			},
 			autoExpand() {
 				var save = QCs_save.qc1
@@ -234,15 +272,30 @@ var QCs = {
 			},
 			setAutoExpand(x) {
 				QCs_save.qc1.autoExpand[x] = parseInt(getEl("setAutoExpand_" + x).value)
+			},
+
+			//Stats
+			recordBest() {
+				let qc1 = QCs_save.qc1
+				qc1.best = qc1.boosts
+				qc1.last.push([qc1.best, qc1.timeLast])
+				if (qc1.last.length >= 30) {
+					var list = []
+					for (var i = 1; i < qc1.last.length; i++) list.push(qc1.last[i])
+					list[0] += qc1.last[0]
+					qc1.last = list
+				}
+
+				qc1.timeLast = 0
 			}
 		},
 		2: {
 			unl: () => true,
-			desc: "Some quantum contents are based on one, but quantum energy multiplier. color powers, and gluons are useless; and you must exclude 1 tier from Positron Cloud.",
+			desc: "You must disable a tier from Positronic Cloud, but some Quantum content are changed/disabled.",
 			goal: () => pos_save.boosts >= 11,
 			goalDisp: () => getFullExpansion(11) + " Positronic Boosters",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
-			hint: "Mess around Positronic Cloud by swapping and excluding.",
+			hint: "",
 
 			rewardDesc: (x) => "Color charge boosts itself by " + shorten(x) + "x.",
 			rewardEff(str) {
@@ -280,7 +333,7 @@ var QCs = {
 		},
 		3: {
 			unl: () => true,
-			desc: "There are only Meta Dimensions that produce AM and IP, but successfully dilating reduces AM production, and you only gain TP normally.",
+			desc: "Meta Dimensions only work, but they produce antimatter and Infinity Points instead. Dilating sucessfully reduces the production.",
 			goal: () => player.dilation.tachyonParticles.gte(3e4),
 			goalDisp: () => shortenCosts(3e4) + " Tachyon Particles",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 0.2),
@@ -308,7 +361,7 @@ var QCs = {
 		},
 		4: {
 			unl: () => true,
-			desc: "You must exclude one type of galaxy for a single run. Changing the exclusion requires a forced Eternity reset.",
+			desc: "You must disable one type of Galaxies. Changing it performs a forced Eternity reset.",
 			goal: () => player.dilation.freeGalaxies >= 2800,
 			goalDisp: () => getFullExpansion(2800) + " Tachyonic Galaxies",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
@@ -319,8 +372,8 @@ var QCs = {
 				return
 			},
 
-			nerfDesc: (x) => "Changing the exclusion restarts this challenge.",
-			perkDesc: (x) => "You can exclude separately in dilation runs.",
+			nerfDesc: (x) => "Changing the disabled kind restarts this challenge.",
+			perkDesc: (x) => "You can disable separately in dilation runs.",
 			perkEff() {
 				return 1
 			},
@@ -374,7 +427,7 @@ var QCs = {
 		},
 		5: {
 			unl: () => true,
-			desc: "Replicantis generate Replicanti Energy instead, and get resetted on Eternities. Replicate interval gets stronger over time.",
+			desc: "Replicanti effects are disabled, but they generate energy. Replicate interval gets stronger over time since Eternity.",
 			goal: () => player.eternityPoints.gte(Decimal.pow(10, 2.8e6)),
 			goalDisp: () => shortenCosts(Decimal.pow(10, 2.8e6)) + " Eternity Points",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 1.7),
@@ -385,8 +438,8 @@ var QCs = {
 				return 1
 			},
 
-			nerfDesc: (x) => "You must spend Replicanti Energy to unlock a tier of Positronic Cloud. (not implemented)",
-			perkDesc: (x) => "Replicated Expanders speed up Replicantis at a linear rate.",
+			nerfDesc: (x) => "Eternitying also resets Replicanti Energy, and Replicanti Energy doesn't give you more Vibration Energy.",
+			perkDesc: (x) => "Replicanti Energy effects are doubled.",
 			perkEff() {
 				return 1
 			},
@@ -428,7 +481,7 @@ var QCs = {
 		},
 		6: {
 			unl: () => true,
-			desc: "There is an increasing variable, which nerfs replicanti slowdown. Eternitying subtracts it, and Dilating reduces its gain.",
+			desc: "There is ??? which buffs Replicanti Slowdown. Eternitying loses some of ???, and dilating reduces the production.",
 			goal: () => (player.replicanti.amount.e >= 1e6 && QCs_save.qc1.boosts == 4) || QCs_save.qc1.boosts >= 5,
 			goalDisp: () => shortenCosts(Decimal.pow(10, 1e6)) + " Replicantis + " + getFullExpansion(4) + " Replicanti Compressors",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.45),
@@ -472,8 +525,8 @@ var QCs = {
 				return 1
 			},
 
-			nerfDesc: (x) => "You can't passively generate TT, and QC7 applies to Time Studies. (partly implemented)",
-			perkDesc: (x) => "You can bank 10% of sacrificed RGs that last one quantum. (not implemented)",
+			nerfDesc: (x) => "You can’t fill the branches in Mastery Studies except singles. (not implemented)",
+			perkDesc: (x) => "You can bank 10% of RGs that last one quantum. (not implemented)",
 			perkEff() {
 				return 1
 			},
@@ -493,8 +546,8 @@ var QCs = {
 				return 1
 			},
 
-			nerfDesc: (x) => "You must setup a cycle on Positronic Boosts. (not implemented)",
-			perkDesc: (x) => "For Entangled Boosts that doesn’t match, they get mastered.",
+			nerfDesc: (x) => "???",
+			perkDesc: (x) => "For Entangled Boosts that are matched with your entanglement, they get mastered.",
 			perkEff() {
 				return 1
 			},
@@ -567,7 +620,11 @@ var QCs = {
 	unl() {
 		return tmp.ngp3 && player.masterystudies.includes("d8")
 	},
+	started(x) {
+		return QCs_tmp.in.includes(x)
+	},
 	in(x) {
+		if (x == 7 && QCs.modIn(1, "up")) return true
 		return QCs_tmp.in.includes(x)
 	},
 	inAny() {
@@ -590,8 +647,8 @@ var QCs = {
 		if (x) {
 			r = this.data[x].goalMA
 			if (mod) r = r.pow(QCs.modData[mod].maExp)
+			if (mod && x >= 7) return new Decimal(1/0)
 		} else r = PCs.in() ? PCs.goal() : QCs_save.mod ? this.data[QCs_tmp.in[0]].goalMA.pow(QCs.modData[QCs_save.mod].maExp) : this.data[QCs_tmp.in[0]].goalMA
-		if (this.perkActive(4)) r = r.div(QCs_tmp.perks[4])
 		return r
 	},
 	isRewardOn(x) {
@@ -603,7 +660,7 @@ var QCs = {
 		showChallengesTab("quantumchallenges")
 	},
 	start(x) {
-		if (QCs_tmp.show_perks && !this.done(qc)) return
+		if (QCs_tmp.show_perks && !QCs.done(x)) return
 		quantum(false, true, { qc: x }, "qc")
 	},
 	restart(x) {
@@ -634,7 +691,7 @@ var QCs = {
 		},
 	},
 	modIn(x, m) {
-		return this.in(x) && QCs_save.mod == m
+		return QCs_tmp.in.includes(x) && QCs_save.mod == m
 	},
 	modDone(x, m) {
 		var data = QCs_save.mod_comps
@@ -707,8 +764,8 @@ var QCs = {
 			} else if (cUnl) {
 				getEl("qc_" + qc + "_desc").textContent = evalData(this.data[qc].desc)
 				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.data[qc].goalMA) + " meta-antimatter and " + evalData(this.data[qc].goalDisp)
-				getEl("qc_" + qc + "_btn").textContent = this.in(qc) ? "Running" : this.done(qc) ? "Completed" : "Start"
-				getEl("qc_" + qc + "_btn").className = this.in(qc) ? "onchallengebtn" : this.done(qc) ? "completedchallengesbtn" : "challengesbtn"
+				getEl("qc_" + qc + "_btn").textContent = this.started(qc) ? "Running" : this.done(qc) ? "Completed" : "Start"
+				getEl("qc_" + qc + "_btn").className = this.started(qc) ? "onchallengebtn" : this.done(qc) ? "completedchallengesbtn" : "challengesbtn"
 			}
 		}
 
@@ -720,10 +777,13 @@ var QCs = {
 		if (!this.divInserted) return
 
 		for (let qc = 1; qc <= this.data.max; qc++) {
-			if (QCs_tmp.unl.includes(qc)) getEl("qc_" + qc + "_reward").innerHTML = 
+			if (QCs_tmp.unl.includes(qc)) {
+				var hint = evalData(this.data[qc].hint)
+				getEl("qc_" + qc + "_reward").innerHTML = 
 				QCs_tmp.show_perks ? "Reward: +1 PC Shrunker<br>Perk: " + this.data[qc].perkDesc(QCs_tmp.perks[qc]) :
-				shiftDown || QCs.in(qc) ? "Hint: " + this.data[qc].hint :
+				(shiftDown || QCs.in(qc)) && hint ? "Hint: " + hint :
 				"Reward: " + evalData(this.data[qc].rewardDesc, [QCs_tmp.rewards[qc]])
+			}
 		}
 	},
 	updateBest() {

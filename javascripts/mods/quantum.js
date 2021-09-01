@@ -256,7 +256,9 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	if (str.unl()) {
 		//Positronic Cloud Fix
 		pos_save.swaps = {...pos_tmp.cloud.next}
-		pos_tmp.cloud.swaps = pos.on() ? {...pos_tmp.cloud.next} : {}
+		pos_tmp.cloud.swaps = !pos.swapsDisabled() ? {...pos_tmp.cloud.next} : {}
+
+		if (data.qc && data.qc.includes(5) && data.mod == "up") str_save.energy = 0
 
 		str.updateTmp()
 		str.updateDisp()

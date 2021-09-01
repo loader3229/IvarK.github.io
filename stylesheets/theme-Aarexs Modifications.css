@@ -159,7 +159,7 @@ strong { color: #0072e5 }
 }
 .IPAmount1, .IPAmount2, #infPowAmount, #infDimMultAmount, #infDimEffectPower,
 #replicantiamount, #replicantimult, #replCond, #replCond1, #replCond2,
-#replCompress, #replCompressEff, #qc5_eng, #qc5_eff {
+#replCompress, #replCompressEff, #replDilater, #replDilaterEff, #qc5_eng, #qc5_eff {
     color: #e2bd00 !important
 }
 .infinistorebtn1, .infinistorebtn3 {
@@ -445,12 +445,12 @@ strong { color: #0072e5 }
 	border: 2px solid #191919 !important;
 	color: #191919 !important
 }
-#dilstudy7.dilationupg, .timestudy.elcstudy, #positronstabbtn button, #positrons .gluonupgrade.storebtn { 
+#dilstudy7.dilationupg, .timestudy.pos_study, #positronstabbtn button, #positrons .gluonupgrade.storebtn { 
 	background-color: transparent !important;
 	border: 2px solid #d2e500 !important;
 	animation: none !important
 }
-#dilstudy7.dilationupg:hover, #dilstudy7.dilationupgbought, .timestudy.elcstudy:hover, .timestudybought.elcstudy, #positronstabbtn button:hover, #dilstudy7.dilationupgbought, #positrons .gluonupgrade.storebtn:hover { background-color: #d2e500 !important }
+#dilstudy7.dilationupg:hover, #dilstudy7.dilationupgbought, .timestudy.pos_study:hover, .timestudybought.pos_study, #positronstabbtn button:hover, #dilstudy7.dilationupgbought, #positrons .gluonupgrade.storebtn:hover { background-color: #d2e500 !important }
 #elc_percentage, #elc_amount, #elc_translation { color: #d2e500 !important }
 #elc_effect { color: #00e500 !important }
 .quantumchallengediv {

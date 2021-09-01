@@ -513,8 +513,6 @@ function onBuyDilationUpgrade(x, b = 1) {
 }
 
 function getTTProduction(display) {
-	if (QCs.modIn(7, "up")) return 0
-
 	let tp = player.dilation.tachyonParticles
 	let r = getTTGenPart(tp)
 

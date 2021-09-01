@@ -744,7 +744,7 @@ function updateMasteryStudyButtons() {
 			if (!hasMTS(name) && !canBuyMasteryStudy('t', name)) className = "timestudylocked"
 			else {
 				if (hasMTS(name)) className += "bought"
-				if (name > 270 && name < 320) className += " elcstudy"
+				if (name > 270 && name < 320) className += " pos_study"
 			}
 			if (div.className !== className) div.className = className
 			if (mTs.hasStudyEffect.includes(name)) {

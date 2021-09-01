@@ -17,7 +17,7 @@ var PCs = {
 		62: "Eternitying timewraps Meta Dimensions and Replicantis by 3 seconds.",
 		72: "Mastery Study cost multiplier is divided by 5x.",
 		82: "Remote Galaxies scaling is slower based on its starting point.",
-		13: "Unlock Replicated Dilaters. (not implemented)",
+		13: "Unlock Replicated Dilaters.",
 		23: "???",
 		33: "Meta Accelerator slowdown starts 2% later per PC level.",
 		43: "Extra Replicated Galaxies contribute to Positronic Charge.",

@@ -252,10 +252,8 @@ function getColorPowerQuantity(color, base) {
 	if (colorCharge.normal.color == color) r = getColorChargeProduction(colorCharge.normal.charge, color)
 	if (colorCharge.sub && colorCharge.sub.color == color) r = getColorChargeProduction(colorCharge.sub.charge, color)
 
-	if (r) {
-		if (tmp.qe) r = r.times(tmp.qe.eff1)
-		if (tmp.glB) r = r.times(tmp.glB[color].mult)
-	} else r = new Decimal(0)
+	if (r) r = r.times(getColorPowerMult(color))
+	else r = new Decimal(0)
 
 	if (tmp.qe) r = r.add(tmp.qe.eff2)
 	if (tmp.glB) r = r.sub(r.min(tmp.glB[color].sub))
@@ -267,11 +265,17 @@ function getColorPowerQuantity(color, base) {
 	return r
 }
 
+function getColorPowerMult(color) {
+	var r = 1
+	if (tmp.qe) r *= tmp.qe.eff1
+	if (tmp.glB) r *= tmp.glB[color].mult
+	return r
+}
+
 function getColorChargeProduction(x, color, disp) {
 	var r = x.pow(2 * qu_save.expEnergy)
 	if (disp) {
-		r = r.times(tmp.qe.eff1)
-		r = r.times(tmp.glB[color].mult)
+		r = r.times(getColorPowerMult(color))
 		if (color == "r" && hasMTS(272)) r = r.div(5)
 	}
 	return r
@@ -601,14 +605,16 @@ var enB = {
 		boosterEff() {
 			var amt = this.target(undefined, true)
 			if (pos.on()) amt = amt.add(enB.pos.target())
-			if (PCs.unl() && amt.gt(PCs_tmp.eff1_start)) amt = amt.div(PCs_tmp.eff1_start).pow(this.boosterExp()).times(PCs_tmp.eff1_start)
+			if (PCs.unl() && amt.gt(PCs_tmp.eff1_start)) {
+				amt = amt.div(PCs_tmp.eff1_start).pow(this.boosterExp()).times(PCs_tmp.eff1_start)
+			}
 			if (hasAch("ng3pr14")) amt = amt.times(1.1)
 			if (QCs.perkActive(2)) amt = amt.times(1.5)
 
 			return amt
 		},
 		boosterExp(amt) {
-			amt = amt || this.target(true)
+			amt = amt || this.target(undefined, true)
 			if (PCs.unl() && amt.gte(PCs_tmp.eff1_start)) {
 				var exp = PCs_tmp.eff1
 				return exp
@@ -790,7 +796,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				var r = Decimal.div(x, 100).add(1).log(2) * 1.5 + 1
+				var r = Decimal.div(x, 100).add(1).log(2) * (tmp.ngp3_exp ? 1.5 : 1) + 1
 				if (futureBoost("quantum_superbalancing")) r = Math.max(r, Decimal.pow(x, 1 / 6 / dev.quSb.jP).toNumber() / 100)
 				return r
 			},

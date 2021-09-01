@@ -158,7 +158,7 @@ button, div.storebtn {
 
 .IPAmount2, #sacrificedIP, #infPowAmount, #infPowEffectPower, #infDimMultAmount,
 #replicantiamount, #replicantimult, #replCond, #replCond1, #replCond2, #replicantiAmount2, #InfAndReplMultAmount,
-#replCompress, #replCompressEff, #qc5_eng, #qc5_eff {
+#replCompress, #replCompressEff, #replDilater, #replDilaterEff, #qc5_eng, #qc5_eff {
 	color: #e59900 !important;
 }
 
@@ -433,16 +433,16 @@ button, div.storebtn {
 	color: #3939e5 !important
 }
 
-#dilstudy7.dilationupgbought, .timestudybought.elcstudy, #positronstabbtn button, #positrons .gluonupgrade.storebtn {
+#dilstudy7.dilationupgbought, .timestudybought.pos_study, #positronstabbtn button, #positrons .gluonupgrade.storebtn {
 	background-color: #e5e500 !important;
 	animation: none !important
 }
 
-#dilstudy7.dilationupg, .timestudy.elcstudy, #positronstabbtn button:hover, #positrons .gluonupgrade.storebtn:hover {
+#dilstudy7.dilationupg, .timestudy.pos_study, #positronstabbtn button:hover, #positrons .gluonupgrade.storebtn:hover {
 	background-color: #e5e539 !important
 }
 
-#dilstudy7.dilationupg:hover, .timestudy.elcstudy:hover {
+#dilstudy7.dilationupg:hover, .timestudy.pos_study:hover {
 	background-color: #e5e557 !important
 }
 

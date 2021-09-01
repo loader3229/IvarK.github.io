@@ -2378,9 +2378,18 @@ td.grey {
 	vertical-align: 0
 }
 
-.gluonupgrade.rg { animation: rgupg 5s infinite }
-.gluonupgrade.gb { animation: gbupg 5s infinite }
-.gluonupgrade.br { animation: brupg 5s infinite }
+.gluonupgrade.rg {
+	background: linear-gradient(45deg, #1f0000, #001f00);
+	animation: rgupg 5s infinite
+}
+.gluonupgrade.gb {
+	background: linear-gradient(45deg, #001f00, #00001f);
+	animation: gbupg 5s infinite
+}
+.gluonupgrade.br {
+	background: linear-gradient(45deg, #00001f, #1f0000);
+	animation: brupg 5s infinite
+}
 
 .gluonupgrade.rg:hover {
 	animation: rgupghover 5s infinite;
@@ -2395,41 +2404,37 @@ td.grey {
 	cursor: pointer
 }
 
-.gluonupgradebought.rg { animation: rgupgbought 5s infinite }
-.gluonupgradebought.gb { animation: gbupgbought 5s infinite }
-.gluonupgradebought.br { animation: brupgbought 5s infinite }
-
-#positrons .gluonupgrade.storebtn, .timestudy.elcstudy {
+.timestudy.pos_study {
 	background-color: black !important;
 	border-color: #8e991e;
 	color: #8e991e;
 	animation: positronupg 5s infinite
 }
-
-#positrons .gluonupgrade.storebtn:hover, .timestudy.elcstudy:hover {
+.timestudy.pos_study:hover {
 	background-color: #8e991e !important;
 	color: #ffffff;
 	animation: positronupg 5s infinite
 }
-
-.timestudybought.elcstudy {
+.timestudybought.pos_study {
     background: #eeff32;
-	border-color: #8e991e
+	border-color: #8e991e;
+	color: black
 }
+
 .pos_tier {
 	font-size: 10px
 }
 .pos_tier b {
 	font-size: 15px
 }
-.posbtn {
+.pos_btn {
 	margin: 2px;
 	position: relative;
 	width: 90px !important;
 	height: 90px !important;
 	white-space: normal
 }
-.posbtn span {
+.pos_btn span {
 	position: absolute;
 	left: 0px;
 	top: 50%;
@@ -2437,10 +2442,10 @@ td.grey {
 	width: 100%;
 	font-size: 10px
 }
-.posbtn b {
+.pos_btn b {
 	font-size: 15px
 }
-.posbtn p {
+.pos_btn p {
 	margin: 0
 }
 .charged {
@@ -2450,6 +2455,22 @@ td.grey {
 .undercharged {
 	color: #ff9f7f;
 	text-shadow: 0px 0px 6px #bf0000, 2px 1px 3px #bf0000, -2px -1px 3px #bf0000
+}
+
+#positrons .pos_btn.chosenbtn {
+    background: #eeff32;
+	border-color: #8e991e;
+	color: black
+}
+#positrons .pos_btn.chosenbtn2 {
+    background: #1f1f1f;
+	border-color: #8e991e;
+	color: white
+}
+#positrons .pos_btn.chosenbtn3 {
+    background: #f8ffc1;
+	border-color: #8e991e;
+	color: black
 }
 
 .str_boosts {
@@ -3412,99 +3433,264 @@ screen and (max-width: 480px) {
 }
 
 @keyframes rg {
-	0% {color: #bf0000}
-	25% {color: #bfbf00}
-	50% {color: #00bf00}
-	75% {color: #bfbf00}
-	100% {color: #bf0000}
+	0% {
+		color: #ffbfbf;
+		text-shadow: 0px 0px 3px #ff0000, 0px 0px 0px #ff0000, 0px 0px 0px #00ff00
+	}
+	25% {
+		color: #ffff7f;
+		text-shadow: 0px 0px 3px #7f7f00, -4px 0px 3px transparent, 4px 0px 3px transparent
+	}
+	50% {
+		color: #bfffbf;
+		text-shadow: 0px 0px 3px #00ff00, -4px 0px 3px transparent, 4px 0px 3px transparent
+	}
+	75% {
+		color: #ffff7f;
+		text-shadow: 0px 0px 3px #7f7f00, -4px 0px 3px transparent, 4px 0px 3px transparent
+	}
+	100% {
+		color: #ffbfbf;
+		text-shadow: 0px 0px 3px #ff0000, -4px 0px 3px transparent, 4px 0px 3px transparent
+	}
 }
-
 @keyframes gb {
-	0% {color: #00bf00}
-	25% {color: #00bfbf}
-	50% {color: #0000bf}
-	75% {color: #00bfbf}
-	100% {color: #00bf00}
+	0% {
+		color: #bfffbf;
+		text-shadow: 0px 0px 3px #00ff00, 0px 0px 0px #00ff00, 0px 0px 0px #0000ff
+	}
+	25% {
+		color: #7fffff;
+		text-shadow: 0px 0px 3px #007f7f, -4px 0px 3px transparent, 4px 0px 3px transparent
+	}
+	50% {
+		color: #bfbfff;
+		text-shadow: 0px 0px 3px #0000ff, -4px 0px 3px transparent, 4px 0px 3px transparent
+	}
+	75% {
+		color: #7fffff;
+		text-shadow: 0px 0px 3px #007f7f, -4px 0px 3px transparent, 4px 0px 3px transparent
+	}
+	100% {
+		color: #bfffbf;
+		text-shadow: 0px 0px 3px #00ff00, -4px 0px 3px transparent, 4px 0px 3px transparent
+	}
 }
-
 @keyframes br {
-	0% {color: #0000bf}
-	25% {color: #bf00bf}
-	50% {color: #bf0000}
-	75% {color: #bf00bf}
-	100% {color: #0000bf}
+	0% {
+		color: #bfbfff;
+		text-shadow: 0px 0px 3px #0000ff, 0px 0px 0px #0000ff, 0px 0px 0px #ff0000
+	}
+	25% {
+		color: #ff7fff;
+		text-shadow: 0px 0px 3px #7f007f, -4px 0px 3px transparent, 4px 0px 3px transparent
+	}
+	50% {
+		color: #ffbfbf;
+		text-shadow: 0px 0px 3px #ff0000, -4px 0px 3px transparent, 4px 0px 3px transparent
+	}
+	75% {
+		color: #ff7fff;
+		text-shadow: 0px 0px 3px #7f007f, -4px 0px 3px transparent, 4px 0px 3px transparent
+	}
+	100% {
+		color: #bfbfff;
+		text-shadow: 0px 0px 3px #0000ff, -4px 0px 3px transparent, 4px 0px 3px transparent
+	}
 }
 
 @keyframes rgupg {
-	0% {background-color: #1f0000; border: 1px solid #3f0000; box-shadow: inset 0px 0px 5px 0px #7f0000; color: #bf0000}
-	25% {background-color: #1f1f00; border: 1px solid #3f3f00; box-shadow: inset 0px 0px 10px 0px #7f7f00; color: #7f7f00}
-	50% {background-color: #001f00; border: 1px solid #003f00; box-shadow: inset 0px 0px 20px 0px #007f00; color: #007f00}
-	75% {background-color: #1f1f00; border: 1px solid #3f3f00; box-shadow: inset 0px 0px 10px 0px #7f7f00; color: #7f7f00}
-	100% {background-color: #1f0000; border: 1px solid #3f0000; box-shadow: inset 0px 0px 5px 0px #7f0000; color: #bf0000}
+	0% {
+		color: #ff0000;
+		border: 1px solid #bf5f5f;
+		box-shadow: inset 0px 0px 20px 0px #bf5f5f;
+		text-shadow: 0px 0px 3px #ff0000, 0px 0px 0px #ff0000, 0px 0px 0px #00ff00
+	}
+	25% {
+		color: #ffff00;
+		border: 1px solid #bfbf5f;
+		box-shadow: inset 0px 0px 20px 0px #bfbf5f;
+		text-shadow: 0px 0px 3px #ffff00, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	50% {
+		color: #00ff00;
+		border: 1px solid #5fbf5f;
+		box-shadow: inset 0px 0px 20px 0px #5fbf5f;
+		text-shadow: 0px 0px 3px #00ff00, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	75% {
+		color: #ffff00;
+		border: 1px solid #bfbf5f;
+		box-shadow: inset 0px 0px 20px 0px #bfbf5f;
+		text-shadow: 0px 0px 3px #ffff00, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	100% {
+		color: #ff0000;
+		border: 1px solid #bf5f5f;
+		box-shadow: inset 0px 0px 20px 0px #bf5f5f;
+		text-shadow: 0px 0px 3px #ff0000, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
 }
-
 @keyframes gbupg {
-	0% {background-color: #001f00; border: 1px solid #003f00; box-shadow: inset 0px 0px 5px 0px #007f00; color: #007f00}
-	25% {background-color: #001f1f; border: 1px solid #003f3f; box-shadow: inset 0px 0px 5px 0px #007f7f; color: #007f7f}
-	50% {background-color: #00001f; border: 1px solid #00003f; box-shadow: inset 0px 0px 5px 0px #00007f; color: #0000df}
-	75% {background-color: #001f1f; border: 1px solid #003f3f; box-shadow: inset 0px 0px 5px 0px #007f7f; color: #007f7f}
-	100% {background-color: #001f00; border: 1px solid #003f00; box-shadow: inset 0px 0px 5px 0px #007f00; color: #007f00}
+	0% {
+		color: #00ff00;
+		border: 1px solid #5fbf5f;
+		box-shadow: inset 0px 0px 20px 0px #5fbf5f;
+		text-shadow: 0px 0px 3px #00ff00, 0px 0px 0px #00ff00, 0px 0px 0px #0000ff
+	}
+	25% {
+		color: #00ffff;
+		border: 1px solid #5fbfbf;
+		box-shadow: inset 0px 0px 20px 0px #5fbfbf;
+		text-shadow: 0px 0px 3px #00ffff, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	50% {
+		color: #0000ff;
+		border: 1px solid #5f5fbf;
+		box-shadow: inset 0px 0px 20px 0px #5f5fbf;
+		text-shadow: 0px 0px 3px #0000ff, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	75% {
+		color: #00ffff;
+		border: 1px solid #5fbfbf;
+		box-shadow: inset 0px 0px 20px 0px #5fbfbf;
+		text-shadow: 0px 0px 3px #00ffff, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	100% {
+		color: #00ff00;
+		border: 1px solid #5fbf5f;
+		box-shadow: inset 0px 0px 20px 0px #5fbf5f;
+		text-shadow: 0px 0px 3px #00ff00, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
 }
-
 @keyframes brupg {
-	0% {background-color: #00001f; border: 1px solid #00003f; box-shadow: inset 0px 0px 5px 0px #00007f; color: #0000df}
-	25% {background-color: #1f001f; border: 1px solid #3f003f; box-shadow: inset 0px 0px 5px 0px #7f007f; color: #7f007f}
-	50% {background-color: #1f0000; border: 1px solid #3f0000; box-shadow: inset 0px 0px 5px 0px #7f0000; color: #bf0000}
-	75% {background-color: #1f001f; border: 1px solid #3f003f; box-shadow: inset 0px 0px 5px 0px #7f007f; color: #7f007f}
-	100% {background-color: #00001f; border: 1px solid #00003f; box-shadow: inset 0px 0px 5px 0px #00007f; color: #0000df}
+	0% {
+		color: #0000ff;
+		border: 1px solid #5f5fbf;
+		box-shadow: inset 0px 0px 20px 0px #5f5fbf;
+		text-shadow: 0px 0px 3px #0000ff, 0px 0px 0px #0000ff, 0px 0px 0px #ff0000
+	}
+	25% {
+		color: #ff00ff;
+		border: 1px solid #bf5fbf;
+		box-shadow: inset 0px 0px 20px 0px #bf5fbf;
+		text-shadow: 0px 0px 3px #ff00ff, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	50% {
+		color: #ff0000;
+		border: 1px solid #bf5f5f;
+		box-shadow: inset 0px 0px 20px 0px #bf5f5f;
+		text-shadow: 0px 0px 3px #ff0000, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	75% {
+		color: #ff00ff;
+		border: 1px solid #bf5fbf;
+		box-shadow: inset 0px 0px 20px 0px #bf5fbf;
+		text-shadow: 0px 0px 3px #ff00ff, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	100% {
+		color: #0000ff;
+		border: 1px solid #5f5fbf;
+		box-shadow: inset 0px 0px 20px 0px #5f5fbf;
+		text-shadow: 0px 0px 3px #0000ff, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
 }
 
 @keyframes rgupghover {
-	0% {background-color: #7f0000; border: 1px solid #3f0000; box-shadow: inset 0px 0px 5px 0px #bf0000; color: #1f0000}
-	25% {background-color: #7f7f00; border: 1px solid #3f3f00; box-shadow: inset 0px 0px 10px 0px #bfbf00; color: #1f1f00}
-	50% {background-color: #007f00; border: 1px solid #003f00; box-shadow: inset 0px 0px 20px 0px #00bf00; color: #001f00}
-	75% {background-color: #7f7f00; border: 1px solid #3f3f00; box-shadow: inset 0px 0px 10px 0px #bfbf00; color: #1f1f00}
-	100% {background-color: #7f0000; border: 1px solid #3f0000; box-shadow: inset 0px 0px 5px 0px #bf0000; color: #1f0000}
+	0% {
+		color: #ff7f7f;
+		border: 1px solid #ff7f7f;
+		box-shadow: inset 0px 0px 20px 0px #ff7f7f;
+		text-shadow: 0px 0px 3px #ff7f7f, 0px 0px 0px #ff7f7f, 0px 0px 0px #7fff7f
+	}
+	25% {
+		color: #ffff7f;
+		border: 1px solid #ffff7f;
+		box-shadow: inset 0px 0px 20px 0px #ffff7f;
+		text-shadow: 0px 0px 3px #ffff7f, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	50% {
+		color: #7fff7f;
+		border: 1px solid #7fff7f;
+		box-shadow: inset 0px 0px 20px 0px #7fff7f;
+		text-shadow: 0px 0px 3px #7fff7f, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	75% {
+		color: #ffff7f;
+		border: 1px solid #ffff7f;
+		box-shadow: inset 0px 0px 20px 0px #ffff7f;
+		text-shadow: 0px 0px 3px #ffff7f, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	100% {
+		color: #ff7f7f;
+		border: 1px solid #ff7f7f;
+		box-shadow: inset 0px 0px 20px 0px #ff7f7f;
+		text-shadow: 0px 0px 3px #ff7f7f, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
 }
-
 @keyframes gbupghover {
-	0% {background-color: #007f00; border: 1px solid #003f00; box-shadow: inset 0px 0px 5px 0px #00bf00; color: #001f00}
-	25% {background-color: #007f7f; border: 1px solid #003f3f; box-shadow: inset 0px 0px 5px 0px #00bfbf; color: #001f1f}
-	50% {background-color: #00007f; border: 1px solid #00003f; box-shadow: inset 0px 0px 5px 0px #0000bf; color: #00001f}
-	75% {background-color: #007f7f; border: 1px solid #003f3f; box-shadow: inset 0px 0px 5px 0px #00bfbf; color: #001f1f}
-	100% {background-color: #007f00; border: 1px solid #003f00; box-shadow: inset 0px 0px 5px 0px #00bf00; color: #001f00}
+	0% {
+		color: #7fff7f;
+		border: 1px solid #7fff7f;
+		box-shadow: inset 0px 0px 20px 0px #7fff7f;
+		text-shadow: 0px 0px 3px #7fff7f, 0px 0px 0px #7fff7f, 0px 0px 0px #7f7fff
+	}
+	25% {
+		color: #7fffff;
+		border: 1px solid #7fffff;
+		box-shadow: inset 0px 0px 20px 0px #7fffff;
+		text-shadow: 0px 0px 3px #7fffff, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	50% {
+		color: #7f7fff;
+		border: 1px solid #7f7fff;
+		box-shadow: inset 0px 0px 20px 0px #7f7fff;
+		text-shadow: 0px 0px 3px #7f7fff, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	75% {
+		color: #7fffff;
+		border: 1px solid #7fffff;
+		box-shadow: inset 0px 0px 20px 0px #7fffff;
+		text-shadow: 0px 0px 3px #7fffff, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	100% {
+		color: #7fff7f;
+		border: 1px solid #7fff7f;
+		box-shadow: inset 0px 0px 20px 0px #7fff7f;
+		text-shadow: 0px 0px 3px #7fff7f, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
 }
-
 @keyframes brupghover {
-	0% {background-color: #00007f; border: 1px solid #00003f; box-shadow: inset 0px 0px 5px 0px #0000bf; color: #00001f}
-	25% {background-color: #7f007f; border: 1px solid #3f003f; box-shadow: inset 0px 0px 5px 0px #bf00bf; color: #1f001f}
-	50% {background-color: #7f0000; border: 1px solid #3f0000; box-shadow: inset 0px 0px 5px 0px #bf0000; color: #1f0000}
-	75% {background-color: #7f007f; border: 1px solid #3f003f; box-shadow: inset 0px 0px 5px 0px #bf00bf; color: #1f001f}
-	100% {background-color: #00007f; border: 1px solid #00003f; box-shadow: inset 0px 0px 5px 0px #0000bf; color: #00001f}
-}
-
-@keyframes rgupgbought {
-	0% {background-color: #bf0000; border: 1px solid #7f0000; color: #1f0000}
-	25% {background-color: #bfbf00; border: 1px solid #7f7f00; color: #1f1f00}
-	50% {background-color: #00bf00; border: 1px solid #007f00; color: #001f00}
-	75% {background-color: #bfbf00; border: 1px solid #7f7f00; color: #1f1f00}
-	100% {background-color: #bf0000; border: 1px solid #7f0000; color: #1f0000}
-}
-
-@keyframes gbupgbought {
-	0% {background-color: #00bf00; border: 1px solid #007f00; color: #001f00}
-	25% {background-color: #00bfbf; border: 1px solid #007f7f; color: #001f1f}
-	50% {background-color: #0000bf; border: 1px solid #00007f; color: #00001f}
-	75% {background-color: #00bfbf; border: 1px solid #007f7f; color: #001f1f}
-	100% {background-color: #00bf00; border: 1px solid #007f00; color: #001f00}
-}
-
-@keyframes brupgbought {
-	0% {background-color: #0000bf; border: 1px solid #00007f; color: #00001f}
-	25% {background-color: #bf00bf; border: 1px solid #7f007f; color: #1f001f}
-	50% {background-color: #bf0000; border: 1px solid #7f0000; color: #1f0000}
-	75% {background-color: #bf00bf; border: 1px solid #7f007f; color: #1f001f}
-	100% {background-color: #0000bf; border: 1px solid #00007f; color: #00001f}
+	0% {
+		color: #7f7fff;
+		border: 1px solid #7f7fff;
+		box-shadow: inset 0px 0px 20px 0px #7f7fff;
+		text-shadow: 0px 0px 3px #7f7fff, 0px 0px 0px #7f7fff, 0px 0px 0px #ff7f7f
+	}
+	25% {
+		color: #ff7fff;
+		border: 1px solid #ff7fff;
+		box-shadow: inset 0px 0px 20px 0px #ff7fff;
+		text-shadow: 0px 0px 3px #ff7fff, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	50% {
+		color: #ff7f7f;
+		border: 1px solid #ff7f7f;
+		box-shadow: inset 0px 0px 20px 0px #ff7f7f;
+		text-shadow: 0px 0px 3px #ff7f7f, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	75% {
+		color: #ff7fff;
+		border: 1px solid #ff7fff;
+		box-shadow: inset 0px 0px 20px 0px #ff7fff;
+		text-shadow: 0px 0px 3px #ff7fff, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
+	100% {
+		color: #7f7fff;
+		border: 1px solid #7f7fff;
+		box-shadow: inset 0px 0px 20px 0px #7f7fff;
+		text-shadow: 0px 0px 3px #7f7fff, 4px 0px 3px transparent, -4px 0px 3px transparent
+	}
 }
 
 @keyframes positronupg {

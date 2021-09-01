@@ -1480,7 +1480,7 @@ function updateMoney() {
 	getEl("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult) + "x" : ""
 	getEl("qc3Mult").textContent = QCs.in(3) ? "Antimatter exponent: " + QCs.data[3].amExp().toFixed(2) : ""
 	getEl("qc6Mult").textContent = QCs.in(6) ? "t = " + (QCs_save.qc6 < 0 ? "-" : "") + timeDisplayShort(Math.abs(QCs_save.qc6) * 10) + "; Replicate interval slowdown scales " + formatPercentage(QCs_tmp.qc6 - 1) + "% faster" : ""
-	if (QCs.in(4)) getEl("qc4_boost").textContent = "Exclusion bonus: Strengthen all galaxies by " + formatPercentage(QCs_tmp.qc4.boost - 1) + "% (" + shortenMoney(QCs_tmp.qc4.diff) + ")"
+	if (QCs.in(4)) getEl("qc4_boost").textContent = "Bonus: Strengthen all galaxies by " + formatPercentage(QCs_tmp.qc4.boost - 1) + "%"
 }
 
 function updateCoinPerSec() {
@@ -4023,7 +4023,10 @@ function changingDecimalSystemUpdating(){
 
 function incrementTimesUpdating(diffStat){
 	player.totalTimePlayed += diffStat
-	if (tmp.ngp3) player.ghostify.time += diffStat
+	if (QCs.done(1)) {
+		QCs_save.qc1.time += diffStat
+		QCs_save.qc1.timeLast += diffStat
+	}
 	if (qu_save && implosionCheck !== 2) qu_save.time += diffStat
 	if (player.currentEternityChall == "eterc12") diffStat /= 1e3
 	player.thisEternity += diffStat * (QCs.perkActive(6) ? 0.5 : 1)

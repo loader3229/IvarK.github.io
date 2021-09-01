@@ -110,7 +110,7 @@
 			<div id="tickSpeedAmount" style="visibility: hidden">Tickspeed: 1000</div>
 		</div>
 		<div id="qc4_div">
-			Select below to exclude one type of galaxies:
+			Select one to disable:
 			<br>
 			<button class="storebtn" id="qc4_ng" onclick="QCs.data[4].switch('ng')">Antimatter</button>
 			<button class="storebtn" id="qc4_rg" onclick="QCs.data[4].switch('rg')">Replicated</button>
@@ -1534,7 +1534,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.6: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(8/30/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(8/31/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -1552,6 +1552,7 @@
 				<td><button class="secondarytabbtn" onclick="showStatsTab('lasttenruns')" id="pastinfs">Past Infinities</button><td>
 				<td><button class="secondarytabbtn" onclick="showStatsTab('lastteneternities')" id="pasteternities" >Past Eternities</button><td>
 				<td><button class="secondarytabbtn" onclick="showStatsTab('lasttenquantums')" id="pastquantums" >Past Quantums</button><td>
+				<td><button class="secondarytabbtn" onclick="showStatsTab('lasttencompressors')" id="pastcompressors" >Past Compressors</button><td>
 				<td><button class="secondarytabbtn aarexmodsghostifybtn" onclick="showStatsTab('lasttenghostifies')" id="pastghostifies" >Past Ghostifies</button><td>
 			</div>
 			<div id="stats" class="statstab">
@@ -1574,8 +1575,13 @@
 					<div id="quantumed"></div>
 					<div id="bestQuantum"></div>
 					<div id="thisQuantum"></div>
-					<div id="bestCompressors"></div>
 					<div id="bestPCs"></div>
+					<br>
+				</div>
+				<div id="compressorStatistics">
+					<div id="thisCompressor"></div>
+					<div id="bestCompressors"></div>
+					<div id="thisLastCompressor"></div>
 					<br>
 				</div>
 				<div id="bigRipStatistics">
@@ -1750,6 +1756,7 @@
 				<div id="averageQuantumRun"></div>
 				<br>
 			</div>
+			<div id="lasttencompressors" class="statstab"></div>
 			<div id="lasttenghostifies" class="statstab">
 				<div id="ghostifyrun1"></div>
 				<div id="ghostifyrun2"></div>
@@ -2255,7 +2262,7 @@
 								<div id="Bursted Em All!" class="achievement achievementlocked" style="background-image: url(images/ng3pr/13.png)" ach-tooltip="Charge all Positronic Boosts with QC4x2 milestone and 4 swaps. Reward: Charging requires 25% less."></div>
 							</td>
 							<td>
-								<div id="Sciencing Around The Core" class="achievement achievementlocked" style="background-image: url(images/ng3pr/14.png)" ach-tooltip="Reach ^0.85 Quantum efficiency. Reward: Effective Boosters x1.1."></div>
+								<div id="Sciencing Around The Core" class="achievement achievementlocked" style="background-image: url(images/ng3pr/14.png)" ach-tooltip="Reach ^1 Quantum efficiency. Reward: Effective Boosters +10%."></div>
 							</td>
 							<td>
 								<div id="ng3pr15" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
@@ -4173,9 +4180,10 @@
 				<p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti, which is translated to <span id="replicantimult" style="font-size:23px; color: black">0</span> <span id="replDesc"></span>.</p>
 				<span id="replicantieff"></span> <span id="softcap_rep_disp"></span>
 				<p id="replCompressDiv">You have <span id="replCompress" style="font-size: 20px">0</span> Replicanti Compressors, which boosts the exponent of Replicantis by <span id="replCompressEff" style="font-size: 15px">^1.00, x1.00</span>.</p>
+				<p id="replDilaterDiv">You have <span id="replDilater" style="font-size: 20px">0</span> Replicanti Dilaters, which makes EC14 reward <span id="replDilaterEff" style="font-size: 15px">0.00</span>% closer to ^1.</p>
 				<p id="qc5_div" style="font-size: 9px">
-					During this quantum, Replicantis also produced <span id="qc5_eng" style="font-size: 15px">0</span> energy<sup id="qc5_eng_exp">1</sup> in total<span id="qc5_eng_mult" style="font-size: 12px"></span>,
-					which translated to +<span id="qc5_eff" style="font-size: 12px">0</span> extra quantum energy and positronic charge.
+					Replicantis have generated <span id="qc5_eng" style="font-size: 15px">0</span> energy<sup id="qc5_eng_exp">1</sup> in total<span id="qc5_eng_mult" style="font-size: 12px"></span>,
+					which translated to +<span id="qc5_eff" style="font-size: 12px">0</span> quantum energy and positronic charge.
 				</p>
 				<br>
 				<button class="storebtn" id="replicantichance" onclick="upgradeReplicantiChance()" style="width:180px; height: 50px; font-size: 10px">Replicate chance: 1%<br>+1% Costs: 1e6969 IP</button>
@@ -4722,7 +4730,7 @@
 				<tr>
 					<td class="pos_tier" id="pos_cloud1_cell"></td>
 					<td>
-						<button class="storebtn longbtn" id="pos_cloud1_toggle" onclick="QCs.data[2].switch(1)">Disable on challenge</button>
+						<button class="storebtn longbtn" id="pos_cloud1_toggle" onclick="QCs.data[2].switch(1)">Disable</button>
 					</td>
 				</tr>
 				<tr>
@@ -4731,7 +4739,7 @@
 				<tr>
 					<td class="pos_tier" id="pos_cloud2_cell"></td>
 					<td>
-						<button class="storebtn longbtn" id="pos_cloud2_toggle" onclick="QCs.data[2].switch(2)">Disable on challenge</button>
+						<button class="storebtn longbtn" id="pos_cloud2_toggle" onclick="QCs.data[2].switch(2)">Disable</button>
 					</td>
 				</tr>
 				<tr>
@@ -4740,7 +4748,7 @@
 				<tr>
 					<td class="pos_tier" id="pos_cloud3_cell"></td>
 					<td>
-						<button class="storebtn longbtn" id="pos_cloud3_toggle" onclick="QCs.data[2].switch(3)">Disable on challenge</button>
+						<button class="storebtn longbtn" id="pos_cloud3_toggle" onclick="QCs.data[2].switch(3)">Disable</button>
 					</td>
 				</tr>
 				<tr>
@@ -4793,7 +4801,7 @@
 						<br>
 						<span id="enB_pos4_type"></span>
 						<br>
-						Quantum requires <span id="enB_pos4_eff" style="font-size: 18px"></span> instead. <span id="enB_pos4_exp" style="font-size: 18px"></span>
+						Quantum requires <span id="enB_pos4_eff" style="font-size: 18px"></span> instead. <span id="enB_pos4_exp" style="font-size: 15px"></span>
 					</td>
 					<td id="enB_pos5">
 						<b id="enB_pos5_name" style="font-size: 24px"></b>
@@ -4846,7 +4854,7 @@
 						<br>
 						<span id="enB_pos11_type"></span>
 						<br>
-						Eternity Points boost Anti-Quarks by <span id="enB_pos11_eff" style="font-size: 18px"></span>. <span id="enB_pos11_exp" style="font-size: 18px"></span>
+						Eternity Points boost Anti-Quarks by <span id="enB_pos11_eff" style="font-size: 18px"></span>. <span id="enB_pos11_exp" style="font-size: 15px"></span>
 					</td>
 					<td id="enB_pos12">
 						<b id="enB_pos12_name" style="font-size: 24px"></b>
@@ -4865,7 +4873,7 @@
 				<span style="font-size: 15px">You have made <span id="str_ve" style="font-size: 30px">0.00</span> Vibration Energy.</span>
 				<p style="font-size: 8px">(based on Quantum Energy and Replicanti Energy)</p>
 				<br>
-				<b class="warning" style="font-size: 15px">WARNING: Vibrating boosts costs Vibration Energy!</b>
+				<b class="warning" id="str_warn" style="font-size: 15px"></b>
 				<br>
 				<span id="str_cost"></span>
 				<br>
