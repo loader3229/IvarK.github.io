@@ -1479,7 +1479,7 @@ function updateMoney() {
 	if (inNC(14) && inNGM(4)) getEl("c14Resets").textContent = "You have "+getFullExpansion(10-getTotalResets())+" resets left."
 	getEl("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult) + "x" : ""
 	getEl("qc3Mult").textContent = QCs.in(3) ? "Antimatter exponent: " + QCs.data[3].amExp().toFixed(2) : ""
-	getEl("qc6Mult").textContent = QCs.in(6) ? "t = " + (QCs_save.qc6 < 0 ? "-" : "") + timeDisplayShort(Math.abs(QCs_save.qc6) * 10) + "; Replicate interval slowdown scales " + formatPercentage(QCs_tmp.qc6 - 1) + "% faster" : ""
+	getEl("qc6Mult").textContent = QCs.in(6) ? "There are " + shorten(QCs_save.qc6 + 30) + " Nullons, which speed up Replicate Slowdown by " + formatPercentage(QCs_tmp.qc6 - 1) + "%." : ""
 	if (QCs.in(4)) getEl("qc4_boost").textContent = "Bonus: Strengthen all galaxies by " + formatPercentage(QCs_tmp.qc4.boost - 1) + "%"
 }
 
@@ -2258,7 +2258,7 @@ var notationArray = [
 	"Mixed scientific", "Mixed engineering", "Mixed logarithm",
 	"Explained scientific", "Explained engineering", "Explained logarithm",
 
-	"Tetration", "Hyperscientific", "Layered scientific", "Layered logarithm", "E notation", "Hyper-E", "Psi",
+	"Tetration", "Hyperscientific", "Layered scientific", "Layered logarithm", "Tetrational scientific", "Hyper-E", "Psi",
 
 	"Letters", "Standard", "Emojis", "Brackets", "Infinity", "Greek", "Game percentages", "Hexadecimal", "Morse code", "Spazzy", "Country Codes", "Iroha", "Symbols", "Lines", "Simplified Written", "Time", "Base-64", "Myriads", /*"Layered Symbols",*/ "AF2019", "AAS", "AF5LN", "Blind"
 ]
@@ -4036,10 +4036,7 @@ function incrementTimesUpdating(diffStat){
 	failsafeDilateTime = false
 }
 
-function requiredInfinityUpdating(diff){
-	if (tmp.ri) return
-	if (player.infinityUpgradesRespecced != undefined) infinityRespeccedDMUpdating(diff)
-
+function normalDimUpdating(diff){
 	if (!QCs.in(3)) {
 		let steps = getDimensionSteps()
 		let dims = getMaxGeneralDimensions()
@@ -4054,10 +4051,12 @@ function requiredInfinityUpdating(diff){
 	amProd = amProd.times(diff)
 	player.money = player.money.plus(amProd)
 	player.totalmoney = player.totalmoney.plus(amProd)
+}
 
+function checkForInfinite() {
 	if (isInfiniteDetected()) return
 	if (player.totalmoney.gt("1e9000000000000000")) changingDecimalSystemUpdating()
-	tmp.ri=player.money.gte(getLimit()) && ((player.currentChallenge != "" && player.money.gte(player.challengeTarget)) || !onPostBreak())
+	tmp.ri = player.money.gte(getLimit()) && ((player.currentChallenge != "" && player.money.gte(player.challengeTarget)) || !onPostBreak())
 }
 
 function chall2PowerUpdating(diff){
@@ -4928,7 +4927,13 @@ function gameLoop(diff) {
 		checkMatter(diff * 10)
 		passiveIPupdating(diff)
 		passiveInfinitiesUpdating(diff)
-		requiredInfinityUpdating(diff)
+
+		if (!tmp.ri) {
+			if (player.infinityUpgradesRespecced !== undefined) infinityRespeccedDMUpdating(diff)
+			normalDimUpdating(diff)
+		}
+		checkForInfinite()
+
 		normalChallPowerUpdating(diff)
 		passiveIPperMUpdating(diff)
 		incrementTimesUpdating(diffStat)

@@ -433,6 +433,26 @@ button, div.storebtn {
 	color: #3939e5 !important
 }
 
+.gluonupgrade.rg {
+	animation: rgupg 5s infinite
+}
+.gluonupgrade.gb {
+	animation: gbupg 5s infinite
+}
+.gluonupgrade.br {
+	animation: brupg 5s infinite
+}
+
+.gluonupgrade.rg:hover {
+	animation: rgupghover 5s infinite
+}
+.gluonupgrade.gb:hover {
+	animation: gbupghover 5s infinite
+}
+.gluonupgrade.br:hover {
+	animation: brupghover 5s infinite
+}
+
 #dilstudy7.dilationupgbought, .timestudybought.pos_study, #positronstabbtn button, #positrons .gluonupgrade.storebtn {
 	background-color: #e5e500 !important;
 	animation: none !important
@@ -834,75 +854,51 @@ button, div.storebtn {
 }
 
 @keyframes rgupg {
-	0% {background-color: #e53939}
-	25% {background-color: #e5e539}
-	50% {background-color: #39e539}
-	75% {background-color: #e5e539}
-	100% {background-color: #e53939}
+	0% {background: #e53939}
+	25% {background: #e5e539}
+	50% {background: #39e539}
+	75% {background: #e5e539}
+	100% {background: #e53939}
 }
 
 @keyframes gbupg {
-	0% {background-color: #39e539}
-	25% {background-color: #39e5e5}
-	50% {background-color: #3939e5}
-	75% {background-color: #39e5e5}
-	100% {background-color: #39e539}
+	0% {background: #39e539}
+	25% {background: #39e5e5}
+	50% {background: #3939e5}
+	75% {background: #39e5e5}
+	100% {background: #39e539}
 }
 
 @keyframes brupg {
-	0% {background-color: #3939e5}
-	25% {background-color: #e539e5}
-	50% {background-color: #e53939}
-	75% {background-color: #e539e5}
-	100% {background-color: #3939e5}
+	0% {background: #3939e5}
+	25% {background: #e539e5}
+	50% {background: #e53939}
+	75% {background: #e539e5}
+	100% {background: #3939e5}
 }
 
 @keyframes rgupghover {
-	0% {background-color: #e55757}
-	25% {background-color: #e5e557}
-	50% {background-color: #57e557}
-	75% {background-color: #e5e557}
-	100% {background-color: #e55757}
+	0% {background: #e55757}
+	25% {background: #e5e557}
+	50% {background: #57e557}
+	75% {background: #e5e557}
+	100% {background: #e55757}
 }
 
 @keyframes gbupghover {
-	0% {background-color: #57e557}
-	25% {background-color: #57e5e5}
-	50% {background-color: #5757e5}
-	75% {background-color: #57e5e5}
-	100% {background-color: #57e557}
+	0% {background: #57e557}
+	25% {background: #57e5e5}
+	50% {background: #5757e5}
+	75% {background: #57e5e5}
+	100% {background: #57e557}
 }
 
 @keyframes brupghover {
-	0% {background-color: #5757e5}
-	25% {background-color: #e557e5}
-	50% {background-color: #e55757}
-	75% {background-color: #e557e5}
-	157% {background-color: #5757e5}
-}
-
-@keyframes rgupgbought {
-	0% {background-color: #e50000}
-	25% {background-color: #e5e500}
-	50% {background-color: #00e500}
-	75% {background-color: #e5e500}
-	100% {background-color: #e50000}
-}
-
-@keyframes gbupgbought {
-	0% {background-color: #00e500}
-	25% {background-color: #00e5e5}
-	50% {background-color: #0000e5}
-	75% {background-color: #00e5e5}
-	100% {background-color: #00e500}
-}
-
-@keyframes brupgbought {
-	0% {background-color: #0000e5}
-	25% {background-color: #e500e5}
-	50% {background-color: #e50000}
-	75% {background-color: #e500e5}
-	100% {background-color: #0000e5}
+	0% {background: #5757e5}
+	25% {background: #e557e5}
+	50% {background: #e55757}
+	75% {background: #e557e5}
+	157% {background: #5757e5}
 }
 
 [ach-tooltip] {

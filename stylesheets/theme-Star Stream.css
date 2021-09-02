@@ -1240,27 +1240,6 @@ strong { color: #0072e5 }
     75% {background-color: #e500e5; border: 2px solid #e500e5}
     100% {background-color: #0000e5; border: 2px solid #0000e5}
 }
-@keyframes rgupgbought {
-    0% {background-color: #e57272}
-    25% {background-color: #e5e572}
-    50% {background-color: #72e572}
-    75% {background-color: #e5e572}
-    100% {background-color: #e57272}
-}
-@keyframes gbupgbought {
-    0% {background-color: #72e572}
-    25% {background-color: #72e5e5}
-    50% {background-color: #7272e5}
-    75% {background-color: #72e5e5}
-    100% {background-color: #72e572}
-}
-@keyframes brupgbought {
-    0% {background-color: #7272e5}
-    25% {background-color: #e572e5}
-    50% {background-color: #e57272}
-    75% {background-color: #e572e5}
-    100% {background-color: #7272e5}
-}
 
 @keyframes ghostifytext { 
     0%{color: #ff0000;}

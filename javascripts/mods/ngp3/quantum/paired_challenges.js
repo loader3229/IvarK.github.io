@@ -13,7 +13,7 @@ var PCs = {
 		22: "You can swap Positronic Boosts between 2 of any tiers.",
 		32: "25 MP milestone is activated in QC3.",
 		42: "Tier 1 charge is 8x, but require 4x more.",
-		52: "Replicated Compressors boosts Replicanti Energy exponent.",
+		52: "Replicated Compressors raise Replicanti Energy by an exponent.",
 		62: "Eternitying timewraps Meta Dimensions and Replicantis by 3 seconds.",
 		72: "Mastery Study cost multiplier is divided by 5x.",
 		82: "Remote Galaxies scaling is slower based on its starting point.",

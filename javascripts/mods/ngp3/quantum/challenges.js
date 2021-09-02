@@ -481,9 +481,9 @@ var QCs = {
 		},
 		6: {
 			unl: () => true,
-			desc: "There is ??? which buffs Replicanti Slowdown. Eternitying loses some of ???, and dilating reduces the production.",
-			goal: () => (player.replicanti.amount.e >= 1e6 && QCs_save.qc1.boosts == 4) || QCs_save.qc1.boosts >= 5,
-			goalDisp: () => shortenCosts(Decimal.pow(10, 1e6)) + " Replicantis + " + getFullExpansion(4) + " Replicanti Compressors",
+			desc: "There are Nullons that speed up Replicanti Slowdown. (less as you have more) Eternitying loses some Nullons, and dilating reduces the production.",
+			goal: () => QCs_save.qc1.boosts >= 4 || (player.replicanti.amount.e >= 3e6 && QCs_save.qc1.boosts == 3),
+			goalDisp: () => getFullExpansion(3) + " Replicanti Compressors + " + shortenCosts(Decimal.pow(10, 3e6)) + " Replicantis or have more Compressors",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.45),
 			hint: "Do long Eternity runs.",
 
@@ -497,7 +497,7 @@ var QCs = {
 				return x
 			},
 
-			nerfDesc: (x) => "QC6 variable is inverted. (x -> -x)",
+			nerfDesc: (x) => "The effect of Nullons is changed drastically.",
 			perkDesc: (x) => "Start with 5s Eternity time, but Eternity time is 2x slower.",
 			perkEff() {
 				return 1

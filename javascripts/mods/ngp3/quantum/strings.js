@@ -87,7 +87,7 @@ let str = {
 		var data = str_tmp
 		if (!data.unl) return
 
-		data.str = 0
+		data.str = 1
 	},
 	updateDispOnTick() {
 		if (!str_tmp.setupHTML || !str_tmp.unl) return

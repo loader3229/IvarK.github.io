@@ -212,7 +212,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			}
 			return result
 		}
-		if (notation === "Hyperscientific" || notation === "Layered scientific" || notation === "Layered logarithm" || notation === "E notation" || notation === "Hyper-E") {
+		if (notation === "Hyperscientific" || notation === "Layered scientific" || notation === "Layered logarithm" || notation === "Tetrational scientific" || notation === "Hyper-E") {
 			value = new Decimal(value)
 			var e = value
 			var f = 0
@@ -229,7 +229,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			if (notation === "Hyperscientific") return e + "F" + f
 			if (notation === "Layered scientific") return "e".repeat(f - 1) + Math.pow(10, e % 1).toFixed(1 + f) + "e" + Math.floor(e)
 			if (notation === "Layered logarithm") return "e".repeat(f) + e
-			if (notation === "E notation") return "E(" + f + ")" + e
+			if (notation === "Tetrational scientific") return "10^^" + f + ";" + e
 			if (notation === "Hyper-E") return "E" + e + "#" + f
 		}
 		if (value instanceof Decimal) {

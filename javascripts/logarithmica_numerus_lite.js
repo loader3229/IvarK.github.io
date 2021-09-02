@@ -335,9 +335,11 @@
 			return Decimal.mod(this,v)
 		}
 		
-		static pow(v,power) {
-			v=new Decimal(v)
-			v.l=v.l*power
+		static pow(v, power) {
+			v = new Decimal(v)
+			if (power == 0) {
+				if (v.l >= Number.NEGATIVE_INFINITY) v.l = 0
+			} else v.l = v.l * power
 			return v
 		}
 		

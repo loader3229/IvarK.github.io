@@ -321,8 +321,8 @@ function gainQuantumEnergy() {
 	if (isNaN(xNoDiv.e)) xNoDiv = 0
 	if (isNaN(x.e)) x = 0
 
-	qu_save.quarkEnergy = x.max(qu_save.quarkEnergy || 0)
-	qu_save.bestEnergy = xNoDiv.max(qu_save.bestEnergy || 0).max(qu_save.quarkEnergy || 0)
+	qu_save.quarkEnergy = Decimal.max(x, qu_save.quarkEnergy || 0)
+	qu_save.bestEnergy = Decimal.max(xNoDiv, qu_save.bestEnergy || 0).max(qu_save.quarkEnergy)
 }
 
 function getQEQuarksPortion() {
@@ -343,7 +343,7 @@ function getQEGluonsPortion() {
 }
 
 function getQuantumEnergyMult() {
-	if (QCs.in(2)) return 1
+	if (QCs.in(2)) return new Decimal(1)
 
 	let x = new Decimal(1)
 	if (enB.active("glu", 1)) x = enB_tmp.glu1
@@ -604,10 +604,10 @@ var enB = {
 		},
 		boosterEff() {
 			var amt = this.target(undefined, true)
-			if (pos.on()) amt = amt.add(enB.pos.target())
-			if (PCs.unl() && amt.gt(PCs_tmp.eff1_start)) {
-				amt = amt.div(PCs_tmp.eff1_start).pow(this.boosterExp()).times(PCs_tmp.eff1_start)
-			}
+			//if (pos.on()) amt = amt.add(enB.pos.target())
+
+			if (PCs.unl() && amt.gt(PCs_tmp.eff1_start)) amt = amt.div(PCs_tmp.eff1_start).pow(this.boosterExp()).times(PCs_tmp.eff1_start)
+
 			if (hasAch("ng3pr14")) amt = amt.times(1.1)
 			if (QCs.perkActive(2)) amt = amt.times(1.5)
 
@@ -796,7 +796,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				var r = Decimal.div(x, 100).add(1).log(2) * (tmp.ngp3_exp ? 1.5 : 1) + 1
+				var r = Decimal.div(x, 50).add(1).log(2) * 1.25 + 1
 				if (futureBoost("quantum_superbalancing")) r = Math.max(r, Decimal.pow(x, 1 / 6 / dev.quSb.jP).toNumber() / 100)
 				return r
 			},
