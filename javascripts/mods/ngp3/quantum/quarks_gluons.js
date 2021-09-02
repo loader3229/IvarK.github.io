@@ -604,7 +604,7 @@ var enB = {
 		},
 		boosterEff() {
 			var amt = this.target(undefined, true)
-			//if (pos.on()) amt = amt.add(enB.pos.target())
+			if (pos.on()) amt = amt.add(enB.pos.target())
 
 			if (PCs.unl() && amt.gt(PCs_tmp.eff1_start)) amt = amt.div(PCs_tmp.eff1_start).pow(this.boosterExp()).times(PCs_tmp.eff1_start)
 
