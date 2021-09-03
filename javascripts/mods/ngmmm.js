@@ -77,7 +77,7 @@ function divideTickspeedIC5() {
 }
 
 function getInitPostC3Power(){
-	var ic3Power = player.totalTickGained * getECReward(14)
+	var ic3Power = 0
 	if (player.tickspeedBoosts != undefined && player.currentChallenge != "postc5") {
 		let mult = 30
 		if ((inNC(14) && tmp.ngmX == 3) || player.currentChallenge == "postcngm3_3") mult = 20

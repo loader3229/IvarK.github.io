@@ -395,15 +395,17 @@ function identifyICs() {
 function getIC3Mult() {
 	let base = getIC3Base()
 	let exp = getIC3Exp()
-	if (exp > 1) return Decimal.pow(base,exp)
+	if (exp > 1) return Decimal.pow(base, exp)
 	return base
 }
 
 function getIC3Base() {
-	if (player.currentChallenge=="postcngmm_3") return 1
-	let perGalaxy = 0.005;
+	if (player.currentChallenge == "postcngmm_3") return 
+
+	let perGalaxy = 0.005
 	if (inNGM(4)) perGalaxy = 0.002
 	if (!inNGM(2)) return player.galaxies * perGalaxy + 1.05
+
 	if (tmp.cp > 1) {
 		if (player.tickspeedBoosts != undefined) perGalaxy *= tmp.cp / 10 + .9
 		else perGalaxy *= tmp.cp / 5 + .8
@@ -450,5 +452,5 @@ function getIC3Exp() {
 function resetIC3Mult() {
 	//IC3 Multiplier
 	ic3Power = getInitPostC3Power()
-	player.postC3Reward = Decimal.pow(getIC3Mult(), ic3Power)	
+	player.postC3Reward = Decimal.pow(getIC3Mult(), ic3Power)
 }

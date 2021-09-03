@@ -486,7 +486,9 @@ amNewsArray = [
 ["Welcome to Deep Quantum, where strings are everywhere.", "str.unl()", "am269"],
 ["Number of perfect lines: Absolutely zero.", "str.unl()", "am270"],
 ["Absolute zero. That's how many particles didn't contain.", "str.unl()", "am271"],
-/*NEXT ID: am256*/
+["It is year 2077. We haven't eliminated matter bots, but we are trying to outsmart them. We are developing a brain transplant technology which detects if you are a human by nanobots for resources and materials.", true, "am272"],
+["For the first time, I saw a interesting moment for the first time. This moment shows people standing on the extractor, which can safely move on dark matter goo.", true, "am273"],
+/*NEXT ID: am274*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);

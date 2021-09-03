@@ -93,7 +93,7 @@ var pos = {
 	},
 	updateTmp() {
 		var data = {
-			tab: pos_tmp.tab
+			cloud: pos_tmp.cloud
 		}
 		pos_tmp = data
 		if (pos_save === undefined) return

@@ -5284,7 +5284,7 @@ function dimBoostABTick(){
 
 var timer = 0
 function autoBuyerTick() {
-	if (qMs.tmp.amt >= 18 && qu_save.autobuyer.enabled && !inBigRip()) autoQuantumABTick()
+	if (tmp.ngp3 && qu_save.autobuyer.enabled) autoQuantumABTick()
 	
 	if (getEternitied() >= 100 && isEterBuyerOn()) autoEternityABTick()
 

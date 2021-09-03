@@ -779,7 +779,7 @@ var enB = {
 			title: "Meta Resynergizer II",
 			type: "r",
 			eff(x) {
-				return 0.125 - 0.025 / Math.pow(x + 1, tmp.ngp3_mul ? 0.3 : 0.2)
+				return 0.125 - 0.025 / Decimal.add(x, 1).pow(tmp.ngp3_mul ? 0.3 : 0.2).toNumber()
 			},
 			disp(x) {
 				return "x^" + x.toFixed(3)
@@ -1163,7 +1163,7 @@ var enB = {
 			tier: 2,
 			eff(x) {
 				var sqrt = Math.sqrt(Decimal.max(getInfinitied(), 1).log10())
-				var exp = 5 - 5 / (Math.log10(x / 1e3 + 1) + 1)
+				var exp = 5 - 5 / (1 + Decimal.div(x, 1e3).add(1).log10())
 				return Math.max(sqrt, 1) * exp + 1
 			},
 			disp(x) {

@@ -364,7 +364,9 @@ function getECReward(x) {
 		let cl = 1
 		if (enB.active("pos", 8)) cl *= enB_tmp.pos8
 		if (PCs.milestoneDone(13)) cl *= QCs_tmp.qc1.dilaterEff
-		return (r + (cl - 1)) / cl
+
+		if (cl > 1) return (r + (cl - 1)) / cl
+		return r
 	}
 }
 

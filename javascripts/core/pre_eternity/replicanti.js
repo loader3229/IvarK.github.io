@@ -43,7 +43,7 @@ function replicantiIncrease(diff) {
 	if (auto && tmp.ngC) ngC.condense.rep.buy()
 	if (auto && canGetReplicatedGalaxy() && (canAutoReplicatedGalaxy() || player.currentEternityChall == "eterc14")) replicantiGalaxy()
 
-	if (QCs_tmp.qc1 && player.replicanti.amount.eq(lim)) QCs.data[1].boost()
+	if (QCs_tmp.qc1 && isReplicantiLimitBroken() && player.replicanti.amount.eq(lim)) QCs.data[1].boost()
 }
 
 function getReplicantiLimit(cap = false) {
