@@ -400,7 +400,7 @@ function getIC3Mult() {
 }
 
 function getIC3Base() {
-	if (player.currentChallenge == "postcngmm_3") return 
+	if (player.currentChallenge == "postcngmm_3") return 1
 
 	let perGalaxy = 0.005
 	if (inNGM(4)) perGalaxy = 0.002
