@@ -3307,7 +3307,7 @@ function eternity(force, auto, forceRespec, dilated) {
 		updateBreakEternity()
 	}
 	addEternityTime(array)
-	player.thisEternity = PCs.milestoneDone(63) ? Math.max(player.thisEternity - 300, 0) : 0
+	player.thisEternity = 0
 	forceRespec = doCheckECCompletionStuff() || forceRespec
 
 	player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())

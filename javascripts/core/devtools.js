@@ -338,14 +338,12 @@ dev.boosts = {
 		},
 	},
 	7: {
-		name: "Condenser Pressure",
+		name: "???",
 		unl() {
-			return PCs.milestoneDone(52)
+			return false
 		},
 		eff(x) {
-			//Condenser Pressure: Replicanti Compressors boost Replicanti Energy more.
-			var qc1 = QCs_save.qc1.boosts
-			return Math.pow(qc1 / 20 + 1, qc1 / 30 + 1)
+			return 1
 		},
 	},
 	8: {

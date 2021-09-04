@@ -290,25 +290,38 @@ colorBoosts = {
 function updateColorPowers() {
 	if (!tmp.quUnl) return
 
+	//Exponents
+	let e = 1
+	if (hasAch("ng3pr12")) {
+		let c = 0
+		for (var i = 1; i <= 4; i++) if (PCs.milestoneDone(i * 10 + 4)) c++
+		e *= 1 + c * 0.025
+	}
+
 	//Red
 	colorBoosts.r = Decimal.times(qu_save.colorPowers.r, 5).add(1).log10() / 3.5 + 1
 	if (hasMTS(272)) colorBoosts.r += 0.25
 	colorBoosts.r = softcap(colorBoosts.r, "rp")
+	if (e > 1) colorBoosts.r = Math.pow(colorBoosts.r, e)
 
 	//Green
 	colorBoosts.g = Decimal.times(qu_save.colorPowers.g, 3).add(1).log10() + 1
-	if (futureBoost("quantum_superbalancing")) colorBoosts.g = Decimal.pow(qu_save.colorPowers.g, 1 / 4 / dev.quSb.k).div(1000).max(colorBoosts.g)
+	if (futureBoost("quantum_superbalancing")) colorBoosts.g = Decimal.pow(qu_save.colorPowers.g, 1 / 4.4 / dev.quSb.k).div(1000).max(colorBoosts.g)
+	if (e > 1) colorBoosts.g = Math.pow(colorBoosts.g, e)
 	colorBoosts.g = softcap(colorBoosts.g, "gp")
 
 	//Blue
-	colorBoosts.b_base = Decimal.add(qu_save.colorPowers.b, 1)
-	colorBoosts.b_base = colorBoosts.b_base.add(colorBoosts.b_base.max(1).log(2))
-	colorBoosts.b_exp = 2
-	if (enB.active("glu", 10)) colorBoosts.b_base = colorBoosts.b_base.times(enB_tmp.glu10)
-	if (enB.active("glu", 11)) colorBoosts.b_exp = enB_tmp.glu11
+	colorBoosts.b_base = Decimal.times(qu_save.colorPowers.b, 1.5).add(1)
+	colorBoosts.b_exp = 1.5
 
-	colorBoosts.b_base2 = colorBoosts.b_base.pow(colorBoosts.b_exp)
-	if (hasMTS(313)) colorBoosts.b_exp *= getMTSMult(313, "update")
+	if (e > 1) colorBoosts.b_exp *= e
+	if (enB.active("glu", 10)) colorBoosts.b_base = colorBoosts.b_base.times(enB_tmp.glu10)
+	if (enB.active("glu", 11)) colorBoosts.b_exp *= enB_tmp.glu11
+
+	if (hasMTS(313)) {
+		colorBoosts.b_base2 = colorBoosts.b_base.pow(colorBoosts.b_exp)
+		colorBoosts.b_exp *= getMTSMult(313, "update")
+	}
 
 	colorBoosts.b = colorBoosts.b_base.pow(colorBoosts.b_exp)
 }
@@ -796,7 +809,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				var r = Decimal.div(x, 50).add(1).log(2) * 1.25 + 1
+				var r = Decimal.div(x, 100).add(1).log(2) + 1
 				if (futureBoost("quantum_superbalancing")) r = Math.max(r, Decimal.pow(x, 1 / 6 / dev.quSb.jP).toNumber() / 100)
 				return r
 			},
@@ -831,7 +844,7 @@ var enB = {
 			title: "Blue Unseeming",
 			type: "r",
 			eff(x) {
-				var r = Math.log10(Decimal.add(x, 1).log10() / (tmp.ngp3_mul ? 4 : 5) + 1) / 2 + 1
+				var r = Math.sqrt(Decimal.div(x, 500).add(1).log10() / 3 + 1)
 				return r
 			},
 			disp(x) {

@@ -87,7 +87,7 @@ let str = {
 		var data = str_tmp
 		if (!data.unl) return
 
-		data.str = 1
+		data.str = Math.max(Math.log2(str_save.energy) / 2, 1)
 	},
 	updateDispOnTick() {
 		if (!str_tmp.setupHTML || !str_tmp.unl) return
@@ -113,7 +113,7 @@ let str = {
 			getEl("str_pb" + i + "_nerf").innerHTML = (pb_nerf < 1 ? "/" + shorten(1 / pb_nerf) : shorten(pb_nerf) + "x") + "<br>requirement"
 			getEl("str_pb" + i).className = (str_save.vibrated.includes(pb_pos) ? "chosenbtn2" : str.vibrated(pb_pos) ? (str_tmp.disable[pb_pos] > pb_pos ? "chosenbtn3" : "chosenbtn") : str.canVibrate(pb_pos) ? "storebtn" : "unavailablebtn") + " pos_btn"
 		}
-		getEl("str_strength").textContent = "Manifold Surgery: " + formatPercentage(str_tmp.str - 1) + "% stronger"
+		getEl("str_strength").textContent = "Manifold Surgery: " + shorten(str_tmp.str) + "x strength to String boosts"
 	},
 	updateFeatureOnTick() {
 		str_save.energy = Math.max(str_save.energy, this.veGain())
@@ -148,6 +148,7 @@ let str = {
 	veGain() {
 		let r = qu_save.quarkEnergy.add(1).log10()
 		if (!QCs.modIn(5, "up")) r *= Math.log10(QCs_save.qc5.add(1).log10() + 1)
+		r *= PCs_save.lvl / 8
 		return r
 	},
 	veUnspent() {

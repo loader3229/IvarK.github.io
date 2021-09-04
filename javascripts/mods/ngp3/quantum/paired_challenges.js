@@ -9,6 +9,7 @@ var PCs = {
 		61: "The QC6 reward is squared.",
 		71: "Meta Accelerator accelerates faster based on your PC level.",
 		81: "EC14 reward power speeds up Replicantis more.",
+
 		12: "Unlock Replicated Expanders.",
 		22: "You can swap Positronic Boosts between 2 of any tiers.",
 		32: "25 MP milestone is activated in QC3.",
@@ -17,19 +18,56 @@ var PCs = {
 		62: "Eternitying timewraps Meta Dimensions and Replicantis by 3 seconds.",
 		72: "Mastery Study cost multiplier is divided by 5x.",
 		82: "Remote Galaxies scaling is slower based on its starting point.",
+
 		13: "Unlock Replicated Dilaters.",
-		23: "???",
+		23: "Undercharged boosts get a higher charge multiplier. (not implemented)",
 		33: "Meta Accelerator slowdown starts 2% later per PC level.",
 		43: "Extra Replicated Galaxies contribute to Positronic Charge.",
-		53: "Replicanti Energy formula is stronger.",
-		63: "Eternity time stat is 3x slower.",
+		53: "Replicanti Compressors raise Replicanti Energy more.",
+		63: "Add the time efficiency of QC6 reward by 5s, and also slow down by 3x.",
 		73: "Remove the second softcap of TT generation.",
-		83: "???",
+		83: "Unlock the first Omega Set. (not implemented)",
+
+		14: "+0.025 to the exponent of Color Power effects.",
+		24: "+0.025 to the exponent of Color Power effects.",
+		34: "+0.025 to the exponent of Color Power effects.",
+		44: "+0.025 to the exponent of Color Power effects.",
+		54: "+15% to aQs gain exponent.",
+		64: "+15% to aQs gain exponent.",
+		74: "+15% to aQs gain exponent.",
+		84: "+15% to aQs gain exponent.",
+
+		15: "???",
+		25: "???",
+		35: "???",
+		45: "???",
+		55: "???",
+		65: "???",
+		75: "???",
+		85: "???",
+
+		16: "???",
+		26: "???",
+		36: "???",
+		46: "???",
+		56: "???",
+		66: "???",
+		76: "???",
+		86: "???",
 	},
 	setupData() {
 		var data = {
 			goal_divs: [null, 0.1, 0.95, 0.25, 0.95, 0.45, 0.5, 0.4, 0.75],
-			milestoneReqs: [null, 1, 2, 4],
+			milestone_reqs: [null, 1, 2, 3, 4, 6, 7],
+			milestone_unls: [null,
+				true,
+				true,
+				() => hasAch("ng3pr12"),
+				() => hasAch("ng3pr12"),
+				() => futureBoost("more_milestones"),
+				() => futureBoost("more_milestones"),
+				() => futureBoost("more_milestones"),
+			],
 			letters: [null, "A", "B", "C", "D", "Ω<sup>1</sup>", "Ω<sup>2</sup>", "Ω<sup>3</sup>", "Θ"],
 			all: [],
 			setup: true
@@ -283,11 +321,10 @@ var PCs = {
 	milestoneUnl(pos) {
 		if (!PCs.unl()) return
 		if (!PCs_tmp.comps) return
-		if (pos == 3) return hasAch("ng3pr12")
-		return true
+		return evalData(PCs.data.milestone_unls[pos])
 	},
 	milestoneDone(pos) {
-		return PCs.milestoneUnl(pos % 10) && PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestoneReqs[pos % 10]
+		return PCs.milestoneUnl(pos % 10) && PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestone_reqs[pos % 10]
 	},
 	lvlReq(pc) {
 		if (QCs_save.comps / 2 < pc % 10) return 1/0
@@ -429,7 +466,7 @@ var PCs = {
 		getEl("pc_info").style.display = qc || PCs_save.lvl == 1 ? "none" : ""
 		if (qc) {
 			getEl("qc_milestone_header").textContent = "QC" + qc + " Milestones"
-			for (var i = 1; i < PCs.data.milestoneReqs.length; i++) {
+			for (var i = 1; i < PCs.data.milestone_reqs.length; i++) {
 				getEl("qc_milestone" + i).className = "qMs_" + (this.milestoneDone(qc * 10 + i) ? "reward" : "locked")
 				getEl("qc_milestone" + i).textContent = PCs.milestones[qc * 10 + i] || "???"
 				if (i >= 3) {

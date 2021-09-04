@@ -111,7 +111,10 @@ var QCs = {
 				if (!QCs_tmp.qc1) return false
 
 				if (QCs.perkActive(1) && qc1.time >= 5) qc1.perkBoosts++
-				if (PCs.milestoneDone(13) && tmp.rep.est.gte(1e6)) qc1.dilaters++
+				if (PCs.milestoneDone(13) && tmp.rep.est.gte(1e6)) {
+					updateReplicantiTemp()
+					qc1.dilaters++
+				}
 
 				QCs.data[1].fix = true
 				qc1.boosts++
@@ -242,7 +245,7 @@ var QCs = {
 				}
 				if (PCs.milestoneDone(13)) {
 					getEl("replDilater").textContent = getFullExpansion(qc1.dilaters)
-					getEl("replCompressEff").textContent = formatReductionPercentage(QCs_tmp.qc1.dilaterEff) + "%"
+					getEl("replDilaterEff").textContent = formatReductionPercentage(QCs_tmp.qc1.dilaterEff) + "%"
 				}
 			},
 
@@ -449,8 +452,9 @@ var QCs = {
 			exp() {
 				var x = 1
 				if (PCs.milestoneDone(52)) {
-					var y = QCs_save.qc1.boosts / 20 + 1
-					if (futureBoost("condenser_pressure") && dev.boosts.tmp[7]) y = dev.boosts.tmp[7]
+					var boosts = QCs_save.qc1.boosts
+					var y = boosts / 20 + 1
+					if (PCs.milestoneDone(53)) y = Math.pow(y, boosts / 40 + 1)
 					x *= y
 				}
 				return x
@@ -464,7 +468,6 @@ var QCs = {
 					eff: Math.pow(QCs_save.qc5.div(2e6).add(1).log(2), 12 / 7) * 5
 				}
 				if (QCs.isRewardOn(6)) QCs_tmp.qc5.mult = QCs_tmp.qc5.mult.times(QCs_tmp.rewards[6])
-				if (PCs.milestoneDone(53)) QCs_tmp.qc5.eff = Math.pow(QCs_tmp.qc5.eff, 1.1)
 				if (QCs.perkActive(5)) QCs_tmp.qc5.eff *= 2
 			},
 
@@ -490,6 +493,7 @@ var QCs = {
 			rewardDesc: (x) => "Replicantis also produce Replicanti Energy; but also boosted by time since Eternity. (" + shorten(QCs_tmp.rewards[6]) + "x)",
 			rewardEff(str) {
 				let t = player.thisEternity / 10
+				if (PCs.milestoneDone(63)) t = (t + 5) / 3
 
 				let x = Math.log2(t + 2)
 				if (PCs.milestoneDone(61)) x *= x
