@@ -464,7 +464,7 @@ var enB = {
 		if (!data.unl()) return
 		if (Decimal.lt(data.engAmt(), data.cost())) return
 
-		data.set(data.amt().add(1).round())
+		data.set(data.amt().add(1))
 		updateGluonicBoosts()
 		this.update(type)
 	},
@@ -603,7 +603,7 @@ var enB = {
 			return x
 		},
 		set(x) {
-			qu_save.entBoosts = x
+			qu_save.entBoosts = x.round()
 		},
 
 		eff(x) {
@@ -898,7 +898,7 @@ var enB = {
 			return new Decimal(pos_save.eng)
 		},
 		set(x) {
-			pos_save.boosts = x
+			pos_save.boosts = x.round()
 		},
 
 		activeReq(x) {
@@ -946,7 +946,7 @@ var enB = {
 		},
 
 		lvl(x, next) {
-			if (pos_save === undefined) return this[x].tier
+			if (!pos_tmp.cloud) return this[x].tier
 
 			var swaps = next ? pos_tmp.cloud.next : pos_tmp.cloud.swaps
 			if (swaps[x]) x = swaps[x]
@@ -1254,7 +1254,7 @@ var enB = {
 		}
 		if (QCs.inAny()) getEl("enB_" + type + "_next").textContent = ""
 
-		if (type == "pos") {
+		if (type == "pos" && pos_tmp.cloud) {
 			pos.updateCloud()
 			pos_tmp.cloud.allMastered = allMastered
 			getEl("entangle_div_pos").style.display = allMastered ? "none" : ""

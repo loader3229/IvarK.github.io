@@ -1010,9 +1010,17 @@ function doFeatureProgress() {
 	let res
 	let req
 	let reqNum
+	let reqFormat
 
-	if (str.unl()) {}
-	else if (PCs.unl()) {
+	if (pH.can("quPlus")) {}
+	else if (str.unl()) {
+		res = player.money
+		resFormat = shortenCosts(res)
+		reqNum = Decimal.pow(10, Math.pow(10, 13.5))
+		req = shortenCosts(reqNum) + " antimatter"
+		percentage = res.log(reqNum)
+		feature = "Quantum+"
+	} else if (PCs.unl()) {
 		res = PCs_save.comps.length
 		reqNum = 8
 		req = reqNum + " PC combinations"
@@ -1065,5 +1073,5 @@ function doFeatureProgress() {
 	percentage = percentage === undefined ? "100%" : Math.min(percentage * 100, 100).toFixed(1) + "%"
 	getEl("progressbar").style.width = percentage
 	getEl("progresspercent").textContent = percentage
-	getEl("progresspercent").setAttribute('ach-tooltip', feature ? "Reach " + req + " to unlock " + feature + ". (" + res + ")" : "All features unlocked!")
+	getEl("progresspercent").setAttribute('ach-tooltip', feature ? "Reach " + req + " to unlock " + feature + ". (" + (resFormat || res) + ")" : "All features unlocked!")
 }

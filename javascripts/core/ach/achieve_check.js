@@ -268,6 +268,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (PCs_save.best >= 12) giveAchievement("The Challenging Day")
 	if (player.money.log10() >= 6.2e11 && player.currentEternityChall == "eterc11") giveAchievement("I can’t get my multipliers higher!")
 	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")
+	if (player.meta.antimatter.e >= 1/0 && player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] == 0 && player.dilation.upgrades.length == 0) giveAchievement("Never make paradoxes!")
 	if (player.infinityPoints.gte(Decimal.pow(Number.MAX_VALUE, 1000)) && ableToGetRid5) giveAchievement("I don't want you to live anymore.")
 
 	if (mTs.bought == mTs.timeStudies.length && QCs.in(1) && PCs.in()) giveAchievement("Mastery Mayhem")
@@ -281,6 +282,7 @@ function preHiggsNGp3AchieveCheck() {
 	}
 	if (qu_save.expEnergy >= 1) giveAchievement("Sciencing Around The Core")
 
+	if (pH.did("quPlus")) giveAchievement("Quantum+ Reached!")
 	if (player.dilation.dilatedTime.log10() >= 411 && qu_save.notrelative) giveAchievement("Time is not relative")
 	if (!hasAch("ng3p42")) {
 		for (d = 2; d < 9; d++) {
@@ -308,8 +310,8 @@ function preHiggsNGp3AchieveCheck() {
 	}
 	if (qu_save.bigRip.spaceShards.log10() >= 33 && !qu_save.breakEternity.did) giveAchievement("Finite Time")
 	if (minUQ.quarks.log10() >= 1e12 && minUQ.decays >=2 && !qu_save.bigRip.times) giveAchievement("Weak Decay")		
-	if (nG(getInfinitied(), Number.MAX_VALUE)) giveAchievement("Meta-Infinity confirmed?")
-	if (nG(getEternitied(), Number.MAX_VALUE)) giveAchievement("Everlasting Eternities")
+	if (Decimal.gte(getInfinitied(), 1/0)) giveAchievement("Meta-Infinity confirmed?")
+	if (Decimal.gte(getEternitied(), 1/0)) giveAchievement("Everlasting Eternities")
 	if (player.options.secrets && player.options.secrets.ghostlyNews && !player.options.newsHidden) giveAchievement("Two tickers")
 	if (qu_save.breakEternity.did) giveAchievement("Time Breaker")
 	if (mTs.bought >= 48) giveAchievement("The Theory of Ultimate Studies")

@@ -1,5 +1,5 @@
 let str = {
-	unl: (force) => (!force && str_tmp.unl) || (PCs_save && PCs_save.best >= 8),
+	unl: (force) => force ? (PCs_save && PCs_save.best >= 8) : str_tmp.unl,
 
 	//Data
 	data: {
@@ -40,9 +40,10 @@ let str = {
 	//Updates
 	updateTmp() {
 		var data = str_tmp
+		if (!data.unl) return
+
 		var vibrated = str_save.vibrated
 		var all = this.data.all
-		if (!data.unl) return
 
 		data.alt = {}
 		data.disable = {}
@@ -202,21 +203,23 @@ let str = {
 		return !str.unl() ? x : rev ? str_tmp.rev_order[x] : str_tmp.order[x]
 	},
 	eff(x) {
-		if (x > 0) x /= 2
-		return x
+		let r = this.altitude(x)
+		r *= str_tmp.str
+		if (r > 0) r /= 2
+		return r
 	},
 	eff_eb(x) {
-		return 1 + Math.abs(this.altitude(this.data.pos["eb" + x])) * this.eff(str_tmp.str)
+		return 1 + Math.abs(this.eff(this.data.pos["eb" + x]))
 	},
 	eff_pb(x) {
-		return Math.abs(this.altitude(this.data.pos["pb" + x])) * 8 * this.eff(str_tmp.str)
+		return Math.abs(this.eff(this.data.pos["pb" + x])) * 8
 	},
 	nerf_eb(x) {
-		var alt = this.altitude(this.data.pos["eb" + x]) * this.eff(str_tmp.str)
+		var alt = this.eff(this.data.pos["eb" + x])
 		return alt < 0 ? -alt * 1e3 : 0
 	},
 	nerf_pb(x) {
-		var alt = this.altitude(this.data.pos["pb" + x]) * this.eff(str_tmp.str)
+		var alt = this.eff(this.data.pos["pb" + x])
 		return alt < 0 ? 1 - alt : 1 / (1 + alt)
 	},
 

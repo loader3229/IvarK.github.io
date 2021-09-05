@@ -2683,49 +2683,51 @@ function conToDeciMS(){
 		if (qu_save) {
 			qu_save.quarkEnergy = new Decimal(qu_save.quarkEnergy)
 			qu_save.bestEnergy = new Decimal(qu_save.bestEnergy)
-			qu_save.entBoosts = new Decimal(qu_save.entBoosts)
-		}
-		if (qu_save && qu_save.usedQuarks) {
-			qu_save.usedQuarks.r = new Decimal(qu_save.usedQuarks.r)
-			qu_save.usedQuarks.g = new Decimal(qu_save.usedQuarks.g)
-			qu_save.usedQuarks.b = new Decimal(qu_save.usedQuarks.b)
-			if (typeof(qu_save.colorPowers.r) !== "number") {
-				qu_save.colorPowers.r = 0
-				qu_save.colorPowers.g = 0
-				qu_save.colorPowers.b = 0
+			if (qu_save.usedQuarks) {
+				qu_save.usedQuarks.r = new Decimal(qu_save.usedQuarks.r)
+				qu_save.usedQuarks.g = new Decimal(qu_save.usedQuarks.g)
+				qu_save.usedQuarks.b = new Decimal(qu_save.usedQuarks.b)
+				if (typeof(qu_save.colorPowers.r) !== "number") {
+					qu_save.colorPowers.r = 0
+					qu_save.colorPowers.g = 0
+					qu_save.colorPowers.b = 0
+				}
 			}
-		}
-		if (qu_save ? aarMod.newGame3PlusVersion > 1.5 : false) {
-			qu_save.gluons.rg = new Decimal(qu_save.gluons.rg)
-			qu_save.gluons.gb = new Decimal(qu_save.gluons.gb)
-			qu_save.gluons.br = new Decimal(qu_save.gluons.br)
-		}
-		if (qu_save ? qu_save.autobuyer : false) qu_save.autobuyer.limit = new Decimal(qu_save.autobuyer.limit)
-		if (player.dilation.bestTP == undefined) player.dilation.bestTP = hasAch("ng3p18") || hasAch("ng3p37") ? player.dilation.tachyonParticles : 0
-		player.dilation.bestTP = new Decimal(player.dilation.bestTP)
-		if (qu_save ? qu_save.electrons : false) delete qu_save.electrons //RIP positrons
-		if (qu_save ? qu_save.replicants : false) delete qu_save.replicants
-		if (qu_save ? qu_save.emperorDimensions : false) delete qu_save.emperorDimensions
 
-		if (qu_save && qu_save.nanofield) {
-			qu_save.nanofield.charge = new Decimal(qu_save.nanofield.charge)
-			qu_save.nanofield.energy = new Decimal(qu_save.nanofield.energy)
-			qu_save.nanofield.antienergy = new Decimal(qu_save.nanofield.antienergy)
-			qu_save.nanofield.powerThreshold = new Decimal(qu_save.nanofield.powerThreshold)
-		}
-		if (qu_save && qu_save.tod) {
-			qu_save.tod.r.quarks = new Decimal(qu_save.tod.r.quarks)
-			qu_save.tod.r.spin = new Decimal(qu_save.tod.r.spin)
-			qu_save.tod.g.quarks = new Decimal(qu_save.tod.g.quarks)
-			qu_save.tod.g.spin = new Decimal(qu_save.tod.g.spin)
-			qu_save.tod.b.quarks = new Decimal(qu_save.tod.b.quarks)
-			qu_save.tod.b.spin = new Decimal(qu_save.tod.b.spin)
-		}
+			if (qu_save.gluons && aarMod.newGame3PlusVersion > 1.5) {
+				qu_save.gluons.rg = new Decimal(qu_save.gluons.rg)
+				qu_save.gluons.gb = new Decimal(qu_save.gluons.gb)
+				qu_save.gluons.br = new Decimal(qu_save.gluons.br)
+			}
+			qu_save.entBoosts = Decimal.round(qu_save.entBoosts)
 
-		delete qu_save.bosons
-		delete qu_save.neutronstar
-		delete qu_save.realGluons
-		delete qu_save.rebuyables
+			if (qu_save.electrons) delete qu_save.electrons //RIP positrons
+			if (qu_save.replicants) delete qu_save.replicants //RIP replicants
+			if (qu_save.emperorDimensions) delete qu_save.emperorDimensions //RIP emperor dimensions
+			if (qu_save.nanofield) {
+				qu_save.nanofield.charge = new Decimal(qu_save.nanofield.charge)
+				qu_save.nanofield.energy = new Decimal(qu_save.nanofield.energy)
+				qu_save.nanofield.antienergy = new Decimal(qu_save.nanofield.antienergy)
+				qu_save.nanofield.powerThreshold = new Decimal(qu_save.nanofield.powerThreshold)
+			}
+			if (qu_save.tod) {
+				qu_save.tod.r.quarks = new Decimal(qu_save.tod.r.quarks)
+				qu_save.tod.r.spin = new Decimal(qu_save.tod.r.spin)
+				qu_save.tod.g.quarks = new Decimal(qu_save.tod.g.quarks)
+				qu_save.tod.g.spin = new Decimal(qu_save.tod.g.spin)
+				qu_save.tod.b.quarks = new Decimal(qu_save.tod.b.quarks)
+				qu_save.tod.b.spin = new Decimal(qu_save.tod.b.spin)
+			}
+
+			if (qu_save.autobuyer) qu_save.autobuyer.limit = new Decimal(qu_save.autobuyer.limit)
+			if (player.dilation.bestTP == undefined) player.dilation.bestTP = hasAch("ng3p18") || hasAch("ng3p37") ? player.dilation.tachyonParticles : 0
+			player.dilation.bestTP = new Decimal(player.dilation.bestTP)
+
+			delete qu_save.bosons
+			delete qu_save.neutronstar
+			delete qu_save.realGluons
+			delete qu_save.rebuyables
+		}
 	}
 }
 

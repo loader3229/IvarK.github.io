@@ -113,10 +113,10 @@ var mTs = {
 			return QCs.in(7) || mTs.bought >= (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10)
 		},
 		d7() {
-			return enB.glu.engAmt() >= (tmp.exMode ? 5.3 : 3)
+			return qu_save.bestEnergy.gte(tmp.exMode ? 5.3 : 3)
 		},
 		d8() {
-			return enB.pos.engAmt() >= 5
+			return pos_save.eng.gte(5)
 		}
 	},
 	unlockReqDisplays: {
@@ -127,7 +127,7 @@ var mTs = {
 			return QCs.in(7) ? "" : (tmp.dtMode ? 9 : tmp.exMode ? 8 : 10) + " bought mastery studies"
 		},
 		d7() {
-			return (tmp.exMode ? 5.3 : 3) + " quantum energy"
+			return (tmp.exMode ? 5.3 : 3) + " best quantum energy"
 		},
 		d8() {
 			return "5 positronic charge"
@@ -638,18 +638,21 @@ function getMasteryStudyCostMult(id) {
 }
 
 function buyingD7Changes() {
+	pos_tmp.unl = true
+	getEl("positronstabbtn").style.display = ""
+
 	showTab("quantumtab")
 	showQuantumTab("positrons")
-	getEl("positronstabbtn").style.display = ""
 
 	enB.update("pos")
 	pos.updateTmp()
 }
 
 function buyingDilStudyForQC() {
-	qMs.updateDisplay()
+	QCs_tmp.unl = true
 	getEl("qctabbtn").style.display = ""
 
+	qMs.updateDisplay()
 	QCs.tp()
 	QCs.updateTmp()
 	QCs.updateDisp()

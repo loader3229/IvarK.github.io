@@ -73,22 +73,19 @@
 			</button>
 		</div>
 		<div style="position: relative">
+			<div id="quPlusEmpty"></div>
+			<button id="quPlusReset" class="storebtn" onclick="alert('You will see when the next update comes...')">Quantum has been splitted... For now, you reached the end-game! ~ Aarex</button>
+		</div>
+		<div style="position: relative">
 			<div id="ghostparticles">
 				You have <span id='GHPAmount'>0</span> Ghost Particles.<br>
 				<div id="quantumedBM">Quantumed <span id='quantumedBMAmount'>0</span> times</div>
 			</div>
-			<button id="bigripbtn" onclick="bigRip()">I want to complete the impossible challenge... I want to Big Rip the universe.</button>
 			<button id="ghostifybtn" onclick="ghostify()">
 				<div id="ghostifybtnFlavor" class="hideEmpty"></div>
 				<div id="GHPGain" class="hideEmpty"></div>
 				<div id="GHPRate" class="hideEmpty"></div>
 				<div id="GHPPeak" class="hideEmpty"></div>
-			</button>
-		</div>
-		<div style="position: relative">
-			<div id="planckinfo">You have a Planck Tier of <b class="pl" id="plTier">0</b>.</div>
-			<button onclick="pl.reset()" id="planck">
-				<b id="plMsg">See beyond the forces of Quantum... I want to go deeper into Planck Scale.</b>
 			</button>
 		</div>
 		<div id='quantumBlock' style='height:120px'></div>
@@ -139,8 +136,8 @@
 			<button id="irTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="interrealitybtn" onclick='showTab("irTab")'>Interreality</button>
 			<button id="sgTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="singularitybtn" onclick='showTab("sgTab")'>Singularity</button>
 			<button id="quantumtabbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="quantumbtn" onclick='showTab("quantumtab")'>Quantum</button>
+			<button id="quPlusBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="quPlusbtn">Quantum+</button>
 			<button id="ghostifytabbtn" style="font-family: Typewriter; font-size: 20px" class="ghostifybtn" onclick='showTab("ghostify")'>Ghostify</button>
-			<button id="plancktabbtn" style="font-family: Typewriter; font-size: 20px" class="planckbtn" onclick='showTab("plTab")'>Planck</button>
 		</div>
 		<div id="emptiness" class="tab" style="font-size: 150%">
 			<br>
@@ -1534,7 +1531,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.6: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(9/3/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(9/4/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -2268,7 +2265,7 @@
 								<div id="ng3pr15" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
 							</td>
 							<td>
-								<div id="ng3pr16" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
+								<div id="I can’t get my multipliers higher!" class="achievement achievementlocked" style="background-image: url(images/ng3pr/16.png)"><br></div>
 							</td>
 							<td>
 								<div id="ng3pr17" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
@@ -2282,7 +2279,7 @@
 								<div id="ERROR 500: INTERNAL DIMENSION ERROR" class="achievement achievementlocked" style="background-image: url(images/127.png)"></div>
 							</td>
 							<td>
-								<div id="The truth of anti-challenged" class="achievement achievementlocked" style="background-image: url(images/128.png)"></div>
+								<div id="Quantum+ Reached!" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Reach Quantum+."></div>
 							</td>
 							<td>
 								<div id="Never make paradoxes!" class="achievement achievementlocked" style="background-image: url(images/129.png)"></div>
@@ -2291,10 +2288,10 @@
 								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/130.png)" ach-tooltip="Complete 12 Paired Challenge combinations. Reward: Cooler temperatures are doubled."></div>
 							</td>
 							<td>
-								<div id="An ant office?" class="achievement achievementlocked" style="background-image: url(images/131.png)" ach-tooltip="Promote a worker into the second Emperor Dimension. Reward: Duplicants feed babies 10x faster."></div>
+								<div id="ng3p35" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
 							</td>
 							<td>
-								<div id="I can’t get my multipliers higher!" class="achievement achievementlocked" style="background-image: url(images/132.png)"><br></div>
+								<div id="ng3p36" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
 							</td>
 							<td>
 								<div id="No dilation means no production." class="achievement achievementlocked" style="background-image: url(images/133.png)"><br></div>

@@ -158,7 +158,12 @@ function doQuantumProgress() {
 	var first = isQuantumFirst()
 	var name = ""
 
-	if (!first && quarkGain().gte(256)) {
+	if (!first && quarkGain().gte(Number.MAX_VALUE)) {
+		var quPlus = Decimal.pow(10, Math.pow(10, 13.5))
+		percentage = player.money.log(quPlus)
+		name = "Percentage until Quantum+ (" + shortenCosts(quPlus) + " antimatter)"
+		className = "quantumProgress"
+	} else if (!first && quarkGain().gte(256)) {
 		var qkLog = quarkGain().log(2)
 		var qkNext = Math.pow(2, Math.floor(Math.log2(qkLog) + 1))
 		percentage = qkLog / qkNext
@@ -213,8 +218,6 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		pH.updateDisplay()
 	}
 	getEl("quantumbtn").style.display = "none"
-	getEl("bigripbtn").style.display = "none"
-	getEl("ghostifybtn").style.display = "none"
 
 	// check if forced quantum
 	// otherwise, give rewards
@@ -230,7 +233,6 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 		gainQKOnQuantum(qkGain)
 
-		if (player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] < 1 && player.dilation.upgrades.length < 1) giveAchievement("Never make paradoxes!")
 		if (qu_save.times >= 1e4) giveAchievement("Prestige No-lifer")
 
 		if (hasAch("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
@@ -249,50 +251,26 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	getEl("galaxyPoints2").innerHTML = "You have <span class='GPAmount'>0</span> Galaxy points."
 
 	/*
-		NEW GAME PLUS 3: Goes in reverse feature order
+		NEW GAME PLUS 3
 	*/
 
-	// Strings
-	if (str.unl()) {
-		//Positronic Cloud Fix
+	// Quantum
+	if (tmp.ngp3) {
+		qMs.update()
+		qu_save.quarkEnergy = new Decimal(0)
+	} else qu_save.gluons = 0;
+
+	// Positrons
+	if (pos.unl()) {
 		pos_save.swaps = {...pos_tmp.cloud.next}
-		pos_tmp.cloud.swaps = !pos.swapsDisabled() ? {...pos_tmp.cloud.next} : {}
-
-		if (data.qc && data.qc.includes(5) && data.mod == "up") str_save.energy = 0
-
-		str.updateTmp()
-		str.updateDisp()
-	}
-
-	// Paired Challenges
-	if (PCs.unl()) {
-		var pc_pos = PCs_save.in
-		delete PCs_save.in
-		if (data.pc) {
-			PCs_save.in = data.pc
-			PCs.updateButton(data.pc)
-		}
-
-		var qcDataPrev = QCs_save.in
-		if (qcDataPrev.length == 2) {
-			var pc = PCs.conv(qcDataPrev)
-			if (!PCs_save.comps.includes(pc)) {
-				if (force) delete PCs_save.challs[pc_pos]
-				else PCs_save.comps.push(pc)
-				PCs.updateButton(pc_pos)
-			}
-		}
-
-		if (!PCs_tmp.unl) PCs_tmp.unl = true
-		PCs.updateUsed()
-		PCs.updateTmp()
-		PCs.updateDisp()
+		pos.updateCloud()
+		pos.updateTmp()
 	}
 
 	// Quantum Challenges
+	var qcDataPrev = QCs_save.in
 	if (QCs.unl()) {
 		var isQC = data.qc !== undefined
-		var qcDataPrev = QCs_save.in
 		var qcData = PCs.sort(data.qc)
 
 		if (!force) {
@@ -337,17 +315,47 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		QCs.updateDisp()
 	}
 
-	// Positrons
-	if (pos.unl()) {
-		pos_save.swaps = {...pos_tmp.cloud.next}
-		pos.updateCloud()
-		pos.updateTmp()
+	// Paired Challenges
+	if (!PCs.unl()) PCs_tmp.unl = PCs.unl(true)
+	if (PCs.unl()) {
+		var pc_pos = PCs_save.in
+		delete PCs_save.in
+		if (data.pc) {
+			PCs_save.in = data.pc
+			PCs.updateButton(data.pc)
+		}
+
+		if (qcDataPrev.length == 2) {
+			var pc = PCs.conv(qcDataPrev)
+			if (!PCs_save.comps.includes(pc)) {
+				if (force) delete PCs_save.challs[pc_pos]
+				else PCs_save.comps.push(pc)
+				PCs.updateButton(pc_pos)
+			}
+		}
+
+		if (!PCs_tmp.unl) PCs_tmp.unl = true
+		PCs.updateUsed()
+		PCs.updateTmp()
+		PCs.updateDisp()
 	}
 
-	if (tmp.ngp3) {
-		qMs.update()
-		qu_save.quarkEnergy = new Decimal(0)
-	} else qu_save.gluons = 0;
+	// Strings
+	if (!str.unl()) str_tmp.unl = str.unl(true)
+	if (str.unl()) {
+		//Positronic Cloud Fix
+		pos_save.swaps = {...pos_tmp.cloud.next}
+		pos_tmp.cloud.swaps = !pos.swapsDisabled() ? {...pos_tmp.cloud.next} : {}
+
+		if (data.qc && data.qc.includes(5) && data.mod == "up") str_save.energy = 0
+
+		str.updateTmp()
+		str.updateDisp()
+	}
+
+	/*
+		END OF NG+3 MECHANICS
+	*/
 
 	doQuantumResetStuff(5, false, isQC, QCs_save.in)
 

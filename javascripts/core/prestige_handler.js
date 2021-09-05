@@ -1,5 +1,11 @@
 var pH = {
-	order: ["paradox", "accelerate", "galaxy", "infinity", "eternity", "interreality", "singularity", "quantum", "ghostify", "planck"],
+	order: ["paradox", "accelerate", "galaxy", "infinity", "eternity", "interreality", "singularity", "quantum", "quPlus", "ghostify"],
+	names: {
+		infinity: "Infinity",
+		eternity: "Eternity",
+		quantum: "Quantum",
+		quPlus: "Quantum+"
+	},
 	reqs: {
 		paradox() {
 			return player.money.max(1).log10() >= 3 && player.totalTickGained && !tmp.ri
@@ -30,10 +36,10 @@ var pH = {
 				(!tmp.ngp3 || tmp.ngp3_mul || ECComps("eterc14") >= 1) &&
 				getQuarkGain().gte(1)
 		},
-		ghostify() {
-			return false
+		quPlus() {
+			return player.money.e >= Math.pow(10, 13.5)
 		},
-		planck() {
+		ghostify() {
 			return false
 		}
 	},
@@ -56,11 +62,11 @@ var pH = {
 		quantum() {
 			return player.meta !== undefined
 		},
-		ghostify() {
+		quPlus() {
 			return tmp.ngp3
 		},
-		planck() {
-			return false
+		ghostify() {
+			return tmp.ngp3
 		}
 	},
 	resetFuncs: {
@@ -91,11 +97,11 @@ var pH = {
 				else quantum()
 			}
 		},
+		quPlus() {
+			alert('You will see when the next update comes...')
+		},
 		ghostify() {
 			ghostify()
-		},
-		planck() {
-			alert("Coming soon...")
 		}
 	},
 	tabLocs: {
@@ -107,8 +113,8 @@ var pH = {
 		interreality: "irTab",
 		singularity: "sgTab",
 		quantum: "quantumtab",
-		ghostify: "ghostify",
-		planck: "plTab"
+		quPlus: "quPlusTab",
+		ghostify: "ghostify"
 	},
 	hotkeys: {
 		paradox: "p",
@@ -119,8 +125,8 @@ var pH = {
 		interreality: "i",
 		singularity: "s",
 		quantum: "q",
-		ghostify: "g",
-		planck: "p"
+		quPlus: "q",
+		ghostify: "g"
 	},
 	can(id) {
 		return tmp_pH[id] && pH.reqs[id]()
@@ -150,11 +156,11 @@ var pH = {
 		quantum() {
 			return qu_save.times >= 1
 		},
+		quPlus() {
+			return false
+		},
 		ghostify() {
 			return player.ghostify.times >= 1
-		},
-		planck() {
-			return false
 		}
 	},
 	did(id) {
@@ -172,8 +178,8 @@ var pH = {
 		interreality: ["irReset", "irEmpty", "irTabBtn"],
 		singularity: ["sgReset", "sgEmpty", "sgTabBtn"],
 		quantum: ["quantumbtn", "quantumInfo", "quantumtabbtn"],
-		ghostify: ["ghostifybtn", "ghostparticles", "ghostifytabbtn"],
-		planck: ["planck", "planckinfo", "plancktabbtn"],
+		quPlus: ["quPlusReset", "quPlusEmpty", "quPlusBtn"],
+		ghostify: ["ghostifybtn", "ghostparticles", "ghostifytabbtn"]
 	},
 	shown(id) {
 		if (!tmp_pH[id]) return false
@@ -263,20 +269,8 @@ var pH = {
 		let bigRipAndQuantum = !hasNU(16)
 		if (!bigRipAndQuantum && !QCs.inAny()) getEl("quantumbtn").style.display = "none"
 
-		//Big Rip
-		var canBigRip = canQuickBigRip() && (pH.shown("quantum") || bigRipAndQuantum)
-		getEl("bigripbtn").style.display = canBigRip ? "" : "none"
-		if (canBigRip) {
-			let pos = bigRipAndQuantum ? "ghostify" : "quantum"
-			getEl("bigripbtn").className = "presBtn presPos" + (tmp_pH[pos].shown ? tmp_pH[pos].order : tmp_pH.shown + 1) + " quickBigRip"
-			if (!tmp_pH[pos].shown) tmp_pH.shown++
-		}
-
-		if (tmp.ngp3 && qu_save.bigRip.active) {
-			getEl("quantumbtn").className = "presBtn presPos" + (tmp_pH.quantum.shown ? tmp_pH.quantum.order : tmp_pH.shown + 1) + " quickBigRip"
-			getEl("quantumbtn").style.display = ""
-			if (!tmp_pH.quantum.shown) tmp_pH.shown++
-		}
+		// //The future layer...
+		// getEl("quPlusBtn").style.display = "none"
 	},
 	updateActive() {
 		tmp.eterUnl = pH.did("eternity")
@@ -290,7 +284,7 @@ var pH = {
 		getEl("layerDispOptions").style.display = ""
 		//getEl("resetDispOptions").style.display = ""
 		getEl("hide_" + layer).style.display = ""
-		getEl("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+		getEl("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + (pH.names[layer] || layer)
 
 		pH.updateActive()
 	},
@@ -306,7 +300,7 @@ var pH = {
 		if (aarMod.layerHidden[layer]) delete aarMod.layerHidden[layer]
 		else aarMod.layerHidden[layer] = true
 
-		getEl("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+		getEl("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + (pH.names[layer] || layer)
 
 		if (layer == "infinity") getEl("postctabbtn").parentElement.style.display = pH.shown("infinity") && (player.postChallUnlocked >= 1 || pH.did("eternity")) ? "" : "none"
 		if (layer == "eternity") updateEternityChallenges()

@@ -558,7 +558,7 @@ function useContinuousRep() {
 }
 
 function handleReplTabs() {
-	let major = QCs_tmp.qc1 !== undefined && pH.shown("quantum")
+	let major = false //QCs_tmp.qc1 !== undefined && pH.shown("quantum")
 
 	if (major != (tmp.repMajor || false)) {
 		getEl("replicantitabbtn").style.display = major || player.infinityUpgradesRespecced ? "none" : ""

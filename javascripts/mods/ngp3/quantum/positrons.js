@@ -31,7 +31,7 @@ var pos = {
 		}
 		if (!data.swaps) data.swaps = {}
 
-		data.boosts = new Decimal(data.boosts)
+		data.boosts = Decimal.round(data.boosts)
 		data.eng = new Decimal(data.eng)
 
 		if (data.consumedQE) delete data.consumedQE
@@ -42,9 +42,7 @@ var pos = {
 
 		this.updateTmp()
 	},
-	unl() {
-		return tmp.ngp3 && player.masterystudies.includes("d7")
-	},
+	unl: (force) => force ? tmp.ngp3 && player.masterystudies.includes("d7") : pos_tmp.unl,
 	on() {
 		return this.unl() && pos_save && pos_save.on
 	},
@@ -93,10 +91,11 @@ var pos = {
 	},
 	updateTmp() {
 		var data = {
-			cloud: pos_tmp.cloud
+			cloud: pos_tmp.cloud,
+			unl: pos_tmp.unl
 		}
 		pos_tmp = data
-		if (pos_save === undefined) return
+		if (!data.unl) return
 
 		data.mults = {
 			mdb: QCs.done(3) ? (PCs.milestoneDone(31) ? 1/3 : 0.3) : 0.25,
@@ -118,7 +117,10 @@ var pos = {
 		this.updateCloud()
 	},
 	updateCloud(quick) {
+		if (!pos_tmp.unl) return
+
 		var data = pos_tmp.cloud
+		if (!data) return
 		data = {
 			div: data.div,
 			swaps: data.swaps,

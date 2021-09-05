@@ -85,7 +85,12 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	player.dimlife = true
 	player.dead = true
 
+	let oldUpgs = player.dilation.upgrades
+	let upgs = !qMs.isOn(5) || !qMs.isOn(7) ? [] : qMs.tmp.amt >= 9 ? oldUpgs : [4, 5, 6, 7, 8, 9, 10]
+	let newUpgs = []
 	let multUpgs = !qMs.isOn(8) ? 0 : tmp.exMode ? 10 : tmp.bgMode ? 1/0 : 25
+	for (var i = 0; i < oldUpgs.length; i++) if (upgs.includes(oldUpgs[i])) newUpgs.push(oldUpgs[i])
+
 	if (!player.dilation.bestTP) player.dilation.bestTP = player.dilation.tachyonParticles
 	player.dilation = {
 		studies:
@@ -99,7 +104,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
 		nextThreshold: new Decimal(1000),
 		freeGalaxies: 0,
-		upgrades: qMs.tmp.amt >= 9 ? player.dilation.upgrades : qMs.tmp.amt >= 7 ? [4, 5, 6, , 7, 8, 9, 10] : [],
+		upgrades: newUpgs,
 		autoUpgrades: [],
 		rebuyables: {
 			1: 0,

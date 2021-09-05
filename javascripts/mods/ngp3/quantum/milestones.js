@@ -85,7 +85,7 @@ let qMs = {
 
 				if (shown) {
 					getEl("qMs_reward_" + i).className = qMs.tmp.amt < i || qMs.forceOff(i) ? "qMs_locked" :
-						!this[i].disablable ? "qMs_reward" :
+						!evalData(this[i].disablable) ? "qMs_reward" :
 						"qMs_toggle_" + (!qu_save.disabledRewards[i] ? "on" : "off")
 					getEl("qMs_reward_" + i).innerHTML = qMs[i].eff() + (qMs.tmp.amt >= i ? "" : "<br>(requires " + getFullExpansion(qMs[i].req) + " MP)")
 				}
@@ -128,15 +128,15 @@ let qMs = {
 		getEl("qMs_points").textContent = getFullExpansion(qMs.tmp.points)
 	},
 	isOn(id) {
-		return qMs.tmp.amt >= id && (!this[id].disablable || !qu_save.disabledRewards[id]) && !qMs.forceOff(id)
+		return qMs.tmp.amt >= id && !qu_save.disabledRewards[id] && !qMs.forceOff(id)
 	},
 	forceOff(id) {
-		return qMs[id].forceDisable !== undefined && qMs[id].forceDisable()
+		return evalData(qMs[id].forceDisable)
 	},
 	toggle(id) {
-		if (!qMs[id].disablable) return
-		if (qMs.forceOff(id)) return
 		if (qMs.tmp.amt < id) return
+		if (qMs.forceOff(id)) return
+		if (!evalData(qMs[id].disablable)) return
 
 		let on = !qu_save.disabledRewards[id]
 		qu_save.disabledRewards[id] = on
@@ -178,6 +178,7 @@ let qMs = {
 	},
 	7: {
 		req: 7,
+		disablable: true,
 		eff: () => "Keep all your dilation upgrades except the repeatables",
 		effGot: () => "You now can keep all your dilation upgrades except the repeatables."
 	},

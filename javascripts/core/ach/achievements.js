@@ -163,17 +163,17 @@ const allAchievements = {
         ng3pr12 : "Completing the Quantum",
         ng3pr13 : "Bursted Em All!",
         ng3pr14 : "Sciencing Around The Core",
-        ng3pr15 : "ng3pr15",
-        ng3pr16 : "ng3pr16",
-        ng3pr17 : "ng3pr17",
-        ng3pr18 : "ng3pr18",
+        ng3pr15 : "ng3pr15", // UNDETERMINED ACHIEVEMENT
+        ng3pr16 : "I can’t get my multipliers higher!", // NO REWARD
+        ng3pr17 : "ng3pr17", // UNDETERMINED ACHIEVEMENT
+        ng3pr18 : "ng3pr18", // UNDETERMINED ACHIEVEMENT
 
         ng3p31 : "ERROR 500: INTERNAL DIMENSION ERROR",
-        ng3p32 : "The truth of anti-challenged", // NO REWARD
+        ng3p32 : "Quantum+ Reached!", // UNNAMED ACHIEVEMENT
         ng3p33 : "Never make paradoxes!",
         ng3p34 : "The Challenging Day",
-        ng3p35 : "An ant office?",
-        ng3p36 : "I can’t get my multipliers higher!", // NO REWARD
+        ng3p35 : "ng3p35", // UNDETERMINED ACHIEVEMENT
+        ng3p36 : "ng3p36", // UNDETERMINED ACHIEVEMENT
         ng3p37 : "No dilation means no production.",
         ng3p38 : "I don't want you to live anymore.", // NO REWARD
 
@@ -240,6 +240,7 @@ const allAchievements = {
         ng3p107 : "Brutally Challenging",  // NO REWARD
         ng3p108 : "Auto-Ghost Speedrunning",  // NO REWARD
 
+		//SECRET ACHIEVEMENTS
         s11 : "The first one's always free",
         s12 : "Just in case",
         s13 : "It pays to have respect",
@@ -275,6 +276,7 @@ const allAchievements = {
         ng3ps16 : "Up and Down and Up and Down...",
         ng3ps17 : "Did you not understand the automation?",
         ng3ps18 : "The Ultimate Challenge",
+
         ng3ps21 : "The Forbidden Layer",
         ng3ps22 : "400% Breaking News",
         ng3ps23 : "keyboard broke?",

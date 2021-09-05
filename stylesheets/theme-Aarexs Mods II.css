@@ -490,7 +490,7 @@ button, div.storebtn {
 	box-shadow: 1px 2px rgba(229,229,229,0.4)
 }
 
-.quantumchallengediv, .pc4completed {
+.quantumchallengediv {
 	background-color: #009900 !important;
 	border: none !important;
 	border-radius: 0px !important;
@@ -499,43 +499,15 @@ button, div.storebtn {
 	box-shadow: 1px 2px rgba(229,229,229,0.4)
 }
 
-.pc1completed {
-	background-color: #00e500 !important;
-	color: #191919 !important;
-	border: none !important;
-	border-radius: 0px !important;
-	font-weight: normal !important;
-	box-shadow: 1px 2px rgba(229,229,229,0.4)
+#stringstabbtn button {
+	background: linear-gradient(black, transparent, black), linear-gradient(#1f3f00, transparent, #1f3f00), linear-gradient(30deg, #3f7f00, transparent, #5f7f00), linear-gradient(#7fff00, #bfff00);
+	color: #efffbf !important;
+	animation: str 5s linear infinite
 }
 
-.ndcompleted {
-	background-color: #57e557 !important;
-	color: #191919 !important;
-	border: none !important;
-	border-radius: 0px !important;
-	font-weight: normal !important;
-	box-shadow: 1px 2px rgba(229,229,229,0.4);
-	animation: none
-}
-
-#dilstudy10.dilationupg:hover, #dilstudy11.dilationupg:hover {
-    background-color: #4c4c4c !important
-}
-
-#preonEnergy, #quarkEnergy2, #quantumFoodAmount, #workerProgress, #growupProgress, #quantumFoodAmountED, #preonEnergy, #quarkEnergyRate, #quarkPower, #quarkPowerThreshold, #rewards, #rewards_AP {
-	color: #39e539 !important
-}
-
-#eggonRate, #eggonAmount {
-	color: #e58139 !important
-}
-
-#reduceHatchSpeed.storebtn, #maxReduceHatchSpeed.storebtn {
-	background-color: #e58139 !important
-}
-
-#reduceHatchSpeed.storebtn:hover, #maxReduceHatchSpeed.storebtn:hover {
-	background-color: #e59257 !important
+#stringstabbtn button:hover {
+	box-shadow: 1px 2px rgba(229,229,229,0.4), 0px 0px 12px inset #7fff00;
+	color: #7fff00 !important
 }
 
 #dilstudy12.dilationupgbought, #nanofieldtabbtn button, #produceQuarkCharge, .nfReward {
@@ -903,4 +875,19 @@ button, div.storebtn {
 
 [ach-tooltip] {
 	font-family: 'Roboto'
+}
+
+@keyframes str { 
+	0%{
+		background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+		background-position: 0% 0%
+	}
+	50%{
+		background-size: 100% 200%, 100% 150%, 100% 50%, 100% 100%;
+		background-position: 0% 50%
+	}
+	100%{
+		background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+		background-position: 0% 200%
+	}
 }

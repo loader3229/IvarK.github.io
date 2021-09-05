@@ -950,9 +950,16 @@ function setupSaveDataNGP3() {
 	PCs_save = (qu_save && qu_save.pc)
 	str_save = (qu_save && qu_save.str)
 
-	QCs.compile()
-	PCs.compile()
+	pos_tmp.unl = pos.unl(true)
 	pos.compile()
+
+	QCs_tmp.unl = QCs.unl(true)
+	QCs.compile()
+
+	PCs_tmp.unl = PCs.unl(true)
+	PCs.compile()
+
+	str_tmp.unl = str.unl(true)
 	str.compile()
 }
 

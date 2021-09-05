@@ -779,7 +779,6 @@ button {
     transition-duration: 0.2s;
     cursor: pointer;
 }
-
 .galaxybtn:hover {
     color: #FFFFFF;
     background: #1E90FF;
@@ -797,7 +796,6 @@ button {
     transition-duration: 0.2s;
     cursor: pointer;
 }
-
 .infinitybtn:hover {
     color: #000000;
     background: #B67F33;
@@ -811,7 +809,6 @@ button {
     background: black;
     border: 2px solid #b341e0
 }
-
 .eternitybtn:hover {
     color: #511568;
     background: white;
@@ -826,7 +823,6 @@ button {
     transition-duration: 0.2s;
     cursor: pointer;
 }
-
 .eternitytabbtn:hover {
     color: #511568;
     background: white;
@@ -842,7 +838,6 @@ button {
 	transition-duration: 0.2s;
 	cursor: pointer
 }
-
 .singularitybtn:hover {
     color: #1f1f1f;
     background: white;
@@ -861,7 +856,6 @@ button {
 	transition-duration: 0.2s;
 	cursor: pointer
 }
-
 .interrealitybtn:hover {
 	border-color: #00bf00 #005fbf #005fbf #00bf00;
 	box-shadow: inset 0px 0px 12px 0px rgba(255, 255, 255, 0.5);
@@ -878,30 +872,26 @@ button {
     transition-duration: 0.2s;
     cursor: pointer;
 }
-
 .quantumbtn:hover {
     background: #32c832;
     color: #0a640a;
 }
 
-.planckbtn {
-	background: linear-gradient(#000000, #003f2f, #000000) !important;
-	background-size: 50% 50% !important;
-	border: 2px solid #003f2f;
-	border-radius: 4px;
-	box-shadow: inset 0px 0px 12px 0px #003f2f;
+.quPlusbtn {
+	background: linear-gradient(transparent, #FEF9BB, #FEF9BB, transparent, transparent), linear-gradient(transparent, transparent, transparent, transparent, #CAF575), linear-gradient(#FDF379, #FDF379);
+	border: 2px solid #9F9404;
+	color: rgba(0, 0, 0, 0.5);
+	font-family: Typewriter;
 	font-weight: bold;
-	color: #00ffbf;
-	text-shadow: 0px 0px 3px #00ffbf, 0px 0px 0px transparent;
-	cursor: pointer;
+	border-radius: 4px;
 	transition-duration: 0.2s;
+	cursor: pointer;
 }
-.planckbtn:hover {
-	background-size: 50% 200% !important;
-	box-shadow: inset 0px 0px 24px 0px #5f7f00;
-	border: 2px solid #5f7f00;
-	color: #efffbf;
-	text-shadow: 0px 0px 3px #00ffbf, 0px 0px 6px #00ffbf;
+.quPlusbtn:hover {
+	border-color: #dfdfdf;
+	box-shadow: inset 0px 0px 24px 0px #ffffff;
+	color: #FDF379;
+	text-shadow: 0 0 3px #9F9404;
 }
 
 .ghostifybtn {
@@ -914,16 +904,13 @@ button {
 	transition-duration: 0.2s;
 	animation: ghostifytext 4s linear infinite
 }
-
 .ghostifybtn div {
 	animation: ghostifytext 4s linear infinite
 }
-
 .ghostifybtn:hover {
 	box-shadow: inset 0px 0px 12px 0px #420072;
 	cursor: pointer
 }
-
 .aarexmodsghostifybtn {
 	cursor: pointer
 }

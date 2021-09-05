@@ -365,37 +365,36 @@ function setR16Tooltip() {
 }
 
 function setR16p5Tooltip() {
-	// Row 16.5 (ng3pr1) (1/8)
+	// Row 16.5 (ng3pr1) (2/8)
 	let mayhem = getEl("Mastery Mayhem")
 	//ng3pr12/////
 	//ng3pr13/////
 	//ng3pr14/////
 	//ng3pr15/////
-	//ng3pr16/////
+	let cantGet = getEl("I can’t get my multipliers higher!")
 	//ng3pr17/////
 	//ng3pr18/////
 
 	mayhem.setAttribute('ach-tooltip', "Max out Mastery Studies in QC1, and any other QC. Reward: You can buy Mastery Studies from a row above the latest bought row, and Infinity Morals reward can be applied in any challenge.")
+	cantGet.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 6.2e11)) + " antimatter in Eternity Challenge 11.")
 }
 
 function setR17Tooltip() {
-	// Row 17 (ng3p3) (6/8)
+	// Row 17 (ng3p3) (4/8)
 	let internal = getEl("ERROR 500: INTERNAL DIMENSION ERROR")
-	let truth = getEl("The truth of anti-challenged")
+	//ng3p32/////
 	let noparadox = getEl("Never make paradoxes!")
 	//ng3p34/////
 	//ng3p35/////
-	let cantGet = getEl("I can’t get my multipliers higher!")
+	//ng3p36/////
 	let noDil = getEl("No dilation means no production.")
 	let dontWant = getEl("I don't want you to live anymore.")
 
 	//ACHIEVEMENT ROW 17
 	internal.setAttribute('ach-tooltip', "???")
-	truth.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 7.88e13)) + " antimatter without having completed any paired challenges.")
-	cantGet.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 6.2e11)) + " antimatter in Eternity Challenge 11.")
 	noDil.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 1/0)) + " replicanti without having Tachyon Particles. Reward: You start Quantums with the square root of your best TP as your Tachyon particle amount.")
 	dontWant.setAttribute('ach-tooltip', "Reach " + shorten(Decimal.pow(Number.MAX_VALUE, 1000)) + " IP while dilated, in QC2, and without having studies and First Dimensions during your current Eternity.")
-	noparadox.setAttribute('ach-tooltip', "Quantum without any Dilation upgrades. Reward: The sum of your best Quantum Challenge times boosts Quark gain.")
+	noparadox.setAttribute('ach-tooltip', "Reach " + shortenCosts(1/0) + " MA without dilation upgrades. Reward: [TBD]")
 }
 
 function setR18Tooltip() {
@@ -488,7 +487,7 @@ function setR21Tooltip() {
 
 	//ACHIEVEMENT ROW 21
 	uc.setAttribute('ach-tooltip', "Become a ghost with at least "+shortenCosts(Decimal.pow(10, 2.2e5))+" EP without starting Eternity Challenge 10 while Big Ripped. Reward: Meta-Dimension Boosts no longer reset Meta Dimensions.")
-	mi.setAttribute('ach-tooltip', "Get " + shorten(Number.MAX_VALUE) + " infinities. Reward: You gain banked infinites and eternities when going Quantum or Big Ripping the universe.")
+	mi.setAttribute('ach-tooltip', "Get " + shorten(1/0) + " infinities. Reward: You gain banked infinites and eternities when going Quantum or Big Ripping the universe.")
 	wd.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 1e12)) + " Infinity Unstable Quarks for each Branch without Big Ripping in this Ghostify. Reward: Normal replicant autobuyer buys max.")
 	radioDecay.setAttribute('ach-tooltip', "Get 10 total Radioactive Decays. Reward: You get 1 galaxy worth of generated neutrinos per second.")
 	arent.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 1.8e6)) + " IP while dilated and Big Ripped and without having studies, EP mult upgrades, Tree Upgrades, and Break Eternity within this Ghostify. Reward: Your 8th Tree Upgrade's level speeds up Nanofield.")
@@ -506,7 +505,7 @@ function setR22Tooltip() {
 	//ng3p88/////
 
 	//ACHIEVEMENT ROW 22
-	ee.setAttribute('ach-tooltip', "Get " + shorten(Number.MAX_VALUE) + " eternities. Reward: Boost quark gain by 10 per Light Empowerment squared.")
+	ee.setAttribute('ach-tooltip', "Get " + shorten(1/0) + " eternities. Reward: Boost quark gain by 10 per Light Empowerment squared.")
 	oc.setAttribute('ach-tooltip', "Become a ghost with at least " + shortenCosts(Decimal.pow(10, 3.75e5)) + " EP while Big Ripped with the Anti-Dilation modifier. Reward: Remove the Further Nanofield scaling.")
 	btco.setAttribute('ach-tooltip', "Complete Paired Challenge 1 after getting " + shortenCosts(Decimal.pow(10, 1.65e9)) + " antimatter in Quantum Challenges 6 and 8. Reward: Ghostifies only makes you lose 25% of your radiocative decays.")
 	tdc.setAttribute('ach-tooltip', "Complete Eternity Challenge 11 with " + shortenCosts(Decimal.pow(10, 15500)) + " IP in a Paired Challenge with the Quantum Challenges 6 and 8 combination and the Anti-Dilation modifier. Reward: Remove the quadratic cost scaling and the level softcap of fifth Tree of Decay upgrade and make it based on best meta-antimatter over Ghostifies, instead of over quantums.")

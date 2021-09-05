@@ -132,7 +132,7 @@ var QCs = {
 			},
 			scalings: [5],
 
-			eff(boosts, eff, max, pc11 = 0) {
+			eff(eff, pc11 = 0) {
 				var eff = Math.min(eff * (1 + 2 * pc11) / 10 + 1, 5)
 				return eff
 			},
@@ -141,6 +141,7 @@ var QCs = {
 				if (QCs.perkActive(1)) x += QCs_tmp.perks[1]
 				return x
 			},
+			total: () => QCs_save.qc1.boosts + QCs.data[1].extra(),
 			updateTmp() {
 				let qc1 = QCs_save.qc1
 				delete QCs_tmp.qc1
@@ -149,7 +150,7 @@ var QCs = {
 				//Boosts
 				let boosts = qc1.boosts
 				let distantBoosts = Math.max(boosts - this.scalings[0], 0)
-				let eff = boosts + this.extra()
+				let eff = this.total()
 
 				//Setup
 				let data = {
@@ -159,7 +160,7 @@ var QCs = {
 					scalingMult: 1,
 					scalingExp: 1 / (1 + boosts / 20),
 
-					effMult: this.eff(boosts, eff),
+					effMult: this.eff(eff),
 					effExp: 1 + eff / 20,
 				}
 				if (QCs.in(1)) data.lim = data.lim.pow((tmp.exMode ? 0.2 : tmp.bgMode ? 0.4 : 0.3) * 5 / 6)
@@ -171,7 +172,7 @@ var QCs = {
 					data.lim = data.lim.pow(Math.pow(2, -pc11))
 					data.speedMult = data.speedMult.pow(1 - pc11)
 					data.scalingExp = 1 / (1 + boosts / (20 + pc11 * 5))
-					data.effMult = this.eff(boosts, eff, pc11)
+					data.effMult = this.eff(eff, pc11)
 				}
 				if (PCs.milestoneDone(13)) data.dilaterEff = qc1.dilaters / 5 + 1
 				if (QCs.perkActive(1)) data.effMult = Math.pow(data.effMult, data.effExp / 2 + 0.5)
@@ -188,9 +189,9 @@ var QCs = {
 				}
 
 				var limLog = QCs_tmp.qc1.lim.log10()
-				if (limLog >= 4e7) {
-					var div = limLog / 4e7
-					data.lim = Decimal.pow(10, 4e7)
+				if (limLog >= 1e8) {
+					var div = limLog / 1e8
+					data.lim = Decimal.pow(10, 1e8)
 					data.scalingMult /= div
 				}
 			},
@@ -234,7 +235,7 @@ var QCs = {
 				let qc1 = QCs_save.qc1
 				let data = QCs.data[1]
 				if (QCs_tmp.qc1) {
-					getEl("replCompress").textContent = getFullExpansion(qc1.boosts)
+					getEl("replCompress").textContent = getFullExpansion(qc1.boosts) + (data.extra() > 0 ? " + " + shorten(data.extra()) : "")
 					getEl("replCompressEff").textContent = "^" + shorten(QCs_tmp.qc1.effExp) + ", x" + shorten(QCs_tmp.qc1.effMult)
 				}
 				if (PCs.milestoneDone(12)) {
@@ -295,7 +296,7 @@ var QCs = {
 		2: {
 			unl: () => true,
 			desc: "You must disable a tier from Positronic Cloud, but some Quantum content are changed/disabled.",
-			goal: () => pos_save.boosts >= 11,
+			goal: () => pos_save.boosts.gte(11),
 			goalDisp: () => getFullExpansion(11) + " Positronic Boosters",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
 			hint: "",
@@ -452,7 +453,7 @@ var QCs = {
 			exp() {
 				var x = 1
 				if (PCs.milestoneDone(52)) {
-					var boosts = QCs_save.qc1.boosts
+					var boosts = QCs.data[1].total()
 					var y = boosts / 20 + 1
 					if (PCs.milestoneDone(53)) y = Math.pow(y, boosts / 40 + 1)
 					x *= y
@@ -519,8 +520,8 @@ var QCs = {
 		7: {
 			unl: () => true,
 			desc: "You can’t fill the rows in Mastery Studies except singles. MD and TT productions are reduced by ^0.95.",
-			goal: () => player.timestudy.theorem >= 5e82,
-			goalDisp: () => shortenDimensions(5e82) + " Time Theorems",
+			goal: () => player.timestudy.theorem >= 5e85,
+			goalDisp: () => shortenDimensions(5e85) + " Time Theorems",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.3),
 			hint: "Do not buy MS22 and MS53/54.",
 
@@ -594,14 +595,21 @@ var QCs = {
 	},
 
 	updateTmp() {
-		let data = { unl: [], in: [], rewards: {}, perks: {}, show_perks: QCs_tmp.show_perks }
-		QCs_tmp = data
+		let data = {
+			unl: QCs_tmp.unl,
+			unl_challs: [],
+			in: [],
+			rewards: {},
+			perks: {},
+			show_perks: QCs_tmp.show_perks
+		}
+		if (!data.unl) return
 
-		if (!this.unl()) return
+		QCs_tmp = data
 		for (let x = 1; x <= this.data.max; x++) {
 			if (this.data[x].unl()) {
 				if (QCs_save.in.includes(x)) data.in.push(x)
-				data.unl.push(x)
+				data.unl_challs.push(x)
 				if (!this.done(x)) break
 			}
 		}
@@ -613,7 +621,7 @@ var QCs = {
 		
 		let data = QCs_tmp
 		for (let x = this.data.max; x; x--) {
-			if (data.unl.includes(x)) {
+			if (data.unl_challs.includes(x)) {
 				data.rewards[x] = this.data[x].rewardEff()
 				if (PCs.unl()) data.perks[x] = this.data[x].perkEff(1)
 			}
@@ -621,9 +629,7 @@ var QCs = {
 		}
 	},
 
-	unl() {
-		return tmp.ngp3 && player.masterystudies.includes("d8")
-	},
+	unl: (force) => force ? (tmp.ngp3 && player.masterystudies.includes("d8")) : QCs_tmp.unl,
 	started(x) {
 		return QCs_tmp.in.includes(x)
 	},
@@ -756,7 +762,7 @@ var QCs = {
 		getEl("qc_effects").innerHTML = QCs_tmp.show_perks ? "" : "All quantum mechanics will change, when entering a Quantum Challenge:<br>" +
 			(tmp.bgMode ? "No" : (tmp.exMode ? "No" : "Reduced") + " global Quantum energy bonus, no") + " gluon nerfs, and mastered boosts only work."
 		for (let qc = 1; qc <= this.data.max; qc++) {
-			var cUnl = QCs_tmp.unl.includes(qc)
+			var cUnl = QCs_tmp.unl_challs.includes(qc)
 
 			getEl("qc_" + qc + "_div").style.display = cUnl ? "" : "none"
 			if (QCs_tmp.show_perks) {
@@ -781,7 +787,7 @@ var QCs = {
 		if (!this.divInserted) return
 
 		for (let qc = 1; qc <= this.data.max; qc++) {
-			if (QCs_tmp.unl.includes(qc)) {
+			if (QCs_tmp.unl_challs.includes(qc)) {
 				var hint = evalData(this.data[qc].hint)
 				getEl("qc_" + qc + "_reward").innerHTML = 
 				QCs_tmp.show_perks ? "Reward: +1 PC Shrunker<br>Perk: " + this.data[qc].perkDesc(QCs_tmp.perks[qc]) :
