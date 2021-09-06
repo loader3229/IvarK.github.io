@@ -221,7 +221,6 @@ var QCs = {
 
 				var last = QCs_save.qc1.last
 				var html = "<br><br>"
-				getEl("pastcompressors").style.display = last && last.length >= 1 ? "" : "none"
 				for (var i = last.length; i > 0; i--) {
 					var first = last[i - 2] !== undefined ? last[i - 2][0] : 0
 					var fin = last[i - 1][0]
@@ -486,8 +485,8 @@ var QCs = {
 		6: {
 			unl: () => true,
 			desc: "There are Nullons that speed up Replicanti Slowdown. (less as you have more) Eternitying loses some Nullons, and dilating reduces the production.",
-			goal: () => QCs_save.qc1.boosts >= 4 || (player.replicanti.amount.e >= 3e6 && QCs_save.qc1.boosts == 3),
-			goalDisp: () => getFullExpansion(3) + " Replicanti Compressors + " + shortenCosts(Decimal.pow(10, 3e6)) + " Replicantis or have more Compressors",
+			goal: () => QCs_save.qc1.boosts >= 3 || (player.replicanti.amount.e >= 4.5e6 && QCs_save.qc1.boosts == 2),
+			goalDisp: () => shortenCosts(Decimal.pow(10, 4.5e6)) + " Replicantis + " + getFullExpansion(2) + " Compressors",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.45),
 			hint: "Do long Eternity runs.",
 
@@ -760,7 +759,7 @@ var QCs = {
 		if (!unl) return
 
 		getEl("qc_effects").innerHTML = QCs_tmp.show_perks ? "" : "All quantum mechanics will change, when entering a Quantum Challenge:<br>" +
-			(tmp.bgMode ? "No" : (tmp.exMode ? "No" : "Reduced") + " global Quantum energy bonus, no") + " gluon nerfs, and mastered boosts only work."
+			(tmp.bgMode ? "No" : (tmp.exMode ? "No" : "Reduced") + " global Quantum Energy bonus, no") + " gluon nerfs, and mastered boosts only work."
 		for (let qc = 1; qc <= this.data.max; qc++) {
 			var cUnl = QCs_tmp.unl_challs.includes(qc)
 
@@ -768,7 +767,7 @@ var QCs = {
 			if (QCs_tmp.show_perks) {
 				var reqs = this.data[qc].overlapReqs
 				getEl("qc_" + qc + "_desc").textContent = this.data[qc].nerfDesc()
-				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.getGoalMA(qc, "up")) + " meta-antimatter"
+				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.getGoalMA(qc, "up")) + " MA"
 				getEl("qc_" + qc + "_btn").textContent = this.modIn(qc, "up") ? "Running" : this.modDone(qc, "up") ? (this.perkActive(qc) ? "Perk Activated" : "Completed") : this.done(qc) ? "Start" : "Locked"
 				getEl("qc_" + qc + "_btn").className = this.modIn(qc, "up") ? "onchallengebtn" : this.modDone(qc, "up") ? "completedchallengesbtn" : this.done(qc) ? "challengesbtn" : "lockedchallengesbtn"
 			} else if (cUnl) {

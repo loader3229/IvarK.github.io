@@ -143,12 +143,12 @@ button, div.storebtn {
 	display: none
 }
 
-#bigcrunch, #infinitybtn, #pastinfs, .infinistorebtn1, .infinistorebtn2, .infinistorebtn3, .infinistorebtn4, .infinimultbtn, #challengetimesbtn, #postInfinityButton, .newdim, #idtabbtn button, #infinitydimensions td:nth-child(4) .storebtn, #challTabButtons td:nth-child(2) button, #infchallengesbtn, #repMajorBtn, #replicantiunlock.storebtn, #replicantichance.storebtn, #replicantiinterval.storebtn, #replicantimax.storebtn {
+#bigcrunch, #infinitybtn, #pastinfs, .infinistorebtn1, .infinistorebtn2, .infinistorebtn3, .infinistorebtn4, .infinimultbtn, #challengetimesbtn, #postInfinityButton, .newdim, #idtabbtn button, #infinitydimensions td:nth-child(4) .storebtn, #challTabButtons td:nth-child(2) button, #infchallengesbtn, #repMajorBtn, #replicantiunlock.storebtn, #replicantichance.storebtn, #replicantiinterval.storebtn, #replicantimax.storebtn, #pastcompressors {
 	background-color: #e59900 !important;
 	color: #191919 !important
 }
 
-#bigcrunch:hover, #infinitybtn:hover, #pastinfs:hover, .infinistorebtn1:hover, .infinistorebtn2:hover, .infinistorebtn3:hover, .infinistorebtn4:hover, .infinimultbtn:hover, #challengetimesbtn:hover, #postInfinityButton:hover, .newdim:hover, #idtabbtn button:hover, #infinitydimensions td:nth-child(4) .storebtn:hover, #challTabButtons td:nth-child(2) button:hover, #infchallengesbtn:hover, #repMajorBtn:hover, #replicantiunlock.storebtn:hover, #replicantichance.storebtn:hover, #replicantiinterval.storebtn:hover, #replicantimax.storebtn:hover {
+#bigcrunch:hover, #infinitybtn:hover, #pastinfs:hover, .infinistorebtn1:hover, .infinistorebtn2:hover, .infinistorebtn3:hover, .infinistorebtn4:hover, .infinimultbtn:hover, #challengetimesbtn:hover, #postInfinityButton:hover, .newdim:hover, #idtabbtn button:hover, #infinitydimensions td:nth-child(4) .storebtn:hover, #challTabButtons td:nth-child(2) button:hover, #infchallengesbtn:hover, #repMajorBtn:hover, #replicantiunlock.storebtn:hover, #replicantichance.storebtn:hover, #replicantiinterval.storebtn:hover, #replicantimax.storebtn:hover, #pastcompressors:hover {
 	background-color: #e5ac39 !important
 }
 

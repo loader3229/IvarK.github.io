@@ -96,7 +96,7 @@ function updateSpoilers() {
 					var msg = "When you reach "
 					if (ngp3) msg += "e385 meta-antimatter and completed EC14 for the first time"
 					else msg += "infinity meta-antimatter"
-					msg += ", you will able to go quantum. Quantum will reset everything eternity resets, and also time studies, eternity challenges, dilation, "+(ngp3?"meta dimensions, and mastery studies":"and meta dimensions (except your best meta-antimatter)")+". You will gain anti-quarks and quantum energy in return, besides with a multiplier to quantum energy."
+					msg += ", you will able to go quantum. Quantum will reset everything eternity resets, and also time studies, eternity challenges, dilation, "+(ngp3?"meta dimensions, and mastery studies":"and meta dimensions (except your best meta-antimatter)")+". You will gain anti-Quarks and quantum energy in return, besides with a multiplier to quantum energy."
 					if (ngp3) msg += "<br><br>You will also unlock Quantum Milestones where you must go fast or progress to get your QoL content rewards on eternity, and even quantum autobuyer."
 					getEl("div22").innerHTML = msg
 				}

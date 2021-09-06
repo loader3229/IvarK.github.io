@@ -32,10 +32,10 @@ var PCs = {
 		24: "+0.025 to the exponent of Color Power effects.",
 		34: "+0.025 to the exponent of Color Power effects.",
 		44: "+0.025 to the exponent of Color Power effects.",
-		54: "+15% to aQs gain exponent.",
-		64: "+15% to aQs gain exponent.",
-		74: "+15% to aQs gain exponent.",
-		84: "+15% to aQs gain exponent.",
+		54: "Raise the anti-Quarks by ^1.15.",
+		64: "Raise the anti-Quarks by ^1.15.",
+		74: "Raise the anti-Quarks by ^1.15.",
+		84: "Raise the anti-Quarks by ^1.15.",
 
 		15: "???",
 		25: "???",
@@ -348,6 +348,21 @@ var PCs = {
 		)
 	},
 	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Milestones</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
+	setupMilestoneHeader() {
+		var x = "<tr><td></td>"
+		for (var i = 1; i < PCs.data.milestone_reqs.length; i++) x += "<td id='qc_milestone_header_" + i + "'></td>"
+		x += "</tr>"
+		return x
+	},
+	setupMilestoneRow(qc) {
+		var x = "<tr id='qc_milestone_all_" + qc + "'><td>QC" + qc + "</td>"
+		for (var i = 1; i < PCs.data.milestone_reqs.length; i++) {
+			var id = qc * 10 + i
+			x += "<td id='qc_milestone_" + id + "_div'><button class='qMs_reward small_milestone' id='qc_milestone_" + id + "'>???</button></td>"
+		}
+		x += "</tr>"
+		return x
+	},
 	setupHTML() {
 		var el = getEl("pc_table")
 		var data = PCs.data
@@ -377,6 +392,11 @@ var PCs = {
 			for (var x = 1; x <= 4; x++) html += this.setupButton(y * 10 + x)
 			el.insertRow(y).innerHTML = html
 		}
+
+		//Setup "all milestones"
+		var html = this.setupMilestoneHeader()
+		for (var c = 1; c <= 8; c++) html += this.setupMilestoneRow(c)
+		getEl("qc_milestone_all").innerHTML = html
 
 		this.resetButtons()
 		this.updateDisp()
@@ -455,22 +475,51 @@ var PCs = {
 		if (!PCs_tmp.unl) return
 		if (!PCs.data.setupHTML) return
 
-		getEl("pc_eff2").textContent = "^" + shorten(getAQSGainExp())
+		getEl("pc_eff2").textContent = "^" + shorten(getAQGainExp())
 	},
 	showMilestones(qc) {
 		PCs_tmp.milestone = qc
-		getEl("qc_milestone_div").style.display = qc ? "" : "none"
-		getEl("pc_info").style.display = qc || PCs_save.lvl == 1 ? "none" : ""
-		if (qc) {
+
+		let shown = qc != 0 && qc != "all"
+		getEl("qc_milestones").style.display = qc != 0 || PCs_save.lvl == 1 ? "none" : ""
+		getEl("qc_milestone_div").style.display = shown ? "" : "none"
+		getEl("pc_info").style.display = qc != 0 || PCs_save.lvl == 1 ? "none" : ""
+		if (shown) {
 			getEl("qc_milestone_header").textContent = "QC" + qc + " Milestones"
 			for (var i = 1; i < PCs.data.milestone_reqs.length; i++) {
+				var unl = this.milestoneUnl(i)
+				var req = this.data.milestone_reqs[i]
+				getEl("qc_milestone" + i + "_div").textContent = req + " combination" + (req == 1 ? "" : "s")
+				getEl("qc_milestone" + i + "_div").style.display = unl ? "" : "none"
+				getEl("qc_milestone" + i + "_div2").style.display = unl ? "" : "none"
+
 				getEl("qc_milestone" + i).className = "qMs_" + (this.milestoneDone(qc * 10 + i) ? "reward" : "locked")
-				getEl("qc_milestone" + i).textContent = PCs.milestones[qc * 10 + i] || "???"
-				if (i >= 3) {
-					var unl = this.milestoneUnl(i)
-					getEl("qc_milestone" + i + "_div").style.display = unl ? "" : "none"
-					getEl("qc_milestone" + i + "_div2").style.display = unl ? "" : "none"
+				getEl("qc_milestone" + i).textContent = evalData(PCs.milestones[qc * 10 + i]) || "???"
+			}
+		}
+
+		getEl("qc_milestone_all_btn").style.display = qc != 0 || PCs_save.lvl == 1 ? "none" : ""
+		getEl("qc_milestone_all_div").style.display = qc == "all" ? "" : "none"
+		if (qc == "all") {
+			for (var i = 1; i < PCs.data.milestone_reqs.length; i++) {
+				var unl = this.milestoneUnl(i)
+				var req = this.data.milestone_reqs[i]
+				getEl("qc_milestone_header_" + i).textContent = req + " combination" + (req == 1 ? "" : "s")
+				getEl("qc_milestone_header_" + i).style.display = unl ? "" : "none"
+
+				for (var c = 1; c <= 8; c++) {
+					if (QCs.done(c)) {
+						var id = c * 10 + i
+						getEl("qc_milestone_" + id + "_div").style.display = unl ? "" : "none"
+						if (unl) {
+							getEl("qc_milestone_" + id).className = "qMs_" + (this.milestoneDone(id) ? "reward" : "locked") + " small_milestone"
+							getEl("qc_milestone_" + id).textContent = evalData(PCs.milestones[id]) || "???"
+						}
+					}
 				}
+			}
+			for (var c = 1; c <= 8; c++) {
+				getEl("qc_milestone_all_" + c).style.display = QCs.done(c) ? "" : "none"
 			}
 		}
 	},

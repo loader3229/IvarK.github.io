@@ -91,7 +91,7 @@ function quarkGain(base) {
 	log = Math.pow(log + 1, logExp) - 1
 
 	if (enB.active("pos", 11)) log += player.eternityPoints.max(1).log10() * enB_tmp.pos11
-	if (!base) log *= getAQSGainExp(Decimal.pow(10, log))
+	if (!base) log *= getAQGainExp(Decimal.pow(10, log))
 
 	return Decimal.pow(10, log)
 }
@@ -124,13 +124,13 @@ function updateLastTenQuantums() {
 	for (var i = 0; i < 10; i++) {
 		if (qu_save.last10[i][1].gt(0)) {
 			var qkpm = qu_save.last10[i][1].dividedBy(qu_save.last10[i][0] / 600)
-			var tempstring = "(" + rateFormat(qkpm, "aQs") + ")"
+			var tempstring = "(" + rateFormat(qkpm, "aQ") + ")"
 			var msg = "The quantum " + (i == 0 ? '1 quantum' : (i + 1) + ' quantums') + " ago took " + timeDisplayShort(qu_save.last10[i][0], false, 3)
 			if (qu_save.last10[i][2]) {
 				if (typeof(qu_save.last10[i][2]) == "number") " in Quantum Challenge " + qu_save.last10[i][2]
 				else msg += " in Paired Challenge " + qu_save.last10[i][2][0] + " (QC" + qu_save.last10[i][2][1][0] + "+" + qu_save.last10[i][2][1][1] + ")"
 			}
-			msg += " and gave " + shortenDimensions(qu_save.last10[i][1]) +" aQs. "+ tempstring
+			msg += " and gave " + shortenDimensions(qu_save.last10[i][1]) +" aQ. "+ tempstring
 			getEl("quantumrun"+(i+1)).textContent = msg
 			tempTime = tempTime.plus(qu_save.last10[i][0])
 			tempQK = tempQK.plus(qu_save.last10[i][1])
@@ -142,9 +142,9 @@ function updateLastTenQuantums() {
 		tempTime = tempTime.dividedBy(listed)
 		tempQK = tempQK.dividedBy(listed)
 		var qkpm = tempQK.dividedBy(tempTime / 600)
-		var tempstring = "(" + rateFormat(qkpm, "aQs") + ")"
+		var tempstring = "(" + rateFormat(qkpm, "aQ") + ")"
 		averageQk = tempQK
-		getEl("averageQuantumRun").textContent = "Average time of the last " + listed + " Quantums: "+ timeDisplayShort(tempTime, false, 3) + " | Average QK gain: " + shortenDimensions(tempQK) + " aQs. " + tempstring
+		getEl("averageQuantumRun").textContent = "Average time of the last " + listed + " Quantums: "+ timeDisplayShort(tempTime, false, 3) + " | Average QK gain: " + shortenDimensions(tempQK) + " aQ. " + tempstring
 	} else getEl("averageQuantumRun").textContent = ""
 }
 
@@ -167,13 +167,13 @@ function doQuantumProgress() {
 		var qkLog = quarkGain().log(2)
 		var qkNext = Math.pow(2, Math.floor(Math.log2(qkLog) + 1))
 		percentage = qkLog / qkNext
-		name = "Percentage until " + shorten(Decimal.pow(2, qkNext)) + " aQs"
+		name = "Percentage until " + shorten(Decimal.pow(2, qkNext)) + " aQ"
 		className = "quantumProgress"
 	} else if (!first && pH.can("quantum")) {
 		var qkNext = Math.pow(2, Math.floor(quarkGain().log(2) + 1))
 		var goal = quarkGainNextAt(qkNext)
 		percentage = getQuantumReqSource().log(goal)
-		name = "Percentage until " + shorten(goal) + " MA (" + shortenDimensions(qkNext) + " aQs)"
+		name = "Percentage until " + shorten(goal) + " MA (" + shortenDimensions(qkNext) + " aQ)"
 	} else {
 		var goal = QCs.inAny() ? QCs.getGoalMA() : getQuantumReq()
 		percentage = getQuantumReqSource().log(goal)
@@ -261,11 +261,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	} else qu_save.gluons = 0;
 
 	// Positrons
-	if (pos.unl()) {
-		pos_save.swaps = {...pos_tmp.cloud.next}
-		pos.updateCloud()
-		pos.updateTmp()
-	}
+	if (pos.unl()) pos_save.swaps = {...pos_tmp.cloud.next}
 
 	// Quantum Challenges
 	var qcDataPrev = QCs_save.in
@@ -311,8 +307,6 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		}
 
 		QCs.reset()
-		QCs.updateTmp()
-		QCs.updateDisp()
 	}
 
 	// Paired Challenges
@@ -336,8 +330,6 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 		if (!PCs_tmp.unl) PCs_tmp.unl = true
 		PCs.updateUsed()
-		PCs.updateTmp()
-		PCs.updateDisp()
 	}
 
 	// Strings
@@ -348,14 +340,12 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		pos_tmp.cloud.swaps = !pos.swapsDisabled() ? {...pos_tmp.cloud.next} : {}
 
 		if (data.qc && data.qc.includes(5) && data.mod == "up") str_save.energy = 0
-
-		str.updateTmp()
-		str.updateDisp()
 	}
 
 	/*
 		END OF NG+3 MECHANICS
 	*/
+	updateQuantumTemp(true)
 
 	doQuantumResetStuff(5, false, isQC, QCs_save.in)
 
@@ -501,14 +491,17 @@ function handleDispOutOfQuantum(bigRip) {
 	let keepQCs = keepQuantum && QCs.unl()
 	let keepPCs = keepQuantum && PCs.unl()
 	let keepBE = false
+	let keepRC = keepQuantum && QCs_save.qc1.last.length >= 1
 
 	if (!keepQCs && getEl("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
 	if (!keepPCs && getEl("pairedChalls").style.display == "block") showChallengesTab("normalchallenges")
 	if (!keepBE && getEl("breakEternity").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
+	if (!keepRC && getEl("lasttencompressors").style.display == "block") showStatisticsTab("stats")
 
 	getEl("qctabbtn").parentElement.style.display = keepQCs ? "" : "none"
 	getEl("pctabbtn").parentElement.style.display = keepPCs ? "" : "none"
-	getEl("breakEternityTabbtn").style.display = keepBE? "" : "none"
+	getEl("breakEternityTabbtn").style.display = keepBE ? "" : "none"
+	getEl("pastcompressors").style.display = keepRC ? "" : "none"
 }
 
 function handleQuantumDisplays(prestige) {
@@ -534,8 +527,8 @@ function updateQuarkDisplay() {
 	let msg = ""
 	if (pH.did("quantum")) {
 		msg += "You have <b class='QKAmount'>"+shortenDimensions(qu_save.quarks)+"</b> "	
-		if (tmp.ngp3&&player.masterystudies.includes("d14")) msg += " aQs and <b class='SSAmount'>" + shortenDimensions(qu_save.bigRip.spaceShards) + "</b> Space Shard" + (qu_save.bigRip.spaceShards.round().eq(1) ? "" : "s")
-		else msg += "anti-quark" + (qu_save.quarks.round().eq(1) ? "" : "s")
+		if (tmp.ngp3&&player.masterystudies.includes("d14")) msg += " aQ and <b class='SSAmount'>" + shortenDimensions(qu_save.bigRip.spaceShards) + "</b> Space Shard" + (qu_save.bigRip.spaceShards.round().eq(1) ? "" : "s")
+		else msg += "anti-Quark" + (qu_save.quarks.round().eq(1) ? "" : "s")
 		msg += "."
 	}
 	getEl("quarks").innerHTML=msg

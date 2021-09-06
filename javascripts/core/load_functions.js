@@ -2128,6 +2128,8 @@ END OF ONLOAD
 
 var welcomeUpdates = []
 function setupNGP31Versions() {
+	var rollback = 0
+
 	if (aarMod.ngp3lV) {
 		alert("NG+3L is no longer supported. This save will now go through a mandatory migration to NG+3R.")
 		delete aarMod.ngp3lV
@@ -2171,27 +2173,9 @@ function setupNGP31Versions() {
 		player.dilation.studies = []
 	}
 	if (aarMod.ngp3Build < 20210802) PCs.reset()
-	if (aarMod.ngp3Build < 20210802 && Decimal.log10(player.money) >= 1/0) {
-		player.totalMoney = new Decimal(1)
-		qu_save.quarks = new Decimal(0)
-		qu_save.gluons = {
-			rg: new Decimal(0),
-			gb: new Decimal(0),
-			br: new Decimal(0),
-		}
-		qu_save.entBoosts = 0
-		pos_save.boosts = 0
-		QCs_save.comps = aarMod.ngp3Build < 20210709 ? 0 : 7
-
-		var aQs = aarMod.ngp3Build < 20210709 ? 1e3 : 1e11
-		dev.giveQuantumStuff(aQs, true)
-		gainQKOnQuantum(aQs, true)
-		forceToQuantumAndRemove = true
-		setTTAfterQuantum = 1e80
-	}
-	if (aarMod.ngp3Build < 20210829) {
-		str_save.vibrated = []
-	}
+	if (aarMod.ngp3Build < 20210802 && Decimal.log10(player.money) >= 2e13) rollback = 1e20
+	if (aarMod.ngp3Build < 20210829) str_save.vibrated = []
+	if (aarMod.ngp3Build < 20210905 && Decimal.log10(player.money) >= 6e13) rollback = 1e190
 
 	welcomeUpdates = []
 	if (aarMod.ngp3Build) {
@@ -2203,11 +2187,10 @@ function setupNGP31Versions() {
 	}
 	aarMod.ngp3r = 0.6
 	aarMod.ngp3Alpha = beta
-	aarMod.ngp3Build = 20210829
+	aarMod.ngp3Build = 20210905
 
-	if (tmp.ngp3_boost && !player.timestudy.auto) {
-		player.timestudy.auto = {}
-	}
+	if (tmp.ngp3_boost && !player.timestudy.auto) player.timestudy.auto = {}
+	if (rollback) rollbackQuantum(rollback)
 }
 
 function checkNGM(imported) {

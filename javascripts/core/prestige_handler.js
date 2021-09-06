@@ -268,9 +268,6 @@ var pH = {
 		//Quantum (after Neutrino Upgrade 16)
 		let bigRipAndQuantum = !hasNU(16)
 		if (!bigRipAndQuantum && !QCs.inAny()) getEl("quantumbtn").style.display = "none"
-
-		// //The future layer...
-		// getEl("quPlusBtn").style.display = "none"
 	},
 	updateActive() {
 		tmp.eterUnl = pH.did("eternity")

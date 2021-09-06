@@ -1725,6 +1725,12 @@ button {
     background: #ffbfbf
 }
 
+.small_milestone {
+    width: 150px;
+    height: 45px;
+    font-size: 9px;
+}
+
 #production {
     font-size: 12px;
 }

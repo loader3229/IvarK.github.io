@@ -100,7 +100,7 @@ let str = {
 		for (var i = 1; i <= 12; i++) {
 			var eb_id = str.conv(i)
 			var eb_pos = str.data.pos["eb" + i]
-			getEl("str_eb" + i).setAttribute('ach-tooltip', "Boost: " + enB.glu[eb_id].dispFull(enB_tmp["glu" + eb_id]))
+			getEl("str_eb" + i).setAttribute('ach-tooltip', enB.active("glu", eb_id) ? "Boost: " + enB.glu[eb_id].dispFull(enB_tmp["glu" + eb_id]) : "Inactive boost")
 			getEl("str_eb" + i + "_eff").textContent = formatPercentage(str.eff_eb(i) - 1) + "% stronger"
 			getEl("str_eb" + i + "_nerf").innerHTML = str.altitude(eb_pos) < 0 ? "at " + shorten(str.nerf_eb(i)) + "<br>effective boosters" : ""
 			getEl("str_eb" + i).className = (str_save.vibrated.includes(eb_pos) ? "chosenbtn2" : str.vibrated(eb_pos) ? (str_tmp.disable[eb_pos] > eb_pos ? "chosenbtn3" : "chosenbtn") : str.canVibrate(eb_pos) ? "storebtn" : "unavailablebtn") + " pos_btn"
@@ -108,7 +108,7 @@ let str = {
 			var pb_id = str.conv(i)
 			var pb_pos = str.data.pos["pb" + i]
 			var pb_nerf = str.nerf_pb(i)
-			getEl("str_pb" + i).setAttribute('ach-tooltip', "Boost: " + enB.pos[pb_id].dispFull(enB_tmp["pos" + pb_id]))
+			getEl("str_pb" + i).setAttribute('ach-tooltip', enB.active("pos", pb_id) ? "Boost: " + enB.pos[pb_id].dispFull(enB_tmp["pos" + pb_id]) : "Inactive boost")
 			getEl("str_pb" + i + "_eff").textContent = "+" + shorten(str.eff_pb(i)) + "x charge"
 			getEl("str_pb" + i + "_nerf").className = pb_nerf < 1 ? "charged" : pb_nerf > 1 ? "warning" : ""
 			getEl("str_pb" + i + "_nerf").innerHTML = (pb_nerf < 1 ? "/" + shorten(1 / pb_nerf) : shorten(pb_nerf) + "x") + "<br>requirement"
@@ -156,7 +156,7 @@ let str = {
 		return str_save.energy - str_save.spent
 	},
 	veCost(x) {
-		return x ? Math.pow(2, x - 2) : 0
+		return x ? Math.pow(3, x - 1) : 0
 	},
 
 	//Vibrations
@@ -179,6 +179,7 @@ let str = {
 
 		if (dev.noReset) {
 			str.updateTmp()
+			str.updateDisp()
 		} else restartQuantum(true)
 	},
 	vibrated(x) {
@@ -187,7 +188,7 @@ let str = {
 	onVibrate(x) {
 		for (var p = -2; p <= 2; p++) {
 			var y = p + x
-			str_tmp.alt[y] = (str_tmp.alt[y] || 0) + (1 - 2 * (Math.abs(p) % 2)) / (Math.abs(p) + 2)
+			str_tmp.alt[y] = (str_tmp.alt[y] || 0) + (1 - 2 * (Math.abs(p) % 2)) / Math.pow(2, Math.abs(p) + 1)
 		}
 
 		str_tmp.disable[x - 1] = x
@@ -203,20 +204,21 @@ let str = {
 		return !str.unl() ? x : rev ? str_tmp.rev_order[x] : str_tmp.order[x]
 	},
 	eff(x) {
-		let r = this.altitude(x)
+		let r = this.altitude(x) / 2
 		r *= str_tmp.str
-		if (r > 0) r /= 2
 		return r
 	},
 	eff_eb(x) {
-		return 1 + Math.abs(this.eff(this.data.pos["eb" + x]))
+		let exp = 1
+		if (x == 1) exp = 1/3
+		return Math.pow(1 + Math.abs(this.eff(this.data.pos["eb" + x])), exp)
 	},
 	eff_pb(x) {
-		return Math.abs(this.eff(this.data.pos["pb" + x])) * 8
+		return Math.abs(this.eff(this.data.pos["pb" + x])) * 4
 	},
 	nerf_eb(x) {
 		var alt = this.eff(this.data.pos["eb" + x])
-		return alt < 0 ? -alt * 1e3 : 0
+		return alt < 0 ? -alt * 6e3 : 0
 	},
 	nerf_pb(x) {
 		var alt = this.eff(this.data.pos["pb" + x])

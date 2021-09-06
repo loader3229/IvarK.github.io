@@ -168,7 +168,7 @@ function quantumStatDisplay(){
 		getEl("bestPCs").textContent = PCs_save.lvl > 1 ? "You have a best of " + getFullExpansion(PCs_save.best) + " Paired Challenge completions." : ""
 	}
 
-	if (!QCs.done(1)) getEl("compressorStatistics").style.display = "none"
+	if (!pH.shown("quantum") || !QCs.done(1)) getEl("compressorStatistics").style.display = "none"
 	else {
 		getEl("compressorStatistics").style.display = ""
 

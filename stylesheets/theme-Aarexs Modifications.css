@@ -151,10 +151,10 @@ strong { color: #0072e5 }
     color: #e5e5e5 !important
 }
 #vanillaInfinityPoints { display: none }
-#bigcrunch, #infinitybtn, #pastinfs, #postInfinityButton, #idtabbtn button, .newdim, #infinitydimensions td:nth-child(4) .storebtn, #repMajorBtn, #replicantichance.storebtn, #replicantiinterval.storebtn, #replicantimax.storebtn, #challTabButtons td:nth-child(2) button, #infchallengesbtn, .respecbtn {
+#bigcrunch, #infinitybtn, #pastinfs, #postInfinityButton, #idtabbtn button, .newdim, #infinitydimensions td:nth-child(4) .storebtn, #repMajorBtn, #replicantichance.storebtn, #replicantiinterval.storebtn, #replicantimax.storebtn, #challTabButtons td:nth-child(2) button, #infchallengesbtn, .respecbtn, #pastcompressors {
     border-color: #e2bd00 !important
 }
-#bigcrunch:hover, #infinitybtn:hover, #pastinfs:hover, #postInfinityButton:hover, #idtabbtn button:hover, .newdim:hover, #infinitydimensions td:nth-child(4) .storebtn:hover, #repMajorBtn:hover, #replicantichance.storebtn:hover, #replicantiinterval.storebtn:hover, #replicantimax.storebtn:hover, #challTabButtons td:nth-child(2) button:hover, #infchallengesbtn:hover, .respecbtn:hover {
+#bigcrunch:hover, #infinitybtn:hover, #pastinfs:hover, #postInfinityButton:hover, #idtabbtn button:hover, .newdim:hover, #infinitydimensions td:nth-child(4) .storebtn:hover, #repMajorBtn:hover, #replicantichance.storebtn:hover, #replicantiinterval.storebtn:hover, #replicantimax.storebtn:hover, #challTabButtons td:nth-child(2) button:hover, #infchallengesbtn:hover, .respecbtn:hover, #pastcompressors:hover {
     background-color: #e2bd00 !important
 }
 .IPAmount1, .IPAmount2, #infPowAmount, #infDimMultAmount, #infDimEffectPower,

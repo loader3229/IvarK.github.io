@@ -8,7 +8,7 @@ let ETER_UPGS = {
 		unl: () => true,
 		cost: 5,
 		mult: () => player.eternityPoints.plus(1),
-		desc: () => "Infinity Dimension multiplier based on unspent EP. (x+1)"
+		desc: () => "Infinity Dimension multiplier based on unspent EP." + (shiftDown ? " (x+1)" : "")
 	},
 	2: {
 		unl: () => true,
@@ -46,7 +46,7 @@ let ETER_UPGS = {
 			if (player.boughtDims !== undefined) eu2formula = "x^log4(2x)"
 			else if (hasAch("ngpp15")) eu2formula = tmp.ngC ? "x^log10(x)^2" : "10^log(x)^5"
 
-			return "Infinity Dimension multiplier based on Eternities. (" + eu2formula + ")"
+			return "Infinity Dimension multiplier based on Eternities." + (shiftDown ? " (" + eu2formula + ")" : "")
 		}
 	},
 	3: {

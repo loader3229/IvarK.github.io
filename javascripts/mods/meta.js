@@ -387,7 +387,7 @@ function updateMetaDimensions () {
 	getEl("quantumResetLabel").textContent =
 		'Quantum: requires ' + shorten(req) + (tmp.ngp3 ? " best" : "") + ' meta-antimatter'
 		+ (QCs.inAny() ? QCs.getGoalDisp() : tmp.ngp3 && !tmp.ngp3_mul ? " and an EC14 completion" : "")
-	getEl("quantum").innerHTML = tmp.quUnl ? "Gain " + shortenDimensions(quarkGain()) + " aQs." : 'Reset your progress for a new layer...'
+	getEl("quantum").innerHTML = tmp.quUnl ? "Gain " + shortenDimensions(quarkGain()) + " aQ." : 'Reset your progress for a new layer...'
 	getEl("quantum").className = pH.can("quantum") ? 'quantumbtn' : 'unavailablebtn'
 
 	getEl("metaAccelerator").innerHTML = enB.active("pos", 2) ?

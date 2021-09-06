@@ -99,7 +99,7 @@ let qMs = {
 		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 17 ? "block" : "none"
 		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 17 ? "" : "none"
 		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 20 ? "" : "none"
-		getEl('repExpandAuto').style.display = qMs.tmp.amt >= 26 ? "" : "none"
+		getEl('repExpandAuto').style.display = qMs.tmp.amt >= 27 ? "" : "none"
 
         var autoAssignUnl = qMs.tmp.amt >= 23
 		getEl('respec_quarks').style.display = autoAssignUnl ? "" : "none"
@@ -107,7 +107,7 @@ let qMs = {
         getEl('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
 
 		if (QCs.unl()) {
-			getEl("swaps_toggle").style.display = qMs.tmp.amt >= 27 ? "" : "none"
+			getEl("swaps_toggle").style.display = qMs.tmp.amt >= 26 ? "" : "none"
 			getEl("swaps_toggle").textContent = (QCs_save.disable_swaps.on ? "Enable" : "Disable") + " swaps in challenge"
 		}
 	},
@@ -277,13 +277,13 @@ let qMs = {
 		effGot: () => "Meta Dimension autobuyer is now unlimited."
 	},
 	26: {
-		req: 150,
-		eff: () => "Unlock the autobuyer for Replicated Expanders.",
-		effGot: () => "Unlock the autobuyer for Replicated Expanders."
+		req: 160,
+		eff: () => "You can disable swaps in any Quantum Challenge.",
+		effGot: () => "You now can disable swaps in any Quantum Challenge."
 	},
 	27: {
 		req: 200,
-		eff: () => "You can disable swaps in any Quantum Challenge.",
-		effGot: () => "You now can disable swaps in any Quantum Challenge."
+		eff: () => "Unlock the autobuyer for Replicated Expanders.",
+		effGot: () => "Unlock the autobuyer for Replicated Expanders."
 	},
 }

@@ -542,10 +542,26 @@ function hasSoftcapStarted(id, num){
 		eu2: tmp.ngp3,
 		ts83: tmp.ngp3,
 		ts225: tmp.ngp3,
+		ec14: tmp.ngp3,
 		rp: tmp.ngp3,
+		gp: tmp.ngp3,
 		tt: tmp.ngp3,
 		ma: tmp.ngp3
 	}
+	let layers = {
+		rep: QCs_tmp.qc1 ? "quantum" : "infinity",
+		rInt: "quantum",
+		it: "eternity",
+		eu2: "eternity",
+		ts83: "eternity",
+		ts225: "eternity",
+		ec14: "eternity",
+		rp: "quantum",
+		gp: "quantum",
+		tt: "eternity",
+		ma: tmp.quUnl ? "quantum" : ""
+	}
+	if (layers[id] && !pH.shown(layers[id])) return false
 	if (l >= 4 && !tmp.ngC && id.slice(l - 4, l) == "_ngC") return false
 	if (l >= 5 && id.slice(l - 5, l - 1) == "_ngm") {
 		let int = parseInt(id[l - 1])

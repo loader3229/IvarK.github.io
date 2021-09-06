@@ -478,6 +478,10 @@ var enB = {
 		this.update(type)
 	},
 
+	name(type, x) {
+		var data = this[type]
+		return shiftDown ? data[x].title : data.name + " Boost " + x
+	},
 	has(type, x) {
 		var data = this[type]
 		return this[type].unl() && Decimal.gte(data.amt(), data[x].req)
@@ -493,44 +497,6 @@ var enB = {
 
 		if (data.activeReq && !data.activeReq()) return false
 		return true
-	},
-	mastered(type, x) {
-		if (type == "glu" && QCs.in(8)) return false
-
-		var data = this[type]
-		return data.amt() >= this.getMastered(type, x) && data.amt() >= data[x].req
-	},
-	getMastered(type, x) {
-		var data = this[type]
-		var r = (tmp.dtMode && data[x].masReqDeath) || (tmp.exMode && data[x].masReqExpert) || data[x].masReq
-		if (type == "glu") {
-			if (QCs.perkActive(8) && !this.colorMatch("glu", x)) r = 0
-			else if (QCs.perkActive(2)) r *= 20
-		}
-		return r
-	},
-	anti(type, x) {
-		if (type == "glu" && (QCs.perkActive(2) || QCs.in(8))) return true
-		return this[type][x].anti
-	},
-
-	colorUsed(type, x) {
-		if (QCs.in(8)) {
-			var qc8 = QCs_save.qc8
-			return qc8.order.length ? qc8.order[qc8.index] : ""
-		}
-		if (qu_save.entColor === undefined) qu_save.entColor = "rg"
-		return qu_save.entColor
-	},
-	colorMatch(type, x) {
-		var data = this[type][x]
-		var gluon = enB.colorUsed()
-		if (!data.type) return true
-		if (!gluon) return
-
-		var r = data.type == gluon[0] || data.type == gluon[1]
-		if (this.anti(type, x)) r = !r
-		return r
 	},
 
 	choose(x) {
@@ -551,6 +517,44 @@ var enB = {
 		if (!confirm("This will perform a quantum reset without gaining anything. Are you sure?")) return
 		qu_save.entColor = x
 		restartQuantum(true)
+	},
+	colorUsed(type, x) {
+		if (QCs.in(8)) {
+			var qc8 = QCs_save.qc8
+			return qc8.order.length ? qc8.order[qc8.index] : ""
+		}
+		if (qu_save.entColor === undefined) qu_save.entColor = "rg"
+		return qu_save.entColor
+	},
+	colorMatch(type, x) {
+		var data = this[type][x]
+		var gluon = enB.colorUsed()
+		if (!data.type) return true
+		if (!gluon) return
+
+		var r = data.type == gluon[0] || data.type == gluon[1]
+		if (this.anti(type, x)) r = !r
+		return r
+	},
+	anti(type, x) {
+		if (type == "glu" && (QCs.perkActive(2) || QCs.in(8))) return true
+		return this[type][x].anti
+	},
+
+	mastered(type, x) {
+		if (type == "glu" && QCs.in(8)) return false
+
+		var data = this[type]
+		return data.amt() >= this.getMastered(type, x) && data.amt() >= data[x].req
+	},
+	getMastered(type, x) {
+		var data = this[type]
+		var r = (tmp.dtMode && data[x].masReqDeath) || (tmp.exMode && data[x].masReqExpert) || data[x].masReq
+		if (type == "glu") {
+			if (QCs.perkActive(8) && !this.colorMatch("glu", x)) r = 0
+			else if (QCs.perkActive(2)) r *= 20
+		}
+		return r
 	},
 
 	updateTmp() {
@@ -619,10 +623,10 @@ var enB = {
 			var amt = this.target(undefined, true)
 			if (pos.on()) amt = amt.add(enB.pos.target())
 
-			if (PCs.unl() && amt.gt(PCs_tmp.eff1_start)) amt = amt.div(PCs_tmp.eff1_start).pow(this.boosterExp()).times(PCs_tmp.eff1_start)
-
 			if (hasAch("ng3pr14")) amt = amt.times(1.1)
 			if (QCs.perkActive(2)) amt = amt.times(1.5)
+
+			if (PCs.unl() && amt.gt(PCs_tmp.eff1_start)) amt = amt.div(PCs_tmp.eff1_start).pow(this.boosterExp()).times(PCs_tmp.eff1_start)
 
 			return amt
 		},
@@ -714,7 +718,7 @@ var enB = {
 				return "^" + x.toFixed(4)
 			},
 			dispFull(x) {
-				return this.disp(x)
+				return "Meta-antimatter boosts dilated time by " + this.disp(x) + "."
 			}
 		},
 		5: {
@@ -992,11 +996,11 @@ var enB = {
 				var accSpeed = 1
 				if (enB.active("pos", 9)) {
 					var p9 = 1 + enB_tmp.pos9 / 4
-					accSpeed /= p9 * Math.max(p9 / 10, 1)
+					accSpeed /= p9 * Math.max(p9 / 2, 1)
 				}
 				if (enB.active("glu", 9)) accSpeed *= enB_tmp.glu9
 				if (QCs.done(7)) accSpeed *= 1.25
-				if (PCs.milestoneDone(71)) accSpeed *= 1 + 0.03 * Math.sqrt(PCs_save.lvl)
+				//if (PCs.milestoneDone(71)) accSpeed *= 1 + 0.03 * Math.sqrt(PCs_save.lvl)
 
 				var mdb = player.meta.resets
 				var base = Math.min(player.meta.bestAntimatter.add(1).log10() * getPataAccelerator() + 1, 1e10)
@@ -1129,7 +1133,7 @@ var enB = {
 				return formatValue(player.options.notation, x, 2, 3) + "x"
 			},
 			dispFull(x) {
-				return "Tachyon particles speed up Pata Accelerator production by " + this.disp(x) + "."
+				return "Tachyon particles speed up " + enB.name("pos", 2) + "  production by " + this.disp(x) + "."
 			}
 		},
 		8: {
@@ -1197,7 +1201,7 @@ var enB = {
 				return Math.min(5e-8 * Math.log2(x / 500 + 1), 1e-5)
 			},
 			disp(x) {
-				return shorten(player.eternityPoints.max(1).pow(x * getAQSGainExp())) + "x"
+				return shorten(player.eternityPoints.max(1).pow(x * getAQGainExp())) + "x"
 			},
 			dispFull(x) {
 				return "Eternity Points boost Anti-Quarks by " + this.disp(x) + "."
@@ -1217,7 +1221,7 @@ var enB = {
 				return "+" + x.toFixed(3) + "x"
 			},
 			dispFull(x) {
-				return "Replicantis add " + this.disp(x) + " to Pata Accelerator cap."
+				return "Replicantis add " + this.disp(x) + " to " + enB.name("pos", 2) + " cap."
 			}
 		},
 	},

@@ -1531,7 +1531,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.6: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(9/4/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(9/5/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -2380,7 +2380,7 @@
 						</tr>
 						<tr id="achRowng3p7">
 							<td>
-								<div id="Progressing as a Ghost" class="achievement achievementlocked" style="background-image: url(images/159.png)" ach-tooltip="Unlock Ghostly Photons. Reward: You produce 1% of gluons gained on Quantum every second if you have the 8th Brave Milestone, Tachyon Particles persist in Big Rip if you have the 16th Brave Milestone and unlock three new Break Eternity Upgrades."></div>
+								<div id="Progressing as a Ghost" class="achievement achievementlocked" style="background-image: url(images/159.png)" ach-tooltip="Unlock Ghostly Photons. Reward: You produce 1% of gluons gained on Quantum Every second if you have the 8th Brave Milestone, Tachyon Particles persist in Big Rip if you have the 16th Brave Milestone and unlock three new Break Eternity Upgrades."></div>
 							</td>
 							<td>
 								<div id="Underchallenged" class="achievement achievementlocked" style="background-image: url(images/160.png)"></div>
@@ -3372,6 +3372,7 @@
 			</div>
 			<div id="pairedChalls" class="challengeTab">
 				<table id="qc_milestones" align="center" style="margin: auto"></table>
+				<button class="secondarytabbtn" id="qc_milestone_all_btn" onclick="PCs.showMilestones('all')">Show all milestones</button>
 				<div id="qc_milestone_div">
 					<b id="qc_milestone_header" style="font-size: 20px">QC1 Milestones</b>
 					<br>
@@ -3379,19 +3380,19 @@
 					<br>
 					<table class="table" align="center" style="margin: auto">
 						<tr>
-							<td>1 completion</td>
-							<td>2 completions</td>
-							<td id="qc_milestone3_div">3 completions</td>
+							<td id="qc_milestone1_div"></td>
+							<td id="qc_milestone2_div"></td>
+							<td id="qc_milestone3_div"></td>
 						</tr>
 						<tr>
-							<td><button class="qMs_reward" id="qc_milestone1">???</button></td>
-							<td><button class="qMs_reward" id="qc_milestone2">???</button></td>
+							<td id="qc_milestone1_div2"><button class="qMs_reward" id="qc_milestone1">???</button></td>
+							<td id="qc_milestone2_div2"><button class="qMs_reward" id="qc_milestone2">???</button></td>
 							<td id="qc_milestone3_div2"><button class="qMs_reward" id="qc_milestone3">???</button></td>
 						</tr>
 						<tr>
-							<td id="qc_milestone4_div">4 completions</td>
-							<td id="qc_milestone5_div">6 completions</td>
-							<td id="qc_milestone6_div">7 completions</td>
+							<td id="qc_milestone4_div"></td>
+							<td id="qc_milestone5_div"></td>
+							<td id="qc_milestone6_div"></td>
 						</tr>
 						<tr>
 							<td id="qc_milestone4_div2"><button class="qMs_reward" id="qc_milestone4">???</button></td>
@@ -3400,10 +3401,16 @@
 						</tr>
 					</table>
 				</div>
+				<div id="qc_milestone_all_div">
+					<b id="qc_milestone_header" style="font-size: 20px">All Milestones</b>
+					<br>
+					<button class="secondarytabbtn" onclick="PCs.showMilestones(0)">Close</button>
+					<table id="qc_milestone_all" class="table" align="center" style="margin: auto"></table>
+				</div>
 				<div id="pc_info">
 					<br>
 					<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 20px">0 / 1</span>)</span><br>
-					Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Entangled Booster efficiency (starting from <span id="pc_eff1_start"></span>),<br>and make aQs gain boosts itself by <span id="pc_eff2" style="font-size: 20px"></span>.
+					Translated to <span id="pc_eff1" style="font-size: 20px"></span> efficiency to Entangled Boosts (starting at <span id="pc_eff1_start"></span>), and make aQ boosts itself by <span id="pc_eff2" style="font-size: 20px"></span>.
 				</div>
 				<span id="pc_enter">
 					<br>
@@ -4190,7 +4197,7 @@
 				<p id="replDilaterDiv">You have <span id="replDilater" style="font-size: 20px">0</span> Replicanti Dilaters, which makes EC14 reward <span id="replDilaterEff" style="font-size: 15px">0.00%</span> closer to ^1.</p>
 				<p id="qc5_div" style="font-size: 9px">
 					Replicantis have generated <span id="qc5_eng" style="font-size: 15px">0</span> energy<sup id="qc5_eng_exp">1</sup> in total<span id="qc5_eng_mult" style="font-size: 12px"></span>,
-					which translated to +<span id="qc5_eff" style="font-size: 12px">0</span> quantum energy and positronic charge.
+					which translated to +<span id="qc5_eff" style="font-size: 12px">0</span> Quantum Energy and Positronic charge.
 				</p>
 				<br>
 				<button class="storebtn" id="replicantichance" onclick="upgradeReplicantiChance()" style="width:180px; height: 50px; font-size: 10px">Replicate chance: 1%<br>+1% Costs: 1e6969 IP</button>
@@ -4313,8 +4320,8 @@
 	<div class='tab' id='repMajor'></div>
 	<div class='tab' id='quantumtab'>
 		<br>
-		<div id="qw_info" style="display: none">Your quantum worth (sum of anti-quarks, colored anti-quarks, and gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.<br></div>
-		<span style="font-size: 15px">You have <span class="QKAmount" id="quarkEnergy" style="font-size:30px">0.0</span> quantum energy.</span>
+		<div id="qw_info" style="display: none">Your quantum worth (sum of anti-Quarks, colored anti-Quarks, and gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.<br></div>
+		<span style="font-size: 15px">You have <span class="QKAmount" id="quarkEnergy" style="font-size:30px">0.0</span> Quantum Energy.</span>
 		<span id="qe_info" style="display: none">
 			<span id="quarkEnergyMult" style="font-size: 15px">(1.00x)</span>
 			<br>You have made a best-ever of <span id="bestQE" style="font-size:15px">0.0</span> energy. (no divisors)
@@ -4435,14 +4442,14 @@
 				<!-- Quantum Energy -->
 				<tr>
 					<td class="lime" colspan=3>
-						Your quantum energy is giving <span id="quarkEnergyEffect1" style="font-size: 24px">0.0</span> more color powers and <span id="quarkEnergyEffect2" style="font-size: 24px">0.0</span> total extra color powers.
+						Your Quantum Energy is giving <span id="quarkEnergyEffect1" style="font-size: 24px">0.0</span> more color powers and <span id="quarkEnergyEffect2" style="font-size: 24px">0.0</span> total extra color powers.
 					</td>
 				</tr>
 
 				<!-- Distribution -->
 				<tr>
 					<td style="vertical-align: middle">
-						You will get <span id="assort_amount"></span> colored anti-quarks when you assort anti-quarks
+						You will get <span id="assort_amount"></span> colored anti-Quarks when you assort anti-Quarks
 						<br>
 						<button class='storebtn' id="assignAllButton" style="width:135px" onclick='assignAll()'>Distribute</button>
 					</td>
@@ -4455,7 +4462,7 @@
 						<input id="assort_percentage" type="number" min=1 max=100 onchange="changeAssortPercentage()">%
 					</td>
 					<td class="grey" rowspan=2>
-						<button class='storebtn' id="neutralize_quarks" style="width: 180px; height: 36px" onclick='neutralizeQuarks()'>Neutralize<br>(Cost: <span id="neutralize_req"></span> aQs)</button>
+						<button class='storebtn' id="neutralize_quarks" style="width: 180px; height: 36px" onclick='neutralizeQuarks()'>Neutralize<br>(Cost: <span id="neutralize_req"></span> aQ)</button>
 						<button class='storebtn' id="respec_quarks" style="width: 180px; height: 36px" onclick='respecQuarks()'>Respec Quarks</button>
 					</td>
 				</tr>
@@ -4505,7 +4512,7 @@
 				<td colspan=3>
 					You have <span id="enB_glu_amt" style="font-size:35px">0</span> Entangled Boosters.
 					<br>
-					<button class="storebtn" id="enB_glu_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1 Entangled Booster<br><span style="font-size: 10px">(requires <span id="enB_glu_cost">1</span> best quantum energy)</span></button>
+					<button class="storebtn" id="enB_glu_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1 Entangled Booster<br><span style="font-size: 10px">(requires <span id="enB_glu_cost">1</span> best Quantum Energy)</span></button>
 					<br>
 					<button class='storebtn' style="width: 180px" onclick="ENTANGLED_BOOSTS.maxBuy('glu')">Max buy</button>
 				</td>
@@ -4527,7 +4534,7 @@
 					<br>
 					<span id="enB_glu1_type"></span>
 					<br>
-					Gain <span id="enB_glu1_eff" style="font-size: 18px"></span> more quantum energy.
+					Gain <span id="enB_glu1_eff" style="font-size: 18px"></span> more Quantum Energy.
 				</td>
 				<td id="enB_glu2">
 					<b id="enB_glu2_name" style="font-size: 24px"></b>
@@ -4632,7 +4639,7 @@
 					<td class="green" id="qMs_en_cell">
 						<b style="font-size: 25px">Energetic</b>
 						<span id="qMs_en_points" style="font-size: 20px"></span><br>
-						(Your best quantum energy is <span id="qMs_en_target" style="font-size: 15px">0</span>)<br>
+						(Your best Quantum Energy is <span id="qMs_en_target" style="font-size: 15px">0</span>)<br>
 						<span id="qMs_en_next">0</span>
 					</td>
 					<td class="cyan" id="qMs_rl_cell">
@@ -4831,7 +4838,7 @@
 						<br>
 						<span id="enB_pos7_type"></span>
 						<br>
-						Tachyon particles speed up Pata Accelerator production by <span id="enB_pos7_eff" style="font-size: 18px"></span>.
+						Tachyon particles speed up <span id="enB_pos2_mention_1"></span> production by <span id="enB_pos7_eff" style="font-size: 18px"></span>.
 					</td>
 					<td id="enB_pos8">
 						<b id="enB_pos8_name" style="font-size: 24px"></b>
@@ -4868,7 +4875,7 @@
 						<br>
 						<span id="enB_pos12_type"></span>
 						<br>
-						Replicantis add <span id="enB_pos12_eff" style="font-size: 18px"></span> to Pata Accelerator cap.
+						Replicantis add <span id="enB_pos12_eff" style="font-size: 18px"></span> to <span id="enB_pos2_mention_2"></span> cap.
 					</td>
 				</tr>
 			</table>

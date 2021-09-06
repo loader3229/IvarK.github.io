@@ -961,6 +961,42 @@ function setupSaveDataNGP3() {
 
 	str_tmp.unl = str.unl(true)
 	str.compile()
+
+	updateQuantumTemp()
+}
+
+function rollbackQuantum(aQ) {
+	player.totalMoney = new Decimal(1)
+	qu_save.quarks = new Decimal(0)
+	qu_save.gluons = {
+		rg: new Decimal(0),
+		gb: new Decimal(0),
+		br: new Decimal(0),
+	}
+	qu_save.entBoosts = 0
+	pos_save.boosts = 0
+	QCs_save.comps = aQ <= 1e20 ? 7 : 8
+	if (aQ <= 1e20) PCs.reset()
+	str_save.energy = 0
+	str_save.vibrated = []
+
+	dev.giveQuantumStuff(aQ, true)
+	gainQKOnQuantum(aQ, true)
+	forceToQuantumAndRemove = true
+	setTTAfterQuantum = 1e80
+}
+
+function updateQuantumTemp(update) {
+	QCs.updateTmp()
+	PCs.updateTmp()
+	str.updateTmp()
+	pos.updateTmp()
+
+	if (update) {
+		QCs.updateDisp()
+		PCs.updateDisp()
+		str.updateDisp()
+	}
 }
 
 //Recent boosts
@@ -972,7 +1008,7 @@ function getReplDilBonus() {
 	return Decimal.pow(1.6, x)
 }
 
-function getAQSGainExp(x) {
+function getAQGainExp(x) {
 	if (!x) x = quarkGain(true)
 
 	let r = 1
