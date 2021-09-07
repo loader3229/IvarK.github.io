@@ -13,20 +13,20 @@ var PCs = {
 		12: "Unlock Replicated Expanders.",
 		22: "You can swap Positronic Boosts between 2 of any tiers.",
 		32: "25 MP milestone is activated in QC3.",
-		42: "Tier 1 charge is 8x, but require 4x more.",
+		42: "Tier 1 charge is 8x, but require 6x more.",
 		52: "Replicated Compressors raise Replicanti Energy by an exponent.",
 		62: "Eternitying timewraps Meta Dimensions and Replicantis by 3 seconds.",
 		72: "Mastery Study cost multiplier is divided by 5x.",
 		82: "Remote Galaxies scaling is slower based on its starting point.",
 
 		13: "Unlock Replicated Dilaters.",
-		23: "Undercharged boosts get a higher charge multiplier. (not implemented)",
-		33: "Meta Accelerator slowdown starts 2% later per PC level.",
+		23: "Undercharged boosts get a higher charge multiplier.",
+		33: "Meta Accelerator slowdown starts 1% later per PC level.",
 		43: "Extra Replicated Galaxies contribute to Positronic Charge.",
 		53: "Replicanti Compressors raise Replicanti Energy more.",
 		63: "Add the time efficiency of QC6 reward by 5s, and also slow down by 3x.",
 		73: "Remove the second softcap of TT generation.",
-		83: "Unlock the first Omega Set. (not implemented)",
+		83: "Unlock the first Omega Set.",
 
 		14: "+0.025 to the exponent of Color Power effects.",
 		24: "+0.025 to the exponent of Color Power effects.",
@@ -57,6 +57,16 @@ var PCs = {
 	},
 	setupData() {
 		var data = {
+			row_unls: [null,
+				true,
+				true,
+				true,
+				() => str.unl(),
+				() => PCs.milestoneDone(83),
+				false,
+				false,
+				false,
+			],
 			goal_divs: [null, 0.1, 0.95, 0.25, 0.95, 0.45, 0.5, 0.4, 0.75],
 			milestone_reqs: [null, 1, 2, 3, 4, 6, 7],
 			milestone_unls: [null,
@@ -68,7 +78,7 @@ var PCs = {
 				() => futureBoost("more_milestones"),
 				() => futureBoost("more_milestones"),
 			],
-			letters: [null, "A", "B", "C", "D", "Ω<sup>1</sup>", "Ω<sup>2</sup>", "Ω<sup>3</sup>", "Θ"],
+			letters: [null, "A", "B", "C", "D", "Ω1", "Ω2", "Ω3", "Ω4"],
 			all: [],
 			setup: true
 		}
@@ -137,7 +147,6 @@ var PCs = {
 			}
 			if (PCs_tmp.picked) this.occupy(PCs_tmp.picked[0])
 
-
 			if (l == 1) {
 				var d = PCs_tmp.used.d1
 				for (var i = 0; i < d.length; i++) this.occupy(d[i])
@@ -148,7 +157,9 @@ var PCs = {
 					var p = PCs.sort(i * 10 + PCs_tmp.picked[0])
 					if (d.includes(p)) this.occupy(i)
 				}
+			}
 
+			if (PCs_tmp.pick < 50 && l == 2) {
 				var p1 = PCs_tmp.used.p1
 				var p2 = PCs_tmp.used.p2
 				var p = p1.includes(PCs_tmp.picked[0]) ? p1 : p2
@@ -280,7 +291,7 @@ var PCs = {
 		div -= PCs_tmp.temp
 
 		var r = qc1.pow(qc2.log(base) / div)
-		var pow = Math.sqrt(Math.max(PCs_tmp.comps[list[0]], PCs_tmp.comps[list[1]]) / 3 + 1)
+		var pow = Math.pow(1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) / 3)
 		r = r.pow(pow)
 		r = r.div(this.shrunkerEff())
 		return r
@@ -324,14 +335,16 @@ var PCs = {
 		return PCs.milestoneUnl(pos % 10) && PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestone_reqs[pos % 10]
 	},
 	lvlReq(pc) {
+		if (pc >= 50) return PCs.rowUnl(Math.floor(pc / 10)) ? 0 : 1/0
 		if (QCs_save.comps / 2 < pc % 10) return 1/0
-		if (PCs_tmp.debug) return pc > 40 ? 1/0 : 0
-
 		var x = Math.floor(pc / 10) * 4 - 4
 		if (pc < 20) x++
 
 		x += pc % 10 - 1
 		return x
+	},
+	rowUnl(x) {
+		return evalData(PCs.data.row_unls[x])
 	},
 	overlapped(x) {
 		return Math.floor(x / 10) == x % 10
@@ -341,10 +354,11 @@ var PCs = {
 	buttonTxt(pc) {
 		var id = PCs.sort(PCs_save.challs[pc])
 		return '<b style="font-size: 18px">' + PCs.name(pc) + '</b><br>' + (
-			PCs_tmp.pick ? (PCs_tmp.pick == pc ? "Click to cancel" : "") :
-			!PCs_save.challs[pc] ? "Click to assign" :
-			"QC " + wordizeList(PCs.convBack(id), false, " + ", false) +
-			(PCs.done(id) ? "" : "<br>Goal: " + shorten(PCs.goal(id)) + " MA")
+			PCs_save.challs[pc] ? "QC " + wordizeList(PCs.convBack(id), false, " + ", false) :
+			PCs_tmp.pick == pc ? "Click to cancel" :
+			!PCs_tmp.pick ? "Click to assign" : ""
+		) + (
+			PCs_tmp.pick || !PCs_save.challs[pc] || PCs.done(id) ? "" : "<br>Goal: " + shorten(PCs.goal(id)) + " MA"
 		)
 	},
 	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Milestones</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
@@ -385,12 +399,15 @@ var PCs = {
 		el.insertRow(0).innerHTML = html
 
 		//Setup rows
-		for (var y = 1; y <= 4; y++) {
+		for (var y = 1; y <= 8; y++) {
 			var html = "<td>Set " + this.data.letters[y] +
-			"<br><button class='storebtn' id='pc_respec" + y + "' style='height: 24px; width: 60px' onclick='PCs.respec(" + y + ")'>Respec</button>" +
+			"<br><button class='storebtn' id='pc_respec_" + y + "' style='height: 24px; width: 60px' onclick='PCs.respec(" + y + ")'>Respec</button>" +
 			"</td>"
 			for (var x = 1; x <= 4; x++) html += this.setupButton(y * 10 + x)
-			el.insertRow(y).innerHTML = html
+
+			var row = el.insertRow(y)
+			row.innerHTML = html
+			row.id = 'pc_row_' + y
 		}
 
 		//Setup "all milestones"
@@ -411,9 +428,7 @@ var PCs = {
 		}
 
 		el.style.display = ""
-		el.className = PCs_tmp.debug ? (
-			pc >= 33 ? "completedchallengesbtn" : pc > 30 ? "onchallengebtn" : pc % 10 >= 3 ? "challengesbtn" : "lockedchallengesbtn"
-		) : (
+		el.className = (
 			PCs_tmp.pick ? (PCs_tmp.pick == pc ? "onchallengebtn" : "lockedchallengesbtn") :
 			PCs_save.in == pc && !exit ? "onchallengebtn" :
 			PCs_save.challs[pc] && PCs_save.comps.includes(PCs.sort(PCs_save.challs[pc])) ? "completedchallengesbtn" :
@@ -425,7 +440,7 @@ var PCs = {
 	resetButtons(force) {
 		if (!PCs.unl()) return
 		var data = PCs.data
-		for (var y = 1; y <= 4; y++) {
+		for (var y = 1; y <= 8; y++) {
 			for (var x = 1; x <= 4; x++) this.updateButton(y * 10 + x)
 		}
 	},
@@ -433,6 +448,7 @@ var PCs = {
 	updateDisp() {
 		if (!PCs_tmp.unl) return
 		if (!PCs.data.setupHTML) return
+		var data = PCs
 
 		for (var i = 1; i <= 8; i++) {
 			getEl("pc_comp" + i + "_div").style.display = PCs_tmp.comps[i] ? "" : "none"
@@ -441,14 +457,16 @@ var PCs = {
 
 		getEl("pc_lvl").textContent = getFullExpansion(PCs_save.lvl)
 		getEl("pc_comps").textContent = getFullExpansion(PCs_save.comps.length) + " / " + getFullExpansion(Math.min(PCs_save.lvl, 16))
-		for (var i = 1; i <= 4; i++) {
-			getEl("pc_respec" + i).style.display = PCs.posDone(i * 10 + 1) || PCs.posDone(i * 10 + 2) || PCs.posDone(i * 10 + 3) || PCs.posDone(i * 10 + 4) ? "" : "none"
+		for (var i = 1; i <= 8; i++) {
+			getEl("pc_row_" + i).style.display = data.rowUnl(i) ? "" : "none"
+			getEl("pc_respec_" + i).style.display = data.posDone(i * 10 + 1) || data.posDone(i * 10 + 2) || data.posDone(i * 10 + 3) || data.posDone(i * 10 + 4) ? "" : "none"
 		}
 
 		getEl("pc_eff1").textContent = "^" + PCs_tmp.eff1.toFixed(3)
 		getEl("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
 
 		getEl("pc_enter").style.display = PCs_tmp.pick ? "none" : ""
+		getEl("pc_omega").style.display = PCs_tmp.pick >= 50 ? "" : "none"
 		getEl("pc_penalty").style.display = tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp ? "none" : ""
 		getEl("pc_pick").style.display = PCs_tmp.pick ? "" : "none"
 		if (PCs_tmp.pick) {

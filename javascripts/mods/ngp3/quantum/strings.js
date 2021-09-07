@@ -156,7 +156,7 @@ let str = {
 		return str_save.energy - str_save.spent
 	},
 	veCost(x) {
-		return x ? Math.pow(3, x - 1) : 0
+		return x ? Math.pow(2.25, x - 1) : 0
 	},
 
 	//Vibrations
@@ -188,7 +188,7 @@ let str = {
 	onVibrate(x) {
 		for (var p = -2; p <= 2; p++) {
 			var y = p + x
-			str_tmp.alt[y] = (str_tmp.alt[y] || 0) + (1 - 2 * (Math.abs(p) % 2)) / Math.pow(2, Math.abs(p) + 1)
+			str_tmp.alt[y] = (str_tmp.alt[y] || 0) + (1 - 2 * (Math.abs(p) % 2)) / Math.pow(2, Math.max(Math.abs(p), 1))
 		}
 
 		str_tmp.disable[x - 1] = x
@@ -204,17 +204,17 @@ let str = {
 		return !str.unl() ? x : rev ? str_tmp.rev_order[x] : str_tmp.order[x]
 	},
 	eff(x) {
-		let r = this.altitude(x) / 2
+		let r = this.altitude(x)
 		r *= str_tmp.str
 		return r
 	},
 	eff_eb(x) {
 		let exp = 1
 		if (x == 1) exp = 1/3
-		return Math.pow(1 + Math.abs(this.eff(this.data.pos["eb" + x])), exp)
+		return Math.pow(1 + Math.abs(this.eff(this.data.pos["eb" + x])) / 2, exp)
 	},
 	eff_pb(x) {
-		return Math.abs(this.eff(this.data.pos["pb" + x])) * 4
+		return Math.abs(this.eff(this.data.pos["pb" + x])) * 8
 	},
 	nerf_eb(x) {
 		var alt = this.eff(this.data.pos["eb" + x])
@@ -222,7 +222,7 @@ let str = {
 	},
 	nerf_pb(x) {
 		var alt = this.eff(this.data.pos["pb" + x])
-		return alt < 0 ? 1 - alt : 1 / (1 + alt)
+		return alt < 0 ? Math.pow(1 - alt, 4) : Math.pow(2, -alt)
 	},
 
 	//Others

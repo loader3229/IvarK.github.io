@@ -253,7 +253,7 @@ let qMs = {
 	21: {
 		req: 25,
 		forceDisable: () => !PCs.milestoneDone(32) && QCs.in(3),
-		eff: () => "Every second, you gain Tachyon Particles, if you dilate.",
+		eff: () => "Every second, you gain Tachyon Particles, if you dilate",
 		effGot: () => "Every second, you now gain Tachyon Particles, if you dilate."
 	},
 	22: {
@@ -278,12 +278,12 @@ let qMs = {
 	},
 	26: {
 		req: 160,
-		eff: () => "You can disable swaps in any Quantum Challenge.",
+		eff: () => "You can disable swaps in any Quantum Challenge",
 		effGot: () => "You now can disable swaps in any Quantum Challenge."
 	},
 	27: {
 		req: 200,
-		eff: () => "Unlock the autobuyer for Replicated Expanders.",
+		eff: () => "Unlock the autobuyer for Replicated Expanders",
 		effGot: () => "Unlock the autobuyer for Replicated Expanders."
 	},
 }

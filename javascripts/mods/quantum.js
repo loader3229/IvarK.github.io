@@ -322,8 +322,9 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		if (qcDataPrev.length == 2) {
 			var pc = PCs.conv(qcDataPrev)
 			if (!PCs_save.comps.includes(pc)) {
-				if (force) delete PCs_save.challs[pc_pos]
-				else PCs_save.comps.push(pc)
+				if (force) {
+					if (pc_pos != data.pc) delete PCs_save.challs[pc_pos]
+				} else PCs_save.comps.push(pc)
 				PCs.updateButton(pc_pos)
 			}
 		}

@@ -813,7 +813,7 @@ var enB = {
 			type: "b",
 			anti: true,
 			eff(x) {
-				var r = Decimal.div(x, 100).add(1).log(2) + 1
+				var r = Decimal.div(x, 100).add(1).log(3) + 1
 				if (futureBoost("quantum_superbalancing")) r = Math.max(r, Decimal.pow(x, 1 / 6 / dev.quSb.jP).toNumber() / 100)
 				return r
 			},
@@ -933,8 +933,8 @@ var enB = {
 				Math.pow(1.5, Math.max((pos_tmp.cloud && pos_tmp.cloud.total) || 0, 2)) *
 				Math.pow(2, lvl - this[x].tier)
 			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
-			if (hasAch("ng3pr13")) req *= 0.75
-			if (PCs.milestoneDone(42) && lvl == 1) req *= 4
+			if (hasAch("ng3pr13")) req *= 0.9
+			if (PCs.milestoneDone(42) && lvl == 1) req *= 6
 			if (str.unl()) req *= str.nerf_pb(str.conv(x, true))
 			return req
 		},
@@ -942,6 +942,7 @@ var enB = {
 			var lvl = this.lvl(x)
 			var eff = 2 * lvl
 			if (PCs.milestoneDone(42) && lvl == 1) eff = 8
+			if (PCs.milestoneDone(43) && pos.isUndercharged(x)) eff += 2
 			if (str.unl()) eff += str.eff_pb(str.conv(x, true))
 			return eff
 		},
@@ -991,7 +992,7 @@ var enB = {
 			eff(x) {
 				var slowStart = 4
 				if (enB.active("pos", 9)) slowStart += enB_tmp.pos9
-				if (PCs.milestoneDone(33)) slowStart *= Math.pow(1.02, PCs_save.lvl)
+				if (PCs.milestoneDone(33)) slowStart *= Math.pow(1.01, PCs_save.lvl)
 
 				var accSpeed = 1
 				if (enB.active("pos", 9)) {
@@ -1125,9 +1126,8 @@ var enB = {
 			title: "Looped Dimensionality",
 			tier: 3,
 			eff(x) {
-				x = Math.log10(player.dilation.tachyonParticles.max(1).log10() / 100 + 1) * Decimal.div(x, 10).add(1).log10() / 4 + 1
-				x *= x
-				return x
+				x = Math.log10(player.dilation.tachyonParticles.max(1).log10() / 100 + 1) * Decimal.div(x, 10).add(1).log10() / 3 + 1
+				return Math.pow(x, 2.5)
 			},
 			disp(x) {
 				return formatValue(player.options.notation, x, 2, 3) + "x"
@@ -1198,7 +1198,7 @@ var enB = {
 			title: "Eternity Transfinition",
 			tier: 3,
 			eff(x) {
-				return Math.min(5e-8 * Math.log2(x / 500 + 1), 1e-5)
+				return Math.min(5e-8 * Math.sqrt(Math.log2(x / 300 + 1)), 1e-5)
 			},
 			disp(x) {
 				return shorten(player.eternityPoints.max(1).pow(x * getAQGainExp())) + "x"
