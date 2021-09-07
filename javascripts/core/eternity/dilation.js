@@ -87,8 +87,9 @@ function hasDilationUpg(x) {
 	return tmp.eterUnl && player.dilation.upgrades.includes(x)
 }
 
-function getDilUpgPower(x) {
+function getDilUpgPower(x, next) {
 	let r = player.dilation.rebuyables[x] || 0
+	if (next) r++
 
 	if (aarMod.nguspV) r += exDilationUpgradeStrength(x)
 	else if (player.exdilation != undefined && !aarMod.ngudpV) r *= exDilationUpgradeStrength(x)
@@ -134,14 +135,7 @@ function getTPExp(disable) {
 	else if (aarMod.newGameExpVersion) x += .001 //NG^
 
 	//NG++
-	if (disable == "dil4") return x
-	if (player.meta !== undefined && !aarMod.nguspV) x += getDilUpgPower(4) / 4
-	if (disable == "post-dil4") return x
-
-	//NG+3
-	if (tmp.ngp3) {
-		if ((!qu_save.bigRip.active || qu_save.bigRip.upgrades.includes(11)) && isTreeUpgActive(2) && disable != "TU3") x += getTreeUpgradeEffect(2)
-	}
+	if (player.meta !== undefined && !aarMod.nguspV) x += getDilUpgPower(4, disable == "post-dil4") / 4
 	return x
 }
 
@@ -550,7 +544,7 @@ function updateDilationUpgradeButtons() {
 	var power = getDil3Power()
 	getEl("dil13desc").innerHTML = "You gain " + shorten(power) + "x more Tachyon Particles."
 	getEl("dil13eff").innerHTML = "Currently: " + shorten(Decimal.pow(power, getDilUpgPower(3))) + "x"
-	getEl("dil14eff").innerHTML = aarMod.nguspV ? "Currently: 3x -> " + (getDilUpgPower(4) / 2 + 3).toFixed(2) + "x" : "Currently: ^" + shorten(getTPExp("dil4")) + " -> ^" + shorten(getTPExp("post-dil4"))
+	getEl("dil14eff").innerHTML = aarMod.nguspV ? "Currently: 3x -> " + (getDilUpgPower(4) / 2 + 3).toFixed(2) + "x" : "Currently: ^" + shorten(getTPExp()) + " -> ^" + shorten(getTPExp("post-dil4"))
 
 	getEl("dil22desc").innerHTML = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Replicanti multiplier speeds up Time Dimensions.<br>Currently: " + shorten(tmp.rm.pow(getRepToTDExp())) + "x"
 	getEl("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
