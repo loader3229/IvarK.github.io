@@ -360,7 +360,7 @@ function setR16Tooltip() {
 	//ACHIEVEMENT ROW 16
 	memories.setAttribute('ach-tooltip', "Reach " + shorten(Decimal.pow(Number.MAX_VALUE, 2)) + " meta-antimatter without buying 5th - 8th Meta Dimensions. Reward: Even Meta Dimensions boost odd Meta Dimensions.")
 	morals.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e85) + " TT in any Quantum Challenge. Reward: Start with first 10 Mastery Studies in completed QCs.")
-	intergal.setAttribute('ach-tooltip', "Get " + getFullExpansion(3e7) + " Eighth Dimensions without " + (tmp.dtMode ? "" : "max ") + "Replicated Galaxies. Reward: Meta Accelerator boosts the MA effect.")
+	intergal.setAttribute('ach-tooltip', "Get " + getFullExpansion(3e7) + " Eighth Dimensions without " + (tmp.dtMode ? "" : "max ") + "Replicated Galaxies. Reward: Starting at " + shortenCosts(Decimal.pow(10, 1750)) + " MA, meta-antimatter greatly boosts itself.")
 	seriously.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 2e7)) + " Eternity Points with at least 5 excluded Positronic Boosts. Reward: Charging Positronic Boosts requires less.")
 }
 

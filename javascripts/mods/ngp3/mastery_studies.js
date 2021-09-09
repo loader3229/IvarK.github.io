@@ -230,7 +230,7 @@ var mTs = {
 		},
 
 		311() {
-			var exp = Math.min(Math.log10(Math.log10(qu_save.colorPowers.r / 10 + 1) + 1), 1)
+			var exp = Math.min(Math.log10(Math.log10(qu_save.colorPowers.r / 100 + 1) + 1), 1)
 			var eff = hasTS(232) ? Math.pow(tsMults[232](), exp) : 1
 			return {
 				exp: exp,
@@ -238,7 +238,7 @@ var mTs = {
 			}
 		},
 		312() {
-			var mul = Math.min(Math.log10(qu_save.colorPowers.g / 10 + 1) / 40, 1)
+			var mul = Math.min(Math.log10(qu_save.colorPowers.g / 100 + 1) / 30, 1)
 			var eff = getReplGalaxyEff()
 			eff = (eff - 1) * mul + 1
 			return {

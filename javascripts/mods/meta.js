@@ -286,16 +286,16 @@ function getMDProduction(tier) {
 
 function getExtraDimensionBoostPower(ma) {
 	if (!ma) ma = getExtraDimensionBoostPowerUse()
-	if (tmp.ngp3) ma = softcap(ma, "ma")
 
-	ma = Decimal.pow(ma, getMADimBoostPowerExp(ma)).max(1)
+	let maFinal = tmp.ngp3 ? softcap(ma, "ma") : ma
+	maFinal = Decimal.pow(maFinal, getMADimBoostPowerExp(ma)).max(1)
 
-	let l2 = ma.log(2)
+	let l2 = maFinal.log(2)
 	if (l2 > 1024) {
 		if (aarMod.nguspV) l2 = Math.pow(l2 * 32, 2/3)
-		ma = Decimal.pow(2, l2)
+		maFinal = Decimal.pow(2, l2)
 	}
-	return ma
+	return maFinal
 }
 
 function getExtraDimensionBoostPowerUse() {
@@ -309,11 +309,14 @@ function getExtraDimensionBoostPowerExponent(ma = player.meta.antimatter){
 }
 
 function getMADimBoostPowerExp(ma) {
+	ma = new Decimal(ma)
+
 	let power = 8
 	if (hasDilationUpg("ngpp5")) power++
 	if (hasMTS(262)) power += doubleMSMult(0.5)
-	if (enB.active("pos", 2) && enB_tmp.pos2.igal) power *= enB_tmp.pos2.igal
-	if (isNanoEffectUsed("ma_effect_exp")) power += tmp.nf.effects.ma_effect_exp
+	if (hasAch("ng3p27")) {
+		power *= Math.sqrt(Math.max(ma.max(1).log10() / 1e3 - 0.75, 1))
+	}
 	return power
 }
 
@@ -392,8 +395,6 @@ function updateMetaDimensions () {
 
 	getEl("metaAccelerator").innerHTML = enB.active("pos", 2) ?
 		"Meta Accelerator: " + shorten(enB_tmp.pos2.mult) + "x to MA, DT, and replicate interval" +
-		(enB_tmp.pos2.igal ? ", ^" + shorten(enB_tmp.pos2.igal) + " to MA effect" : "") +
-		(enB_tmp.pos2.igal_softcap && shiftDown ? ", ^" + shorten(enB_tmp.pos2.igal_softcap) + " to MA softcap start" : "") +
 		(shiftDown ? "<br>(Base: " + shorten(enB_tmp.pos2.base) + ", raised by ^" + shorten(enB_tmp.pos2.exp) + ", exp speed: +" + enB_tmp.pos2.speed.toFixed(3) + "/MDB" + ", accelerator: +^" + enB_tmp.pos2.acc.toFixed(3) + " speed/MDB" + ", slowdown start: " + shorten(enB_tmp.pos2.slowdown) + " MDBs)" : "")
 	: ""
 }

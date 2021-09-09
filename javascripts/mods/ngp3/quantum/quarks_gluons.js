@@ -1016,17 +1016,13 @@ var enB = {
 				if (mdb < slowStart) speed += mdb * accSpeed
 
 				var mult = Decimal.pow(base, exp)
-				var igal = hasAch("ng3p27") ? getIntergalacticExp(mult.log10()) : undefined
 				return {
 					base: base,
 					exp: exp,
 					slowdown: slowStart,
 					speed: speed / rel_speed,
 					acc: accSpeed / rel_speed,
-					mult: mult,
-
-					igal: hasAch("ng3p27") ? igal : undefined,
-					igal_softcap: hasAch("ng3p27") ? Math.pow(Math.max(igal - 0.5, 1), 2) : undefined
+					mult: mult
 				}
 			},
 			disp(x) {

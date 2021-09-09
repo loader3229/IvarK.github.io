@@ -52,7 +52,6 @@ function updateTmp(init) {
 	tmp.mpte = getMPTExp()
 
 	updateInfiniteTimeTemp()
-	updateIntergalacticTemp() // starts with if (tmp.ngp3)
 	if (hasBosonicUpg(41)) {
 		tmp.blu[41] = bu.effects[41]()
 		tmp.it = tmp.it.times(tmp.blu[41].it)
@@ -185,14 +184,6 @@ function updateFixedLightTemp() {
 		if (!isLEBoostUnlocked(b)) break
 		if (b != 4 && b != 5) tmp.leBonus[b] = leBoosts[b].eff()
 	}
-}
-
-function updateIntergalacticTemp() {
-	if (!tmp.ngp3) return
-
-	tmp.igg = 0
-	tmp.ig = new Decimal(1)
-	tmp.igs = 0
 }
 
 function updateTS431ExtraGalTemp() {

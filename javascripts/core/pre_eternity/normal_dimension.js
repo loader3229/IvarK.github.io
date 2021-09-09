@@ -207,9 +207,7 @@ function getDimensionFinalMultiplier(tier) {
 
 	if (player.currentChallenge == "postc4" && player.postC4Tier != tier && player.tickspeedBoosts == undefined) mult = mult.pow(0.25)
 	
-	if (player.currentEternityChall == "eterc10") mult = mult.times(ec10bonus)
-	
-	if (tier == 8 && hasAch("ng3p27")) mult = mult.times(tmp.ig)	
+	if (player.currentEternityChall == "eterc10") mult = mult.times(ec10bonus)	
 
 	if (mult.gt(10)) mult = dilates(mult.max(1), 2)
 	mult = mult.times(getAfterDefaultDilationLayerAchBonus(tier))

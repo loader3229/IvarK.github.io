@@ -1022,10 +1022,6 @@ function getAQGainExp(x) {
 	return Math.min(r, 2e4)
 }
 
-function getIntergalacticExp(log) {
-	return Math.sqrt(log / 100 + 1) * Math.max(Math.log2(log / 5) / 2, 1)
-}
-
 function getReplStealth() {
 	var x = 1
 	if (enB.active("glu", 5)) x *= enB_tmp.glu5.int
