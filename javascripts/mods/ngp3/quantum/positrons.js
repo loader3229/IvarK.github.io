@@ -260,7 +260,7 @@ var pos = {
 		restartQuantum(true)
 	},
 	swapsDisabled() {
-		return QCs_save.disable_swaps && QCs_save.disable_swaps.active
+		return QCs_save && QCs_save.disable_swaps && QCs_save.disable_swaps.active
 	},
 
 	excluded(x) {

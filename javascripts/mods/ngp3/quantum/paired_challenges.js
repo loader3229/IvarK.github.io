@@ -182,6 +182,7 @@ var PCs = {
 		while (PCs_save.lvl < 17 && comps >= PCs_save.lvl) PCs_save.lvl++
 		if (PCs.data.setupHTML && PCs_save.lvl > oldLvl) this.resetButtons()
 		PCs_save.best = Math.max(PCs_save.best, comps)
+		PCs_save.best = Math.max(PCs_save.best, PCs_save.lvl - 1)
 
 		//Boosts
 		var eff = (PCs_save.lvl - 1) / 28
@@ -218,25 +219,30 @@ var PCs = {
 			for (var x = 1; x <= 4; x++) {
 				var c = PCs_save.challs[y * 10 + x]
 				if (c) {
-					this.increaseUsed(Math.floor(c / 10), 1)
-					this.increaseUsed(c % 10, 2)
+					this.increaseUsed(c, 1)
+					this.increaseUsed(c, 2)
 					PCs_tmp.used.d2.push(PCs.sort(c))
 				}
 			}
 		}
 	},
-	increaseUsed(x, dig) {
+	increaseUsed(c, dig) {
+		var y = dig == 1 ? Math.floor(c / 10) : c % 10
 		var used = PCs_tmp.used
+		var dig_other = (dig % 2) + 1
+		var y_other = dig_other == 1 ? Math.floor(c / 10) : c % 10
 
 		var d = used["d1_tmp"]
-		d[x] = (d[x] || 0) + 1
-		if (d[x] == 7) used.d1.push(x)
+		d[y] = (d[y] || 0) + 1
+		if (d[y] == 7) used.d1.push(y)
 
-		if (!used.p_tmp.includes(x)) {
+		if (!used.p_tmp.includes(y)) {
 			var p = used["p" + dig]
-			if (p.includes(x)) p = used["p" + (dig == 2 ? 1 : 2)]
-			p.push(x)
-			used.p_tmp.push(x)
+			var p_other = used["p" + dig]
+			if (p.includes(y) || p_other.includes(y_other)) p = used["p" + dig_other]
+
+			p.push(y)
+			used.p_tmp.push(y)
 		}
 	},
 
@@ -248,7 +254,7 @@ var PCs = {
 		else {
 			picked.push(x)
 			if (picked.length == 2) {
-				if (PCs_tmp.used.p2.includes(picked[0])) picked = [picked[1], picked[0]]
+				if (PCs_tmp.used.p1.includes(picked[1]) || PCs_tmp.used.p2.includes(picked[0])) picked = [picked[1], picked[0]]
 
 				PCs_save.challs[PCs_tmp.pick] = picked[0] * 10 + picked[1]
 				PCs.updateUsed()

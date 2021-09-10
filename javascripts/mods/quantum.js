@@ -258,10 +258,14 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	if (tmp.ngp3) {
 		qMs.update()
 		qu_save.quarkEnergy = new Decimal(0)
+		enB.updateTmp()
 	} else qu_save.gluons = 0;
 
 	// Positrons
-	if (pos.unl()) pos_save.swaps = {...pos_tmp.cloud.next}
+	if (pos.unl()) {
+		pos_save.eng = new Decimal(0)
+		pos_save.swaps = {...pos_tmp.cloud.next}
+	}
 
 	// Quantum Challenges
 	var qcDataPrev = QCs_save.in
@@ -492,7 +496,7 @@ function handleDispOutOfQuantum(bigRip) {
 	let keepQCs = keepQuantum && QCs.unl()
 	let keepPCs = keepQuantum && PCs.unl()
 	let keepBE = false
-	let keepRC = keepQuantum && QCs_save.qc1.last.length >= 1
+	let keepRC = keepQuantum && QCs_tmp.qc1 && QCs_save.qc1.last.length >= 1
 
 	if (!keepQCs && getEl("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
 	if (!keepPCs && getEl("pairedChalls").style.display == "block") showChallengesTab("normalchallenges")

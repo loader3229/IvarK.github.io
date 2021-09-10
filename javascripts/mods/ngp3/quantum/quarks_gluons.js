@@ -906,14 +906,15 @@ var enB = {
 		},
 
 		activeReq(x) {
+			var lvl = enB.pos.lvl(x)
+			var on = pos.on()
 			var mas = enB.mastered("pos", x)
-
-			return (futureBoost("exclude_any_boost") ? QCs.inAny() : QCs.in(2)) ? (pos.on() && mas && (
-				QCs.modIn(2, "up") ? enB.pos.lvl(x) == QCs_save.qc2 :
-				enB.pos.lvl(x) != QCs_save.qc2
-			)) :
-			!QCs.isntCatched() ? (pos.on() && mas) :
-			(pos.on() || mas)
+			return QCs.isntCatched() ? (on || mas) :
+				(on && mas && (
+					QCs.modIn(2, "up") ? lvl == QCs_save.qc2 :
+					(futureBoost("exclude_any_boost") ? QCs.inAny() : QCs.in(2)) ?  lvl != QCs_save.qc2 :
+					true)
+				)
 		},
 
 		engEff(x) {
@@ -1269,10 +1270,12 @@ var enB = {
 		var data = enB
 		var typeData = data[type]
 		var light = data.mastered(type, e) && e % 2 == 1 ? " light" : ""
-		return type == "pos" && (shiftDown || pos_tmp.cloud.allMastered) ? (!typeData.charged(e) ? "black" : [null, "red", "green", "blue"][typeData.lvl(e)]) :
-			!data.active(type, e) ? "black" :
-			type == "pos" && typeData.charged(e) ? "yellow" + light :
-			data.mastered(type, e) || !typeData[e].type ? "lime" + light :
+		return !data.active(type, e) ? "black" :
+			data.mastered(type, e) || !typeData[e].type ? (
+				type == "glu" ? "lime" + light :
+				(shiftDown || pos_tmp.cloud.allMastered) && typeData.charged(e) ? [null, "red", "green", "blue"][typeData.lvl(e)] :
+				"yellow" + light
+			)				:
 			enB.colorMatch(type, e) ? colors[typeData[e].type] + (data.anti(type, e) ? "_anti" : "") : "grey"
 	},
 	updateUnlock() {
