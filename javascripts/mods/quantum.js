@@ -265,8 +265,9 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		if (qcDataPrev.length == 2) {
 			var pc = PCs.conv(qcDataPrev)
 			if (!PCs_save.comps.includes(pc)) {
-				if (force) delete PCs_save.challs[pc_pos]
-				else PCs_save.comps.push(pc)
+				if (force) {
+					if (data.pc != pc_pos) delete PCs_save.challs[pc_pos]
+				} else PCs_save.comps.push(pc)
 				PCs.updateButton(pc_pos)
 			}
 		}
@@ -327,6 +328,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 	// Positrons
 	if (pos.unl()) {
+		pos_save.eng = 0
 		pos_save.swaps = {...pos_tmp.next_swaps}
 		pos.updateCloud()
 		pos.updateTmp()
@@ -335,6 +337,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	if (tmp.ngp3) {
 		qMs.update()
 		qu_save.quarkEnergy = 0
+		enB.updateTmp()
 	} else qu_save.gluons = 0;
 
 	doQuantumResetStuff(5, false, isQC, QCs_save.in)

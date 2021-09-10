@@ -541,8 +541,8 @@ var QCs = {
 
 		if (!this.unl()) return
 		for (let x = 1; x <= this.data.max; x++) {
+			if (QCs_save.in.includes(x)) data.in.push(x)
 			if (this.data[x].unl()) {
-				if (QCs_save.in.includes(x)) data.in.push(x)
 				data.unl.push(x)
 				if (!this.done(x)) break
 			}
