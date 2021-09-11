@@ -162,16 +162,16 @@ const allAchievements = {
         ng3pr11 : "Mastery Mayhem",
         ng3pr12 : "Completing the Quantum",
         ng3pr13 : "Bursted Em All!",
-        ng3pr14 : "Sciencing Around The Core",
-        ng3pr15 : "ng3pr15", // UNDETERMINED ACHIEVEMENT
+        ng3pr14 : "The Power of Science!",
+        ng3pr15 : "The Challenging Day",
         ng3pr16 : "I can’t get my multipliers higher!", // NO REWARD
-        ng3pr17 : "ng3pr17", // UNDETERMINED ACHIEVEMENT
-        ng3pr18 : "ng3pr18", // UNDETERMINED ACHIEVEMENT
+        ng3pr17 : "Stonking The Pairs", // NO REWARD
+        ng3pr18 : "Get rid of you by yourself...", // NO REWARD
 
         ng3p31 : "ERROR 500: INTERNAL DIMENSION ERROR",
         ng3p32 : "Quantum+ Reached!", // UNNAMED ACHIEVEMENT
         ng3p33 : "Never make paradoxes!",
-        ng3p34 : "The Challenging Day",
+        ng3p34 : "ng3p35", // UNDETERMINED ACHIEVEMENT
         ng3p35 : "ng3p35", // UNDETERMINED ACHIEVEMENT
         ng3p36 : "ng3p36", // UNDETERMINED ACHIEVEMENT
         ng3p37 : "No dilation means no production.",

@@ -2175,7 +2175,7 @@ function setupNGP31Versions() {
 	if (aarMod.ngp3Build < 20210802) PCs.reset()
 	if (aarMod.ngp3Build < 20210802 && Decimal.log10(player.money) >= 2e13) rollback = 1e20
 	if (aarMod.ngp3Build < 20210829) str_save.vibrated = []
-	if (aarMod.ngp3Build < 20210905 && Decimal.log10(player.money) >= 6e13) rollback = 1e190
+	if (aarMod.ngp3Build < 20210910 && Decimal.log10(player.money) >= 6e13) rollback = 1e190
 
 	welcomeUpdates = []
 	if (aarMod.ngp3Build) {
@@ -2187,7 +2187,7 @@ function setupNGP31Versions() {
 	}
 	aarMod.ngp3r = 0.6
 	aarMod.ngp3Alpha = beta
-	aarMod.ngp3Build = 20210905
+	aarMod.ngp3Build = 20210910
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) player.timestudy.auto = {}
 	if (rollback) rollbackQuantum(rollback)

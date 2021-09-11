@@ -550,7 +550,7 @@ var QCs = {
 				return 1
 			},
 
-			nerfDesc: (x) => "???",
+			nerfDesc: (x) => "Positrons are disabled. (i couldn't come up with better idea)",
 			perkDesc: (x) => "For Entangled Boosts that are matched with your entanglement, they get mastered.",
 			perkEff() {
 				return 1

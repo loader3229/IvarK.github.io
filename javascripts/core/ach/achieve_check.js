@@ -264,13 +264,6 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.eightBought >= 3e7 && (tmp.dtMode ? getTotalRG() : player.replicanti.galaxies) == 0) giveAchievement("Intergalactic")
 	if (player.eternityPoints.e >= 2e7 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 
-	if (false) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
-	if (PCs_save.best >= 12) giveAchievement("The Challenging Day")
-	if (player.money.log10() >= 6.2e11 && player.currentEternityChall == "eterc11") giveAchievement("I can’t get my multipliers higher!")
-	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")
-	if (player.meta.antimatter.e >= 1/0 && player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] == 0 && player.dilation.upgrades.length == 0) giveAchievement("Never make paradoxes!")
-	if (player.infinityPoints.gte(Decimal.pow(Number.MAX_VALUE, 1000)) && ableToGetRid5) giveAchievement("I don't want you to live anymore.")
-
 	if (mTs.bought == mTs.timeStudies.length && QCs.in(1) && PCs.in()) giveAchievement("Mastery Mayhem")
 	if (str.unl()) giveAchievement("Completing the Quantum")
 	if (!hasAch("ng3pr13")) {
@@ -280,7 +273,30 @@ function preHiggsNGp3AchieveCheck() {
 		}
 		if (cond) giveAchievement("Bursted Em All!")
 	}
-	if (qu_save.expEnergy >= 1) giveAchievement("Sciencing Around The Core")
+	if (qu_save.expEnergy >= 1) giveAchievement("The Power of Science!")
+	if (!hasAch("ng3pr15")) {
+		var cond = str.unl()
+		for (var i = 1; i <= 8; i++) {
+			if (!QCs.modDone(i, "up")) cond = false
+		}
+		if (cond) giveAchievement("The Challenging Day")
+	}
+	if (player.money.log10() >= 6.2e11 && player.currentEternityChall == "eterc11") giveAchievement("I can’t get my multipliers higher!")
+	for (var y = 4; y <= 8; y++) {
+		if (hasAch("ng3pr17")) break
+
+		var cond = PCs.milestoneDone(83)
+		for (var i = 1; i <= 4; i++) {
+			if (!PCs.posDone(y * 10 + i)) cond = false
+		}
+		if (cond) giveAchievement("Stonking The Pairs")
+	}
+	//ng3pr18 is in quantum.js
+
+	if (false) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
+	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")
+	if (player.meta.antimatter.e >= 1/0 && player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] == 0 && player.dilation.upgrades.length == 0) giveAchievement("Never make paradoxes!")
+	if (player.infinityPoints.gte(Decimal.pow(Number.MAX_VALUE, 1000)) && ableToGetRid5) giveAchievement("I don't want you to live anymore.")
 
 	if (pH.did("quPlus")) giveAchievement("Quantum+ Reached!")
 	if (player.dilation.dilatedTime.log10() >= 411 && qu_save.notrelative) giveAchievement("Time is not relative")
