@@ -536,7 +536,6 @@ function dov7tov10(){
 	getEl(inERS?"r35":"r76").appendChild(getEl("One for each dimension"))
 	getEl(inERS?"r41":"r22").appendChild(getEl("Fake News"))
 	getEl(inERS?"r76":"r41").appendChild(getEl("Spreading Cancer"))
-	getEl("Universal harmony").style["background-image"]="url(images/"+(player.masterystudies==undefined?104:"104-ngp3")+".png)"
 	getEl("Infinite time").style["background-image"]="url(images/"+(inERS?79:69)+".png)"
 
 	if (player.version < 9.5) {
@@ -2336,23 +2335,26 @@ function export_save(id) {
 	if (!id) id=metaSave.current
 	while (metaSave.saveOrder[placement-1]!=id) placement++
 
-	let output = getEl('output')
+	var save
+	if (id == metaSave.current) save = btoa(JSON.stringify(player, function(k, v) { return (v === Infinity) ? "Infinity" : v }))
+	else save = localStorage.getItem(btoa(savePrefix+id))
+	
+	copyToClipboard(save, null, "save #" + placement)
+}
+
+function copyToClipboard(x, el, msg) {
+	let output = getEl(el || "output")
 	let parent = output.parentElement
 
 	parent.style.display = ""
-	if (id == metaSave.current) output.value = btoa(JSON.stringify(player, function(k, v) { return (v === Infinity) ? "Infinity" : v }))
-	else output.value = localStorage.getItem(btoa(savePrefix+id))
-
-	output.onblur = function() {
-		parent.style.display = "none"
-	}
-
+	output.value = x
+	output.onblur = function() { parent.style.display = "none" }
 	output.focus()
 	output.select()
-
+	
 	try {
 		if (document.execCommand('copy')) {
-			$.notify("Exported save #"+placement+" to clipboard", "info")
+			$.notify("Exported" + (msg ? " " + msg : "") + " into clipboard", "info")
 			output.blur()
 			output.onblur()
 		}

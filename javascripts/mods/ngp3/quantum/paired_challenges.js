@@ -28,14 +28,14 @@ var PCs = {
 		73: "Remove the second softcap of TT generation.",
 		83: "Unlock the first Omega Set.",
 
-		14: "+0.025 to the exponent of Color Power effects.",
-		24: "+0.025 to the exponent of Color Power effects.",
-		34: "+0.025 to the exponent of Color Power effects.",
-		44: "+0.025 to the exponent of Color Power effects.",
-		54: "Raise the anti-Quarks by ^1.15.",
-		64: "Raise the anti-Quarks by ^1.15.",
-		74: "Raise the anti-Quarks by ^1.15.",
-		84: "Raise the anti-Quarks by ^1.15.",
+		14: "Raise the Color Power effects by ^1.025.",
+		24: "Raise the Color Power effects by ^1.025.",
+		34: "Raise the Color Power effects by ^1.025.",
+		44: "Raise the Color Power effects by ^1.025.",
+		54: "Raise the anti-Quarks by ^1.03.",
+		64: "Raise the anti-Quarks by ^1.03.",
+		74: "Raise the anti-Quarks by ^1.03.",
+		84: "Raise the anti-Quarks by ^1.03.",
 
 		15: "???",
 		25: "???",
@@ -297,7 +297,7 @@ var PCs = {
 		div -= PCs_tmp.temp
 
 		var r = qc1.pow(qc2.log(base) / div)
-		var pow = Math.pow(1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) / 3)
+		var pow = Math.pow(hasAch("ng3pr18") ? Math.pow(1.4, 0.95) : 1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) / 3)
 		r = r.pow(pow)
 		r = r.div(this.shrunkerEff())
 		return r
@@ -338,7 +338,9 @@ var PCs = {
 		return evalData(PCs.data.milestone_unls[pos])
 	},
 	milestoneDone(pos) {
-		return PCs.milestoneUnl(pos % 10) && PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestone_reqs[pos % 10]
+		if (!PCs.milestoneUnl(pos % 10)) return
+		if (hasAch("ng3pr17") && pos < 20) return true
+		return PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestone_reqs[pos % 10]
 	},
 	lvlReq(pc) {
 		if (pc >= 50) return PCs.rowUnl(Math.floor(pc / 10)) ? 0 : 1/0
@@ -408,6 +410,7 @@ var PCs = {
 		for (var y = 1; y <= 8; y++) {
 			var html = "<td>Set " + this.data.letters[y] +
 			"<br><button class='storebtn' id='pc_respec_" + y + "' style='height: 24px; width: 60px' onclick='PCs.respec(" + y + ")'>Respec</button>" +
+			"<br><button class='storebtn' id='pc_export_" + y + "' style='height: 24px; width: 60px' onclick='PCs.exportRow(" + y + ")'>Export</button>" +
 			"</td>"
 			for (var x = 1; x <= 4; x++) html += this.setupButton(y * 10 + x)
 
@@ -464,8 +467,10 @@ var PCs = {
 		getEl("pc_lvl").textContent = getFullExpansion(PCs_save.lvl)
 		getEl("pc_comps").textContent = getFullExpansion(PCs_save.comps.length) + " / " + getFullExpansion(Math.min(PCs_save.lvl, 16))
 		for (var i = 1; i <= 8; i++) {
+			var respec = PCs_save.challs[i * 10 + 1] || PCs_save.challs[i * 10 + 2] || PCs_save.challs[i * 10 + 3] || PCs_save.challs[i * 10 + 4]
 			getEl("pc_row_" + i).style.display = data.rowUnl(i) ? "" : "none"
-			getEl("pc_respec_" + i).style.display = data.posDone(i * 10 + 1) || data.posDone(i * 10 + 2) || data.posDone(i * 10 + 3) || data.posDone(i * 10 + 4) ? "" : "none"
+			getEl("pc_respec_" + i).style.display = respec ? "" : "none"
+			getEl("pc_export_" + i).style.display = respec ? "" : "none"
 		}
 
 		getEl("pc_eff1").textContent = "^" + PCs_tmp.eff1.toFixed(3)
@@ -486,8 +491,8 @@ var PCs = {
 
 		getEl("pc_comps2").textContent = getFullExpansion(PCs_save.comps.length)
 		getEl("pc_temp").innerHTML = formatPercentage(Math.abs(PCs_tmp.temp)) + "<sup>o</sup> " + (PCs_tmp.temp > 0 ? "hotter" : "cooler")
-		getEl("pc_temp_color").style.display = PCs_tmp.temp != 0 ? "" : "none"
-		getEl("pc_temp_color").className = PCs_tmp.temp > 0 ? "hot" : "cool"
+		getEl("pc_temp_color").style.display = PCs_save.lvl >= 2 ? "" : "none"
+		getEl("pc_temp_color").className = PCs_tmp.temp > 0 ? "hot" : PCs_tmp.temp < 0 ? "cool" : ""
 
 		getEl("pc_shrunker_div").style.display = hasAch("ng3pr12") ? "" : "none"
 		getEl("pc_shrunker").textContent = getFullExpansion(PCs_save.shrunkers)
@@ -552,18 +557,105 @@ var PCs = {
 		if (!confirm("Are you sure do you want to respec this set?")) return
 
 		var exclude = []
-		var array = []
 		for (var i = 1; i <= 4; i++) {
 			var c = PCs_save.challs[x * 10 + i]
-			if (c) exclude.push(PCs.sort(c))
+			if (c) exclude.push(x * 10 + i)
 		}
-		for (var i = 0; i < PCs_save.comps.length; i++) if (!exclude.includes(PCs_save.comps[i])) array.push(PCs_save.comps[i])
-		for (var i = 1; i <= 4; i++) delete PCs_save.challs[x * 10 + i]
-		PCs_save.comps = array
-		PCs.updateUsed()
+		this.respecSet(exclude)
+	},
+	respecSet(exclude, quick) {
+		var toRespec = []
+		for (var i = 0; i < exclude.length; i++) {
+			toRespec.push(PCs.sort(PCs_save.challs[exclude[i]]))
+			delete PCs_save.challs[exclude[i]]
+		}
 
-		quantum(false, true)
-		PCs.resetButtons()
+		var array = []
+		for (var i = 0; i < PCs_save.comps.length; i++) {
+			var item = PCs_save.comps[i]
+			if (!toRespec.includes(item)) array.push(item)
+		}
+		PCs_save.comps = array
+
+		if (!quick) {
+			PCs.updateUsed()
+			quantum(false, true)
+			PCs.resetButtons()
+		}
+	},
+	exportPreset(y) {
+		let str = []
+		let letters = [null, "a", "b", "c", "d", "e", "f", "g", "h"]
+		for (var y = 1; y <= 8; y++) {
+			for (var x = 1; x <= 4; x++) {
+				var c = PCs_save.challs[y * 10 + x]
+				if (c) str.push(letters[y] + x + c)
+			}
+		}
+		str = str.join(",")
+
+		copyToClipboard(str)
+	},
+	exportRow(y) {
+		let str = []
+		let letters = [null, "a", "b", "c", "d", "e", "f", "g", "h"]
+		for (var x = 1; x <= 4; x++) {
+			var c = PCs_save.challs[y * 10 + x]
+			if (c) str.push(letters[y] + x + c)
+		}
+		str = str.join(",")
+
+		copyToClipboard(str)
+	},
+	getPreset(x) {
+		x = x.split(",")
+
+		let rev_letters = {
+			a: 1,
+			b: 2,
+			c: 3,
+			d: 4,
+			e: 5,
+			f: 6,
+			g: 7,
+			h: 8
+		}
+		let set = []
+
+		for (var i = 0; i < x.length; i++) {
+			var item = x[i]
+			set.push([rev_letters[item[0]] + item[1], parseInt(item[2] + item[3])])
+		}
+		return set
+	},
+	importPreset() {
+		var str = prompt("WARNING! Importing a preset will respec some combinations! Be careful! CAUTION: This is currently buggy! Have some bugs you experienced on this feature? Report it into #bugs_and_glitches!")
+		str = PCs.getPreset(str)
+
+		var rows = []
+		var toRespec = []
+		for (var i = 0; i < str.length; i++) {
+			var item = str[i]
+			var y = Math.floor(item[0] / 10)
+			if (PCs_save.challs[item[0]] && PCs_save.challs[item[0]] != item[1] && !rows.includes(y)) {
+				for (var i = 1; i <= 4; i++) {
+					var c = PCs_save.challs[x * 10 + i]
+					if (c) toRespec.push(x * 10 + i)
+				}
+				rows.push(y)
+			}
+		}
+		if (toRespec.length >= 1) this.respecSet(toRespec, true)
+
+		for (var i = 0; i < str.length; i++) {
+			var item = str[i]
+			if (PCs.rowUnl(Math.floor(item[0] / 10))) PCs_save.challs[item[0]] = item[1]
+		}
+		if (str.length >= 1) {
+			PCs.updateUsed()
+			quantum(false, true)
+			PCs.resetButtons()
+		}
 	},
 
 	resetShrunkers() {

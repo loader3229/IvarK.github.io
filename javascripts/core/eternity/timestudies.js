@@ -545,25 +545,8 @@ function getStudyTreeStr() {
 }
 
 function exportStudyTree() {
-	let output = getEl('output');
-	let parent = output.parentElement;
-
-	parent.style.display = "";
-	output.value = getStudyTreeStr()
-	output.onblur = function() { parent.style.display = "none";}
-	output.focus();
-	output.select();
-	
-	try {
-		if (document.execCommand('copy')) {
-			$.notify("exported to clipboard", "info");
-			output.blur();
-			output.onblur();
-		}
-	} catch(ex) {
-		// well, we tried.
-	}
-};
+	copyToClipboard(getStudyTreeStr())
+}
 
 function importStudyTree(input) {
 	onImport = true

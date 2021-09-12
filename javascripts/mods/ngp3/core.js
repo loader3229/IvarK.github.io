@@ -1016,7 +1016,7 @@ function getAQGainExp(x) {
 	if (hasAch("ng3pr12")) {
 		let c = 0
 		for (var i = 1; i <= 4; i++) if (PCs.milestoneDone(i * 10 + 4)) c++
-		r *= Math.pow(1.15, c)
+		r *= Math.pow(1.03, c)
 	}
 	if (futureBoost("quark_gluon_plasma")) r = Math.pow(x.log10() * r / 100 + 1, 1/3)
 	return Math.min(r, 2e4)

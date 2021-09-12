@@ -91,9 +91,13 @@ function quarkGain(base) {
 	log = Math.pow(log + 1, logExp) - 1
 
 	if (enB.active("pos", 11)) log += player.eternityPoints.max(1).log10() * enB_tmp.pos11
-	if (!base) log *= getAQGainExp(Decimal.pow(10, log))
-
-	return Decimal.pow(10, log)
+	
+	let r = Decimal.pow(10, log)
+	if (!base) {
+		r = r.pow(getAQGainExp(r))
+		if (hasAch("ng3pr16")) r = r.times(3)
+	}
+	return r
 }
 
 function quarkGainNextAt(qk) {
@@ -523,7 +527,6 @@ function handleQuantumDisplays(prestige) {
 	updateGluonsTabOnUpdate()
 
 	QCs.updateDisp()
-	QCs.updateBest()
 
 	updateTODStuff()
 	updateBreakEternity()

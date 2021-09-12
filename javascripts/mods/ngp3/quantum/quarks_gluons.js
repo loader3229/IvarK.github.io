@@ -295,7 +295,7 @@ function updateColorPowers() {
 	if (hasAch("ng3pr12")) {
 		let c = 0
 		for (var i = 1; i <= 4; i++) if (PCs.milestoneDone(i * 10 + 4)) c++
-		e *= 1 + c * 0.025
+		e = Math.pow(1.025, c)
 	}
 
 	//Red
@@ -1327,7 +1327,10 @@ function gainQKOnQuantum(qkGain, quick) {
 	var g = qu_save.gluons
 	var p = ["rg", "gb", "br"]
 	var d = []
-	for (var c = 0; c < 3; c++) d[c] = u[p[c][0]].min(u[p[c][1]])
+	for (var c = 0; c < 3; c++) {
+		d[c] = u[p[c][0]].min(u[p[c][1]])
+		if (qu_save.keep_50) d[c] = d[c].div(2).round()
+	}
 	for (var c = 0; c < 3; c++) {
 		g[p[c]] = g[p[c]].add(d[c]).round()
 		u[p[c][0]] = u[p[c][0]].sub(d[c]).round()
@@ -1347,6 +1350,11 @@ function gainQKOnQuantum(qkGain, quick) {
 		updateQEGainTmp()
 		gainQuantumEnergy()
 	}
+}
+
+function toggle50Quarks() {
+	qu_save.keep_50 = !qu_save.keep_50
+	updateQuarksTabOnUpdate()
 }
 
 //Display
@@ -1437,8 +1445,13 @@ function updateQuarksTabOnUpdate(mode) {
 	for (var p = 0; p < 3; p++) {
 		var pair = (["rg", "gb", "br"])[p]
 		var diff = uq[pair[0]].min(uq[pair[1]])
+		if (qu_save.keep_50) diff = diff.div(2).round()
 		getEl(pair + "_info").textContent = shortenDimensions(uq[pair[0]].sub(diff).round()) + " (+" + shortenDimensions(diff) + " gluons)"
 	}
+
+	//Others
+	getEl('keep_50_quarks').style.display = hasAch("ng3pr16") ? "" : "none"
+	getEl("keep_50_quarks").textContent = "50% gluon gain: " + (qu_save.keep_50 ? "ON" : "OFF")
 }
 
 function updateQuarkAssort() {

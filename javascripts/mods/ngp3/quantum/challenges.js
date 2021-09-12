@@ -5,7 +5,8 @@ var QCs = {
 			comps: 0,
 			mod_comps: [],
 			best: {},
-			cloud_disable: 1
+			cloud_disable: 1,
+			auto: false
 		}
 		this.reset()
 		qu_save.qc = QCs_save
@@ -720,7 +721,15 @@ var QCs = {
 		if (this.perkUnl(x)) return
 		return pos_tmp.cloud.total >= data.overlapReqs[0] && pos_tmp.cloud.exclude >= data.overlapReqs[1]
 	},
+	viewPerks() {
+		QCs_tmp.show_perks = !QCs_tmp.show_perks
+		QCs.updateDisp()
+	},
 
+	toggle_auto() {
+		QCs_save.auto = !QCs_save.auto
+		getEl("auto_qc").textContent = "Auto-completions: " + (QCs_save.auto ? "ON" : "OFF")
+	},
 	disable_swaps() {
 		QCs_save.disable_swaps.on = !QCs_save.disable_swaps.on
 		getEl("swaps_toggle").textContent = (QCs_save.disable_swaps.on ? "Enable" : "Disable") + " swaps in challenge"
@@ -743,12 +752,10 @@ var QCs = {
 		'<span id="qc_' + x + '_reward"></span>' +
 		'</div></div></td>',
 	divInserted: false,
-
 	updateDisp() {
 		let unl = this.divInserted && this.unl() && pH.shown("quantum")
 
 		//In Quantum Challenges
-		getEl("qc_restart").style.display = QCs.in(3) ? "" : "none"
 		this.data[1].updateDisp()
 		this.data[2].updateCloudDisp()
 		this.data[4].updateDisp()
@@ -777,6 +784,9 @@ var QCs = {
 				getEl("qc_" + qc + "_btn").className = this.started(qc) ? "onchallengebtn" : this.done(qc) ? "completedchallengesbtn" : "challengesbtn"
 			}
 		}
+		getEl("restart_qc").style.display = QCs.inAny() ? "" : "none"
+		getEl("auto_qc").style.display = hasAch("ng3p25") ? "" : "none"
+		getEl("auto_qc").textContent = "Auto-completions: " + (QCs_save.auto ? "ON" : "OFF")
 
 		getEl("qc_perks").style.display = hasAch("ng3pr12") ? "inline" : "none"
 		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Nerfed modifier'
@@ -794,13 +804,6 @@ var QCs = {
 				"Reward: " + evalData(this.data[qc].rewardDesc, [QCs_tmp.rewards[qc]])
 			}
 		}
-	},
-	updateBest() {
-		//Rework coming soon
-	},
-	viewPerks() {
-		QCs_tmp.show_perks = !QCs_tmp.show_perks
-		QCs.updateDisp()
 	}
 }
 var QCs_save = undefined
