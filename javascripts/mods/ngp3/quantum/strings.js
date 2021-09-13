@@ -161,6 +161,7 @@ let str = {
 
 	//Vibrations
 	canVibrate(x) {
+		if (str_tmp.disable[x] !== undefined) return
 		if (str_save.energy < str.veCost(str_tmp.vibrated + 1)) return
 		return true
 	},
@@ -225,7 +226,53 @@ let str = {
 		return alt < 0 ? Math.pow(1 - alt, 4) : Math.pow(2, -alt)
 	},
 
+	//Presets
+	exportPreset() {
+		let str = []
+		let letters = " abcdefghijklmnopqrstuvwxyz"
+		for (var i = 0; i < str_save.vibrated.length; i++) {
+			var letter = letters[str_save.vibrated[i]]
+			if (i % 2 == 1) letter = letter.toUpperCase()
+			str += letter
+		}
+
+		copyToClipboard(str)
+	},
+	getPreset(x) {
+		let letters = " abcdefghijklmnopqrstuvwxyz"
+		let rev_letters = {}
+		for (var i = 1; i <= 26; i++) rev_letters[letters[i]] = i
+
+		let set = []
+		for (var i = 0; i < x.length; i++) set.push(rev_letters[x[i].toLowerCase()])
+		return set
+	},
+	importPreset() {
+		var x = prompt("WARNING! Importing a preset will restart your Quantum run!")
+		x = str.getPreset(x)
+
+		str_save.vibrated = []
+		str_save.spent = 0
+		var ve = str_save.energy
+		for (var i = 0; i < x.length; i++) {
+			var k = x[i]
+			if (str.canVibrate(k)) {
+				str_save.vibrated.push(k)
+				str_save.spent = str.veCost(str_save.vibrated.length)
+			}
+		}
+
+		restartQuantum()
+	},
+
 	//Others
+	clear() {
+		if (!confirm("Are you sure?")) return
+
+		str_save.vibrated = []
+		str_save.spent = 0
+		restartQuantum()
+	},
 	disabled() {
 		return !str.unl() || this.veUnspent() < 0
 	}

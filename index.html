@@ -1531,7 +1531,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.6: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(9/11/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(9/12/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -4894,14 +4894,21 @@
 				<span style="font-size: 15px">You have made <span id="str_ve" style="font-size: 30px">0.00</span> Vibration Energy.</span>
 				<p style="font-size: 8px">(based on Quantum Energy, Replicanti Energy, and PC level)</p>
 				<br>
+				<button class="storebtn" onclick="str.clear()" style="width: 120px; height: 48px">Clear</button>
+				<button class="storebtn" onclick="str.exportPreset()" style="width: 120px; height: 48px">Export String</button>
+				<button class="storebtn" onclick="str.importPreset()" style="width: 120px; height: 48px">Import String</button>
+				<br><br>
 				<b class="warning" id="str_warn" style="font-size: 15px"></b>
 				<br>
 				<span id="str_cost"></span>
 				<br><br>
-				<div class="str_boosts" id="str_boosts_ent"></div><br>
-				<div class="str_boosts" id="str_boosts_pos"></div><br>
 				<span id="str_strength" style="font-size: 15px"></span>
 				<p style="font-size: 8px">(based on total Vibration Energy)</p>
+				<div class="str_boosts" id="str_boosts_ent"></div><br>
+				<div class="str_boosts" id="str_boosts_pos"></div><br>
+				<!--
+				COMING IN THE NEXT LAYER
+
 				<br><br>
 				<button class="gluonupgrade storebtn">
 					<b>String Shrunker</b> (0 / 6)
@@ -4910,6 +4917,7 @@
 					<br>
 					(Coming soon...)
 				</button>
+				-->
 			</div>
 		</div>
 		<div class='quantumtab' id='nanofield'>

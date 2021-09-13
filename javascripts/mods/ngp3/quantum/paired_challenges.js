@@ -585,7 +585,7 @@ var PCs = {
 	},
 	exportPreset(y) {
 		let str = []
-		let letters = [null, "a", "b", "c", "d", "e", "f", "g", "h"]
+		let letters = " abcdefgh"
 		for (var y = 1; y <= 8; y++) {
 			for (var x = 1; x <= 4; x++) {
 				var c = PCs_save.challs[y * 10 + x]
@@ -598,7 +598,7 @@ var PCs = {
 	},
 	exportRow(y) {
 		let str = []
-		let letters = [null, "a", "b", "c", "d", "e", "f", "g", "h"]
+		let letters = " abcdefgh"
 		for (var x = 1; x <= 4; x++) {
 			var c = PCs_save.challs[y * 10 + x]
 			if (c) str.push(letters[y] + x + c)
