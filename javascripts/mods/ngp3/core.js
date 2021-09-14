@@ -999,6 +999,26 @@ function updateQuantumTemp(update) {
 	}
 }
 
+function updateAutoApplyDisp(toggle) {
+	if (toggle) {
+		if (!aarMod.autoApply) {
+			if (!confirm("This will reset upcoming changes. Are you sure do you want to turn this on?")) return
+			if (pos_tmp.cloud && pos_tmp.cloud.sum >= 4) {
+				pos_tmp.cloud.next = {... pos_save.swaps}
+				pos.updateCloud()
+			}
+		}
+		aarMod.autoApply = !aarMod.autoApply
+	}
+
+	var on = aarMod.autoApply
+	getEl("autoApply").style.display = pos_tmp.cloud && pos_tmp.cloud.sum >= 4 ? "" : "none"
+	getEl("autoApply").textContent = "Auto-apply changes: " + (on ? "ON" : "OFF")
+
+	getEl("pos_apply_div").style.display = on ? "none" : ""
+	getEl("str_apply_div").style.display = true ? "none" : ""
+}
+
 //Recent boosts
 function getReplDilBonus() {
 	let log = getReplEff().max(1).log10()

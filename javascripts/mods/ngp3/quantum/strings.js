@@ -198,31 +198,31 @@ let str = {
 	},
 
 	//Altitudes
-	altitude(x) {
-		return !this.disabled() ? Math.max(Math.min(str_tmp.alt[x] || 0, 1), -1) : 0
+	altitude(x, next) {
+		return !this.disabled() ? Math.max(Math.min((next ? str_tmp.next : str_tmp).alt[x] || 0, 1), -1) : 0
 	},
 	conv(x, rev) {
 		return !str.unl() ? x : rev ? str_tmp.rev_order[x] : str_tmp.order[x]
 	},
-	eff(x) {
+	eff(x, next) {
 		let r = this.altitude(x)
 		r *= str_tmp.str
 		return r
 	},
-	eff_eb(x) {
+	eff_eb(x, next) {
 		let exp = 1
 		if (x == 1) exp = 1/3
-		return Math.pow(1 + Math.abs(this.eff(this.data.pos["eb" + x])) / 2, exp)
+		return Math.pow(1 + Math.abs(this.eff(this.data.pos["eb" + x], next)) / 2, exp)
 	},
-	eff_pb(x) {
-		return Math.abs(this.eff(this.data.pos["pb" + x])) * 8
+	eff_pb(x, next) {
+		return Math.abs(this.eff(this.data.pos["pb" + x], next)) * 8
 	},
-	nerf_eb(x) {
-		var alt = this.eff(this.data.pos["eb" + x])
+	nerf_eb(x, next) {
+		var alt = this.eff(this.data.pos["eb" + x], next)
 		return alt < 0 ? -alt * 6e3 : 0
 	},
-	nerf_pb(x) {
-		var alt = this.eff(this.data.pos["pb" + x])
+	nerf_pb(x, next) {
+		var alt = this.eff(this.data.pos["pb" + x], next)
 		return alt < 0 ? Math.pow(1 - alt, 4) : Math.pow(2, -alt)
 	},
 

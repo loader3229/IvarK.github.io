@@ -909,7 +909,8 @@ var enB = {
 			var lvl = enB.pos.lvl(x)
 			var on = pos.on()
 			var mas = enB.mastered("pos", x)
-			return QCs.isntCatched() ? (on || mas) :
+			return QCs.modIn(8, "up") ? false :
+				QCs.isntCatched() ? (on || mas) :
 				(on && mas && (
 					QCs.modIn(2, "up") ? lvl == QCs_save.qc2 :
 					(futureBoost("exclude_any_boost") ? QCs.inAny() : QCs.in(2)) ?  lvl != QCs_save.qc2 :

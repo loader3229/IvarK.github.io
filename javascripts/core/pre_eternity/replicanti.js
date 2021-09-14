@@ -246,6 +246,7 @@ function updateExtraReplBase() {
 	extraReplBase = 0
 	if (hasTS(225)) extraReplBase += tsMults[225]()
 	if (hasTS(226)) extraReplBase += tsMults[226]()
+	if (QCs.perkActive(7)) extraReplBase += QCs_save.qc7
 }
 
 var extraReplMulti = 1

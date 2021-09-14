@@ -76,7 +76,7 @@ var QCs = {
 		if (!QCs_save.qc2) QCs_save.qc2 = 1
 		QCs_save.qc5 = new Decimal(0)
 		QCs_save.qc6 = 0
-		QCs_save.qc7 = 0
+		QCs_save.qc7 = QCs.perkActive(7) ? Math.sqrt(player.replicanti.galaxies) : 0 //QC7 perk
 	},
 	data: {
 		max: 8,
@@ -531,7 +531,7 @@ var QCs = {
 			},
 
 			nerfDesc: (x) => "You can’t fill the branches in Mastery Studies except singles. (not implemented)",
-			perkDesc: (x) => "You can bank 10% of RGs that last one quantum. (not implemented)",
+			perkDesc: (x) => "Temporaily convert base RGs into extra base RGs.",
 			perkEff() {
 				return 1
 			},
@@ -551,7 +551,7 @@ var QCs = {
 				return 1
 			},
 
-			nerfDesc: (x) => "Positrons are disabled. (i couldn't come up with better idea)",
+			nerfDesc: (x) => "Positrons and Positronic Boosts are disabled.",
 			perkDesc: (x) => "For Entangled Boosts that are matched with your entanglement, they get mastered.",
 			perkEff() {
 				return 1
@@ -657,7 +657,7 @@ var QCs = {
 		if (x) {
 			r = this.data[x].goalMA
 			if (mod) r = r.pow(QCs.modData[mod].maExp)
-			if (mod && x >= 7) return new Decimal(1/0)
+			if (mod && x == 7) return new Decimal(1/0)
 		} else r = PCs.in() ? PCs.goal() : QCs_save.mod ? this.data[QCs_tmp.in[0]].goalMA.pow(QCs.modData[QCs_save.mod].maExp) : this.data[QCs_tmp.in[0]].goalMA
 		return r
 	},
@@ -679,6 +679,7 @@ var QCs = {
 	},
 
 	modData: {
+		list: ["up", "ol", "us", "tl"],
 		up: {
 			name: 'Nerfed',
 			maExp: 1.35,

@@ -281,7 +281,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 			if (QCs_save.mod) {
 				var qc = QCs_save.mod + qcDataPrev[0]
 				if (!QCs_save.mod_comps.includes(qc)) {
-					PCs_save.shrunkers.unspent += QCs.modData[QCs_save.mod].shrunker
+					PCs_save.shrunkers += QCs.modData[QCs_save.mod].shrunker
 					QCs_save.mod_comps.push(qc)
 				}
 				if (QCs_save.mod == "up" && PCs_save.comps.length == 0) giveAchievement("Get rid of you by yourself...")
@@ -516,6 +516,7 @@ function handleDispOutOfQuantum(bigRip) {
 
 function handleQuantumDisplays(prestige) {
 	qMs.updateDisplay()
+	updateAutoApplyDisp()
 	if (!tmp.ngp3) return
 
 	updateLastTenQuantums()

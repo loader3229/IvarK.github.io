@@ -89,6 +89,7 @@ var pos = {
 	},
 	unl: (force) => force ? tmp.ngp3 && player.masterystudies.includes("d7") : pos_tmp.unl,
 	on() {
+		if (QCs.modIn(8, "up")) return false
 		return this.unl() && pos_save && pos_save.on
 	},
 	toggle() {
@@ -219,54 +220,39 @@ var pos = {
 		getEl("pos_tab").textContent = shown ? "Show boosts" : "Show cloud"
 	},
 
-	canSwap(x) {
-		var old = enB.pos.lvl(x, true)
-		var nw = enB.pos.lvl(pos_tmp.chosen, true)
-		return !pos_tmp.cloud.next[x] && (PCs.milestoneDone(22) ? old != nw : Math.abs(old - nw) == 1)
+	//Charging
+	updateCharge(i) {
+		var lvl = enB.pos.lvl(i)
+		var match = enB.pos.lvl(i, true) == lvl
+		var charged = match && enB.pos.charged(i)
+		var undercharged = match && this.isUndercharged(i)
+		getEl("pos_boost" + i + "_charge").textContent = undercharged && PCs.milestoneDone(43) ? shortenDimensions(enB.pos.chargeEff(i)) + "x Undercharged!" :
+		getEl("pos_boost" + i + "_charge").textContent = undercharged ? "Undercharged! (Switch to Tier " + pos_tmp.undercharged[i] + ")" :
+			charged ? shortenDimensions(enB.pos.chargeEff(i)) + "x Charged" :
+			"Charge: " + shorten(enB.pos.chargeReq(i, true))
+		getEl("pos_boost" + i + "_charge").className = undercharged ? "undercharged" : charged ? "charged" : ""
 	},
-	getSwaps() {
-		return this.swapsDisabled() ? {} : pos_tmp.cloud.swaps
+	isUndercharged(x) {
+		return pos_tmp.undercharged[x] !== undefined
 	},
-	swap(x) {
-		if (!pos_tmp.chosen) {
-			if (pos_tmp.cloud.next[x]) {
-				var y = pos_tmp.cloud.next[x]
-				delete pos_tmp.cloud.next[x]
-				delete pos_tmp.cloud.next[y]
-			} else {
-				pos_tmp.chosen = x
-			}
-		} else if (pos_tmp.chosen == x) {
-			delete pos_tmp.chosen
-		} else {
-			if (!this.canSwap(x)) return
-			pos_tmp.cloud.next[x] = pos_tmp.chosen
-			pos_tmp.cloud.next[pos_tmp.chosen] = x
-			delete pos_tmp.chosen
+	updateUndercharged() {
+		var data = {}
+		pos_tmp.undercharged = data
+		if (pos_tmp.cloud.sum < 4) return
+
+		//Tiers
+		var eng = pos_save.eng
+		var tiers_list = {}
+		for (var i = 1; i <= 3; i++) tiers_list[i] = this.data.undercharged[i]()
+
+		//Calculations
+		for (var i = 1; i <= 12; i++) if (enB.mastered("pos", i)) {
+			var tiers = tiers_list[enB.pos.lvl(i)]
+			for (var t = 0; t < tiers.length; t++) if (eng.gte(enB.pos.chargeReq(i, 0, tiers[t]))) data[i] = tiers[t]
 		}
-		this.updateCloud()
-	},
-	clearSwaps() {
-		pos_tmp.cloud.next = {}
-		pos.updateCloud()
-	},
-	cancelSwaps() {
-		if (!confirm("Do you want to cancel changes on Positronic Cloud?")) return
-		pos_tmp.cloud.next = {... pos_save.swaps}
-		pos.updateCloud()
-	},
-	applySwaps() {
-		if (!confirm("Do you want to apply the changes immediately? This restarts your Quantum run!")) return
-		restartQuantum(true)
-	},
-	swapsDisabled() {
-		return QCs_save && QCs_save.disable_swaps && QCs_save.disable_swaps.active
 	},
 
-	excluded(x) {
-		return (futureBoost("exclude_any_qc") ? QCs.inAny() : QCs.in(2)) ? enB.pos.lvl(x) == QCs_save.qc2 : false
-	},
-
+	//Positronic Cloud
 	updateCloud(quick) {
 		if (!pos_tmp.unl) return
 
@@ -276,6 +262,7 @@ var pos = {
 			div: data.div,
 			swaps: data.swaps,
 			next: data.next,
+			chosen: data.chosen,
 			allMastered: data.allMastered,
 			shown: data.shown !== undefined ? data.shown : true
 		}
@@ -302,13 +289,13 @@ var pos = {
 				if (data.div[i] != nextLvl) getEl("pos_cloud" + nextLvl + "_boosts").appendChild(getEl("pos_boost" + i + "_btn"))
 				data.div[i] = nextLvl
 
-				getEl("pos_boost" + i + "_btn").className = (pos_tmp.chosen ? 
-					(pos_tmp.chosen == i ? "chosenbtn" : this.canSwap(i) ? "storebtn" : "unavailablebtn") :
+				getEl("pos_boost" + i + "_btn").className = (pos_tmp.cloud.chosen ? 
+					(pos_tmp.cloud.chosen == i ? "chosenbtn" : this.canSwap(i) ? "storebtn" : "unavailablebtn") :
 					excluded ? "unavailablebtn" :
 					data.next[i] ? (nextLvl > originalLvl ? "chosenbtn3" : "chosenbtn") :
 					lvl != nextLvl ? "chosenbtn2" : "storebtn"
 				) + " pos_btn"
-				getEl("pos_boost" + i + "_excite").innerHTML = (lvl != nextLvl ? "(Next: " + lvl + " -> " + nextLvl + ")" : "Tier " + originalLvl + (originalLvl != lvl ? " -> " + lvl : "") + (pos_tmp.chosen == i ? "<br>(Selected)" : originalLvl != lvl ? "<br>(from PB" + pos_save.swaps[i] + ")" : ""))
+				getEl("pos_boost" + i + "_excite").innerHTML = (lvl != nextLvl ? "(Next: " + lvl + " -> " + nextLvl + ")" : "Tier " + originalLvl + (originalLvl != lvl ? " -> " + lvl : "") + (pos_tmp.cloud.chosen == i ? "<br>(Selected)" : originalLvl != lvl ? "<br>(from PB" + pos_save.swaps[i] + ")" : ""))
 				data[lvl] = (data[lvl] || 0) + 1
 
 				if (originalLvl != lvl) data.swaps_amt++
@@ -345,35 +332,112 @@ var pos = {
 								'<p id="pos_boost' + x + '_excite">(+0 tiers)</p>' +
 							'</span>' +
 						'</button>'),
-	updateCharge(i) {
-		var lvl = enB.pos.lvl(i)
-		var match = enB.pos.lvl(i, true) == lvl
-		var charged = match && enB.pos.charged(i)
-		var undercharged = match && this.isUndercharged(i)
-		getEl("pos_boost" + i + "_charge").textContent = undercharged && PCs.milestoneDone(43) ? shortenDimensions(enB.pos.chargeEff(i)) + "x Undercharged!" :
-		getEl("pos_boost" + i + "_charge").textContent = undercharged ? "Undercharged! (Switch to Tier " + pos_tmp.undercharged[i] + ")" :
-			charged ? shortenDimensions(enB.pos.chargeEff(i)) + "x Charged" :
-			"Charge: " + shorten(enB.pos.chargeReq(i, true))
-		getEl("pos_boost" + i + "_charge").className = undercharged ? "undercharged" : charged ? "charged" : ""
+	canSwap(x) {
+		var old = enB.pos.lvl(x, true)
+		var nw = enB.pos.lvl(pos_tmp.cloud.chosen, true)
+		return !pos_tmp.cloud.next[x] && (PCs.milestoneDone(22) ? old != nw : Math.abs(old - nw) == 1)
 	},
-	isUndercharged(x) {
-		return pos_tmp.undercharged[x] !== undefined
+	getSwaps() {
+		return this.swapsDisabled() ? {} : pos_tmp.cloud.swaps
 	},
-	updateUndercharged() {
-		var data = {}
-		pos_tmp.undercharged = data
-		if (pos_tmp.cloud.sum < 4) return
-
-		//Tiers
-		var eng = pos_save.eng
-		var tiers_list = {}
-		for (var i = 1; i <= 3; i++) tiers_list[i] = this.data.undercharged[i]()
-
-		//Calculations
-		for (var i = 1; i <= 12; i++) if (enB.mastered("pos", i)) {
-			var tiers = tiers_list[enB.pos.lvl(i)]
-			for (var t = 0; t < tiers.length; t++) if (eng.gte(enB.pos.chargeReq(i, 0, tiers[t]))) data[i] = tiers[t]
+	swap(x) {
+		if (!pos_tmp.cloud.chosen) {
+			if (pos_tmp.cloud.next[x]) {
+				var y = pos_tmp.cloud.next[x]
+				delete pos_tmp.cloud.next[x]
+				delete pos_tmp.cloud.next[y]
+				pos.autoApply()
+			} else {
+				pos_tmp.cloud.chosen = x
+				pos.updateCloud()
+			}
+		} else if (pos_tmp.cloud.chosen == x) {
+			delete pos_tmp.cloud.chosen
+			pos.updateCloud()
+		} else {
+			if (!this.canSwap(x)) return
+			pos_tmp.cloud.next[x] = pos_tmp.cloud.chosen
+			pos_tmp.cloud.next[pos_tmp.cloud.chosen] = x
+			delete pos_tmp.cloud.chosen
+			pos.autoApply()
 		}
+	},
+	clearSwaps() {
+		pos_tmp.cloud.next = {}
+		pos.autoApply()
+	},
+	cancelSwaps() {
+		if (!confirm("Do you want to cancel changes on Positronic Cloud?")) return
+		pos_tmp.cloud.next = {... pos_save.swaps}
+		pos.updateCloud()
+	},
+	autoApply() {
+		if (aarMod.autoApply) restartQuantum(true)
+		else pos.updateCloud()
+	},
+	applySwaps() {
+		if (!confirm("Do you want to apply the changes immediately? This restarts your Quantum run!")) return
+		restartQuantum(true)
+	},
+	swapsDisabled() {
+		return QCs_save && QCs_save.disable_swaps && QCs_save.disable_swaps.active
+	},
+
+	//Presets
+	exportPreset() {
+		let array = []
+		for (var i = 1; i <= 12; i++) {
+			if (array.includes(i)) continue
+			if (pos_tmp.cloud.next[i]) {
+				array.push(i)
+				array.push(pos_tmp.cloud.next[i])
+			}
+		}
+
+		let str = array.join(",")
+		copyToClipboard(str)
+	},
+	getPreset(x) {
+		let r = {}
+		x = x.split(",")
+		for (var i = 0; i < x.length; i += 2) {
+			r[x[i]] = parseInt(x[i+1])
+			r[x[i+1]] = parseInt(x[i])
+		}
+		return r
+	},
+	importPreset() {
+		var x = prompt()
+		x = pos.getPreset(x)
+
+		pos_tmp.cloud.next = {}
+
+		let next = {}
+		let array = []
+		for (var i = 1; i <= 12; i++) {
+			delete pos_tmp.cloud.chosen
+			if (array.includes(i)) continue
+			if (x[i]) {
+				console.log(i, x[i])
+				array.push(i)
+				array.push(x[i])
+
+				pos_tmp.cloud.chosen = i
+				if (pos.canSwap(x[i])) {
+					next[i] = x[i]
+					next[x[i]] = i
+				}
+				delete pos_tmp.cloud.chosen
+			}
+		}
+
+		pos_tmp.cloud.next = next
+		pos.autoApply()
+	},
+
+	//Others
+	excluded(x) {
+		return (futureBoost("exclude_any_qc") ? QCs.inAny() : QCs.in(2)) ? enB.pos.lvl(x) == QCs_save.qc2 : false
 	},
 }
 var pos_save = undefined

@@ -191,7 +191,7 @@ var PCs = {
 		data.eff2 = Math.sqrt(eff) / 4
 
 		//Temperature
-		data.temp = Math.min(comps / 28 - 0.5, 1) * comps / 28
+		data.temp = Math.min(comps / 14 - 0.5, 1) * comps / 28
 		if (data.temp > 0) data.temp *= 2
 		if (tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp) {
 			if (data.temp > 0) data.temp /= 2
@@ -285,10 +285,11 @@ var PCs = {
 	in(x) {
 		return PCs_save && PCs_save.in
 	},
-	goal(pc) {
+	goal(pc, pos) {
 		var list = pc || QCs_tmp.in
 		if (this.overlapped(list)) return QCs.getGoalMA(pc % 10, "ol")
 		if (typeof(list) == "number") list = this.convBack(list)
+		pos = pos || PCs_save.in
 
 		var qc1 = QCs.data[list[0]].goalMA
 		var qc2 = QCs.data[list[1]].goalMA
@@ -298,6 +299,7 @@ var PCs = {
 
 		var r = qc1.pow(qc2.log(base) / div)
 		var pow = Math.pow(hasAch("ng3pr18") ? Math.pow(1.4, 0.95) : 1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) / 3)
+		if (pos >= 50) pow *= 1.5
 		r = r.pow(pow)
 		r = r.div(this.shrunkerEff())
 		return r
@@ -366,7 +368,7 @@ var PCs = {
 			PCs_tmp.pick == pc ? "Click to cancel" :
 			!PCs_tmp.pick ? "Click to assign" : ""
 		) + (
-			PCs_tmp.pick || !PCs_save.challs[pc] || PCs.done(id) ? "" : "<br>Goal: " + shorten(PCs.goal(id)) + " MA"
+			PCs_tmp.pick || !PCs_save.challs[pc] || PCs.done(id) ? "" : "<br>Goal: " + shorten(PCs.goal(id, pc)) + " MA"
 		)
 	},
 	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Milestones</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
@@ -660,12 +662,16 @@ var PCs = {
 
 	resetShrunkers() {
 		var qc = QCs_save
+		var mods = QCs.modData
 		if (!PCs.unl() || !qc.mod_comps || !qc.mod_comps.length) return
 
-		let x = 0
-		for (var c = 1; c <= 8; c++) if (qc.mod_comps.includes("up" + x)) x++
-
-		PCs_save.shrunkers = x
+		PCs_save.shrunkers = 0
+		for (var i = 0; i < mods.list.length; i++) {
+			var mod = mods.list[i]
+			var x = 0
+			for (var c = 1; c <= 8; c++) if (QCs.modDone(c, "up")) x++
+			PCs_save.shrunkers += x * mods[mod].shrunker
+		}
 	},
 	shrunkerEff() {
 		let x = PCs_save.shrunkers
