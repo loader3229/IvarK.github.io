@@ -219,7 +219,7 @@ let str = {
 	},
 	nerf_eb(x, next) {
 		var alt = this.eff(this.data.pos["eb" + x], next)
-		return alt < 0 ? -alt * 6e3 : 0
+		return alt < 0 ? -alt * 3e3 : 0
 	},
 	nerf_pb(x, next) {
 		var alt = this.eff(this.data.pos["pb" + x], next)

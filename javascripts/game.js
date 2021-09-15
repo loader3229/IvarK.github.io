@@ -4307,7 +4307,7 @@ function specialDimUpdating(diff){
 
 	// Time
 	var stepT = inNC(7) && inNGM(4) ? 2 : step
-	if (!QCs.in(3) || QCs.modIn(3, "up")) {
+	if (!QCs.in(3)) {
 		for (let tier = max; tier >= 1; tier--) {
 			if ((tmp.eterUnl || inNGM(4)) && tier <= max - stepT) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + stepT).times(diff / 10))
 		}

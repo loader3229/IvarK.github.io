@@ -488,6 +488,11 @@ amNewsArray = [
 ["Absolute zero. That's how many particles didn't contain.", "str.unl()", "am271"],
 ["It is year 2077. We haven't eliminated matter bots, but we are trying to outsmart them. We are developing a brain transplant technology which detects if you are a human by nanobots for resources and materials.", true, "am272"],
 ["For the first time, I saw a interesting moment for the first time. This moment shows people standing on the extractor, which can safely move on dark matter goo.", true, "am273"],
+["You ever think how messed up AD is? You're shredding through countless realities, turning them to nothing and annihilating them completely, only to rebuild them out of antimatter and then tear them down in one final crunch Thousands upon thousands of dimensions are destroyed each second, parallel universes like our own, universes that could harbor life, turned into nothing but antimatter in a matter of moments and then collapsed completely. Even multiverses aren't enough, and the spacetime continuum eventually rips as we dilate time itself to satiate our bloodlust.", true, "am274"],
+["Does any of the news here actually get added into the game?", true, "am275"],
+["Meanwhile in a computable number competition: Writes the code that looks like snaky lines, which contains functions that are more powerful than Loader's Number. He is trying to not make interpreters and turing machines, just to follow rules."
+, true, "am276"],
+["In September 2020, I suddenly lost my interest on Numberblocks, and even left the community. At the time when I wrote this, It's been 1 year. Don't worry, I will use BAN and SAN for googological numbers in this game, if I want to go beyond ee308.", true, "am277"],
 /*NEXT ID: am274*/
 ];}
 

@@ -68,7 +68,7 @@ var PCs = {
 				false,
 			],
 			goal_divs: [null, 0.1, 0.95, 0.25, 0.95, 0.45, 0.5, 0.4, 0.75],
-			milestone_reqs: [null, 1, 2, 3, 4, 6, 7],
+			milestone_reqs: [null, 1, 2, 3, 5, 6, 7],
 			milestone_unls: [null,
 				true,
 				true,
@@ -300,9 +300,9 @@ var PCs = {
 		var r = qc1.pow(qc2.log(base) / div)
 		var pow = Math.pow(hasAch("ng3pr18") ? Math.pow(1.4, 0.95) : 1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) / 3)
 		if (pos >= 50) pow *= 1.5
-		r = r.pow(pow)
-		r = r.div(this.shrunkerEff())
-		return r
+		pow /= this.shrunkerEff()
+
+		return r.pow(pow)
 	},
 	done(pc) {
 		return PCs.unl() && PCs_save.comps.includes(this.sort(pc))
@@ -498,7 +498,7 @@ var PCs = {
 
 		getEl("pc_shrunker_div").style.display = hasAch("ng3pr12") ? "" : "none"
 		getEl("pc_shrunker").textContent = getFullExpansion(PCs_save.shrunkers)
-		getEl("pc_shrunker_eff").textContent = shortenCosts(this.shrunkerEff()) + "x"
+		getEl("pc_shrunker_eff").textContent = "^" + this.shrunkerEff().toFixed(3)
 
 		this.showMilestones(PCs_tmp.milestone || 0)
 	},
@@ -675,7 +675,7 @@ var PCs = {
 	},
 	shrunkerEff() {
 		let x = PCs_save.shrunkers
-		return Decimal.pow(10, x * (x + 2) * 2)
+		return Math.pow(0.93, Math.sqrt(x))
 	}
 }
 var PCs_save = undefined

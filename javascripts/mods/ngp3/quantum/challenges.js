@@ -348,7 +348,7 @@ var QCs = {
 				return 1
 			},
 
-			nerfDesc: (x) => "There are Time Dimensions, but Meta Dimensions only get boosted by antimatter.",
+			nerfDesc: (x) => "You can only dilate once, and meta-antimatter only get boosted by antimatter.",
 			perkDesc: (x) => "Start at 1 TP, and Eternity Points boost Meta Dimensions.",
 			perkEff() {
 				return 1
