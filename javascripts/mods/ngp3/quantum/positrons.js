@@ -195,7 +195,7 @@ var pos = {
 		if (!pos_tmp.cloud.shown) {
 			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "(^" + (1 / enB_tmp.pos4).toFixed(3) + ")"
 			if (enB.has("pos", 7)) getEl("enB_pos2_mention_1").textContent = enB.name("pos", 2)
-			if (enB.has("pos", 11)) getEl("enB_pos11_exp").textContent = "(x^1/" + shorten(1 / enB_tmp.pos11 / getAQGainExp()) + ")"
+			if (enB.has("pos", 11)) getEl("enB_pos11_info").textContent = "(x^1/" + shorten(1 / enB_tmp.pos11.exp) + ", cap of " + shorten(enB_tmp.pos11.cap) + "x)"
 			if (enB.has("pos", 12)) getEl("enB_pos2_mention_2").textContent = enB.name("pos", 2)
 
 			for (var i = 1; i <= enB.pos.max; i++) {
@@ -372,12 +372,15 @@ var pos = {
 		pos.updateCloud()
 	},
 	autoApply() {
-		if (aarMod.autoApply) restartQuantum(true)
+		if (aarMod.autoApply) pos.applySwaps(true)
 		else pos.updateCloud()
 	},
-	applySwaps() {
-		if (!confirm("Do you want to apply the changes immediately? This restarts your Quantum run!")) return
-		restartQuantum(true)
+	applySwaps(auto) {
+		if (!auto && !confirm("Do you want to apply the changes immediately? This restarts your Quantum run!")) return
+		if (dev.noReset) {
+			pos_save.swaps = {... pos_tmp.cloud.next}
+			pos.updateTmp()
+		} else restartQuantum(true)
 	},
 	swapsDisabled() {
 		return QCs_save && QCs_save.disable_swaps && QCs_save.disable_swaps.active

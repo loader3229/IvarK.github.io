@@ -264,7 +264,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.eightBought >= 3e7 && (tmp.dtMode ? getTotalRG() : player.replicanti.galaxies) == 0) giveAchievement("Intergalactic")
 	if (player.eternityPoints.e >= 2e7 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 
-	if (mTs.bought == mTs.timeStudies.length && QCs.in(1) && PCs.in()) giveAchievement("Mastery Mayhem")
+	if (mTs.bought == mTs.timeStudies.length && QCs.in(1)) giveAchievement("Mastery Mayhem")
 	if (str.unl()) giveAchievement("Completing the Quantum")
 	if (!hasAch("ng3pr13")) {
 		var cond = PCs.milestoneDone(42) && pos_save.swaps >= 8

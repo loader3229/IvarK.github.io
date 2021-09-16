@@ -993,17 +993,18 @@ var enB = {
 			type: "b",
 			eff(x) {
 				var slowStart = 4
-				if (enB.active("pos", 9)) slowStart += enB_tmp.pos9
-				if (PCs.milestoneDone(33)) slowStart *= Math.pow(1.01, PCs_save.lvl)
-
 				var accSpeed = 1
-				if (enB.active("pos", 9)) {
-					var p9 = 1 + enB_tmp.pos9 / 4
-					accSpeed /= p9 * Math.max(p9 / 2, 1)
+
+				if (!QCs.in(3) && !QCs.modIn(1, "up")) {
+					if (enB.active("pos", 9)) {
+						var p9 = 1 + enB_tmp.pos9 / 4
+						slowStart += enB_tmp.pos9
+						accSpeed /= p9 * Math.max(p9 / 2, 1)
+					}
+					if (PCs.milestoneDone(33)) slowStart *= Math.pow(1.01, PCs_save.lvl)
+					if (enB.active("glu", 9)) accSpeed *= enB_tmp.glu9
+					if (QCs.done(7)) accSpeed *= 1.25
 				}
-				if (enB.active("glu", 9)) accSpeed *= enB_tmp.glu9
-				if (QCs.done(7)) accSpeed *= 1.25
-				//if (PCs.milestoneDone(71)) accSpeed *= 1 + 0.03 * Math.sqrt(PCs_save.lvl)
 
 				var mdb = player.meta.resets
 				var base = Math.min(player.meta.bestAntimatter.add(1).log10() * getPataAccelerator() + 1, 1e10)
@@ -1107,7 +1108,9 @@ var enB = {
 			type: "r",
 			eff(x) {
 				let r = Decimal.div(x, 600).add(1).log10() / 3 + 1
-				return Math.sqrt(r)
+				r = Math.sqrt(r)
+				if (r > 1.2) r = r / 2 + 0.6
+				return r
 			},
 			disp(x) {
 				return "^" + x.toFixed(3)
@@ -1196,13 +1199,19 @@ var enB = {
 			title: "Eternity Transfinition",
 			tier: 3,
 			eff(x) {
-				return Math.min(5e-8 * Math.sqrt(Math.log2(x / 300 + 1)), 1e-5)
+				let exp = Math.min(3e-8 * Math.log2(x / 300 + 1), 1e-5) * getAQGainExp()
+				let cap = Decimal.pow(5, Math.pow(x, 0.4))
+				return {
+					exp: exp,
+					cap: cap,
+					gain: player.eternityPoints.max(1).pow(exp).min(cap)
+				}
 			},
 			disp(x) {
-				return shorten(player.eternityPoints.max(1).pow(x * getAQGainExp())) + "x"
+				return shorten(x.gain) + "x"
 			},
 			dispFull(x) {
-				return "Eternity Points boost Anti-Quarks by " + this.disp(x) + "."
+				return "Eternity Points boost Anti-Quarks by " + this.disp(x.gain) + "."
 			}
 		},
 		12: {

@@ -19,6 +19,7 @@ function quantum(auto, force, attrs, mode, quick) {
 		data.pc = PCs_save.in
 		data.qc = QCs_save.in
 		data.mod = QCs_save.mod
+		data.restart = true
 	}
 
 	var headstart = aarMod.newGamePlusVersion >= 1 && !tmp.ngp3
@@ -90,7 +91,7 @@ function quarkGain(base) {
 	let logExp = 3
 	log = Math.pow(log + 1, logExp) - 1
 
-	if (enB.active("pos", 11)) log += player.eternityPoints.max(1).log10() * enB_tmp.pos11
+	if (enB.active("pos", 11)) log += enB_tmp.pos11.gain.log10()
 	
 	let r = Decimal.pow(10, log)
 	if (!base) {
@@ -349,7 +350,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		pos_save.swaps = {...pos_tmp.cloud.next}
 		pos_tmp.cloud.swaps = !pos.swapsDisabled() ? {...pos_tmp.cloud.next} : {}
 
-		if (data.qc && data.qc.includes(5) && data.mod == "up") str_save.energy = 0
+		if (!data.restart && data.qc && data.qc.includes(5) && data.mod == "up") str_save.energy = 0
 	}
 
 	/*

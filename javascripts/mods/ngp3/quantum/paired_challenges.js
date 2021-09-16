@@ -67,7 +67,7 @@ var PCs = {
 				false,
 				false,
 			],
-			goal_divs: [null, 0.1, 0.95, 0.25, 0.95, 0.45, 0.5, 0.4, 0.75],
+			goal_divs: [null, 0.1, 0.95, 0.35, 0.95, 0.45, 0.5, 0.4, 0.75],
 			milestone_reqs: [null, 1, 2, 3, 5, 6, 7],
 			milestone_unls: [null,
 				true,
@@ -191,7 +191,7 @@ var PCs = {
 		data.eff2 = Math.sqrt(eff) / 4
 
 		//Temperature
-		data.temp = Math.min(comps / 14 - 0.5, 1) * comps / 28
+		data.temp = Math.min(comps / 21 - 0.5, 1) * comps / 28
 		if (data.temp > 0) data.temp *= 2
 		if (tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp) {
 			if (data.temp > 0) data.temp /= 2
@@ -335,13 +335,13 @@ var PCs = {
 		return PCs.data.letters[Math.floor(pc / 10)] + pc % 10
 	},
 	milestoneUnl(pos) {
-		if (!PCs.unl()) return
-		if (!PCs_tmp.comps) return
+		if (!PCs.unl()) return false
+		if (!PCs_tmp.comps) return false
 		return evalData(PCs.data.milestone_unls[pos])
 	},
 	milestoneDone(pos) {
-		if (!PCs.milestoneUnl(pos % 10)) return
-		if (hasAch("ng3pr17") && pos < 20) return true
+		if (!PCs.milestoneUnl(pos % 10)) return false
+		if (hasAch("ng3pr17") && pos % 10 == 1) return true
 		return PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestone_reqs[pos % 10]
 	},
 	lvlReq(pc) {
@@ -669,13 +669,13 @@ var PCs = {
 		for (var i = 0; i < mods.list.length; i++) {
 			var mod = mods.list[i]
 			var x = 0
-			for (var c = 1; c <= 8; c++) if (QCs.modDone(c, "up")) x++
+			for (var c = 1; c <= 8; c++) if (QCs.modDone(c, mod)) x++
 			PCs_save.shrunkers += x * mods[mod].shrunker
 		}
 	},
 	shrunkerEff() {
 		let x = PCs_save.shrunkers
-		return Math.pow(0.93, Math.sqrt(x))
+		return Math.pow(0.95, Math.sqrt(x))
 	}
 }
 var PCs_save = undefined

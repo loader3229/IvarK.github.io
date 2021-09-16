@@ -212,9 +212,10 @@ function maxAllDilUpgs() {
 	}
 	if (update) {
 		player.dilation.dilatedTime = dt
-
-		updateDilationUpgradeCosts()
-		updateDilationUpgradeButtons()
+		if (getEl("eternitystore").style.display == "block" && getEl("dilation").style.display == "block") {
+			updateDilationUpgradeCosts()
+			updateDilationUpgradeButtons()
+		}
 	}
 }
 

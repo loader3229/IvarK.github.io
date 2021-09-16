@@ -375,7 +375,7 @@ function setR16p5Tooltip() {
 	//ng3pr17/////
 	//ng3pr18/////
 
-	mayhem.setAttribute('ach-tooltip', "Max out Mastery Studies in QC1, and any other QC. Reward: You can buy Mastery Studies from a row above the latest bought row, and Infinity Morals reward can be applied in any challenge.")
+	mayhem.setAttribute('ach-tooltip', "Max out Mastery Studies in QC1. Reward: You can buy Mastery Studies from a row above the latest bought row, and Infinity Morals reward can be applied in any challenge.")
 	cantGet.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 6.2e11)) + " antimatter in Eternity Challenge 11. Reward: You gain 3x more Quarks, and can reduce the gluon gains by 50%.")
 }
 

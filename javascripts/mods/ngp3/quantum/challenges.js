@@ -93,7 +93,7 @@ var QCs = {
 				return 0.1
 			},
 
-			nerfDesc: (x) => "TT softcap is harsher, and QC7 is applied.",
+			nerfDesc: (x) => "TT softcap is harsher, QC7 is applied, and Meta Accelerator boosts are disabled.",
 			perkDesc: (x) => "You gain 0.2 extra Compressors on compressing in at least 5 seconds. (+" + shortenMoney(x) + ")",
 			perkEff() {
 				return QCs_save.qc1.perkBoosts / 5
@@ -337,7 +337,7 @@ var QCs = {
 		},
 		3: {
 			unl: () => true,
-			desc: "Meta Dimensions only work, but they produce antimatter and Infinity Points instead. Dilating sucessfully reduces the production.",
+			desc: "Meta Dimensions only work, but they produce antimatter and Infinity Points instead. Dilating sucessfully reduces the production, and Meta Accelerator boosts are disabled.",
 			goal: () => player.dilation.tachyonParticles.gte(3e4),
 			goalDisp: () => shortenCosts(3e4) + " Tachyon Particles",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 0.2),
@@ -407,6 +407,7 @@ var QCs = {
 
 			updateDisp() {		
 				getEl("qc4_div").style.display = QCs.in(4) ? "" : "none"
+				getEl("qc4_select").style.display = "Select one to disable:" + (!QCs.perkActive(4) ? "" : " (" + player.dilation.active ? "Dilation" : "Normal" + ")")
 				getEl("coinsPerSec").style.display = QCs.in(4) ? "none" : ""
 				getEl("tickSpeedRow").style.display = QCs.in(4) ? "none" : ""
 
@@ -611,6 +612,7 @@ var QCs = {
 			if (this.data[x].unl()) {
 				data.unl_challs.push(x)
 				if (!this.done(x)) break
+				if (this.modDone(x, "up")) data.nerfed = (data.nerfed || 0) + 1
 			}
 		}
 
@@ -646,19 +648,27 @@ var QCs = {
 	done(x) {
 		return this.unl() && QCs_save.comps >= x
 	},
+	hasSecondaryGoal() {
+		return !PCs.in() && !QCs_save.mod
+	},
 	getGoal() {
-		return PCs.in() || QCs_save.mod ? player.meta.bestAntimatter.gte(this.getGoalMA()) : player.meta.bestAntimatter.gte(this.getGoalMA()) && this.data[QCs_tmp.in[0]].goal()
+		return player.meta.bestAntimatter.gte(this.getGoalMA()) && (!this.hasSecondaryGoal() || this.data[QCs_tmp.in[0]].goal())
 	},
 	getGoalDisp() {
-		return PCs.in() ? "" : " and " + this.data[QCs_tmp.in[0]].goalDisp()
+		return this.hasSecondaryGoal() ? " and " + this.data[QCs_tmp.in[0]].goalDisp() : ""
 	},
 	getGoalMA(x, mod) {
-		var r
+		if (!x) {
+			if (PCs.in()) return PCs.goal()
+			x = QCs_save.in[0]
+			mod = QCs_save.mod
+		}
 		if (x) {
 			r = this.data[x].goalMA
 			if (mod) r = r.pow(QCs.modData[mod].maExp)
+			if (mod == "up") r = r.pow(QCs_tmp.nerfed / 8 + 1)
 			if (mod && x == 7) return new Decimal(1/0)
-		} else r = PCs.in() ? PCs.goal() : QCs_save.mod ? this.data[QCs_tmp.in[0]].goalMA.pow(QCs.modData[QCs_save.mod].maExp) : this.data[QCs_tmp.in[0]].goalMA
+		}
 		return r
 	},
 	isRewardOn(x) {
@@ -791,7 +801,7 @@ var QCs = {
 
 		getEl("qc_perks").style.display = hasAch("ng3pr12") ? "inline" : "none"
 		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Nerfed modifier'
-		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Nerfed modifier doesn\'t have its secondary goals. And perks only work in any Quantum Challenge!' : ""
+		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Nerfed modifier doesn\'t have its secondary goal, but completing one increases the main goals. However, perks only work in any Quantum Challenge!' : ""
 	},
 	updateDispOnTick() {
 		if (!this.divInserted) return

@@ -95,7 +95,7 @@ let str = {
 
 		let ve = str.veUnspent()
 		getEl("str_ve").textContent = (ve < 0 ? "-" : "") + shorten(Math.abs(ve))
-		getEl("str_warn").textContent = ve < 0 ? "Strings have been disabled due to spending too many Vibration Energy!" : "WARNING: Vibrating boosts costs Vibration Energy, and performs a Quantum reset!"
+		getEl("str_warn").textContent = ve < 0 ? "Strings have been disabled due to spending too many Vibration Energy!" : "WARNING: Vibrating boosts costs Vibration Energy, and unvibrating performs a Quantum reset!"
 
 		for (var i = 1; i <= 12; i++) {
 			var eb_id = str.conv(i)
@@ -167,18 +167,20 @@ let str = {
 	},
 	vibrate(type, x) {
 		var id = str.data.pos[type + x]
+		var noReset = true
 		if (str_tmp.disable[id]) {
 			var disable = str_tmp.disable[id]
 			var vibrated = str_save.vibrated
 			var new_vibrated = []
 			for (var i = 0; i < vibrated.length; i++) if (vibrated[i] != disable) new_vibrated.push(vibrated[i])
 			str_save.vibrated = new_vibrated
+			noReset = dev.noReset
 		} else {
 			if (!str.canVibrate(id)) return
 			str_save.vibrated.push(id)
 		}
 
-		if (dev.noReset) {
+		if (noReset) {
 			str.updateTmp()
 			str.updateDisp()
 		} else restartQuantum(true)
@@ -215,7 +217,7 @@ let str = {
 		return Math.pow(1 + Math.abs(this.eff(this.data.pos["eb" + x], next)) / 2, exp)
 	},
 	eff_pb(x, next) {
-		return Math.abs(this.eff(this.data.pos["pb" + x], next)) * 8
+		return Math.abs(this.eff(this.data.pos["pb" + x], next)) * 4
 	},
 	nerf_eb(x, next) {
 		var alt = this.eff(this.data.pos["eb" + x], next)
