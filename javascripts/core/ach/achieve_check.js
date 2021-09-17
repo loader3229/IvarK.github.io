@@ -264,34 +264,35 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.eightBought >= 3e7 && (tmp.dtMode ? getTotalRG() : player.replicanti.galaxies) == 0) giveAchievement("Intergalactic")
 	if (player.eternityPoints.e >= 2e7 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 
+	//ROW 16.5
 	if (mTs.bought == mTs.timeStudies.length && QCs.in(1)) giveAchievement("Mastery Mayhem")
 	if (str.unl()) giveAchievement("Completing the Quantum")
 	if (!hasAch("ng3pr13")) {
-		var cond = PCs.milestoneDone(42) && pos_save.swaps >= 8
+		var cond = 0
 		for (var i = 1; i <= 12; i++) {
-			if (!enB.pos.charged(i)) cond = false
+			if (enB.pos.charged(i) && enB.pos.chargeEff(i) >= 9) cond++
+			if (cond >= 6) break
 		}
-		if (cond) giveAchievement("Bursted Em All!")
+		if (cond >= 6) giveAchievement("Bursted Em All!")
 	}
 	if (qu_save.expEnergy >= 1) giveAchievement("The Power of Science!")
-	if (!hasAch("ng3pr15")) {
-		var cond = str.unl()
+	if (!hasAch("ng3pr15") && str.unl()) {
+		var cond = 0
 		for (var i = 1; i <= 8; i++) {
-			if (!QCs.modDone(i, "up")) cond = false
+			if (QCs.modDone(i, "up")) cond++
+			if (cond >= 4) break
 		}
-		if (cond) giveAchievement("The Challenging Day")
+		if (cond >= 4) giveAchievement("The Challenging Day")
 	}
-	if (player.money.log10() >= 6.2e11 && player.currentEternityChall == "eterc11") giveAchievement("I can’t get my multipliers higher!")
-	for (var y = 4; y <= 8; y++) {
-		if (hasAch("ng3pr17")) break
-
-		var cond = PCs.milestoneDone(83)
+	if (player.money.log10() >= Math.PI * 1e11 && player.currentEternityChall == "eterc11") giveAchievement("I can’t get my multipliers higher!")
+	if (!hasAch("ng3pr17") && PCs.milestoneDone(83)) {
+		var cond = 0
 		for (var i = 1; i <= 4; i++) {
-			if (!PCs.posDone(y * 10 + i)) cond = false
+			if (PCs.posDone(50 + i)) cond++
 		}
-		if (cond) giveAchievement("Stonking The Pairs")
+		if (cond >= 2) giveAchievement("Stonking The Pairs")
 	}
-	//ng3pr18 is in quantum.js
+	if (QCs.inAny() && QCs_save.mod == "up" && PCs_save.comps.length == 0 && player.meta.bestAntimatter.e >= 800) giveAchievement("Get rid of you by yourself...")
 
 	if (false) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
 	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")

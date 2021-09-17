@@ -542,7 +542,7 @@ var enB = {
 	},
 
 	mastered(type, x) {
-		if (type == "glu" && QCs.in(8)) return false
+		if (type == "glu" && !QCs.perkActive(2) && QCs.in(8)) return false
 
 		var data = this[type]
 		return data.amt() >= this.getMastered(type, x) && data.amt() >= data[x].req
@@ -944,7 +944,7 @@ var enB = {
 			var lvl = this.lvl(x)
 			var eff = 2 * lvl
 			if (PCs.milestoneDone(42) && lvl == 1) eff = 8
-			if (PCs.milestoneDone(43) && pos.isUndercharged(x)) eff += 2
+			if (PCs.milestoneDone(23) && pos.isUndercharged(x)) eff++
 			if (str.unl()) eff += str.eff_pb(str.conv(x, true))
 			return eff
 		},
@@ -1211,7 +1211,7 @@ var enB = {
 				return shorten(x.gain) + "x"
 			},
 			dispFull(x) {
-				return "Eternity Points boost Anti-Quarks by " + this.disp(x.gain) + "."
+				return "Eternity Points boost Anti-Quarks by " + this.disp(x) + "."
 			}
 		},
 		12: {

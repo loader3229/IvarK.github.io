@@ -298,8 +298,8 @@ var PCs = {
 		div -= PCs_tmp.temp
 
 		var r = qc1.pow(qc2.log(base) / div)
-		var pow = Math.pow(hasAch("ng3pr18") ? Math.pow(1.4, 0.95) : 1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) / 3)
-		if (pos >= 50) pow *= 1.5
+		var pow = Math.pow(1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) * (hasAch("ng3pr16") ? 0.9 : 1) / 3)
+		if (pos >= 50) pow *= 1.25
 		pow /= this.shrunkerEff()
 
 		return r.pow(pow)

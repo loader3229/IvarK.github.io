@@ -88,7 +88,7 @@ let str = {
 		var data = str_tmp
 		if (!data.unl) return
 
-		data.str = Math.max(Math.log2(str_save.energy) / 2, 1)
+		data.str = Math.max(Math.log2(str_save.energy * 4) / 4, 1)
 	},
 	updateDispOnTick() {
 		if (!str_tmp.setupHTML || !str_tmp.unl) return
@@ -149,7 +149,7 @@ let str = {
 	veGain() {
 		let r = qu_save.quarkEnergy.add(1).log10()
 		if (!QCs.modIn(5, "up")) r *= Math.log10(QCs_save.qc5.add(1).log10() + 1)
-		r *= PCs_save.lvl / 8
+		r *= Math.pow(4, PCs_save.lvl / 8 - 1)
 		return r
 	},
 	veUnspent() {

@@ -164,9 +164,9 @@ const allAchievements = {
         ng3pr13 : "Bursted Em All!",
         ng3pr14 : "The Power of Science!",
         ng3pr15 : "The Challenging Day",
-        ng3pr16 : "I can’t get my multipliers higher!", // NO REWARD
-        ng3pr17 : "Stonking The Pairs", // NO REWARD
-        ng3pr18 : "Get rid of you by yourself...", // NO REWARD
+        ng3pr16 : "I can’t get my multipliers higher!",
+        ng3pr17 : "Stonking The Pairs",
+        ng3pr18 : "Get rid of you by yourself...",
 
         ng3p31 : "ERROR 500: INTERNAL DIMENSION ERROR",
         ng3p32 : "Quantum+ Reached!", // UNNAMED ACHIEVEMENT

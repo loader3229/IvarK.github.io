@@ -285,7 +285,6 @@ function quantumReset(force, auto, data, mode, implode = false) {
 					PCs_save.shrunkers += QCs.modData[QCs_save.mod].shrunker
 					QCs_save.mod_comps.push(qc)
 				}
-				if (QCs_save.mod == "up" && PCs_save.comps.length == 0) giveAchievement("Get rid of you by yourself...")
 			} else if (qcDataPrev.length == 1) {
 				var qc = qcDataPrev[0]
 				QCs_save.comps = Math.max(QCs_save.comps, qc)

@@ -373,10 +373,11 @@ function setR16p5Tooltip() {
 	//ng3pr15/////
 	let cantGet = getEl("I can’t get my multipliers higher!")
 	//ng3pr17/////
-	//ng3pr18/////
+	let rid = getEl("Get rid of you by yourself...") 
 
 	mayhem.setAttribute('ach-tooltip', "Max out Mastery Studies in QC1. Reward: You can buy Mastery Studies from a row above the latest bought row, and Infinity Morals reward can be applied in any challenge.")
-	cantGet.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 6.2e11)) + " antimatter in Eternity Challenge 11. Reward: You gain 3x more Quarks, and can reduce the gluon gains by 50%.")
+	cantGet.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, Math.PI * 1e11)) + " antimatter in Eternity Challenge 11. Reward: You gain 3x more Quarks, and can reduce the gluon gains by 50%.")
+	rid.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 800)) + " MA in a Nerfed QC without Paired Challenge combinations. Reward: PC temperatures below 0 are doubled.")
 }
 
 function setR17Tooltip() {

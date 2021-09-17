@@ -248,7 +248,10 @@ var mTs = {
 		},
 		313() {
 			var tpLog = player.dilation.tachyonParticles.max(1).log10()
-			var bpLog = colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0
+			var bpLog = Math.min(colorBoosts.b_base2 ? colorBoosts.b_base2.log10() : 0, 15)
+
+			if (tpLog > 200) tpLog = Math.pow(tpLog / 200, 5/6) * 200
+			if (bpLog > 15) bpLog = 15
 
 			return Math.pow(tpLog / 90, 0.6) * Math.pow(bpLog / 3, 0.2)
 		},

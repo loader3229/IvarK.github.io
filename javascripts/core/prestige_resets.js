@@ -47,7 +47,9 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	if (!headstart) player.eternities = qMs.tmp.amt >= 2 ? 100 * Math.pow(3, qMs.tmp.amt) : oheHeadstart ? 100 : 0
 	player.eternityPoints = new Decimal(0)
 
-	player.timestudy = (bigRip ? tmp.bruActive[12] : qMs.isOn(3)) ? player.timestudy : {
+	var keepTS = bigRip ? tmp.bruActive[12] : qMs.isOn(3)
+	if (keepTS) respecTimeStudies()
+	else player.timestudy = {
 		theorem: 0,
 		amcost: new Decimal("1e20000"),
 		ipcost: new Decimal(1),
@@ -56,6 +58,8 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 		auto: player.timestudy.auto
 	}
 	if (isQC) player.timestudy.theorem = 0
+	player.respec = false
+	player.respecMastery = false
 
 	if (!qMs.isOn(3)) player.eternityUpgrades = []
 	player.epmult = new Decimal(1)

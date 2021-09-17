@@ -73,7 +73,7 @@ var poData
 
 function save_preset(id, placement) {
 	let data = getEl("preset_" + id +"_data").value
-	presets[id].preset = presets.editing && data != presets[id].preset ? data : getStudyTreeStr()
+	presets[id].preset = presets.editing == placement ? data : getStudyTreeStr()
 	localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
 	delete presets.editing
 
@@ -181,7 +181,7 @@ function openStudyPresets() {
 	} else if (saveOnNGP3 != onNGP3) {
 		onNGP3 = saveOnNGP3
 		for (var p = 0; p < loadedPresets; p++) {
-			getEl("presets").rows[p].innerHTML = getPresetLayout(poData[p])
+			getEl("presets").rows[p].innerHTML = getPresetLayout(poData[p], p + 1)
 			changePresetTitle(poData[p], p + 1)
 		}
 	}

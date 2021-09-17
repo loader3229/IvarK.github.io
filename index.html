@@ -1531,7 +1531,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.6: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(9/15/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(9/16/21a Pre-Release Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -2256,22 +2256,22 @@
 								<div id="Completing the Quantum" class="achievement achievementlocked" style="background-image: url(images/ng3p/32.png)" ach-tooltip="Unlock Strings. Reward: Unlock the first QC modifier: Nerfed modifier."></div>
 							</td>
 							<td>
-								<div id="Bursted Em All!" class="achievement achievementlocked" style="background-image: url(images/ng3p/33.png)" ach-tooltip="Charge all Positronic Boosts with QC4x2 milestone and 4 swaps. Reward: Charging requires 10% less."></div>
+								<div id="Bursted Em All!" class="achievement achievementlocked" style="background-image: url(images/ng3p/33.png)" ach-tooltip="Charge 6 Positronic Boosts with at least 9x multiplier. Reward: Charging requires 10% less."></div>
 							</td>
 							<td>
 								<div id="The Power of Science!" class="achievement achievementlocked" style="background-image: url(images/ng3p/34.png)" ach-tooltip="Reach ^1 Quantum efficiency. Reward: Effective Boosters +10%."></div>
 							</td>
 							<td>
-								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/ng3p/35.png)" ach-tooltip="Complete all 8 Challenges with the Nerfed modifier. Reward: Cooler temperatures are doubled."></div>
+								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/ng3p/35.png)" ach-tooltip="Complete 4 Challenges with the Nerfed modifier. PC goals increase 10% slower from PC combinations."></div>
 							</td>
 							<td>
 								<div id="I can’t get my multipliers higher!" class="achievement achievementlocked" style="background-image: url(images/ng3p/36.png)"><br></div>
 							</td>
 							<td>
-								<div id="Stonking The Pairs" class="achievement achievementlocked" style="background-image: url(images/ng3p/37.png)" ach-tooltip="Complete all 4 PC combinations in a single Omega Set. Reward: You keep all 1 combination milestones."></div>
+								<div id="Stonking The Pairs" class="achievement achievementlocked" style="background-image: url(images/ng3p/37.png)" ach-tooltip="Complete 2 PC combinations in the first Omega Set. Reward: You keep all 1 combination milestones."></div>
 							</td>
 							<td>
-								<div id="Get rid of you by yourself..." class="achievement achievementlocked" style="background-image: url(images/ng3p/38.png)" ach-tooltip="Complete any Quantum Challenge with the Nerfed modifier, but without Paired Challenge completions. Reward: Completed combinations increase other goals 5% slower."></div>
+								<div id="Get rid of you by yourself..." class="achievement achievementlocked" style="background-image: url(images/ng3p/38.png)"></div>
 							</td>
 						</tr>
 						<tr id="achRowng3p3">
@@ -3367,8 +3367,9 @@
 				<span id="qc_perks_note"></span>
 				<br>
 				<button class="storebtn" id="restart_qc" style="width: 120px; height: 48px" onclick="QCs.restart()">Restart Challenge</button>
-				<button class="storebtn" id="auto_qc" style="width: 120px; height: 48px" onclick="QCs.toggle_auto()">Auto-complete QCs: OFF</button>
-				<button class="storebtn" id="swaps_toggle" style="width: 120px; height: 48px" onclick="QCs.disable_swaps()">Disable swaps in challenge</button>
+				<button class="storebtn" id="auto_qc" style="width: 120px; height: 48px; font-size: 11px" onclick="QCs.toggle_auto()"></button>
+				<button class="storebtn" id="swaps_toggle" style="width: 120px; height: 48px" onclick="QCs.disable_swaps()"></button>
+				<button class="storebtn" id="disable_qc2_perk" style="width: 120px; height: 48px" onclick="QCs.disablePerk(2)"></button>
 				<table class="table" id="qcs_div" style="margin: 0 auto"></table>
 			</div>
 			<div id="pairedChalls" class="challengeTab">
@@ -3423,7 +3424,7 @@
 				</span>
 				<span id="pc_omega">
 					<br>
-					<b class="warning">You are assigning in a Omega Set! You can assign any combination, but goals are raised by ^1.5!</b>
+					<b class="warning">You are assigning in a Omega Set! You can assign any combination, but goals are raised by ^1.25!</b>
 				</span>
 				<span id="pc_pick"></span>
 				<table id="pc_table" align="center" style="margin: auto"></table>

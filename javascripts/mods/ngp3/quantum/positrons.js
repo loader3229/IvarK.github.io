@@ -226,7 +226,7 @@ var pos = {
 		var match = enB.pos.lvl(i, true) == lvl
 		var charged = match && enB.pos.charged(i)
 		var undercharged = match && this.isUndercharged(i)
-		getEl("pos_boost" + i + "_charge").textContent = undercharged && PCs.milestoneDone(43) ? shortenDimensions(enB.pos.chargeEff(i)) + "x Undercharged!" :
+		getEl("pos_boost" + i + "_charge").textContent = undercharged && PCs.milestoneDone(23) ? shortenDimensions(enB.pos.chargeEff(i)) + "x Undercharged!" :
 		getEl("pos_boost" + i + "_charge").textContent = undercharged ? "Undercharged! (Switch to Tier " + pos_tmp.undercharged[i] + ")" :
 			charged ? shortenDimensions(enB.pos.chargeEff(i)) + "x Charged" :
 			"Charge: " + shorten(enB.pos.chargeReq(i, true))

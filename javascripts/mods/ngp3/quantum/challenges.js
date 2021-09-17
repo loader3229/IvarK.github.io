@@ -55,6 +55,7 @@ var QCs = {
 			delete data.best_exclusion
 			delete data.perks_unl
 		}
+		if (data.disable_perks === undefined) data.disable_perks = {}
 
 		this.updateTmp()
 		this.updateDisp()
@@ -180,7 +181,7 @@ var QCs = {
 
 				//Replicanti Limit
 				if (PCs.milestoneDone(12)) data.lim = data.lim.pow(Math.log2(qc1.expands + 1) / 10 + 1)
-				data.lim = data.lim.max(Decimal.pow(10, 1e6 * (distantBoosts + 1)))
+				data.lim = data.lim.max(Decimal.pow(10, 1.5e6 * distantBoosts))
 
 				var release = 1
 				if (futureBoost("replicanti_release") && dev.boosts.tmp[6]) release *= dev.boosts.tmp[6]
@@ -189,6 +190,7 @@ var QCs = {
 					data.scalingMult *= release
 				}
 
+				//Penalties
 				var limLog = QCs_tmp.qc1.lim.log10()
 				if (limLog >= 1e8) {
 					var div = limLog / 1e8
@@ -311,7 +313,7 @@ var QCs = {
 			},
 
 			nerfDesc: (x) => "Only excluded Positronic Boosts work.",
-			perkDesc: (x) => "Entangled Boosts are 50% stronger, but mastery requires 20x more and always anti'd.",
+			perkDesc: (x) => "Entangled Boosts are 50% stronger, but mastery requires 20x more and always anti'd. Also, mastered boosts are always active.",
 			perkEff() {
 				return 1
 			},
@@ -718,19 +720,26 @@ var QCs = {
 		var data = QCs_save.mod_comps
 		return this.unl() && data && data.includes(m + x)
 	},
-
-	perkUnl(x) {
-		return hasAch("ng3pr12") && this.modDone(x, "up")
-	},
-	perkActive(x) {
-		return QCs_tmp.perks[x] && this.perkUnl(x) && this.inAny()
-	},
 	overlapCan(x) {
 		var data = this.data[x]
 		if (!PCs.unl()) return
 		if (pos_tmp.cloud == undefined) return
 		if (this.perkUnl(x)) return
 		return pos_tmp.cloud.total >= data.overlapReqs[0] && pos_tmp.cloud.exclude >= data.overlapReqs[1]
+	},
+
+	perkUnl(x) {
+		return hasAch("ng3pr12") && this.modDone(x, "up")
+	},
+	perkActive(x) {
+		return QCs_tmp.perks[x] && this.perkUnl(x) && this.inAny() && !(QCs_save.disable_perks && QCs_save.disable_perks[x])
+	},
+	disablePerk(x) {
+		if (QCs.inAny() && !confirm("This will restart this challenge! Are you sure?")) return
+		QCs_save.disable_perks[x] = !QCs_save.disable_perks[x]
+		getEl("disable_qc" + x + "_perk").textContent = (QCs_save.disable_perks[x] ? "Enable" : "Disable") + " QC" + x + " Perk"
+
+		if (QCs.inAny()) restartQuantum()
 	},
 	viewPerks() {
 		QCs_tmp.show_perks = !QCs_tmp.show_perks
@@ -799,9 +808,13 @@ var QCs = {
 		getEl("auto_qc").style.display = hasAch("ng3p25") ? "" : "none"
 		getEl("auto_qc").textContent = "Auto-completions: " + (QCs_save.auto ? "ON" : "OFF")
 
+		//Perks
 		getEl("qc_perks").style.display = hasAch("ng3pr12") ? "inline" : "none"
 		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Nerfed modifier'
 		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Nerfed modifier doesn\'t have its secondary goal, but completing one increases the main goals. However, perks only work in any Quantum Challenge!' : ""
+
+		getEl("disable_qc2_perk").style.display = QCs.modDone(2, "up") ? "" : "none"
+		getEl("disable_qc2_perk").textContent = (QCs_save.disable_perks[2] ? "Enable" : "Disable") + " QC2 Perk"
 	},
 	updateDispOnTick() {
 		if (!this.divInserted) return
