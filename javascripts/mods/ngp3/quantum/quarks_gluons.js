@@ -510,7 +510,7 @@ var enB = {
 			return
 		}
 		if (enB.colorUsed() == x) return
-		if (!qu_save.entBoosts || qu_save.gluons.rg.max(qu_save.gluons.gb).max(qu_save.gluons.br).eq(0)) {
+		if (!qu_save.entBoosts || !this.glu.unl()) {
 			alert("You need to get at least 1 Entangled Boost and have gluons before choosing a type!")
 			return
 		}
@@ -545,7 +545,7 @@ var enB = {
 		if (type == "glu" && !QCs.perkActive(2) && QCs.in(8)) return false
 
 		var data = this[type]
-		return data.amt() >= this.getMastered(type, x) && data.amt() >= data[x].req
+		return Decimal.gte(data.amt(), this.getMastered(type, x)) && this.has(type, x)
 	},
 	getMastered(type, x) {
 		var data = this[type]
@@ -585,7 +585,7 @@ var enB = {
 	glu: {
 		name: "Entangled",
 		unl() {
-			return tmp.quActive && qu_save.gluons.rg.max(qu_save.gluons.gb).max(qu_save.gluons.br).gt(0)
+			return tmp.quActive && Decimal.add(qu_save.gluons.rg, qu_save.gluons.gb).add(qu_save.gluons.br).gt(0)
 		},
 
 		cost(x) {

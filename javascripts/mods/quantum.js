@@ -311,6 +311,10 @@ function quantumReset(force, auto, data, mode, implode = false) {
 			if (QCs_save.kept) {
 				player.timestudy.theorem += QCs_save.kept.tt
 				player.masterystudies = [...QCs_save.kept.ms]
+
+				updateMasteryStudyBoughts()
+				updateMasteryStudyCosts()
+
 				delete QCs_save.kept
 			}
 		}
@@ -338,7 +342,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 			}
 		}
 
-		if (!PCs_tmp.unl) PCs_tmp.unl = true
+		PCs.resetButtons()
 		PCs.updateUsed()
 	}
 

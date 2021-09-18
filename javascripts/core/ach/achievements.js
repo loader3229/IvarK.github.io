@@ -441,7 +441,11 @@ function giveAchievement(name, noUpdate) {
 		getEl('bestTP').style.display = ""
 		getEl('bestTP').textContent = "Your best ever Tachyon particles was "+shorten(player.dilation.bestTP)+"."
 	}
-	if (name == "Twice in the row") $.notify("Congratulations! You have unlocked Quantum Challenge 8!")
+	if (name == "Twice in a row") {
+		$.notify("Congratulations! You have unlocked Quantum Challenge 8!")
+		QCs.updateTmp()
+		QCs.updateDisp()
+	}
 	if (name == "Stop blocking me!") getEl('autoReset').style.display = ""
 	if (name == "To the new dimension!") qu_save.bigRip.bestGals = 1
 	if (name == "Quantum doesn't take so long") {

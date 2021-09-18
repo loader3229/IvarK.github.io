@@ -1,9 +1,9 @@
 body {
-	background: linear-gradient(#001f2f, #002f2f, #001f2f)
+	background: linear-gradient(#504A02, #9F9404, #504A02)
 }
 
 .container, div, b, input {
-	color: #bfefff;
+	color: #FDF379;
     font-family: 'Roboto' !important;
     letter-spacing: 0.05em
 }
@@ -22,28 +22,28 @@ button:hover {
 }
 
 .tabbtn {
-	background: rgba(127, 223, 255, 0.125) !important;
-	border-color: transparent transparent #7fdfff transparent !important;
-	box-shadow: 0px 3px 3px rgba(127, 223, 255, 0.25), inset 0px 0px 12px rgba(127, 223, 255, 0.125);
-	color: #bfefff !important
+	background: rgba(254, 249, 187, 0.125) !important;
+	border-color: transparent transparent #CAF575 transparent !important;
+	box-shadow: 0px 3px 3px rgba(253, 243, 121, 0.25), inset 0px 0px 12px rgba(253, 243, 121, 0.125);
+	color: #FDF379 !important
 }
 
 .secondarytabbtn {
-	background: rgba(255, 223, 127, 0.125) !important;
-	border-color: transparent transparent #ffdf7f transparent !important;
-	box-shadow: 0px 3px 3px rgba(255, 223, 127, 0.25), inset 0px 0px 12px rgba(255, 223, 127, 0.125);
-	color: #ffefbf !important
+	background: rgba(253, 243, 121, 0.125) !important;
+	border-color: transparent transparent #CAF575 transparent !important;
+	box-shadow: 0px 3px 3px rgba(254, 249, 187, 0.25), inset 0px 0px 12px rgba(254, 249, 187, 0.125);
+	color: #FEF9BB !important
 }
 
 .storebtn {
-	background: rgba(159, 255, 127, 0.125) !important;
-	border-color: transparent transparent #9fff7f transparent !important;
-	box-shadow: 0px 3px 3px rgba(159, 255, 127, 0.25), inset 0px 0px 12px rgba(159, 255, 127, 0.125);
-	color: #cfffbf !important
+	background: rgba(253, 243, 121, 0.125) !important;
+	border-color: transparent transparent #CAF575 transparent !important;
+	box-shadow: 0px 3px 3px rgba(254, 249, 187, 0.25), inset 0px 0px 12px rgba(254, 249, 187, 0.125);
+	color: #FDF379 !important
 }
 
 .storebtn div, .storebtn b, .storebtn span, .storebtn p {
-	color: #cfffbf !important
+	color: #FDF379 !important
 }
 
 .unavailablebtn,
@@ -69,9 +69,9 @@ button:hover {
 }
 
 .popup .storebtn {
-	background: rgba(79, 127, 63, 0.5) !important;
+	background: rgba(253, 243, 121, 0.5) !important;
 	border-color: transparent transparent #4f7f3f transparent !important;
-	box-shadow: 0px 3px 3px rgba(159, 255, 127, 0.25), inset 0px 0px 12px rgba(159, 255, 127, 0.125);
+	box-shadow: 0px 3px 3px rgba(254, 249, 187, 0.25), inset 0px 0px 12px rgba(254, 249, 187, 0.125);
 }
 
 .chosenbtn {
@@ -87,7 +87,7 @@ button:hover {
 }
 
 #coinAmount {
-	color: #00bfff !important
+	color: #CAF575 !important
 }
 
 /* Challenges */
@@ -105,7 +105,7 @@ button:hover {
 .infchallengediv {
 	background: rgba(255, 191, 0, 0.5) !important;
 	border-color: transparent !important;
-	box-shadow: inset 0px 0px 12px rgba(255, 223, 127, 0.5);
+	box-shadow: inset 0px 0px 12px rgba(254, 249, 187, 0.5);
 	color: #ffdf7f !important
 }
 
@@ -196,7 +196,7 @@ button:hover {
 	border: 2px solid !important;
 	border-color: transparent transparent #ffbf00 transparent !important;
 	text-shadow: 1px 2px 1px rgba(255, 127, 0, 0.25);
-	box-shadow: 0px 3px 3px rgba(255, 191, 0, 0.25), inset 0px 0px 12px rgba(255, 223, 127, 0.5);
+	box-shadow: 0px 3px 3px rgba(255, 191, 0, 0.25), inset 0px 0px 12px rgba(254, 249, 187, 0.5);
 	color: #ffdf7f !important
 }
 
@@ -204,7 +204,7 @@ button:hover {
 	transform: scale(1) !important;
 	background: rgba(255, 191, 0, 0.5) !important;
 	border-color: transparent !important;
-	box-shadow: 0px 0px 0px transparent, inset 0px 0px 12px rgba(255, 223, 127, 0.5);
+	box-shadow: 0px 0px 0px transparent, inset 0px 0px 12px rgba(254, 249, 187, 0.5);
 	color: #ffdf7f !important
 }
 
@@ -301,12 +301,12 @@ button:hover {
 
 /* Fixes */
 .optionstab td .storebtn {
-	background: rgba(159, 255, 127, 0.125) !important;
+	background: rgba(254, 249, 187, 0.125) !important;
 	border: 1px solid !important;
-	border-color: transparent transparent #9fff7f transparent !important;
+	border-color: transparent transparent #CAF575 transparent !important;
 	border-radius: 3px !important;
-	box-shadow: 0px 3px 3px rgba(159, 255, 127, 0.25), inset 0px 0px 12px rgba(159, 255, 127, 0.125);
-	color: #cfffbf !important
+	box-shadow: 0px 3px 3px rgba(254, 249, 187, 0.25), inset 0px 0px 12px rgba(254, 249, 187, 0.125);
+	color: #FDF379 !important
 }
 
 .presPos1.newdimlocked, .presPos4.newdimlocked {

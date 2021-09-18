@@ -1015,7 +1015,7 @@ function doFeatureProgress() {
 	if (pH.can("quPlus")) {}
 	else if (str.unl()) {
 		res = player.money
-		resFormat = shortenCosts(res)
+		reqFormat = shortenCosts(res)
 		reqNum = Decimal.pow(10, Math.pow(10, 13.5))
 		req = shortenCosts(reqNum) + " antimatter"
 		percentage = res.log(reqNum)

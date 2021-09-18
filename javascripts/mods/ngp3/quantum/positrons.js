@@ -248,7 +248,7 @@ var pos = {
 		//Calculations
 		for (var i = 1; i <= 12; i++) if (enB.mastered("pos", i)) {
 			var tiers = tiers_list[enB.pos.lvl(i)]
-			for (var t = 0; t < tiers.length; t++) if (eng.gte(enB.pos.chargeReq(i, 0, tiers[t]))) data[i] = tiers[t]
+			for (var t = 0; t < tiers.length; t++) if (Decimal.gte(eng, enB.pos.chargeReq(i, 0, tiers[t]))) data[i] = tiers[t]
 		}
 	},
 
