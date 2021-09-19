@@ -78,7 +78,7 @@ function assignAll(auto) {
 	var mult = getQuarkAssignMult()
 	if (oldQuarks.eq(0)) return
 	for (c = 0; c < 3; c++) {
-		var toAssign = oldQuarks.times(ratios[colors[c]]/sum).round()
+		var toAssign = oldQuarks.times(ratios[colors[c]] / sum).round()
 		if (toAssign.gt(0)) {
 			qu_save.usedQuarks[colors[c]] = qu_save.usedQuarks[colors[c]].add(toAssign.times(mult)).round()
 			if (player.ghostify.another > 0) player.ghostify.another--
@@ -849,6 +849,7 @@ var enB = {
 			type: "r",
 			eff(x) {
 				var r = Math.sqrt(Decimal.div(x, 500).add(1).log10() / 3 + 1)
+				if (futureBoost("quantum_superbalancing")) r = Math.max(r, Decimal.add(x, 1).pow(1 / dev.quSb.jP / 12).toNumber())
 				return r
 			},
 			disp(x) {

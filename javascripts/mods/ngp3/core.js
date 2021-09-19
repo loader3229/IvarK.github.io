@@ -929,10 +929,10 @@ function loadAutoPreset(x) {
 	importStudyTree(player.timestudy.auto[x])
 }
 
-function targetAutoPreset() {
+function targetAutoPreset(dilated) {
 	if (QCs.in(7) && autoPresetUnlocked("qc7")) return "qc7"
 	if (QCs.in(1) && autoPresetUnlocked("qc1")) return "qc1"
-	return player.dilation.active ? "dilation" : "eternity"
+	return (dilated !== undefined ? dilated : player.dilation.active) ? "dilation" : "eternity"
 }
 
 function refreshAutoPreset(update) {

@@ -1051,7 +1051,7 @@ function doFeatureProgress() {
 		percentage = res.log(reqNum)
 		feature = "Quantum"
 	} else if (pH.did("eternity")) {
-		res = getTotalTT()
+		res = getTotalTT(player)
 		reqNum = 13000
 		req = reqNum + " total TT"
 		percentage = res / reqNum

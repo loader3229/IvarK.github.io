@@ -3271,7 +3271,7 @@ function updateRespecButtons() {
 	getEl("respecMastery2").className = className
 }
 
-function eternity(force, auto, forceRespec, dilated) {
+function eternity(force, auto, forceRespec, dilated = false) {
 	var canEternity = force || ((forceRespec || pH.can("eternity")) && (auto || !player.options.eternityconfirm || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades.")))
 	if (!canEternity) return false
 
@@ -3345,7 +3345,7 @@ function eternity(force, auto, forceRespec, dilated) {
 			autoOn = false
 		}
 
-		var autoPreset = targetAutoPreset()
+		var autoPreset = targetAutoPreset(dilated)
 		var canSwitch = autoOn && player.timestudy.auto[autoPreset] && player.timestudy.auto[autoPreset] != "" && autoPresetUnlocked(autoPreset)
 		if (autoOn && !player.timestudy.auto[autoPreset]) refreshAutoPreset(autoPreset)
 		getEl("autoPresetTarget").textContent = "Assigning updates the preset you are choosing. (" + autoPresets[autoPreset] + ")"
