@@ -75,13 +75,15 @@ function assignAll(auto) {
 	var ratios = qu_save.assignAllRatios
 	var sum = ratios.r + ratios.g + ratios.b
 	var oldQuarks = getAssortAmount()
+	var left = oldQuarks
 	var mult = getQuarkAssignMult()
 	if (oldQuarks.eq(0)) return
 	for (c = 0; c < 3; c++) {
-		var toAssign = oldQuarks.times(ratios[colors[c]] / sum).round()
+		var toAssign = oldQuarks.times(ratios[colors[c]] / sum).min(left).round()
 		if (toAssign.gt(0)) {
 			qu_save.usedQuarks[colors[c]] = qu_save.usedQuarks[colors[c]].add(toAssign.times(mult)).round()
 			if (player.ghostify.another > 0) player.ghostify.another--
+			left = left.sub(toAssign.min(left)).round()
 		}
 	}
 	qu_save.quarks = qu_save.quarks.sub(oldQuarks).round()
@@ -318,10 +320,8 @@ function updateColorPowers() {
 	if (enB.active("glu", 10)) colorBoosts.b_base = colorBoosts.b_base.times(enB_tmp.glu10)
 	if (enB.active("glu", 11)) colorBoosts.b_exp *= enB_tmp.glu11
 
-	if (hasMTS(313)) {
-		colorBoosts.b_base2 = colorBoosts.b_base.pow(colorBoosts.b_exp)
-		colorBoosts.b_exp *= getMTSMult(313, "update")
-	}
+	colorBoosts.b_base2 = colorBoosts.b_base.pow(colorBoosts.b_exp)
+	if (hasMTS(313)) colorBoosts.b_exp *= getMTSMult(313, "update")
 
 	colorBoosts.b = colorBoosts.b_base.pow(colorBoosts.b_exp)
 }

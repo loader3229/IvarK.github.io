@@ -164,7 +164,7 @@ const allAchievements = {
         ng3pr13 : "Bursted Em All!",
         ng3pr14 : "The Power of Science!",
         ng3pr15 : "The Challenging Day",
-        ng3pr16 : "I can’t get my multipliers higher!",
+        ng3pr16 : "I can't get my multipliers higher!",
         ng3pr17 : "Stonking The Pairs",
         ng3pr18 : "Get rid of you by yourself...",
 

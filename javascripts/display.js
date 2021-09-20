@@ -942,9 +942,9 @@ function showAutoTab(tabName) {
 
 function moveAutoTabs() {
 	let autoUnl = pH.did(tmp.ngmX >= 4 ? "galaxy" : "infinity")
-	let autoShown = autoUnl && aarMod.showAuto && !isEmptiness
+	let autoShown = autoUnl && (forceAutoTab() || aarMod.showAuto) && !isEmptiness
 
-	getEl("showAuto").style.display = autoUnl ? "" : "none"
+	getEl("showAuto").style.display = autoUnl && !forceAutoTab() ? "" : "none"
 	getEl("showAuto").textContent = (aarMod.showAuto ? "Hide" : "Show") + " general automation tab"
 
 	getEl("automationbtn").style.display = autoShown ? "" : "none"
@@ -953,6 +953,10 @@ function moveAutoTabs() {
 
 	moveAutoTab("automaticghosts", "ag", "agtabbtn", "ghostify", autoShown, "neutrinos")
 	getEl("agbtn_pos_no_auto").style.display = autoShown ? "none" : ""
+}
+
+function forceAutoTab() {
+	return (pH.did("infinity") && !pH.shown("infinity")) || tmp.ngmX >= 4
 }
 
 function toggleAutoTab() {

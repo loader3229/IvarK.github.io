@@ -371,7 +371,7 @@ function setR16p5Tooltip() {
 	//ng3pr13/////
 	//ng3pr14/////
 	//ng3pr15/////
-	let cantGet = getEl("I can’t get my multipliers higher!")
+	let cantGet = getEl("I can't get my multipliers higher!")
 	//ng3pr17/////
 	let rid = getEl("Get rid of you by yourself...") 
 

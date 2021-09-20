@@ -284,7 +284,7 @@ function preHiggsNGp3AchieveCheck() {
 		}
 		if (cond >= 4) giveAchievement("The Challenging Day")
 	}
-	if (player.money.log10() >= Math.PI * 1e11 && player.currentEternityChall == "eterc11") giveAchievement("I can’t get my multipliers higher!")
+	if (player.money.log10() >= Math.PI * 1e11 && player.currentEternityChall == "eterc11") giveAchievement("I can't get my multipliers higher!")
 	if (!hasAch("ng3pr17") && PCs.milestoneDone(83)) {
 		var cond = 0
 		for (var i = 1; i <= 4; i++) {
