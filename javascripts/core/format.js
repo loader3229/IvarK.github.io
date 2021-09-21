@@ -20,7 +20,6 @@ function getAbbreviation(e) {
 		['', 'U', 'D', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'O', 'N'],
 				['', 'Dc', 'Vg', 'Tg', 'Qd', 'Qi', 'Se', 'St', 'Og', 'Nn'],
 				['', 'Ce', 'Dn', 'Tc', 'Qe', 'Qu', 'Sc', 'Si', 'Oe', 'Ne']]
-		const prefixes2 = ['', 'MI', 'MC', 'NA']
 	var result = ''
 	e = Math.floor(e / 3) - 1;
 	e2 = 0
@@ -29,8 +28,8 @@ function getAbbreviation(e) {
 		if (partE > 0) {
 			if (partE == 1 && e2 > 0) var prefix = ""
 			else var prefix = prefixes[0][partE % 10] + prefixes[1][Math.floor(partE / 10) % 10] + prefixes[2][Math.floor(partE / 100)]
-			if (result == "") result = prefix + prefixes2[e2]
-			else result = prefix + prefixes2[e2] + '-' + result
+			if (result == "") result = prefix + getTier2Abbreviation(e2)
+			else result = prefix + getTier2Abbreviation(e2) + '-' + result
 		}
 		e = Math.floor(e / 1000)
 		e2++
@@ -40,20 +39,10 @@ function getAbbreviation(e) {
 
 function getShortAbbreviation(e) {
 	const prefixes = [
-	['', 'U', 'D', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'O', 'N'],
-	['', 'Dc', 'Vg', 'Tg', 'Qd', 'Qi', 'Se', 'St', 'Og', 'Nn'],
-	['', 'Ce', 'Dn', 'Tc', 'Qe', 'Qu', 'Sc', 'Si', 'Oe', 'Ne']]
-	const prefixes2 = ['', 'MI', 'MC', 'NA', 'PC', 'FM', 'AT', 'ZP', 'YC', 'XN', 
-	'VE', 'ME', 'DE', 'TE', 'TeE', 'PE', 'HE', 'HeE', 'OC', 'EC', 
-	'IS', 'MS', 'DS', 'TS', 'TeS', 'PS', 'HS', 'HeS', 'OS', 'ES', 
-	'TN', 'MTN', 'DTN', 'TTN', 'TeTN', 'PTN', 'HTN', 'HeTN', 'OTN', 'ETN', 
-	'TeC', 'MTeC', 'DTeC', 'TTeC', 'TeTeC', 'PTeC', 'HTeC', 'HeTeC', 'OTeC', 'ETeC', 
-	'PC', 'MPC', 'DPC', 'TPC', 'TePC', 'PPC', 'HPC', 'HePC', 'OPC', 'EPC', 
-	'HC', 'MHC', 'DHC', 'THC', 'TeHC', 'PHC', 'HHC', 'HeHC', 'OHC', 'EHC', 
-	'HeC', 'MHeC', 'DHeC', 'THeC', 'TeHeC', 'PHeC', 'HHeC', 'HeHeC', 'OHeC', 'EHeC', 
-	'OC', 'MOC', 'DOC', 'TOC', 'TeOC', 'POC', 'HOC', 'HeOC', 'OOC', 'EOC', 
-	'EC', 'MEC', 'DEC', 'TEC', 'TeEC', 'PEC', 'HEC', 'HeEC', 'OEC', 'EEC', 
-	'HT', 'MHT', 'DHT']
+		['', 'U', 'D', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'O', 'N'],
+		['', 'Dc', 'Vg', 'Tg', 'Qd', 'Qi', 'Se', 'St', 'Og', 'Nn'],
+		['', 'Ce', 'Dn', 'Tc', 'Qe', 'Qu', 'Sc', 'Si', 'Oe', 'Ne']
+	]
 	var result = ''
 	var id = Math.floor(e / 3 - 1)
 	var log = Math.floor(Math.log10(id))
@@ -64,13 +53,36 @@ function getShortAbbreviation(e) {
 		if (partE > 0) {
 			if (partE == 1 && step > 0) var prefix = ""
 			else var prefix = prefixes[0][partE % 10] + prefixes[1][Math.floor(partE / 10) % 10] + prefixes[2][Math.floor(partE / 100)]
-			if (result == "") result = prefix + prefixes2[step]
-			else result = prefix + prefixes2[step] + '-' + result
+			if (result == "") result = prefix + getTier2Abbreviation(step)
+			else result = prefix + getTier2Abbreviation(step) + '-' + result
 		}
 		id = Math.floor(id / 1000)
 		step++
 	}
 	return result
+}
+
+function getTier2Abbreviation(e, aas) {
+	const prefixes2 = aas ? [
+		["", "Mi", "Mc", "Na", "Pi", "Fe", "At", "Ze", "Yo", "Xn"],
+		["", "Me", player.options.aas.useDe ? "Du" : "De", "Te", "Tr", "Pe", "He", "Hp", "Ot", "En"],
+		["", "Vc", "Ic", "Ti", "Tn", "Pc", "Hc", "Ht", "On", "Ec", "Ht"],
+		["", "Ht", "Dh", "Th", "Trh", "Ph", "Hh", "Hph", "Oh", "Eh"]
+	] : [
+		['', 'MI', 'MC', 'NA', 'PC', 'FM', 'AT', 'ZP', 'YC', 'XN'],
+		['', 'ME', 'DU', 'TR', 'TE', 'P', 'HX', 'HP', 'OT', 'E'],
+		['', 'C', 'IC', 'TCN', 'TRC', 'PCN', 'HCN', 'HPC', 'OCN', 'ECN'],
+		['', 'HC', 'DH', 'TH', 'TRH', 'PH', 'HH', 'HPH', 'OH', 'EH']
+	]
+
+	var e100 = e % 100
+	var r = ''
+	if (e < 10) return prefixes2[0][e]
+	if (!aas && e100 == 10) r = 'V'
+	else r = prefixes2[1][e % 10]
+	if (!aas || (e <= 10 || e >= 20)) r += prefixes2[2][Math.floor(e / 10) % 10]
+	r += prefixes2[3][Math.floor(e / 100)]
+	return r
 }
 
 function getAASAbbreviation(x) {
@@ -81,9 +93,6 @@ function getAASAbbreviation(x) {
 	const units = ["", "U", "D", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "N"]
 	const tens = ["", player.options.aas.useDe ? "De" : "D", "Vg", "Tg", "Qg", "Qq", "Sg", "St", "Og", "Ng"]
 	const hundreds = ["", "Ce", "Dc", "Tc", "Qe", "Qu", "Se", "Su", "Oe", "Ne"]
-	const special = ["", "Mi", "Mc", "Na", "Pi", "Fe", "At", "Ze", "Yo", "Xn"]
-	const specialUnits = ["", "Me", player.options.aas.useDe ? "Du" : "De", "Te", "Tr", "Pe", "He", "Hp", "Ot", "En"]
-	const specialTens = ["", "Vc", "Ic", "Ti", "Tn", "Pc", "Hc", "Ht", "On", "Ec", "Ht"]
 	const log = Math.floor(Math.log10(x))
 	let result = ""
 	if (log > 8) {
@@ -98,9 +107,7 @@ function getAASAbbreviation(x) {
 				if (y % 100 == 2 && !player.options.aas.useDe) subResult = "Du" + hundreds[Math.floor(y / 100) % 10]
 				else subResult = units[y % 10] + tens[Math.floor(y / 10) % 10] + hundreds[Math.floor(y / 100) % 10]
 			}
-			var tier2 = special[step]
-			if (step > 9) tier2 = specialUnits[step % 10] + specialTens[Math.floor(step / 10)]
-			if (step > 10 && step < 20) tier2 = specialUnits[step % 10]
+			var tier2 = getTier2Abbreviation(step, true)
 			if (result != "" && player.options.aas.useHyphens) result = subResult + tier2 + "-" + result
 			else result = subResult + tier2 + result
 		}

@@ -196,7 +196,7 @@ let qMs = {
 	},
 	10: {
 		req: 10,
-		forceDisable: () => !QCs.isntCatched() || QCs.in(7),
+		forceDisable: () => hasAch("ng3pr11") ? QCs.in(1) || QCs.in(7) : !QCs.isntCatched(),
 		eff: () => "Keep all your mastery studies",
 		effGot: () => "You now can keep all your mastery studies."
 	},

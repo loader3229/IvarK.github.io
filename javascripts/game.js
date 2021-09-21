@@ -2260,7 +2260,7 @@ var notationArray = [
 
 	"Tetration", "Hyperscientific", "Layered scientific", "Layered logarithm", "Tetrational scientific", "Hyper-E", "Psi",
 
-	"Letters", "Standard", "Emojis", "Brackets", "Infinity", "Greek", "Game percentages", "Hexadecimal", "Morse code", "Spazzy", "Country Codes", "Iroha", "Symbols", "Lines", "Simplified Written", "Time", "Base-64", "Myriads", /*"Layered Symbols",*/ "AF2019", "AAS", "AF5LN", "Blind"
+	"Standard", "AAS", "Letters", "Emojis", "Brackets", "Infinity", "Game percentages", "Greek", "Hexadecimal", "Morse code", "Spazzy", "Country Codes", "Iroha", "Symbols", "Lines", "Simplified Written", "Time", "Base-64", "Myriads", /*"Layered Symbols",*/ "AF2019", "AF5LN", "Blind"
 ]
 
 function updateNotationOption() {

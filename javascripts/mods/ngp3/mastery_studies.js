@@ -891,5 +891,5 @@ function recordUpDown(x) {
 }
 
 function isInfinityMoralsApplied() {
-	return QCs.inAny() && (hasAch("ng3pr11") || (!PCs.in() && QCs.done(QCs_save.in[0])))
+	return hasAch("ng3p26") && QCs.inAny() && (PCs.in() || QCs.done(QCs_save.in[0]))
 }

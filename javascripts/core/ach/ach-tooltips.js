@@ -359,9 +359,9 @@ function setR16Tooltip() {
 
 	//ACHIEVEMENT ROW 16
 	memories.setAttribute('ach-tooltip', "Reach " + shorten(Decimal.pow(Number.MAX_VALUE, 2)) + " meta-antimatter without buying 5th - 8th Meta Dimensions. Reward: Even Meta Dimensions boost odd Meta Dimensions.")
-	morals.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e85) + " TT in any Quantum Challenge. Reward: Start with first 10 Mastery Studies in completed QCs.")
+	morals.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e85) + " TT in any Quantum Challenge. Reward: Start with first 10 Mastery Studies in completed QCs and Paired Challenges.")
 	intergal.setAttribute('ach-tooltip', "Get " + getFullExpansion(3e7) + " Eighth Dimensions without " + (tmp.dtMode ? "" : "max ") + "Replicated Galaxies. Reward: Starting at " + shortenCosts(Decimal.pow(10, 1750)) + " MA, meta-antimatter greatly boosts itself.")
-	seriously.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 2e7)) + " Eternity Points with at least 5 excluded Positronic Boosts. Reward: Charging Positronic Boosts requires less.")
+	seriously.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 2e7)) + " Eternity Points with at least 5 excluded Positronic Boosts. Reward: Charging Positronic Boosts requires less, and you can buy Mastery Studies in a row above the latest bought row.")
 }
 
 function setR16p5Tooltip() {
@@ -375,7 +375,7 @@ function setR16p5Tooltip() {
 	//ng3pr17/////
 	let rid = getEl("Get rid of you by yourself...") 
 
-	mayhem.setAttribute('ach-tooltip', "Max out Mastery Studies in QC1. Reward: You can buy Mastery Studies from a row above the latest bought row, and Infinity Morals reward can be applied in any challenge.")
+	mayhem.setAttribute('ach-tooltip', "Max out Mastery Studies in QC1. Reward: You keep Mastery Studies except in QC1 and QC7.")
 	cantGet.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, Math.PI * 1e11)) + " antimatter in Eternity Challenge 11. Reward: You gain 3x more Quarks, and can reduce the gluon gains by 50%.")
 	rid.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 800)) + " MA in a Nerfed QC without Paired Challenge combinations. Reward: PC temperatures below 0 are doubled.")
 }

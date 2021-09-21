@@ -300,7 +300,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 			QCs_save.in = qcData
 			QCs_tmp.in = qcData
 
-			if ((!QCs.isntCatched() || QCs.in(7)) && !QCs_save.kept) QCs_save.kept = {
+			if ((hasAch("ng3pr11") ? QCs.in(1) || QCs.in(7) : !QCs.isntCatched()) && !QCs_save.kept) QCs_save.kept = {
 				tt: player.timestudy.theorem,
 				ms: [...player.masterystudies]
 			}

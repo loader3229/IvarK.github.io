@@ -174,7 +174,7 @@ let str = {
 			var new_vibrated = []
 			for (var i = 0; i < vibrated.length; i++) if (vibrated[i] != disable) new_vibrated.push(vibrated[i])
 			str_save.vibrated = new_vibrated
-			noReset = dev.noReset
+			noReset = str.veUnspent() < 0 || dev.noReset
 		} else {
 			if (!str.canVibrate(id)) return
 			str_save.vibrated.push(id)
