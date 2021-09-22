@@ -12,10 +12,7 @@ function autoBuyDilUpgs() {
 			buyDilationUpgrade(upg, true, true)
 		}
 		maxAllDilUpgs()
-		if (player.dilation.upgrades.length > old) {
-			updateDilationUpgradeCosts()
-			updateDilationUpgradeButtons()
-		}
+		if (player.dilation.upgrades.length > old) onDilationRebuyable()
 	}
 }
 

@@ -28,11 +28,11 @@ var QCs = {
 		if (qc1.time === undefined) {
 			qc1.time = qu_save.time
 			qc1.timeLast = player.totalTimePlayed
-			qc1.last = []
 
 			qc1.perkBoosts = 0
 			qc1.dilaters = 0
 		}
+		if (qc1.last === undefined) qc1.last = []
 		if (qc1.autoExpand === undefined) qc1.autoExpand = {
 			value: 0,
 			percentage: 0

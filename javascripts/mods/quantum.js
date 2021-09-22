@@ -505,7 +505,7 @@ function handleDispOutOfQuantum(bigRip) {
 	let keepQCs = keepQuantum && QCs.unl()
 	let keepPCs = keepQuantum && PCs.unl()
 	let keepBE = false
-	let keepRC = keepQuantum && QCs_tmp.qc1 && QCs_save.qc1.last.length >= 1
+	let keepRC = keepQuantum && QCs_tmp.qc1 && QCs_save.qc1.last && QCs_save.qc1.last.length >= 1
 
 	if (!keepQCs && getEl("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
 	if (!keepPCs && getEl("pairedChalls").style.display == "block") showChallengesTab("normalchallenges")

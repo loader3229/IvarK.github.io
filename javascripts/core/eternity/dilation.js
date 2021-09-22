@@ -498,7 +498,7 @@ function buyDilationUpgrade(pos, max, isId) {
 	}
 	if (max) return true
 	if (rebuyable) updateDilationUpgradeCost(pos, id)
-	updateDilationUpgradeButtons()
+	onDilationRebuyable()
 }
 
 function onBuyDilationUpgrade(x, b = 1) {
@@ -580,15 +580,32 @@ function updateDilationUpgradeCost(pos, id) {
 		else r = shortenCosts(r)
 		getEl("dil" + pos + "cost").textContent = "Cost: " + r + " dilated time"
 	}
+
 	if (id == "ngud1") getEl("dil42oom").textContent = shortenCosts(new Decimal("1e1000"))
+}
+
+function onDilationRebuyable() {
+	if (atDilationDisplay()) {
+		updateDilationUpgradeCosts()
+		updateDilationUpgradeButtons()
+	}
+}
+
+function updateDilationRebuyableCosts() {
+	for (let i = 1; i <= 5; i++) {
+		var id = "r" + i
+		var pos = DIL_UPG_ID_POS[id]
+		if (DIL_UPG_UNLOCKED[id]) updateDilationUpgradeCost(pos, id)
+	}
 }
 
 function updateDilationUpgradeCosts() {
 	for (let i = 0; i < DIL_UPGS.length; i++) {
 		var pos = DIL_UPGS[i]
 		var id = getDilUpgId(pos)
-		if (DIL_UPG_UNLOCKED[id]) updateDilationUpgradeCost(pos, id)
+		if (id[0] != "r" && DIL_UPG_UNLOCKED[id]) updateDilationUpgradeCost(pos, id)
 	}
+	updateDilationRebuyableCosts()
 }
 
 function canBuyGalaxyThresholdUpg() {
@@ -678,13 +695,19 @@ function dilateTime(auto, shortcut) {
 	eternity(!pH.can("eternity"), true, undefined, !onActive)
 }
 
+function atDilationDisplay() {
+	return getEl("dilation").style.display == "block" && getEl("eternitystore").style.display == "block"
+}
+
 function updateDilationDisplay() {
-	if (getEl("dilation").style.display == "block" && getEl("eternitystore").style.display == "block") {
+	if (atDilationDisplay()) {
 		getEl("tachyonParticleAmount").textContent = shortenMoney(player.dilation.tachyonParticles)
 		getEl("dilatedTimeAmount").textContent = shortenMoney(player.dilation.dilatedTime)
 		getEl("dilatedTimePerSecond").textContent = "+" + shortenMoney(getDilTimeGainPerSecond()) + "/s"
 		getEl("galaxyThreshold").textContent = shortenMoney(player.dilation.nextThreshold)
 		getEl("dilatedGalaxies").textContent = getFullExpansion(Math.floor(player.dilation.freeGalaxies))
+
+		updateDilationRebuyableCosts()
 	}
 }
 

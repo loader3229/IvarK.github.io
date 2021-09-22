@@ -571,7 +571,8 @@ function mainDilationDisplay(){
 	if (player.exdilation==undefined||aarMod.ngudpV?false:player.blackhole.unl) {
 		exdilationDisplay()
 	} else getEl("reversedilationdiv").style.display = "none"
-	var fgm=getFreeGalaxyGainMult()
+
+	var fgm = getFreeGalaxyGainMult()
 	getEl('freeGalaxyMult').textContent = fgm == 1 ? "Tachyonic Galaxy" : Math.round(fgm * 10) / 10 + " Tachyonic Galaxies"
 }
 
