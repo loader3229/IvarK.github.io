@@ -603,6 +603,7 @@ var QCs = {
 			unl_challs: [],
 			in: [],
 			rewards: {},
+			nerfed: 0,
 			perks: {},
 			show_perks: QCs_tmp.show_perks
 		}
@@ -614,7 +615,7 @@ var QCs = {
 			if (this.data[x].unl()) {
 				data.unl_challs.push(x)
 				if (!this.done(x)) break
-				if (this.modDone(x, "up")) data.nerfed = (data.nerfed || 0) + 1
+				if (this.modDone(x, "up")) data.nerfed++
 			}
 		}
 

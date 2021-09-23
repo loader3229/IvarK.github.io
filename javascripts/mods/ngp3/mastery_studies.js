@@ -719,7 +719,7 @@ function canBuyMasteryStudy(type, id) {
 		var row = Math.floor(id / 10)
 		if (!mTs.spentable.includes(id)) return false
 		if (player.timestudy.theorem < mTs.costs.time[id]) return false
-		if (!hasAch("ng3pr11") && mTs.latestBoughtRow - (tmp.bgMode || tmp.ngp3_mul && !tmp.exMode ? 1 : 0) > row) return false
+		if (!hasAch("ng3p28") && mTs.latestBoughtRow - (tmp.bgMode || tmp.ngp3_mul && !tmp.exMode ? 1 : 0) > row) return false
 		if (mTs.unlockReqConditions[id] && !mTs.unlockReqConditions[id]()) return false
 
 		//Death Mode
