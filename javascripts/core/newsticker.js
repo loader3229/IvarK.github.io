@@ -493,6 +493,7 @@ amNewsArray = [
 ["Meanwhile in a computable number competition: Writes the code that looks like snaky lines, which contains functions that are more powerful than Loader's Number. He is trying to not make interpreters and turing machines, just to follow rules."
 , true, "am276"],
 ["In September 2020, I suddenly lost my interest on Numberblocks, and even left the community. At the time when I wrote this, It's been 1 year. Don't worry, I will use BAN and SAN for googological numbers in this game, if I want to go beyond ee308.", true, "am277"],
+["τεμΩαrεx", "tmp.ngp3", "am278"],
 /*NEXT ID: am274*/
 ];}
 
