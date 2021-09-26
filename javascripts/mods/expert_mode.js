@@ -1,5 +1,4 @@
 function checkForExpertMode() {
-	if (!metaSave.ngp4) return
 	if (metaSave.ngp3ex) return
 	console.log("EXPERT MODE UNLOCKED!")
 	metaSave.ngp3ex = true

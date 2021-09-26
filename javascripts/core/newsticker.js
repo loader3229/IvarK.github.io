@@ -342,7 +342,7 @@ amNewsArray = [
 ["Eternity Challenge 10 is confirmed to be a boost!", "pH.did('ghostify') && (player.ghostify.ghostlyPhotons.lights[0] > 3 || player.ghostify.ghostlyPhotons.enpowerments)", "am125"],
 ["When will Trio Challenges be released?!", "hasAch('ng3p25')", "am126"],
 ["Welcome to the hell of NG-.", "player.tickspeedBoosts !== undefined", "am127"],
-["Start playing NG+3 instead. You are not doing your progress.", "aarMod.ngp4V", "am128"],
+["[FUTURE NEWS TICKER]", false, "am128"],
 ["If NGUd+ is a combination of NG+3 and NGUd, then why isn't NGUd' a combination of NG' and NGUd?", "aarMod.ngudpV", "am129"],
 ["Congratulations for beating NG-3! (for now...)", "player.tickspeedBoosts !== undefined && player.postChallUnlocked > 5", "am130"],
 ["Progressing as a Ghost...", "pH.did('ghostify') && player.ghostify.ghostlyPhotons.unl", "am131"],

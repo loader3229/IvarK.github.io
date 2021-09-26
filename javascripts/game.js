@@ -27,7 +27,7 @@ function setupFooterHTML() {
 			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
 			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a> |-| " + 
 			"<a href='http://ng-plus-plus-plus.fandom.com' target='_newtab'>Wiki</a> | " +  
-			(beta ?
+			(beta || preBeta ?
 				(
 					!checkCorrectBeta() ?
 					"<a href='http://rawgit.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Correct Test Server</a>" :
@@ -377,7 +377,7 @@ function updateNewPlayer(mode, preset) {
 	if (mode == "reset") {
 		modsChosen = {
 			ngm: aarMod.ngmR !== undefined ? 2 : aarMod.newGameMinusVersion !== undefined ? 1 : 0,
-			ngp: aarMod.ngpX ? aarMod.ngpX - 2 : aarMod.ngp4V !== undefined ? 2 : aarMod.newGamePlusVersion !== undefined ? 1 : 0,
+			ngp: aarMod.ngpX ? aarMod.ngpX - 2 : aarMod.newGamePlusVersion !== undefined ? 1 : 0,
 			arrows: aarMod.newGameExpVersion !== undefined,
 			ngpp: player.meta == undefined ? false : aarMod.ngp3lV ? 3 : tmp.ngp3 ? 2 : 1,
 			ngmm: tmp.ngmX ? tmp.ngmX - 1 : inNGM(2) ? 1 : 0,
@@ -696,7 +696,6 @@ function updateNewPlayer(mode, preset) {
 		if (modsChosen.ngp) doNGPlusOneNewPlayer()
 		if (modsChosen.ngpp) doNGPlusTwoNewPlayer()
 		if (modsChosen.ngpp === 2) doNGPlusThreeNewPlayer()
-		if (modsChosen.ngp === 2) doNGPlusFourPlayer()
 
 		// NG-x
 		if (modsChosen.ngm === 1) aarMod.newGameMinusVersion = 2.2
@@ -1103,32 +1102,6 @@ function doInfinityRespeccedNewPlayer(){
 	for (dim = 1; dim <= 8; dim++) player.dimtechs["dim" + dim + "Upgrades"] = 0
 	player.setsUnlocked = 0
 	player.infMultCost = 1
-}
-
-function doNGPlusFourPlayer(){
-	player.eternities = 1e13
-	for (var c = 13; c <= mTs.ecsUpTo; c++) player.eternityChalls["eterc" + c] = 5
-	player.dilation.studies = [1, 2, 3, 4, 5, 6]
-	player.dilation.dilatedTime = 1e100
-	for (var u = 4; u < 11; u++) player.dilation.upgrades.push(u)
-	for (var u = 1; u < 7; u++) player.dilation.upgrades.push("ngpp" + u)
-	player.meta.antimatter = 1e25
-	player.meta.resets = 4
-	qu_save.times = 1
-	qu_save.best = 10
-	for (var d = 7; d < 14; d++) player.masterystudies.push("d"+d)
-	QCs_save.comps = QCs.data.max
-	qu_save.nanofield.rewards = 19
-	qu_save.reachedInfQK = true
-	qu_save.tod.r.spin = 1e25
-	qu_save.tod.g.spin = 1e25
-	qu_save.tod.b.spin = 1e25
-	player.ghostify.milestones = 1
-	player.achievements.push("ng3p18")
-	player.achievements.push("ng3p28")
-	player.achievements.push("ng3p37")
-	player.achievements.push("ng3p47")
-	aarMod.ngp4V = 1
 }
 
 function doNGUDSemiprimePlayer(){
@@ -1789,13 +1762,6 @@ function changeSaveDesc(saveId, placement) {
 			if (!temp.aarexModifications.nguspV && !temp.aarexModifications.ngudpV && temp.meta) msg += "+"
 		} else if (temp.meta) msg += exp + "++" + (temp.masterystudies ? "+" : "")
 		else if (temp.aarexModifications.newGamePlusVersion) msg += exp + "+"
-		if (temp.masterystudies) {
-			if (temp.aarexModifications.ngp4V) {
-				msg += "+"
-				if (!temp.exdilation) msg = exp + "+4"
-			}
-			if (temp.aarexModifications.ngp3lV) msg += "L"
-		}
 		var ngmX = calcNGMX(temp)
 		if (ngmX >= 4) msg += "-" + ngmX
 		else if (ngmX) msg += "-".repeat(ngmX)
@@ -1928,7 +1894,7 @@ var modFullNames = {
 }
 var modSubNames = {
 	ngm: ["OFF", "ON", "NG- Remade"],
-	ngp: ["OFF", "ON (v3)", "NG+4"/*, "NG+5"*/],
+	ngp: ["OFF", "ON (v3)"/*, "NG+4", "NG+5"*/],
 	ngpp: ["OFF", "ON", "NG+++"],
 	arrows: ["Linear (↑⁰)", "Exponential (↑)"/*, "Tetrational (↑↑)"*/],
 	ngmm: ["OFF", "ON", "NG---", "NG-4", "NG-5"/*, "NG-6"*/],
@@ -1953,8 +1919,7 @@ function toggle_mod(id) {
 
 	// Change submod
 	var subMode = ((mods[id] || 0) + 1) % ((hasSubMod && modSubNames[id].length) || 2)
-	if (id == "ngp" && subMode == 2 && !metaSave.ngp4) subMode = 0
-	else if (id == "ngpp" && subMode == 1 && mods.ngud) subMode = 2
+	if (id == "ngpp" && subMode == 1 && mods.ngud) subMode = 2
 	else if (id == "arrows" && subMode == 2 && mods.rs) subMode = 0
 	mods[id] = subMode
 
@@ -2084,6 +2049,7 @@ function showNextModeMessage(click) {
 		getEl("welcomeMessage").innerHTML = ngModeMessages[ngModeMessages.length - 1]
 		ngModeMessages.pop()
 	} else if (welcomeUpdates.length > 0) {
+		console.log(ngp3Welcomes)
 		var ver = welcomeUpdates.pop()
 		getEl("welcome").style.display = "flex"
 		getEl("welcomeMessage").innerHTML = ver == "alpha" ? (
@@ -2093,10 +2059,10 @@ function showNextModeMessage(click) {
 			"<br><br>Thank you for testing NG+3R!<br>~Aarex"
 		) : (
 			"<b class='lime'>Welcome to NG+3 Respecced v" + ver + "!</b><br>This update introduces...<br><br>" +
-			(ngp3Welcomes.msgs[ver] || "???") +
+			evalData(ngp3Welcomes.msgs[ver] || "???") +
 			"<br><br><b>Discord</b>: <a href='http://discord.gg/KsjcgskgTj' target='_newtab'>http://discord.gg/KsjcgskgTj</a>" +
 			"<br><br>Thank you for playing NG+3R!<br>~Aarex" +
-			"<br><br>Goal: " + ngp3Welcomes.goals[ver]()
+			"<br><br>Goal: " + evalData(ngp3Welcomes.goals[ver])
 		)
 	} else if (click) getEl("welcome").style.display = "none"
 }
@@ -3715,13 +3681,6 @@ function doBreakEternityUnlockStuff(){
 	updateBreakEternity()
 }
 
-function doNGP4UnlockStuff(){
-	$.notify("Congratulations! You unlocked NG+4!", "success")
-	metaSave.ngp4 = true
-	checkForExpertMode()
-	localStorage.setItem(metaSaveId,btoa(JSON.stringify(metaSave)))
-}
-
 function doGhostifyUnlockStuff(){
 	player.ghostify.reached = true
 	if (getEl("welcome").style.display != "flex") getEl("welcome").style.display = "flex"
@@ -3740,7 +3699,6 @@ function doNGP3UnlockStuff(){
 	if (!qu_save.reached && isQuantumReached()) doQuantumUnlockStuff()
 
 	var inEasierModeCheck = !inEasierMode()
-	if (player.masterystudies && (hasMTS("d14")||hasAch("ng3p51")) && !metaSave.ngp4 && !inEasierModeCheck) doNGP4UnlockStuff()
 	if (player.eternityPoints.gte("1e1200") && qu_save.bigRip.active && !qu_save.breakEternity.unlocked) doBreakEternityUnlockStuff()
 	if (tmp.quActive) {
 		if (!player.ghostify.reached && qu_save.bigRip.active && qu_save.bigRip.bestThisRun.gte(Decimal.pow(10, QCs.getGoalMA(undefined, true)))) doGhostifyUnlockStuff()

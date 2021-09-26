@@ -1904,7 +1904,6 @@ function updateNGModeMessage(){
 	}
 	if (player.meta!==undefined||player.exdilation!==undefined) {
 		if (!aarMod.newGamePlusVersion && !condensed) ngModeMessages.push("You have disabled NG+ features on NG++. This means you start off from the beginning of Antimatter Dimensions without any buffs, and with NG+3 enabled, it can be considered as The Grand Run. If you want to go for it, good luck.")
-		if (aarMod.ngp4V) ngModeMessages.push("Welcome to NG+4, by Aarex and Soul147! This is a NG+ version of NG+3, starting you off with all features up to Big Rip unlocked. It isn't recommended to play this mode as you have some more content accessible early on compared to NG+.")
 
 		if (player.exdilation!==undefined) {
 			if (aarMod.nguspV) ngModeMessages.push("Welcome to NG Update Semiprime, made by Aarex! This is like NGUd', but with balancing changes implemented. Good luck! :)")
@@ -1915,8 +1914,8 @@ function updateNGModeMessage(){
 			else if (aarMod.ngudpV) ngModeMessages.push("Welcome to NG Update Prime, made by pg132! NGUd' is like NGUd+, but you can't reverse dilation. Good luck for beating this mod. >:)")
 			else if (player.meta!==undefined) ngModeMessages.push("Welcome to NG Update+, a combination made by Soul147 (Sigma)! This is a combination of dan-simon's NG Update and Aarex's NG+++, which can end up unbalancing the game because of some mechanics.")
 			else ngModeMessages.push("Welcome to NG Update, made by dan-simon! In this mod, Black Hole and Ex-Dilation are available after the endgame of the vanilla Antimatter Dimensions.")
-		} else if (player.masterystudies && !aarMod.ngp3mpV && !aarMod.ngp4V) ngModeMessages.push("Welcome to NG+++ mode, the extension of dan-simon's NG++, made by Aarex! There is a lot of content in this mod, so good luck!")
-		else if (!aarMod.ngp4V) ngModeMessages.push("Welcome to NG++, made by dan-simon! In this mode, more Dilation upgrades and Meta Dimensions are added to push the endgame further. Disclaimer: This is not NG+3, there is no Quantum content available.")
+		} else if (player.masterystudies && !aarMod.ngp3mpV) ngModeMessages.push("Welcome to NG+++ mode, the extension of dan-simon's NG++, made by Aarex! There is a lot of content in this mod, so good luck!")
+		else ngModeMessages.push("Welcome to NG++, made by dan-simon! In this mode, more Dilation upgrades and Meta Dimensions are added to push the endgame further. Disclaimer: This is not NG+3, there is no Quantum content available.")
 	} else if (aarMod.newGamePlusVersion) ngModeMessages.push("Welcome to NG+, made by usavictor and Aarex! You start with many things unlocked and given to you immediately to get through the early game faster.")
 	if (player.infinityUpgradesRespecced) ngModeMessages.push('Welcome to Infinity Respecced, created by Aarex! In this mode, all of infinity upgrades are replaced with new upgrades except for the 2x IP mult, Break Infinity is removed, but there is new content in Infinity.')
 	if (player.boughtDims) ngModeMessages.push('Welcome to Eternity Respecced, created by dan-simon! In this mode, Eternity is changed to be balanced better without any scaling. Note: The port is not complete on this site, so you should search for the separate website for the mod itself to get the latest version.')
@@ -2180,13 +2179,14 @@ function setupNGP31Versions() {
 	if (aarMod.ngp3Build) {
 		if (!aarMod.ngp3r) aarMod.ngp3r = 0
 		if (aarMod.ngp3r < 0.5) welcomeUpdates.push(0.5)
+		if (aarMod.ngp3r < 0.6) welcomeUpdates.push(0.6)
 
-		if (!beta && (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.6 : aarMod.ngp3r < 0.6)) welcomeUpdates.push(0.6)
-		if (beta && aarMod.ngp3r < 0.6) welcomeUpdates.push("alpha")
+		if (!beta && (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.7 : aarMod.ngp3r < 0.7)) welcomeUpdates.push(0.7)
+		if (beta && aarMod.ngp3r < 0.7) welcomeUpdates.push("alpha")
 	}
-	aarMod.ngp3r = 0.6
+	aarMod.ngp3r = 0.7
 	aarMod.ngp3Alpha = beta
-	aarMod.ngp3Build = 20210910
+	aarMod.ngp3Build = 20210926
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) player.timestudy.auto = {}
 	if (rollback) rollbackQuantum(rollback)
@@ -2903,8 +2903,8 @@ function migrateOldSaves() {
 }
 
 //Save Storage System
-var beta = false
-var preBeta = true
+var beta = true
+var preBeta = false
 var betaId = beta || preBeta ? "A-" : ""
 var correctBetaId = "A-"
 var betaLink = "Respecced-Alpha"
