@@ -384,9 +384,10 @@ function dimBought(tier) {
 	return player[TIER_NAMES[tier] + "Bought"] % 10;
 }
 
-function recordBought (name, num) {
+function recordBought(name, num) {
+	player[name + 'Amount'] = player[name + 'Amount'].add(num);
 	player[name + 'Bought'] += num;
-	if (inNGM(2)) player.totalBoughtDims[name] = (player.totalBoughtDims[name] ? player.totalBoughtDims[name] : 0) + num;
+	if (inNGM(2)) player.totalBoughtDims[name] = (player.totalBoughtDims[name] || 0) + num;
 }
 
 function costIncreaseActive(cost) {
@@ -440,9 +441,10 @@ function buyOneDimension(tier) {
 	let cost = player[name + 'Cost']
 	let resource = getOrSubResource(tier)
 	if (!cost.lte(resource)) return false
+
 	getOrSubResource(tier, cost)
-	player[name + "Amount"] = player[name + "Amount"].add(1)
 	recordBought(name, 1)
+
 	if (dimBought(tier) == 0) {
 		if (player.currentChallenge == "postc5" && player.tickspeedBoosts == undefined) multiplyPC5Costs(player[name + 'Cost'], tier)
 		else if (inNC(5) && player.tickspeedBoosts == undefined) multiplySameCosts(player[name + 'Cost'])
@@ -452,9 +454,11 @@ function buyOneDimension(tier) {
 		let pow = getDimensionPowerMultiplier()
 		floatText("D" + tier, "x" + shortenMoney(pow))
 	}
+
 	if (tier == 1 && getAmount(1) >= 1e150) giveAchievement("There's no point in doing that")
 	if (getAmount(8) == 99) giveAchievement("The 9th Dimension is a lie");
 	onBuyDimension(tier)
+
 	return true
 }
 
@@ -466,7 +470,6 @@ function buyManyDimension(tier, quick) {
 	let resource = getOrSubResource(tier)
 	if (!cost.lte(resource)) return false
 	getOrSubResource(tier, cost)
-	player[name + "Amount"] = player[name + "Amount"].add(toBuy)
 	recordBought(name, toBuy)
 	if (player.currentChallenge == "postc5" && player.tickspeedBoosts == undefined) multiplyPC5Costs(player[name + 'Cost'], tier)
 	else if (inNC(5) && player.tickspeedBoosts == undefined) multiplySameCosts(player[name + 'Cost'])
@@ -497,7 +500,6 @@ function buyBulkDimension(tier, bulk, auto) {
 		if (!inNC(10) && player.currentChallenge != "postc1" && player.infinityUpgradesRespecced == undefined) max = Math.ceil(Decimal.div(Number.MAX_VALUE, cost).log(mult) + 1)
 		var toBuy = Math.min(Math.min(Math.floor(resource.div(cost).times(mult-1).add(1).log(mult)), bulk-bought), max)
 		getOrSubResource(tier, Decimal.pow(mult, toBuy).sub(1).div(mult-1).times(cost))
-		player[name + "Amount"] = player[name + "Amount"].add(toBuy * 10)
 		recordBought(name, toBuy*10)
 		player[name + "Cost"] = player[name + "Cost"].times(Decimal.pow(mult, toBuy))
 		if (costIncreaseActive(player[name + "Cost"])) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionCostMultiplierIncrease())
@@ -526,7 +528,6 @@ function buyBulkDimension(tier, bulk, auto) {
 		if (toBuy < 1) break
 		let newCost = player[name + "Cost"].times(Decimal.pow(player.costMultipliers[tier - 1], toBuy - 1).times(Decimal.pow(mi, (toBuy - 1) * (toBuy - 2) / 2)))
 		let newMult = player.costMultipliers[tier - 1].times(Decimal.pow(mi, toBuy - 1))
-		player[name + "Amount"] = player[name + "Amount"].add(toBuy * 10)
 		recordBought(name, toBuy * 10)
 		player[name + "Cost"] = newCost.times(newMult)
 		player.costMultipliers[tier - 1] = newMult.times(mi)
@@ -544,16 +545,11 @@ function canQuickBuyDim(tier) {
 }
 
 function getOrSubResource(tier, sub) {
-	if (sub == undefined) {
-		if (tier > 2 && (inNC(10) || player.currentChallenge == "postc1")) return player[TIER_NAMES[tier - 2] + "Amount"]
-		return player.money
-	} else {
-		if (tier > 2 && (inNC(10) || player.currentChallenge == "postc1")) {
-			if (sub.gt(player[TIER_NAMES[tier - 2] + "Amount"])) player[TIER_NAMES[tier - 2] + "Amount"] = new Decimal(0)
-			else player[TIER_NAMES[tier - 2] + "Amount"] = player[TIER_NAMES[tier - 2] + "Amount"].sub(sub)
-		} else if (sub.gt(player.money)) player.money = new Decimal(0)
-		else player.money = player.money.sub(sub)
-	}
+	let c10 = (inNC(10) || player.currentChallenge == "postc1") && tier > 2
+	let res = c10 ? TIER_NAMES[tier - 2] + "Amount" : "money"
+
+	if (sub !== undefined) player[res] = player[res].sub(sub)
+	else return player[res]
 }
 
 function getDimensionProductionPerSecond(tier) {

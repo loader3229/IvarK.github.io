@@ -3963,9 +3963,11 @@ function checkMatter(diff){
 	if (inNC(12) || player.currentChallenge == "postc1") pow = 1
 	if (player.currentChallenge == "postc6") pow = 20
 
-	if (isNaN(player.matter.e)) player.matter = new Decimal(0)
-	if (pow > 0 && getAmount(1) > 0) player.matter = player.matter.max(1).times(Decimal.pow(tmp.mv, diff))
-	if (player.matter.pow(pow).gt(player.money)) quickReset()
+	if (pow > 0) {
+		if (isNaN(player.matter.e)) player.matter = new Decimal(0)
+		if (getAmount(1) > 0) player.matter = player.matter.max(1).times(Decimal.pow(tmp.mv, diff))
+		if (player.matter.pow(pow).gt(player.money)) quickReset()
+	}
 }
 
 function passiveIPupdating(diff) {
