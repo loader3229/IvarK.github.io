@@ -3789,7 +3789,7 @@ function doPerSecondNGP3Stuff(){
 	doNGP3UnlockStuff()
 	notifyGhostifyMilestones()
 	ghostifyAutomationUpdatingPerSecond()
-	if (qu_save.autoOptions.assignQK) assignAll(true)
+	if (qu_save.autoOptions.assignQK) distributeQK(true)
 
 	givePerSecondNeuts()
 }

@@ -194,7 +194,7 @@ dev.quickQuantum = function(n, quick) {
 	qu_save.gluons.gb = Decimal.div(n, 3)
 	qu_save.gluons.br = Decimal.div(n, 3)
 	gainQKOnQuantum(n, true)
-	assignAll(true)
+	distributeQK(true)
 	if (!quick) updateColorCharge()
 }
 

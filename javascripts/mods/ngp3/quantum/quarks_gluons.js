@@ -62,8 +62,7 @@ function assignQuark(color) {
 		$.notify("Make sure you are assigning at least one quark!")
 		return
 	}
-	var mult = getQuarkAssignMult()
-	qu_save.usedQuarks[color] = qu_save.usedQuarks[color].add(usedQuarks.times(mult)).round()
+	qu_save.usedQuarks[color] = qu_save.usedQuarks[color].add(usedQuarks).round()
 	qu_save.quarks = qu_save.quarks.sub(usedQuarks)
 	getEl("quarks").innerHTML = "You have <b class='QKAmount'>0</b> quarks."
 	if (!mult.eq(1)) updateQuantumWorth()
@@ -71,22 +70,24 @@ function assignQuark(color) {
 	if (player.ghostify.another > 0) player.ghostify.another--
 }
 
-function assignAll(auto) {
+function distributeQK(auto) {
 	var ratios = qu_save.assignAllRatios
 	var sum = ratios.r + ratios.g + ratios.b
-	var oldQuarks = getAssortAmount()
-	var left = oldQuarks
-	var mult = getQuarkAssignMult()
-	if (oldQuarks.eq(0)) return
+	var assort = getAssortAmount()
+	var left = assort
+
+	if (assort.eq(0)) return
 	for (c = 0; c < 3; c++) {
-		var toAssign = oldQuarks.times(ratios[colors[c]] / sum).min(left).round()
-		if (toAssign.gt(0)) {
-			qu_save.usedQuarks[colors[c]] = qu_save.usedQuarks[colors[c]].add(toAssign.times(mult)).round()
+		var to = assort.times(ratios[colors[c]] / sum).min(left)
+		if (c == 2) to = left
+		if (to.gt(0)) {
+			qu_save.usedQuarks[colors[c]] = qu_save.usedQuarks[colors[c]].add(to).round()
 			if (player.ghostify.another > 0) player.ghostify.another--
-			left = left.sub(toAssign.min(left)).round()
+			left = left.sub(to.min(left)).round()
 		}
 	}
-	qu_save.quarks = qu_save.quarks.sub(oldQuarks).round()
+	qu_save.quarks = qu_save.quarks.sub(assort).round()
+
 	if (qu_save.autoOptions.assignQKRotate) {
 		if (qu_save.autoOptions.assignQKRotate > 1) {
 			qu_save.assignAllRatios = {
@@ -103,12 +104,6 @@ function assignAll(auto) {
 	}
 	if (mult.gt(1)) updateQuantumWorth()
 	updateColorCharge(true)
-}
-
-function getQuarkAssignMult() {
-	let r = new Decimal(1)
-	if (hasBosonicUpg(23)) r = r.times(tmp.blu[23])
-	return r
 }
 
 function changeRatio(color) {
@@ -130,7 +125,7 @@ function changeRatio(color) {
 function toggleAutoAssign() {
 	qu_save.autoOptions.assignQK = !qu_save.autoOptions.assignQK
 	getEl('autoAssign').textContent="Auto: O"+(qu_save.autoOptions.assignQK?"N":"FF")
-	if (qu_save.autoOptions.assignQK) assignAll(true)
+	if (qu_save.autoOptions.assignQK) distributeQK(true)
 }
 
 function rotateAutoAssign() {
@@ -165,7 +160,7 @@ function respecQuarks() {
 	qu_save.quarks = qu_save.quarks.add(sum)
 	restartQuantum(true)
 
-	if (qu_save.autoOptions.assignQK) assignAll(true)
+	if (qu_save.autoOptions.assignQK) distributeQK(true)
 }
 
 //Color Charge
@@ -328,7 +323,7 @@ function updateColorPowers() {
 
 //Gluons
 function gainQuantumEnergy() {
-	let xNoDiv = Decimal.add(getQEQuarksPortion(), getQEGluonsPortion()).times(tmp.qe.mult)
+	let xNoDiv = getBaseQuantumEnergy()
 	let x = xNoDiv.div(tmp.qe.div)
 
 	if (isNaN(xNoDiv.e)) xNoDiv = 0
@@ -336,6 +331,10 @@ function gainQuantumEnergy() {
 
 	qu_save.quarkEnergy = Decimal.max(x, qu_save.quarkEnergy || 0)
 	qu_save.bestEnergy = Decimal.max(xNoDiv, qu_save.bestEnergy || 0).max(qu_save.quarkEnergy)
+}
+
+function getBaseQuantumEnergy() {
+	return Decimal.add(getQEQuarksPortion(), getQEGluonsPortion()).times(tmp.qe.mult)
 }
 
 function getQEQuarksPortion() {
@@ -1353,7 +1352,7 @@ function gainQKOnQuantum(qkGain, quick) {
 
 	if (!quick) {
 		//Quarks -> Colors
-		if (qu_save.autoOptions.assignQK) assignAll(true)
+		if (qu_save.autoOptions.assignQK) distributeQK(true)
 		updateColorCharge()
 
 		//Quarks & Gluons -> Energy
@@ -1468,7 +1467,7 @@ function updateQuarksTabOnUpdate(mode) {
 function updateQuarkAssort() {
 	var assortAmount = getAssortAmount()
 	var canAssign = assortAmount.gt(0)
-	getEl("assort_amount").textContent = shortenDimensions(assortAmount.times(getQuarkAssignMult()))
+	getEl("assort_amount").textContent = shortenDimensions(assortAmount)
 	getEl("redAssort").className = canAssign ? "storebtn" : "unavailablebtn"
 	getEl("greenAssort").className = canAssign ? "storebtn" : "unavailablebtn"
 	getEl("blueAssort").className = canAssign ? "storebtn" : "unavailablebtn"

@@ -82,7 +82,7 @@ var QCs = {
 	data: {
 		max: 8,
 		1: {
-			unl: () => true,
+			unl: () => QCs.unl(),
 			desc: "TT cost multipliers are multiplied by 3.5x.",
 			goal: () => mTs.bought >= 10,
 			goalDisp: () => getFullExpansion(10) + " bought mastery studies",
@@ -607,9 +607,9 @@ var QCs = {
 			perks: {},
 			show_perks: QCs_tmp.show_perks
 		}
+		QCs_tmp = data
 		if (!data.unl) return
 
-		QCs_tmp = data
 		for (let x = 1; x <= this.data.max; x++) {
 			if (QCs_save.in.includes(x)) data.in.push(x)
 			if (this.data[x].unl()) {
@@ -634,7 +634,7 @@ var QCs = {
 		}
 	},
 
-	unl: (force) => force ? (tmp.ngp3 && player.masterystudies.includes("d8")) : QCs_tmp.unl,
+	unl: (force) => force ? (tmp.ngp3 && player.masterystudies.includes("d8")) : QCs_save !== undefined && QCs_tmp.unl,
 	started(x) {
 		return QCs_tmp.in.includes(x)
 	},
