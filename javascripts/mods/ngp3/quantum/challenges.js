@@ -791,7 +791,7 @@ var QCs = {
 		for (let qc = 1; qc <= this.data.max; qc++) {
 			var cUnl = QCs_tmp.unl_challs.includes(qc)
 
-			getEl("qc_" + qc + "_div").style.display = cUnl ? "" : "none"
+			getEl("qc_" + qc + "_div").style.display = (qc != 7 || !QCs_tmp.show_perks) && cUnl ? "" : "none"
 			if (QCs_tmp.show_perks) {
 				var reqs = this.data[qc].overlapReqs
 				getEl("qc_" + qc + "_desc").textContent = this.data[qc].nerfDesc()

@@ -2904,7 +2904,7 @@ function migrateOldSaves() {
 
 //Save Storage System
 var beta = false
-var preBeta = true
+var preBeta = false
 var betaId = beta || preBeta ? "A-" : ""
 var correctBetaId = "A-"
 var betaLink = "Respecced-Alpha"
