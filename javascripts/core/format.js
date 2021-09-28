@@ -16,46 +16,49 @@ function letter(power, str) {
 }
 
 function getAbbreviation(e) {
-	const prefixes = [
-		['', 'U', 'D', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'O', 'N'],
-				['', 'Dc', 'Vg', 'Tg', 'Qd', 'Qi', 'Se', 'St', 'Og', 'Nn'],
-				['', 'Ce', 'Dn', 'Tc', 'Qe', 'Qu', 'Sc', 'Si', 'Oe', 'Ne']]
 	var result = ''
 	e = Math.floor(e / 3) - 1;
 	e2 = 0
-		while (e > 0) {		
+	while (e > 0) {		
 		var partE = e % 1000
-		if (partE > 0) {
-			if (partE == 1 && e2 > 0) var prefix = ""
-			else var prefix = prefixes[0][partE % 10] + prefixes[1][Math.floor(partE / 10) % 10] + prefixes[2][Math.floor(partE / 100)]
-			if (result == "") result = prefix + getTier2Abbreviation(e2)
-			else result = prefix + getTier2Abbreviation(e2) + '-' + result
-		}
+		if (partE > 0) result = getRootAbbreviation(partE, e2) + (result ? '-' + result : '')
 		e = Math.floor(e / 1000)
 		e2++
 	}
 	return result
 }
 
-function getShortAbbreviation(e) {
-	const prefixes = [
+function getRootAbbreviation(t1, t2) {
+	let prefixes = [
 		['', 'U', 'D', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'O', 'N'],
 		['', 'Dc', 'Vg', 'Tg', 'Qd', 'Qi', 'Se', 'St', 'Og', 'Nn'],
 		['', 'Ce', 'Dn', 'Tc', 'Qe', 'Qu', 'Sc', 'Si', 'Oe', 'Ne']
 	]
+	let o = t1 % 10
+	let t = Math.floor(t1 / 10) % 10
+	let h = Math.floor(t1 / 100) % 10
+
+	let r = ""
+	if (player.options.standard.useMyr && t1 >= 10 && t2 == 1) {
+		if (t1 >= 20) r = prefixes[0][t] + prefixes[1][h]
+		r += "MY"
+		if (o > 0) r += "-" + (o > 1 ? prefixes[0][o] : "") + "MI"
+	} else {
+		if (t1 > 1 || t2 == 0) r = prefixes[0][o] + prefixes[1][t] + prefixes[2][h]
+		r += getTier2Abbreviation(t2)
+	}
+	return r
+}
+
+function getShortAbbreviation(e) {
 	var result = ''
 	var id = Math.floor(e / 3 - 1)
 	var log = Math.floor(Math.log10(id))
 	var step = Math.max(Math.floor(log / 3 - 2), 0)
 	id = Math.round(id / Math.pow(10, Math.max(log - 6, 0))) * Math.pow(10, Math.max(log - 6, 0) % 3)
-		while (id > 0) {		
+	while (id > 0) {		
 		var partE = id % 1000
-		if (partE > 0) {
-			if (partE == 1 && step > 0) var prefix = ""
-			else var prefix = prefixes[0][partE % 10] + prefixes[1][Math.floor(partE / 10) % 10] + prefixes[2][Math.floor(partE / 100)]
-			if (result == "") result = prefix + getTier2Abbreviation(step)
-			else result = prefix + getTier2Abbreviation(step) + '-' + result
-		}
+		if (partE > 0) result = getRootAbbreviation(partE, step) + (result ? '-' + result : '')
 		id = Math.floor(id / 1000)
 		step++
 	}
@@ -249,7 +252,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 		var explained = (notation === "Explained scientific" || notation === "Explained engineering" || notation === "Explained logarithm")
 		var e = explained ? "10^" : "e"
 		var e_m = explained ? "*" : ""
-		if ((notation === "Mixed scientific" && power >= 33) || notation === "Scientific" || notation === "Explained scientific") {
+		if ((notation === "Mixed scientific" && power >= 33) || notation === "Scientific" || notation === "Explained scientific" || (notation === "Maximus Standard" && power < 1e3)) {
 			if (player.options.scientific !== undefined && player.options.scientific.significantDigits !== undefined) places = player.options.scientific.significantDigits - 1
 			places = Math.min(places, 9 - Math.floor(Math.log10(power)) - 1)
 			if (places >= 0) {
@@ -285,6 +288,17 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			return convTo(notation, matissa) + (notation == "Symbols" ? '-' : "e") + power
 		}
 		if (notation === "Layered Symbols") return ""
+		if (notation === "Maximus Standard") {
+			var slog = Math.floor(Math.log10(power))
+			var slog3 = Math.floor(slog / 3)
+			var log10 = power / Math.pow(10, 3 * slog3)
+			var mant = log10.toFixed(3 - slog + slog3 * 3)
+			if (mant >= 1e3) {
+				mant = (1).toFixed(3);
+				slog3++
+			}
+			return "MXS-" + FormatList[slog3] + "^" + mant
+		}
 		if (notation === "Infinity") {
 			const inflog = Math.log10(Number.MAX_VALUE)
 			const pow = Decimal.log10(value)
@@ -377,6 +391,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			}
 			return matissa + getAASAbbreviation(Math.floor(power / 3) - 1)
 		}
+		if (notation === "Myriads") return getMyriadStandard(value, places)
 		if (notation === "Time") {
 			if (power >= 3e9 + 3) return getTimeAbbreviation(power / 3)
 			matissa = (matissa * Math.pow(10, power % 3)).toFixed(Math.max(places - power % 3, 0))
@@ -386,7 +401,6 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			}
 			return matissa + " " + getTimeAbbreviation(Math.floor(power / 3))
 		}
-		if (notation === "Myriads") return getMyriadStandard(value, places)
 
 		if (matissa >= 1000) {
 			matissa /= 1000;

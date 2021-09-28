@@ -5696,15 +5696,20 @@
 			<table id='commasOptions'></table>
 		</div>
 		<div id='notationoptions' class='notationOptions' style="display: none; width: 450px; overflow-y: scroll">
-			<b>Scientific notation</b>
+			<b>Scientific</b>
 			Significant digits (min: 1, max: 10, leave 0 for variable): <input id="significantDigits" style="width: 170px" type="number" min=0 max=10 onchange="switchNotationOption('scientific','significantDigits')"></input><br>
-			<b>Logarithm notation</b>
+			<b>Logarithm</b>
 			Base (min: 1.01, max: 1.79e308): <input id="logBase" style="width: 170px" onchange="switchNotationOption('logarithm','base')"></input><br>
-			<b>Tetration notation</b>
+			<b>Tetration</b>
 			Base (min: 1.6, max: 1.79e308): <input id="tetrationBase" style="width: 170px" onchange="switchNotationOption('tetration','base')"></input><br>
-			<b>Hyperscientific notations</b>
+			<b>Hyperscientific</b>
 			Bump to next F at: <input id="hypersciBump" style="width: 170px" onchange="switchNotationOption('hypersci','bump')"></input><br>
-			<b>Psi notation</b>
+			<b>Standard</b>
+			Use Myrillions: <input type="checkbox" id="useMyr" onchange="switchNotationOption('standard','useMyr')"><br>
+			<b>AAS</b>
+			Use hyphen (-) separators: <input type="checkbox" id="useHyphens" onchange="switchNotationOption('aas','useHyphens')"><br>
+			Use De as 1e33: <input type="checkbox" id="useDe" onchange="switchNotationOption('aas','useDe')"><br>
+			<b>Psi</b>
 			Max characters (min: 2, max: 30): <input id="maxLength" style="width: 170px" type="number" min=2 max=30 onchange="switchNotationOption('psi','maxLength')"></input><br>
 			Max arguments (min: 1, max: 6): <input id="maxArguments" style="width: 170px" type="number" min=1 max=6 onchange="switchNotationOption('psi','maxArguments')"></input><br>
 			Max letters (min: 1, max: 4): <input id="maxLetters" style="width: 170px" type="number" min=1 max=4 onchange="switchNotationOption('psi','maxLetters')"></input><br>
@@ -5729,12 +5734,9 @@
 					<td><button class="storebtn" style="width:160px; height: 40px" onclick="switchNotationOption('psi','psiLetterH')">Force H</button></td>
 				</tr>
 			</table>
-			<b>Spazzy notation</b>
+			<b>Spazzy</b>
 			<p id='chosenSubNotation'></p>
 			<table id='subNotationOptions'></table>
-			<b>Aarex's Abbreviation System</b>
-			Use hyphen (-) separators: <input type="checkbox" id="useHyphens" onchange="switchNotationOption('aas','useHyphens')"><br>
-			Use De as 1e33: <input type="checkbox" id="useDe" onchange="switchNotationOption('aas','useDe')">
 		</div>
 	</div>
 	<div class="popup optionmenu" id="thememenu">

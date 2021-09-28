@@ -776,23 +776,10 @@ function doNGPlusOneNewPlayer(){
 	player.eternityChalls.eterc10 = 1
 	player.dilation.studies = [1]
 	player.dilation.rebuyables[3] = 2
-	aarMod.newGamePlusVersion = 3
+	player.break = true
+	aarMod.newGamePlusVersion = 3.01
 }
 
-/* Currently does not work when initializing, please fix
-function doNGPlusClassicNewPlayer(){
-	player.infinitied = Math.max(player.infinited, 1);
-	player.dimensionMultDecrease = 2
-	player.tickSpeedMultDecrease = 1.65
-	player.challenges = challengesCompletedOnEternity()
-	for (ec = 1; ec < 13; ec++) player.eternityChalls['eterc' + ec] = 5
-	player.achievements = []
-	player.achievements.push("r123") // 5 more eternities until the update
-	player.achievements.push("r22") // FAKE NEWS!
-	player.achievements.push("r76") // One for each dimension
-	aarMod.newGamePlusVersion = 2
-}
- */
 function doNGPlusTwoNewPlayer(){
 	aarMod.newGamePlusPlusVersion = 2.90142
 	player.autoEterMode = "amount"
@@ -1894,7 +1881,7 @@ var modFullNames = {
 }
 var modSubNames = {
 	ngm: ["OFF", "ON", "NG- Remade"],
-	ngp: ["OFF", "ON (v3)"/*, "NG+4", "NG+5"*/],
+	ngp: ["OFF", "ON", "NG+4"/*, "NG+5"*/], //There's no NG+ Classic, because earth doesn't want us to bring NG+ Classic back.
 	ngpp: ["OFF", "ON", "NG+++"],
 	arrows: ["Linear (↑⁰)", "Exponential (↑)"/*, "Tetrational (↑↑)"*/],
 	ngmm: ["OFF", "ON", "NG---", "NG-4", "NG-5"/*, "NG-6"*/],
@@ -2226,7 +2213,9 @@ var notationArray = [
 
 	"Tetration", "Hyperscientific", "Layered scientific", "Layered logarithm", "Tetrational scientific", "Hyper-E", "Psi",
 
-	"Standard", "AAS", "Letters", "Emojis", "Brackets", "Infinity", "Game percentages", "Greek", "Hexadecimal", "Morse code", "Spazzy", "Country Codes", "Iroha", "Symbols", "Lines", "Simplified Written", "Time", "Base-64", "Myriads", /*"Layered Symbols",*/ "AF2019", "AF5LN", "Blind"
+	"Standard", "AAS", "Maximus Standard",
+
+	"Letters", "Emojis", "Brackets", "Infinity", "Game percentages", "Greek", "Hexadecimal", "Morse code", "Spazzy", "Country Codes", "Iroha", "Symbols", "Lines", "Simplified Written", "Time", "Base-64", "Myriads", /*"Layered Symbols",*/ "AF2019", "AF5LN", "Blind"
 ]
 
 function updateNotationOption() {
@@ -2355,6 +2344,7 @@ function openNotationOptions() {
 		getEl("chosenSubNotation").textContent = "Sub-notation: " + (player.options.spazzy.subNotation == "Emojis" ? "Cancer" : player.options.spazzy.subNotation)
 		getEl("useHyphens").checked = player.options.aas.useHyphens
 		getEl("useDe").checked = player.options.aas.useDe
+		getEl("useMyr").checked = player.options.standard.useMyr
 	} else {
 		getEl("openpsioptions").textContent = "Notation options"
 		getEl("mainnotationoptions1").style.display = ""
@@ -2427,7 +2417,7 @@ function switchNotationOption(notation,id) {
 			if (value < 1 || value > 4) return
 			player.options.psi.maxletters=value
 		}
-	} else if (notation === "aas") player.options.aas[id] = getEl(id).checked
+	} else if (notation === "standard" || notation === "aas") player.options[notation][id] = getEl(id).checked
 	onNotationChange()
 }
 
@@ -2573,15 +2563,18 @@ function updateAutobuyers() {
 	var autoBuyerInf = new Autobuyer (getEl("bigcrunch"))
 	var autoSacrifice = new Autobuyer(13)
 
-	if (aarMod.newGameExpVersion || tmp.bgMode) {
-		autoBuyerDim1.interval = 1000
-		autoBuyerDim2.interval = 1000
-		autoBuyerDim3.interval = 1000
-		autoBuyerDim4.interval = 1000
-		autoBuyerDim5.interval = 1000
-		autoBuyerDim6.interval = 1000
-		autoBuyerDim7.interval = 1000
-		autoBuyerDim8.interval = 1000
+	var ngpInterval = aarMod.newGamePlusVersion && 100
+
+	if (aarMod.newGameExpVersion || tmp.bgMode || ngpInterval) {
+		var dimInt = ngpInterval || 1000
+		autoBuyerDim1.interval = dimInt
+		autoBuyerDim2.interval = dimInt
+		autoBuyerDim3.interval = dimInt
+		autoBuyerDim4.interval = dimInt
+		autoBuyerDim5.interval = dimInt
+		autoBuyerDim6.interval = dimInt
+		autoBuyerDim7.interval = dimInt
+		autoBuyerDim8.interval = dimInt
 	} else {
 		autoBuyerDim1.interval = 1500
 		autoBuyerDim2.interval = 2000
@@ -2595,17 +2588,21 @@ function updateAutobuyers() {
 
 	autoBuyerDimBoost.interval = 8000
 	if (tmp.bgMode) autoBuyerDimBoost.interval = 1000
+	if (ngpInterval) autoBuyerDimBoost.interval = ngpInterval
 	if (player.infinityUpgradesRespecced) autoBuyerDimBoost.bulkBought = false
 
 	autoBuyerGalaxy.interval = inNGM(2) ? 6e4 : 1.5e4
 	if (tmp.bgMode) autoBuyerGalaxy.interval /= 10
+	if (ngpInterval) autoBuyerGalaxy.interval = ngpInterval
 	if (player.infinityUpgradesRespecced) autoBuyerGalaxy.bulkBought = false
 
 	autoBuyerTickspeed.interval = 5000
 	if (tmp.bgMode) autoBuyerTickspeed.interval = 1000
+	if (ngpInterval) autoBuyerTickspeed.interval = ngpInterval
 
 	autoBuyerInf.interval = inNGM(2) ? 6e4 : 3e5
 	if (tmp.bgMode) autoBuyerInf.interval /= 10
+	if (ngpInterval) autoBuyerInf.interval = ngpInterval
    	if (player.boughtDims) {
 		autoBuyerInf.requireMaxReplicanti = false
 		autoBuyerInf.requireIPPeak = false
@@ -2613,6 +2610,7 @@ function updateAutobuyers() {
 
 	autoSacrifice.interval = inNGM(2) ? 1.5e4 : player.infinityUpgradesRespecced ? 3500 : 100
 	if (tmp.bgMode) autoSacrifice.interval /= 10
+	if (ngpInterval) autoSacrifice.interval = ngpInterval
 	autoSacrifice.priority = 5
 
 	autoBuyerDim1.tier = 1
@@ -2629,18 +2627,21 @@ function updateAutobuyers() {
 		var autoGalSacrifice = new Autobuyer(14)
 		autoGalSacrifice.interval = 1.5e4
 		if (tmp.bgMode) autoGalSacrifice.interval /= 10
+		if (ngpInterval) autoGalSacrifice.interval = ngpInterval
 		autoGalSacrifice.priority = 5
 	}
 	if (inNGM(3)) {
 		var autoTickspeedBoost = new Autobuyer(15)
 		autoTickspeedBoost.interval = 1.5e4
 		if (tmp.bgMode) autoTickspeedBoost.interval /= 10
+		if (ngpInterval) autoTickspeedBoost.interval = ngpInterval
 		autoTickspeedBoost.priority = 5
 	}
 	if (inNGM(4)) {
 		var autoTDBoost = new Autobuyer(16)
 		autoTDBoost.interval = 1.5e4
 		if (tmp.bgMode) autoTDBoost.interval /= 10
+		if (ngpInterval) autoTDBoost.interval = ngpInterval
 		autoTDBoost.priority = 5
 		autoTDBoost.overXGals = 0
 	}
