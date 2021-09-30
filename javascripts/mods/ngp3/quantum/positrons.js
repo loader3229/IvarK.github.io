@@ -89,7 +89,6 @@ var pos = {
 	},
 	unl: (force) => force ? tmp.ngp3 && player.masterystudies.includes("d7") : pos_tmp.unl,
 	on() {
-		if (QCs.modIn(8, "up")) return false
 		return this.unl() && pos_save && pos_save.on
 	},
 	toggle() {

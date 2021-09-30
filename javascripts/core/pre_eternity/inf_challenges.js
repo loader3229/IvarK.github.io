@@ -231,7 +231,7 @@ function updateInChallenges() {
 	if (player.currentChallenge != "") array.push(getNCName(player.currentChallenge))
 	if (player.dilation.active) array.push("Time Dilation")
 	else if (player.currentEternityChall != "") array.push("Eternity Challenge " + player.eternityChallUnlocked)
-	if (QCs.inAny()) array.push("Quantum Challenge " + wordizeList(QCs_save.in, false, " + ", false) + (QCs_save.mod ? " (" + QCs.modData[QCs_save.mod].name + " modifier)": "") + (PCs.in() ? " (Pair " + PCs.name(PCs_save.in) + ")" : ""))
+	if (QCs.inAny()) array.push("Quantum Challenge " + wordizeList(QCs_save.in, false, " + ", false) + (PCs.in() ? " (Pair " + PCs.name(PCs_save.in) + ")" : ""))
 
 	setAndMaybeShow("inchall", array.length > 0, () => "You are currently in " + wordizeList(array))
 }

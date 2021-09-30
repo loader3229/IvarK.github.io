@@ -20,7 +20,7 @@ var softcap_data = {
 			start: new Decimal(1e69 / 2e4),
 			base: 10,
 			pow: 2/3,
-			mul: () => (tmp.bgMode ? 1.25 : 1.5) * (QCs.modIn(1, "up") ? 0.8 : 1),
+			mul: () => (tmp.bgMode ? 1.25 : 1.5),
 			sub10: 68 - Math.log10(2e4)
 		},
 		2: {

@@ -148,7 +148,7 @@ let str = {
 	//Vibration Energy
 	veGain() {
 		let r = qu_save.quarkEnergy.add(1).log10()
-		if (!QCs.modIn(5, "up")) r *= Math.log10(QCs_save.qc5.add(1).log10() + 1)
+		r *= Math.log10(QCs_save.qc5.add(1).log10() + 1)
 		r *= Math.pow(4, PCs_save.lvl / 8 - 1)
 		return r
 	},

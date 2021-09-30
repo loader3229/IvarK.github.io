@@ -422,14 +422,10 @@ var QCs = {
 			},
 			switch(x) {
 				QCs_save.qc4[QCs_tmp.qc4.type] = x
-				if (QCs.modIn(4, "up")) {
-					if (QCs_tmp.qc4.type == "dil" && !confirm("This exits your dilation run, and also restarts this challenge! Are you sure?")) return
-					restartQuantum()
-				} else {
-					if (QCs_tmp.qc4.type == "dil" && !confirm("This exits your dilation run! Are you sure?")) return
-					eternity(true)
-					this.updateDisp()
-				}
+
+				if (QCs_tmp.qc4.type == "dil" && !confirm("This exits your dilation run! Are you sure?")) return
+				eternity(true)
+				this.updateDisp()
 			}
 		},
 		5: {
@@ -517,7 +513,7 @@ var QCs = {
 				delete QCs_tmp.qc6
 				if (!QCs.in(6)) return
 
-				QCs_tmp.qc6 = Math.log2(Math.max(QCs.modIn(6, "up") ? QCs_save.qc6 : -QCs_save.qc6, 0) / 100 + 1) + 2
+				QCs_tmp.qc6 = Math.log2(Math.max(-QCs_save.qc6, 0) / 100 + 1) + 2
 			}
 		},
 		7: {
@@ -615,7 +611,6 @@ var QCs = {
 			if (this.data[x].unl()) {
 				data.unl_challs.push(x)
 				if (!this.done(x)) break
-				if (this.modDone(x, "up")) data.nerfed++
 			}
 		}
 
@@ -639,7 +634,6 @@ var QCs = {
 		return QCs_tmp.in.includes(x)
 	},
 	in(x) {
-		if (x == 7 && QCs.modIn(1, "up")) return true
 		return QCs_tmp.in.includes(x)
 	},
 	inAny() {
@@ -652,7 +646,7 @@ var QCs = {
 		return this.unl() && QCs_save.comps >= x
 	},
 	hasSecondaryGoal() {
-		return !PCs.in() && !QCs_save.mod
+		return !PCs.in()
 	},
 	getGoal() {
 		return player.meta.bestAntimatter.gte(this.getGoalMA()) && (!this.hasSecondaryGoal() || this.data[QCs_tmp.in[0]].goal())
@@ -664,14 +658,8 @@ var QCs = {
 		if (!x) {
 			if (PCs.in()) return PCs.goal()
 			x = QCs_save.in[0]
-			mod = QCs_save.mod
 		}
-		if (x) {
-			r = this.data[x].goalMA
-			if (mod) r = r.pow(QCs.modData[mod].maExp)
-			if (mod == "up") r = r.pow(QCs_tmp.nerfed / 8 + 1)
-			if (mod && x == 7) return new Decimal(1/0)
-		}
+		if (x) r = this.data[x].goalMA
 		return r
 	},
 	isRewardOn(x) {
@@ -691,46 +679,8 @@ var QCs = {
 		restartQuantum()
 	},
 
-	modData: {
-		list: ["up", "ol", "us", "tl"],
-		up: {
-			name: 'Nerfed',
-			maExp: 1.35,
-			shrunker: 1
-		},
-		ol: {
-			name: "Overlapped",
-			maExp: 2,
-			shrunker: 1
-		},
-		us: {
-			name: "Unstable",
-			maExp: 1/0,
-			shrunker: 0
-		},
-		tl: {
-			name: "Timeless",
-			maExp: 1/0,
-			shrunker: 0
-		},
-	},
-	modIn(x, m) {
-		return QCs_tmp.in.includes(x) && QCs_save.mod == m
-	},
-	modDone(x, m) {
-		var data = QCs_save.mod_comps
-		return this.unl() && data && data.includes(m + x)
-	},
-	overlapCan(x) {
-		var data = this.data[x]
-		if (!PCs.unl()) return
-		if (pos_tmp.cloud == undefined) return
-		if (this.perkUnl(x)) return
-		return pos_tmp.cloud.total >= data.overlapReqs[0] && pos_tmp.cloud.exclude >= data.overlapReqs[1]
-	},
-
 	perkUnl(x) {
-		return hasAch("ng3pr12") && this.modDone(x, "up")
+		return hasAch("ng3pr12") && PCs.milestoneDone(x * 10 + 4)
 	},
 	perkActive(x) {
 		return QCs_tmp.perks[x] && this.perkUnl(x) && this.inAny() && !(QCs_save.disable_perks && QCs_save.disable_perks[x])
@@ -790,14 +740,14 @@ var QCs = {
 			(tmp.bgMode ? "No" : (tmp.exMode ? "No" : "Reduced") + " global Quantum Energy bonus, no") + " gluon nerfs, and mastered boosts only work."
 		for (let qc = 1; qc <= this.data.max; qc++) {
 			var cUnl = QCs_tmp.unl_challs.includes(qc)
+			getEl("qc_" + qc + "_div").style.display = cUnl ? "" : "none"
 
-			getEl("qc_" + qc + "_div").style.display = (qc != 7 || !QCs_tmp.show_perks) && cUnl ? "" : "none"
 			if (QCs_tmp.show_perks) {
 				var reqs = this.data[qc].overlapReqs
-				getEl("qc_" + qc + "_desc").textContent = this.data[qc].nerfDesc()
+				getEl("qc_" + qc + "_desc").textContent = this.data[qc].perkDesc(QCs_tmp.perks[qc])
 				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.getGoalMA(qc, "up")) + " MA"
-				getEl("qc_" + qc + "_btn").textContent = this.modIn(qc, "up") ? "Running" : this.modDone(qc, "up") ? (this.perkActive(qc) ? "Perk Activated" : "Completed") : this.done(qc) ? "Start" : "Locked"
-				getEl("qc_" + qc + "_btn").className = this.modIn(qc, "up") ? "onchallengebtn" : this.modDone(qc, "up") ? "completedchallengesbtn" : this.done(qc) ? "challengesbtn" : "lockedchallengesbtn"
+				getEl("qc_" + qc + "_btn").textContent = this.perkUnl(qc) ? (this.perkActive(qc) ? "Perk Activated" : "Completed") : "Locked"
+				getEl("qc_" + qc + "_btn").className = this.perkUnl(qc) ? "completedchallengesbtn" : "lockedchallengesbtn"
 			} else if (cUnl) {
 				getEl("qc_" + qc + "_desc").textContent = evalData(this.data[qc].desc)
 				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.data[qc].goalMA) + " meta-antimatter and " + evalData(this.data[qc].goalDisp)
@@ -811,10 +761,10 @@ var QCs = {
 
 		//Perks
 		getEl("qc_perks").style.display = hasAch("ng3pr12") ? "inline" : "none"
-		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Nerfed modifier'
-		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Nerfed modifier doesn\'t have its secondary goal, but completing one increases the main goals. However, perks only work in any Quantum Challenge!' : ""
+		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Perks'
+		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Perks only work in any Quantum Challenge!' : ""
 
-		getEl("disable_qc2_perk").style.display = QCs.modDone(2, "up") ? "" : "none"
+		getEl("disable_qc2_perk").style.display = this.perkUnl(2) ? "" : "none"
 		getEl("disable_qc2_perk").textContent = (QCs_save.disable_perks[2] ? "Enable" : "Disable") + " QC2 Perk"
 	},
 	updateDispOnTick() {
@@ -824,7 +774,7 @@ var QCs = {
 			if (QCs_tmp.unl_challs.includes(qc)) {
 				var hint = evalData(this.data[qc].hint)
 				getEl("qc_" + qc + "_reward").innerHTML = 
-				QCs_tmp.show_perks ? "Reward: +1 PC Shrunker<br>Perk: " + this.data[qc].perkDesc(QCs_tmp.perks[qc]) :
+				QCs_tmp.show_perks ? "" :
 				(shiftDown || QCs.in(qc)) && hint ? "Hint: " + hint :
 				"Reward: " + evalData(this.data[qc].rewardDesc, [QCs_tmp.rewards[qc]])
 			}

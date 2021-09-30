@@ -683,7 +683,6 @@ function getDilGalaxyEff() {
 
 var failsafeDilateTime = false
 function dilateTime(auto, shortcut) {
-	if (QCs.modIn(3, "up") && player.dilation.times >= 1) return
 	if (shortcut && player.dilation.active) return
 	if (failsafeDilateTime) return
 	if (!player.dilation.studies.includes(1)) return

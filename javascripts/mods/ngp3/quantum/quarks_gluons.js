@@ -291,7 +291,7 @@ function updateColorPowers() {
 	let e = 1
 	if (hasAch("ng3pr12")) {
 		let c = 0
-		for (var i = 1; i <= 4; i++) if (PCs.milestoneDone(i * 10 + 4)) c++
+		for (var i = 1; i <= 4; i++) if (PCs.milestoneDone(i * 10 + 5)) c++
 		e = Math.pow(1.025, c)
 	}
 
@@ -909,10 +909,8 @@ var enB = {
 			var lvl = enB.pos.lvl(x)
 			var on = pos.on()
 			var mas = enB.mastered("pos", x)
-			return QCs.modIn(8, "up") ? false :
-				QCs.isntCatched() ? (on || mas) :
+			return QCs.isntCatched() ? (on || mas) :
 				(on && mas && (
-					QCs.modIn(2, "up") ? lvl == QCs_save.qc2 :
 					(futureBoost("exclude_any_boost") ? QCs.inAny() : QCs.in(2)) ?  lvl != QCs_save.qc2 :
 					true)
 				)
@@ -995,7 +993,7 @@ var enB = {
 				var slowStart = 4
 				var accSpeed = 1
 
-				if (!QCs.in(3) && !QCs.modIn(1, "up")) {
+				if (!QCs.in(3)) {
 					if (enB.active("pos", 9)) {
 						var p9 = 1 + enB_tmp.pos9 / 4
 						slowStart += enB_tmp.pos9

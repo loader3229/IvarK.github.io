@@ -1033,7 +1033,7 @@ function getAQGainExp(x) {
 	if (PCs.unl()) r = Math.log10(x.log10() + 1) * PCs_tmp.eff2 + 1
 	if (hasAch("ng3pr12")) {
 		let c = 0
-		for (var i = 1; i <= 4; i++) if (PCs.milestoneDone(i * 10 + 4)) c++
+		for (var i = 1; i <= 4; i++) if (PCs.milestoneDone(i * 10 + 5)) c++
 		r *= Math.pow(1.03, c)
 	}
 	if (futureBoost("quark_gluon_plasma")) r = Math.pow(x.log10() * r / 100 + 1, 1/3)
@@ -1051,11 +1051,13 @@ function getReplStealth() {
 var ngp3Welcomes = {
 	msgs: {
 		0.5: "<b class='lime'>Paired Challenges!</b> Can you complete 2 challenges at once, and level up your progression? Unlocks after completing Quantum Challenge 7!",
-		0.6: "<b class='lime'>Strings!</b> Can you vibrate a string of boosts, which adjusts them at a sawtooth rate?"
+		0.6: "<b class='lime'>Strings!</b> Can you vibrate a string of boosts, which adjusts them at a sawtooth rate?",
+		0.61: "<b class='lime'>More QoL!</b> Yes, I added several QoL features, including new NG+ buffs. This also rework Strings too!"
 	},
 	goals: {
 		0.5: () => getFullExpansion(8) + " PC combinations + " + shortenCosts(Decimal.pow(10, 1e13)) + " antimatter",
-		0.6: () => getFullExpansion(16) + " PC combinations + " + shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter",
+		0.6: () => shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter",
+		0.61: () => shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter",
 	}
 }
 

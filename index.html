@@ -1530,8 +1530,8 @@
 				<p id='versionDescCreator'>Created by Aarex.</p>
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
-				<p id='versionDescBeta'>(Beta v0.6: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(9/20/21a Release Candidate Build)</p>
+				<p id='versionDescBeta'>(Beta v0.61: Dimension-Yau Manuifold)</p>
+				<p class="warning" id='versionDescAlpha'>(9/29/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -2262,7 +2262,7 @@
 								<div id="The Power of Science!" class="achievement achievementlocked" style="background-image: url(images/ng3p/34.png)" ach-tooltip="Reach ^1 Quantum efficiency. Reward: Effective Boosters +10%."></div>
 							</td>
 							<td>
-								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/ng3p/35.png)" ach-tooltip="Complete 4 Challenges with the Nerfed modifier. PC goals increase 10% slower from PC combinations."></div>
+								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/ng3p/35.png)" ach-tooltip="Complete all milestones with 3 combinations. PC goals increase 10% slower from PC combinations."></div>
 							</td>
 							<td>
 								<div id="I can't get my multipliers higher!" class="achievement achievementlocked" style="background-image: url(images/ng3p/36.png)"><br></div>
@@ -3687,6 +3687,7 @@
 			<br>
 			<button class="storebtn" id="toggleautobuyers" style="font-size: 100%; width: 150px; height: 40px; margin: 3px" onclick="toggleAutoBuyers()">Enable/disable autobuyers</button>
 			<button class="storebtn" id="togglebulk" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="toggleBulk()">Disable bulk buy</button>
+			<button class="storebtn" id="togglebuymax" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="alert('Not implemented yet!')">Toggle "buy max" to all</button>
 			<button class="storebtn" id="maxAutobuyerUpgrades" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="maxAutobuyerUpgrades()">Max autobuyer upgrades</button>
 			<br>
 			<button class="storebtn" id="togglecrunchmode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleCrunchMode()">Auto crunch mode: amount</button>
@@ -4340,7 +4341,7 @@
 				<td><button class="secondarytabbtn" onclick="showQuantumTab('uquarks')">Anti-Quarks</button></td>
 				<td id='gluonstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Gluons</button></td>
 				<td id='positronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('positrons')">Positrons</button></td>
-				<td id='stringstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('strings')">Strings</button></td>
+				<td id='stringstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('strings')">String</button></td>
 				<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Milestones</button></td>
 
 				<!--
@@ -4895,8 +4896,9 @@
 		</div>
 		</div>
 		<div class='quantumtab' id='strings'>
-			<p id="str_unl">Complete 8 PC completions to unlock Strings.</p>
+			<p id="str_unl">Complete 8 PC completions to unlock String.</p>
 			<div id="str_div">
+				<b class="warning">Hey. This mechanic will be reworked soon, because it would probably be complex.</b><br>
 				<span style="font-size: 15px">You have made <span id="str_ve" style="font-size: 30px">0.00</span> Vibration Energy.</span>
 				<p style="font-size: 8px">(based on Quantum Energy, Replicanti Energy, and PC level)</p>
 				<br>
