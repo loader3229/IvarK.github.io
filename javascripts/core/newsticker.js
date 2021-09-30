@@ -495,6 +495,8 @@ amNewsArray = [
 ["In September 2020, I suddenly lost my interest on Numberblocks, and even left the community. At the time when I wrote this, It's been 1 year. Don't worry, I will use BAN and SAN for googological numbers in this game, if I want to go beyond ee308.", true, "am277"],
 ["τεμΩαrεx", "tmp.ngp3", "am278"],
 ["Aarex went back to Googology, just to compete with strongest computable notations. Will he do it?", "tmp.ngp3", "am279"],
+["Although the number on the only posted 9/18/2021 news ticker number is probably in the range of 120 <= x <= 600", true, "am280"],
+["In an alternate universe, @TruthNotScam9 convinced Aarex to add Scamify, leaving many sparks of outrage from the players. Both of them died soon afterward.", "tmp.ngp3", "am281"],
 /*NEXT ID: am274*/
 ];}
 

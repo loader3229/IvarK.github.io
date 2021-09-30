@@ -2908,7 +2908,7 @@ var beta = true
 var preBeta = false
 var betaId = beta || preBeta ? "A-" : ""
 var correctBetaId = "A-"
-var betaLink = "Respecced-Alpha"
+var betaLink = "minitest"
 
 //Was "ds" before Respecced happened.
 var prefix = "Gds"
