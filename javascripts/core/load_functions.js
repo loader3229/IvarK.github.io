@@ -2907,7 +2907,7 @@ function migrateOldSaves() {
 var beta = true
 var preBeta = false
 var betaId = beta || preBeta ? "A-" : ""
-var correctBetaId = "A-"
+var correctBetaId = "MT-"
 var betaLink = "minitest"
 
 //Was "ds" before Respecced happened.
