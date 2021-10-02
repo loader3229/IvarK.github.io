@@ -541,7 +541,7 @@ var QCs = {
 			unl: () => hasAch("ng3p25"),
 			desc: "All Entangled Boosts are anti'd. You have to setup a cycle of 2 entanglements, and Big Crunching switches your gluon kind to the next one.",
 			goal: () => enB.glu.boosterEff() >= 220,
-			goalDisp: "220 Effective Boosters",
+			goalDisp: "220 Quantum Power",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.1),
 			hint: "Make your Auto-Crunch faster than Auto-Eternity.",
 

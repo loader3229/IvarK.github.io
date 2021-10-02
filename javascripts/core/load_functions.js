@@ -2188,7 +2188,7 @@ function setupNGP31Versions() {
 	}
 	aarMod.ngp3r = 0.61
 	aarMod.ngp3Alpha = beta
-	aarMod.ngp3Build = 20210929
+	aarMod.ngp3Build = 20211001
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) player.timestudy.auto = {}
 	if (rollback) rollbackQuantum(rollback)

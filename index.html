@@ -1531,7 +1531,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.61: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(9/29/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(10/1/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -2259,7 +2259,7 @@
 								<div id="Bursted Em All!" class="achievement achievementlocked" style="background-image: url(images/ng3p/33.png)" ach-tooltip="Charge 6 Positronic Boosts with at least 9x multiplier. Reward: Charging requires 10% less."></div>
 							</td>
 							<td>
-								<div id="The Power of Science!" class="achievement achievementlocked" style="background-image: url(images/ng3p/34.png)" ach-tooltip="Reach ^1 Quantum efficiency. Reward: Effective Boosters +10%."></div>
+								<div id="The Power of Science!" class="achievement achievementlocked" style="background-image: url(images/ng3p/34.png)" ach-tooltip="Reach ^1 Quantum efficiency. Reward: Quantum Power +10%."></div>
 							</td>
 							<td>
 								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/ng3p/35.png)" ach-tooltip="Complete all milestones with 3 combinations. PC goals increase 10% slower from PC combinations."></div>
@@ -4518,11 +4518,9 @@
 				</tr>
 				<tr>
 					<td colspan=3>
-						You have <span id="enB_glu_amt" style="font-size:35px">0</span> Entangled Boosters.
+						<b class="warning">This section is currently in being reworked!</b>
 						<br>
-						<button class="storebtn" id="enB_glu_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1 Entangled Booster<br><span style="font-size: 10px">(requires <span id="enB_glu_cost">1</span> best Quantum Energy)</span></button>
-						<br>
-						<button class='storebtn' style="width: 180px" onclick="ENTANGLED_BOOSTS.maxBuy('glu')">Max buy</button>
+						<button class="storebtn" id="enB_glu_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('glu')">Unlock/Master Boosts</span><br><span id="enB_glu_cost" style="font-size: 10px"></span></button>
 					</td>
 				</tr>
 				<tr>
@@ -4530,8 +4528,6 @@
 						Some Entangled Boosts only work on and based on which kind you choose.
 						<br>
 						<span id="masterNote">However, mastered boosts are based on total gluons and always activated instead!</span>
-						<br>
-						<span id="enB_glu_next"></span>
 						<br>
 						<span id="enB_eff"></span>
 					</td>
@@ -4735,11 +4731,9 @@
 					<span id="enB_pos_eng" style="font-size:25px">0.0</span> Positronic Charge
 				</td>
 				<td>
-					<span id="enB_pos_amt" style="font-size:25px">0</span> Positronic Boosters
+					<b class="warning">This section is currently in being reworked!</b>
 					<br>
-					<button class="storebtn" id="enB_pos_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1 Positronic Booster<br><span style="font-size: 10px">(requires <span id="enB_pos_cost">1</span> Positronic Charge)</span></button>
-					<br>
-					<button class='storebtn' style="width: 180px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy</button>
+					<button class="storebtn" id="enB_pos_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('pos')">Unlock/Master Boosts</span><br><span id="enB_pos_cost" style="font-size: 10px"></span></button>
 				</td>
 			</tr>
 		</table>
@@ -4793,7 +4787,6 @@
 				<button id="entangle_gb_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('gb')">GB</button>
 				<button id="entangle_br_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('br')">BR</button>
 			</div>
-			<span id="enB_pos_next"></span>
 			<span id="pos_cloud_req"></span>
 			<table class="qTable">
 				<tr>

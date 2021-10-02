@@ -262,7 +262,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	if (tmp.ngp3) {
 		qMs.update()
 		qu_save.quarkEnergy = new Decimal(0)
-		enB.updateTmp()
+		enB.updateTmpOnTick()
 	} else qu_save.gluons = 0;
 
 	// Positrons
