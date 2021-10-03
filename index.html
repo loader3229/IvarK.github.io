@@ -2300,6 +2300,7 @@
 								<div id="I don't want you to live anymore." class="achievement achievementlocked" style="background-image: url(images/134.png)"></div>
 							</td>
 						</tr>
+						<!--
 						<tr id="achRowng3p4">
 							<td>
 								<div id="Time is not relative" class="achievement achievementlocked" style="background-image: url(images/135.png)"></div>
@@ -2482,6 +2483,7 @@
 								<div id="Auto-Ghost Speedrunning" class="achievement achievementlocked" style="background-image: url(images/190.png)" ach-tooltip="Reach e??? in the first 10 seconds of Ghostify."></div>
 							</td>
 						</tr>
+						-->
 				</table>
 				<div id="nothingness">You completed all the normal achievements! Congratulations!</div>
 			</div>
@@ -3687,7 +3689,7 @@
 			<br>
 			<button class="storebtn" id="toggleautobuyers" style="font-size: 100%; width: 150px; height: 40px; margin: 3px" onclick="toggleAutoBuyers()">Enable/disable autobuyers</button>
 			<button class="storebtn" id="togglebulk" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="toggleBulk()">Disable bulk buy</button>
-			<button class="storebtn" id="togglebuymax" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="alert('Not implemented yet!')">Toggle "buy max" to all</button>
+			<button class="storebtn" id="togglebuymax" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="toggleAllABBulks()">Toggle "buy max" to all</button>
 			<button class="storebtn" id="maxAutobuyerUpgrades" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="maxAutobuyerUpgrades()">Max autobuyer upgrades</button>
 			<br>
 			<button class="storebtn" id="togglecrunchmode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleCrunchMode()">Auto crunch mode: amount</button>
@@ -4891,7 +4893,40 @@
 		<div class='quantumtab' id='strings'>
 			<p id="str_unl">Complete 8 PC completions to unlock String.</p>
 			<div id="str_div">
-				<b class="warning">Hey. This mechanic will be reworked soon, because it would probably be complex.</b><br>
+				<b class="warning">This mechanic has been recently reworked! However, it is not fully tested yet!</b>
+				<table class="qTable">
+					<tr>
+						<td id="str_1_power" style="font-size: 24px">Alpha: 0.00</td>
+						<td id="str_2_power" style="font-size: 24px">Beta: 0.00</td>
+						<td id="str_3_power" style="font-size: 24px">Gamma: 0.00</td>
+					</tr>
+					<tr>
+						<td class="lime" id="str_1_eb_eff"></td>
+						<td class="lime" id="str_2_eb_eff"></td>
+						<td class="lime" id="str_3_eb_eff"></td>
+					</tr>
+					<tr>
+						<td class="lime light" id="str_1_eb_nerf"></td>
+						<td class="lime light" id="str_2_eb_nerf"></td>
+						<td class="lime light" id="str_3_eb_nerf"></td>
+					</tr>
+					<tr>
+						<td class="yellow" id="str_1_pb_eff"></td>
+						<td class="yellow" id="str_2_pb_eff"></td>
+						<td class="yellow" id="str_3_pb_eff"></td>
+					</tr>
+					<tr>
+						<td class="yellow light" id="str_1_pb_nerf"></td>
+						<td class="yellow light" id="str_2_pb_nerf"></td>
+						<td class="yellow light" id="str_3_pb_nerf"></td>
+					</tr>
+					<tr>
+						<td colspan=3>
+							<span id="str_strength" style="font-size: 15px"></span>
+							<p style="font-size: 8px">(based on total Vibration Energy)</p>
+						<td>
+					</tr>
+				</table>
 				<span style="font-size: 15px">You have made <span id="str_ve" style="font-size: 30px">0.00</span> Vibration Energy.</span>
 				<p style="font-size: 8px">(based on Quantum Energy, Replicanti Energy, and PC level)</p>
 				<br>
@@ -4908,22 +4943,7 @@
 				<br>
 				<span id="str_cost"></span>
 				<br><br>
-				<span id="str_strength" style="font-size: 15px"></span>
-				<p style="font-size: 8px">(based on total Vibration Energy)</p>
-				<div class="str_boosts" id="str_boosts_ent"></div><br>
-				<div class="str_boosts" id="str_boosts_pos"></div><br>
-				<!--
-				COMING IN THE NEXT LAYER
-
-				<br><br>
-				<button class="gluonupgrade storebtn">
-					<b>String Shrunker</b> (0 / 6)
-					<br>
-					Reset Strings, in exchange of a smaller version.
-					<br>
-					(Coming soon...)
-				</button>
-				-->
+				<div class="str_boosts" id="str_boosts"></div>
 			</div>
 		</div>
 		<div class='quantumtab' id='nanofield'>

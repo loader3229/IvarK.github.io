@@ -332,8 +332,8 @@ const allAchievementNums = Object.invert(allAchievements)
 // to retrieve by value: Object.keys(allAchievements).find(key => allAchievements[key] === "L4D: Left 4 Dimensions");
 const allAchievementRows = [
 	"r1", "ngm5p1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", 
-	"r10", "r11", "r12", "r13", "ngud1", "ngpp1", "ng3p1", "ng3p2", "ng3pr1", "ng3p3", "ng3p4",
-	"ng3p5", "ng3p6", "ng3p7", "ng3p8", "ng3p9", "ng3p10"
+	"r10", "r11", "r12", "r13", "ngud1", "ngpp1", "ng3p1", "ng3p2", "ng3pr1", "ng3p3", /*"ng3p4",
+	"ng3p5", "ng3p6", "ng3p7", "ng3p8", "ng3p9", "ng3p10"*/
 ]
 const allAchievementReplacements = {
 	r35() {

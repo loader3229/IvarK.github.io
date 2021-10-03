@@ -625,7 +625,7 @@ var enB = {
 			r = r.sub(r.min(1))
 
 			r = r.times(tmp.glB[enB.mastered("glu", x) ? "masAmt" : "enAmt"])
-			if (str.unl() && amt.gte(str.nerf_eb(str.conv(x, true)))) r = r.times(str.eff_eb(str.conv(x, true)))
+			if (str.unl() && amt.gte(str.nerf_eb(x))) r = r.times(str.eff_eb(x))
 			return r
 		},
 		boosterEff() {
@@ -664,7 +664,9 @@ var enB = {
 			title: "Quantum Tesla",
 			type: "r",
 			eff(x) {
-				return Decimal.cbrt(x).times(0.75).add(1)
+				let r = Decimal.cbrt(x).times(0.75).add(1)
+				if (r.gte(30)) r = r.div(r.log(30))
+				return r
 			},
 			disp(x) {
 				return shorten(x) + "x"
@@ -713,6 +715,7 @@ var enB = {
 			type: "r",
 			eff(x) {
 				x = Math.sqrt(1 + Math.log10(x / 10 + 1))
+				if (x > 2.5) x = (x + 1.25) / 1.5
 				return Math.min(0.003 * x, 0.012)
 			},
 			disp(x) {
@@ -935,7 +938,7 @@ var enB = {
 			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
 			if (hasAch("ng3pr13")) req *= 0.9
 			if (PCs.milestoneDone(42) && lvl == 1) req *= 6
-			if (str.unl()) req *= str.nerf_pb(str.conv(x, true))
+			if (str.unl()) req *= str.nerf_pb(x)
 			return req
 		},
 		chargeEff(x) {
@@ -943,7 +946,7 @@ var enB = {
 			var eff = 2 * lvl
 			if (PCs.milestoneDone(42) && lvl == 1) eff = 8
 			if (PCs.milestoneDone(23) && pos.isUndercharged(x)) eff++
-			if (str.unl()) eff += str.eff_pb(str.conv(x, true))
+			if (str.unl()) eff += str.eff_pb(x)
 			return eff
 		},
 		charged(x, lvl) {

@@ -125,7 +125,7 @@ function setupAutobuyerHTMLandData(){
 	}
 
 	toggleAutobuyerTarget = function(id) {
-		if (player.autobuyers[id-1].target == id) {
+		if (!isABBuyUntil10(id)) {
 			player.autobuyers[id-1].target = 10 + id
 			getEl("toggleBtn" + id).textContent = "Buys until 10"
 		} else {
@@ -141,7 +141,7 @@ function setupAutobuyerHTMLandData(){
 	}
 
 	getEl("toggleBtnTickSpeed").onclick = function () {
-		if (player.autobuyers[8].target == 1) {
+		if (!isABBuyUntil10(9)) {
 			player.autobuyers[8].target = 10
 			getEl("toggleBtnTickSpeed").textContent = "Buys max"
 		} else {
@@ -2802,13 +2802,8 @@ function updateAutobuyers() {
 	for (let i = 0; i < 8; i++) if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].bulk >= 512) b1++
 	if (b1 == 8) giveAchievement("Bulked up")
 
-	for (var i = 0; i <= 8; i++) {
-		getEl("priority" + (i + 1)).selectedIndex = player.autobuyers[i].priority - 1
-		if (i == 8 && player.autobuyers[i].target == 10) getEl("toggleBtnTickSpeed").textContent = "Buys max"
-		else if (i == 8 && player.autobuyers[i].target !== 10) getEl("toggleBtnTickSpeed").textContent = "Buys singles"
-		else if (player.autobuyers[i].target > 10) getEl("toggleBtn" + (i+1)).textContent = "Buys until 10"
-		else getEl("toggleBtn" + (i+1)).textContent = "Buys singles"
-	}
+	for (var i = 0; i <= 8; i++) getEl("priority" + (i + 1)).selectedIndex = player.autobuyers[i].priority - 1
+	updateABBulks()
 
 	if (player.autobuyers[8].interval <= 100) {
 		getEl("buyerBtnTickSpeed").style.display = "none"

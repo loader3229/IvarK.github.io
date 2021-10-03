@@ -586,14 +586,14 @@ function setNGP3AchievementTooltip() {
 	setR16Tooltip()
 	setR16p5Tooltip()
 	setR17Tooltip()
-	setR18Tooltip()
+	/*setR18Tooltip()
 	setR19Tooltip()
 	setR20Tooltip()
 	setR21Tooltip()
 	setR22Tooltip()
 	setR23Tooltip()
 	setR24Tooltip()
-	setR25Tooltip()
+	setR25Tooltip()*/
 }
 
 function setAchieveTooltip() { 

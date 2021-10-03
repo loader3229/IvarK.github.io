@@ -39,7 +39,7 @@ function buyWithEP() {
 }
 
 function canBuyTTWithEP() {
-	return player.timeDimension1.bought
+	return aarMod.newGamePlusVersion || tmp.quUnl || player.timeDimension1.bought
 }
 
 function maxTheorems() {

@@ -3,7 +3,8 @@ let str = {
 
 	//Data
 	data: {
-		all: [],
+		letters: ["α", "β", "γ"],
+		names: ["Alpha", "Beta", "Gamma"],
 		pos: {}
 	},
 
@@ -51,14 +52,11 @@ let str = {
 		for (var i = 0; i < data.vibrated; i++) this.onVibrate(vibrated[i])
 		str_save.spent = str.veCost(data.vibrated)
 
-		var tiers = {}
-		data.order = {}
-		data.rev_order = {}
+		//Powers
+		data.powers = {}
 		for (var i = 1; i <= 12; i++) {
-			var tier = enB.pos.lvl(i)
-			tiers[tier] = (tiers[tier] || 0) + 1
-			data.order[(tier - 1) * tier + tiers[tier]] = i
-			data.rev_order[i] = (tier - 1) * tier + tiers[tier]
+			var pow = Math.ceil(i / 4)
+			data.powers[pow] = (data.powers[pow] || 0) + (data.alt[i] || 0)
 		}
 	},
 	updateDisp() {
@@ -71,15 +69,11 @@ let str = {
 
 		if (!str_tmp.setupHTML) return
 
-		var all = this.data.all
-		for (var e = 0; e < all.length; e++) {
-			var id = all[e]
-			var num = this.conv(id.split("b")[1])
+		for (var e = 1; e <= 12; e++) {
 			var pos = this.data.pos[id]
-			var alt = this.altitude(pos)
-			getEl("str_" + id + "_title").textContent = (id.split("b")[0] + "b" + num).toUpperCase()
-			getEl("str_" + id + "_altitude").textContent = "#" + pos + " / " + this.altitude(pos).toFixed(3)
-			getEl("str_" + id).style.top = (1 - alt) * 72 + "px"
+			var alt = this.altitude(e)
+			getEl("str_" + e + "_altitude").textContent = alt.toFixed(3)
+			getEl("str_" + e).style.top = (1 - alt) * 72 + "px"
 		}
 	},
 
@@ -98,21 +92,20 @@ let str = {
 		getEl("str_warn").textContent = ve < 0 ? "Strings have been disabled due to spending too many Vibration Energy!" : "WARNING: Vibrating boosts costs Vibration Energy, and unvibrating performs a Quantum reset!"
 
 		for (var i = 1; i <= 12; i++) {
-			var eb_id = str.conv(i)
-			var eb_pos = str.data.pos["eb" + i]
-			getEl("str_eb" + i).setAttribute('ach-tooltip', enB.active("glu", eb_id) ? "Boost: " + enB.glu[eb_id].dispFull(enB_tmp["glu" + eb_id]) : "Inactive boost")
-			getEl("str_eb" + i + "_eff").textContent = formatPercentage(str.eff_eb(i) - 1) + "% stronger"
-			getEl("str_eb" + i + "_nerf").innerHTML = str.altitude(eb_pos) < 0 ? "at " + shorten(str.nerf_eb(i)) + "<br>effective boosters" : ""
-			getEl("str_eb" + i).className = (str_save.vibrated.includes(eb_pos) ? "chosenbtn2" : str.vibrated(eb_pos) ? (str_tmp.disable[eb_pos] > eb_pos ? "chosenbtn3" : "chosenbtn") : str.canVibrate(eb_pos) ? "storebtn" : "unavailablebtn") + " pos_btn"
+			var alt = str.altitude(i)
+			getEl("str_" + i + "_eff").textContent = (alt < 0 ? "-" : "+") + shorten(Math.abs(alt) * str_tmp.str) + " to " + str.data.names[Math.ceil(i / 4) - 1]
+			getEl("str_" + i).className = (str_save.vibrated.includes(i) ? "chosenbtn2" : str.vibrated(i) ? (str_tmp.disable[i] > i ? "chosenbtn3" : "chosenbtn") : str.canVibrate(i) ? "storebtn" : "unavailablebtn") + " pos_btn"
+		}
 
-			var pb_id = str.conv(i)
-			var pb_pos = str.data.pos["pb" + i]
-			var pb_nerf = str.nerf_pb(i)
-			getEl("str_pb" + i).setAttribute('ach-tooltip', enB.active("pos", pb_id) ? "Boost: " + enB.pos[pb_id].dispFull(enB_tmp["pos" + pb_id]) : "Inactive boost")
-			getEl("str_pb" + i + "_eff").textContent = "+" + shorten(str.eff_pb(i)) + "x charge"
-			getEl("str_pb" + i + "_nerf").className = pb_nerf < 1 ? "charged" : pb_nerf > 1 ? "warning" : ""
-			getEl("str_pb" + i + "_nerf").innerHTML = (pb_nerf < 1 ? "/" + shorten(1 / pb_nerf) : shorten(pb_nerf) + "x") + "<br>requirement"
-			getEl("str_pb" + i).className = (str_save.vibrated.includes(pb_pos) ? "chosenbtn2" : str.vibrated(pb_pos) ? (str_tmp.disable[pb_pos] > pb_pos ? "chosenbtn3" : "chosenbtn") : str.canVibrate(pb_pos) ? "storebtn" : "unavailablebtn") + " pos_btn"
+		for (var p = 1; p <= 3; p++) {
+			var pow = str_tmp.powers[p]
+			getEl("str_" + p + "_power").textContent = str.data.names[p-1] + ": " + (pow < 0 ? "-" : "") + shorten(Math.abs(pow) * str_tmp.str)
+
+			var pb_nerf = str.nerf_pb(p * 4)
+			getEl("str_" + p + "_eb_eff").textContent = shorten(str.eff_eb(p * 4)) + "x stronger to Entangled Boosts " + (p * 4 - 3) + " - " + (p * 4)
+			getEl("str_" + p + "_eb_nerf").innerHTML = pow < 0 ? "<b class='warning'>Effective at " + shorten(str.nerf_pb(p * 4)) + " Quantum Power</b>" : ""
+			getEl("str_" + p + "_pb_eff").textContent = "+" + shorten(str.eff_pb(p * 4)) + "x charge multiplier to Positronic Boosts " + (p * 4 - 3) + " - " + (p * 4)
+			getEl("str_" + p + "_pb_nerf").innerHTML = pb_nerf == 1 ? "" : "<b class='" + (pb_nerf < 1 ? "charged" : "warning") + "'>" + (pb_nerf < 1 ? "/" + shorten(1 / pb_nerf) : shorten(pb_nerf) + "x") + " charge requirement</b>"
 		}
 		getEl("str_strength").textContent = "Manifold Surgery: " + shorten(str_tmp.str) + "x strength to String boosts"
 	},
@@ -121,26 +114,20 @@ let str = {
 	},
 
 	//HTML + DOM elements
-	setupBoost(type, x, fix) {
-		var id = type + x
-		return '<div class="str_boost' + (fix ? " fix" : "") + '" id="str_' + id + '_div">' +
-			'<button id="str_' + id + '" onclick="str.vibrate(\'' + type + '\', ' + x + ')">' +
-			'<b id="str_' + id + '_title"></b><br>' +
-			'<span id="str_' + id + '_eff"></span><br>' +
-			'<b class="warning" id="str_' + id + '_nerf" style="font-size: 8px"></b></button>' +
-			'<br><span id="str_' + id + '_altitude"></span></div>'
+	setupBoost(x) {
+		return '<div class="str_boost' + '" id="str_' + x + '_div">' +
+			'<button id="str_' + x + '" onclick="str.vibrate(' + x + ')">' +
+			'<b>' + str.data.letters[Math.ceil(x / 4) - 1] + ((x - 1) % 4 + 1) + '</b><br>' +
+			'<span id="str_' + x + '_eff"></span></button>' +
+			'<br><span id="str_' + x + '_altitude"></span></div>'
 	},
 	setupHTML() {
 		if (str_tmp.setupHTML) return
 		str_tmp.setupHTML = true
 
-		var html = this.setupBoost("", 0, true)
-		for (var e = 1; e <= 12; e++) html += this.setupBoost("eb", e)
-		getEl("str_boosts_ent").innerHTML = html
-
-		var html = this.setupBoost("", 0, true)
-		for (var p = 1; p <= 12; p++) html += this.setupBoost("pb", p)
-		getEl("str_boosts_pos").innerHTML = html
+		var html = ""
+		for (var e = 1; e <= 12; e++) html += this.setupBoost(e)
+		getEl("str_boosts").innerHTML = html
 
 		str.updateDisp()
 	},
@@ -165,19 +152,18 @@ let str = {
 		if (str_save.energy < str.veCost(str_tmp.vibrated + 1)) return
 		return true
 	},
-	vibrate(type, x) {
-		var id = str.data.pos[type + x]
+	vibrate(x) {
 		var noReset = true
-		if (str_tmp.disable[id]) {
-			var disable = str_tmp.disable[id]
+		if (str_tmp.disable[x]) {
+			var disable = str_tmp.disable[x]
 			var vibrated = str_save.vibrated
 			var new_vibrated = []
 			for (var i = 0; i < vibrated.length; i++) if (vibrated[i] != disable) new_vibrated.push(vibrated[i])
 			str_save.vibrated = new_vibrated
 			noReset = str.veUnspent() < 0 || dev.noReset
 		} else {
-			if (!str.canVibrate(id)) return
-			str_save.vibrated.push(id)
+			if (!str.canVibrate(x)) return
+			str_save.vibrated.push(x)
 		}
 
 		if (noReset) {
@@ -189,7 +175,7 @@ let str = {
 		return str.unl() && ((str_save.vibrated && str_save.vibrated.includes(x)) || str_tmp.disable[x])
 	},
 	onVibrate(x) {
-		for (var p = -2; p <= 2; p++) {
+		for (var p = -3; p <= 3; p++) {
 			var y = p + x
 			str_tmp.alt[y] = (str_tmp.alt[y] || 0) + (1 - 2 * (Math.abs(p) % 2)) / Math.pow(2, Math.max(Math.abs(p), 1))
 		}
@@ -206,25 +192,23 @@ let str = {
 	conv(x, rev) {
 		return !str.unl() ? x : rev ? str_tmp.rev_order[x] : str_tmp.order[x]
 	},
-	eff(x, next) {
-		let r = this.altitude(x)
-		r *= str_tmp.str
-		return r
+	eff(x) {
+		return str.unl() ? str_tmp.powers[Math.ceil(x / 4)] * str_tmp.str : 0
 	},
-	eff_eb(x, next) {
+	eff_eb(x) {
 		let exp = 1
 		if (x == 1) exp = 1/3
-		return Math.pow(1 + Math.abs(this.eff(this.data.pos["eb" + x], next)) / 2, exp)
+		return Math.pow(1 + Math.abs(this.eff(x)) / 2, exp)
 	},
-	eff_pb(x, next) {
-		return Math.abs(this.eff(this.data.pos["pb" + x], next)) * 4
+	eff_pb(x) {
+		return Math.abs(this.eff(x)) * 4
 	},
-	nerf_eb(x, next) {
-		var alt = this.eff(this.data.pos["eb" + x], next)
+	nerf_eb(x) {
+		var alt = this.eff(x)
 		return alt < 0 ? -alt * 3e3 : 0
 	},
-	nerf_pb(x, next) {
-		var alt = this.eff(this.data.pos["pb" + x], next)
+	nerf_pb(x) {
+		var alt = this.eff(x)
 		return alt < 0 ? Math.pow(1 - alt, 4) : Math.pow(2, -alt)
 	},
 
