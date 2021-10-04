@@ -762,13 +762,16 @@ function doNGPlusOneNewPlayer(){
 	}
 
 	player.money = new Decimal(2e25)
+	player.resets = 4
+	player.galaxies = 1
 	player.infinitiedBank = 5e9
-	player.infinityUpgrades = ["timeMult", "dimMult", "timeMult2", "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "passiveGen", "45Mult", "resetBoost", "galaxyBoost"]
+	player.infinityUpgrades = ["timeMult", "dimMult", "timeMult2", "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "passiveGen", "45Mult", "resetBoost", "galaxyBoost", "skipReset1", "skipReset2", "skipReset3", "skipResetGalaxy"]
 	player.infMult = 2048
 	player.dimensionMultDecrease = 2
 	player.tickSpeedMultDecrease = 1.65
 	player.eternities = 1012680
 	player.challenges = challengesCompletedOnEternity()
+	player.postChallUnlocked = order.length
 	player.replicanti.unl = true
 	player.replicanti.amount = new Decimal(1)
 	for (ec = 1; ec <= 12; ec++) player.eternityChalls['eterc' + ec] = 5
