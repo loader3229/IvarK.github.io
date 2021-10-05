@@ -1531,7 +1531,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.61: Dimension-Yau Manuifold)</p>
-				<p class="warning" id='versionDescAlpha'>(10/3/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(10/4/21a Pre-Release Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -4520,18 +4520,16 @@
 				</tr>
 				<tr>
 					<td colspan=3>
-						<b class="warning">This section is currently in being reworked!</b>
+						<button class="storebtn" id="enB_glu_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('glu')">Unlock/Master Entangled Boosts</span><br><span id="enB_glu_cost" style="font-size: 10px"></span></button>
 						<br>
-						<button class="storebtn" id="enB_glu_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('glu')">Unlock/Master Boosts</span><br><span id="enB_glu_cost" style="font-size: 10px"></span></button>
+						<span id="enB_glu_next"></span>
+						<br>
+						<span id="enB_eff"></span>
 					</td>
 				</tr>
 				<tr>
-					<td colspan=3>
-						Some Entangled Boosts only work on and based on which kind you choose.
-						<br>
-						<span id="masterNote">However, mastered boosts are based on total gluons and always activated instead!</span>
-						<br>
-						<span id="enB_eff"></span>
+					<td class="red" colspan=3>
+						<b class="warning">Some Entangled Boosts only work on and based on which kind you choose.</b>
 					</td>
 				</tr>
 				<tr>
@@ -4733,9 +4731,9 @@
 					<span id="enB_pos_eng" style="font-size:25px">0.0</span> Positronic Charge
 				</td>
 				<td>
-					<b class="warning">This section is currently in being reworked!</b>
-					<br>
 					<button class="storebtn" id="enB_pos_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('pos')">Unlock/Master Boosts</span><br><span id="enB_pos_cost" style="font-size: 10px"></span></button>
+					<br>
+					<span id="enB_pos_next"></span>
 				</td>
 			</tr>
 		</table>

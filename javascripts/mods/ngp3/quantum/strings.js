@@ -56,7 +56,7 @@ let str = {
 		data.powers = {}
 		for (var i = 1; i <= 12; i++) {
 			var pow = Math.ceil(i / 4)
-			data.powers[pow] = (data.powers[pow] || 0) + (data.alt[i] || 0)
+			data.powers[pow] = (data.powers[pow] || 0) + this.altitude(i)
 		}
 	},
 	updateDisp() {
@@ -89,7 +89,7 @@ let str = {
 
 		let ve = str.veUnspent()
 		getEl("str_ve").textContent = (ve < 0 ? "-" : "") + shorten(Math.abs(ve))
-		getEl("str_warn").textContent = ve < 0 ? "Strings have been disabled due to spending too many Vibration Energy!" : "WARNING: Vibrating boosts costs Vibration Energy, and unvibrating performs a Quantum reset!"
+		getEl("str_warn").textContent = ve < 0 ? "Strings have been disabled due to spending too many Vibration Energy!" : "WARNING: Vibrating costs Vibration Energy, and also performs a Quantum reset!"
 
 		for (var i = 1; i <= 12; i++) {
 			var alt = str.altitude(i)
@@ -153,20 +153,18 @@ let str = {
 		return true
 	},
 	vibrate(x) {
-		var noReset = true
 		if (str_tmp.disable[x]) {
 			var disable = str_tmp.disable[x]
 			var vibrated = str_save.vibrated
 			var new_vibrated = []
 			for (var i = 0; i < vibrated.length; i++) if (vibrated[i] != disable) new_vibrated.push(vibrated[i])
 			str_save.vibrated = new_vibrated
-			noReset = str.veUnspent() < 0 || dev.noReset
 		} else {
 			if (!str.canVibrate(x)) return
 			str_save.vibrated.push(x)
 		}
-
-		if (noReset) {
+	
+		if (str.veUnspent() < 0 || dev.noReset) {
 			str.updateTmp()
 			str.updateDisp()
 		} else restartQuantum(true)
@@ -176,32 +174,36 @@ let str = {
 	},
 	onVibrate(x) {
 		for (var p = -3; p <= 3; p++) {
+			var d = Math.abs(p) + 1
 			var y = p + x
-			str_tmp.alt[y] = (str_tmp.alt[y] || 0) + (1 - 2 * (Math.abs(p) % 2)) / Math.pow(2, Math.max(Math.abs(p), 1))
+			var add = 2 * (d % 2) / ((d - 1) / 3 + 1) - 1
+			if (add < 0) add *= -add / 3
+			add /= 2
+			str_tmp.alt[y] = (str_tmp.alt[y] || 0) + add
 		}
 
-		str_tmp.disable[x - 1] = x
 		str_tmp.disable[x] = x
-		str_tmp.disable[x + 1] = x
 	},
 
 	//Altitudes
 	altitude(x, next) {
-		return !this.disabled() ? Math.max(Math.min((next ? str_tmp.next : str_tmp).alt[x] || 0, 1), -1) : 0
-	},
-	conv(x, rev) {
-		return !str.unl() ? x : rev ? str_tmp.rev_order[x] : str_tmp.order[x]
+		if (this.disabled()) return
+		let r = str_tmp.alt[x] || 0
+		if (r < 0) r /= 2
+		return Math.max(Math.min(r, 1), -1)
 	},
 	eff(x) {
-		return str.unl() ? str_tmp.powers[Math.ceil(x / 4)] * str_tmp.str : 0
+		if (!str.unl()) return 0
+		let r = str_tmp.powers[Math.ceil(x / 4)]
+		r *= str_tmp.str
+		return r
 	},
 	eff_eb(x) {
 		let exp = 1
-		if (x == 1) exp = 1/3
-		return Math.pow(1 + Math.abs(this.eff(x)) / 2, exp)
+		return Math.pow(1 + Math.abs(this.eff(x)), exp)
 	},
 	eff_pb(x) {
-		return Math.abs(this.eff(x)) * 4
+		return Math.abs(this.eff(x)) * 8
 	},
 	nerf_eb(x) {
 		var alt = this.eff(x)
