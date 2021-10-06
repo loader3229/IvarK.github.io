@@ -666,7 +666,7 @@ var PCs = {
 		if (!PCs.unl() || !qc.mod_comps || !qc.mod_comps.length) return
 
 		PCs_save.shrunkers = 0
-		if (this.milestoneDone(c * 10 + 4)) PCs_save.shrunkers++
+		for (var c = 1; c <= 8; c++) if (this.milestoneDone(c * 10 + 4)) PCs_save.shrunkers++
 	},
 	shrunkerEff() {
 		let x = PCs_save.shrunkers
