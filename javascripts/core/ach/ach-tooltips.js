@@ -377,7 +377,7 @@ function setR16p5Tooltip() {
 
 	mayhem.setAttribute('ach-tooltip', "Max out Mastery Studies in QC1. Reward: You keep Mastery Studies except in QC1 and QC7.")
 	cantGet.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, Math.PI * 1e11)) + " antimatter in Eternity Challenge 11. Reward: You gain 3x more Quarks, and can reduce the gluon gains by 50%.")
-	rid.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 1000)) + " MA in any QC with at least 10 completed combinations. Reward: PC temperatures below 0 are doubled.")
+	rid.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 1000)) + " MA in any QC without ???. Reward: PC temperatures below 0 are doubled.")
 }
 
 function setR17Tooltip() {

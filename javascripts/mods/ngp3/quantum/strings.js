@@ -22,15 +22,6 @@ let str = {
 		str_tmp = { unl: this.unl(true) }
 		if (!tmp.ngp3 || qu_save === undefined) return
 
-		this.data.all = []
-		for (var i = 1; i <= 12; i++) {
-			this.data.all.push("eb" + i)
-			this.data.pos["eb" + i] = i + 4
-
-			this.data.all.push("pb" + i)
-			this.data.pos["pb" + i] = i
-		}
-
 		var data = str_save || this.setup()
 		if (data.effs) delete data.effs
 		if (!data.vibrated) data.vibrated = []
@@ -56,7 +47,7 @@ let str = {
 		data.powers = {}
 		for (var i = 1; i <= 12; i++) {
 			var pow = Math.ceil(i / 4)
-			data.powers[pow] = (data.powers[pow] || 0) + this.altitude(i)
+			data.powers[pow] = (data.powers[pow] || 0) + this.oneEff(i)
 		}
 	},
 	updateDisp() {
@@ -93,7 +84,7 @@ let str = {
 
 		for (var i = 1; i <= 12; i++) {
 			var alt = str.altitude(i)
-			getEl("str_" + i + "_eff").textContent = (alt < 0 ? "-" : "+") + shorten(Math.abs(alt) * str_tmp.str) + " to " + str.data.names[Math.ceil(i / 4) - 1]
+			getEl("str_" + i + "_eff").textContent = (alt < 0 ? "-" : "+") + shorten(Math.abs(str.oneEff(i)) * str_tmp.str) + " to " + str.data.names[Math.ceil(i / 4) - 1]
 			getEl("str_" + i).className = (str_save.vibrated.includes(i) ? "chosenbtn2" : str.vibrated(i) ? (str_tmp.disable[i] > i ? "chosenbtn3" : "chosenbtn") : str.canVibrate(i) ? "storebtn" : "unavailablebtn") + " pos_btn"
 		}
 
@@ -103,7 +94,7 @@ let str = {
 
 			var pb_nerf = str.nerf_pb(p * 4)
 			getEl("str_" + p + "_eb_eff").textContent = shorten(str.eff_eb(p * 4)) + "x stronger to Entangled Boosts " + (p * 4 - 3) + " - " + (p * 4)
-			getEl("str_" + p + "_eb_nerf").innerHTML = pow < 0 ? "<b class='warning'>Effective at " + shorten(str.nerf_pb(p * 4)) + " Quantum Power</b>" : ""
+			getEl("str_" + p + "_eb_nerf").innerHTML = pow < 0 ? "<b class='warning'>Effective at " + shorten(str.nerf_eb(p * 4)) + " Quantum Power</b>" : ""
 			getEl("str_" + p + "_pb_eff").textContent = "+" + shorten(str.eff_pb(p * 4)) + "x charge multiplier to Positronic Boosts " + (p * 4 - 3) + " - " + (p * 4)
 			getEl("str_" + p + "_pb_nerf").innerHTML = pb_nerf == 1 ? "" : "<b class='" + (pb_nerf < 1 ? "charged" : "warning") + "'>" + (pb_nerf < 1 ? "/" + shorten(1 / pb_nerf) : shorten(pb_nerf) + "x") + " charge requirement</b>"
 		}
@@ -143,13 +134,13 @@ let str = {
 		return str_save.energy - str_save.spent
 	},
 	veCost(x) {
-		return x ? Math.pow(2.25, x - 1) : 0
+		return x ? Math.pow(1.9, x - 1) : 0
 	},
 
 	//Vibrations
 	canVibrate(x) {
-		if (str_tmp.disable[x] !== undefined) return
-		if (str_save.energy < str.veCost(str_tmp.vibrated + 1)) return
+		if (str_tmp.disable[x] !== undefined) return false
+		if (str_save.energy < str.veCost(str_tmp.vibrated + 1)) return false
 		return true
 	},
 	vibrate(x) {
@@ -174,11 +165,9 @@ let str = {
 	},
 	onVibrate(x) {
 		for (var p = -3; p <= 3; p++) {
-			var d = Math.abs(p) + 1
+			var d = Math.abs(p)
 			var y = p + x
-			var add = 2 * (d % 2) / ((d - 1) / 3 + 1) - 1
-			if (add < 0) add *= -add / 3
-			add /= 2
+			var add = 0.17 - 0.14 * d + 0.25 * ((d + 1) % 2)
 			str_tmp.alt[y] = (str_tmp.alt[y] || 0) + add
 		}
 
@@ -189,29 +178,36 @@ let str = {
 	altitude(x, next) {
 		if (this.disabled()) return
 		let r = str_tmp.alt[x] || 0
-		if (r < 0) r /= 2
 		return Math.max(Math.min(r, 1), -1)
+	},
+	oneEff(x) {
+		return this.altitude(x)
 	},
 	eff(x) {
 		if (!str.unl()) return 0
 		let r = str_tmp.powers[Math.ceil(x / 4)]
-		r *= str_tmp.str
+		r *= str_tmp.str / 4
 		return r
 	},
 	eff_eb(x) {
 		let exp = 1
-		return Math.pow(1 + Math.abs(this.eff(x)), exp)
+		let r = this.eff(x)
+		if (r < 0) r *= -1.5
+		return 1 + r
 	},
 	eff_pb(x) {
-		return Math.abs(this.eff(x)) * 8
+		let r = this.eff(x)
+		if (r < 0) r *= -1.5
+		return r * 6
 	},
 	nerf_eb(x) {
-		var alt = this.eff(x)
-		return alt < 0 ? -alt * 3e3 : 0
+		var r = this.eff(x)
+		if (r > 0) return 0
+		return -r * 8e3 * Math.min(Math.pow(1 - r, 3), 6)
 	},
 	nerf_pb(x) {
-		var alt = this.eff(x)
-		return alt < 0 ? Math.pow(1 - alt, 4) : Math.pow(2, -alt)
+		var r = this.eff(x)
+		return r < 0 ? (1 - r * 2) * Math.min(Math.pow(1 - r * 2, 3), 8) : 1 / (1 + r)
 	},
 
 	//Presets
@@ -241,12 +237,16 @@ let str = {
 
 		str_save.vibrated = []
 		str_save.spent = 0
+		str_tmp.vibrated = 0
+		str_tmp.disable = {}
+
 		var ve = str_save.energy
 		for (var i = 0; i < x.length; i++) {
 			var k = x[i]
 			if (str.canVibrate(k)) {
 				str_save.vibrated.push(k)
-				str_save.spent = str.veCost(str_save.vibrated.length)
+				str_tmp.vibrated++
+				str_save.spent = str.veCost(str_tmp.vibrated)
 			}
 		}
 

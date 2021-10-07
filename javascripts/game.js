@@ -2082,7 +2082,7 @@ function showNextModeMessage(click) {
 			"<br><br><b>Test Discord</b>: <a href='http://discord.gg/7v82CAX' target='_newtab'>http://discord.gg/7v82CAX</a>" +
 			"<br><br>Thank you for testing NG+3R!<br>~Aarex"
 		) : (
-			"<b class='lime'>Welcome to NG+3 Respecced v" + ver + "!</b><br>This update introduces...<br><br>" +
+			"<b class='lime'>Welcome to NG+3 Respecced v" + ver + "!</b><br>This update " + evalData(ngp3Welcomes.verbs[ver] || "introduces") + "...<br><br>" +
 			(ngp3Welcomes.msgs[ver] || "???") +
 			"<br><br><b>Discord</b>: <a href='http://discord.gg/KsjcgskgTj' target='_newtab'>http://discord.gg/KsjcgskgTj</a>" +
 			"<br><br>Thank you for playing NG+3R!<br>~Aarex" +
@@ -4024,11 +4024,21 @@ function changingDecimalSystemUpdating(){
 
 function incrementTimesUpdating(diffStat){
 	player.totalTimePlayed += diffStat
+
+	if (qu_save && implosionCheck !== 2) qu_save.time += diffStat
 	if (QCs.done(1)) {
 		QCs_save.qc1.time += diffStat
 		QCs_save.qc1.timeLast += diffStat
 	}
-	if (qu_save && implosionCheck !== 2) qu_save.time += diffStat
+	if (QCs.in(8)) {
+		QCs_save.qc8.time += diffStat
+		if (QCs_save.qc8.time > 50) {
+			QCs_save.qc8.time = 0
+			QCs.data[8].switch()
+			bigCrunch(true)
+		}
+	}
+
 	if (player.currentEternityChall == "eterc12") diffStat /= 1e3
 	player.thisEternity += diffStat * (QCs.perkActive(6) ? 0.5 : 1)
    	player.thisInfinityTime += diffStat

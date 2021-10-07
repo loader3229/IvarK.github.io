@@ -532,14 +532,15 @@ var enB = {
 	},
 
 	mastered(type, x) {
-		return enB_tmp.unl[type + x] >= 2
+		if (enB_tmp.unl[type + x] < 2) return false
+		if (type == "glu" && QCs.perkActive(2)) return enB_tmp.eff_eb.gte(500)
+		return true
 	},
 	getMastered(type, x) {
 		var data = this[type]
 		var r = data[x].masReq
 		if (type == "glu") {
 			if (QCs.perkActive(8) && !this.colorMatch("glu", x)) r = 0
-			else if (QCs.perkActive(2)) r *= 20
 		}
 		return r
 	},
@@ -628,6 +629,7 @@ var enB = {
 			r = r.sub(r.min(1))
 
 			r = r.times(tmp.glB[enB.mastered("glu", x) ? "masAmt" : "enAmt"])
+			if (QCs.perkActive(2) && enB.mastered("glu", x)) r = r.times(1.5)
 			if (str.unl() && amt.gte(str.nerf_eb(x))) r = r.times(str.eff_eb(x))
 			return r
 		},
@@ -636,7 +638,6 @@ var enB = {
 			if (pos.on()) amt = amt.add(enB.pos.target())
 
 			if (hasAch("ng3pr14")) amt = amt.times(1.1)
-			if (QCs.perkActive(2)) amt = amt.times(1.5)
 
 			if (PCs.unl() && amt.gt(PCs_tmp.eff1_start)) amt = amt.div(PCs_tmp.eff1_start).pow(this.boosterExp()).times(PCs_tmp.eff1_start)
 
@@ -668,7 +669,7 @@ var enB = {
 			type: "r",
 			eff(x) {
 				let r = Decimal.cbrt(x).times(0.75).add(1)
-				if (r.gte(30)) r = r.div(r.log(30))
+				if (r.gte(40)) r = r.div(r.div(40).log(4) + 1)
 				return r
 			},
 			disp(x) {
@@ -882,7 +883,7 @@ var enB = {
 	},
 	pos: {
 		name: "Positronic",
-		engName: "Positronic Energy",
+		engName: "Positronic Charge",
 		unl() {
 			return pos.unl()
 		},

@@ -670,7 +670,7 @@ var PCs = {
 	},
 	shrunkerEff() {
 		let x = PCs_save.shrunkers
-		return Math.pow(0.97, Math.sqrt(x))
+		return Math.pow(0.96, Math.sqrt(x))
 	}
 }
 var PCs_save = undefined

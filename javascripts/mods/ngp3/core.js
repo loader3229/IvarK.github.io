@@ -1052,7 +1052,10 @@ var ngp3Welcomes = {
 	msgs: {
 		0.5: "<b class='lime'>Paired Challenges!</b> Can you complete 2 challenges at once, and level up your progression? Unlocks after completing Quantum Challenge 7!",
 		0.6: "<b class='lime'>Strings!</b> Can you vibrate a string of boosts, which adjusts them at a sawtooth rate?",
-		0.61: "<b class='lime'>More QoL!</b> Yes, I added several QoL features, including new NG+ buffs. This also rework Strings too!"
+		0.61: "<b class='lime'>Strings, again!</b> Yes, I decided to rework Strings for better balancing and less confusion. This also removes Nerfed modifier and reworks Entangled Boosters and Perks."
+	},
+	verbs: {
+		0.61: "reworks"
 	},
 	goals: {
 		0.5: () => getFullExpansion(8) + " PC combinations + " + shortenCosts(Decimal.pow(10, 1e13)) + " antimatter",

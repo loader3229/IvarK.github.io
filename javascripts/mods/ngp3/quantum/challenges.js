@@ -44,10 +44,12 @@ var QCs = {
 		delete QCs_save.qc3
 		if (data.qc4 === undefined || data.qc4.normal === undefined) data.qc4 = { normal: data.qc4 || "ng", dil: "ng" }
 		data.qc5 = new Decimal(data.qc5)
-		if (data.qc8 === undefined) data.qc8 = {
-			index: 0,
-			order: []
-		}
+		if (data.qc8 === undefined) {
+			data.qc8 = {
+				index: 0,
+				order: []
+			}
+		} else if (data.qc8.time === undefined) data.qc8.time = 0
 
 		if (data.disable_swaps === undefined) data.disable_swaps = {}
 		if (data.best_exclusion || data.perks_unl || (data.mod_comps && !data.mod_comps.length)) {
@@ -78,6 +80,7 @@ var QCs = {
 		QCs_save.qc5 = new Decimal(0)
 		QCs_save.qc6 = 0
 		QCs_save.qc7 = QCs.perkActive(7) ? Math.sqrt(player.replicanti.galaxies) : 0 //QC7 perk
+		QCs_save.qc8.timer = 0
 	},
 	data: {
 		max: 8,
@@ -95,7 +98,7 @@ var QCs = {
 			},
 
 			nerfDesc: (x) => "TT softcap is harsher, QC7 is applied, and Meta Accelerator boosts are disabled.",
-			perkDesc: (x) => "You gain 0.2 extra Compressors on compressing in at least 5 seconds. (+" + shortenMoney(x) + ")",
+			perkDesc: (x) => "You gain 0.2 extra Compressors on compressing in at least 5 seconds, or for the first time. (+" + shortenMoney(x) + ")",
 			perkEff() {
 				return QCs_save.qc1.perkBoosts / 5
 			},
@@ -112,7 +115,7 @@ var QCs = {
 				let qc1 = QCs_save.qc1
 				if (!QCs_tmp.qc1) return false
 
-				if (QCs.perkActive(1) && qc1.time >= 5) qc1.perkBoosts++
+				if (QCs.perkActive(1) && (qc1.boosts == 0 || qc1.time >= 5)) qc1.perkBoosts++
 				if (PCs.milestoneDone(13) && tmp.rep.est.gte(1e6)) {
 					updateReplicantiTemp()
 					qc1.dilaters++
@@ -313,7 +316,7 @@ var QCs = {
 			},
 
 			nerfDesc: (x) => "Only excluded Positronic Boosts work.",
-			perkDesc: (x) => "Entangled Boosts are 50% stronger, but mastery requires 20x more and always anti'd. Also, mastered boosts are always active.",
+			perkDesc: (x) => "Mastered Entangled Boosts are 50% stronger, but mastery requires " + shortenCosts(500) + " Quantum Power. Also, they are always active.",
 			perkEff() {
 				return 1
 			},
@@ -539,11 +542,11 @@ var QCs = {
 		},
 		8: {
 			unl: () => hasAch("ng3p25"),
-			desc: "All Entangled Boosts are anti'd. You have to setup a cycle of 2 entanglements, and Big Crunching switches your gluon kind to the next one.",
+			desc: "All Entangled Boosts are anti'd. You have to setup a cycle of 2 entanglements, and there's a 5-second timer that constantly switches your gluon kind.",
 			goal: () => enB.glu.boosterEff() >= 220,
 			goalDisp: "220 Quantum Power",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.1),
-			hint: "Make your Auto-Crunch faster than Auto-Eternity.",
+			hint: "Avoid the GB gluon kind.",
 
 			rewardDesc: (x) => "Unlock the fourth column of Paired Challenges.",
 			rewardEff(str) {
@@ -683,7 +686,7 @@ var QCs = {
 		return hasAch("ng3pr12") && PCs.milestoneDone(x * 10 + 4)
 	},
 	perkActive(x) {
-		return QCs_tmp.perks[x] && this.perkUnl(x) && this.inAny() && !(QCs_save.disable_perks && QCs_save.disable_perks[x])
+		return QCs_tmp.perks[x] !== undefined && this.perkUnl(x) && this.inAny() && !(QCs_save.disable_perks && QCs_save.disable_perks[x])
 	},
 	disablePerk(x) {
 		if (QCs.inAny() && !confirm("This will restart this challenge! Are you sure?")) return
