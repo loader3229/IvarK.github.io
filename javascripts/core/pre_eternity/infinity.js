@@ -320,8 +320,6 @@ function bigCrunch(autoed) {
 
 	var g11MultShown = pH.did("infinity")
 	doAfterResetCrunchStuff(g11MultShown)
-
-	if (QCs.in(8)) QCs.data[8].switch()
 }
 
 //INFINITY UPGRADES

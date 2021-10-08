@@ -278,11 +278,8 @@ function preHiggsNGp3AchieveCheck() {
 	if (qu_save.expEnergy >= 1) giveAchievement("The Power of Science!")
 	if (!hasAch("ng3pr15") && str.unl()) {
 		var cond = 0
-		for (var i = 1; i <= 8; i++) {
-			if (QCs.modDone(i, "up")) cond++
-			if (cond >= 4) break
-		}
-		if (cond >= 4) giveAchievement("The Challenging Day")
+		for (var i = 1; i <= 8; i++) if (PCs.milestoneDone(i * 10 + 3)) cond++
+		if (cond >= 8) giveAchievement("The Challenging Day")
 	}
 	if (player.money.log10() >= Math.PI * 1e11 && player.currentEternityChall == "eterc11") giveAchievement("I can't get my multipliers higher!")
 	if (!hasAch("ng3pr17") && PCs.milestoneDone(83)) {
@@ -292,7 +289,7 @@ function preHiggsNGp3AchieveCheck() {
 		}
 		if (cond >= 2) giveAchievement("Stonking The Pairs")
 	}
-	if (QCs.inAny() && QCs_save.mod == "up" && PCs_save.comps.length == 0 && player.meta.bestAntimatter.e >= 800) giveAchievement("Get rid of you by yourself...")
+	if (QCs.inAny() && str_tmp.vibrated === 0 && player.meta.bestAntimatter.e >= 1.6e3) giveAchievement("Get rid of you by yourself...")
 
 	if (false) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
 	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")

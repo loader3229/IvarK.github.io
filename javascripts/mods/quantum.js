@@ -18,7 +18,6 @@ function quantum(auto, force, attrs, mode, quick) {
 	if (mode == "restart") {
 		data.pc = PCs_save.in
 		data.qc = QCs_save.in
-		data.mod = QCs_save.mod
 		data.restart = true
 	}
 
@@ -263,7 +262,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	if (tmp.ngp3) {
 		qMs.update()
 		qu_save.quarkEnergy = new Decimal(0)
-		enB.updateTmp()
+		enB.updateTmpOnTick()
 	} else qu_save.gluons = 0;
 
 	// Positrons
@@ -278,22 +277,13 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		var isQC = data.qc !== undefined
 		var qcData = PCs.sort(data.qc)
 
-		if (!force) {
-			if (QCs_save.mod) {
-				var qc = QCs_save.mod + qcDataPrev[0]
-				if (!QCs_save.mod_comps.includes(qc)) {
-					PCs_save.shrunkers += QCs.modData[QCs_save.mod].shrunker
-					QCs_save.mod_comps.push(qc)
-				}
-			} else if (qcDataPrev.length == 1) {
-				var qc = qcDataPrev[0]
-				QCs_save.comps = Math.max(QCs_save.comps, qc)
-				QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, qu_save.best)
-			}
+		if (!force && qcDataPrev.length == 1) {
+			var qc = qcDataPrev[0]
+			QCs_save.comps = Math.max(QCs_save.comps, qc)
+			QCs_save.best[qc] = Math.max(QCs_save.best[qc] || 1/0, qu_save.best)
 		}
 
 		delete QCs_save.mod
-		if (data.mod) QCs_save.mod = data.mod
 		QCs_save.disable_swaps.active = isQC && QCs_save.disable_swaps.on
 
 		if (isQC) {

@@ -377,7 +377,7 @@ function setR16p5Tooltip() {
 
 	mayhem.setAttribute('ach-tooltip', "Max out Mastery Studies in QC1. Reward: You keep Mastery Studies except in QC1 and QC7.")
 	cantGet.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, Math.PI * 1e11)) + " antimatter in Eternity Challenge 11. Reward: You gain 3x more Quarks, and can reduce the gluon gains by 50%.")
-	rid.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 800)) + " MA in a Nerfed QC without Paired Challenge combinations. Reward: PC temperatures below 0 are doubled.")
+	rid.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 1600)) + " MA in any QC without vibrations. Reward: PC temperatures below 0 are doubled.")
 }
 
 function setR17Tooltip() {
@@ -586,14 +586,14 @@ function setNGP3AchievementTooltip() {
 	setR16Tooltip()
 	setR16p5Tooltip()
 	setR17Tooltip()
-	setR18Tooltip()
+	/*setR18Tooltip()
 	setR19Tooltip()
 	setR20Tooltip()
 	setR21Tooltip()
 	setR22Tooltip()
 	setR23Tooltip()
 	setR24Tooltip()
-	setR25Tooltip()
+	setR25Tooltip()*/
 }
 
 function setAchieveTooltip() { 

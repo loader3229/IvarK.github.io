@@ -167,8 +167,7 @@ function isIntervalAffordable() {
 function getRGCost(offset = 0, costChange) {
 	let ret = player.replicanti.galCost
 	let gal = player.replicanti.gal
-	if (tmp.ngp3 && !hasMTS(266) && gal + offset >= 500) return new Decimal(1/0)
-	else if (offset > 0) {
+	if (offset > 0) {
 		let increase = 0
 		if (player.currentEternityChall == "eterc6") increase = offset * ((offset + gal * 2) + 3)
 		else increase = offset * (2.5 * (offset + gal * 2) + 22.5)
@@ -176,11 +175,20 @@ function getRGCost(offset = 0, costChange) {
 		
 		let scaleStart = tmp.ngC ? 250 : 400
 		if (gal + offset > scaleStart - 1) {
-			if (player.exdilation != undefined) for (var g = Math.max(gal, scaleStart - 1); g < gal + offset; g++) increase += Math.pow(g - 389, 2)
+			// Thanks Naruyoko for fixing the performance issue!
+			// https://github.com/Naruyoko/Antimatter-Dimensions-Mods/commit/2034cee4f039e6984d4acaeafb3e4eb79dadc668
+
+			// Use sum of squares formula: sum_k=1^{n-1}(k^2) = n*(n-1)*(2n-1)/6
+			if (player.exdilation != undefined){
+				var low = Math.max(gal, scaleStart - 1)
+				var high = gal + offset
+				increase += low < high ? (high * (high - 1) * (high * 2 - 1) - low * (low - 1) * (low * 2 - 1)) / 6 : 0
+			}
 			if (player.meta != undefined) {
 				var isReduced = tmp.ngp3 && hasMTS(266)
 				if (isReduced) increase += (Math.pow(gal + offset - scaleStart, 3) - Math.pow(Math.max(gal - scaleStart, 0), 3)) * 10 / doubleMSMult(1)
-				else for (var g = Math.max(gal, scaleStart - 1); g < gal + offset; g++) increase += 5 * Math.floor(Math.pow(1.2, g - scaleStart + 6))
+				// Limit to the highest 512 numbers as lower numbers becomes insignificant (ratio of 3.47e+40)
+				else for (var g = Math.max(gal, scaleStart - 1, gal + offset - 512); g < gal + offset && isFinite(increase); g++) increase += 5 * Math.floor(Math.pow(1.2, g - scaleStart + 6))
 			}
 		}
 		ret = ret.times(Decimal.pow(10, increase))

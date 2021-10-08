@@ -520,7 +520,7 @@ function scrollNextMessage() {
 			nextMsgCond = false
 			while (!nextMsgCond) {
 				// randomly choose from either normal news or aarex news
-				var array = (hasAch("r22") && Math.random() > 0.5) ? amNewsArray : newsArray
+				var array = ((hasAch("r22") && Math.random() > 0.5) || aarMod.newGamePlusVersion || tmp.ngp3) ? amNewsArray : newsArray
 				nextMsgIndex = Math.min(Math.floor(Math.random() * array.length), array.length)
 				var func = array[nextMsgIndex][1]
 				nextMsgCond = typeof(func) == "function" ? func() : eval(func);

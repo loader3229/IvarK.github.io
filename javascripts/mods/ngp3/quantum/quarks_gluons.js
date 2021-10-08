@@ -291,7 +291,7 @@ function updateColorPowers() {
 	let e = 1
 	if (hasAch("ng3pr12")) {
 		let c = 0
-		for (var i = 1; i <= 4; i++) if (PCs.milestoneDone(i * 10 + 4)) c++
+		for (var i = 1; i <= 4; i++) if (PCs.milestoneDone(i * 10 + 5)) c++
 		e = Math.pow(1.025, c)
 	}
 
@@ -461,18 +461,10 @@ var enB = {
 	buy(type) {
 		var data = this[type]
 		if (!data.unl()) return
+		if (!data.cost()) return
 		if (Decimal.lt(data.engAmt(), data.cost())) return
 
-		data.set(data.amt().add(1))
-		updateGluonicBoosts()
-		this.update(type)
-	},
-	maxBuy(type) {
-		var data = this[type]
-		if (!data.unl()) return
-		if (Decimal.lt(data.engAmt(), data.cost())) return
-
-		data.set(data.target().floor())
+		data.lvlUp()
 		updateGluonicBoosts()
 		this.update(type)
 	},
@@ -482,8 +474,7 @@ var enB = {
 		return shiftDown ? data[x].title : data.name + " Boost " + x
 	},
 	has(type, x) {
-		var data = this[type]
-		return this[type].unl() && Decimal.gte(data.amt(), data[x].req)
+		return enB_tmp.unl[type + x] >= 1
 	},
 	active(type, x) {
 		var data = this[type][x]
@@ -541,17 +532,15 @@ var enB = {
 	},
 
 	mastered(type, x) {
-		if (type == "glu" && !QCs.perkActive(2) && QCs.in(8)) return false
-
-		var data = this[type]
-		return Decimal.gte(data.amt(), this.getMastered(type, x)) && this.has(type, x)
+		if (enB_tmp.unl[type + x] !== 2) return false
+		if (type == "glu" && QCs.perkActive(2)) return enB_tmp.eff_eb.gte(500)
+		return true
 	},
 	getMastered(type, x) {
 		var data = this[type]
-		var r = (tmp.dtMode && data[x].masReqDeath) || (tmp.exMode && data[x].masReqExpert) || data[x].masReq
+		var r = data[x].masReq
 		if (type == "glu") {
 			if (QCs.perkActive(8) && !this.colorMatch("glu", x)) r = 0
-			else if (QCs.perkActive(2)) r *= 20
 		}
 		return r
 	},
@@ -559,6 +548,28 @@ var enB = {
 	updateTmp() {
 		var data = {}
 		enB_tmp = data
+
+		data.unl = {}
+		for (var x = 0; x < this.types.length; x++) {
+			var type = this.types[x]
+			var typeData = this[type]
+			var peek = true
+			if (!typeData.unl()) continue
+			for (var y = 1; y <= 12; y++) {
+				var id = type + y
+				var unl = typeData.amt() >= typeData[y].req
+				if (unl) {
+					data.unl[id] = 1
+					if (type == "glu" && !QCs.perkActive(2) && QCs.in(8)) continue
+					if (typeData.amt() >= this.getMastered(type, y)) data.unl[id] = 2
+				}
+			}
+		}
+
+		enB.updateTmpOnTick()
+	},
+	updateTmpOnTick() {
+		var data = enB_tmp
 
 		data.eff_eb = enB.glu.boosterEff()
 		for (var x = 0; x < this.priorities.length; x++) {
@@ -583,13 +594,16 @@ var enB = {
 	],
 	glu: {
 		name: "Entangled",
+		engName: "Quantum Energy",
 		unl() {
 			return tmp.quActive && Decimal.add(qu_save.gluons.rg, qu_save.gluons.gb).add(qu_save.gluons.br).gt(0)
 		},
 
+		costs: [1,4,6,7,8,9,10,12,13,15,36,40,45,60,75,80],
 		cost(x) {
 			if (x === undefined) x = this.amt()
-			return Decimal.div(x, 3).pow(1.5).add(1)
+			if (!this.costs[x]) return
+			return Decimal.pow((this.costs[x] - 1) / 3, 1.5).add(1)
 		},
 		target(x, noBest) {
 			var eng = x ? new Decimal(x) : this.engAmt(noBest)
@@ -598,15 +612,15 @@ var enB = {
 		},
 
 		amt() {
-			return qu_save.entBoosts || new Decimal(0)
+			return qu_save.entLvl || 0
 		},
 		engAmt(noBest) {
 			var x = noBest ? qu_save.quarkEnergy : qu_save.bestEnergy
 			if (noBest && QCs_tmp.qc5) x = x.add(QCs_tmp.qc5.eff)
 			return x
 		},
-		set(x) {
-			qu_save.entBoosts = x.round()
+		lvlUp() {
+			qu_save.entLvl = this.amt() + 1
 		},
 
 		eff(x) {
@@ -615,7 +629,8 @@ var enB = {
 			r = r.sub(r.min(1))
 
 			r = r.times(tmp.glB[enB.mastered("glu", x) ? "masAmt" : "enAmt"])
-			if (str.unl() && amt.gte(str.nerf_eb(str.conv(x, true)))) r = r.times(str.eff_eb(str.conv(x, true)))
+			if (QCs.perkActive(2) && enB.mastered("glu", x)) r = r.times(1.5)
+			if (str.unl() && amt.gte(str.nerf_eb(x))) r = r.times(str.eff_eb(x))
 			return r
 		},
 		boosterEff() {
@@ -623,7 +638,6 @@ var enB = {
 			if (pos.on()) amt = amt.add(enB.pos.target())
 
 			if (hasAch("ng3pr14")) amt = amt.times(1.1)
-			if (QCs.perkActive(2)) amt = amt.times(1.5)
 
 			if (PCs.unl() && amt.gt(PCs_tmp.eff1_start)) amt = amt.div(PCs_tmp.eff1_start).pow(this.boosterExp()).times(PCs_tmp.eff1_start)
 
@@ -649,14 +663,14 @@ var enB = {
 		max: 12,
 		1: {
 			req: 1,
-			masReq: 6,
-			masReqExpert: 7,
-			masReqDeath: 10,
+			masReq: 3,
 
 			title: "Quantum Tesla",
 			type: "r",
 			eff(x) {
-				return Decimal.cbrt(x).times(0.75).add(1)
+				let r = Decimal.cbrt(x).times(0.75).add(1)
+				if (r.gte(40)) r = r.div(r.div(40).log(4) + 1)
+				return r
 			},
 			disp(x) {
 				return shorten(x) + "x"
@@ -666,10 +680,8 @@ var enB = {
 			}
 		},
 		2: {
-			req: 4,
-			masReq: 8,
-			masReqExpert: 9,
-			masReqDeath: 11,
+			req: 2,
+			masReq: 5,
 
 			title: "Extraclusters",
 			type: "g",
@@ -684,10 +696,8 @@ var enB = {
 			}
 		},
 		3: {
-			req: 6,
-			masReq: 9,
-			masReqExpert: 10,
-			masReqDeath: 11,
+			req: 3,
+			masReq: 6,
 
 			title: "Dilation Overflow",
 			type: "b",
@@ -702,15 +712,14 @@ var enB = {
 			}
 		},
 		4: {
-			req: 7,
-			masReq: 10,
-			masReqExpert: 11,
-			masReqDeath: 13,
+			req: 4,
+			masReq: 7,
 
 			title: "Meta Resynergizer",
 			type: "r",
 			eff(x) {
 				x = Math.sqrt(1 + Math.log10(x / 10 + 1))
+				if (x > 2.5) x = (x + 1.25) / 1.5
 				return Math.min(0.003 * x, 0.012)
 			},
 			disp(x) {
@@ -721,8 +730,8 @@ var enB = {
 			}
 		},
 		5: {
-			req: 9,
-			masReq: 75,
+			req: 6,
+			masReq: 15,
 
 			title: "Otherworldly Galaxies",
 			type: "b",
@@ -746,10 +755,8 @@ var enB = {
 			}
 		},
 		6: {
-			req: 10,
-			masReq: 13,
-			masReqExpert: 14,
-			masReqDeath: 15,
+			req: 7,
+			masReq: 9,
 
 			title: "Energy Lever",
 			type: "g",
@@ -770,10 +777,8 @@ var enB = {
 			}
 		},
 		7: {
-			req: 12,
-			masReq: 40,
-			masReqExpert: 50,
-			masReqDeath: 60,
+			req: 8,
+			masReq: 12,
 
 			title: "Dilation Overflow II",
 			type: "g",
@@ -789,8 +794,8 @@ var enB = {
 			}
 		},
 		8: {
-			req: 12,
-			masReq: 80,
+			req: 8,
+			masReq: 16,
 
 			title: "Meta Resynergizer II",
 			type: "r",
@@ -805,8 +810,8 @@ var enB = {
 			}
 		},
 		9: {
-			req: 15,
-			masReq: 36,
+			req: 10,
+			masReq: 11,
 
 			title: "Inflation Resistor",
 			type: "b",
@@ -824,8 +829,8 @@ var enB = {
 			}
 		},
 		10: {
-			req: 36,
-			masReq: 80,
+			req: 11,
+			masReq: 16,
 
 			title: "Blue Saturation",
 			type: "g",
@@ -841,8 +846,8 @@ var enB = {
 			}
 		},
 		11: {
-			req: 45,
-			masReq: 80,
+			req: 13,
+			masReq: 16,
 
 			title: "Blue Unseeming",
 			type: "r",
@@ -859,8 +864,8 @@ var enB = {
 			}
 		},
 		12: {
-			req: 60,
-			masReq: 80,
+			req: 14,
+			masReq: 16,
 
 			title: "Color Subcharge",
 			type: "b",
@@ -878,13 +883,16 @@ var enB = {
 	},
 	pos: {
 		name: "Positronic",
+		engName: "Positronic Charge",
 		unl() {
 			return pos.unl()
 		},
 
+		costs: [1,3,4,6,7,8,9,16,25,50,90,99,150],
 		cost(x) {
 			if (x === undefined) x = this.amt()
-			return x.div(2).add(1).pow(1.5)
+			if (!this.costs[x]) return
+			return Decimal.pow((this.costs[x] - 1) / 2 + 1, 1.5)
 		},
 		target(x) {
 			var eng = x || this.engAmt()
@@ -894,25 +902,23 @@ var enB = {
 		},
 
 		amt() {
-			if (pos_save === undefined) return new Decimal(0)
-			return new Decimal(pos_save.boosts)
+			if (pos_save === undefined) 0
+			return pos_save.lvl || 0
 		},
 		engAmt() {
 			if (pos_save === undefined) return new Decimal(0)
 			return new Decimal(pos_save.eng)
 		},
-		set(x) {
-			pos_save.boosts = x.round()
+		lvlUp() {
+			pos_save.lvl = this.amt() + 1
 		},
 
 		activeReq(x) {
 			var lvl = enB.pos.lvl(x)
 			var on = pos.on()
 			var mas = enB.mastered("pos", x)
-			return QCs.modIn(8, "up") ? false :
-				QCs.isntCatched() ? (on || mas) :
+			return QCs.isntCatched() ? (on || mas) :
 				(on && mas && (
-					QCs.modIn(2, "up") ? lvl == QCs_save.qc2 :
 					(futureBoost("exclude_any_boost") ? QCs.inAny() : QCs.in(2)) ?  lvl != QCs_save.qc2 :
 					true)
 				)
@@ -937,7 +943,7 @@ var enB = {
 			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
 			if (hasAch("ng3pr13")) req *= 0.9
 			if (PCs.milestoneDone(42) && lvl == 1) req *= 6
-			if (str.unl()) req *= str.nerf_pb(str.conv(x, true))
+			if (str.unl()) req *= str.nerf_pb(x)
 			return req
 		},
 		chargeEff(x) {
@@ -945,7 +951,7 @@ var enB = {
 			var eff = 2 * lvl
 			if (PCs.milestoneDone(42) && lvl == 1) eff = 8
 			if (PCs.milestoneDone(23) && pos.isUndercharged(x)) eff++
-			if (str.unl()) eff += str.eff_pb(str.conv(x, true))
+			if (str.unl()) eff += str.eff_pb(x)
 			return eff
 		},
 		charged(x, lvl) {
@@ -963,9 +969,7 @@ var enB = {
 		max: 12,
 		1: {
 			req: 1,
-			masReq: 4,
-			masReqExpert: 5,
-			masReqDeath: 6,
+			masReq: 3,
 			chargeReq: 1,
 
 			title: "Replicanti Launch",
@@ -984,8 +988,8 @@ var enB = {
 			}
 		},
 		2: {
-			req: 3,
-			masReq: 6,
+			req: 2,
+			masReq: 4,
 			chargeReq: 1.5,
 
 			title: "Pata Accelerator",
@@ -995,7 +999,7 @@ var enB = {
 				var slowStart = 4
 				var accSpeed = 1
 
-				if (!QCs.in(3) && !QCs.modIn(1, "up")) {
+				if (!QCs.in(3)) {
 					if (enB.active("pos", 9)) {
 						var p9 = 1 + enB_tmp.pos9 / 4
 						slowStart += enB_tmp.pos9
@@ -1036,8 +1040,8 @@ var enB = {
 			}
 		},
 		3: {
-			req: 6,
-			masReq: 7,
+			req: 4,
+			masReq: 5,
 			chargeReq: 2,
 
 			title: "Classical Positrons",
@@ -1057,10 +1061,8 @@ var enB = {
 			}
 		},
 		4: {
-			req: 8,
-			masReq: 9,
-			masReqExpert: 10,
-			masReqDeath: 12,
+			req: 6,
+			masReq: 7,
 			chargeReq: 2.5,
 
 			title: "Quantum Scope",
@@ -1079,9 +1081,8 @@ var enB = {
 			}
 		},
 		5: {
-			req: 8,
-			masReq: 9,
-			masReqExpert: 10,
+			req: 6,
+			masReq: 7,
 			chargeReq: 3,
 
 			title: "Gluon Flux",
@@ -1099,8 +1100,8 @@ var enB = {
 			}
 		},
 		6: {
-			req: 9,
-			masReq: 16,
+			req: 7,
+			masReq: 8,
 			chargeReq: 3.5,
 
 			title: "Transfinite Time",
@@ -1120,8 +1121,8 @@ var enB = {
 			}
 		},
 		7: {
-			req: 25,
-			masReq: 0,
+			req: 9,
+			masReq: 9,
 			chargeReq: 4,
 
 			title: "Looped Dimensionality",
@@ -1138,8 +1139,8 @@ var enB = {
 			}
 		},
 		8: {
-			req: 50,
-			masReq: 0,
+			req: 10,
+			masReq: 10,
 			chargeReq: 5,
 
 			title: "308% Completionist",
@@ -1155,8 +1156,8 @@ var enB = {
 			}
 		},
 		9: {
-			req: 90,
-			masReq: 0,
+			req: 11,
+			masReq: 11,
 			chargeReq: 6,
 
 			title: "MT-Force Preservation",
@@ -1173,8 +1174,8 @@ var enB = {
 			}
 		},
 		10: {
-			req: 99,
-			masReq: 0,
+			req: 12,
+			masReq: 12,
 			chargeReq: 8,
 
 			title: "Overpowered Infinities",
@@ -1192,8 +1193,8 @@ var enB = {
 			}
 		},
 		11: {
-			req: 150,
-			masReq: 0,
+			req: 13,
+			masReq: 13,
 			chargeReq: 10,
 
 			title: "Eternity Transfinition",
@@ -1215,8 +1216,8 @@ var enB = {
 			}
 		},
 		12: {
-			req: 150,
-			masReq: 0,
+			req: 13,
+			masReq: 13,
 			chargeReq: 12,
 
 			title: "Timeless Capability",
@@ -1237,20 +1238,20 @@ var enB = {
 		var data = enB
 		var typeData = data[type]
 
-		getEl("enB_" + type + "_amt").textContent = getFullExpansion(typeData.amt() || 0)
-		getEl("enB_" + type + "_cost").textContent = shorten(typeData.cost())
-		getEl("enB_" + type + "_next").textContent = ""
+		var cost = typeData.cost()
+		getEl("enB_" + type + "_cost").textContent = cost ? "(" + shorten(cost) + " " + typeData.engName + " - Level " + getFullExpansion(typeData.amt()) + ")" : "(MAXED)"
 
 		var has = true
 		var allMastered = true
+		var last = 0
 		for (var e = 1; e <= typeData.max; e++) {
 			var active = data.active(type, e)
 			var mastered = data.mastered(type, e)
 			var el = getEl("enB_" + type + e + "_name")
 
-			if (has && !data.has(type, e)) {
-				has = false
-				getEl("enB_" + type + "_next").textContent = "Next " + typeData.name + " Boost unlocks at " + typeData[e].req + " " + typeData.name + " Boosters."
+			if (has) {
+				if (data.has(type, e)) last++
+				else has = false
 			}
 
 			var localHas = has
@@ -1263,7 +1264,7 @@ var enB = {
 				el.textContent = shiftDown ? (typeData[e].title || "Unknown title.") : (typeData.name + " Boost #" + e)
 			}
 		}
-		if (QCs.inAny()) getEl("enB_" + type + "_next").textContent = ""
+		getEl("enB_" + type + "_next").textContent = last == typeData.max ? "" : "Next " + typeData.name + " Boost unlocks at level " + typeData[last + 1].req + "."
 
 		if (type == "pos" && pos_tmp.cloud) {
 			pos.updateCloud()
@@ -1273,6 +1274,7 @@ var enB = {
 	},
 	color(e, type) {
 		var colors = {
+		
 			r: "red",
 			g: "green",
 			b: "blue"
@@ -1297,7 +1299,7 @@ var enB = {
 		var data = this[type]
 
 		if (getEl("enB_" + type + "_eng") !== null) getEl("enB_" + type + "_eng").textContent = shorten(data.engAmt())
-		getEl("enB_" + type + "_buy").className = Decimal.gte(data.engAmt(), data.cost()) ? "storebtn" : "unavailablebtn"
+		getEl("enB_" + type + "_buy").className = data.cost() && Decimal.gte(data.engAmt(), data.cost()) ? "storebtn" : "unavailablebtn"
 
 		for (var i = 1; i <= data.max; i++) {
 			if (!this.has(type, i)) break
@@ -1313,7 +1315,7 @@ var enB = {
 			else if (mastered && (type != "pos" || !pos_tmp.cloud.allMastered)) list.push("Mastered")
 			if (!charged && type == "pos") list.push(!enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched" : "Self-boost is at " + shorten(enB.pos.chargeReq(i)) + " charge")
 			if (data[i].type && (!mastered || shiftDown)) list.push((this.anti(type, i) ? "anti-" : "") + data[i].type.toUpperCase() + "-type boost")
-			if (!mastered && !QCs.in(8)) list.push("Get " + getFullExpansion(enB.getMastered(type, i)) + " " + data.name + " Boosters to master")
+			if (!mastered && !QCs.in(8)) list.push("Get Level " + getFullExpansion(enB.getMastered(type, i)) + " to master")
 
 			getEl("enB_" + type + i + "_name").textContent = shiftDown ? (data[i].title || "Unknown title.") : (data.name + " Boost #" + i)
 			getEl("enB_" + type + i + "_type").innerHTML = "(" + wordizeList(list, false, " - ", false) + ")" + (data[i].activeDispReq ? "<br>Requirement: " + data[i].activeDispReq() : "")
@@ -1322,7 +1324,7 @@ var enB = {
 		}
 	}
 }
-var enB_tmp = {}
+var enB_tmp = { unl: {} }
 let ENTANGLED_BOOSTS = enB
 
 function gainQKOnQuantum(qkGain, quick) {
@@ -1416,8 +1418,7 @@ function updateGluonsTab() {
 	}
 
 	enB.updateOnTick("glu")
-	getEl("enB_eff").textContent = !shiftDown && !QCs.in(8) ? "" :
-		"Effective Boosters: " + shorten(enB_tmp.eff_eb) + (enB.glu.boosterExp() > 1 ? " (^" + shorten(enB.glu.boosterExp()) + ")" : "")
+	getEl("enB_eff").textContent = "Quantum Power: " + shorten(enB_tmp.eff_eb) + (enB.glu.boosterExp() > 1 ? " (^" + shorten(enB.glu.boosterExp()) + ")" : "")
 }
 
 //Display: On load
@@ -1501,8 +1502,6 @@ function updateGluonsTabOnUpdate(mode) {
 		getEl("entangle_" + typeUsed).className = "gluonupgrade chosenbtn"
 		getEl("entangle_" + typeUsed + "_pos").className = "gluonupgrade chosenbtn"
 	}
-
-	getEl("masterNote").style.display = enB.mastered("glu", 1) ? "" : "none"
 }
 
 //Quarks animation

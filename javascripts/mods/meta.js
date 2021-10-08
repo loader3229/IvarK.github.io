@@ -68,8 +68,6 @@ function getMDMultiplier(tier) {
 }
 
 function getMDGlobalMult() {
-	if (QCs.modIn(3, "up")) return player.money.max(10).log10()
-
 	let ret = getDilationMDMultiplier()
 	if (hasDilationUpg("ngpp3")) ret = ret.times(getDil14Bonus())
 	if (hasAch("ngpp12")) ret = ret.times(1.1)

@@ -359,7 +359,7 @@ dev.boosts = {
 }
 
 dev.quSb = {
-	//^3 effective boosters: Rebalancing
+	//^3 Quantum Power: Rebalancing
 	k: 3,
 	j: 6,
 	jP: 3,

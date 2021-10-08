@@ -28,23 +28,23 @@ var PCs = {
 		73: "Remove the second softcap of TT generation.",
 		83: "Unlock the first Omega Set.",
 
-		14: "Raise the Color Power effects by ^1.025.",
-		24: "Raise the Color Power effects by ^1.025.",
-		34: "Raise the Color Power effects by ^1.025.",
-		44: "Raise the Color Power effects by ^1.025.",
-		54: "Raise the anti-Quarks by ^1.03.",
-		64: "Raise the anti-Quarks by ^1.03.",
-		74: "Raise the anti-Quarks by ^1.03.",
-		84: "Raise the anti-Quarks by ^1.03.",
+		14: "Unlock a new Perk, and gain 1 PC Shrunker.",
+		24: "Unlock a new Perk, and gain 1 PC Shrunker.",
+		34: "Unlock a new Perk, and gain 1 PC Shrunker.",
+		44: "Unlock a new Perk, and gain 1 PC Shrunker.",
+		54: "Unlock a new Perk, and gain 1 PC Shrunker.",
+		64: "Unlock a new Perk, and gain 1 PC Shrunker.",
+		74: "Unlock a new Perk, and gain 1 PC Shrunker.",
+		84: "Unlock a new Perk, and gain 1 PC Shrunker.",
 
-		15: "???",
-		25: "???",
-		35: "???",
-		45: "???",
-		55: "???",
-		65: "???",
-		75: "???",
-		85: "???",
+		15: "Raise the Color Power effects by ^1.025.",
+		25: "Raise the Color Power effects by ^1.025.",
+		35: "Raise the Color Power effects by ^1.025.",
+		45: "Raise the Color Power effects by ^1.025.",
+		55: "Raise the anti-Quarks by ^1.03.",
+		65: "Raise the anti-Quarks by ^1.03.",
+		75: "Raise the anti-Quarks by ^1.03.",
+		85: "Raise the anti-Quarks by ^1.03.",
 
 		16: "???",
 		26: "???",
@@ -68,13 +68,13 @@ var PCs = {
 				false,
 			],
 			goal_divs: [null, 0.1, 0.95, 0.35, 0.95, 0.45, 0.5, 0.4, 0.75],
-			milestone_reqs: [null, 1, 2, 3, 5, 6, 7],
+			milestone_reqs: [null, 1, 2, 3, 4, 5, 7],
 			milestone_unls: [null,
 				true,
 				true,
 				() => hasAch("ng3pr12"),
 				() => hasAch("ng3pr12"),
-				() => futureBoost("more_milestones"),
+				() => hasAch("ng3pr12"),
 				() => futureBoost("more_milestones"),
 				() => futureBoost("more_milestones"),
 			],
@@ -112,7 +112,6 @@ var PCs = {
 		}
 
 		let data = PCs_save || this.setup()
-
 		if (data.best === undefined) data.best = data.lvl - 1
 
 		this.updateTmp()
@@ -365,13 +364,13 @@ var PCs = {
 		var id = PCs.sort(PCs_save.challs[pc])
 		return '<b style="font-size: 18px">' + PCs.name(pc) + '</b><br>' + (
 			PCs_save.challs[pc] ? "QC " + wordizeList(PCs.convBack(id), false, " + ", false) :
-			PCs_tmp.pick == pc ? "Click to cancel" :
-			!PCs_tmp.pick ? "Click to assign" : ""
+			PCs_tmp.pick == pc ? "Cancel" :
+			!PCs_tmp.pick ? "Assign" : ""
 		) + (
 			PCs_tmp.pick || !PCs_save.challs[pc] || PCs.done(id) ? "" : "<br>Goal: " + shorten(PCs.goal(id, pc)) + " MA"
 		)
 	},
-	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Milestones</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
+	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Show</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
 	setupMilestoneHeader() {
 		var x = "<tr><td></td>"
 		for (var i = 1; i < PCs.data.milestone_reqs.length; i++) x += "<td id='qc_milestone_header_" + i + "'></td>"
@@ -461,6 +460,7 @@ var PCs = {
 		if (!PCs.data.setupHTML) return
 		var data = PCs
 
+
 		for (var i = 1; i <= 8; i++) {
 			getEl("pc_comp" + i + "_div").style.display = PCs_tmp.comps[i] ? "" : "none"
 			getEl("pc_comp" + i).textContent = PCs_tmp.comps[i] + " / 7"
@@ -474,6 +474,8 @@ var PCs = {
 			getEl("pc_respec_" + i).style.display = respec ? "" : "none"
 			getEl("pc_export_" + i).style.display = respec ? "" : "none"
 		}
+		getEl("pc_info").style.display = PCs_save.lvl == 1 ? "none" : ""
+		getEl("pctabbtn_milestone").style.display = PCs_save.lvl == 1 ? "none" : ""
 
 		getEl("pc_eff1").textContent = "^" + PCs_tmp.eff1.toFixed(3)
 		getEl("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
@@ -514,7 +516,6 @@ var PCs = {
 		let shown = qc != 0 && qc != "all"
 		getEl("qc_milestones").style.display = qc != 0 || PCs_save.lvl == 1 ? "none" : ""
 		getEl("qc_milestone_div").style.display = shown ? "" : "none"
-		getEl("pc_info").style.display = qc != 0 || PCs_save.lvl == 1 ? "none" : ""
 		if (shown) {
 			getEl("qc_milestone_header").textContent = "QC" + qc + " Milestones"
 			for (var i = 1; i < PCs.data.milestone_reqs.length; i++) {
@@ -553,6 +554,10 @@ var PCs = {
 				getEl("qc_milestone_all_" + c).style.display = QCs.done(c) ? "" : "none"
 			}
 		}
+	},
+	back() {
+		if (!PCs_tmp.milestone) showChallengesTab("pairedChalls")
+		else PCs.showMilestones(0)
 	},
 
 	respec(x) {
@@ -666,16 +671,11 @@ var PCs = {
 		if (!PCs.unl() || !qc.mod_comps || !qc.mod_comps.length) return
 
 		PCs_save.shrunkers = 0
-		for (var i = 0; i < mods.list.length; i++) {
-			var mod = mods.list[i]
-			var x = 0
-			for (var c = 1; c <= 8; c++) if (QCs.modDone(c, mod)) x++
-			PCs_save.shrunkers += x * mods[mod].shrunker
-		}
+		for (var c = 1; c <= 8; c++) if (this.milestoneDone(c * 10 + 4)) PCs_save.shrunkers++
 	},
 	shrunkerEff() {
 		let x = PCs_save.shrunkers
-		return Math.pow(0.95, Math.sqrt(x))
+		return Math.pow(0.96, Math.sqrt(x))
 	}
 }
 var PCs_save = undefined

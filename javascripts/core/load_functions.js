@@ -2174,20 +2174,21 @@ function setupNGP31Versions() {
 	if (aarMod.ngp3Build < 20210802) PCs.reset()
 	if (aarMod.ngp3Build < 20210802 && Decimal.log10(player.money) >= 2e13) rollback = 1e20
 	if (aarMod.ngp3Build < 20210829) str_save.vibrated = []
-	if (aarMod.ngp3Build < 20210910 && Decimal.log10(player.money) >= 6e13) rollback = 1e190
+	if (aarMod.ngp3Build < 20210929 && Decimal.log10(player.money) >= 6e13) rollback = 1e190
 
 	welcomeUpdates = []
 	if (aarMod.ngp3Build) {
 		if (!aarMod.ngp3r) aarMod.ngp3r = 0
 		if (aarMod.ngp3r < 0.5) welcomeUpdates.push(0.5)
 		if (aarMod.ngp3r < 0.6) welcomeUpdates.push(0.6)
+		if (aarMod.ngp3r < 0.61) welcomeUpdates.push(0.61)
 
-		if (!beta && (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.7 : aarMod.ngp3r < 0.7)) welcomeUpdates.push(0.7)
-		if (beta && aarMod.ngp3r < 0.7) welcomeUpdates.push("alpha")
+		if (!beta && (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.61 : aarMod.ngp3r < 0.61)) welcomeUpdates.push(0.61)
+		if (beta && aarMod.ngp3r < 0.61) welcomeUpdates.push("alpha")
 	}
-	aarMod.ngp3r = 0.7
+	aarMod.ngp3r = 0.61
 	aarMod.ngp3Alpha = beta
-	aarMod.ngp3Build = 20210926
+	aarMod.ngp3Build = 20211007
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) player.timestudy.auto = {}
 	if (rollback) rollbackQuantum(rollback)
@@ -2904,11 +2905,11 @@ function migrateOldSaves() {
 }
 
 //Save Storage System
-var beta = true
+var beta = false
 var preBeta = false
 var betaId = beta || preBeta ? "A-" : ""
-var correctBetaId = "MT-"
-var betaLink = "minitest"
+var correctBetaId = "A-"
+var betaLink = "Respecced-Alpha"
 
 //Was "ds" before Respecced happened.
 var prefix = "Gds"

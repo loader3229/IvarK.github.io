@@ -1530,8 +1530,8 @@
 				<p id='versionDescCreator'>Created by Aarex.</p>
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
-				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(9/26/21a Pre-Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.61: Dimension-Yau Manuifold)</p>
+				<p class="warning" id='versionDescAlpha'>(10/7/21a Pre-Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -2259,10 +2259,10 @@
 								<div id="Bursted Em All!" class="achievement achievementlocked" style="background-image: url(images/ng3p/33.png)" ach-tooltip="Charge 6 Positronic Boosts with at least 9x multiplier. Reward: Charging requires 10% less."></div>
 							</td>
 							<td>
-								<div id="The Power of Science!" class="achievement achievementlocked" style="background-image: url(images/ng3p/34.png)" ach-tooltip="Reach ^1 Quantum efficiency. Reward: Effective Boosters +10%."></div>
+								<div id="The Power of Science!" class="achievement achievementlocked" style="background-image: url(images/ng3p/34.png)" ach-tooltip="Reach ^1 Quantum efficiency. Reward: Quantum Power +10%."></div>
 							</td>
 							<td>
-								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/ng3p/35.png)" ach-tooltip="Complete 4 Challenges with the Nerfed modifier. PC goals increase 10% slower from PC combinations."></div>
+								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/ng3p/35.png)" ach-tooltip="Complete all milestones with 3 combinations. PC goals increase 10% slower from PC combinations."></div>
 							</td>
 							<td>
 								<div id="I can't get my multipliers higher!" class="achievement achievementlocked" style="background-image: url(images/ng3p/36.png)"><br></div>
@@ -2300,6 +2300,7 @@
 								<div id="I don't want you to live anymore." class="achievement achievementlocked" style="background-image: url(images/134.png)"></div>
 							</td>
 						</tr>
+						<!--
 						<tr id="achRowng3p4">
 							<td>
 								<div id="Time is not relative" class="achievement achievementlocked" style="background-image: url(images/135.png)"></div>
@@ -2482,6 +2483,7 @@
 								<div id="Auto-Ghost Speedrunning" class="achievement achievementlocked" style="background-image: url(images/190.png)" ach-tooltip="Reach e??? in the first 10 seconds of Ghostify."></div>
 							</td>
 						</tr>
+						-->
 				</table>
 				<div id="nothingness">You completed all the normal achievements! Congratulations!</div>
 			</div>
@@ -3373,12 +3375,35 @@
 				<table class="table" id="qcs_div" style="margin: 0 auto"></table>
 			</div>
 			<div id="pairedChalls" class="challengeTab">
-				<table id="qc_milestones" align="center" style="margin: auto"></table>
+				<button class="secondarytabbtn" id="pctabbtn_milestone" onclick="showChallengesTab('pairedChallMilestones')">Milestones</button>
+				<div id="pc_info">
+					<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 20px">0 / 1</span>)</span><br>
+					Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Quantum Power (starting at <span id="pc_eff1_start"></span>), and make aQ boosts itself by <span id="pc_eff2" style="font-size: 20px"></span>.
+				</div>
+				<span id="pc_enter">
+					<br>
+					<p id="pc_penalty">Note: Starting a Paired Challenge reduces Meta Dimensions by ^0.95! (acts like you are in QC7)</p>
+					Note 2: Exiting a Paired Challenge automatically unassigns it, unless it is completed!
+					<br>
+					<button class="storebtn" onclick="PCs.exportPreset()" style="width: 120px; height: 48px">Export combinations</button>
+					<button class="storebtn" onclick="PCs.importPreset()" style="width: 120px; height: 48px">Import combinations</button>
+				</span>
+				<span id="pc_omega">
+					<br>
+					<b class="warning">You are assigning in a Omega Set! You can assign any combination, but goals are raised by ^1.25!</b>
+				</span>
+				<span id="pc_pick"></span>
+				<table id="pc_table" align="center" style="margin: auto"></table>
+				<span id="pc_temp_color" style="font-size: 15px">Your <span id="pc_comps2" style="font-size: 20px"></span> completions are making PC goals <span id="pc_temp"></span>!</span>
+				<br>
+				<span id="pc_shrunker_div">Your <span id="pc_shrunker" style="font-size: 20px"></span> PC shrunkers are reducing all goals by <span id="pc_shrunker_eff" style="font-size: 15px"></span>.</span>
+			</div>
+			<div id="pairedChallMilestones" class="challengeTab">
+				<button class="secondarytabbtn" onclick="PCs.back()">Back</button>
 				<button class="secondarytabbtn" id="qc_milestone_all_btn" onclick="PCs.showMilestones('all')">Show all milestones</button>
+				<table id="qc_milestones" align="center" style="margin: auto"></table>
 				<div id="qc_milestone_div">
 					<b id="qc_milestone_header" style="font-size: 20px">QC1 Milestones</b>
-					<br>
-					<button class="secondarytabbtn" onclick="PCs.showMilestones(0)">Close</button>
 					<br>
 					<table class="table" align="center" style="margin: auto">
 						<tr>
@@ -3405,32 +3430,8 @@
 				</div>
 				<div id="qc_milestone_all_div">
 					<b id="qc_milestone_header" style="font-size: 20px">All Milestones</b>
-					<br>
-					<button class="secondarytabbtn" onclick="PCs.showMilestones(0)">Close</button>
 					<table id="qc_milestone_all" class="table" align="center" style="margin: auto"></table>
 				</div>
-				<div id="pc_info">
-					<br>
-					<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 20px">0 / 1</span>)</span><br>
-					Translated to <span id="pc_eff1" style="font-size: 20px"></span> efficiency to Entangled Boosts (starting at <span id="pc_eff1_start"></span>), and make aQ boosts itself by <span id="pc_eff2" style="font-size: 20px"></span>.
-				</div>
-				<span id="pc_enter">
-					<br>
-					<p id="pc_penalty">Note: Starting a Paired Challenge reduces Meta Dimensions by ^0.95! (acts like you are in QC7)</p>
-					Note 2: Exiting a Paired Challenge automatically unassigns it, unless it is completed!
-					<br>
-					<button class="storebtn" onclick="PCs.exportPreset()" style="width: 120px; height: 48px">Export combinations</button>
-					<button class="storebtn" onclick="PCs.importPreset()" style="width: 120px; height: 48px">Import combinations</button>
-				</span>
-				<span id="pc_omega">
-					<br>
-					<b class="warning">You are assigning in a Omega Set! You can assign any combination, but goals are raised by ^1.25!</b>
-				</span>
-				<span id="pc_pick"></span>
-				<table id="pc_table" align="center" style="margin: auto"></table>
-				<span id="pc_temp_color" style="font-size: 15px">Your <span id="pc_comps2" style="font-size: 20px"></span> completions are making PC goals <span id="pc_temp"></span>!</span>
-				<br>
-				<span id="pc_shrunker_div">Your <span id="pc_shrunker" style="font-size: 20px"></span> PC shrunkers are reducing the PC goal by <span id="pc_shrunker_eff" style="font-size: 15px"></span>.</span>
 			</div>
 			<div class="footer"></div>
 		</div>
@@ -3687,6 +3688,7 @@
 			<br>
 			<button class="storebtn" id="toggleautobuyers" style="font-size: 100%; width: 150px; height: 40px; margin: 3px" onclick="toggleAutoBuyers()">Enable/disable autobuyers</button>
 			<button class="storebtn" id="togglebulk" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="toggleBulk()">Disable bulk buy</button>
+			<button class="storebtn" id="togglebuymax" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="toggleAllABBulks()">Toggle "buy max" to all</button>
 			<button class="storebtn" id="maxAutobuyerUpgrades" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="maxAutobuyerUpgrades()">Max autobuyer upgrades</button>
 			<br>
 			<button class="storebtn" id="togglecrunchmode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleCrunchMode()">Auto crunch mode: amount</button>
@@ -4340,7 +4342,7 @@
 				<td><button class="secondarytabbtn" onclick="showQuantumTab('uquarks')">Anti-Quarks</button></td>
 				<td id='gluonstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Gluons</button></td>
 				<td id='positronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('positrons')">Positrons</button></td>
-				<td id='stringstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('strings')">Strings</button></td>
+				<td id='stringstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('strings')">String</button></td>
 				<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Milestones</button></td>
 
 				<!--
@@ -4517,22 +4519,16 @@
 				</tr>
 				<tr>
 					<td colspan=3>
-						You have <span id="enB_glu_amt" style="font-size:35px">0</span> Entangled Boosters.
-						<br>
-						<button class="storebtn" id="enB_glu_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1 Entangled Booster<br><span style="font-size: 10px">(requires <span id="enB_glu_cost">1</span> best Quantum Energy)</span></button>
-						<br>
-						<button class='storebtn' style="width: 180px" onclick="ENTANGLED_BOOSTS.maxBuy('glu')">Max buy</button>
-					</td>
-				</tr>
-				<tr>
-					<td colspan=3>
-						Some Entangled Boosts only work on and based on which kind you choose.
-						<br>
-						<span id="masterNote">However, mastered boosts are based on total gluons and always activated instead!</span>
+						<button class="storebtn" id="enB_glu_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('glu')">Unlock/Master Boosts</span><br><span id="enB_glu_cost" style="font-size: 10px"></span></button>
 						<br>
 						<span id="enB_glu_next"></span>
 						<br>
 						<span id="enB_eff"></span>
+					</td>
+				</tr>
+				<tr>
+					<td class="red" colspan=3>
+						<b class="warning">Some Entangled Boosts only work on and based on which kind you choose.</b>
 					</td>
 				</tr>
 				<tr>
@@ -4734,11 +4730,9 @@
 					<span id="enB_pos_eng" style="font-size:25px">0.0</span> Positronic Charge
 				</td>
 				<td>
-					<span id="enB_pos_amt" style="font-size:25px">0</span> Positronic Boosters
+					<button class="storebtn" id="enB_pos_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('pos')">Unlock/Master Boosts</span><br><span id="enB_pos_cost" style="font-size: 10px"></span></button>
 					<br>
-					<button class="storebtn" id="enB_pos_buy" style="width: 180px; height: 60px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1 Positronic Booster<br><span style="font-size: 10px">(requires <span id="enB_pos_cost">1</span> Positronic Charge)</span></button>
-					<br>
-					<button class='storebtn' style="width: 180px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy</button>
+					<span id="enB_pos_next"></span>
 				</td>
 			</tr>
 		</table>
@@ -4792,7 +4786,6 @@
 				<button id="entangle_gb_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('gb')">GB</button>
 				<button id="entangle_br_pos" style="width: 60px; height: 60px" onclick="ENTANGLED_BOOSTS.choose('br')">BR</button>
 			</div>
-			<span id="enB_pos_next"></span>
 			<span id="pos_cloud_req"></span>
 			<table class="qTable">
 				<tr>
@@ -4895,40 +4888,58 @@
 		</div>
 		</div>
 		<div class='quantumtab' id='strings'>
-			<p id="str_unl">Complete 8 PC completions to unlock Strings.</p>
+			<p id="str_unl">Complete 8 PC completions to unlock String.</p>
 			<div id="str_div">
-				<span style="font-size: 15px">You have made <span id="str_ve" style="font-size: 30px">0.00</span> Vibration Energy.</span>
-				<p style="font-size: 8px">(based on Quantum Energy, Replicanti Energy, and PC level)</p>
-				<br>
+				<table class="qTable">
+					<tr>
+						<td class="ve" id="str_1_power" style="font-size: 24px">Alpha: 0.00</td>
+						<td class="ve" id="str_2_power" style="font-size: 24px">Beta: 0.00</td>
+						<td class="ve" id="str_3_power" style="font-size: 24px">Gamma: 0.00</td>
+					</tr>
+					<tr>
+						<td class="lime" id="str_1_eb_eff"></td>
+						<td class="lime" id="str_2_eb_eff"></td>
+						<td class="lime" id="str_3_eb_eff"></td>
+					</tr>
+					<tr>
+						<td class="lime light" id="str_1_eb_nerf"></td>
+						<td class="lime light" id="str_2_eb_nerf"></td>
+						<td class="lime light" id="str_3_eb_nerf"></td>
+					</tr>
+					<tr>
+						<td class="yellow" id="str_1_pb_eff"></td>
+						<td class="yellow" id="str_2_pb_eff"></td>
+						<td class="yellow" id="str_3_pb_eff"></td>
+					</tr>
+					<tr>
+						<td class="yellow light" id="str_1_pb_nerf"></td>
+						<td class="yellow light" id="str_2_pb_nerf"></td>
+						<td class="yellow light" id="str_3_pb_nerf"></td>
+					</tr>
+					<tr>
+						<td colspan=3>
+							<span id="str_strength"></span><br>
+							<span id="str_strength_based" style="font-size: 8px"></span>
+						<td>
+					</tr>
+				</table>
+
+				<span class="ve" style="font-size: 15px"><span id="str_ve" style="font-size: 30px">0.00</span> Vibration Energy</span>
+				<span id="str_ve_based" style="font-size: 8px"></span><br>
 				<button class="storebtn" onclick="str.clear()">Clear</button>
-				<span id="str_apply_div">
+				<!--<span id="str_apply_div">
 					<button class="storebtn" onclick="str.cancel()">Cancel</button>
 					<button class="storebtn" onclick="str.apply()">Apply</button>
 					<br>
-				</span>
+				</span>-->
 				<button class="storebtn" onclick="str.exportPreset()">Export String</button>
 				<button class="storebtn" onclick="str.importPreset()">Import String</button>
 				<br><br>
-				<b class="warning" id="str_warn" style="font-size: 15px"></b>
+				<b class="warning" style="font-size: 15px">WARNING: Vibrating performs a Quantum reset!</b>
 				<br>
 				<span id="str_cost"></span>
 				<br><br>
-				<span id="str_strength" style="font-size: 15px"></span>
-				<p style="font-size: 8px">(based on total Vibration Energy)</p>
-				<div class="str_boosts" id="str_boosts_ent"></div><br>
-				<div class="str_boosts" id="str_boosts_pos"></div><br>
-				<!--
-				COMING IN THE NEXT LAYER
-
-				<br><br>
-				<button class="gluonupgrade storebtn">
-					<b>String Shrunker</b> (0 / 6)
-					<br>
-					Reset Strings, in exchange of a smaller version.
-					<br>
-					(Coming soon...)
-				</button>
-				-->
+				<div class="str_boosts" id="str_boosts"></div>
 			</div>
 		</div>
 		<div class='quantumtab' id='nanofield'>

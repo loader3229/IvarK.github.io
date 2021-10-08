@@ -125,7 +125,7 @@ function setupAutobuyerHTMLandData(){
 	}
 
 	toggleAutobuyerTarget = function(id) {
-		if (player.autobuyers[id-1].target == id) {
+		if (!isABBuyUntil10(id)) {
 			player.autobuyers[id-1].target = 10 + id
 			getEl("toggleBtn" + id).textContent = "Buys until 10"
 		} else {
@@ -141,7 +141,7 @@ function setupAutobuyerHTMLandData(){
 	}
 
 	getEl("toggleBtnTickSpeed").onclick = function () {
-		if (player.autobuyers[8].target == 1) {
+		if (!isABBuyUntil10(9)) {
 			player.autobuyers[8].target = 10
 			getEl("toggleBtnTickSpeed").textContent = "Buys max"
 		} else {
@@ -761,13 +761,16 @@ function doNGPlusOneNewPlayer(){
 	}
 
 	player.money = new Decimal(2e25)
+	player.resets = 4
+	player.galaxies = 1
 	player.infinitiedBank = 5e9
-	player.infinityUpgrades = ["timeMult", "dimMult", "timeMult2", "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "passiveGen", "45Mult", "resetBoost", "galaxyBoost"]
+	player.infinityUpgrades = ["timeMult", "dimMult", "timeMult2", "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "passiveGen", "45Mult", "resetBoost", "galaxyBoost", "skipReset1", "skipReset2", "skipReset3", "skipResetGalaxy"]
 	player.infMult = 2048
 	player.dimensionMultDecrease = 2
 	player.tickSpeedMultDecrease = 1.65
 	player.eternities = 1012680
 	player.challenges = challengesCompletedOnEternity()
+	player.postChallUnlocked = order.length
 	player.replicanti.unl = true
 	player.replicanti.amount = new Decimal(1)
 	for (ec = 1; ec <= 12; ec++) player.eternityChalls['eterc' + ec] = 5
@@ -2036,7 +2039,6 @@ function showNextModeMessage(click) {
 		getEl("welcomeMessage").innerHTML = ngModeMessages[ngModeMessages.length - 1]
 		ngModeMessages.pop()
 	} else if (welcomeUpdates.length > 0) {
-		console.log(ngp3Welcomes)
 		var ver = welcomeUpdates.pop()
 		getEl("welcome").style.display = "flex"
 		getEl("welcomeMessage").innerHTML = ver == "alpha" ? (
@@ -2045,8 +2047,8 @@ function showNextModeMessage(click) {
 			"<br><br><b>Test Discord</b>: <a href='http://discord.gg/7v82CAX' target='_newtab'>http://discord.gg/7v82CAX</a>" +
 			"<br><br>Thank you for testing NG+3R!<br>~Aarex"
 		) : (
-			"<b class='lime'>Welcome to NG+3 Respecced v" + ver + "!</b><br>This update introduces...<br><br>" +
-			evalData(ngp3Welcomes.msgs[ver] || "???") +
+			"<b class='lime'>Welcome to NG+3 Respecced v" + ver + "!</b><br>This update " + evalData(ngp3Welcomes.verbs[ver] || "introduces") + "...<br><br>" +
+			(ngp3Welcomes.msgs[ver] || "???") +
 			"<br><br><b>Discord</b>: <a href='http://discord.gg/KsjcgskgTj' target='_newtab'>http://discord.gg/KsjcgskgTj</a>" +
 			"<br><br>Thank you for playing NG+3R!<br>~Aarex" +
 			"<br><br>Goal: " + evalData(ngp3Welcomes.goals[ver])
@@ -2768,13 +2770,8 @@ function updateAutobuyers() {
 	for (let i = 0; i < 8; i++) if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].bulk >= 512) b1++
 	if (b1 == 8) giveAchievement("Bulked up")
 
-	for (var i = 0; i <= 8; i++) {
-		getEl("priority" + (i + 1)).selectedIndex = player.autobuyers[i].priority - 1
-		if (i == 8 && player.autobuyers[i].target == 10) getEl("toggleBtnTickSpeed").textContent = "Buys max"
-		else if (i == 8 && player.autobuyers[i].target !== 10) getEl("toggleBtnTickSpeed").textContent = "Buys singles"
-		else if (player.autobuyers[i].target > 10) getEl("toggleBtn" + (i+1)).textContent = "Buys until 10"
-		else getEl("toggleBtn" + (i+1)).textContent = "Buys singles"
-	}
+	for (var i = 0; i <= 8; i++) getEl("priority" + (i + 1)).selectedIndex = player.autobuyers[i].priority - 1
+	updateABBulks()
 
 	if (player.autobuyers[8].interval <= 100) {
 		getEl("buyerBtnTickSpeed").style.display = "none"
@@ -3984,11 +3981,21 @@ function changingDecimalSystemUpdating(){
 
 function incrementTimesUpdating(diffStat){
 	player.totalTimePlayed += diffStat
+
+	if (qu_save && implosionCheck !== 2) qu_save.time += diffStat
 	if (QCs.done(1)) {
 		QCs_save.qc1.time += diffStat
 		QCs_save.qc1.timeLast += diffStat
 	}
-	if (qu_save && implosionCheck !== 2) qu_save.time += diffStat
+	if (QCs.in(8)) {
+		QCs_save.qc8.time += diffStat
+		if (QCs_save.qc8.time > 50) {
+			QCs_save.qc8.time = 0
+			QCs.data[8].switch()
+			bigCrunch(true)
+		}
+	}
+
 	if (player.currentEternityChall == "eterc12") diffStat /= 1e3
 	player.thisEternity += diffStat * (QCs.perkActive(6) ? 0.5 : 1)
    	player.thisInfinityTime += diffStat

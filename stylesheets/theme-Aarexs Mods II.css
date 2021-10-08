@@ -499,15 +499,18 @@ button, div.storebtn {
 	box-shadow: 1px 2px rgba(229,229,229,0.4)
 }
 
-#stringstabbtn button {
+#stringstabbtn button, .str_boost .storebtn {
 	background: linear-gradient(black, transparent, black), linear-gradient(#1f3f00, transparent, #1f3f00), linear-gradient(30deg, #3f7f00, transparent, #5f7f00), linear-gradient(#7fff00, #bfff00);
 	color: #efffbf !important;
 	animation: str 5s linear infinite
 }
-
-#stringstabbtn button:hover {
+#stringstabbtn button:hover, .str_boost .storebtn:hover {
 	box-shadow: 1px 2px rgba(229,229,229,0.4), 0px 0px 12px inset #7fff00;
 	color: #7fff00 !important
+}
+.ve {
+	color: #bfff00;
+	text-shadow: 0px 0px 3px #bfff00, 0px 0px 6px #7fff00
 }
 
 #dilstudy12.dilationupgbought, #nanofieldtabbtn button, #produceQuarkCharge, .nfReward {
@@ -875,19 +878,4 @@ button, div.storebtn {
 
 [ach-tooltip] {
 	font-family: 'Roboto'
-}
-
-@keyframes str { 
-	0%{
-		background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-		background-position: 0% 0%
-	}
-	50%{
-		background-size: 100% 200%, 100% 150%, 100% 50%, 100% 100%;
-		background-position: 0% 50%
-	}
-	100%{
-		background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-		background-position: 0% 200%
-	}
 }

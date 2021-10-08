@@ -2520,6 +2520,25 @@ td.grey {
 	position: revert;
 	font-size: 8px;
 }
+.str_boost .storebtn {
+	background: linear-gradient(black, transparent, black), linear-gradient(#1f3f00, transparent, #1f3f00), linear-gradient(30deg, #3f7f00, transparent, #5f7f00), linear-gradient(#7fff00, #bfff00);
+	color: #efffbf;
+    border-color: #bfff7f;
+	animation: str 5s linear infinite
+}
+.str_boost .storebtn:hover {
+	box-shadow: 0px 0px 12px inset #7fff00;
+	color: #7fff00
+}
+.str_boost .chosenbtn {
+	background: linear-gradient(30deg, #3f7f00, transparent, #5f7f00), linear-gradient(#7fff00, #bfff00);
+	color: black;
+    border-color: #bfff7f;
+}
+.ve {
+	color: #9fbf00;
+	text-shadow: 0px 0px 3px #bfff00, 0px 0px 6px #7fff00
+}
 
 #pc_table td {
 	height: 108px;
@@ -3703,6 +3722,21 @@ screen and (max-width: 480px) {
     50% {box-shadow: inset 0px 0px 40px 0px #8e991e;}
     100% {box-shadow: inset 0px 0px 20px 0px #8e991e;}
 }
+@keyframes str { 
+	0%{
+		background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+		background-position: 0% 0%
+	}
+	50%{
+		background-size: 100% 200%, 100% 150%, 100% 50%, 100% 100%;
+		background-position: 0% 50%
+	}
+	100%{
+		background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+		background-position: 0% 200%
+	}
+}
+
 @keyframes nanofieldanimation {
     0%  {box-shadow: inset 0px 0px 90px 0px #4c4c4c;}
     50% {box-shadow: inset 0px 0px 120px 0px #4c4c4c;}
