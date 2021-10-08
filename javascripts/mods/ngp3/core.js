@@ -1014,7 +1014,7 @@ function updateAutoApplyDisp(toggle) {
 	getEl("autoApply").textContent = "Auto-apply changes: " + (on ? "ON" : "OFF")
 
 	getEl("pos_apply_div").style.display = on ? "none" : ""
-	getEl("str_apply_div").style.display = true ? "none" : ""
+	//getEl("str_apply_div").style.display = on ? "none" : ""
 }
 
 //Recent boosts

@@ -80,7 +80,7 @@ var QCs = {
 		QCs_save.qc5 = new Decimal(0)
 		QCs_save.qc6 = 0
 		QCs_save.qc7 = QCs.perkActive(7) ? Math.sqrt(player.replicanti.galaxies) : 0 //QC7 perk
-		QCs_save.qc8.timer = 0
+		if (QCs_save.qc8) QCs_save.qc8.time = 0
 	},
 	data: {
 		max: 8,
@@ -301,8 +301,8 @@ var QCs = {
 		2: {
 			unl: () => true,
 			desc: "You must disable a tier from Positronic Cloud, but some Quantum content are changed/disabled.",
-			goal: () => pos_save.boosts.gte(11),
-			goalDisp: () => getFullExpansion(11) + " Positronic Boosters",
+			goal: () => pos_save.eng.gte(7),
+			goalDisp: () => shortenCosts(7) + " Positronic Charge",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
 			hint: "",
 

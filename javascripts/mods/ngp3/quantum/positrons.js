@@ -315,14 +315,14 @@ var pos = {
 		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " disabled" : "")
 
 		//Unlocks
-		var unl = (data.sum >= 4)
+		var unl = enB.pos.amt() >= 7
 		if (!unl) data.shown = false
 
 		getEl("pos_tab").style.display = unl ? "" : "none"
 		getEl("pos_tab").textContent = data.shown ? "Show boosts" : "Show cloud"
 		getEl("pos_boost_div").style.display = !data.shown ? "" : "none"
 		getEl("pos_cloud_div").style.display = data.shown ? "" : "none"
-		getEl("pos_cloud_req").innerHTML = unl ? "" : "<br>To unlock Positronic Cloud, you need to master " + getFullExpansion(data.sum) + " / " + getFullExpansion(4) + " Positronic Boosts."
+		getEl("pos_cloud_req").innerHTML = unl ? "" : "<br>To unlock Positronic Cloud, you need to get Level " + getFullExpansion(enB.pos.amt()) + " / " + getFullExpansion(7) + "."
 		getEl("pos_cloud_disabled").style.display = this.swapsDisabled() ? "" : "none"
 	},
 	getCloudBtn: (x) => ('<button id="pos_boost' + x + '_btn" onclick="pos.swap(' + x + ')">' +

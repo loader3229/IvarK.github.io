@@ -463,12 +463,16 @@ strong { color: #0072e5 }
 #stringstabbtn button {
 	background: linear-gradient(black, transparent, black), linear-gradient(#1f3f00, transparent, #1f3f00), linear-gradient(30deg, #3f7f00, transparent, #5f7f00), linear-gradient(#7fff00, #bfff00);
 	color: #efffbf !important;
-    border-color: #7fff00 !important;
+    border-color: #bfff7f !important;
 	animation: str 5s linear infinite
 }
 #stringstabbtn button:hover {
 	box-shadow: 0px 0px 12px inset #7fff00;
 	color: #7fff00 !important
+}
+.ve {
+	color: #bfff00;
+	text-shadow: 0px 0px 3px #bfff00, 0px 0px 6px #7fff00
 }
 
 #produceQuarkCharge, .nfReward { 
@@ -835,18 +839,4 @@ strong { color: #0072e5 }
 	50% {background-color: #e50000; border: 2px solid #e50000}
 	75% {background-color: #e500e5; border: 2px solid #e500e5}
 	100% {background-color: #0000e5; border: 2px solid #0000e5}
-}
-@keyframes str { 
-	0%{
-		background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-		background-position: 0% 0%
-	}
-	50%{
-		background-size: 100% 200%, 100% 150%, 100% 50%, 100% 100%;
-		background-position: 0% 50%
-	}
-	100%{
-		background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-		background-position: 0% 200%
-	}
 }

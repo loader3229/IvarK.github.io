@@ -532,7 +532,7 @@ var enB = {
 	},
 
 	mastered(type, x) {
-		if (enB_tmp.unl[type + x] < 2) return false
+		if (enB_tmp.unl[type + x] !== 2) return false
 		if (type == "glu" && QCs.perkActive(2)) return enB_tmp.eff_eb.gte(500)
 		return true
 	},
@@ -1122,7 +1122,7 @@ var enB = {
 		},
 		7: {
 			req: 9,
-			masReq: 0,
+			masReq: 9,
 			chargeReq: 4,
 
 			title: "Looped Dimensionality",
@@ -1140,7 +1140,7 @@ var enB = {
 		},
 		8: {
 			req: 10,
-			masReq: 0,
+			masReq: 10,
 			chargeReq: 5,
 
 			title: "308% Completionist",
@@ -1157,7 +1157,7 @@ var enB = {
 		},
 		9: {
 			req: 11,
-			masReq: 0,
+			masReq: 11,
 			chargeReq: 6,
 
 			title: "MT-Force Preservation",
@@ -1175,7 +1175,7 @@ var enB = {
 		},
 		10: {
 			req: 12,
-			masReq: 0,
+			masReq: 12,
 			chargeReq: 8,
 
 			title: "Overpowered Infinities",
@@ -1194,7 +1194,7 @@ var enB = {
 		},
 		11: {
 			req: 13,
-			masReq: 0,
+			masReq: 13,
 			chargeReq: 10,
 
 			title: "Eternity Transfinition",
@@ -1217,7 +1217,7 @@ var enB = {
 		},
 		12: {
 			req: 13,
-			masReq: 0,
+			masReq: 13,
 			chargeReq: 12,
 
 			title: "Timeless Capability",
@@ -1264,7 +1264,7 @@ var enB = {
 				el.textContent = shiftDown ? (typeData[e].title || "Unknown title.") : (typeData.name + " Boost #" + e)
 			}
 		}
-		getEl("enB_" + type + "_next").textContent = last == typeData.max ? "" : "Next Entangled Booster unlocks at level " + typeData[last + 1].req + "."
+		getEl("enB_" + type + "_next").textContent = last == typeData.max ? "" : "Next " + typeData.name + " Boost unlocks at level " + typeData[last + 1].req + "."
 
 		if (type == "pos" && pos_tmp.cloud) {
 			pos.updateCloud()

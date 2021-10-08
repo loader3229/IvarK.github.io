@@ -26,6 +26,7 @@ let str = {
 		if (data.effs) delete data.effs
 		if (!data.vibrated) data.vibrated = []
 
+
 		this.updateTmp()
 	},
 
@@ -47,7 +48,7 @@ let str = {
 		data.powers = {}
 		for (var i = 1; i <= 12; i++) {
 			var pow = Math.ceil(i / 4)
-			data.powers[pow] = (data.powers[pow] || 0) + this.oneEff(i)
+			data.powers[pow] = (data.powers[pow] || 0) + this.altitude(i)
 		}
 	},
 	updateDisp() {
@@ -56,8 +57,9 @@ let str = {
 		var unl = this.unl()
 		getEl("str_unl").style.display = !unl ? "" : "none"
 		getEl("str_div").style.display = unl ? "" : "none"
-		if (unl) getEl("str_cost").textContent = "(the next one costs " + shorten(this.veCost(str_tmp.vibrated + 1) - this.veCost(str_tmp.vibrated)) + ")"
+		if (unl) getEl("str_cost").textContent = "(the next vibration costs " + shorten(this.veCost(str_tmp.vibrated + 1) - this.veCost(str_tmp.vibrated)) + ")"
 
+		if (!unl) return
 		if (!str_tmp.setupHTML) return
 
 		for (var e = 1; e <= 12; e++) {
@@ -79,13 +81,13 @@ let str = {
 		if (!str_tmp.setupHTML || !str_tmp.unl) return
 
 		let ve = str.veUnspent()
-		getEl("str_ve").textContent = (ve < 0 ? "-" : "") + shorten(Math.abs(ve))
-		getEl("str_warn").textContent = ve < 0 ? "Strings have been disabled due to spending too many Vibration Energy!" : "WARNING: Vibrating costs Vibration Energy, and also performs a Quantum reset!"
+		getEl("str_ve").textContent = shorten(ve)
+		getEl("str_ve_based").textContent = shiftDown ? "(based on Quantum Energy, Replicanti Energy, and PC level)" : ""
 
 		for (var i = 1; i <= 12; i++) {
 			var alt = str.altitude(i)
-			getEl("str_" + i + "_eff").textContent = (alt < 0 ? "-" : "+") + shorten(Math.abs(str.oneEff(i)) * str_tmp.str) + " to " + str.data.names[Math.ceil(i / 4) - 1]
-			getEl("str_" + i).className = (str_save.vibrated.includes(i) ? "chosenbtn2" : str.vibrated(i) ? (str_tmp.disable[i] > i ? "chosenbtn3" : "chosenbtn") : str.canVibrate(i) ? "storebtn" : "unavailablebtn") + " pos_btn"
+			getEl("str_" + i + "_eff").textContent = (alt < 0 ? "-" : "+") + shorten(Math.abs(alt) * str_tmp.str) + " to " + str.data.names[Math.ceil(i / 4) - 1]
+			getEl("str_" + i).className = (str_save.vibrated.includes(i) ? "chosenbtn" : str.canVibrate(i) ? "storebtn" : "unavailablebtn") + " pos_btn"
 		}
 
 		for (var p = 1; p <= 3; p++) {
@@ -98,7 +100,8 @@ let str = {
 			getEl("str_" + p + "_pb_eff").textContent = "+" + shorten(str.eff_pb(p * 4)) + "x charge multiplier to Positronic Boosts " + (p * 4 - 3) + " - " + (p * 4)
 			getEl("str_" + p + "_pb_nerf").innerHTML = pb_nerf == 1 ? "" : "<b class='" + (pb_nerf < 1 ? "charged" : "warning") + "'>" + (pb_nerf < 1 ? "/" + shorten(1 / pb_nerf) : shorten(pb_nerf) + "x") + " charge requirement</b>"
 		}
-		getEl("str_strength").textContent = "Manifold Surgery: " + shorten(str_tmp.str) + "x strength to String boosts"
+		getEl("str_strength").textContent = shiftDown ? "Manifold Surgery: " + shorten(str_tmp.str) + "x strength to String boosts" : ""
+		getEl("str_strength_based").textContent = shiftDown ? "(based on total Vibration Energy)" : ""
 	},
 	updateFeatureOnTick() {
 		str_save.energy = Math.max(str_save.energy, this.veGain())
@@ -127,7 +130,7 @@ let str = {
 	veGain() {
 		let r = qu_save.quarkEnergy.add(1).log10()
 		r *= Math.log10(QCs_save.qc5.add(1).log10() + 1)
-		r *= Math.pow(4, PCs_save.lvl / 8 - 1)
+		r *= Math.pow(Math.max(r, 4), PCs_save.lvl / 8 - 1)
 		return r
 	},
 	veUnspent() {
@@ -139,20 +142,17 @@ let str = {
 
 	//Vibrations
 	canVibrate(x) {
-		if (str_tmp.disable[x] !== undefined) return false
-		if (str_save.energy < str.veCost(str_tmp.vibrated + 1)) return false
-		return true
+		return str_save.energy >= str.veCost(str_tmp.vibrated + 1)
 	},
 	vibrate(x) {
-		if (str_tmp.disable[x]) {
-			var disable = str_tmp.disable[x]
-			var vibrated = str_save.vibrated
+		var vibrated = str_save.vibrated
+		if (vibrated.includes(x)) {
 			var new_vibrated = []
-			for (var i = 0; i < vibrated.length; i++) if (vibrated[i] != disable) new_vibrated.push(vibrated[i])
+			for (var i = 0; i < vibrated.length; i++) if (vibrated[i] != x) new_vibrated.push(vibrated[i])
 			str_save.vibrated = new_vibrated
 		} else {
 			if (!str.canVibrate(x)) return
-			str_save.vibrated.push(x)
+			vibrated.push(x)
 		}
 	
 		if (str.veUnspent() < 0 || dev.noReset) {
@@ -161,7 +161,7 @@ let str = {
 		} else restartQuantum(true)
 	},
 	vibrated(x) {
-		return str.unl() && ((str_save.vibrated && str_save.vibrated.includes(x)) || str_tmp.disable[x])
+		return str.unl() && (str_save.vibrated && str_save.vibrated.includes(x))
 	},
 	onVibrate(x) {
 		for (var p = -3; p <= 3; p++) {
@@ -170,8 +170,6 @@ let str = {
 			var add = 0.17 - 0.14 * d + 0.25 * ((d + 1) % 2)
 			str_tmp.alt[y] = (str_tmp.alt[y] || 0) + add
 		}
-
-		str_tmp.disable[x] = x
 	},
 
 	//Altitudes
@@ -180,34 +178,27 @@ let str = {
 		let r = str_tmp.alt[x] || 0
 		return Math.max(Math.min(r, 1), -1)
 	},
-	oneEff(x) {
-		return this.altitude(x)
-	},
 	eff(x) {
 		if (!str.unl()) return 0
 		let r = str_tmp.powers[Math.ceil(x / 4)]
+		if (r < 0) r *= 1.5
 		r *= str_tmp.str / 4
 		return r
 	},
 	eff_eb(x) {
-		let exp = 1
-		let r = this.eff(x)
-		if (r < 0) r *= -1.5
-		return 1 + r
+		return 1 + Math.abs(this.eff(x))
 	},
 	eff_pb(x) {
-		let r = this.eff(x)
-		if (r < 0) r *= -1.5
-		return r * 6
+		return Math.abs(this.eff(x)) * 6
 	},
 	nerf_eb(x) {
 		var r = this.eff(x)
 		if (r > 0) return 0
-		return -r * 8e3 * Math.min(Math.pow(1 - r, 3), 6)
+		return -r * 6e3 * Math.min(Math.pow(1 - r, 3), 6)
 	},
 	nerf_pb(x) {
 		var r = this.eff(x)
-		return r < 0 ? (1 - r * 2) * Math.min(Math.pow(1 - r * 2, 3), 8) : 1 / (1 + r)
+		return r < 0 ? (1 - r * 1.5) * Math.min(Math.pow(1 - r * 1.5, 3), 8) : 1 / (1 + r)
 	},
 
 	//Presets
@@ -238,7 +229,6 @@ let str = {
 		str_save.vibrated = []
 		str_save.spent = 0
 		str_tmp.vibrated = 0
-		str_tmp.disable = {}
 
 		var ve = str_save.energy
 		for (var i = 0; i < x.length; i++) {

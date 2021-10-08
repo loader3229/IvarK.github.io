@@ -112,7 +112,6 @@ var PCs = {
 		}
 
 		let data = PCs_save || this.setup()
-
 		if (data.best === undefined) data.best = data.lvl - 1
 
 		this.updateTmp()
@@ -365,13 +364,13 @@ var PCs = {
 		var id = PCs.sort(PCs_save.challs[pc])
 		return '<b style="font-size: 18px">' + PCs.name(pc) + '</b><br>' + (
 			PCs_save.challs[pc] ? "QC " + wordizeList(PCs.convBack(id), false, " + ", false) :
-			PCs_tmp.pick == pc ? "Click to cancel" :
-			!PCs_tmp.pick ? "Click to assign" : ""
+			PCs_tmp.pick == pc ? "Cancel" :
+			!PCs_tmp.pick ? "Assign" : ""
 		) + (
 			PCs_tmp.pick || !PCs_save.challs[pc] || PCs.done(id) ? "" : "<br>Goal: " + shorten(PCs.goal(id, pc)) + " MA"
 		)
 	},
-	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Milestones</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
+	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Show</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
 	setupMilestoneHeader() {
 		var x = "<tr><td></td>"
 		for (var i = 1; i < PCs.data.milestone_reqs.length; i++) x += "<td id='qc_milestone_header_" + i + "'></td>"
@@ -461,6 +460,7 @@ var PCs = {
 		if (!PCs.data.setupHTML) return
 		var data = PCs
 
+
 		for (var i = 1; i <= 8; i++) {
 			getEl("pc_comp" + i + "_div").style.display = PCs_tmp.comps[i] ? "" : "none"
 			getEl("pc_comp" + i).textContent = PCs_tmp.comps[i] + " / 7"
@@ -474,6 +474,8 @@ var PCs = {
 			getEl("pc_respec_" + i).style.display = respec ? "" : "none"
 			getEl("pc_export_" + i).style.display = respec ? "" : "none"
 		}
+		getEl("pc_info").style.display = PCs_save.lvl == 1 ? "none" : ""
+		getEl("pctabbtn_milestone").style.display = PCs_save.lvl == 1 ? "none" : ""
 
 		getEl("pc_eff1").textContent = "^" + PCs_tmp.eff1.toFixed(3)
 		getEl("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
@@ -514,7 +516,6 @@ var PCs = {
 		let shown = qc != 0 && qc != "all"
 		getEl("qc_milestones").style.display = qc != 0 || PCs_save.lvl == 1 ? "none" : ""
 		getEl("qc_milestone_div").style.display = shown ? "" : "none"
-		getEl("pc_info").style.display = qc != 0 || PCs_save.lvl == 1 ? "none" : ""
 		if (shown) {
 			getEl("qc_milestone_header").textContent = "QC" + qc + " Milestones"
 			for (var i = 1; i < PCs.data.milestone_reqs.length; i++) {
@@ -553,6 +554,10 @@ var PCs = {
 				getEl("qc_milestone_all_" + c).style.display = QCs.done(c) ? "" : "none"
 			}
 		}
+	},
+	back() {
+		if (!PCs_tmp.milestone) showChallengesTab("pairedChalls")
+		else PCs.showMilestones(0)
 	},
 
 	respec(x) {

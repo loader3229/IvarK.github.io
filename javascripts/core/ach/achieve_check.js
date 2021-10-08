@@ -289,7 +289,7 @@ function preHiggsNGp3AchieveCheck() {
 		}
 		if (cond >= 2) giveAchievement("Stonking The Pairs")
 	}
-	if (QCs.inAny() && false && player.meta.bestAntimatter.e >= 1e3) giveAchievement("Get rid of you by yourself...")
+	if (QCs.inAny() && str_tmp.vibrated === 0 && player.meta.bestAntimatter.e >= 1.6e3) giveAchievement("Get rid of you by yourself...")
 
 	if (false) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
 	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")

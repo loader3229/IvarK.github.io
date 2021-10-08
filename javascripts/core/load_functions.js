@@ -2188,7 +2188,7 @@ function setupNGP31Versions() {
 	}
 	aarMod.ngp3r = 0.61
 	aarMod.ngp3Alpha = beta
-	aarMod.ngp3Build = 20211003
+	aarMod.ngp3Build = 20211007
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) player.timestudy.auto = {}
 	if (rollback) rollbackQuantum(rollback)
@@ -2905,11 +2905,11 @@ function migrateOldSaves() {
 }
 
 //Save Storage System
-var beta = true
+var beta = false
 var preBeta = false
-var betaId = beta || preBeta ? "MT-" : ""
-var correctBetaId = "MT-"
-var betaLink = "minitest"
+var betaId = beta || preBeta ? "A-" : ""
+var correctBetaId = "A-"
+var betaLink = "Respecced-Alpha"
 
 //Was "ds" before Respecced happened.
 var prefix = "Gds"
