@@ -1017,7 +1017,7 @@ function doFeatureProgress() {
 	let reqNum
 	let reqFormat
 
-	if (pH.can("quPlus")) {}
+	if (pH.can("fluctuate")) {}
 	else if (str.unl()) {
 		res = player.money
 		reqFormat = shortenCosts(res)

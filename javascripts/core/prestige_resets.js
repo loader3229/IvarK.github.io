@@ -1,31 +1,114 @@
-function onQuantumAM(){
-	let x = 10
-	if (player.challenges.includes("challenge1")) x = 100
-	if (tmp.ngmX > 3) x = 200
-	if (hasAch("r37")) x = 1000
-	if (hasAch("r54")) x = 2e5
-	if (hasAch("r55")) x = 1e10
-	if (hasAch("r78")) x = 2e25
-	return new Decimal(x)
-}
+//LAYERS
+function doDimBoostResetStuff(layer = 1) {
+	if (layer >= 3 || !hasAch("r111")) setInitialMoney()
+	skipResets()
+	setInitialResetPower()
+	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < tmp.ngp3_em[0]) resetDimensions()
 
-function NC10NDCostsOnReset() {
-	if (inNC(10) || player.currentChallenge == "postc1") {
-		player.thirdCost = new Decimal(100)
-		player.fourthCost = new Decimal(500)
-		player.fifthCost = new Decimal(2500)
-		player.sixthCost = new Decimal(2e4)
-		player.seventhCost = new Decimal(2e5)
-		player.eightCost = new Decimal(4e6)
+	player.totalBoughtDims = resetTotalBought()
+	player.sacrificed = new Decimal(0)
+	player.chall3Pow = new Decimal(0.01)
+	player.matter = new Decimal(0)
+	player.chall11Pow = new Decimal(1)
+	player.postC4Tier = 1
+	player.postC8Mult = new Decimal(1)
+
+	if (player.currentChallenge == "postc2") {
+		player.eightAmount = new Decimal(1)
+		player.eightBought = 1
 	}
 }
 
-function nanofieldResetOnQuantum(){
-	qu_save.nanofield.charge = new Decimal(0)
-	qu_save.nanofield.energy = new Decimal(0)
-	qu_save.nanofield.antienergy = new Decimal(0)
-	qu_save.nanofield.power = 0
-	qu_save.nanofield.powerThreshold = new Decimal(50)
+function doGalaxyResetStuff(layer = 2) {
+	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < tmp.ngp3_em[4]) {
+		player.resets = 0
+		if (player.dbPower) player.dbPower = new Decimal(1)
+	}
+	if (tmp.ngmX >= 3) player.tickspeedBoosts = 0
+	player.tdBoosts = resetTDBoosts()
+
+	doDimBoostResetStuff(layer)
+}
+
+function doCrunchResetStuff(layer = 3, chall) {
+	player.totalBoughtDims = resetTotalBought()
+	player.tickBoughtThisInf = resetTickBoughtThisInf()
+	player.galaxies = 0
+
+	if (tmp.ngmX >= 2) player.galacticSacrifice = newGalacticDataOnInfinity(layer, chall)
+	if (tmp.ngmX >= 5) resetPSac()
+
+	player.thisInfinityTime = 0
+	IPminpeak = new Decimal(0)
+
+	doGalaxyResetStuff(layer)
+}
+
+function doEternityResetStuff(layer = 4, chall) {
+	player.infinityPoints = new Decimal(hasAch("r104") ? 2e25 : 0)
+	player.infinitied = 0
+	player.infMult = new Decimal(1)
+	player.infMultCost = new Decimal(10)
+	if (hasAch("r85")) player.infMult = player.infMult.times(4)
+	if (hasAch("r93")) player.infMult = player.infMult.times(4)
+	playerInfinityUpgradesOnEternity()
+
+	player.currentChallenge = ""
+	player.challengeTarget = 0
+	player.challenges = challengesCompletedOnEternity()
+
+	if (!canBreakInfinity()) player.break = false
+	if (!player.challenges.includes("postc2") && getEternitied() < 7) player.autoSacrifice = 1
+
+	player.partInfinityPoint = 0
+	player.partInfinitied = 0
+	player.autoIP = new Decimal(0)
+	player.autoTime = 1e300
+
+	player.thisEternity = QCs.perkActive(6) ? 5 : 0
+	player.bestInfinityTime = 9999999999
+	player.lastTenRuns = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
+
+	player.tickSpeedMultDecrease = getEternitied() >= 20 ? player.tickSpeedMultDecrease : 10
+	player.tickSpeedMultDecreaseCost = getEternitied() >= 20 ? player.tickSpeedMultDecreaseCost : 3e6
+	player.dimensionMultDecrease = getEternitied() >= 20 ? player.dimensionMultDecrease : 10
+	player.dimensionMultDecreaseCost = getEternitied() >= 20 ? player.dimensionMultDecreaseCost : 1e8
+	player.offlineProd = getEternitied() >= 20 ? player.offlineProd : 0
+	player.offlineProdCost = getEternitied() >= 20 ? player.offlineProdCost : 1e7
+	if (tmp.ngmX >= 2) {
+		player.extraDimPowerIncrease = getEternitied() >= 20 ? player.extraDimPowerIncrease : 0
+		player.dimPowerIncreaseCost = getEternitied() >= 20 ? player.dimPowerIncreaseCost : 1e3
+	}
+
+	player.replicanti.unl = getEternitied() >= 50
+	resetReplicantiUpgrades()
+	player.replicanti.galaxybuyer = (getEternitied() > 2) ? player.replicanti.galaxybuyer : undefined
+
+	if (chall == 14) player.replicanti.kept = player.replicanti.amount
+	player.replicanti.amount = layer >= 5 ? (
+		new Decimal(getEternitied() >= 50 ? 1 : 0)
+	) : (
+		moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[2] && (chall == 0 || chall == "dil") && !QCs.in(5) ? Decimal.pow(player.replicanti.kept || player.replicanti.amount, 0.995).floor().max(1) :
+		new Decimal(getEternitied() >= 50 ? 1 : 0)
+	)
+	if (chall != 14) delete player.replicanti.kept
+
+	player.dilation.active = chall == "dil"
+
+	delete tmp.rmPseudo
+	tmp.rm = new Decimal(1)
+
+	player.eterc8ids = 50
+	player.eterc8repl = 40
+
+	player.dimlife = true
+	player.dead = true
+	if (tmp.ngp3) player.dontWant = true
+
+	resetInfDimensions(true)
+	resetTimeDimensions()
+
+	doCrunchResetStuff(layer, chall)
 }
 
 function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
@@ -130,6 +213,38 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	player.dontWant = tmp.ngp3 || undefined
 }
 
+function doFlunctantResetStuff(layer = 6) {
+	qu_save.times = 0
+	qu_save.best = 999999999
+	qu_save.last10 = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
+
+	player.dilation.bestTP = new Decimal(0)
+	qu_save.bestEnergy = new Decimal(0)
+	qu_save.quarkEnergy = new Decimal(0)
+
+	qu_save.quarks = new Decimal(0)
+	qu_save.usedQuarks = {
+		r: new Decimal(0),
+		g: new Decimal(0),
+		b: new Decimal(0),
+	}
+
+	qu_save.gluons = {
+		rg: new Decimal(0),
+		gb: new Decimal(0),
+		br: new Decimal(0),
+	}
+	qu_save.entLvl = 0
+
+	str.reset()
+	PCs.reset()
+	QCs.reset(true)
+	pos.reset()
+
+	doQuantumResetStuff(layer)
+}
+
+//FUNCTIONS
 function resetDimensions() {
 	resetNormalDimensions()
 	if (inNGM(5)) resetInfDimensions()
@@ -138,49 +253,44 @@ function resetDimensions() {
 	reduceDimCosts()
 }
 
-function doDimBoostResetStuff(layer = 1) {
-	if (layer >= 3 || !hasAch("r111")) setInitialMoney()
-	skipResets()
-	setInitialResetPower()
-	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < tmp.ngp3_em[0]) resetDimensions()
-
-	player.totalBoughtDims = resetTotalBought()
-	player.sacrificed = new Decimal(0)
-	player.chall3Pow = new Decimal(0.01)
-	player.matter = new Decimal(0)
-	player.chall11Pow = new Decimal(1)
-	player.postC4Tier = 1
-	player.postC8Mult = new Decimal(1)
-
-	if (player.currentChallenge == "postc2") {
-		player.eightAmount = new Decimal(1)
-		player.eightBought = 1
+function NC10NDCostsOnReset() {
+	if (inNC(10) || player.currentChallenge == "postc1") {
+		player.thirdCost = new Decimal(100)
+		player.fourthCost = new Decimal(500)
+		player.fifthCost = new Decimal(2500)
+		player.sixthCost = new Decimal(2e4)
+		player.seventhCost = new Decimal(2e5)
+		player.eightCost = new Decimal(4e6)
 	}
 }
 
-function doGalaxyResetStuff(layer = 2) {
-	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < tmp.ngp3_em[4]) {
-		player.resets = 0
-		if (player.dbPower) player.dbPower = new Decimal(1)
-	}
-	if (tmp.ngmX >= 3) player.tickspeedBoosts = 0
-	player.tdBoosts = resetTDBoosts()
-
-	doDimBoostResetStuff(layer)
+function checkOnCrunchAchievements(){
+	if (player.thisInfinityTime <= 72000) giveAchievement("That's fast!");
+	if (player.thisInfinityTime <= 6000) giveAchievement("That's faster!")
+	if (player.thisInfinityTime <= 600) giveAchievement("Forever isn't that long")
+	if (player.thisInfinityTime <= 2) giveAchievement("Blink of an eye")
+	if (player.eightAmount == 0) giveAchievement("You didn't need it anyway");
+	if (player.galaxies == 1) giveAchievement("Claustrophobic");
+	if (player.galaxies == 0 && player.resets == 0) giveAchievement("Zero Deaths")
+	if (inNC(2) && player.thisInfinityTime <= 1800) giveAchievement("Many Deaths")
+	if (inNC(11) && player.thisInfinityTime <= 1800) giveAchievement("Gift from the Gods")
+	if (inNC(5) && player.thisInfinityTime <= 1800) giveAchievement("Is this hell?")
+	if (inNC(3) && player.thisInfinityTime <= 100) giveAchievement("You did this again just for the achievement right?");
+	if (player.firstAmount == 1 && player.resets == 0 && player.galaxies == 0 && inNC(12)) giveAchievement("ERROR 909: Dimension not found")
+	if (gainedInfinityPoints().gte(1e150)) giveAchievement("All your IP are belong to us")
+	if (gainedInfinityPoints().gte(1e200) && player.thisInfinityTime <= 20) giveAchievement("Ludicrous Speed")
+	if (gainedInfinityPoints().gte(1e250) && player.thisInfinityTime <= 200) giveAchievement("I brake for nobody")
 }
 
-function doCrunchResetStuff(layer = 3, chall) {
-	player.totalBoughtDims = resetTotalBought()
-	player.tickBoughtThisInf = resetTickBoughtThisInf()
-	player.galaxies = 0
-
-	if (tmp.ngmX >= 2) player.galacticSacrifice = newGalacticDataOnInfinity(layer, chall)
-	if (tmp.ngmX >= 5) resetPSac()
-
-	player.thisInfinityTime = 0
-	IPminpeak = new Decimal(0)
-
-	doGalaxyResetStuff(layer)
+function checkSecondSetOnCrunchAchievements(){
+	checkForEndMe()
+	giveAchievement("To infinity!");
+	if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
+	if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
+	if (player.bestInfinityTime <= 0.01) giveAchievement("Less than or equal to 0.001");
+	if (player.challenges.length >= 2) giveAchievement("Daredevil")
+	if (player.challenges.length >= getTotalNormalChallenges() + 1) giveAchievement("AntiChallenged")
+	if (player.challenges.length >= getTotalNormalChallenges() + order.length + 1) giveAchievement("Anti-antichallenged")
 }
 
 function doNormalChallengeResetStuff() {
@@ -254,100 +364,13 @@ function resetMasteryStudies() {
 	if (!qMs.isOn(10)) mTs.respec(false, true)
 }
 
-function checkOnCrunchAchievements(){
-	if (player.thisInfinityTime <= 72000) giveAchievement("That's fast!");
-	if (player.thisInfinityTime <= 6000) giveAchievement("That's faster!")
-	if (player.thisInfinityTime <= 600) giveAchievement("Forever isn't that long")
-	if (player.thisInfinityTime <= 2) giveAchievement("Blink of an eye")
-	if (player.eightAmount == 0) giveAchievement("You didn't need it anyway");
-	if (player.galaxies == 1) giveAchievement("Claustrophobic");
-	if (player.galaxies == 0 && player.resets == 0) giveAchievement("Zero Deaths")
-	if (inNC(2) && player.thisInfinityTime <= 1800) giveAchievement("Many Deaths")
-	if (inNC(11) && player.thisInfinityTime <= 1800) giveAchievement("Gift from the Gods")
-	if (inNC(5) && player.thisInfinityTime <= 1800) giveAchievement("Is this hell?")
-	if (inNC(3) && player.thisInfinityTime <= 100) giveAchievement("You did this again just for the achievement right?");
-	if (player.firstAmount == 1 && player.resets == 0 && player.galaxies == 0 && inNC(12)) giveAchievement("ERROR 909: Dimension not found")
-	if (gainedInfinityPoints().gte(1e150)) giveAchievement("All your IP are belong to us")
-	if (gainedInfinityPoints().gte(1e200) && player.thisInfinityTime <= 20) giveAchievement("Ludicrous Speed")
-	if (gainedInfinityPoints().gte(1e250) && player.thisInfinityTime <= 200) giveAchievement("I brake for nobody")
-}
-
-function checkSecondSetOnCrunchAchievements(){
-	checkForEndMe()
-	giveAchievement("To infinity!");
-	if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
-	if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
-	if (player.bestInfinityTime <= 0.01) giveAchievement("Less than or equal to 0.001");
-	if (player.challenges.length >= 2) giveAchievement("Daredevil")
-	if (player.challenges.length >= getTotalNormalChallenges() + 1) giveAchievement("AntiChallenged")
-	if (player.challenges.length >= getTotalNormalChallenges() + order.length + 1) giveAchievement("Anti-antichallenged")
-}
-
-function doEternityResetStuff(layer = 4, chall) {
-	player.infinityPoints = new Decimal(hasAch("r104") ? 2e25 : 0)
-	player.infinitied = 0
-	player.infMult = new Decimal(1)
-	player.infMultCost = new Decimal(10)
-	if (hasAch("r85")) player.infMult = player.infMult.times(4)
-	if (hasAch("r93")) player.infMult = player.infMult.times(4)
-	playerInfinityUpgradesOnEternity()
-
-	player.currentChallenge = ""
-	player.challengeTarget = 0
-	player.challenges = challengesCompletedOnEternity()
-
-	if (!canBreakInfinity()) player.break = false
-	if (!player.challenges.includes("postc2") && getEternitied() < 7) player.autoSacrifice = 1
-
-	player.partInfinityPoint = 0
-	player.partInfinitied = 0
-	player.autoIP = new Decimal(0)
-	player.autoTime = 1e300
-
-	player.thisEternity = QCs.perkActive(6) ? 5 : 0
-	player.bestInfinityTime = 9999999999
-	player.lastTenRuns = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
-
-	player.tickSpeedMultDecrease = getEternitied() >= 20 ? player.tickSpeedMultDecrease : 10
-	player.tickSpeedMultDecreaseCost = getEternitied() >= 20 ? player.tickSpeedMultDecreaseCost : 3e6
-	player.dimensionMultDecrease = getEternitied() >= 20 ? player.dimensionMultDecrease : 10
-	player.dimensionMultDecreaseCost = getEternitied() >= 20 ? player.dimensionMultDecreaseCost : 1e8
-	player.offlineProd = getEternitied() >= 20 ? player.offlineProd : 0
-	player.offlineProdCost = getEternitied() >= 20 ? player.offlineProdCost : 1e7
-	if (tmp.ngmX >= 2) {
-		player.extraDimPowerIncrease = getEternitied() >= 20 ? player.extraDimPowerIncrease : 0
-		player.dimPowerIncreaseCost = getEternitied() >= 20 ? player.dimPowerIncreaseCost : 1e3
-	}
-
-	player.replicanti.unl = getEternitied() >= 50
-	resetReplicantiUpgrades()
-	player.replicanti.galaxybuyer = (getEternitied() > 2) ? player.replicanti.galaxybuyer : undefined
-
-	if (chall == 14) player.replicanti.kept = player.replicanti.amount
-	player.replicanti.amount = layer >= 5 ? (
-		new Decimal(getEternitied() >= 50 ? 1 : 0)
-	) : (
-		moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[2] && (chall == 0 || chall == "dil") && !QCs.in(5) ? Decimal.pow(player.replicanti.kept || player.replicanti.amount, 0.995).floor().max(1) :
-		new Decimal(getEternitied() >= 50 ? 1 : 0)
-	)
-	if (chall != 14) delete player.replicanti.kept
-
-	player.dilation.active = chall == "dil"
-
-	delete tmp.rmPseudo
-	tmp.rm = new Decimal(1)
-
-	player.eterc8ids = 50
-	player.eterc8repl = 40
-
-	player.dimlife = true
-	player.dead = true
-	if (tmp.ngp3) player.dontWant = true
-
-	resetInfDimensions(true)
-	resetTimeDimensions()
-
-	doCrunchResetStuff(layer, chall)
+//Old
+function nanofieldResetOnQuantum(){
+	qu_save.nanofield.charge = new Decimal(0)
+	qu_save.nanofield.energy = new Decimal(0)
+	qu_save.nanofield.antienergy = new Decimal(0)
+	qu_save.nanofield.power = 0
+	qu_save.nanofield.powerThreshold = new Decimal(50)
 }
 
 function getReplicantsOnGhostifyData(){

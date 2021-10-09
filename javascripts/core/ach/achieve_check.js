@@ -296,7 +296,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.meta.antimatter.e >= 1/0 && player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] == 0 && player.dilation.upgrades.length == 0) giveAchievement("Never make paradoxes!")
 	if (player.infinityPoints.gte(Decimal.pow(Number.MAX_VALUE, 1000)) && ableToGetRid5) giveAchievement("I don't want you to live anymore.")
 
-	if (pH.did("quPlus")) giveAchievement("Quantum+ Reached!")
+	if (pH.did("fluctuate")) giveAchievement("Quantum+ Reached!")
 	if (player.dilation.dilatedTime.log10() >= 411 && qu_save.notrelative) giveAchievement("Time is not relative")
 	if (!hasAch("ng3p42")) {
 		for (d = 2; d < 9; d++) {

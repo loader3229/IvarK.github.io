@@ -26,8 +26,12 @@ let str = {
 		if (data.effs) delete data.effs
 		if (!data.vibrated) data.vibrated = []
 
-
 		this.updateTmp()
+	},
+	reset() {
+		this.setup()
+		this.updateTmp()
+		this.updateDisp()
 	},
 
 	//Updates

@@ -1,10 +1,10 @@
 var pH = {
-	order: ["paradox", "accelerate", "galaxy", "infinity", "eternity", "interreality", "singularity", "quantum", "quPlus", "ghostify"],
+	order: ["paradox", "accelerate", "galaxy", "infinity", "eternity", "interreality", "singularity", "quantum", "fluctuate", "ghostify"],
 	names: {
 		infinity: "Infinity",
 		eternity: "Eternity",
 		quantum: "Quantum",
-		quPlus: "Quantum+"
+		fluctuate: "Quantum+"
 	},
 	reqs: {
 		paradox() {
@@ -36,7 +36,7 @@ var pH = {
 				(!tmp.ngp3 || tmp.ngp3_mul || ECComps("eterc14") >= 1) &&
 				getQuarkGain().gte(1)
 		},
-		quPlus() {
+		fluctuate() {
 			return player.money.e >= Math.pow(10, 13.5)
 		},
 		ghostify() {
@@ -62,7 +62,7 @@ var pH = {
 		quantum() {
 			return player.meta !== undefined
 		},
-		quPlus() {
+		fluctuate() {
 			return tmp.ngp3
 		},
 		ghostify() {
@@ -97,7 +97,7 @@ var pH = {
 				else quantum()
 			}
 		},
-		quPlus() {
+		fluctuate() {
 			alert('You will see when the next update comes...')
 		},
 		ghostify() {
@@ -113,7 +113,7 @@ var pH = {
 		interreality: "irTab",
 		singularity: "sgTab",
 		quantum: "quantumtab",
-		quPlus: "quPlusTab",
+		fluctuate: "fluctuateTab",
 		ghostify: "ghostify"
 	},
 	hotkeys: {
@@ -125,7 +125,7 @@ var pH = {
 		interreality: "i",
 		singularity: "s",
 		quantum: "q",
-		quPlus: "q",
+		fluctuate: "q",
 		ghostify: "g"
 	},
 	can(id) {
@@ -156,7 +156,7 @@ var pH = {
 		quantum() {
 			return qu_save.times >= 1
 		},
-		quPlus() {
+		fluctuate() {
 			return false
 		},
 		ghostify() {
@@ -178,7 +178,7 @@ var pH = {
 		interreality: ["irReset", "irEmpty", "irTabBtn"],
 		singularity: ["sgReset", "sgEmpty", "sgTabBtn"],
 		quantum: ["quantumbtn", "quantumInfo", "quantumtabbtn"],
-		quPlus: ["quPlusReset", "quPlusEmpty", "quPlusBtn"],
+		fluctuate: ["fluctuateReset", "fluctuateEmpty", "fluctuateBtn"],
 		ghostify: ["ghostifybtn", "ghostparticles", "ghostifytabbtn"]
 	},
 	shown(id) {

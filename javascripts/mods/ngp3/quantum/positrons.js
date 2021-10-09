@@ -47,9 +47,14 @@ var pos = {
 	setup() {
 		pos_save = {
 			on: false,
-			amt: 0,
-			eng: 0,
-			boosts: 0,
+			gals: {
+				ng: {sac: 0, qe: 0, pc: 0},
+				rg: {sac: 0, qe: 0, pc: 0},
+				eg: {sac: 0, qe: 0, pc: 0},
+				tg: {sac: 0, qe: 0, pc: 0}
+			},
+			eng: new Decimal(0),
+			lvl: 0,
 			swaps: {}
 		}
 		qu_save.pos = pos_save
@@ -63,11 +68,7 @@ var pos = {
 
 		let data = pos_save || this.setup()
 
-		if (!data.on) {
-			data.amt = 0
-			data.eng = 0
-		}
-		if (!data.boosts) data.boosts = 0
+		if (!data.on) data.eng = 0
 		if (!data.gals) data.gals = {
 			ng: {sac: 0, qe: 0, pc: 0},
 			rg: {sac: 0, qe: 0, pc: 0},
@@ -76,7 +77,6 @@ var pos = {
 		}
 		if (!data.swaps) data.swaps = {}
 
-		data.boosts = Decimal.round(data.boosts)
 		data.eng = new Decimal(data.eng)
 
 		if (data.consumedQE) delete data.consumedQE
@@ -87,6 +87,14 @@ var pos = {
 
 		this.updateTmp()
 	},
+	reset() {
+		this.setup()
+		this.updateTmp()
+
+		enB.updateTmp()
+		enB.update("pos")
+	},
+
 	unl: (force) => force ? tmp.ngp3 && player.masterystudies.includes("d7") : pos_tmp.unl,
 	on() {
 		return this.unl() && pos_save && pos_save.on

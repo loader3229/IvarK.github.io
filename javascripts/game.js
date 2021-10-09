@@ -1021,7 +1021,6 @@ function doNGPlusThreeNewPlayer(){
 	qu_save.qc = QCs.setup()
 	player.dontWant = false
 	qu_save.nanofield = getBrandNewNanofieldData()
-	qu_save.reachedInfQK = false
 	qu_save.notrelative = false
 	qu_save.wasted = false
 	qu_save.tod = getBrandNewTodData()

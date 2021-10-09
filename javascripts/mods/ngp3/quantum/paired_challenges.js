@@ -123,6 +123,8 @@ var PCs = {
 
 		this.updateTmp()
 		this.updateUsed()
+		this.updateDisp()
+		this.resetButtons()
 	},
 
 	unl: (force) => force ? (QCs_save && QCs.done(7)) : PCs_tmp.unl,

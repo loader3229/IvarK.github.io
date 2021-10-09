@@ -631,6 +631,11 @@ function doNGP3NewPlayerStuff(){
                 gb: 0,
                 br: 0
         }
+        qu_save.assignAllRatios = {
+                r: 1,
+                g: 1,
+                b: 1
+        }
         player.eternityBuyer.statBeforeDilation = 0
         player.eternityBuyer.dilationPerAmount = 10
         player.eternityBuyer.dilMode = "amount"
@@ -660,12 +665,6 @@ function doNGP3NewPlayerStuff(){
                 powerThreshold: 50,
                 rewards: 0,
                 producingCharge: false
-        }
-        qu_save.reachedInfQK = false
-        qu_save.assignAllRatios = {
-                r: 1,
-                g: 1,
-                b: 1
         }
         qu_save.notrelative = false
         qu_save.wasted = false
@@ -993,7 +992,6 @@ function doNGp3v199tov19995(){
                         rewards: 0,
                         producingCharge: false
                 }
-                qu_save.reachedInfQK = false
                 qu_save.assignAllRatios = {
                         r: 1,
                         g: 1,

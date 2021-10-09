@@ -3,7 +3,6 @@ var QCs = {
 		QCs_save = {
 			in: [],
 			comps: 0,
-			mod_comps: [],
 			best: {},
 			cloud_disable: 1,
 			auto: false
@@ -52,17 +51,12 @@ var QCs = {
 		} else if (data.qc8.time === undefined) data.qc8.time = 0
 
 		if (data.disable_swaps === undefined) data.disable_swaps = {}
-		if (data.best_exclusion || data.perks_unl || (data.mod_comps && !data.mod_comps.length)) {
-			data.mod_comps = []
-			delete data.best_exclusion
-			delete data.perks_unl
-		}
 		if (data.disable_perks === undefined) data.disable_perks = {}
 
 		this.updateTmp()
 		this.updateDisp()
 	},
-	reset() {
+	reset(hard) {
 		QCs_save.qc1 = {
 			boosts: 0,
 			max: 0,
@@ -81,6 +75,12 @@ var QCs = {
 		QCs_save.qc6 = 0
 		QCs_save.qc7 = QCs.perkActive(7) ? Math.sqrt(player.replicanti.galaxies) : 0 //QC7 perk
 		if (QCs_save.qc8) QCs_save.qc8.time = 0
+
+		if (hard) {
+			QCs_save.comps = 0
+			this.updateTmp()
+			this.updateDisp()
+		}
 	},
 	data: {
 		max: 8,
