@@ -213,7 +213,9 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	player.dontWant = tmp.ngp3 || undefined
 }
 
-function doFlunctantResetStuff(layer = 6) {
+function doFlunctateResetStuff(layer = 6) {
+	flun_save.time = 0
+
 	qu_save.times = 0
 	qu_save.best = 999999999
 	qu_save.last10 = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
@@ -241,6 +243,7 @@ function doFlunctantResetStuff(layer = 6) {
 	QCs.reset(true)
 	pos.reset()
 
+	qMs.update()
 	doQuantumResetStuff(layer)
 }
 

@@ -943,6 +943,11 @@ function autoPresetUnlocked(x) {
 }
 
 function setupSaveDataNGP3() {
+	//Flunctant
+	flun_tmp.unl = flun.unl(true)
+	flun.compile()
+
+	//Quantum
 	pos_save = (qu_save && qu_save.pos)
 	QCs_save = (qu_save && qu_save.qc)
 	PCs_save = (qu_save && qu_save.pc)

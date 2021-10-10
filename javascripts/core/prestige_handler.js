@@ -98,7 +98,7 @@ var pH = {
 			}
 		},
 		fluctuate() {
-			alert('You will see when the next update comes...')
+			flun.reset()
 		},
 		ghostify() {
 			ghostify()
@@ -157,7 +157,7 @@ var pH = {
 			return qu_save.times >= 1
 		},
 		fluctuate() {
-			return false
+			return flun.unl()
 		},
 		ghostify() {
 			return player.ghostify.times >= 1
