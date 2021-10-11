@@ -173,7 +173,7 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	player.dead = true
 
 	let oldUpgs = player.dilation.upgrades
-	let upgs = !qMs.isOn(5) || !qMs.isOn(7) ? [] : qMs.tmp.amt >= 9 ? oldUpgs : [4, 5, 6, 7, 8, 9, 10]
+	let upgs = !qMs.isOn(5) || !qMs.isOn(7) ? [] : qMs.tmp.amt >= 9 ? oldUpgs : [4, 5, 6, 7, 8, 9, 10, "ngpp1", "ngpp2"]
 	let newUpgs = []
 	let multUpgs = !qMs.isOn(8) ? 0 : tmp.exMode ? 10 : tmp.bgMode ? 1/0 : 25
 	for (var i = 0; i < oldUpgs.length; i++) if (upgs.includes(oldUpgs[i])) newUpgs.push(oldUpgs[i])
@@ -213,23 +213,33 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	player.dontWant = tmp.ngp3 || undefined
 }
 
-function doFlunctateResetStuff(layer = 6) {
-	flun_save.time = 0
-
+function doFluctuateResetStuff(layer = 6) {
+	qu_save.time = 0
 	qu_save.times = 0
 	qu_save.best = 999999999
 	qu_save.last10 = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
 
-	player.dilation.bestTP = new Decimal(0)
-	qu_save.bestEnergy = new Decimal(0)
-	qu_save.quarkEnergy = new Decimal(0)
+	player.timestudy.theorem = 0
 
+	player.dilation.tachyonParticles = new Decimal(0)
+	player.dilation.totalTachyonParticles = new Decimal(0)
+	player.dilation.bestTP = new Decimal(0)
+
+	quantumWorth = new Decimal(0)
 	qu_save.quarks = new Decimal(0)
 	qu_save.usedQuarks = {
 		r: new Decimal(0),
 		g: new Decimal(0),
 		b: new Decimal(0),
 	}
+	qu_save.colorPowers = {
+		r: new Decimal(0),
+		g: new Decimal(0),
+		b: new Decimal(0),
+	}
+
+	qu_save.bestEnergy = new Decimal(0)
+	qu_save.quarkEnergy = new Decimal(0)
 
 	qu_save.gluons = {
 		rg: new Decimal(0),
@@ -243,6 +253,9 @@ function doFlunctateResetStuff(layer = 6) {
 	QCs.reset(true)
 	pos.reset()
 
+	flun_save.time = 0
+
+	updateQEGainTmp()
 	qMs.update()
 	doQuantumResetStuff(layer)
 }

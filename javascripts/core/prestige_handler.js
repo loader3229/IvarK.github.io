@@ -4,7 +4,7 @@ var pH = {
 		infinity: "Infinity",
 		eternity: "Eternity",
 		quantum: "Quantum",
-		fluctuate: "Quantum+"
+		fluctuate: "Fluctuate"
 	},
 	reqs: {
 		paradox() {
@@ -37,7 +37,7 @@ var pH = {
 				getQuarkGain().gte(1)
 		},
 		fluctuate() {
-			return player.money.e >= Math.pow(10, 13.5)
+			return player.money.e >= Math.pow(10, 13.5) && flun.gain() > 0
 		},
 		ghostify() {
 			return false
@@ -125,7 +125,7 @@ var pH = {
 		interreality: "i",
 		singularity: "s",
 		quantum: "q",
-		fluctuate: "q",
+		fluctuate: "f",
 		ghostify: "g"
 	},
 	can(id) {
@@ -178,7 +178,7 @@ var pH = {
 		interreality: ["irReset", "irEmpty", "irTabBtn"],
 		singularity: ["sgReset", "sgEmpty", "sgTabBtn"],
 		quantum: ["quantumbtn", "quantumInfo", "quantumtabbtn"],
-		fluctuate: ["fluctuateReset", "fluctuateEmpty", "fluctuateBtn"],
+		fluctuate: ["fluctuateReset", "fluctuateInfo", "fluctuateBtn"],
 		ghostify: ["ghostifybtn", "ghostparticles", "ghostifytabbtn"]
 	},
 	shown(id) {

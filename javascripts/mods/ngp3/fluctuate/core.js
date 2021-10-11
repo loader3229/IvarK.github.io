@@ -26,12 +26,13 @@ let flun = {
 	},
 
 	gain() {
-		return 1
+		let r = 1
+		return Math.max(r - flun_save.energy, 0)
 	},
 	reset(auto, force) {
 		if (!force) {
-			if (!pH.can('flunctate')) return
-			if (!auto && !flun.unl() && !confirm("Flunctating resets everything that Quantum resets, but also including Quantum content. You will gain Energy in transfer, and you permanently keep your feature unlocks.")) return
+			if (!pH.can('fluctuate')) return
+			if (!auto && !flun.unl() && !confirm("Fluctuating resets everything that Quantum resets, but also including Quantum content. You will gain Energy in transfer, and you permanently keep your feature unlocks.")) return
 
 			for (var i = flun_save.last10.length - 1; i > 0; i--) flun_save.last10[i] = flun_save.last10[i - 1]
 			var gain = flun.gain()
@@ -40,17 +41,29 @@ let flun = {
 
 			if (flun_save.energy == 0) {
 				flun_tmp.unl = true
-				pH.updateActive()
+				pH.onPrestige("fluctuate")
 			}
 			flun_save.energy += gain
 		}
 		flun.doReset()
 	},
 	doReset(auto, force) {
-		doFlunctateResetStuff()
+		doFluctuateResetStuff()
 		handleDispOnQuantum(false)
+
+		resetUP()
+		GPminpeak = new Decimal(0)
+		IPminpeak = new Decimal(0)
+		bestRunIppm = new Decimal(0)
+		EPminpeakType = 'normal'
+		EPminpeak = new Decimal(0)
+		QKminpeak = new Decimal(0)
+		QKminpeakValue = new Decimal(0)
 	},
 
+	updateHeader() {
+		getEl("fluctuantEnergy").textContent = getFullExpansion(flun_save.energy)
+	},
 	updateTmp() {
 		
 	}

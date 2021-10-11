@@ -1294,6 +1294,7 @@ var enB = {
 		let gluUnl = enB.glu.unl()
 		getEl("gluon_req").textContent = gluUnl ? "" : "To unlock anti-Gluons, you need to go Quantum with at least 2 colored kinds of anti-Quarks."
 		getEl("gluonstabbtn").style.display = gluUnl ? "" : "none"
+		if (!gluUnl && getEl("gluons").style.display == "block") showQuantumTab("uquarks")
 	},
 	updateOnTick(type) {
 		var data = this[type]

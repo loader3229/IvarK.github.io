@@ -60,6 +60,7 @@ function getDilTimeGainPerSecond() {
 		if (hasAch("ngpp13")) gain = gain.times(2)
 		if (hasAch("ng3p11")) gain = gain.times(Math.min(Math.max(Math.log10(player.eternityPoints.max(1).log10()) / 2, 1) / 2, 2.5))
 		if (enB.active("pos", 2)) gain = gain.times(enB_tmp.pos2.mult)
+		if (pH.did("fluctuate")) gain = gain.times(Decimal.pow(2, flun_save.energy))
 		if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 	}
 	if (tmp.quActive && tmp.ngp3_mul) gain = gain.times(colorBoosts.b) //Color Powers (NG*+3)

@@ -2,7 +2,7 @@
 let qMs = {
 	tmp: {},
 	data: {
-		types: ["sr", "en", "rl", "ch"],
+		types: ["sr", "en", "rl", "ch", "fl"],
 		sr: {
 			name: "Speedrun",
 			targ: () => qu_save.best,
@@ -35,8 +35,17 @@ let qMs = {
 			targ: () => (PCs_save && PCs_save.comps.length) || 0,
 			targDisp: getFullExpansion,
 			targKind: "completions",
-			gain: (x) => x * 1.5,
-			nextAt: (x) => Math.ceil(x / 1.5)
+			gain: (x) => x * 2,
+			nextAt: (x) => Math.ceil(x / 2)
+		},
+		fl: {
+			name: "Fluctuant",
+			unl: () => pH.did("fluctuate"),
+			targ: () => (flun_save && flun_save.energy) || 0,
+			targDisp: getFullExpansion,
+			targKind: "Fluctuant Energy",
+			gain: (x) => x == 0 ? 0 : x * 5 + 2,
+			nextAt: (x) => x == 0 ? 1 : Math.ceil((x - 2) / 5)
 		}
 	},
 	update() {
@@ -94,7 +103,7 @@ let qMs = {
 		}
 
 		getEl('dilationmode').style.display = qMs.tmp.amt >= 4 ? "block" : "none"
-		getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 11 ? "" : "none"
+		getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 11 || pH.did("fluctuate") ? "" : "none"
 		getEl('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
 		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 17 ? "block" : "none"
 		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 17 ? "" : "none"
@@ -143,7 +152,7 @@ let qMs = {
 		getEl("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
 	},
 
-	max: 27,
+	max: 30,
 	1: {
 		req: 1,
 		eff: () => "Completing an EC only exits your challenge.",
@@ -285,5 +294,20 @@ let qMs = {
 		req: 200,
 		eff: () => "Unlock the autobuyer for Replicated Expanders",
 		effGot: () => "Unlock the autobuyer for Replicated Expanders."
+	},
+	28: {
+		req: 530,
+		eff: () => "Keep Quantum Challenges and Entangled Boosts.",
+		effGot: () => "You now keep Quantum Challenges and Entangled Boosts."
+	},
+	29: {
+		req: 570,
+		eff: () => "Keep Paired Challenges and Positrons.",
+		effGot: () => "You now keep Paired Challenges and Positrons."
+	},
+	30: {
+		req: 600,
+		eff: () => "Keep your Vibration Energy.",
+		effGot: () => "You now keep your Vibration Energy."
 	},
 }

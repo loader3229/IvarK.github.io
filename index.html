@@ -5,7 +5,7 @@
 <head>
 	<title>Antimatter Dimensions</title>
 	<link rel="icon" type="image/png" href="icon.png">
-	<meta name="Antimatter Dimensions" content="A game about huge numbers and watching them go up." charset="utf-8"/>
+	<meta name="AD: Aarex's Mods" content="A modification site of Antimatter Dimensions created by Aarex." charset="utf-8"/>
 	<script type="text/javascript" src="javascripts/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="javascripts/core/getel.js"></script>
 	<script type="text/javascript" src="javascripts/notify.js"></script>
@@ -73,7 +73,9 @@
 			</button>
 		</div>
 		<div style="position: relative">
-			<div id="fluctuateEmpty"></div>
+			<div id="fluctuateInfo">
+				You have <b id='fluctuantEnergy'>0</b> Fluctuant Energy.
+			</div>
 			<button id="fluctuateReset" class="storebtn" onclick="flun.reset()">Fluctuate the Quantum Mechanics for 1 Energy.</button>
 		</div>
 		<div style="position: relative">
@@ -1531,7 +1533,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(10/9/21a Pre-Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(10/10/21a Pre-Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -2279,7 +2281,7 @@
 								<div id="ERROR 500: INTERNAL DIMENSION ERROR" class="achievement achievementlocked" style="background-image: url(images/127.png)"></div>
 							</td>
 							<td>
-								<div id="Quantum+ Reached!" class="achievement achievementlocked" style="background-image: url(images/128.png)" ach-tooltip="(Temporary name) Flunctate."></div>
+								<div id="Quantum+ Reached!" class="achievement achievementlocked" style="background-image: url(images/128.png)" ach-tooltip="(Temporary name) Fluctuate. Reward: Keep your dilation upgrade autobuyer, and Fluctuant Energy boosts dilated time."></div>
 							</td>
 							<td>
 								<div id="Never make paradoxes!" class="achievement achievementlocked" style="background-image: url(images/129.png)"></div>
@@ -4659,6 +4661,14 @@
 						<span id="qMs_ch_next">0</span>
 					</td>
 				</tr>
+				<tr>
+					<td class="uv" id="qMs_fl_cell">
+						<b style="font-size: 25px">Fluctuant</b>
+						<span id="qMs_fl_points" style="font-size: 20px"></span><br>
+						(You have <span id="qMs_fl_target" style="font-size: 15px">0</span> Fluctuant Energy)<br>
+						<span id="qMs_fl_next">0</span>
+					</td>
+				</tr>
 			</table>
 			<p id="qMs_next"></p>
 			<table class="table" align="center" style="margin: auto" id="qMs_rewards">
@@ -4706,6 +4716,11 @@
 					<td><button class="qMs_locked" id="qMs_reward_25" onclick="qMs.toggle(25)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_26" onclick="qMs.toggle(26)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_27" onclick="qMs.toggle(27)"></button></td>
+				</tr>
+				<tr>
+					<td><button class="qMs_locked" id="qMs_reward_28" onclick="qMs.toggle(28)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_29" onclick="qMs.toggle(29)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_30" onclick="qMs.toggle(30)"></button></td>
 				</tr>
 			</table>
 		</div>
@@ -5877,7 +5892,7 @@
 <script type="text/javascript" src="javascripts/mods/ngp3/quantum/strings.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/quantum/milestones.js"></script>
 
-<script type="text/javascript" src="javascripts/mods/ngp3/flunctant/core.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/fluctuate/core.js"></script>
 
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/big_rip.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/bosonic_lab.js"></script>

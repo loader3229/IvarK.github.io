@@ -513,6 +513,10 @@ button, div.storebtn {
 	text-shadow: 0px 0px 3px #bfff00, 0px 0px 6px #7fff00
 }
 
+#fluctuantEnergy {
+	color: #ff3f00 !important
+}
+
 #dilstudy12.dilationupgbought, #nanofieldtabbtn button, #produceQuarkCharge, .nfReward {
 	background-color: #4c4c4c !important;
 	color: #e5e5e5 !important;

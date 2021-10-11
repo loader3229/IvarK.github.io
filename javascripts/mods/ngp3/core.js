@@ -943,7 +943,8 @@ function autoPresetUnlocked(x) {
 }
 
 function setupSaveDataNGP3() {
-	//Flunctant
+	//Fluctuant
+	flun_save = player.flun
 	flun_tmp.unl = flun.unl(true)
 	flun.compile()
 

@@ -3143,6 +3143,7 @@ function updateHotkeys() {
 	if (hasAch("r136")) html += ", D to Dilate Time"
 	if (hasAch("ngpp11")) html += ", shift+D to Meta-Dimension Boost"
 	if (player.meta) html += ",<br>Q to Quantum"
+	if (pH.can("fluctuate") || pH.did("fluctuate")) html += ", F to Fluctuate"
 	if (hasAch("ng3p45")) html += ", U to unstabilize all Quarks"
 	if (hasAch("ng3p51")) html += ", B to Big Rip, G to become a ghost"
 	html += "."
@@ -3621,7 +3622,7 @@ function updateNGpp16Reward(){
 function notifyQuantumMilestones(){
 	if (typeof notifyId == "undefined") notifyId = qMs.tmp.amt
 	if (qMs.tmp.amt > notifyId) {
-		notifyId++
+		notifyId = qMs.tmp.amt
 		$.notify("You have got a total of " + qMs[notifyId].req + " Milestone Points! " + qMs[notifyId].effGot(), "success")
 	}
 }
@@ -3828,6 +3829,7 @@ setInterval(function() {
 	eterPoints2Display()
 	updateResetTierButtons()
 	updateQuarkDisplay()
+	if (tmp.ngp3) flun.updateHeader()
 	primaryStatsDisplayResetLayers()
 	crunchAnimationBtn()
 	TPAnimationBtn()
@@ -5624,6 +5626,10 @@ window.addEventListener('keydown', function(event) {
 			pH.onHotkey("eternity")
 		break;
 
+		case 70: // F, for fluctuate.
+			pH.onHotkey("fluctuate")
+		break;
+
 		case 71: // G
 			if (hasAch("ng3p51")) pH.onHotkey("ghostify")
 			else if (pH.did("galaxy")) pH.onHotkey("galaxy")
@@ -5679,7 +5685,7 @@ window.addEventListener('keyup', function(event) {
 		$.notify("Paying respects", "info")
 		giveAchievement("It pays to have respect")
 	}
-		if (Math.random() <= 1e-6) giveAchievement("keyboard broke?")
+	if (Math.random() <= 1e-6) giveAchievement("keyboard broke?")
 	if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text") return false
 }, false);
 
