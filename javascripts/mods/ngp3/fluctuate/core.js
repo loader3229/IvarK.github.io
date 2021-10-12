@@ -1,8 +1,8 @@
-let flun = {
-	unl: (force) => force ? (flun_save && flun_save.energy > 0) : flun_tmp.unl,
+let fluc = {
+	unl: (force) => force ? (fluc_save && fluc_save.energy > 0) : fluc_tmp.unl,
 
 	setup() {
-		flun_save = {
+		fluc_save = {
 			time: 0,
 			best: 999999999,
 			last10: [
@@ -14,38 +14,50 @@ let flun = {
 			],
 			energy: 0,
 		}
-		player.flun = flun_save
-		return flun_save
+		player.fluc = fluc_save
+		return fluc_save
 	},
 	compile() {
-		flun_tmp = { unl: this.unl(true) }
+		if (player.flun) {
+			player.fluc = player.flun
+			fluc_save = player.fluc
+			delete player.flun
+		}
+
+		fluc_tmp = { unl: this.unl(true) }
 		if (!tmp.ngp3) return
 
-		var data = flun_save || this.setup()
+		var data = fluc_save || this.setup()
 		this.updateTmp()
 	},
 
 	gain() {
-		let r = 1
-		return Math.max(r - flun_save.energy, 0)
+		return Math.max(fluc.targ() - fluc_save.energy, 0)
+	},
+	targ() {
+		return Math.floor((Math.log10(player.money.log10()) - 13.5) * 20 + 1)
+	},
+	req(x) {
+		if (!x) x = fluc_save.energy
+		return Decimal.pow(10, Math.pow(10, 13.5 + x / 20))
 	},
 	reset(auto, force) {
 		if (!force) {
 			if (!pH.can('fluctuate')) return
-			if (!auto && !flun.unl() && !confirm("Fluctuating resets everything that Quantum resets, but also including Quantum content. You will gain Energy in transfer, and you permanently keep your feature unlocks.")) return
+			if (!auto && !fluc.unl() && !confirm("Fluctuating resets everything that Quantum resets, but also including Quantum content. You will gain Energy in transfer, and you permanently keep your feature unlocks.")) return
 
-			for (var i = flun_save.last10.length - 1; i > 0; i--) flun_save.last10[i] = flun_save.last10[i - 1]
-			var gain = flun.gain()
-			flun_save.last10[0] = [flun_save.time, gain]
-			if (flun_save.best > flun_save.time) flun_save.best = flun_save.time
+			for (var i = fluc_save.last10.length - 1; i > 0; i--) fluc_save.last10[i] = fluc_save.last10[i - 1]
+			var gain = fluc.gain()
+			fluc_save.last10[0] = [fluc_save.time, gain]
+			if (fluc_save.best > fluc_save.time) fluc_save.best = fluc_save.time
 
-			if (flun_save.energy == 0) {
-				flun_tmp.unl = true
+			if (fluc_save.energy == 0) {
+				fluc_tmp.unl = true
 				pH.onPrestige("fluctuate")
 			}
-			flun_save.energy += gain
+			fluc_save.energy += gain
 		}
-		flun.doReset()
+		fluc.doReset()
 	},
 	doReset(auto, force) {
 		doFluctuateResetStuff()
@@ -62,12 +74,15 @@ let flun = {
 	},
 
 	updateHeader() {
-		getEl("fluctuantEnergy").textContent = getFullExpansion(flun_save.energy)
+		getEl("fluctuantEnergy").textContent = getFullExpansion(fluc_save.energy)
+		getEl("fluc_req").textContent = shorten(fluc.req())
+	},
+	updateTab() {
 	},
 	updateTmp() {
 		
 	}
 }
-let flun_tmp = {}
-let flun_save
-let FLUNCTATE = flun
+let fluc_tmp = {}
+let fluc_save
+let FLUNCTATE = fluc

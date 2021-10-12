@@ -3829,7 +3829,7 @@ setInterval(function() {
 	eterPoints2Display()
 	updateResetTierButtons()
 	updateQuarkDisplay()
-	if (tmp.ngp3) flun.updateHeader()
+	if (tmp.ngp3) fluc.updateHeader()
 	primaryStatsDisplayResetLayers()
 	crunchAnimationBtn()
 	TPAnimationBtn()
@@ -4969,7 +4969,8 @@ function gameLoop(diff) {
 	}
 	IPMultBuyUpdating()
 	doEternityButtonDisplayUpdating(diff)
-	doQuantumButtonDisplayUpdating(diff)	
+	doQuantumButtonDisplayUpdating(diff)
+	if (pH.can("fluctuate")) getEl("fluctuateReset").textContent = "Fluctuate the Quantum Mechanics for +" + getFullExpansion(fluc.gain()) + " Energy."
 	doGhostifyButtonDisplayUpdating(diff)
 
 	updateMoney();

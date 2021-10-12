@@ -944,9 +944,9 @@ function autoPresetUnlocked(x) {
 
 function setupSaveDataNGP3() {
 	//Fluctuant
-	flun_save = player.flun
-	flun_tmp.unl = flun.unl(true)
-	flun.compile()
+	fluc_save = player.fluc
+	fluc_tmp.unl = fluc.unl(true)
+	fluc.compile()
 
 	//Quantum
 	pos_save = (qu_save && qu_save.pos)

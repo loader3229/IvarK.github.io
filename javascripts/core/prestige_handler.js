@@ -37,7 +37,7 @@ var pH = {
 				getQuarkGain().gte(1)
 		},
 		fluctuate() {
-			return player.money.e >= Math.pow(10, 13.5) && flun.gain() > 0
+			return player.money.e >= Math.pow(10, 13.5) && fluc.gain() > 0
 		},
 		ghostify() {
 			return false
@@ -98,7 +98,7 @@ var pH = {
 			}
 		},
 		fluctuate() {
-			flun.reset()
+			fluc.reset()
 		},
 		ghostify() {
 			ghostify()
@@ -113,7 +113,7 @@ var pH = {
 		interreality: "irTab",
 		singularity: "sgTab",
 		quantum: "quantumtab",
-		fluctuate: "fluctuateTab",
+		fluctuate: "flucTab",
 		ghostify: "ghostify"
 	},
 	hotkeys: {
@@ -157,7 +157,7 @@ var pH = {
 			return qu_save.times >= 1
 		},
 		fluctuate() {
-			return flun.unl()
+			return fluc.unl()
 		},
 		ghostify() {
 			return player.ghostify.times >= 1

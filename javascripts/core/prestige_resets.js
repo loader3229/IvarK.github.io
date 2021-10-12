@@ -253,7 +253,7 @@ function doFluctuateResetStuff(layer = 6) {
 	QCs.reset(true)
 	pos.reset()
 
-	flun_save.time = 0
+	fluc_save.time = 0
 
 	updateQEGainTmp()
 	qMs.update()

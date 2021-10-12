@@ -41,7 +41,7 @@ let qMs = {
 		fl: {
 			name: "Fluctuant",
 			unl: () => pH.did("fluctuate"),
-			targ: () => (flun_save && flun_save.energy) || 0,
+			targ: () => (fluc_save && fluc_save.energy) || 0,
 			targDisp: getFullExpansion,
 			targKind: "Fluctuant Energy",
 			gain: (x) => x == 0 ? 0 : x * 5 + 2,

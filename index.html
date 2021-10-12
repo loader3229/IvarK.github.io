@@ -74,7 +74,7 @@
 		</div>
 		<div style="position: relative">
 			<div id="fluctuateInfo">
-				You have <b id='fluctuantEnergy'>0</b> Fluctuant Energy.
+				You have <b class="flucEne" id='fluctuantEnergy'>0</b> Fluctuant Energy.
 			</div>
 			<button id="fluctuateReset" class="storebtn" onclick="flun.reset()">Fluctuate the Quantum Mechanics for 1 Energy.</button>
 		</div>
@@ -138,7 +138,7 @@
 			<button id="irTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="interrealitybtn" onclick='showTab("irTab")'>Interreality</button>
 			<button id="sgTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="singularitybtn" onclick='showTab("sgTab")'>Singularity</button>
 			<button id="quantumtabbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="quantumbtn" onclick='showTab("quantumtab")'>Quantum</button>
-			<button id="fluctuateBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="fluctuatebtn">Fluctuate</button>
+			<button id="fluctuateBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="fluctuatebtn" onclick='showTab("flucTab")'>Fluctuate</button>
 			<button id="ghostifytabbtn" style="font-family: Typewriter; font-size: 20px" class="ghostifybtn" onclick='showTab("ghostify")'>Ghostify</button>
 		</div>
 		<div id="emptiness" class="tab" style="font-size: 150%">
@@ -1533,7 +1533,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(10/10/21a Pre-Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(10/11/21a Pre-Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -5052,6 +5052,9 @@
 			<br>
 		</div>
 		<div class="footer bottom"></div>
+	</div>
+	<div class='tab' id="flucTab">
+		<span style="font-size: 15px">Reach <b id="fluc_req" style="font-size: 20px"></b> antimatter to Fluctuate again.</span>
 	</div>
 		<div class='tab' id='ghostify'>
 			<table class="table" align="center" style="margin: auto">

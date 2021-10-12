@@ -889,6 +889,7 @@ button {
 	border-radius: 4px;
 	transition-duration: 0.2s;
 	animation: fluctuate 4s linear infinite;
+    cursor: pointer;
 }
 .fluctuatebtn:hover {
 	background: linear-gradient(#ff007f, transparent, #ff007f), linear-gradient(90deg, #ff00ff, #ff0000, #ffff00);
