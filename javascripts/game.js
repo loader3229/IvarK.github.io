@@ -4068,6 +4068,7 @@ function dimensionButtonDisplayUpdating() {
    	getEl("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || pH.did("eternity")) && (inNGM(5) || pH.shown("infinity"))) ? "" : "none"
 	getEl("tdtabbtn").style.display = (pH.shown("eternity") || inNGM(4)) ? "" : "none"
 	getEl("mdtabbtn").style.display = (!pH.did("quantum") || pH.shown("quantum")) && hasDilationStudy(6) ? "" : "none"
+	getEl("fdtabbtn").style.display = pH.shown("fluctuate") ? "" : "none"
 	getEl('toggleallmetadims').style.display = moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3]) ? "" : "none"
 }
 

@@ -620,6 +620,7 @@ function updateDimensionsDisplay() {
    	if (getEl("infinity").style.display == "block") INFINITYUPGRADESDisplay()
 	if (getEl("eternitystore").style.display == "block") ETERNITYSTOREDisplay()
    	if (getEl("quantumtab").style.display == "block") updateQuantumTabs()
+   	if (getEl("flucTab").style.display == "block") fluc.updateTab()
    	if (getEl("ghostify").style.display == "block") updateGhostifyTabs()
 }
 

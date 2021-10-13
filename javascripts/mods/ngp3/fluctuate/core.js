@@ -75,9 +75,9 @@ let fluc = {
 
 	updateHeader() {
 		getEl("fluctuantEnergy").textContent = getFullExpansion(fluc_save.energy)
-		getEl("fluc_req").textContent = shorten(fluc.req())
 	},
 	updateTab() {
+		getEl("fluc_req").textContent = shorten(fluc.req())
 	},
 	updateTmp() {
 		

@@ -1067,6 +1067,7 @@
 					<td id="tdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('timedimensions')">Time Dimensions</button></td>
 					<td id="pdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('pdims')">Paradox Dimensions</button></td>
 					<td id="mdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('metadimensions')">Meta Dimensions</button></td>
+					<td id="fdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('fdims')">Fluctuant Dimensions</button></td>
 					<td id="gdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('gdims')">Gravity Dimensions</button></td>
 					<td id="prodtabbtn"><button class="secondarytabbtn" onclick="showDimTab('production')">Production</button></td>
 				</tr>
@@ -1297,6 +1298,59 @@
 				</table>
 				<button id="metaboostauto" style="width:160px; height: 30px; font-size: 12px" onclick="toggleAutoEter('metaboost')" class="storebtn">Toggle all ON/OFF</button>
 				<button id="toggleallmetadims" style="width:300px; height: 30px; font-size: 12px" onclick="toggleAllMetaDims()" class="storebtn">Toggle all meta-dims autobuyer ON/OFF</button>
+			</div>
+			<div id="fdims" class="dimtab">
+				<span style="font-size: 15px">You have made <b id="fd_ds" style="font-size: 24px">0</b> Dimensional Shards by Fluctating.</span><br>
+				Your Fluctuant Dimensions have produced <b id="fd_me" style="font-size: 30px">0.00</b> Metastable Energy,
+				<br>which raises the potential of Replicantis by <b id="fd_eff" style="font-size: 15px">^1.00</b>.
+				  <table>
+					<tbody>
+					  <tr style="font-size: 17px">
+						  <td id="fd1" class="rel">
+							  First Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd1_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd1_buy" style="color:black; width: 195px; height: 30px" class="storebtn">Cost: 1 DS</button>
+						  </td>
+					  </tr>
+					  <tr style="font-size: 17px">
+						  <td id="fd2" class="rel">
+							  Second Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd2_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd2_buy" style="color:black; width: 195px; height: 30px" class="storebtn">Cost: 2 DS</button>
+						  </td>
+					  </tr>
+					  <tr style="font-size: 17px">
+						  <td id="fd3" class="rel">
+							  Third Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd3_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd3_buy" style="color:black; width: 195px; height: 30px" class="storebtn">Cost: 3 DS</button>
+						  </td>
+					  </tr>
+					  <tr style="font-size: 17px">
+						  <td id="fd4" class="rel">
+							  Fourth Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd4_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd4_buy" style="color:black; width: 195px; height: 30px" class="storebtn">Cost: 4 DS</button>
+						  </td>
+					  </tr>
+					</tbody>
+				</table>
 			</div>
 			<div id="gdims" class="dimtab">
 				<button class="gluonupgrade bl" onclick="teleportToBL()">Teleport to Bosonic Lab.</button>
@@ -1533,7 +1587,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(10/11/21a Pre-Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(10/12/21a Pre-Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -5055,6 +5109,14 @@
 	</div>
 	<div class='tab' id="flucTab">
 		<span style="font-size: 15px">Reach <b id="fluc_req" style="font-size: 20px"></b> antimatter to Fluctuate again.</span>
+		<table class="table" align="center" style="margin: auto">
+			<tr>
+				<td><button class="secondarytabbtn">???</button></td>
+			</tr>
+		</table>
+		<div class="flucTab">
+			This mechanic is coming soon...
+		</div>
 	</div>
 		<div class='tab' id='ghostify'>
 			<table class="table" align="center" style="margin: auto">
