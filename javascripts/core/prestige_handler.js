@@ -37,7 +37,7 @@ var pH = {
 				getQuarkGain().gte(1)
 		},
 		fluctuate() {
-			return player.money.e >= Math.pow(10, 13.5) && fluc.gain() > 0
+			return player.totalmoney.e >= Math.pow(10, 13.5) && fluc.gain() > 0
 		},
 		ghostify() {
 			return false

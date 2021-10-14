@@ -66,7 +66,7 @@ function updateSpoilers() {
 	var displayed = spoilers
 	var ngp3 = player && player.masterystudies
 	getEl("ng3pguide").style.display = ngp3 || spoilers ? "" : "none"
-	for (i=27; i>0; i--) {
+	for (i = 29; i > 0; i--) {
 		if (i != 7) {
 			if (!displayed) {
 				if (i < 5) displayed = 1
@@ -88,6 +88,10 @@ function updateSpoilers() {
 						if (i == 25 && player.masterystudies.includes("d7")) displayed = 1
 						if (i == 26 && player.masterystudies.includes("d8")) displayed = 1
 						if (i == 27 && player.quantum && player.quantum.qc && player.quantum.qc.comps >= 7) displayed = 1
+						if (i == 28 && player.quantum && player.quantum.pc && player.quantum.pc.best >= 8) displayed = 1
+					}
+					if (player.fluc) {
+						if (i == 29 && player.fluc.energy > 0) displayed = 1
 					}
 				}
 			}

@@ -1934,7 +1934,7 @@ function updateNGModeMessage(){
 		ngModeMessages = ["Due to balancing changes, you are forced to quantum and reset your TT and your best TP, but you are given  " + shorten(setTTAfterQuantum) + " TT as compensation."]
 		player.timestudy.theorem = setTTAfterQuantum
 		player.dilation.bestTP = new Decimal(0)
-		getEl('bestTP').textContent = "Your best ever Tachyon particles was 0."
+		getEl('bestTP').textContent = "Your best Tachyon particles was 0."
 	}
 }
 
@@ -2032,8 +2032,7 @@ function onLoad(noOffline) {
 		updateGalaxyControl()
 	} else if (getEl("ers_timestudies").style.display=="block") showEternityTab("timestudies",true)
 	poData=metaSave["presetsOrder"+(player.boughtDims?"_ers":"")]
-	setAndMaybeShow('bestTP',hasAch("ng3p18") || hasAch("ng3p37"),'"Your best"+(pH.did("ghostify") ? "" : " ever")+" Tachyon particles"+(pH.did("ghostify") ? " in this Ghostify" : "")+" was "+shorten(player.dilation.bestTP)+"."')
-	setAndMaybeShow('bestTPOverGhostifies',(hasAch("ng3p18") || hasAch("ng3p37")) && pH.did("ghostify"),'"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
+	setAndMaybeShow('bestTP', tmp.quUnl, () => "Your best Tachyon Particles was " + shorten(player.dilation.bestTP) + ".")
 	getEl('autoDisableQuantum').style.display=hasAch("ng3p66")?"":"none"
 	getEl("quarksAnimBtn").style.display=pH.did("quantum")&&player.masterystudies?"inline-block":"none"
 	getEl("quarksAnimBtn").textContent="Quarks: O"+(player.options.animations.quarks?"N":"FF")
@@ -2186,7 +2185,7 @@ function setupNGP31Versions() {
 	}
 	aarMod.ngp3r = 0.7
 	aarMod.ngp3Alpha = beta
-	aarMod.ngp3Build = 20211007
+	aarMod.ngp3Build = 20211013
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) player.timestudy.auto = {}
 	if (rollback) rollbackQuantum(rollback)
@@ -2718,7 +2717,6 @@ function conToDeciMS(){
 
 function conToDeciGhostify(){
 	if (player.ghostify) {
-		player.dilation.bestTPOverGhostifies = Decimal.max(player.dilation.bestTPOverGhostifies, player.dilation.bestTP)
 		player.meta.bestOverGhostifies = Decimal.max(player.meta.bestOverGhostifies, player.meta.bestOverQuantums)
 		qu_save.bigRip.bestThisRun = new Decimal(qu_save.bigRip.bestThisRun)
 		qu_save.bigRip.totalAntimatter = new Decimal(qu_save.bigRip.totalAntimatter)

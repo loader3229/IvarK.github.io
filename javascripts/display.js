@@ -613,6 +613,7 @@ function updateDimensionsDisplay() {
 		if (getEl("timedimensions").style.display == "block") updateTimeDimensions()
 		if (getEl("pdims").style.display == "block") paradoxDimDisplay()
 		if (getEl("metadimensions").style.display == "block") updateMetaDimensions()
+		if (getEl("fdims").style.display == "block") FDs.updateDisp()
 		if (getEl("gdims").style.display == "block") GDs.updateDisplayOnTick()
 	}
 	tickspeedDisplay()
@@ -1079,5 +1080,5 @@ function doFeatureProgress() {
 	percentage = percentage === undefined ? "100%" : Math.min(percentage * 100, 100).toFixed(1) + "%"
 	getEl("progressbar").style.width = percentage
 	getEl("progresspercent").textContent = percentage
-	getEl("progresspercent").setAttribute('ach-tooltip', feature ? "Reach " + req + " to unlock " + feature + ". (" + (resFormat || res) + ")" : "All features unlocked!")
+	getEl("progresspercent").setAttribute('ach-tooltip', feature ? "Reach " + req + " to unlock " + feature + ". (" + (reqFormat || res) + ")" : "All features unlocked!")
 }

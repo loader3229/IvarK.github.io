@@ -409,6 +409,9 @@ function boostReplSpeedExp(exp) {
 	//QC1: Scaling Reduction
 	if (QCs_tmp.qc1) exp = Math.pow(exp, QCs_tmp.qc1.scalingExp) * QCs_tmp.qc1.scalingMult
 
+	//Post-Boosts: Part 2
+	if (fluc.unl()) exp *= FDs_tmp.eff_rep
+
 	return exp
 }
 

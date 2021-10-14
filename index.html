@@ -76,7 +76,7 @@
 			<div id="fluctuateInfo">
 				You have <b class="flucEne" id='fluctuantEnergy'>0</b> Fluctuant Energy.
 			</div>
-			<button id="fluctuateReset" class="storebtn" onclick="flun.reset()">Fluctuate the Quantum Mechanics for 1 Energy.</button>
+			<button id="fluctuateReset" class="storebtn" onclick="fluc.reset()">Fluctuate the Quantum Mechanics for 1 Energy.</button>
 		</div>
 		<div style="position: relative">
 			<div id="ghostparticles">
@@ -747,7 +747,6 @@
 					<p id="xdp">You have <span id="exDilationAmount" style="font-size:35px; color: black">0</span> ex-dilation, <span id="exDilationDesc"></span></p>
 				</div>
 				<p id='bestTP'></p>
-				<p id='bestTPOverGhostifies'></p>
 				<table>
 					<tr>
 						<td>
@@ -1300,12 +1299,12 @@
 				<button id="toggleallmetadims" style="width:300px; height: 30px; font-size: 12px" onclick="toggleAllMetaDims()" class="storebtn">Toggle all meta-dims autobuyer ON/OFF</button>
 			</div>
 			<div id="fdims" class="dimtab">
-				<span style="font-size: 15px">You have made <b id="fd_ds" style="font-size: 24px">0</b> Dimensional Shards by Fluctating.</span><br>
-				Your Fluctuant Dimensions have produced <b id="fd_me" style="font-size: 30px">0.00</b> Metastable Energy,
-				<br>which raises the potential of Replicantis by <b id="fd_eff" style="font-size: 15px">^1.00</b>.
+				<span style="font-size: 15px">You have made <b class="flucEne" id="fd_ds" style="font-size: 24px">0</b> Dimensional Shards by Fluctating.</span><br>
+				Your Fluctuant Dimensions have produced <b class="flucEne" id="fd_me" style="font-size: 30px">0.00</b> Metastable Energy,
+				<br>which raises the potential of Replicantis by <b class="flucEne" id="fd_eff_rep" style="font-size: 15px">^1.00</b> and raising Quantum Power by <b class="flucEne" id="fd_eff_qe" style="font-size: 12px">^1.00</b>.
 				  <table>
 					<tbody>
-					  <tr style="font-size: 17px">
+					  <tr id="fd1_row" style="font-size: 17px">
 						  <td id="fd1" class="rel">
 							  First Fluctuant Dimension x1.00
 						  </td>
@@ -1313,10 +1312,10 @@
 							  <div id="fd1_amt">0</div>
 						  </td>
 						  <td align="right" width="10%">
-							  <button id="fd1_buy" style="color:black; width: 195px; height: 30px" class="storebtn">Cost: 1 DS</button>
+							  <button id="fd1_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(1)">Cost: 1 DS</button>
 						  </td>
 					  </tr>
-					  <tr style="font-size: 17px">
+					  <tr id="fd2_row" style="font-size: 17px">
 						  <td id="fd2" class="rel">
 							  Second Fluctuant Dimension x1.00
 						  </td>
@@ -1324,10 +1323,10 @@
 							  <div id="fd2_amt">0</div>
 						  </td>
 						  <td align="right" width="10%">
-							  <button id="fd2_buy" style="color:black; width: 195px; height: 30px" class="storebtn">Cost: 2 DS</button>
+							  <button id="fd2_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(2)">Cost: 2 DS</button>
 						  </td>
 					  </tr>
-					  <tr style="font-size: 17px">
+					  <tr id="fd3_row" style="font-size: 17px">
 						  <td id="fd3" class="rel">
 							  Third Fluctuant Dimension x1.00
 						  </td>
@@ -1335,10 +1334,10 @@
 							  <div id="fd3_amt">0</div>
 						  </td>
 						  <td align="right" width="10%">
-							  <button id="fd3_buy" style="color:black; width: 195px; height: 30px" class="storebtn">Cost: 3 DS</button>
+							  <button id="fd3_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(3)">Cost: 3 DS</button>
 						  </td>
 					  </tr>
-					  <tr style="font-size: 17px">
+					  <tr id="fd4_row" style="font-size: 17px">
 						  <td id="fd4" class="rel">
 							  Fourth Fluctuant Dimension x1.00
 						  </td>
@@ -1346,7 +1345,51 @@
 							  <div id="fd4_amt">0</div>
 						  </td>
 						  <td align="right" width="10%">
-							  <button id="fd4_buy" style="color:black; width: 195px; height: 30px" class="storebtn">Cost: 4 DS</button>
+							  <button id="fd4_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(4)">Cost: 4 DS</button>
+						  </td>
+					  </tr>
+					  <tr id="fd5_row" style="font-size: 17px">
+						  <td id="fd5" class="rel">
+							  Fifth Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd5_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd5_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(5)">Cost: 5 DS</button>
+						  </td>
+					  </tr>
+					  <tr id="fd6_row" style="font-size: 17px">
+						  <td id="fd6" class="rel">
+							  Sixth Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd6_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd6_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(6)">Cost: 6 DS</button>
+						  </td>
+					  </tr>
+					  <tr id="fd7_row" style="font-size: 17px">
+						  <td id="fd7" class="rel">
+							  Seventh Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd7_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd7_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(7)">Cost: 7 DS</button>
+						  </td>
+					  </tr>
+					  <tr id="fd8_row" style="font-size: 17px">
+						  <td id="fd8" class="rel">
+							  Eighth Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd8_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd8_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(8)">Cost: 8 DS</button>
 						  </td>
 					  </tr>
 					</tbody>
@@ -1587,7 +1630,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(10/12/21a Pre-Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(10/13/21a Pre-Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -2332,28 +2375,28 @@
 						</tr>
 						<tr id="achRowng3p3">
 							<td>
-								<div id="ERROR 500: INTERNAL DIMENSION ERROR" class="achievement achievementlocked" style="background-image: url(images/127.png)"></div>
+								<div id="ERROR 500: INTERNAL DIMENSION ERROR" class="achievement achievementlocked" style="background-image: url(images/ng3p/41.png)" ach-tooltip="Reach Quantum without 2nd - 8th Meta Dimensions while in QC3. Reward: Fluctuant Dimensions produce 50% faster."></div>
 							</td>
 							<td>
-								<div id="Quantum+ Reached!" class="achievement achievementlocked" style="background-image: url(images/128.png)" ach-tooltip="(Temporary name) Fluctuate. Reward: Keep your dilation upgrade autobuyer, and Fluctuant Energy boosts dilated time."></div>
+								<div id="Feel the Momentum" class="achievement achievementlocked" style="background-image: url(images/ng3p/42.png)" ach-tooltip="Fluctuate. Reward: Keep your dilation upgrade autobuyer, and anti-Quarks are greatly stronger, but you gain less aQ."></div>
 							</td>
 							<td>
-								<div id="Never make paradoxes!" class="achievement achievementlocked" style="background-image: url(images/129.png)"></div>
+								<div id="Never make paradoxes!" class="achievement achievementlocked" style="background-image: url(images/ng3p/43.png)" ach-tooltip="Get 1 String Power less than -1.5. Reward: +3 Milestone Points."></div>
 							</td>
 							<td>
-								<div id="ng3p34" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
+								<div id="String Eversion" class="achievement achievementlocked" style="background-image: url(images/ng3p/44.png)" ach-tooltip="Get 2 positive String Powers greater than 2.5. Reward: You gain 20% more Vibration Energy."></div>
 							</td>
 							<td>
-								<div id="ng3p35" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
+								<div id="Bullseye!" class="achievement achievementlocked" style="background-image: url(images/ng3p/45.png)" ach-tooltip="Get 1 String Power between -1 and -0.9. Reward: ^1.02 to Quantum Power. (limits to ^3)"></div>
 							</td>
 							<td>
-								<div id="ng3p36" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
+								<div id="MAXIMUM OVERCHARGE" class="achievement achievementlocked" style="background-image: url(images/ng3p/46.png)" ach-tooltip="[TBD]"></div>
 							</td>
 							<td>
-								<div id="No dilation means no production." class="achievement achievementlocked" style="background-image: url(images/133.png)"><br></div>
+								<div id="No dilation means no production." class="achievement achievementlocked" style="background-image: url(images/ng3p/47.png)"><br></div>
 							</td>
 							<td>
-								<div id="I don't want you to live anymore." class="achievement achievementlocked" style="background-image: url(images/134.png)"></div>
+								<div id="I don't want you to live anymore." class="achievement achievementlocked" style="background-image: url(images/ng3p/48.png)" ach-tooltip="[TBD]"></div>
 							</td>
 						</tr>
 						<!--
@@ -4722,6 +4765,10 @@
 						(You have <span id="qMs_fl_target" style="font-size: 15px">0</span> Fluctuant Energy)<br>
 						<span id="qMs_fl_next">0</span>
 					</td>
+					<td class="cyan" id="qMs_ach_cell">
+						<b style="font-size: 25px">Achievement</b>
+						<span id="qMs_ach_points" style="font-size: 20px"></span>
+					</td>
 				</tr>
 			</table>
 			<p id="qMs_next"></p>
@@ -5108,7 +5155,7 @@
 		<div class="footer bottom"></div>
 	</div>
 	<div class='tab' id="flucTab">
-		<span style="font-size: 15px">Reach <b id="fluc_req" style="font-size: 20px"></b> antimatter to Fluctuate again.</span>
+		<span style="font-size: 15px">Reach <b class="flucEne" id="fluc_req" style="font-size: 20px"></b> antimatter to Fluctuate again.</span>
 		<table class="table" align="center" style="margin: auto">
 			<tr>
 				<td><button class="secondarytabbtn">???</button></td>

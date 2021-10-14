@@ -188,7 +188,6 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 		tachyonParticles: new Decimal(QCs.perkActive(3) ? 1 : 0),
 		dilatedTime: new Decimal(0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
-		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
 		nextThreshold: new Decimal(1000),
 		freeGalaxies: 0,
 		upgrades: newUpgs,
@@ -246,14 +245,15 @@ function doFluctuateResetStuff(layer = 6) {
 		gb: new Decimal(0),
 		br: new Decimal(0),
 	}
-	qu_save.entLvl = 0
+	if (qMs.tmp.amt < 28) qu_save.entLvl = 0
 
-	str.reset()
-	PCs.reset()
-	QCs.reset(true)
-	pos.reset()
+	if (qMs.tmp.amt < 30) str.reset()
+	if (qMs.tmp.amt < 29) PCs.reset()
+	QCs.reset(qMs.tmp.amt < 28)
+	if (qMs.tmp.amt < 29) pos.reset()
 
 	fluc_save.time = 0
+	for (var i = 1; i <= 8; i++) FDs_save[i].amt = new Decimal(FDs_save[i].bgt)
 
 	updateQEGainTmp()
 	qMs.update()
@@ -641,10 +641,9 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 		studies: bm ? player.dilation.studies : [],
 		active: false,
 		times: 0,
-		tachyonParticles: player.ghostify.milestones >= 16 ? player.dilation.bestTPOverGhostifies : new Decimal(0),
+		tachyonParticles: new Decimal(0),
 		dilatedTime: new Decimal(0),
-		bestTP: player.ghostify.milestones >= 16 ? player.dilation.bestTPOverGhostifies : new Decimal(0),
-		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
+		bestTP: new Decimal(0),
 		nextThreshold: new Decimal(1000),
 		freeGalaxies: 0,
 		upgrades: bm ? player.dilation.upgrades : [],
@@ -769,7 +768,6 @@ function doQuantumGhostifyResetStuff(implode, bm){
 		getEl('toggleautoquantummode').style.display = "none"
 	}
 
-	getEl('bestTP').textContent = "Your best Tachyon particles in this Ghostify was " + shorten(player.dilation.bestTP) + "."
 	getEl("quantumbtn").style.display = "none"
 	updateColorCharge()
 	updateGluonsTabOnUpdate("prestige")

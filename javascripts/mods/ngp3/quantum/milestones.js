@@ -2,7 +2,7 @@
 let qMs = {
 	tmp: {},
 	data: {
-		types: ["sr", "en", "rl", "ch", "fl"],
+		types: ["sr", "en", "rl", "ch", "fl", "ach"],
 		sr: {
 			name: "Speedrun",
 			targ: () => qu_save.best,
@@ -17,8 +17,16 @@ let qMs = {
 			targ: () => qu_save.bestEnergy || 0,
 			targDisp: shorten,
 			targKind: "energy",
-			gain: (x) => Math.sqrt(Math.max(x - 0.5, 0)) * 3,
-			nextAt: (x) => Math.pow(x / 3, 2) + 0.5
+			gain(x) {
+				x = Math.sqrt(Math.max(x - 0.5, 0)) * 3
+				if (x > 200) x = Math.log2(x / 50) * 100
+				return x
+			},
+			nextAt(x) {
+				if (x > 200) x = Math.pow(2, x / 100) * 50
+				x = Math.pow(x / 3, 2) + 0.5
+				return x
+			}
 		},
 		rl: {
 			name: "Relativistic",
@@ -46,6 +54,15 @@ let qMs = {
 			targKind: "Fluctuant Energy",
 			gain: (x) => x == 0 ? 0 : x * 5 + 2,
 			nextAt: (x) => x == 0 ? 1 : Math.ceil((x - 2) / 5)
+		},
+		ach: {
+			name: "Achievement",
+			unl: () => qMs.data.ach.gain() > 0,
+			gain() {
+				let x = 0
+				if (hasAch("ng3p33")) x += 3
+				return x
+			}
 		}
 	},
 	update() {
@@ -64,7 +81,7 @@ let qMs = {
 			var typeData = qMs.data[type]
 			var unl = typeData.unl ? typeData.unl() : true
 
-			data["targ_" + type] = typeData.targ()
+			data["targ_" + type] = evalData(typeData.targ)
 			data["amt_" + type] = Math.min(Math.max(Math.floor(typeData.gain(data["targ_" + type])), 0), 1e3)
 			data.points += data["amt_" + type]
 		}
@@ -128,9 +145,11 @@ let qMs = {
 			var unl = typeData.unl ? typeData.unl() : true
 
 			if (unl) {
-				getEl("qMs_" + type + "_target").textContent = typeData.targDisp(qMs.tmp["targ_" + type])
 				getEl("qMs_" + type + "_points").textContent = "+" + getFullExpansion(qMs.tmp["amt_" + type]) + " MP"
-				getEl("qMs_" + type + "_next").textContent = qMs.tmp["amt_" + type] > 50 ? "" : "(Next at: " + typeData.targDisp(typeData.nextAt(qMs.tmp["amt_" + type] + 1)) + " " + typeData.targKind + ")"
+				if (typeData.targ) {
+					getEl("qMs_" + type + "_target").textContent = typeData.targDisp(qMs.tmp["targ_" + type])
+					getEl("qMs_" + type + "_next").textContent = qMs.tmp["amt_" + type] > 50 ? "" : "(Next at: " + typeData.targDisp(typeData.nextAt(qMs.tmp["amt_" + type] + 1)) + " " + typeData.targKind + ")"
+				}
 			}
 		}
 
@@ -296,17 +315,17 @@ let qMs = {
 		effGot: () => "Unlock the autobuyer for Replicated Expanders."
 	},
 	28: {
-		req: 530,
+		req: 430,
 		eff: () => "Keep Quantum Challenges and Entangled Boosts.",
 		effGot: () => "You now keep Quantum Challenges and Entangled Boosts."
 	},
 	29: {
-		req: 570,
+		req: 450,
 		eff: () => "Keep Paired Challenges and Positrons.",
 		effGot: () => "You now keep Paired Challenges and Positrons."
 	},
 	30: {
-		req: 600,
+		req: 500,
 		eff: () => "Keep your Vibration Energy.",
 		effGot: () => "You now keep your Vibration Energy."
 	},

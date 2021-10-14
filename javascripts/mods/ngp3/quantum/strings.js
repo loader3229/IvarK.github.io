@@ -1,5 +1,5 @@
 let str = {
-	unl: (force) => force ? (PCs_save && PCs_save.best >= 8) : str_tmp.unl,
+	unl: (force) => force ? (PCs_save && PCs_save.best >= 8) || fluc.unl() : str_tmp.unl,
 
 	//Data
 	data: {
@@ -135,6 +135,7 @@ let str = {
 		let r = qu_save.quarkEnergy.add(1).log10()
 		r *= Math.log10(QCs_save.qc5.add(1).log10() + 1)
 		r *= Math.pow(Math.max(r, 4), PCs_save.lvl / 8 - 1)
+		if (hasAch("ng3p34")) r *= 1.2
 		return r
 	},
 	veUnspent() {

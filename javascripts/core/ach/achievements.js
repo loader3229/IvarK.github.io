@@ -169,11 +169,11 @@ const allAchievements = {
         ng3pr18 : "Get rid of you by yourself...",
 
         ng3p31 : "ERROR 500: INTERNAL DIMENSION ERROR",
-        ng3p32 : "Quantum+ Reached!", // UNNAMED ACHIEVEMENT
+        ng3p32 : "Feel the Momentum",
         ng3p33 : "Never make paradoxes!",
-        ng3p34 : "ng3p35", // UNDETERMINED ACHIEVEMENT
-        ng3p35 : "ng3p35", // UNDETERMINED ACHIEVEMENT
-        ng3p36 : "ng3p36", // UNDETERMINED ACHIEVEMENT
+        ng3p34 : "String Eversion",
+        ng3p35 : "Bullseye!",
+        ng3p36 : "MAXIMUM OVERCHARGE",
         ng3p37 : "No dilation means no production.",
         ng3p38 : "I don't want you to live anymore.", // NO REWARD
 
@@ -436,11 +436,6 @@ function giveAchievement(name, noUpdate) {
 		if (aarMod.ngudpV) getEl("blackholeAuto").style.display = ""
 	}
 	if (name == "It will never be enough") getEl('replicantibulkmodetoggle').style.display="inline-block"
-	if (name == "I already got rid of you..." || name == "No dilation means no production.") {
-		player.dilation.bestTP = Decimal.max(player.dilation.tachyonParticles, player.dilation.bestTP)
-		getEl('bestTP').style.display = ""
-		getEl('bestTP').textContent = "Your best ever Tachyon particles was "+shorten(player.dilation.bestTP)+"."
-	}
 	if (name == "Twice in a row") {
 		$.notify("Congratulations! You have unlocked Quantum Challenge 8!")
 		QCs.updateTmp()

@@ -1776,6 +1776,7 @@ function changeSaveDesc(saveId, placement) {
 			"<span style='font-size: 16px'>" + shortenMoney(new Decimal(temp.totalmoney)) + " antimatter</span><br>"
 
 		var isSaveGhostified = temp.ghostify ? temp.ghostify.times > 0 : false
+		var isSaveFluctuated = temp.fluc ? temp.fluc.energy > 0 : false
 		var isSaveQuantumed = temp.quantum ? temp.quantum.times > 0 : false
 
 		msg += "<span style='font-size: 12px'>"
@@ -1795,6 +1796,8 @@ function changeSaveDesc(saveId, placement) {
 				for (var l=0;l<8;l ++ ) lights += data.lights[l]
 				msg += "Ghostly Photons: " + shortenDimensions(new Decimal(data.amount)) + ", Dark Matter: " + shortenDimensions(new Decimal(data.darkMatter)) + ", Ghostly Rays: " + shortenDimensions(new Decimal(data.ghostlyRays)) + ", Lights: " + getFullExpansion(lights) + ", Light Empowerments: " + getFullExpansion(data.enpowerments)
 			} else msg += "Ghost Particles: " + shortenDimensions(new Decimal(temp.ghostify.ghostParticles)) + ", Neutrinos: " + shortenDimensions(Decimal.add(temp.ghostify.neutrinos.electron, temp.ghostify.neutrinos.mu).add(temp.ghostify.neutrinos.tau).round())
+		} else if (isSaveFluctuated) {
+			msg += "Fluctuant Energy: " + getFullExpansion(temp.fluc.energy)
 		} else if (isSaveQuantumed) {
 			if (!temp.masterystudies) msg += "Endgame of NG++"
 			else {
@@ -1815,7 +1818,7 @@ function changeSaveDesc(saveId, placement) {
 			if (!mastery) temp2 = "Tachyon particles: " + shortenMoney(new Decimal(temp.dilation.totalTachyonParticles)) +
 				", Dilated time: " + shortenMoney(new Decimal(temp.dilation.dilatedTime))
 
-			if (temp.dilation.studies.includes(6)) temp2 += ", Meta-antimatter: " + shortenMoney(new Decimal(temp.meta.bestAntimatter))
+			if (temp.dilation.studies.includes(6)) temp2 += (mastery ? "" : ", ") + "Meta-antimatter: " + shortenMoney(new Decimal(temp.meta.bestAntimatter))
 			else if (!temp.dilation.upgrades.includes(10)) temp2 = "Eternity points: " + shorten(new Decimal(temp.eternityPoints)) + ", " + temp2
 			else temp2 = "Time Theorems: " + shortenMoney(getTotalTT(temp)) + ", " + temp2
 			if (mastery) temp2 += ", Mastery Studies: " + getFullExpansion(temp.masterystudies.length)
@@ -2047,7 +2050,7 @@ function showNextModeMessage(click) {
 			"<br><br>Thank you for testing NG+3R!<br>~Aarex"
 		) : (
 			"<b class='lime'>Welcome to NG+3 Respecced v" + ver + "!</b><br>This update " + evalData(ngp3Welcomes.verbs[ver] || "introduces") + "...<br><br>" +
-			(ngp3Welcomes.msgs[ver] || "???") +
+			evalData(ngp3Welcomes.msgs[ver] || "???") +
 			"<br><br><b>Discord</b>: <a href='http://discord.gg/KsjcgskgTj' target='_newtab'>http://discord.gg/KsjcgskgTj</a>" +
 			"<br><br>Thank you for playing NG+3R!<br>~Aarex" +
 			"<br><br>Goal: " + evalData(ngp3Welcomes.goals[ver])
@@ -2265,10 +2268,7 @@ function onNotationChange() {
 		GDs.updateDisplay()
 	}
 	getEl("achmultlabel").textContent = "Current achievement multiplier on each Dimension: " + shortenMoney(player.achPow) + "x"
-	if (hasAch("ng3p18") || hasAch("ng3p37")) {
-		getEl('bestTP').textContent="Your best"+(pH.did("ghostify") ? "" : " ever")+" Tachyon particles"+(pH.did("ghostify") ? " in this Ghostify" : "")+" was "+shorten(player.dilation.bestTP)+"."
-		setAndMaybeShow('bestTPOverGhostifies',pH.did("ghostify"),'"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
-	}
+	setAndMaybeShow('bestTP', tmp.quActive, () => "Your best Tachyon Particles was " + shorten(player.dilation.bestTP) + ".")
 }
 
 function setNotation(id) {
@@ -3984,7 +3984,7 @@ function incrementTimesUpdating(diffStat){
 	player.totalTimePlayed += diffStat
 
 	if (qu_save && implosionCheck !== 2) qu_save.time += diffStat
-	if (QCs.done(1)) {
+	if (QCs.done(1) || pH.did("fluctuate")) {
 		QCs_save.qc1.time += diffStat
 		QCs_save.qc1.timeLast += diffStat
 	}
@@ -4020,6 +4020,7 @@ function normalDimUpdating(diff){
 	amProd = amProd.times(diff)
 	player.money = player.money.plus(amProd)
 	player.totalmoney = player.totalmoney.plus(amProd)
+	if (fluc.unl()) fluc_save.bestAM = player.money.max(fluc_save.bestAM)
 }
 
 function checkForInfinite() {
@@ -4500,8 +4501,8 @@ function doQuantumButtonDisplayUpdating(diff){
 	var showGain = !isQuantumFirst() ? "QK" : ""
 	getEl("quantumbtnFlavor").textContent = showGain != "" ? "" : QCs.inAny() ? "The unseening has been detected... Complete this challenging experiment!" : "The spacetime has been conceptualized... It's time to go quantum!"
 	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain " + shortenDimensions(quarkGain()) + " anti-Quark" + (quarkGain().eq(1) ? "." : "s.") : ""
-	getEl("quantumbtnQKNextAt").textContent = showGain == "QK" && currentQKmin.lt(10) ? "Next at " + shorten(getQuantumReqSource()) + " / " + shorten(quarkGainNextAt()) + " MA" : ""
-	if (showGain != "QK" || currentQKmin.gt(1e30)) {
+	getEl("quantumbtnQKNextAt").textContent = showGain == "QK" && currentQKmin.lt(10) && !pH.did("fluctuate") ? "Next at " + shorten(getQuantumReqSource()) + " / " + shorten(quarkGainNextAt()) + " MA" : ""
+	if (showGain != "QK" || currentQKmin.gt(1e30) || pH.did("fluctuate")) {
 		getEl("quantumbtnRate").textContent = ''
 		getEl("quantumbtnPeak").textContent = ''
 	} else if (currentQKmin.gt(1e6)) {
@@ -4819,14 +4820,11 @@ function ngp3DilationUpdating(){
 function setTachyonParticles(x) {
 	player.dilation.tachyonParticles = new Decimal(x)
 	if (!player.dilation.active) player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
-	if (tmp.ngp3) qu_save.notrelative = false
-	if (tmp.quUnl) {
+	if (tmp.ngp3) {
+		qu_save.notrelative = false
 		player.dilation.bestTP = Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles)
-		player.dilation.bestTPOverGhostifies = player.dilation.bestTPOverGhostifies.max(player.dilation.bestTP)
-
-		getEl('bestTP').textContent = "Your best" + (pH.did("ghostify") ? "" : " ever")+" Tachyon particles" + (pH.did("ghostify") ? " in this Ghostify" : "") + " was " + shorten(player.dilation.bestTP) + "."
-		setAndMaybeShow('bestTPOverGhostifies', pH.did("ghostify"), '"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
 	}
+	setAndMaybeShow('bestTP', tmp.quUnl, () => "Your best Tachyon Particles was " + shorten(player.dilation.bestTP) + ".")
 }
 
 function passiveQuantumLevelStuff(diff){
@@ -4939,6 +4937,7 @@ function gameLoop(diff) {
 				if (player.ghostify.ghostlyPhotons.unl) ghostlyPhotonsUpdating(diff) // Ghostly Photons
 				ghostifyAutomationUpdating(diff)
 			}
+			if (pH.did("fluctuate")) fluc.update(diff)
 			if (pH.did("quantum")) quantumOverallUpdating(diff)
 			preQuantumAutoNGP3(diff * 10)
 		}

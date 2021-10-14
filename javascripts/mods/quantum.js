@@ -87,15 +87,14 @@ function quarkGain(base) {
 	if (!tmp.ngp3) return Decimal.pow(10, ma.log(10) / Math.log10(Number.MAX_VALUE) - 1).floor()
 
 	let log = Math.max(ma.div(maReq).log(2) * 5 / 8192, 0)
-	let logExp = 3
-	log = Math.pow(log + 1, logExp) - 1
-
+	log = Math.pow(log + 1, 3) - 1
 	if (enB.active("pos", 11)) log += enB_tmp.pos11.gain.log10()
 	
 	let r = Decimal.pow(10, log)
 	if (!base) {
 		r = r.pow(getAQGainExp(r))
 		if (hasAch("ng3pr16")) r = r.times(3)
+		if (hasAch("ng3p32")) r = Decimal.pow(r.log10(), 6).times(10).add(1)
 	}
 	return r
 }
@@ -106,9 +105,7 @@ function quarkGainNextAt(qk) {
 	qk = Decimal.add(qk, 1).log10()
 	if (enB.active("pos", 11)) qk -= player.eternityPoints.max(1).log10() * enB_tmp.pos11
 	if (qk > 3 && PCs.unl()) qk = Math.pow(qk / 3, 1 / PCs_tmp.eff2) * 3
-
-	let logExp = 3
-	qk = Math.pow(qk + 1, 1 / logExp) - 1
+	qk = Math.pow(qk + 1, 1 / 3) - 1
 
 	return Decimal.pow(2, qk * 8192 / 5).times(getQuantumReq())
 }

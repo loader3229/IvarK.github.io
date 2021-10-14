@@ -187,7 +187,7 @@ var QCs = {
 				data.lim = data.lim.max(Decimal.pow(10, 1.5e6 * distantBoosts))
 
 				var release = 1
-				if (futureBoost("replicanti_release") && dev.boosts.tmp[6]) release *= dev.boosts.tmp[6]
+				if (fluc.unl()) release *= FDs_tmp.eff_rep
 				if (release > 1) {
 					data.lim = data.lim.pow(release)
 					data.scalingMult *= release

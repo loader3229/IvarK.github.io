@@ -515,6 +515,10 @@ option {
         color: #7f7;
     }
 }
+.flucEne {
+    color: #f7b;
+    text-shadow: 0 0 5px #f7b;
+}
 #preonEnergy, #quarkPower, #quarkPowerThreshold {
     color: #ccc !important;
     text-shadow: 0 0 5px #f0f;

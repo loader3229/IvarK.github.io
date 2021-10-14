@@ -127,7 +127,7 @@ var PCs = {
 		this.resetButtons()
 	},
 
-	unl: (force) => force ? (QCs_save && QCs.done(7)) : PCs_tmp.unl,
+	unl: (force) => force ? (QCs_save && QCs.done(7)) || fluc.unl() : PCs_tmp.unl,
 	updateTmp() {
 		if (!PCs_tmp.unl) return
 		if (!PCs.data.setup) this.setupData()
@@ -187,7 +187,7 @@ var PCs = {
 
 		//Boosts
 		var eff = (PCs_save.lvl - 1) / 28
-		data.eff1 = futureBoost("quantum_superbalancing") ? 3 : 1 + 0.75 * eff
+		data.eff1_base = 1 + 0.75 * eff
 		data.eff1_start = futureBoost("quantum_superbalancing") ? 1000 : tmp.ngp3_mul ? 125 : 150
 		data.eff2 = Math.sqrt(eff) / 4
 
@@ -479,9 +479,6 @@ var PCs = {
 		getEl("pc_info").style.display = PCs_save.lvl == 1 ? "none" : ""
 		getEl("pctabbtn_milestone").style.display = PCs_save.lvl == 1 ? "none" : ""
 
-		getEl("pc_eff1").textContent = "^" + PCs_tmp.eff1.toFixed(3)
-		getEl("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
-
 		getEl("pc_enter").style.display = PCs_tmp.pick ? "none" : ""
 		getEl("pc_omega").style.display = PCs_tmp.pick >= 50 ? "" : "none"
 		getEl("pc_penalty").style.display = tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp ? "none" : ""
@@ -510,6 +507,8 @@ var PCs = {
 		if (!PCs_tmp.unl) return
 		if (!PCs.data.setupHTML) return
 
+		getEl("pc_eff1").textContent = "^" + enB.glu.boosterExp(0, true).toFixed(3)
+		getEl("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
 		getEl("pc_eff2").textContent = "^" + shorten(getAQGainExp())
 	},
 	showMilestones(qc) {

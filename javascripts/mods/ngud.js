@@ -341,7 +341,6 @@ function reverseDilation () {
 		dilatedTime: new Decimal(0),
 		totalTachyonParticles: new Decimal(0),
 		bestTP: player.dilation.bestTP,
-		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
 		nextThreshold: new Decimal(1000),
 		freeGalaxies: 0,
 		upgrades: [],

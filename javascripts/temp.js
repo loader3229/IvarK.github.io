@@ -211,6 +211,7 @@ function updatePPTITemp() {
 }
 
 function updateNGP3TempStuff(init) {
+	if (pH.did("fluctuate")) fluc.updateTmpOnTick()
 	if (tmp.quActive) {
 		if (qu_save.breakEternity.unlocked) updateBreakEternityUpgradesTemp()
 		if (player.masterystudies.includes("d14")) updateBigRipUpgradesTemp()

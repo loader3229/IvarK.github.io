@@ -291,15 +291,32 @@ function preHiggsNGp3AchieveCheck() {
 	}
 	if (QCs.inAny() && str_tmp.vibrated === 0 && player.meta.bestAntimatter.e >= 1.6e3) giveAchievement("Get rid of you by yourself...")
 
-	if (false) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
+	if (pH.can("quantum") && QCs.in(3) && player.meta[2].bought == 0 && player.meta[3].bought == 0 && player.meta[4].bought == 0 && player.meta[5].bought == 0 && player.meta[6].bought == 0 && player.meta[7].bought == 0 && player.meta[8].bought == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
+	if (pH.did("fluctuate")) giveAchievement("Feel the Momentum")
+	if (str.unl() && (str_tmp.powers[1] * str_tmp.str < -1.5 || str_tmp.powers[2] * str_tmp.str < -1.5 || str_tmp.powers[3] * str_tmp.str < -1.5)) giveAchievement("Never make paradoxes!")
+	if (str.unl() && !hasAch("ng3p44")) {
+		var cond1 = 0
+		var cond2 = 0
+		for (var i = 1; i <= 3; i++) {
+			if (str_tmp.powers[i] * str_tmp.str > 2.5) cond1++
+			if (str_tmp.powers[i] > 0) cond2++
+		}
+		if (cond1 == 2 && cond2 == 2) giveAchievement("String Eversion")
+	}
+	if (str.unl() && !hasAch("ng3p45")) {
+		for (var i = 1; i <= 3; i++) {
+			if (str_tmp.powers[i] > -1 && str_tmp.powers[i] < -0.9) {
+				giveAchievement("Bullseye!")
+				break
+			}
+		}
+	}
 	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")
-	if (player.meta.antimatter.e >= 1/0 && player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] == 0 && player.dilation.upgrades.length == 0) giveAchievement("Never make paradoxes!")
 	if (player.infinityPoints.gte(Decimal.pow(Number.MAX_VALUE, 1000)) && ableToGetRid5) giveAchievement("I don't want you to live anymore.")
 
-	if (pH.did("fluctuate")) giveAchievement("Quantum+ Reached!")
 	if (player.dilation.dilatedTime.log10() >= 411 && qu_save.notrelative) giveAchievement("Time is not relative")
 	if (!hasAch("ng3p42")) {
-		for (d = 2; d < 9; d++) {
+		for (var d = 2; d < 9; d++) {
 			if (player[TIER_NAMES[d]+"Amount"].gt(0) || player["infinityDimension"+d].amount.gt(0) || player["timeDimension"+d].amount.gt(0) || player.meta[d].amount.gt(0)) break
 			else if (player.money.log10() >= 1.6e12 && d == 8) giveAchievement("ERROR 404: DIMENSIONS NOT FOUND")
 		}

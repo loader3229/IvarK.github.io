@@ -381,21 +381,18 @@ function setR16p5Tooltip() {
 }
 
 function setR17Tooltip() {
-	// Row 17 (ng3p3) (4/8)
-	let internal = getEl("ERROR 500: INTERNAL DIMENSION ERROR")
+	// Row 17 (ng3p3) (1/8)
+	//ng3p31/////
 	//ng3p32/////
-	let noparadox = getEl("Never make paradoxes!")
+	//ng3p33/////
 	//ng3p34/////
 	//ng3p35/////
 	//ng3p36/////
 	let noDil = getEl("No dilation means no production.")
-	let dontWant = getEl("I don't want you to live anymore.")
+	//ng3p38/////
 
 	//ACHIEVEMENT ROW 17
-	internal.setAttribute('ach-tooltip', "???")
-	noDil.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 1/0)) + " replicanti without having Tachyon Particles. Reward: You start Quantums with the square root of your best TP as your Tachyon particle amount.")
-	dontWant.setAttribute('ach-tooltip', "Reach " + shorten(Decimal.pow(Number.MAX_VALUE, 1000)) + " IP while dilated, in QC2, and without having studies and First Dimensions during your current Eternity.")
-	noparadox.setAttribute('ach-tooltip', "Reach " + shortenCosts(1/0) + " MA without dilation upgrades. Reward: [TBD]")
+	noDil.setAttribute('ach-tooltip', "Reach " + "[TBD]" /*shortenCosts(Decimal.pow(10, 1/0))*/ + " replicanti without having Tachyon Particles. Reward: [TBD]")
 }
 
 function setR18Tooltip() {

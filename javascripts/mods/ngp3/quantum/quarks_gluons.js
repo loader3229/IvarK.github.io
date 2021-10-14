@@ -1,4 +1,4 @@
-//Quantum worth
+//Quantum Worth + Eff
 var quantumWorth
 function updateQuantumWorth(mode) {
 	if (!tmp.ngp3) return
@@ -29,6 +29,16 @@ function updateQuantumWorth(mode) {
 		}
 	}
 	if (mode != "quick") for (var e = 1; e <= 2; e++) getEl("quantumWorth" + e).textContent = shortenDimensions(quantumWorth)
+}
+
+function getQuantumEff(x) {
+	if (hasAch("ng3p32")) return Decimal.pow(10, Decimal.div(x, 10).pow(1/6))
+	return x
+}
+
+function getQuantumLogEff(x, mul = 1, base = 10) {
+	if (hasAch("ng3p32")) return Decimal.times(x, mul / 10).pow(1/6).div(Math.log10(base)).toNumber()
+	return Decimal.times(x, mul).add(1).log(base)
 }
 
 //Quark Assertment Machine
@@ -181,7 +191,7 @@ function updateColorCharge(update) {
 
 	var colorPowers = {}
 	for (var i = 0; i < 3; i++) {
-		var ret = Decimal.div(usedQuarks[colors[i]], 2).add(1).log10()
+		var ret = getQuantumLogEff(usedQuarks[colors[i]], 0.5)
 		colorPowers[colors[i]] = new Decimal(ret)
 	}
 
@@ -215,7 +225,7 @@ function updateColorCharge(update) {
 				)
 			: 1).times(chargeMult)
 		}
-		colorCharge.sub.eff = Math.log10(colorCharge.sub.charge.add(1).log(2) / 2 + 1) * 1.5 + 1
+		colorCharge.sub.eff = Math.log10(getQuantumLogEff(colorCharge.sub.charge, 1, 4) + 1) * 1.5 + 1
 		if (futureBoost("quantum_superbalancing")) colorCharge.sub.eff = colorCharge.sub.charge.sqrt().div(1000).max(colorCharge.sub.eff)
 		chargeMult = chargeMult.times(colorCharge.sub.eff)
 	} else delete colorCharge.sub
@@ -339,7 +349,7 @@ function getBaseQuantumEnergy() {
 
 function getQEQuarksPortion() {
 	let exp = qu_save.expEnergy
-	return Decimal.pow(quantumWorth.add(1).log10(), exp).times(1.25)
+	return Decimal.pow(getQuantumLogEff(quantumWorth), exp).times(1.25)
 }
 
 function getQEGluonsPortion() {
@@ -351,7 +361,7 @@ function getQEGluonsPortion() {
 	}
 
 	let exp = qu_save.expEnergy
-	return Decimal.pow(qu_save.gluons[glu].add(1).log10(), exp).times(tmp.ngp3_mul ? 1 : 0.25)
+	return Decimal.pow(getQuantumLogEff(qu_save.gluons[glu]), exp).times(tmp.ngp3_mul ? 1 : 0.25)
 }
 
 function getQuantumEnergyMult() {
@@ -438,7 +448,7 @@ function updateGluonicBoosts() {
 }
 
 function getGluonEffBuff(x) {
-	let r = Math.log10(Decimal.add(x, 1).log10() * 3 + 1)
+	let r = Math.log10(getQuantumLogEff(x) * 3 + 1)
 	if (tmp.ngp3_mul) r *= 1.5
 	return r + 1
 }
@@ -596,7 +606,7 @@ var enB = {
 		name: "Entangled",
 		engName: "Quantum Energy",
 		unl() {
-			return tmp.quActive && Decimal.add(qu_save.gluons.rg, qu_save.gluons.gb).add(qu_save.gluons.br).gt(0)
+			return (tmp.quActive && Decimal.add(qu_save.gluons.rg, qu_save.gluons.gb).add(qu_save.gluons.br).gt(0)) || fluc.unl()
 		},
 
 		costs: [1,4,6,7,8,9,10,12,13,15,36,40,45,60,75,80],
@@ -643,16 +653,19 @@ var enB = {
 
 			return amt
 		},
-		boosterExp(amt) {
+		boosterExp(amt, display) {
 			amt = amt || this.target(undefined, true)
-			if (PCs.unl() && amt.gte(PCs_tmp.eff1_start)) {
-				var exp = PCs_tmp.eff1
-				return exp
+			var exp = 1
+			if (hasAch("ng3p35")) exp = 1.02
+			if (PCs.unl() && (display || amt.gte(PCs_tmp.eff1_start))) {
+				exp *= PCs_tmp.eff1_base
+				if (pH.did("fluctuate")) exp *= FDs_tmp.eff_qe
+				if (pH.did("quantum_superbalancing")) exp = 3
 			}
-			return 1
+			return Math.min(exp, 3)
 		},
 		gluonEff(x) {
-			let l = Decimal.add(x, 1).log10()
+			let l = getQuantumLogEff(x)
 			return Math.min(Math.pow(Math.log2(l + 2), 2 * (qu_save.expEnergy || 0)), 5e3)
 		},
 
