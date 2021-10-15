@@ -130,8 +130,8 @@ let FDs = {
 		if (!fluc.unl()) return
 		var eng_log = FDs_save.meta.add(1).log10()
 		FDs_tmp = {
-			eff_rep: Math.pow(1.015, eng_log),
-			eff_qe: (3 / 1.75 - 1) * Math.min(eng_log / 100, 1) + 1
+			eff_rep: Math.pow(1.01, eng_log),
+			eff_qe: (3 / 1.75 - 1) * Math.min(eng_log / 150, 1) + 1
 		}
 	},
 	updateDisp() {
