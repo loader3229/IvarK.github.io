@@ -1097,3 +1097,21 @@ setTimeout(function() {
 	getEl("plAniBg").style.display = "none"
 }, 5000)
 */
+
+function endGoalAfterStrings(x, slog = 0) {
+	let dMult = 13.5
+	let tBase = 14/13.5
+	let tExp = x
+	let qExp = 1.24
+	if (x > 4) tExp = (Math.pow(qExp, x - 4) - 1) / Math.log(qExp) + 4
+
+	if (slog >= 3) {
+		return tExp * Math.log10(tBase) + Math.log10(dMult)
+	} else {
+		let dExp = dMult * Math.pow(tBase, tExp)
+		let r = dExp
+		if (slog < 2) r = Math.pow(10, r)
+		if (slog < 1) r = Decimal.pow(10, r)
+		return r
+	}
+}
