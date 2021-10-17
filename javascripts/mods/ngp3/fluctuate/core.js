@@ -75,6 +75,10 @@ let fluc = {
 		EPminpeak = new Decimal(0)
 		QKminpeak = new Decimal(0)
 		QKminpeakValue = new Decimal(0)
+
+		getEl("eternitybtn").style.display = "none"
+		getEl("quantumbtn").style.display = "none"
+		getEl("fluctuateReset").style.display = "none"
 	},
 
 	update(diff) {
@@ -121,7 +125,7 @@ let FDs = {
 
 	update(diff) {
 		var eng = fluc_save.energy
-		FDs_save.shards = Math.max(FDs_save.shards, Math.floor(eng * Math.min(eng / 2 + 2, 8)))
+		FDs_save.shards = Math.max(FDs_save.shards, Math.floor(eng * Math.min(eng / 2 + 3, 8)))
 
 		for (var i = 7; i >= 1; i--) FDs_save[i].amt = FDs_save[i].amt.add(FDs_save[i+1].amt.times(this.dimMult(i + 1)).times(diff / 50))
 		FDs_save.meta = FDs_save.meta.add(FDs_save[1].amt.times(this.dimMult(1)).times(diff))

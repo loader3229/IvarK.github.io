@@ -4,6 +4,7 @@ function getTickspeedMultiplier() {
 	if (tmp.be && qu_save.breakEternity.upgrades.includes(5)) x = x.div(getBreakUpgMult(5))
 	if (tmp.ngC && player.timestudy.studies.includes(25)) x = x.div(tsMults[25]())
 	if (inNC(6, 3)) x = x.add(getTotalDBs() * 1e-3)
+	if (tmp.ngp3) x = Decimal.div(1, softcap(Decimal.div(1, x), "tsRed"))
 	return x.min(1)
 }
 

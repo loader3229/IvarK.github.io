@@ -13,6 +13,15 @@ To make a new softcap using this function
 */
 
 var softcap_data = {
+	tsRed: {
+		name: "Tickspeed reduction",
+		1: {
+			func: "pow",
+			start: Decimal.pow(10, 8e4),
+			pow: (x) => 1 / Math.log2(x.log10() / 2e4 - 2),
+			derv: false
+		},
+	},
 	tt: {
 		name: "TT production",
 		1: {
@@ -494,6 +503,7 @@ function getSoftcapName(id){
 
 function getSoftcapAmtFromId(id){
 	return { // for amount
+		tsRed: () => Decimal.div(1, getTickspeedMultiplier()),
 		rep: () => getReplEff(),
 		rInt: () => tmp.rep ? tmp.rep.baseBaseEst.pow(1 - getECReward(14)) : new Decimal(1),
 		it: () => tmp.it.max(1),
@@ -536,6 +546,7 @@ function hasSoftcapStarted(id, num){
 		NOTE: this excludes Big Rip, and other endings that are at the end of words 
 		This currently includes: _ngC, _dilation, _ngmX for integers of length 1 X
 		*/
+		tsRed: tmp.ngp3,
 		rep: tmp.ngp3,
 		rInt: ECComps("eterc14"),
 		it: tmp.ngp3 && tmp.it,

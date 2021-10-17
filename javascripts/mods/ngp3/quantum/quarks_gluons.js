@@ -32,12 +32,12 @@ function updateQuantumWorth(mode) {
 }
 
 function getQuantumEff(x) {
-	if (hasAch("ng3p32")) return Decimal.pow(10, Decimal.div(x, 10).pow(1/6))
+	if (fluc.unl()) return Decimal.pow(10, Decimal.div(x, 10).pow(1/6))
 	return x
 }
 
 function getQuantumLogEff(x, mul = 1, base = 10) {
-	if (hasAch("ng3p32")) return Decimal.times(x, mul / 10).pow(1/6).div(Math.log10(base)).toNumber()
+	if (fluc.unl()) return Decimal.times(x, mul / 10).pow(1/6).div(Math.log10(base)).toNumber()
 	return Decimal.times(x, mul).add(1).log(base)
 }
 
