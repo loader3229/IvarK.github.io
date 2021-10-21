@@ -2583,9 +2583,10 @@ td.grey {
 }
 
 .synt_btn {
+	position: relative;
 	width: 120px;
 	height: 120px;
-	font-size: 10px
+	font-size: 8px
 }
 
 #replicants .qTable td { vertical-align: 0 }
