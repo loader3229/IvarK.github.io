@@ -83,12 +83,14 @@ let fluc = {
 
 	update(diff) {
 		FDs.update(diff)
+		synt.update(diff)
 	},
 	updateTmp() {
-		
+		synt.updateTmp()
 	},
 	updateTmpOnTick() {
 		FDs.updateTmp()
+		synt.updateTmpOnTick()
 	},
 
 	updateHeader() {

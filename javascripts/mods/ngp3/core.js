@@ -951,6 +951,9 @@ function setupSaveDataNGP3() {
 	FDs_save = (fluc_save && fluc_save.dims)
 	FDs.compile()
 
+	synt_save = (fluc_save && fluc_save.synt)
+	synt.compile()
+
 	//Quantum
 	pos_save = (qu_save && qu_save.pos)
 	QCs_save = (qu_save && qu_save.qc)
