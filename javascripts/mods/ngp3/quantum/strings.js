@@ -169,7 +169,11 @@ let str = {
 		return str.unl() && (str_save.vibrated && str_save.vibrated.includes(x))
 	},
 	onVibrate(x) {
-		for (var p = -3; p <= 3; p++) {
+		var range = 3
+		if (synt.unl()) r *= synt_tmp.boosts.f4
+		range = Math.floor(range)
+
+		for (var p = -range; p <= range; p++) {
 			var d = Math.abs(p)
 			var y = p + x
 			var add = 0.17 - 0.14 * d + 0.25 * ((d + 1) % 2)
@@ -181,6 +185,7 @@ let str = {
 	altitude(x, next) {
 		if (this.disabled()) return
 		let r = str_tmp.alt[x] || 0
+		if (synt.unl()) r *= synt_tmp.boosts.f3
 		return Math.max(Math.min(r, 1), -1)
 	},
 	eff(x) {

@@ -1,14 +1,46 @@
 //SYNTHESIS
 let synt = {
-	unl: (force) => force ? fluc.unl() : synt_tmp.unl,
+	unl: (force) => force ? fluc.unl() : synt_tmp.unl && synt_tmp.boosts,
 
 	data: {
 		f1: {
-			targ: () => qu_save && qu_save.quarkEnergy.log10(),
+			//Quantum Eff -> Replicanti Chance Exp
+			targ: () => tmp.qe && tmp.qe.exp && 1 / (1 - tmp.qe.exp) - 1,
 			eff: (x) => 1,
 		},
 		f2: {
-			targ: () => QCs_save && QCs_save.qc5 && QCs_save.qc5.log10(),
+			//Replicanti Energy -> Replicanti Stealth
+			targ: () => QCs_save && QCs_save.qc5 && Math.log10(QCs_save.qc5.add(1).log10() + 1),
+			eff: (x) => 1,
+		},
+		f3: {
+			//Quantum Energy -> Higher Altitudes
+			targ: () => qu_save && qu_save.quarkEnergy.log10(),
+			eff: (x) => 1,
+		},
+		f4: {
+			//Vibration Energy -> Longer Altitudes
+			targ: () => 0,
+			eff: (x) => 1,
+		},
+		f5: {
+			//Positronic Charge -> Gain Exponent
+			targ: () => 0,
+			eff: (x) => 1,
+		},
+		f6: {
+			//Red Charge -> Obsure Galaxies
+			targ: () => 0,
+			eff: (x) => 1,
+		},
+		f7: {
+			//Green Charge -> Extra Replicanti Compressors
+			targ: () => 0,
+			eff: (x) => 1,
+		},
+		f8: {
+			//Blue Charge -> Higher PB11 Cap
+			targ: () => 0,
 			eff: (x) => 1,
 		}
 	},
@@ -43,10 +75,10 @@ let synt = {
 	updateTmp() {
 	},
 	updateTmpOnTick() {
-		if (!synt.unl()) return
+		if (!synt_tmp.unl) return
+
 		synt_tmp.boosts = {}
-		synt_tmp.boosts.f1 = synt.data.f1.eff()
-		synt_tmp.boosts.f2 = synt.data.f2.eff()
+		for (var i = 1; i <= 8; i++) synt_tmp.boosts["f" + i] = synt.data["f" + i].eff()
 	},
 
 	updateTab() {

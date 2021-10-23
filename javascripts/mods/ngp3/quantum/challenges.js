@@ -93,9 +93,7 @@ var QCs = {
 			hint: "",
 
 			rewardDesc: (x) => "Unlock Replicanti Compressors, but there is a limit on Replicantis. Compressors greatly speed up Replicanti Slowdown!",
-			rewardEff(str) {
-				return 0.1
-			},
+			rewardEff: () => true,
 
 			nerfDesc: (x) => "TT softcap is harsher, QC7 is applied, and Meta Accelerator boosts are disabled.",
 			perkDesc: (x) => "You gain 0.2 extra Compressors on compressing in at least 5 seconds, or for the first time. (+" + shortenMoney(x) + ")",
@@ -144,6 +142,7 @@ var QCs = {
 			extra() {
 				var x = 0
 				if (QCs.perkActive(1)) x += QCs_tmp.perks[1]
+				if (synt.unl()) x += synt_tmp.boosts.f7
 				return x
 			},
 			total: () => QCs_save.qc1.boosts + QCs.data[1].extra(),

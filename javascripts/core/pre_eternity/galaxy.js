@@ -102,7 +102,9 @@ function getGalaxyRequirement(offset = 0, display) {
 				}
 
 				let pow = Decimal.pow(getRemoteScalingBase(), (tmp.grd.gals - remoteStart + 1) * speed2)
-				if (pow.gte(1e3)) {
+				let obsStart = 1e3
+				if (synt.unl()) obsStart *= synt_tmp.boosts.f6
+				if (pow.gte(obsStart)) {
 					pow = pow.pow(Math.pow(pow.log10() / 3, 2))
 					scaling = Math.max(scaling, 4)
 				}
