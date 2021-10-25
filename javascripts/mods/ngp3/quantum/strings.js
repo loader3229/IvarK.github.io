@@ -185,7 +185,7 @@ let str = {
 	altitude(x, next) {
 		if (this.disabled()) return
 		let r = str_tmp.alt[x] || 0
-		if (synt.unl()) r *= synt_tmp.boosts.f3
+		if (synt.unl() && synt_tmp.boosts.f3) r *= synt_tmp.boosts.f3
 		return Math.max(Math.min(r, 1), -1)
 	},
 	eff(x) {
