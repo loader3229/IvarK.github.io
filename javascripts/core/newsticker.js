@@ -498,6 +498,7 @@ amNewsArray = [
 ["Although the number on the only posted 9/18/2021 news ticker number is probably in the range of 120 <= x <= 600", true, "am280"],
 ["In an alternate universe, @TruthNotScam9 convinced Aarex to add Scamify, leaving many sparks of outrage from the players. Both of them died soon afterward.", "tmp.ngp3", "am281"],
 ["It's 2025, Aarex became a googologist legend. He is not yet addicted to large number games...", "am282"],
+["It's 2022. Aarex pledged to return NG+3R development after few months of hiatus. However, he instead trying to quit developing.", "am283"],
 /*NEXT ID: am274*/
 ];}
 
