@@ -15,32 +15,32 @@ let synt = {
 		},
 		f3: {
 			//Quantum Energy -> Higher Altitudes
-			targ: () => qu_save && qu_save.quarkEnergy.log10(),
+			targ: () => qu_save && qu_save.quarkEnergy.add(1).log10(),
 			eff: (x) => 1,
 		},
 		f4: {
 			//Vibration Energy -> Longer Altitudes
-			targ: () => 0,
+			targ: () => str_save && Math.log10(str_save.eng + 1),
 			eff: (x) => 1,
 		},
 		f5: {
 			//Positronic Charge -> Gain Exponent
-			targ: () => 0,
+			targ: () => pos_save && pos_save.add(1).log10(),
 			eff: (x) => 1,
 		},
 		f6: {
 			//Red Charge -> Obsure Galaxies
-			targ: () => 0,
+			targ: () => synt.getColorCharge("r"),
 			eff: (x) => 1,
 		},
 		f7: {
 			//Green Charge -> Extra Replicanti Compressors
-			targ: () => 0,
+			targ: () => synt.getColorCharge("g"),
 			eff: (x) => 1,
 		},
 		f8: {
 			//Blue Charge -> Higher PB11 Cap
-			targ: () => 0,
+			targ: () => synt.getColorCharge("b"),
 			eff: (x) => 1,
 		}
 	},
@@ -87,7 +87,20 @@ let synt = {
 	getEnergy(id) {
 		
 	},
+	getColorCharge(color) {
+		if (colorCharge === undefined) return new Decimal(0)
+		if (colorCharge.normal && colorCharge.normal.color) return colorCharge.normal.charge
+		if (colorCharge.sub && colorCharge.sub.color) return colorCharge.sub.charge
+		return new Decimal(0)
+	},
 	getBoost(id) {
+		
+	},
+
+	linkPower() {
+		
+	},
+	clear() {
 		
 	},
 }
