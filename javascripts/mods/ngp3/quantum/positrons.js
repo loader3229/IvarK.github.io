@@ -125,7 +125,7 @@ var pos = {
 			pc_base: QCs.done(5) ? 1 / 100 : 1 / 125,
 			pc_exp: futureBoost("quantum_superbalancing") ? 4 : 2
 		}
-		if (synt.unl()) data.mults.pc_exp *= synt_tmp.boosts.f5
+		if (synt.unl()) data.mults.pc_exp *= synt_tmp.eff.f5
 		if (PCs.milestoneDone(51)) data.mults.pc_base *= 1.2
 
 		if (!data.sac) data.sac = {}

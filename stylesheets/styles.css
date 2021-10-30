@@ -2588,7 +2588,34 @@ td.grey {
 	height: 120px;
 	font-size: 8px;
 	margin: 3px;
-	vertical-align: top
+	vertical-align: top;
+}
+.synt_btn.storebtn {
+	border-radius: 4px;
+	background: linear-gradient(#3f002f, #3f2f00);
+	box-shadow: inset 0px 0px 36px #ffdfdf, inset 0px 0px 36px #ffbfdf;
+	text-shadow: 0px 0px 6px #ff003f;
+	animation: synt 4s infinite
+}
+.synt_btn.storebtn b {
+	color: #ff3f00;
+}
+@keyframes synt {
+	0% {
+		border-color: #bf009f;
+		box-shadow: inset 0px 0px 36px #ff00bf;
+		color: #ff7f9f;
+	}
+	50% {
+		border-color: #bf9f00;
+		box-shadow: inset 0px 0px 36px #ffbf00;
+		color: #ffdf7f;
+	}
+	100% {
+		border-color: #bf009f;
+		box-shadow: inset 0px 0px 36px #ff00bf;
+		color: #ff7f9f;
+	}
 }
 
 #replicants .qTable td { vertical-align: 0 }

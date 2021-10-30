@@ -1238,6 +1238,10 @@ td .timestudybought.pos_study {
     font-size: 12px;
 }
 
+.synt_btn.storebtn {
+	background: linear-gradient(#3f002f, #3f2f00) !important;
+}
+
 .gluonupgrade.bigrip, .bigripbtn {
     background: linear-gradient(#242, #121) !important;
     color: #7f7 !important;
@@ -1589,6 +1593,21 @@ td .timestudybought.pos_study {
     font-size: 6em;
     font-weight: 100;
     opacity: .1;
+    position: absolute;
+    transform: rotate(-20deg);
+}
+
+#fluctuateBtn {
+    position: relative;
+    overflow: hidden;
+}
+#fluctuateBtn::before {
+    content: "κ";
+    top: -80px; left: 0; right: 0;
+    font-size: 6em;
+    font-weight: 100;
+	color: white;
+    opacity: 0.2;
     position: absolute;
     transform: rotate(-20deg);
 }

@@ -58,7 +58,7 @@ let fluc = {
 			if (fluc_save.energy == 0) {
 				fluc_tmp.unl = true
 				synt_tmp.unl = true
-				synt_tmp.boosts = {}
+				synt_tmp.eff = {}
 				pH.onPrestige("fluctuate")
 			}
 			fluc_save.energy += gain
@@ -100,6 +100,7 @@ let fluc = {
 	},
 	updateTab() {
 		getEl("fluc_req").textContent = shorten(fluc.req())
+		synt.updateTab()
 	}
 }
 let fluc_tmp = {}
