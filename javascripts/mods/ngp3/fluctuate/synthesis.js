@@ -138,6 +138,14 @@ let synt = {
 			var eff = synt_tmp.eff[id]
 			getEl("synt_eff_" + id).textContent = (synt.data[id].effDisp || shorten)(eff)
 		}
+
+		//synt.updateDisplays() // Temp
+	},
+	updateDisplays() {
+		for (var i = 0; i < synt.data.all.length; i++) {
+			var id = synt.data.all[i]
+			getEl("synt_btn_" + id).style.visibility = synt.isUnlocked(id) ? "visible" : "hidden"
+		}
 	},
 
 	getColorCharge(color) {
@@ -154,6 +162,9 @@ let synt = {
 	},
 	getStrength(id) {
 		return 1
+	},
+	isUnlocked(id) {
+		return fluc_save.eng >= (synt.data[id].req || 0)
 	},
 
 	linkPower() {
