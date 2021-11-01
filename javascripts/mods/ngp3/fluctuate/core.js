@@ -58,10 +58,10 @@ let fluc = {
 			if (fluc_save.energy == 0) {
 				fluc_tmp.unl = true
 				synt_tmp.unl = true
-				synt_tmp.eff = {}
 				pH.onPrestige("fluctuate")
 			}
 			fluc_save.energy += gain
+			synt.updateTmp()
 		}
 		fluc.doReset()
 	},

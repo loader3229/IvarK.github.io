@@ -10,6 +10,7 @@ let synt = {
 			//Quantum Eff -> Replicanti Chance Exp
 			targ: () => tmp.qe && tmp.qe.exp && 1 / Math.min(2 - tmp.qe.exp * 2, 1) - 1,
 			based: "Quantum Efficiency",
+			req: 1,
 			eff: (x) => 1,
 		},
 		f2: {
@@ -17,13 +18,15 @@ let synt = {
 			//Replicanti Energy -> Replicanti Stealth
 			targ: () => QCs_save && QCs_save.qc5 && Math.log10(QCs_save.qc5.add(1).log10() + 1),
 			based: "Replicanti Energy",
+			req: 2,
 			eff: (x) => 1,
 		},
 		f3: {
 			//Excite
 			//Quantum Energy -> Higher Altitudes
-			targ: () => qu_save && qu_save.quarkEnergy.add(1).log10(),
+			targ: () => qu_save && Decimal.add(qu_save.quarkEnergy, 1).log10(),
 			based: "Quantum Energy",
+			req: 1/0,
 			eff: (x) => 1,
 		},
 		f4: {
@@ -31,13 +34,15 @@ let synt = {
 			//Vibration Energy -> Longer Altitudes
 			targ: () => str_save && Math.log10(str_save.energy + 1),
 			based: "Vibration Energy",
+			req: 1/0,
 			eff: (x) => 1,
 		},
 		f5: {
 			//Flux
 			//Positronic Charge -> Gain Exponent
-			targ: () => pos_save && pos_save.eng && pos_save.eng.add(1).log10(),
+			targ: () => pos_save && Decimal.add(pos_save.eng, 1).log10(),
 			based: "Positronic Charge",
+			req: 1/0,
 			eff: (x) => 1,
 		},
 		f6: {
@@ -45,6 +50,7 @@ let synt = {
 			//Red Charge -> Obsure Galaxies
 			targ: () => synt.getColorCharge("r"),
 			based: "Red Charge",
+			req: 1/0,
 			eff: (x) => 1,
 			effDisp: (x) => formatPercentage(x - 1),
 		},
@@ -53,6 +59,7 @@ let synt = {
 			//Green Charge -> Extra Replicanti Compressors
 			targ: () => synt.getColorCharge("g"),
 			based: "Green Charge",
+			req: 1/0,
 			eff: (x) => 1,
 		},
 		f8: {
@@ -60,15 +67,18 @@ let synt = {
 			//Blue Charge -> Higher PB11 Cap
 			targ: () => synt.getColorCharge("b"),
 			based: "Blue Charge",
+			req: 1/0,
 			eff: (x) => 1,
 		},
 
 		am: {
 			targ: () => 0,
+			req: 1,
 			based: "antimatter"
 		},
 		dil: {
 			targ: () => 0,
+			req: 1/0,
 			based: "dilation runs"
 		}
 	},
@@ -101,6 +111,19 @@ let synt = {
 	update(diff) {
 	},
 	updateTmp() {
+		synt_tmp = {
+			unl: synt_tmp.unl
+		}
+
+		synt_tmp.unlocked = []
+		synt_tmp.nextAt = 1/0
+		for (var i = 0; i < synt.data.all.length; i++) {
+			var id = synt.data.all[i]
+			if (synt.isUnlocked(id)) synt_tmp.unlocked.push(id)
+			else synt_tmp.nextAt = Math.min(synt_tmp.nextAt, synt.data[id].req)
+		}
+
+		synt.updateTmpOnTick()
 	},
 	updateTmpOnTick() {
 		if (!synt_tmp.unl) return
@@ -139,13 +162,14 @@ let synt = {
 			getEl("synt_eff_" + id).textContent = (synt.data[id].effDisp || shorten)(eff)
 		}
 
-		//synt.updateDisplays() // Temp
+		synt.updateDisplays() // Temp
 	},
 	updateDisplays() {
 		for (var i = 0; i < synt.data.all.length; i++) {
 			var id = synt.data.all[i]
 			getEl("synt_btn_" + id).style.visibility = synt.isUnlocked(id) ? "visible" : "hidden"
 		}
+		getEl("synt_unl").textContent = synt_tmp.unlocked.length == 10 ? "" : "Next Synthesizer unlocks at " + getFullExpansion(synt_tmp.nextAt) + " Fluctuant Energy."
 	},
 
 	getColorCharge(color) {
@@ -164,7 +188,7 @@ let synt = {
 		return 1
 	},
 	isUnlocked(id) {
-		return fluc_save.eng >= (synt.data[id].req || 0)
+		return fluc_save.energy >= (synt.data[id].req || 0)
 	},
 
 	linkPower() {
