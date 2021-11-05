@@ -338,12 +338,13 @@ dev.boosts = {
 		},
 	},
 	7: {
-		name: "???",
+		name: "Fluctuant Replicantis",
 		unl() {
-			return false
+			return pH.did("fluctuate")
 		},
 		eff(x) {
-			return 1
+			//Fluctuant Replicantis: Replicantis boost Fluctuant Dimensions.
+			return Math.pow(getReplEff().max(1).log10() / 1e6 + 1, 0.1)
 		},
 	},
 	8: {

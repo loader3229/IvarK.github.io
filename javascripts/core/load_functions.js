@@ -2063,11 +2063,14 @@ function onLoad(noOffline) {
 	showAutoTab((tabsSave.on && tabsSave.tabAuto) || 'autobuyers')
 	showInfTab((tabsSave.on && tabsSave.tabInfinity) || 'preinf')
 	showEternityTab((tabsSave.on && tabsSave.tabEternity) || 'timestudies', true)
-	showQuantumTab((tabsSave.on && tabsSave.tabQuantum) || 'uquarks')
-	showNFTab((tabsSave.on && tabsSave.tabNF) || 'nanoverse')
-	showBranchTab((tabsSave.on && tabsSave.tabBranch) || 'red')
-	showGhostifyTab((tabsSave.on && tabsSave.tabGhostify) || 'neutrinos')
-	showBLTab((tabsSave.on && tabsSave.tabBL) || 'bextab')
+	if (tmp.ngp3) {
+		showQuantumTab((tabsSave.on && tabsSave.tabQuantum) || 'uquarks')
+		fluc.showTab((tabsSave.on && tabsSave.tabFluc) || 'syntTab')
+		showNFTab((tabsSave.on && tabsSave.tabNF) || 'nanoverse')
+		showBranchTab((tabsSave.on && tabsSave.tabBranch) || 'red')
+		showGhostifyTab((tabsSave.on && tabsSave.tabGhostify) || 'neutrinos')
+		showBLTab((tabsSave.on && tabsSave.tabBL) || 'bextab')
+	}
 	if (!player.options.newsHidden) scrollNextMessage()
 	getEl("secretoptionsbtn").style.display=player.options.secrets?"":"none"
 	getEl("ghostlynewsbtn").textContent=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?"Hide":"Show")+" ghostly news ticker"

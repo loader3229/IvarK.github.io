@@ -630,11 +630,12 @@ function replicantiDisplay() {
 		let limit = getReplicantiLimit(true)
 		let time = hasDilationUpg(6)
 		let dil = hasAch("r137") && tmp.ngp3_boost
+		let fluc = dev.boosts.tmp[7]
 		getEl("replicantiamount").textContent = shortenDimensions(player.replicanti.amount) + (limit.lt(1/0) ? (" / ") + shortenDimensions(limit) : "")
 		getEl("replicantieff").textContent = shiftDown ? "Effective Replicantis: " + shorten(getReplEff()) : ""
-		getEl("replicantimult").textContent = shorten(dil ? getReplDilBonus() : time ? tmp.rm.pow(0.1) :getIDReplMult()) + "x"
+		getEl("replicantimult").textContent = shorten(fluc ? dev.boosts.tmp[7] : dil ? getReplDilBonus() : time ? tmp.rm.pow(0.1) :getIDReplMult()) + "x"
 		getEl("replDesc").textContent = (shiftDown ? "more " : "") +
-			(dil ? "dilated time" : time ? "Time Dimensions" : tmp.ngC ? "IP gain (after softcaps) & all Normal Dimensions" : " Infinity Dimensions")
+			(fluc ? "Fluctuant Dimensions" : dil ? "dilated time" : time ? "Time Dimensions" : tmp.ngC ? "IP gain (after softcaps) & all Normal Dimensions" : " Infinity Dimensions")
 		getEl("replStr").textContent = tmp.rep.str > 1 && shiftDown ? "Replicanti Stealth: " + formatPercentage(tmp.rep.str) + "%" : ""
 
 		repApproxDisplay()
@@ -1019,14 +1020,22 @@ function doFeatureProgress() {
 	let reqNum
 	let reqFormat
 
-	if (pH.can("fluctuate")) {}
-	else if (str.unl()) {
+	if (pH.did("fluctuate")) {
+		if (fluc_save.energy < 11) {
+			res = fluc_save.energy
+			reqFormat = shortenDimensions(res)
+			reqNum = 11
+			req = shortenCosts(reqNum) + " Fluctuant Energy"
+			percentage = res / reqNum
+			feature = "Quantum Field"
+		}
+	} else if (str.unl()) {
 		res = player.money
 		reqFormat = shortenCosts(res)
 		reqNum = Decimal.pow(10, Math.pow(10, 13.5))
 		req = shortenCosts(reqNum) + " antimatter"
 		percentage = res.log(reqNum)
-		feature = "Quantum+"
+		feature = "Fluctuate"
 	} else if (PCs.unl()) {
 		res = PCs_save.comps.length
 		reqNum = 8

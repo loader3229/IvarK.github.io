@@ -97,10 +97,33 @@ let fluc = {
 
 	updateHeader() {
 		getEl("fluctuantEnergy").textContent = getFullExpansion(fluc_save.energy)
+
+		//Temp: Quantum Field is not ready!
+		getEl("qf_unl").style.display = fluc_save.energy >= 11 ? "none" : ""
+		getEl("the_end").style.display = fluc_save.energy >= 11 ? "" : "none"
 	},
 	updateTab() {
 		getEl("fluc_req").textContent = shorten(fluc.req())
-		synt.updateTab()
+		if (getEl("syntTab").style.display == "block") synt.updateTab()
+	},
+	showTab(tabName) {
+		//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
+		var tabs = document.getElementsByClassName('flucTab');
+		var tab;
+		var oldTab
+		for (var i = 0; i < tabs.length; i++) {
+			tab = tabs.item(i);
+			if (tab.style.display == 'block') oldTab = tab.id
+			if (tab.id === tabName) { 
+				tab.style.display = 'block';
+			} else {
+				tab.style.display = 'none';
+			}
+		}
+		if (oldTab != tabName) {
+			aarMod.tabsSave.tabFluc = tabName
+		}
+		closeToolTip()
 	}
 }
 let fluc_tmp = {}
@@ -174,6 +197,7 @@ let FDs = {
 	dimMult(x) {
 		var r = Decimal.pow(2.5, FDs_save[x].bgt - 1).max(1)
 		if (hasAch("ng3p31")) r = r.times(1.5)
+		if (dev.boosts.tmp[7]) r = r.times(dev.boosts.tmp[7])
 		return r
 	}
 }

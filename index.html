@@ -1631,7 +1631,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(11/1/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(11/4/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -5160,80 +5160,89 @@
 		<span style="font-size: 15px">Reach <b class="flucEne" id="fluc_req" style="font-size: 20px"></b> antimatter to Fluctuate again.</span>
 		<table class="table" align="center" style="margin: auto">
 			<tr>
-				<td><button class="secondarytabbtn">Synthesis</button></td>
+				<td><button class="secondarytabbtn" onclick="fluc.showTab('syntTab')">Synthesis</button></td>
+				<td><button class="secondarytabbtn" onclick="fluc.showTab('qfTab')">Quantum Field</button></td>
+				<!--<td><button class="secondarytabbtn">Particle Decay</button></td>-->
+				<!--<td><button class="secondarytabbtn">Spatial Decay</button></td>-->
 			</tr>
 		</table>
-		<div class="flucTab">
-			<b class="red">The rework has been completely planned! I will implement it soon. :) ~ Aarex</b>
+		<div class="flucTab" id="syntTab">
 			<br>
 			<span id="synt_unl">Next Synthesizer unlocks at ??? Fluctuant Energy.</span>
+			<br>
+			<b class="red">Synthesizing restarts your Quantum run!</b>
+			<br>
+			<button class="storebtn" onclick="synt.clear()">Clear</button>
+			<button class="storebtn" onclick="synt.exportPreset()">Export</button>
+			<button class="storebtn" onclick="synt.importPreset()">Import</button>
 			<br><br>
+
+			<button class="fluctuatebtn synt_btn" id="synt_btn_am">
+				<b style="font-size: 16px">Antimatter</b><br>
+				<span id="synt_eng_am"></span>
+			</button>
+			<button class="dilationupg synt_btn" id="synt_btn_dil">
+				<b style="font-size: 16px">Dilation</b><br>
+				<span id="synt_eng_dil"></span>
+			</button>
+			<br><br>
+
+			<!-- SYNTHESIZER 1 - 4 -->
 			<button class="storebtn synt_btn" id="synt_btn_f1">
 				<b style="font-size: 12px">Superefficient</b><br>
 				<span id="synt_eng_f1"></span><br><br>
 				^<span id="synt_eff_f1">1.00</span> Replicate Chance Exponent
-				<br><br>(1 link left)
+				<br><br>Affects: Effect
+			</button>
+			<button class="storebtn synt_btn" id="synt_btn_f2">
+				<b style="font-size: 16px">Accelerator</b><br>
+				<span id="synt_eng_f2"></span><br><br>
+				<span id="synt_eff_f2">1.00</span>x Replicanti Stealth
+				<br><br>Affects: Energy
+			</button>
+			<button class="storebtn synt_btn" id="synt_btn_f3">
+				<b style="font-size: 16px">Excite</b><br>
+				<span id="synt_eng_f3"></span><br><br>
+				<span id="synt_eff_f3">1.00</span>x Higher Altitudes
+				<br><br>Affects: None
 			</button>
 			<button class="storebtn synt_btn" id="synt_btn_f4">
 				<b style="font-size: 16px">Stretch</b><br>
 				<span id="synt_eng_f4"></span><br><br>
 				<span id="synt_eff_f4">1.00</span>x Longer Altitudes
-				<br><br>(0 links left)
+				<br><br>Affects: None
 			</button>
 			<br><br>
-			<button class="storebtn synt_btn" id="synt_btn_f2">
-				<b style="font-size: 16px">Accelerator</b><br>
-				<span id="synt_eng_f2"></span><br><br>
-				<span id="synt_eff_f2">1.00</span>x Replicanti Stealth
-				<br><br>(0 links left)
-			</button>
-			<button class="synt_btn" style="visibility: hidden"></button>
-			<button class="synt_btn" style="visibility: hidden"></button>
-			<button class="storebtn synt_btn" id="synt_btn_f3">
-				<b style="font-size: 16px">Excite</b><br>
-				<span id="synt_eng_f3"></span><br><br>
-				<span id="synt_eff_f3">1.00</span>x Higher Altitudes
-				<br><br>(0 links left)
-			</button>
-			<br><br>
-			<button class="fluctuatebtn synt_btn" id="synt_btn_am">
-				<b style="font-size: 16px">Antimatter</b><br>
-				<span id="synt_eng_am"></span>
-				<br><br>(1 link left)
-			</button>
-			<button class="dilationupg synt_btn" id="synt_btn_dil">
-				<b style="font-size: 16px">Dilation</b><br>
-				<span id="synt_eng_dil"></span>
-				<br><br>(0 links left)
-			</button>
-			<br><br>
-			<button class="storebtn synt_btn" id="synt_btn_f6">
-				<b style="font-size: 16px">Overseer</b><br>
-				<span id="synt_eng_f6"></span><br><br>
-				+<span id="synt_eff_f6">0.00</span>% later Obscure Galaxies
-				<br><br>(0 links left)
-			</button>
-			<button class="synt_btn" style="visibility: hidden"></button>
-			<button class="synt_btn" style="visibility: hidden"></button>
-			<button class="storebtn synt_btn" id="synt_btn_f7">
-				<b style="font-size: 16px">Advancement</b><br>
-				<span id="synt_eng_f7"></span><br><br>
-				+<span id="synt_eff_f7">0.00</span> Replicated Compressors
-				<br><br>(0 links left)
-			</button>
-			<br><br>
+
+			<!-- SYNTHESIZER 5 - 8 -->
 			<button class="storebtn synt_btn" id="synt_btn_f5">
 				<b style="font-size: 16px">Flux</b><br>
 				<span id="synt_eng_f5"></span><br><br>
 				^<span id="synt_eff_f5">1.00</span> Positronic Charge
-				<br><br>(0 links left)
+				<br><br>Affects: None
+			</button>
+			<button class="storebtn synt_btn" id="synt_btn_f6">
+				<b style="font-size: 16px">Overseer</b><br>
+				<span id="synt_eng_f6"></span><br><br>
+				+<span id="synt_eff_f6">0.00</span>% later Obscure Galaxies
+				<br><br>Affects: None
+			</button>
+			<button class="storebtn synt_btn" id="synt_btn_f7">
+				<b style="font-size: 16px">Advancement</b><br>
+				<span id="synt_eng_f7"></span><br><br>
+				+<span id="synt_eff_f7">0.00</span> Replicated Compressors
+				<br><br>Affects: None
 			</button>
 			<button class="storebtn synt_btn" id="synt_btn_f8">
 				<b style="font-size: 16px">Dominant</b><br>
 				<span id="synt_eng_f8"></span><br><br>
 				^<span id="synt_eff_f8">1.00</span> cap of PB11 multiplier
-				<br><br>(0 links left)
+				<br><br>Affects: None
 			</button>
+		</div>
+		<div class="flucTab" id="qfTab">
+			<span id="qf_unl">You need 11 Fluctuant Energy in order to unlock Quantum Field.</span>
+			<span id="the_end">Congratulations! You have reached the end for now... Check the Discord to see when Quantum Field is ready!</span>
 		</div>
 	</div>
 		<div class='tab' id='ghostify'>

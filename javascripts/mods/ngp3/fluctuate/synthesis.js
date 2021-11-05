@@ -18,7 +18,7 @@ let synt = {
 			//Replicanti Energy -> Replicanti Stealth
 			targ: () => QCs_save && QCs_save.qc5 && Math.log10(QCs_save.qc5.add(1).log10() + 1),
 			based: "Replicanti Energy",
-			req: 2,
+			req: 3,
 			eff: (x) => 1,
 		},
 		f3: {
@@ -26,7 +26,7 @@ let synt = {
 			//Quantum Energy -> Higher Altitudes
 			targ: () => qu_save && Decimal.add(qu_save.quarkEnergy, 1).log10(),
 			based: "Quantum Energy",
-			req: 1/0,
+			req: 5,
 			eff: (x) => 1,
 		},
 		f4: {
@@ -34,7 +34,7 @@ let synt = {
 			//Vibration Energy -> Longer Altitudes
 			targ: () => str_save && Math.log10(str_save.energy + 1),
 			based: "Vibration Energy",
-			req: 1/0,
+			req: 8,
 			eff: (x) => 1,
 		},
 		f5: {
@@ -42,7 +42,7 @@ let synt = {
 			//Positronic Charge -> Gain Exponent
 			targ: () => pos_save && Decimal.add(pos_save.eng, 1).log10(),
 			based: "Positronic Charge",
-			req: 1/0,
+			req: 13,
 			eff: (x) => 1,
 		},
 		f6: {
@@ -50,7 +50,7 @@ let synt = {
 			//Red Charge -> Obsure Galaxies
 			targ: () => synt.getColorCharge("r"),
 			based: "Red Charge",
-			req: 1/0,
+			req: 21,
 			eff: (x) => 1,
 			effDisp: (x) => formatPercentage(x - 1),
 		},
@@ -59,7 +59,7 @@ let synt = {
 			//Green Charge -> Extra Replicanti Compressors
 			targ: () => synt.getColorCharge("g"),
 			based: "Green Charge",
-			req: 1/0,
+			req: 34,
 			eff: (x) => 1,
 		},
 		f8: {
@@ -67,7 +67,7 @@ let synt = {
 			//Blue Charge -> Higher PB11 Cap
 			targ: () => synt.getColorCharge("b"),
 			based: "Blue Charge",
-			req: 1/0,
+			req: 55,
 			eff: (x) => 1,
 		},
 
@@ -78,7 +78,7 @@ let synt = {
 		},
 		dil: {
 			targ: () => 0,
-			req: 1/0,
+			req: 100,
 			based: "dilation runs"
 		}
 	},
