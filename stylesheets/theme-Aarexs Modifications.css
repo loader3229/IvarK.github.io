@@ -475,6 +475,14 @@ strong { color: #0072e5 }
 	text-shadow: 0px 0px 3px #bfff00, 0px 0px 6px #7fff00
 }
 
+#fdtabbtn button {
+    border-color: #ff007f !important
+}
+#fdtabbtn button:hover {
+    border-color: #ff007f !important;
+    background-color: #ff007f !important;
+	color: #e5e5e5 !important
+}
 .flucEne {
 	color: #ff3f00 !important
 }
