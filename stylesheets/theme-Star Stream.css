@@ -92,7 +92,7 @@ input {
     font-weight: 500
 }
 
-#coinAmount {
+#coinAmount, .antimatter {
     font-weight: 900;
     transition:0.2s;
     animation: ghostifybtntext 16s linear infinite;
@@ -742,7 +742,7 @@ strong { color: #0072e5 }
 
 #quantum.storebtn:hover
 .quantumbtn:hover,
-.qMs_reward:hover, {
+.qMs_reward:hover {
     box-shadow: inset 0px 0px 5px 2px #00ff00;
 }
 
@@ -898,6 +898,17 @@ strong { color: #0072e5 }
 #eggonAmount, #eggonRate {
     color: #e5dab7 !important;
     font-weight: 500 !important;
+}
+
+.fluctuatebtn {
+    border-color: #993300 !important;
+	color: #fcb !important;
+    text-shadow: 0px 0px 5px #000, 0px 0px 9px #f30 !important;
+    transition: 0.2s
+}
+
+.fluctuatebtn:hover {
+    box-shadow: inset 0px 0px 5px 2px #993300;
 }
 
 #produceQuarkCharge { 

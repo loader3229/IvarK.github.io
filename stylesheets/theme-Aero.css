@@ -387,7 +387,7 @@ option {
   R E S O U R C E S
 ===================*/
 
-#coinAmount {
+#coinAmount, .antimatter {
     color: #99c !important;
     animation: antiGlow 25s linear infinite;
 }

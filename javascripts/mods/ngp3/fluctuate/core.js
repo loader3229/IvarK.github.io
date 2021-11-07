@@ -27,6 +27,7 @@ let fluc = {
 		}
 
 		fluc_tmp = { unl: this.unl(true) }
+		fluc.updateConf()
 		if (!tmp.ngp3) return
 
 		var data = fluc_save || this.setup()
@@ -38,8 +39,11 @@ let fluc = {
 		if (!fluc.unl()) return 1
 		return Math.max(fluc.targ() - fluc_save.energy, 0)
 	},
+	res() {
+		return fluc.unl() ? fluc_save.bestAM : player.money
+	},
 	targ() {
-		return Math.floor((Math.log10(fluc_save.bestAM.log10()) - 13.5) * 20 + 1)
+		return Math.floor((Math.log10(fluc.res().log10()) - 13.5) * 20 + 1)
 	},
 	req(x) {
 		if (!x) x = fluc_save.energy
@@ -48,7 +52,7 @@ let fluc = {
 	reset(auto, force) {
 		if (!force) {
 			if (!pH.can('fluctuate')) return
-			if (!auto && !fluc.unl() && !confirm("Fluctuating resets everything that Quantum resets, but also including Quantum content. You will gain Energy in transfer, and you permanently keep your feature unlocks.")) return
+			if (!auto && !fluc_save.noConf && !confirm("Fluctuating resets everything that Quantum resets, but also including Quantum content. You will gain Energy in transfer" + (this.unl() ? ". Make sure to check your Milestone Points before Fluctuating!" : ", and you permanently keep your feature unlocks."))) return
 
 			for (var i = fluc_save.last10.length - 1; i > 0; i--) fluc_save.last10[i] = fluc_save.last10[i - 1]
 			var gain = fluc.gain()
@@ -83,6 +87,12 @@ let fluc = {
 		getEl("fluctuateReset").style.display = "none"
 	},
 
+	updateConf(toggle) {
+		if (toggle) fluc_save.noConf = !fluc_save.noConf
+		getEl("fluc_conf").style.display = this.unl() ? "" : "none"
+		if (this.unl()) getEl("fluc_conf").textContent = "Fluctuate confirmation: " + (fluc_save.noConf ? "OFF" : "ON")
+	},
+
 	update(diff) {
 		FDs.update(diff)
 		synt.update(diff)
@@ -96,7 +106,9 @@ let fluc = {
 	},
 
 	updateHeader() {
+		let gain = fluc.gain()
 		getEl("fluctuantEnergy").textContent = getFullExpansion(fluc_save.energy)
+		getEl("fluc_gain").textContent = gain ? "(+" + getFullExpansion(gain) + " Fluctuant Energy: Next at " + shortenCosts(fluc.req(fluc_save.energy + gain)) + ")" : ""
 
 		//Temp: Quantum Field is not ready!
 		getEl("qf_unl").style.display = fluc_save.energy >= 11 ? "none" : ""

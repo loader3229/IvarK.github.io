@@ -56,7 +56,7 @@ body {
 #footer {
     font-family: 'Inconsolata', monospace !important
 }
-#coinAmount {
+#coinAmount, .antimatter {
     color: #0072e5 !important
 }
 .storebtn, .completedchallengesbtn, .pc4completed {
@@ -159,7 +159,7 @@ strong { color: #0072e5 }
 }
 .IPAmount1, .IPAmount2, #infPowAmount, #infDimMultAmount, #infDimEffectPower,
 #replicantiamount, #replicantimult, #replCond, #replCond1, #replCond2,
-#replCompress, #replCompressEff, #replDilater, #replDilaterEff, #qc5_eng, #qc5_eff {
+#replCompress, #replCompressEff, #replDilater, #replDilaterEff, #qc5_eng, #qc5_eff, #fd_eff_rep {
     color: #e2bd00 !important
 }
 .infinistorebtn1, .infinistorebtn3 {
@@ -476,11 +476,11 @@ strong { color: #0072e5 }
 }
 
 #fdtabbtn button {
-    border-color: #ff007f !important
+    border-color: #ff3f00 !important
 }
 #fdtabbtn button:hover {
-    border-color: #ff007f !important;
-    background-color: #ff007f !important;
+    border-color: #ff3f00 !important;
+    background-color: #ff3f00 !important;
 	color: #e5e5e5 !important
 }
 .flucEne {

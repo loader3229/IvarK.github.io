@@ -1300,10 +1300,12 @@
 				<button id="toggleallmetadims" style="width:300px; height: 30px; font-size: 12px" onclick="toggleAllMetaDims()" class="storebtn">Toggle all meta-dims autobuyer ON/OFF</button>
 			</div>
 			<div id="fdims" class="dimtab">
-				<span style="font-size: 15px">You have made <b class="flucEne" id="fd_ds" style="font-size: 24px">0</b> Dimensional Shards by Fluctating.</span><br>
-				Your Fluctuant Dimensions have produced <b class="flucEne" id="fd_me" style="font-size: 30px">0.00</b> Metastable Energy,
-				<br>which raises the potential of Replicantis by <b class="flucEne" id="fd_eff_rep" style="font-size: 15px">^1.00</b> and raising Quantum Power by <b class="flucEne" id="fd_eff_qe" style="font-size: 12px">^1.00</b>.
-				  <table>
+				You made <span class="flucEne" id="fd_ds" style="font-size: 25px">0</span> Dimensional Shards from Fluctating.<br>
+				You have <span class="flucEne" id="fd_me" style="font-size: 35px">0.00</span> Metastable Energy, which is translated to
+				<span class="flucEne" id="fd_eff_rep" style="font-size: 35px">^1.00</span> to potential Replicantis and <span class="QKAmount" id="fd_eff_qe" style="font-size: 35px">^1.00</span> to Quantum Power.
+				<br>
+				<button class="unavailablebtn" style="font-size: 12px" onclick="alert('Coming soon...')">Max All</button>
+				<table>
 					<tbody>
 					  <tr id="fd1_row" style="font-size: 17px">
 						  <td id="fd1" class="rel">
@@ -1631,7 +1633,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(11/5/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(11/6/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -5157,7 +5159,11 @@
 		<div class="footer bottom"></div>
 	</div>
 	<div class='tab' id="flucTab">
-		<span style="font-size: 15px">Reach <b class="flucEne" id="fluc_req" style="font-size: 20px"></b> antimatter to Fluctuate again.</span>
+		<br>
+		<span style="font-size: 20px">Get <span class="antimatter" id="fluc_req"></span> antimatter to Fluctuate again.</span>
+		<br>
+		<span class="flucEne" id="fluc_gain"></span>
+		<br>
 		<table class="table" align="center" style="margin: auto">
 			<tr>
 				<td><button class="secondarytabbtn" onclick="fluc.showTab('syntTab')">Synthesis</button></td>
@@ -5890,6 +5896,7 @@
 			<button id="dilationConfirmBtn" class="storebtn" onclick="toggleDilaConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
 			<button id="exdilationConfirmBtn" class="storebtn" onclick="toggleExdilaConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
 			<button id="quantumConfirmBtn" class="storebtn" onclick="toggleQuantumConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
+			<button id="fluc_conf" class="storebtn" onclick="fluc.updateConf(true)" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
 			<button id="bigRipConfirmBtn" class="storebtn" onclick="toggleBigRipConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
 			<button id="ghostifyConfirmBtn" class="storebtn" onclick="toggleGhostifyConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
 			<button id="leConfirmBtn" class="storebtn" onclick="toggleLEConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>

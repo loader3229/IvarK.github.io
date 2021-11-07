@@ -86,7 +86,7 @@ button:hover {
 	color: #7fff7f !important
 }
 
-#coinAmount {
+#coinAmount, .antimatter {
 	color: #CAF575 !important
 }
 
