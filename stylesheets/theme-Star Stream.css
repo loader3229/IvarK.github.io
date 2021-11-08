@@ -326,7 +326,14 @@ strong { color: #0072e5 }
 #infDimMultAmount,
 #infDimEffectPower,
 #replicantiamount,
-#replicantimult {
+#replicantimult,
+#replCompress,
+#replCompressEff,
+#replDilater,
+#replDilaterEff,
+#qc5_eng,
+#qc5_eff,
+#fd_eff_rep {
     color: #e2bd00 !important;
     font-weight: 500 !important;
 }
@@ -906,9 +913,11 @@ strong { color: #0072e5 }
     text-shadow: 0px 0px 5px #000, 0px 0px 9px #f30 !important;
     transition: 0.2s
 }
-
 .fluctuatebtn:hover {
     box-shadow: inset 0px 0px 5px 2px #993300;
+}
+.flucEne {
+	color: #ff3f00 !important
 }
 
 #produceQuarkCharge { 
