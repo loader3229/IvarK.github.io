@@ -291,6 +291,7 @@ function preHiggsNGp3AchieveCheck() {
 	}
 	if (QCs.inAny() && str_tmp.vibrated === 0 && player.meta.bestAntimatter.e >= 1.6e3) giveAchievement("Get rid of you by yourself...")
 
+	//ROW 17
 	if (pH.can("quantum") && QCs.in(3) && player.meta[2].bought == 0 && player.meta[3].bought == 0 && player.meta[4].bought == 0 && player.meta[5].bought == 0 && player.meta[6].bought == 0 && player.meta[7].bought == 0 && player.meta[8].bought == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
 	if (pH.did("fluctuate")) giveAchievement("Feel the Momentum")
 	if (str.unl() && (str_tmp.powers[1] * str_tmp.str < -1.5 || str_tmp.powers[2] * str_tmp.str < -1.5 || str_tmp.powers[3] * str_tmp.str < -1.5)) giveAchievement("Never make paradoxes!")
@@ -311,6 +312,7 @@ function preHiggsNGp3AchieveCheck() {
 			}
 		}
 	}
+	if (FDs_save.meta.gte(1e15) && fluc_save.time <= 86400) giveAchievement("MAXIMUM OVERCHARGE")
 	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")
 	if (player.infinityPoints.gte(Decimal.pow(Number.MAX_VALUE, 1000)) && ableToGetRid5) giveAchievement("I don't want you to live anymore.")
 

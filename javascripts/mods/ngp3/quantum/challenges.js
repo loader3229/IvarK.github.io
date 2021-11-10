@@ -128,7 +128,7 @@ var QCs = {
 				tmp.rmPseudo = new Decimal(1)
 				player.replicanti.amount = new Decimal(1)
 
-				eternity(false, true)
+				if (!hasAch("ng3p33")) eternity(false, true)
 
 				QCs.data[1].fix = false
 				return true

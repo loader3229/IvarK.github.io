@@ -387,12 +387,13 @@ function setR17Tooltip() {
 	//ng3p33/////
 	//ng3p34/////
 	//ng3p35/////
-	//ng3p36/////
+	let max = getEl("MAXIMUM OVERCHARGE")
 	let noDil = getEl("No dilation means no production.")
 	//ng3p38/////
 
 	//ACHIEVEMENT ROW 17
-	noDil.setAttribute('ach-tooltip', "Reach " + "[TBD]" /*shortenCosts(Decimal.pow(10, 1/0))*/ + " replicanti without having Tachyon Particles. Reward: [TBD]")
+	max.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e15) + " Metastable Energy in 1-day Fluctuate run. Reward: You can freely synthesize with one Synthesizer.")
+	noDil.setAttribute('ach-tooltip', "Reach " + "[TBD]" /*shortenCosts(Decimal.pow(10, 1/0))*/ + " replicanti without having Tachyon Particles. Reward: Boost the TP gain for first 5 dilation runs.")
 }
 
 function setR18Tooltip() {
