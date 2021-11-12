@@ -124,11 +124,15 @@ var QCs = {
 				qc1.time = 0
 				if (!QCs.inAny() && qc1.boosts > qc1.best) this.recordBest()
 
-				tmp.rm = new Decimal(1)
-				tmp.rmPseudo = new Decimal(1)
-				player.replicanti.amount = new Decimal(1)
+				if (hasAch("ng3p33")) {
+					player.replicanti.amount = player.replicanti.amount.pow(0.9)
+				} else {
+					tmp.rm = new Decimal(1)
+					tmp.rmPseudo = new Decimal(1)
+					player.replicanti.amount = new Decimal(1)
 
-				if (!hasAch("ng3p33")) eternity(false, true)
+					eternity(false, true)
+				}
 
 				QCs.data[1].fix = false
 				return true

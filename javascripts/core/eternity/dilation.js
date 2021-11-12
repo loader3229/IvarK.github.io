@@ -144,7 +144,10 @@ function getDilationTPFormulaExp(disable){
 }
 
 function getAMEffToTP() {
-	return 1 / 400
+	let div = 400
+	let dil = player.dilation.times || 0
+	if (hasAch("ng3p37")) div /= Math.pow(2, 5 - dil)
+	return div
 }
 
 function getTPGain() {
