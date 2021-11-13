@@ -306,7 +306,7 @@ function preHiggsNGp3AchieveCheck() {
 	}
 	if (str.unl() && !hasAch("ng3p45")) {
 		for (var i = 1; i <= 3; i++) {
-			if (str_tmp.powers[i] > -1 && str_tmp.powers[i] < -0.9) {
+			if (str_tmp.powers[i] > -1 && str_tmp.powers[i] < -0.8) {
 				giveAchievement("Bullseye!")
 				break
 			}
