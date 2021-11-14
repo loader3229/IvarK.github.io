@@ -165,7 +165,7 @@ let FDs = {
 
 	update(diff) {
 		var eng = fluc_save.energy
-		FDs_save.shards = Math.max(FDs_save.shards, Math.floor(eng * Math.min(eng / 2 + 3, 8)))
+		FDs_save.shards = Math.max(FDs_save.shards, Math.floor(eng * Math.min(eng / 2.5 + 3, 8)))
 
 		for (var i = 7; i >= 1; i--) FDs_save[i].amt = FDs_save[i].amt.add(FDs_save[i+1].amt.times(this.dimMult(i + 1)).times(diff / 50))
 		FDs_save.meta = FDs_save.meta.add(FDs_save[1].amt.times(this.dimMult(1)).times(diff))
@@ -174,8 +174,8 @@ let FDs = {
 		if (!fluc.unl()) return
 		var eng_log = FDs_save.meta.add(1).log10()
 		FDs_tmp = {
-			eff_rep: Math.pow(1.01, eng_log),
-			eff_qe: (3 / 1.75 - 1) * Math.min(eng_log / 150, 1) + 1
+			eff_rep: Math.min(Math.pow(1.01, eng_log), 4),
+			eff_qe: (3 / 1.75 - 1) * Math.min(Math.log10(eng_log / 50 + 1), 1) + 1
 		}
 	},
 	updateDisp() {
@@ -204,7 +204,7 @@ let FDs = {
 		FDs_save[x].amt = FDs_save[x].amt.add(1)
 	},
 	cost(x) {
-		return Math.min(FDs_save[x].bgt * 2 + x, 12)
+		return Math.min(Math.floor(FDs_save[x].bgt * 1.75 + x), 12)
 	},
 	dimMult(x) {
 		var r = Decimal.pow(2.5, FDs_save[x].bgt - 1).max(1)
