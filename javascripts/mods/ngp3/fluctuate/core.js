@@ -174,7 +174,7 @@ let FDs = {
 		if (!fluc.unl()) return
 		var eng_log = FDs_save.meta.add(1).log10()
 		FDs_tmp = {
-			eff_rep: Math.min(Math.pow(1.01, eng_log), 4),
+			eff_rep: Math.log10(eng_log / 10 + 1) + 1,
 			eff_qe: (3 / 1.75 - 1) * Math.min(Math.log10(eng_log / 50 + 1), 1) + 1
 		}
 	},
