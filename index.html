@@ -1633,7 +1633,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(11/15/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(11/16/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -2421,7 +2421,7 @@
 								<div id="Do protons decay?" class="achievement achievementlocked" style="background-image: url(images/139.png)" ach-tooltip="Unlock Tree of Decay. Reward: You keep the two thirds power of your preons upon quantum when outside of a Quantum Challenge."></div>
 							</td>
 							<td>
-								<div id="Hardly marked" class="achievement achievementlocked" style="background-image: url(images/140.png)" ach-tooltip="Complete a PC with the QC3 & 8 combination. Reward: You keep the cube root of your normal replicants upon quantum when outside of a Quantum Challenge."></div>
+								<div id="Hardly marked" class="achievement achievementlocked" style="background-image: url(images/140.png)" ach-tooltip="Complete a PC with the QC3 & 8 combination. Reward: ???"></div>
 							</td>
 							<td>
 								<div id="Stop blocking me!" class="achievement achievementlocked" style="background-image: url(images/141.png)"></div>
@@ -2470,7 +2470,7 @@
 								<div id="Really?" class="achievement achievementlocked" style="background-image: url(images/154.png)"></div>
 							</td>
 							<td>
-								<div id="But I don't want to grind!" class="achievement achievementlocked" style="background-image: url(images/155.png)" ach-tooltip="Get the 21st Nanofield reward without having Tree Upgrades. Reward: Gain more quarks based on radioactive decays."></div>
+								<div id="But I don't want to grind!" class="achievement achievementlocked" style="background-image: url(images/155.png)" ach-tooltip="???. Reward: Gain more quarks based on radioactive decays."></div>
 							</td>
 							<td>
 								<div id="I rather oppose the theory of everything" class="achievement achievementlocked" style="background-image: url(images/156.png)" ach-tooltip="Become a ghost with at most 1x quantumed stat. Reward: You gain more Quarks based on your quantumed stat and you can auto-disable your 'Automatic Quantum' autobuyer with a specific amount of quantumed stat."></div>
@@ -2571,7 +2571,7 @@
 								<div id="Einstein's Ghost" class="achievement achievementlocked" style="background-image: url(images/185.png)"></div>
 							</td>
 							<td>
-								<div id="Gigafield" class="achievement achievementlocked" style="background-image: url(images/186.png)" ach-tooltip="Get 250 Nanorewards. Rewards: Bosonic Upgrades don't reset at all."></div>
+								<div id="Gigafield" class="achievement achievementlocked" style="background-image: url(images/186.png)" ach-tooltip="???. Reward: Bosonic Upgrades don't reset at all."></div>
 							</td>
 							<td>
 								<div id="X-Ranked" class="achievement achievementlocked" style="background-image: url(images/187.png)"></div>
@@ -4447,13 +4447,6 @@
 				<td id='positronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('positrons')">Positrons</button></td>
 				<td id='stringstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('strings')">String</button></td>
 				<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Milestones</button></td>
-
-				<!--
-				OLD MECHANICS
-
-				<td id='nanofieldtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('nanofield')">Nanofield</button></td>
-				<td id='todtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('tod')">Tree of Decay</button></td>
-				-->
 			</tr>
 		</table>
 		<div class='quantumtab' id='uquarks'>
@@ -5062,100 +5055,6 @@
 				<div class="str_boosts" id="str_boosts"></div>
 			</div>
 		</div>
-		<div class='quantumtab' id='nanofield'>
-			<table id='nftabs' align="center" style="margin: auto">
-				<tr>
-					<td><button class="secondarytabbtn" onclick="showNFTab('nanoverse')">The Nanoverse</button></td>
-					<td><button class="secondarytabbtn" onclick="showNFTab('antipreon')">Antipretus' Lair</button></td>
-				</tr>
-			</table>
-			<div class='nftab' id='nanoverse'>
-				You have <span id="quarksNanofield"></span> preons.<br>
-				<span id="ns"></span>
-				<table class="qTable"><tr><td>
-					You have <span id="preonEnergy" style="font-size:35px"></span> preon energy.<br>
-					You have <span id="quarkPower" style="font-size:35px"></span> preon power. Next at <span id="quarkPowerThreshold" style="font-size:35px"></span> preon energy.<br>
-					You are getting <span id="quarkEnergyRate"></span> preon energy per second if your preon anti-energy didn't reach its limit.
-				</td><td>
-					You have <span id="quarkCharge" style="font-size:35px"></span> preon charge.<br>
-					<button class="storebtn" id="produceQuarkCharge" onclick="startProduceQuarkCharge()"></button><br>
-					You are getting <span id="quarkChargeRate"></span> preon charge per second, but losing <span id="quarkLoss"></span> preons per second.
-				</td><td>
-					You have <span id="quarkAntienergy" style="font-size:35px"></span> preon anti-energy. At <span id="quarkChargeProductionCap" style="font-size:35px"></span>, your preon charge will stop producing energy and anti-energy.<br>
-					You are getting <span id="quarkAntienergyRate"></span> preon anti-energy per second.
-				</td></tr></table>
-				You have <span id="rewards" style="font-size:35px"></span> <span id="nfRewardScaling"></span>.
-				<table class="table" align=center style="margin: auto" id="nfRewards"></table>
-				<br><br>
-			</div>
-			<div class='nftab' id='antipreon'>
-				You have <span id="rewards_AP" style="font-size:35px"></span> Nanorewards.
-				<br><br>
-				<div id="apgInfo">
-					<b style="font-size: 35px">Welcome to my lair, ghosts!</b>
-					<br>
-					~ <span style="font-size: 25px"> Antipretus</span>, the Ghost Overseer of Antifield
-					<br><br>
-					<span id="sleepy">
-						<b style="font-size: 25px">Antipretus is sleepy...</b>
-						<br>
-						The scientists from Bosonic Lab know that he will take control of Nanoverse when he see a lot of Nanorewards from you.
-						<br><br>
-						<b class="warning">Don't get <span id="rewards_wake" style="font-size: 35px">104</span> rewards or else!</b>
-					</span>
-					<span id="woke">
-						<b class="warning" style="font-size: 35px">Antipretus has woken up and took control of your Nanoverse!</b>
-						<br><br>
-						<b style="font-size: 25px">The following effects are now applied!</b>
-						<br>
-						Each time you get 1 preon power:<br>
-						- You will lose preons faster when you start generating charge.<br>
-						- 1.41x slower charge production.<br>
-						- 1.41x faster anti-energy production.
-						<br><br>
-						Additionally, the power of Nanorewards have been softcapped!
-						<br><br>
-						However, the scientists decide to give you a slight quality of life boost. Your current reward gets 0.5 free tiers.
-						<br><br>
-						<b style="font-size: 35px">Good luck! :)</b>
-					</span>
-				</div>
-			</div>
-		</div>
-		<div class='quantumtab' id='tod'>
-			<span id="todspeed"></span>
-			<table class="qTable"><tr id="todRow"></tr></table>
-			<button class="storebtn" onclick="unstableAll()" style="width: 210px">Gain all unstable quarks</button>
-			<table class="table" align="center" style="margin: auto">
-				<tr>
-					<td><button id="redBtn" class="secondarytabbtn" onclick="showBranchTab('red')">Red Branch Upgrades</button></td>
-					<td><button id="greenBtn" class="secondarytabbtn" onclick="showBranchTab('green')">Green Branch Upgrades</button></td>
-					<td><button id="blueBtn" class="secondarytabbtn" onclick="showBranchTab('blue')">Blue Branch Upgrades</button></td>
-					<td><button class="secondarytabbtn" onclick="showBranchTab('upgrades')">Tree Upgrades</button></td>
-				</tr>
-			</table>
-			<div class="branchtab" id="redBranch"></div>
-			<div class="branchtab" id="greenBranch"></div>
-			<div class="branchtab" id="blueBranch"></div>
-			<div class="branchtab" id="upgradesBranch">
-				<span id="treeUpgradeEff"></span>
-				<table class="table" align="center" style="margin: auto"><tr>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg1' onclick='buyTreeUpg(1)' style='font-size:9px'>Meta Dimension Boosts are cheaper.<br><span id='treeupg1lvl'>?</span><br>Currently: -<span id='treeupg1current'>?</span><br><span id="treeupg1cost"></span></button></td>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg2' onclick='buyTreeUpg(2)' style='font-size:9px'>The TP gain formula exponent is increased.<br><span id='treeupg2lvl'>?</span><br>Currently: <span id='treeupg2current'>?</span><br><span id="treeupg2cost"></span></button></td>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg3' onclick='buyTreeUpg(3)' style='font-size:9px'>All branches are faster based on how many Tree upgrades have been bought.<br><span id='treeupg3lvl'>?</span><br>Currently: <span id='treeupg3current'>?</span>x<br><span id="treeupg3cost"></span></button></td>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg4' onclick='buyTreeUpg(4)' style='font-size:9px'>???<br><span id='treeupg4lvl'>?</span><br>Currently: <span id='treeupg4current'>?</span>x<br><span id="treeupg4cost"></span></button></td>
-				</tr><tr>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg5' onclick='buyTreeUpg(5)' style='font-size:9px'>All branches are faster based on your best-ever meta-antimatter.<br><span id='treeupg5lvl'>?</span><br>Currently: <span id='treeupg5current'>?</span>x<br><span id="treeupg5cost"></span></button></td>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg6' onclick='buyTreeUpg(6)' style='font-size:9px'>Emperor Dimensions produce faster.<br><span id='treeupg6lvl'>?</span><br>Currently: <span id='treeupg6current'>?</span>x<br><span id="treeupg6cost"></span></button></td>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg7' onclick='buyTreeUpg(7)' style='font-size:9px'>???<br><span id='treeupg7lvl'>?</span><br>Currently: <span id='treeupg7current'>?</span>x<br><span id="treeupg7cost"></span></button></td>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg8' onclick='buyTreeUpg(8)' style='font-size:9px'>???<br><span id='treeupg8lvl'>?</span><br>Currently: <span id='treeupg8current'>?</span>x<br><span id="treeupg8cost"></span></button></td>
-				</tr></table>
-				<button class="storebtn" onclick="maxTreeUpg()" style="width: 190px">Max all upgrades</button>
-			</div>
-			<br>
-			<br>
-			<br>
-		</div>
 		<div class="footer bottom"></div>
 	</div>
 	<div class='tab' id="flucTab">
@@ -5166,88 +5065,88 @@
 		<br>
 		<table class="table" align="center" style="margin: auto">
 			<tr>
-				<td><button class="secondarytabbtn" onclick="fluc.showTab('syntTab')">Synthesis</button></td>
-				<td><button class="secondarytabbtn" onclick="fluc.showTab('qfTab')">Quantum Field</button></td>
+				<td><button class="secondarytabbtn" onclick="fluc.showTab('ffTab')">Fluctuant Field</button></td>
+				<td><button class="secondarytabbtn" onclick="fluc.showTab('unknownTab')">???</button></td>
 				<!--<td><button class="secondarytabbtn">Particle Decay</button></td>-->
 				<!--<td><button class="secondarytabbtn">Spatial Decay</button></td>-->
 			</tr>
 		</table>
-		<div class="flucTab" id="syntTab">
+		<div class="flucTab" id="ffTab">
 			<br>
-			<span id="synt_unl">Next Synthesizer unlocks at ??? Fluctuant Energy.</span>
+			<span id="ff_unl">Next ??? unlocks at ??? Fluctuant Energy.</span>
 			<br>
-			<b class="red">Synthesizing restarts your Quantum run!</b>
+			<b class="red">??? restarts your Quantum run!</b>
 			<br>
-			<button class="storebtn" onclick="synt.clear()">Clear</button>
-			<button class="storebtn" onclick="synt.exportPreset()">Export</button>
-			<button class="storebtn" onclick="synt.importPreset()">Import</button>
+			<button class="storebtn" onclick="ff.clear()">Clear</button>
+			<button class="storebtn" onclick="ff.exportPreset()">Export</button>
+			<button class="storebtn" onclick="ff.importPreset()">Import</button>
 			<br><br>
 
-			<button class="fluctuatebtn synt_btn" id="synt_btn_am">
+			<button class="fluctuatebtn ff_btn" id="ff_btn_am">
 				<b style="font-size: 16px">Antimatter</b><br>
-				<span id="synt_eng_am"></span>
+				<span id="ff_eng_am"></span>
 			</button>
-			<button class="dilationupg synt_btn" id="synt_btn_dil">
+			<button class="dilationupg ff_btn" id="ff_btn_dil">
 				<b style="font-size: 16px">Dilation</b><br>
-				<span id="synt_eng_dil"></span>
+				<span id="ff_eng_dil"></span>
 			</button>
 			<br><br>
 
-			<!-- SYNTHESIZER 1 - 4 -->
-			<button class="storebtn synt_btn" id="synt_btn_f1">
+			<!-- ??? 1 - 4 -->
+			<button class="storebtn ff_btn" id="ff_btn_f1">
 				<b style="font-size: 12px">Superefficient</b><br>
-				<span id="synt_eng_f1"></span><br><br>
-				^<span id="synt_eff_f1">1.00</span> Replicate Chance Exponent
+				<span id="ff_eng_f1"></span><br><br>
+				^<span id="ff_eff_f1">1.00</span> Replicate Chance Exponent
 				<br><br>Affects: Effect
 			</button>
-			<button class="storebtn synt_btn" id="synt_btn_f2">
+			<button class="storebtn ff_btn" id="ff_btn_f2">
 				<b style="font-size: 16px">Accelerator</b><br>
-				<span id="synt_eng_f2"></span><br><br>
-				<span id="synt_eff_f2">1.00</span>x Replicanti Stealth
+				<span id="ff_eng_f2"></span><br><br>
+				<span id="ff_eff_f2">1.00</span>x Replicanti Stealth
 				<br><br>Affects: Energy
 			</button>
-			<button class="storebtn synt_btn" id="synt_btn_f3">
+			<button class="storebtn ff_btn" id="ff_btn_f3">
 				<b style="font-size: 16px">Excite</b><br>
-				<span id="synt_eng_f3"></span><br><br>
-				<span id="synt_eff_f3">1.00</span>x Higher Altitudes
+				<span id="ff_eng_f3"></span><br><br>
+				<span id="ff_eff_f3">1.00</span>x Higher Altitudes
 				<br><br>Affects: None
 			</button>
-			<button class="storebtn synt_btn" id="synt_btn_f4">
+			<button class="storebtn ff_btn" id="ff_btn_f4">
 				<b style="font-size: 16px">Stretch</b><br>
-				<span id="synt_eng_f4"></span><br><br>
-				<span id="synt_eff_f4">1.00</span>x Longer Altitudes
+				<span id="ff_eng_f4"></span><br><br>
+				<span id="ff_eff_f4">1.00</span>x Longer Altitudes
 				<br><br>Affects: None
 			</button>
 			<br><br>
 
-			<!-- SYNTHESIZER 5 - 8 -->
-			<button class="storebtn synt_btn" id="synt_btn_f5">
+			<!-- ??? 5 - 8 -->
+			<button class="storebtn ff_btn" id="ff_btn_f5">
 				<b style="font-size: 16px">Flux</b><br>
-				<span id="synt_eng_f5"></span><br><br>
-				^<span id="synt_eff_f5">1.00</span> Positronic Charge
+				<span id="ff_eng_f5"></span><br><br>
+				^<span id="ff_eff_f5">1.00</span> Positronic Charge
 				<br><br>Affects: None
 			</button>
-			<button class="storebtn synt_btn" id="synt_btn_f6">
+			<button class="storebtn ff_btn" id="ff_btn_f6">
 				<b style="font-size: 16px">Overseer</b><br>
-				<span id="synt_eng_f6"></span><br><br>
-				+<span id="synt_eff_f6">0.00</span>% later Obscure Galaxies
+				<span id="ff_eng_f6"></span><br><br>
+				+<span id="ff_eff_f6">0.00</span>% later Obscure Galaxies
 				<br><br>Affects: None
 			</button>
-			<button class="storebtn synt_btn" id="synt_btn_f7">
+			<button class="storebtn ff_btn" id="ff_btn_f7">
 				<b style="font-size: 16px">Advancement</b><br>
-				<span id="synt_eng_f7"></span><br><br>
-				+<span id="synt_eff_f7">0.00</span> Replicated Compressors
+				<span id="ff_eng_f7"></span><br><br>
+				+<span id="ff_eff_f7">0.00</span> Replicated Compressors
 				<br><br>Affects: None
 			</button>
-			<button class="storebtn synt_btn" id="synt_btn_f8">
+			<button class="storebtn ff_btn" id="ff_btn_f8">
 				<b style="font-size: 16px">Dominant</b><br>
-				<span id="synt_eng_f8"></span><br><br>
-				^<span id="synt_eff_f8">1.00</span> cap of PB11 multiplier
+				<span id="ff_eng_f8"></span><br><br>
+				^<span id="ff_eff_f8">1.00</span> cap of PB11 multiplier
 				<br><br>Affects: None
 			</button>
 		</div>
-		<div class="flucTab" id="qfTab">
-			<span id="qf_unl">You need 11 Fluctuant Energy in order to unlock Quantum Field.</span>
+		<div class="flucTab" id="unknownTab">
+			<span id="unknown_unl">You need 11 Fluctuant Energy in order to unlock Quantum Field.</span>
 			<span id="the_end">Congratulations! You have reached the end for now... Check the Discord to see when Quantum Field is ready!</span>
 		</div>
 	</div>
@@ -5277,11 +5176,11 @@
 					</tr>
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow2">
 						<td id="neutrinoBoostCell4">They boost something by <span class="neutrinos" id="neutrinoBoost4">1.0</span>x.</td>
-						<td id="neutrinoBoostCell5">They reduce the nerf to red power boost over 130% by <span class="neutrinos" id="neutrinoBoost5">100.0</span>%.</td>
+						<td id="neutrinoBoostCell5">They boost something by <span class="neutrinos" id="neutrinoBoost5">1.0</span>x.</td>
 						<td id="neutrinoBoostCell6">They slow down Distant Antimatter Galaxies by <span class="neutrinos" id="neutrinoBoost6">0.0</span>%.<br>(Nerfed in Big Rip runs)</td>
 					</tr>
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow3">
-						<td>In Big Rips, they make Tree upgrades <span class="neutrinos" id="neutrinoBoost7">0.0</span>% more effective. (<span id="preNeutrinoBoost7Eff">100.0</span>% to <span class="neutrinos" id="neutrinoBoost7Eff" style="font-size:25px">100.0</span>%)</td>
+						<td id="neutrinoBoostCell7">They boost something by <span class="neutrinos" id="neutrinoBoost7">1.0</span>x.</td>
 						<td id="neutrinoBoostCell8">They strengthen the first Big Rip upgrade by <span class="neutrinos" id="neutrinoBoost8">0.0</span>%.</td>
 						<td id="neutrinoBoostCell9">In Big Rips, they multiply the IC3 reward for each tickspeed purchase by <span class="neutrinos" id="neutrinoBoost9">1.00</span>x.</td>
 					</tr>
@@ -5296,29 +5195,29 @@
 						<td><button id="ghpMultUpg" class="gluonupgrade unavailablebtn" onclick="buyGHPMult()">You gain 2.22x more GhP.<br>Currently: <span id="ghpMult"></span>x<br>Cost: <span id="ghpMultUpgCost"></span> of any neutrinos</button><br><button class="storebtn" onclick='maxGHPMult()' style='width:190px'>Max GhP mult</button></td>
 					</tr>
 					<tr>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg1" onclick="buyNeutrinoUpg(1)" style="font-size: 10px">Meta-Dimension Boosts cost cheaper.<br>Currently: -<span id="neutrinoUpg1Pow"></span><br>Cost: <span id="neutrinoUpg1Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg2" onclick="buyNeutrinoUpg(2)">Eggons hatch instantly, and workers do not consume others.<br>Cost: <span id="neutrinoUpg2Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg3" onclick="buyNeutrinoUpg(3)">Blue power boosts preon charge production.<br>Currently: <span id="neutrinoUpg3Pow"></span>x<br>Cost: <span id="neutrinoUpg3Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg1" onclick="buyNeutrinoUpg(1)">Meta-Dimension Boosts cost cheaper.<br>Currently: -<span id="neutrinoUpg1Pow"></span><br>Cost: <span id="neutrinoUpg1Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg2" onclick="buyNeutrinoUpg(2)">???<br>Cost: <span id="neutrinoUpg2Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg3" onclick="buyNeutrinoUpg(3)">???<br>Cost: <span id="neutrinoUpg3Cost"></span> of any neutrinos</button></td>
 					</tr>
 					<tr>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg4" onclick="buyNeutrinoUpg(4)" style="font-size: 10px">Gain quark spins faster and all branches are faster based on your tickspeed.<br>Currently: <span id="neutrinoUpg4Pow">1.0</span>x<br>Cost: <span id="neutrinoUpg4Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg5" onclick="buyNeutrinoUpg(5)">Triple the positron gain.<br>Cost: <span id="neutrinoUpg5Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg4" onclick="buyNeutrinoUpg(4)">???<br>Cost: <span id="neutrinoUpg4Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg5" onclick="buyNeutrinoUpg(5)">???<br>Cost: <span id="neutrinoUpg5Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg6" onclick="buyNeutrinoUpg(6)">Disable Remote Antimatter Galaxies scaling!<br>Cost: <span id="neutrinoUpg6Cost"></span> of any neutrinos</button></td>
 					</tr>
 					<tr>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg7" onclick="buyNeutrinoUpg(7)" style="font-size: 10px">Green power boosts odd Emperor Dimensions and preon charge production.<br>Currently: <span id="neutrinoUpg7Pow"></span>x<br>Cost: <span id="neutrinoUpg7Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg8" onclick="buyNeutrinoUpg(8)">Disable the meta-antimatter boost nerf to quark gain.<br>Cost: <span id="neutrinoUpg8Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg7" onclick="buyNeutrinoUpg(7)">???<br>Cost: <span id="neutrinoUpg7Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg8" onclick="buyNeutrinoUpg(8)">???<br>Cost: <span id="neutrinoUpg8Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg9" onclick="buyNeutrinoUpg(9)">Eternities and Space Shards boost each other.<br>Cost: <span id="neutrinoUpg9Cost"></span> of any neutrinos</button></td>
 					</tr>
 					<tr>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg10" onclick="buyNeutrinoUpg(10)">Banked eternities are counted in Quantum Challenges.<br>Cost: <span id="neutrinoUpg10Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg10" onclick="buyNeutrinoUpg(10)">Banked Eternities are counted in Quantum Challenges.<br>Cost: <span id="neutrinoUpg10Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg11" onclick="buyNeutrinoUpg(11)">8th Big Rip upgrade is never repealed and capped.<br>Cost: <span id="neutrinoUpg11Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg12" onclick="buyNeutrinoUpg(12)" style="font-size: 10px">In Big Rips, each galaxy type boosts differently.<br>Hover to see your current effects<br>Cost: <span id="neutrinoUpg12Cost"></span> of any neutrinos</button></td>
 					</tr>
 					<tr>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg13" onclick="buyNeutrinoUpg(13)">100 RG upgrade doesn't nerf the 100 BR upgrade.<br>Cost: <span id="neutrinoUpg13Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg14" onclick="buyNeutrinoUpg(14)" style="font-size: 10px">Gain more neutrinos based on your GhP and color powers.<br>Currently: <span id="neutrinoUpg14Pow"></span>x<br>Cost: <span id="neutrinoUpg14Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg15" onclick="buyNeutrinoUpg(15)">Your Nanorewards speed up Nanofield.<br>Currently: <span id="neutrinoUpg15Pow"></span>x<br>Cost: <span id="neutrinoUpg15Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg15" onclick="buyNeutrinoUpg(15)">???<br>Cost: <span id="neutrinoUpg15Cost"></span> of any neutrinos</button></td>
 					</tr>
 					<tr>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg16" onclick="buyNeutrinoUpg(16)">You can become a ghost without having to Big Rip, but at a reduced rate.<br>Cost: <span id="neutrinoUpg16Cost"></span> of any neutrinos</button></td>
@@ -5576,27 +5475,27 @@
 						</td>
 					</tr><tr>
 						<td>
-							They boost Tachyon particles boost to dilated time production by ^<span class="red" id="lightBoost1" style="font-size:35px"></span>.
+							They boost something by <span class="red" id="lightBoost1" style="font-size:35px">1.00</span>x.
 						</td>
 						<td>
-							They boost red Light strength by <span class="orange" id="lightStrength1" style="font-size:35px"></span>x and reduce preon power threshold increase to <span class="orange" id="lightBoost2" style="font-size:35px"></span>th root.
+							They boost red Light strength by <span class="orange" id="lightStrength1" style="font-size:35px"></span>x.
 						</td>
 						<td>
 							They boost orange Light strength by <span class="yellow" id="lightStrength2" style="font-size:35px"></span>x.
 						</td>
 						<td>
-							They boost yellow Light strength by <span class="green" id="lightStrength3" style="font-size:35px"></span>x and boost the preon effect by <span class="green" id="lightBoost4" style="font-size:35px"></span>%.
+							They boost yellow Light strength by <span class="green" id="lightStrength3" style="font-size:35px"></span>x.
 						</td>
 					</tr><tr>
 						<td id="le3">
-							In non-Big Rips, Red Light multiplies normal galaxy amount of 'Intergalactic' reward by <span class="red" id="leBoost3" style="font-size:35px"></span>x.<br>(Your best red Light doesn't boost this.)
+							They boost something by <span class="red" id="leBoost3" style="font-size:35px">1.00</span>x.
 						</td>
 						<td></td>
 						<td id="le6">
-							They boost something by <span class="yellow" id="leBoost6" style="font-size:35px"></span>x.
+							They boost something by <span class="yellow" id="leBoost6" style="font-size:35px">1.00</span>x.
 						</td>
 						<td id="le1">
-							Every 100% of green power effect, they add <span class="green" id="leBoost1" style="font-size:35px"></span> to Tachyonic Galaxies amount in Mastery Study 201.<br>(<span class="green" id="leBoost1Total" style="font-size:25px"></span> added to Tachyonic Galaxies amount)
+							They boost something by <span class="green" id="leBoost1" style="font-size:35px">1.00</span>x.
 						</td>
 					</tr><tr>
 						<td class="blue">
@@ -5626,7 +5525,7 @@
 						</td>
 					</tr><tr>
 						<td>
-							They boost green Light strength by <span class="blue" id="lightStrength4" style="font-size:35px"></span>x and reduce the nerf to blue power boost by <span class="blue" id="lightBoost5" style="font-size:35px"></span>%.
+							They boost green Light strength by <span class="blue" id="lightStrength4" style="font-size:35px"></span>x.
 						</td>
 						<td>
 							They boost blue Light strength by <span class="indigo" id="lightStrength5" style="font-size:35px"></span>x and increase your Neutrino gain by <span class="indigo" id="lightBoost6" style="font-size:35px"></span>x.
@@ -6092,16 +5991,14 @@
 <script type="text/javascript" src="javascripts/mods/ngp3/quantum/milestones.js"></script>
 
 <script type="text/javascript" src="javascripts/mods/ngp3/fluctuate/core.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/fluctuate/synthesis.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/fluctuate/field.js"></script>
 
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/big_rip.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/bosonic_lab.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/ghostly_photons.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/gravity_dimensions.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/higgs_bosons.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/legacy/nanofield.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/neutrinos.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/legacy/tod.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/core.js"></script>
 
 <script type="text/javascript" src="javascripts/mods/condensed.js"></script>

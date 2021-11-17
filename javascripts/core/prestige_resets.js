@@ -382,60 +382,6 @@ function resetMasteryStudies() {
 }
 
 //Old
-function nanofieldResetOnQuantum(){
-	qu_save.nanofield.charge = new Decimal(0)
-	qu_save.nanofield.energy = new Decimal(0)
-	qu_save.nanofield.antienergy = new Decimal(0)
-	qu_save.nanofield.power = 0
-	qu_save.nanofield.powerThreshold = new Decimal(50)
-}
-
-function getReplicantsOnGhostifyData(){
-	return {
-		amount: new Decimal(0),
-		requirement: new Decimal("1e3000000"),
-		quarks: new Decimal(0),
-		quantumFood: 0,
-		quantumFoodCost: new Decimal(2e46),
-		limit: 1,
-		limitDim: 1,
-		limitCost: new Decimal(1e49),
-		eggonProgress: new Decimal(0),
-		eggons: new Decimal(0),
-		hatchSpeed: 20,
-		hatchSpeedCost: new Decimal(1e49),
-		babyProgress: new Decimal(0),
-		babies: new Decimal(0),
-		ageProgress: new Decimal(0)
-	}
-}
-
-function getToDOnGhostifyData(){
-	var bm = player.ghostify.milestones
-	let ret = {
-		r: {
-			quarks: new Decimal(0),
-			spin: new Decimal(bm > 13 ? 1e25 : 0),
-			upgrades: {}
-		},
-		g: {
-			quarks: new Decimal(0),
-			spin: new Decimal(bm > 13 ? 1e25 : 0),
-			upgrades: {}
-		},
-		b: {
-			quarks: new Decimal(0),
-			spin: new Decimal(bm > 13 ? 1e25 : 0),
-			upgrades: {}
-		},
-		upgrades: {}
-	}
-	if (qu_save.tod.b.decays && hasAch("ng3p86")) ret.b.decays = Math.floor(qu_save.tod.b.decays * .75)
-	if (qu_save.tod.r.decays && hasAch("ng3p86")) ret.r.decays = Math.floor(qu_save.tod.r.decays * .75)
-	if (qu_save.tod.g.decays && hasAch("ng3p86")) ret.g.decays = Math.floor(qu_save.tod.g.decays * .75)
-	return ret
-}
-
 function getBigRipOnGhostifyData(nBRU){
 	var bm = player.ghostify.milestones
 	return {
@@ -509,18 +455,7 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			br: 0,
 			total: 0
 		},
-		nanofield: {
-			charge: new Decimal(0),
-			energy: new Decimal(0),
-			antienergy: new Decimal(0),
-			power: 0,
-			powerThreshold: new Decimal(50),
-			rewards: bm >= 13 ? 16 : 0,
-			producingCharge: false,
-			apgWoke: qu_save.nanofield.apgWoke
-		},
 		reachedInfQK: bm,
-		tod: getToDOnGhostifyData(),
 		bigRip: getBigRipOnGhostifyData(nBRU),
 		breakEternity: getBreakEternityDataOnGhostify(nBEU, bm),
 		notrelative: true,
@@ -775,8 +710,6 @@ function doQuantumGhostifyResetStuff(implode, bm){
 	updateQuantumWorth("quick")
 	QCs.updateTmp()
 	QCs.updateDisp()
-	updateNanoRewardTemp()
-	updateTODStuff()
 }
 
 function doGhostifyGhostifyResetStuff(bm, force){

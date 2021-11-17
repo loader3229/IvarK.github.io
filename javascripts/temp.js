@@ -55,7 +55,6 @@ function updateTmp(init) {
 	if (hasBosonicUpg(41)) {
 		tmp.blu[41] = bu.effects[41]()
 		tmp.it = tmp.it.times(tmp.blu[41].it)
-		tmp.ig = tmp.ig.times(tmp.blu[41].ig)
 	}
 
 	if (tmp.ngC) ngC.updateTmp()
@@ -92,44 +91,23 @@ function updateTmp(init) {
 }
 
 function updateRedLightBoostTemp(){
-	var light0multiplier = tmp.ngp3_exp ? .155 : .15
-	var lighteffect0 = Math.pow(tmp.effL[0].best, .25) * light0multiplier + 1
-	
-	if (lighteffect0 > 1.5 && !tmp.ngp3_exp) lighteffect0 = Math.log10(lighteffect0 * 20 / 3) * 1.5
-	tmp.le[0] = lighteffect0
+	tmp.le[0] = 1
 }
 
 function updateOrangeLightBoostTemp() {
-	let eff = tmp.effL[1] + 1
-	let small = eff > 9 ? Math.sqrt(eff) + 6 : eff
-	let x = small
-
-	if (tmp.effL[1] > 64) {
-		let big = tmp.ngp3_exp ? 10 + Math.pow(eff, 1/3) : Math.log10(eff / 64) + 14
-
-		x = big
-		if (tmp.pce && tmp.pce.ms) x = Math.pow(small, 1 - tmp.pce.ms.ol) * Math.pow(big, tmp.pce.ms.ol)
-	}
-
-	tmp.le[1] = x
+	tmp.le[1] = 1
 }
 
 function updateYellowLightBoostTemp(){
-	var lighteffect2 = 0 // changed later no matter what
-	if (tmp.effL[2] > 60 && !tmp.ngp3_exp) lighteffect2 = (Math.log10(tmp.effL[2] / 6) + 2) / 3 * Math.sqrt(1200)
-	else lighteffect2 = tmp.effL[2] > 20 ? Math.sqrt(tmp.effL[2] * 20) : tmp.effL[2]
-	tmp.le[2] = Math.sqrt(lighteffect2) * 45e3
+	tmp.le[2] = 1
 }
 
 function updateGreenLightBoostTemp(){
-	var lighteffect3 = Math.log10(tmp.effL[3] + 1) / 5 + 1
-	tmp.le[3] = lighteffect3
+	tmp.le[3] = 1
 }
 
 function updateBlueLightBoostTemp(){
-	var light4mult = tmp.ngp3_exp ? 1.3 : 5/4
-	var lighteffect4 = Math.log10(Math.sqrt(tmp.effL[4] * 2) + 1) * light4mult
-	tmp.le[4] = lighteffect4
+	tmp.le[4] = 1
 }
 
 function updateIndigoLightBoostTemp(){
@@ -143,11 +121,7 @@ function updateIndigoLightBoostTemp(){
 }
 
 function updateVioletLightBoostTemp(){
-	var lightexp6 = tmp.ngp3_exp ? .36 : 1/3
-	var loglighteffect6 = Math.pow(player.postC3Reward.log10() * tmp.effL[6], lightexp6) * 2 
-	if (loglighteffect6 > 15e3) loglighteffect6 = 15e3 * Math.pow(loglighteffect6 / 15e3, .6)
-	if (loglighteffect6 > 5e4) loglighteffect6 = Math.sqrt(loglighteffect6 * 5e4)
-	tmp.le[6] = Decimal.pow(10, loglighteffect6)
+	tmp.le[6] = 1
 }
 
 function updateEffectiveLightAmountsTemp(){
@@ -219,7 +193,6 @@ function updateNGP3TempStuff(init) {
 			if (!player.dilation.active && qu_save.bigRip.upgrades.includes(14)) tmp.nrm = tmp.nrm.pow(tmp.bru[14])
 			if (tmp.nrm.log10() > 1e9) tmp.nrm = Decimal.pow(10, 1e9 * Math.pow(tmp.nrm.log10() / 1e9, 2/3))
 		}
-		if (player.masterystudies.includes("d13")) updateTS431ExtraGalTemp()
 	}
 	if (tmp.quActive || init) {
 		//Quantum
@@ -235,29 +208,12 @@ function updateNGP3TempStuff(init) {
 	if (mTs.unl() || init) {
 		mTs.updateTmp()
 	}
-	if (tmp.quActive) {
-		if (player.masterystudies.includes("d13")) tmp.branchSpeed = getBranchSpeed()
-		if (player.masterystudies.includes("d12") && tmp.nf !== undefined && tmp.nf.rewardsUsed !== undefined) {
-			var x = getNanoRewardPowerEff()
-			var y = qu_save.nanofield.rewards
-			tmp.ns = getNanofieldSpeed()
-			if (tmp.nf.powerEff !== x || tmp.nf.rewards !== y) {
-				tmp.nf.powerEff = x
-				tmp.nf.rewards = y
-
-				updateNanoRewardPowers()
-				updateNanoRewardEffects()
-			}
-		}
-		tmp.be = inBigRip() && qu_save.breakEternity.break
-		tmp.tue = getTreeUpgradeEfficiency()
-	} else tmp.be = false
+	tmp.be = tmp.quActive && inBigRip() && qu_save.breakEternity.break
 }
 
 function updateGhostifyTempStuff() {
 	GDs.updateTmp()
 	updateBosonicLabTemp()
-	tmp.apgw = (tmp.quActive && qu_save.nanofield.apgWoke) || getAntipreonGhostWake()
 	if (tmp.quActive) updatePPTITemp() //preon power threshold increase
 	if (pH.did("ghostify") && player.ghostify.ghostlyPhotons.unl) {
 		tmp.phF = getPhotonicFlow()

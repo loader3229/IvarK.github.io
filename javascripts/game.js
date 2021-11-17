@@ -228,68 +228,6 @@ function setupDimensionsHTML() {
 	}
 }
 
-function setupToDHTMLandData(){
-	for (var c = 0; c < 3; c++) {
-		var color = (["red", "green", "blue"])[c]
-		var shorthand = (["r", "g", "b"])[c]
-		var branchUpgrades = ["Gain <span id='" + color + "UpgPow1'></span>x more " + color + " quark spins, but " + color + " quarks decay <span id='" + color + "UpgSpeed1'></span>x faster.",
-				      "Multiply and exponentiate the gain of " + color + " <span id='" + color + "UpgName2'></span> quarks.",
-				      (["Red", "Green", "Blue"])[c]+" <span id='" + color + "UpgName3'></span> quarks decay<span id='" + color + "UpgEffDesc'> 4x</span> slower."] //might need to change this to just "slower" once we have 1000+ upgrade 3's
-
-		var html = 'You have <span class="' + color + '" id="' + color + 'QuarksToD" style="font-size: 35px">0</span> ' + color + ' quarks.<br>'
-		html += '<button class="storebtn" id="' + color + 'UnstableGain" style="width: 240px; height: 80px" onclick="unstableQuarks(\'' + shorthand + '\')"></button><br>'
-		html += 'You have <span class="' + color + '" id="' + color + 'QuarkSpin" style="font-size: 35px">0.0</span> ' + color + ' quark spin.<br>'
-		html += '<span class="' + color + '" id="' + color + 'QuarkSpinProduction" style="font-size: 25px">+0/s</span><br>'
-		html += "You have <span class='" + color + "' id='" + color + "UnstableQuarks' style='font-size: 35px'>0</span> " + color + " <span id='" + shorthand + "UQName'></span> quarks.<br>"
-		html += "<span id='" + color + "QuarksDecayRate'></span>.<br>"
-		html += "They will last <span id='" + color + "QuarksDecayTime'></span>."
-		getEl("todRow").insertCell(c).innerHTML = html
-		getEl("todRow").cells[c].className = shorthand + "qC"
-		
-		html = "<table class='table' align='center' style='margin: auto'><tr>"
-		for (var u = 1; u <= 3; u++) {
-			html += "<td style='vertical-align: 0'><button class='gluonupgrade unavailablebtn' id='" + color + "upg" + u + "' onclick='buyBranchUpg(\"" + shorthand + "\", " + u + ")' style='font-size:10px'>" + branchUpgrades[u - 1] + "<br>" 
-			html += "Currently: <span id='" + color + "upg" + u + "current'>1</span>x<br><span id='" + color + "upg" + u + "cost'>?</span></button>"
-			html += (u == 2 ? "<br><button class='storebtn' style='width: 190px' onclick='maxBranchUpg(\"" + shorthand + "\")'>Max all upgrades</button>" + "<br><button class='storebtn' style='width: 190px; font-size:10px' onclick='maxBranchUpg(\"" + shorthand + "\", true)'>Max 2nd and 3rd upgrades</button>":"")+"</td>"
-		}
-		html += "</tr></tr><td></td><td><button class='gluonupgrade unavailablebtn' id='" + shorthand + "RadioactiveDecay' style='font-size:9px' onclick='radioactiveDecay(\"" + shorthand + "\")'>Reset to strengthen the 1st upgrade, but nerf this branch.<br><span id='" + shorthand + "RDReq'></span><br>Radioactive Decays: <span id='" + shorthand + "RDLvl'></span></button></td><td></td>"
-		html += "</tr></table>"
-		getEl(color + "Branch").innerHTML = html
-	}
-}
-
-function setupNanofieldHTMLandData(){
-	var rewards = 8
-	var size = 4
-
-	var nfRewards = getEl("nfRewards")
-	var row = 0
-	for (let r = 1; r <= rewards; r += size) {
-		var rows = []
-		for (let i = 0; i < 3; i++) rows[i] = nfRewards.insertRow(row + i)
-		row += 3
-
-		for (let x = 0; x < size; x++) {
-			var rw = r + x
-			if (rw > rewards) break
-
-			var c0 = rows[0].insertCell(x)
-			var c1 = rows[1].insertCell(x)
-			var c2 = rows[2].insertCell(x)
-
-			c0.id = 'nfRewardHeader' + rw
-			c0.className = 'milestoneText'
-
-			c1.id = 'nfRewardTier' + rw
-			c1.className = 'milestoneTextSmall'
-
-			c2.innerHTML = "<button class='nfRewardlocked' id='nfReward" + rw + "'></button>"
-		}
-	}
-	getEl("nfReward7").style["font-size"] = "10px"
-	getEl("nfReward8").style["font-size"] = "10px"
-}
-
 function setupBraveMilestones(){
 	for (var m = 1; m < 17; m++) getEl("braveMilestone" + m).textContent=getFullExpansion(tmp.bm[m - 1])+"x quantumed"
 }
@@ -361,8 +299,6 @@ function setupHTMLAndData() {
 	setupAutobuyerHTMLandData()
 	setupDilationUpgradeList()
 	setupMasteryStudiesHTML()
-	setupToDHTMLandData()
-	setupNanofieldHTMLandData()
 	pos.setupHTML()
 	QCs.setupDiv()
 	setupBraveMilestones()
@@ -836,27 +772,6 @@ function doNGMinusTwoNewPlayer(){
 	player.options.gSacrificeConfirmation = true
 }
 
-function getBrandNewTodData(){
-	return {
-		r: {
-			quarks: 0,
-			spin: 0,
-			upgrades: {}
-		},
-		g: {
-			quarks: 0,
-			spin: 0,
-			upgrades: {}
-		},
-		b: {
-			quarks: 0,
-			spin: 0,
-			upgrades: {}
-		},
-		upgrades: {}
-	}
-}
-
 function getBrandNewBigRipData(){
 	return {
 		active: false,
@@ -868,30 +783,6 @@ function getBrandNewBigRipData(){
 		savedAutobuyersBR: {},
 		spaceShards: 0,
 		upgrades: []
-	}
-}
-
-function getBrandNewPCData(){
-	return {
-		order: {},
-		current: 0,
-		completed: 0,
-		fastest: {},
-		pc68best: 0,
-		respec: false
-	}
-}
-
-function getBrandNewNanofieldData(){
-	return {
-		charge: 0,
-		energy: 0,
-		antienergy: 0,
-		power: 0,
-		powerThreshold: 50,
-		rewards: 0,
-		best: 0,
-		producingCharge: false
 	}
 }
 
@@ -1020,10 +911,8 @@ function doNGPlusThreeNewPlayer(){
 	qu_save.autoOptions = {}
 	qu_save.qc = QCs.setup()
 	player.dontWant = false
-	qu_save.nanofield = getBrandNewNanofieldData()
 	qu_save.notrelative = false
 	qu_save.wasted = false
-	qu_save.tod = getBrandNewTodData()
 	qu_save.bigRip = getBrandNewBigRipData() 
 	qu_save.breakEternity = getBrandNewBreakEternityData()
 	player.dilation.bestTPOverGhostifies = 0
@@ -2258,7 +2147,6 @@ function onNotationChange() {
 		updateQuantumWorth("notation")
 		QCs.updateDisp()
 		updateMasteryStudyTextDisplay()
-		updateTODStuff()
 		updateBreakEternity()
 		onNotationChangeNeutrinos()
 		updateBosonicStuffCosts()
@@ -3144,7 +3032,6 @@ function updateHotkeys() {
 	if (hasAch("ngpp11")) html += ", shift+D to Meta-Dimension Boost"
 	if (player.meta) html += ",<br>Q to Quantum"
 	if (pH.can("fluctuate") || pH.did("fluctuate")) html += ", F to Fluctuate"
-	if (hasAch("ng3p45")) html += ", U to unstabilize all Quarks"
 	if (hasAch("ng3p51")) html += ", B to Big Rip, G to become a ghost"
 	html += "."
 	if (player.boughtDims) html += "<br>You can hold Shift while buying time studies to buy all up until that point, see each study's number, and save study trees."
@@ -3631,7 +3518,7 @@ function notifyGhostifyMilestones(){
 	if (typeof notifyId2 == "undefined") notifyId2 = 16
 	if (notifyId2 <= 0) notifyId2 = 0
 	if (player.ghostify.milestones > notifyId2) {
-		$.notify("You became a ghost in at most "+getFullExpansion(tmp.bm[notifyId2])+"x quantumed stat! "+(["You now start with all Speedrun Milestones and all "+shorten(Number.MAX_VALUE)+" QK assignation features unlocked, all Paired Challenges completed, all Big Rip upgrades bought, Nanofield is 2x faster until you reach 16 rewards, and you get quarks based on your best MA this quantum", "From now on, colored quarks do not cancel, you keep your gluon upgrades, you can quick Big Rip, and completing an Eternity Challenge doesn't respec your Time Studies.", "???", "From now on, Quantum doesn't reset your Tachyon particles unless you are in a QC, unstabilizing quarks doesn't lose your colored quarks, and you start with 5 of 1st upgrades of each Tree Branch", "From now on, Quantum doesn't reset your Meta-Dimension Boosts unless you are in a QC or undoing Big Rip", "From now on, Quantum doesn't reset your normal replicants unless you are in a QC or undoing Big Rip", "You now start with 10 worker replicants and Ghostify now doesn't reset Neutrinos.", "You are now gaining ^0.5 amount of quarks, ^0.5 amount of gluons, and 1% of Space Shards gained on Quantum per second.", "You now start with 10 Emperor Dimensions of each tier up to the second tier"+(aarMod.ngudpV?", and from now on, start Big Rips with the 3rd row of Eternity Upgrades":""), "You now start with 10 Emperor Dimensions of each tier up to the fourth tier", "You now start with 10 Emperor Dimensions of each tier up to the sixth tier, and the IP multiplier no longer costs IP", "You now start with 10 of each Emperor Dimension", "You now start with 16 Nanofield rewards", "You now start with "+shortenCosts(1e25)+" quark spins, and Branches are faster based on your spins", "You now start with Break Eternity unlocked and all Break Eternity upgrades bought and generate 1% of Eternal Matter gained on Eternity per second", "From now on, you gain 1% of quarks you will gain per second and you keep your Tachyon particles on Quantum and Ghostify outside of Big Rip."])[notifyId2]+".","success")
+		$.notify("You became a ghost in at most "+getFullExpansion(tmp.bm[notifyId2])+"x quantumed stat! "+(["You now start with all Speedrun Milestones and all "+shorten(Number.MAX_VALUE)+" QK assignation features unlocked, all Paired Challenges completed, all Big Rip upgrades bought, and you get quarks based on your best MA this quantum", "From now on, colored quarks do not cancel, you keep your gluon upgrades, you can quick Big Rip, and completing an Eternity Challenge doesn't respec your Time Studies.", "???", "From now on, Quantum doesn't reset your Tachyon particles unless you are in a QC, and unstabilizing quarks doesn't lose your colored quarks.", "From now on, Quantum doesn't reset your Meta-Dimension Boosts unless you are in a QC or undoing Big Rip", "From now on, Quantum doesn't reset your normal replicants unless you are in a QC or undoing Big Rip", "You now start with 10 worker replicants and Ghostify now doesn't reset Neutrinos.", "You are now gaining ^0.5 amount of quarks, ^0.5 amount of gluons, and 1% of Space Shards gained on Quantum per second.", "You now start with 10 Emperor Dimensions of each tier up to the second tier"+(aarMod.ngudpV?", and from now on, start Big Rips with the 3rd row of Eternity Upgrades":""), "You now start with 10 Emperor Dimensions of each tier up to the fourth tier", "You now start with 10 Emperor Dimensions of each tier up to the sixth tier, and the IP multiplier no longer costs IP", "You now start with 10 of each Emperor Dimension", "You now start with 16 Nanofield rewards", "You now start with "+shortenCosts(1e25)+" quark spins, and Branches are faster based on your spins", "You now start with Break Eternity unlocked and all Break Eternity upgrades bought and generate 1% of Eternal Matter gained on Eternity per second", "From now on, you gain 1% of quarks you will gain per second and you keep your Tachyon particles on Quantum and Ghostify outside of Big Rip."])[notifyId2]+".","success")
 		notifyId2++
 	}
 }
@@ -3773,13 +3660,6 @@ function ghostifyAutomationUpdatingPerSecond() {
 	//Quantum Layer
 	if (!tmp.quUnl) return
 	if (isAutoGhostActive(14)) maxBuyBEEPMult()
-	if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode=="t") rotateAutoUnstable()
-	if (isAutoGhostActive(10)) maxBuyLimit()
-	if (isAutoGhostActive(8)) buyMaxQuantumFood()
-	if (isAutoGhostActive(7)) {
-		enB.maxBuy("glu")
-		enB.maxBuy("pos")
-	}
 }
 
 function checkGluonRounding(){
@@ -4115,35 +3995,10 @@ function ghostifyAutomationUpdating(diff){
 	if (!tmp.quUnl) return
 
 	let limit = player.ghostify.automatorGhosts[13].o || 1 / 0
-	if (hasMTS("d13") && isAutoGhostActive(13)) {
+	if (hasMTS("d14") && isAutoGhostActive(13)) {
 		if (qu_save.bigRip.active) {
 			if (qu_save.time >= player.ghostify.automatorGhosts[13].u * 10 && qu_save.bigRip.times <= limit) quantumReset(true, true)
 		} else if (qu_save.time >= player.ghostify.automatorGhosts[13].t * 10 && qu_save.bigRip.times < limit) bigRip(true)
-	}
-
-	if (!tmp.quUnl || !tmp.quActive) return
-
-	if (hasMTS("d12")) {
-		for (let c = 1; c <= 3; c++) {
-			let shorthand = colors[c - 1]
-			if (isAutoGhostActive(c) && qu_save.usedQuarks[shorthand].gt(0) && qu_save.tod[shorthand].quarks.eq(0)) unstableQuarks(shorthand)
-			if (isAutoGhostActive(12) && getUnstableGain(shorthand).max(qu_save.tod[shorthand].quarks).gte(Decimal.pow(10, Math.pow(2, 50)))) {
-				unstableQuarks(shorthand)
-				radioactiveDecay(shorthand)
-			}
-			if (isAutoGhostActive(5)) maxBranchUpg(shorthand)
-		}
-		if (isAutoGhostActive(6)) maxTreeUpg()
-	}
-	if (hasMTS("d11") && isAutoGhostActive(11)) {
-		let ag = player.ghostify.automatorGhosts[11]
-		ag.t = (ag.t || 0) + diff
-
-		let start = qu_save.nanofield.producingCharge ? ag.t <= ag.cw : ag.t >= ag.pw
-		if (qu_save.nanofield.producingCharge != start) {
-			startProduceQuarkCharge()
-			if (start) ag.t = 0
-		}
 	}
 }
 
@@ -4181,71 +4036,6 @@ function ghostlyPhotonsUpdating(diff){
 	data.maxRed = Math.max(data.lights[0], data.maxRed)
 }
 
-function nanofieldProducingChargeUpdating(diff){
-	var rate = getQuarkChargeProduction()
-	var loss = getQuarkLossProduction()
-	var toSub = loss.times(diff).min(qu_save.replicants.quarks)
-	if (toSub.eq(0)) {
-		qu_save.nanofield.producingCharge = false
-		getEl("produceQuarkCharge").innerHTML="Start production of preon charge.<br>(You will not get preons when you do this.)"
-	} else if (!hasBosonicUpg(51)) {
-		qu_save.nanofield.charge = qu_save.nanofield.charge.add(toSub.div(loss).times(rate))
-	}
-}
-
-function nanofieldUpdating(diff){
-	var AErate = getQuarkAntienergyProduction()
-	var toAddAE = AErate.times(diff).min(getQuarkChargeProductionCap().sub(qu_save.nanofield.antienergy))
-	if (qu_save.nanofield.producingCharge) nanofieldProducingChargeUpdating(diff)
-	if (hasBosonicUpg(51)) {
-		qu_save.nanofield.charge = qu_save.nanofield.charge.add(getQuarkChargeProduction().times(diff))
-		qu_save.nanofield.energy = qu_save.nanofield.energy.add(getQuantumEnergyProduction().times(diff).div(100))
-	}
-	if (toAddAE.gt(0)) {
-		qu_save.nanofield.antienergy = qu_save.nanofield.antienergy.add(toAddAE).min(getQuarkChargeProductionCap())
-		qu_save.nanofield.energy = qu_save.nanofield.energy.add(toAddAE.div(AErate).times(getQuantumEnergyProduction()))
-	}
-	if (toAddAE.gt(0) || hasBosonicUpg(51)) {
-		updateNextPreonEnergyThreshold()
-		if (qu_save.nanofield.power > qu_save.nanofield.rewards) {
-			qu_save.nanofield.rewards = qu_save.nanofield.power
-			if (!qu_save.nanofield.apgWoke && qu_save.nanofield.rewards >= tmp.apgw) {
-				qu_save.nanofield.apgWoke = tmp.apgw
-				$.notify("You reached " + getFullExpansion(tmp.apgw) + " rewards... Antipretus has woken up and took over the Nanoverse! Be careful!")
-				if (!hasAch("ng3p91")) {
-					showTab("quantumtab")
-					showQuantumTab("nanofield")
-					showNFTab("antipreon")
-				}
-			}
-			updateNanoRewardScaling()
-		}
-	}
-}
-
-function treeOfDecayUpdating(diff){
-	for (var c = 0; c < 3; c++) {
-		var shorthand = colors[c]
-		var branch = qu_save.tod[shorthand]
-		if (branch.quarks.gt(0)) {
-			var decayRate = getDecayRate(shorthand)
-			var decayPower = getRDPower(shorthand)
-
-			var mult = Decimal.pow(2, decayPower)
-			var power = getDecayLifetime(branch.quarks.div(mult))
-			var decayed = power.div(decayRate).min(diff)
-			power = power.sub(decayed.times(decayRate))
-
-			var sProd = getQuarkSpinProduction(shorthand)
-			var decaySpent = decayed
-			if (isAutoGhostsSafe && isAutoGhostActive(c + 1)) decaySpent = decaySpent.max(power.div(decayRate).times(10).min(diff))
-
-			branch.quarks = power.gt(1) ? Decimal.pow(2, power - 1).times(mult) : power.times(mult)
-			branch.spin = branch.spin.add(sProd.times(decaySpent))	
-		}
-	}
-}
-
 function quantumOverallUpdating(diff){
 	if (tmp.quActive) {
 		//Quantum Challenges
@@ -4258,10 +4048,6 @@ function quantumOverallUpdating(diff){
 		for (var c = 0; c < 3; c++) qu_save.colorPowers[colors[c]] = getColorPowerQuantity(colors[c])
 
 		if (str.unl()) str.updateFeatureOnTick() //Strings
-
-		if (hasMTS("d11")) emperorDimUpdating(diff)
-		if (hasMTS("d12")) nanofieldUpdating(diff)
-		if (hasMTS("d13")) treeOfDecayUpdating(diff)
 	}
 }
 
@@ -5673,10 +5459,6 @@ window.addEventListener('keydown', function(event) {
 		case 84: // T
 			if (shiftDown) buyTickSpeed()
 			else buyMaxTickSpeed()
-		break;
-
-		case 85: // U
-			if (tmp.ngp3) unstableAll()
 		break;
 	}
 }, false);

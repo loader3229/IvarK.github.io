@@ -1217,7 +1217,7 @@ var enB = {
 			eff(x) {
 				let exp = Math.min(3e-8 * Math.log2(x / 300 + 1), 1e-5) * getAQGainExp()
 				let cap = Decimal.pow(5, Math.pow(x, 0.4))
-				if (synt.unl()) cap = cap.pow(synt_tmp.eff.f8)
+				if (ff.unl()) cap = cap.pow(ff_tmp.eff.f8)
 				return {
 					exp: exp,
 					cap: cap,

@@ -657,35 +657,8 @@ function doNGP3NewPlayerStuff(){
         player.old = false
         qu_save.autoOptions = {}
 
-        qu_save.nanofield = {
-                charge: 0,
-                energy: 0,
-                antienergy: 0,
-                power: 0,
-                powerThreshold: 50,
-                rewards: 0,
-                producingCharge: false
-        }
         qu_save.notrelative = false
         qu_save.wasted = false
-        qu_save.tod = {
-                r: {
-                        quarks: 0,
-                        spin: 0,
-                        upgrades: {}
-                },
-                g: {
-                        quarks: 0,
-                        spin: 0,
-                        upgrades: {}
-                },
-                b: {
-                        quarks: 0,
-                        spin: 0,
-                        upgrades: {}
-                },
-                upgrades: {}
-        }
         qu_save.bigRip = {
                 active: false,
                 conf: true,
@@ -983,15 +956,6 @@ function doNGp3v199tov19995(){
         if (aarMod.newGame3PlusVersion < 1.9995) {
                 player.meta.bestOverQuantums = player.meta.bestAntimatter
                 qu_save.autobuyer.peakTime = 0
-                qu_save.nanofield = {
-                        charge: 0,
-                        energy: 0,
-                        antienergy: 0,
-                        power: 0,
-                        powerThreshold: 50,
-                        rewards: 0,
-                        producingCharge: false
-                }
                 qu_save.assignAllRatios = {
                         r: 1,
                         g: 1,
@@ -1006,24 +970,6 @@ function doNGp3v19995tov21(){
         var setTTAfterQuantum = 0
         if (aarMod.newGame3PlusVersion < 1.9997) {
                 player.dilation.times = 0
-                qu_save.tod = {
-                        r: {
-                                quarks: 0,
-                                spin: 0,
-                                upgrades: {}
-                        },
-                        g: {
-                                quarks: 0,
-                                spin: 0,
-                                upgrades: {}
-                        },
-                        b: {
-                                quarks: 0,
-                                spin: 0,
-                                upgrades: {}
-                        },
-                        upgrades: {}
-                }
         }
         if (aarMod.newGame3PlusVersion < 2) {
                 player.eternityBuyer.dilMode = "amount"
@@ -1543,14 +1489,6 @@ function doNGp3Init2(){
 		tmp.be=qu_save.bigRip.active&&qu_save.breakEternity.break
 		updateQuantumWorth()
 		if (qu_save.autoOptions === undefined) qu_save.autoOptions = {}
-		if (qu_save["10ofield"] !== undefined) {
-			qu_save.nanofield = qu_save["10ofield"]
-			delete qu_save["10ofield"]
-		}
-		if (qu_save.nanofield.powerThreshold === undefined) {
-			qu_save.nanofield.powerThreshold = 50
-			qu_save.nanofield.producingCharge = false
-		}
 		if (qu_save.autobuyer.peakTime === undefined) qu_save.autobuyer.peakTime = 0
 		if (qu_save.bigRip.bestGals == undefined) qu_save.bigRip.bestGals = 0
 		if (player.ghostify.neutrinos.boosts == undefined|| !player.ghostify.times) player.ghostify.neutrinos.boosts = 0
@@ -1817,7 +1755,6 @@ function updateNGp3DisplayStuff(){
 	getEl('dilUpgsauto').textContent="Auto-buy dilation upgrades: O"+(player.autoEterOptions.dilUpgs?"N":"FF")
 	getEl('metaboostauto').textContent="Meta-boost auto: O"+(player.autoEterOptions.metaboost?"N":"FF")
 	getEl('priorityquantum').value=formatValue("Scientific", new Decimal(qu_save.autobuyer.limit), 2, 0)
-	getEl("produceQuarkCharge").innerHTML="S" + (qu_save.nanofield.producingCharge ? "top" : "tart") + " production of preon charge." + (qu_save.nanofield.producingCharge ? "" : "<br>(You will not get preons when you do this.)")
 	getEl("ratio_r").value = qu_save.assignAllRatios.r
 	getEl("ratio_g").value = qu_save.assignAllRatios.g
 	getEl("ratio_b").value = qu_save.assignAllRatios.b
@@ -2023,7 +1960,6 @@ function onLoad(noOffline) {
 	updateExdilation()
 	handleDispOnQuantum()
 	maybeShowFillAll()
-	updateNanoRewardTemp()
 	updateLastTenGhostifies()
 	onNotationChangeNeutrinos()
 	setAchieveTooltip()
@@ -2065,9 +2001,8 @@ function onLoad(noOffline) {
 	showEternityTab((tabsSave.on && tabsSave.tabEternity) || 'timestudies', true)
 	if (tmp.ngp3) {
 		showQuantumTab((tabsSave.on && tabsSave.tabQuantum) || 'uquarks')
-		fluc.showTab((tabsSave.on && tabsSave.tabFluc) || 'syntTab')
+		fluc.showTab((tabsSave.on && tabsSave.tabFluc) || 'ffTab')
 		showNFTab((tabsSave.on && tabsSave.tabNF) || 'nanoverse')
-		showBranchTab((tabsSave.on && tabsSave.tabBranch) || 'red')
 		showGhostifyTab((tabsSave.on && tabsSave.tabGhostify) || 'neutrinos')
 		showBLTab((tabsSave.on && tabsSave.tabBL) || 'bextab')
 	}
@@ -2450,7 +2385,6 @@ function new_game(type) {
 	showInfTab('preinf')
 	showEternityTab('timestudies', true)
 	showQuantumTab('uquarks')
-	showBranchTab('red')
 	showGhostifyTab('neutrinos')
 	showBLTab('bextab')
 }
@@ -2691,20 +2625,9 @@ function conToDeciMS(){
 			if (qu_save.electrons) delete qu_save.electrons //RIP positrons
 			if (qu_save.replicants) delete qu_save.replicants //RIP replicants
 			if (qu_save.emperorDimensions) delete qu_save.emperorDimensions //RIP emperor dimensions
-			if (qu_save.nanofield) {
-				qu_save.nanofield.charge = new Decimal(qu_save.nanofield.charge)
-				qu_save.nanofield.energy = new Decimal(qu_save.nanofield.energy)
-				qu_save.nanofield.antienergy = new Decimal(qu_save.nanofield.antienergy)
-				qu_save.nanofield.powerThreshold = new Decimal(qu_save.nanofield.powerThreshold)
-			}
-			if (qu_save.tod) {
-				qu_save.tod.r.quarks = new Decimal(qu_save.tod.r.quarks)
-				qu_save.tod.r.spin = new Decimal(qu_save.tod.r.spin)
-				qu_save.tod.g.quarks = new Decimal(qu_save.tod.g.quarks)
-				qu_save.tod.g.spin = new Decimal(qu_save.tod.g.spin)
-				qu_save.tod.b.quarks = new Decimal(qu_save.tod.b.quarks)
-				qu_save.tod.b.spin = new Decimal(qu_save.tod.b.spin)
-			}
+			if (qu_save.nanofield) delete qu_save.nanofield //RIP nanofield
+			if (qu_save["10ofield"]) delete qu_save["10ofield"]
+			if (qu_save.tod) delete qu_save.tod //RIP Tree of Decay
 
 			if (qu_save.autobuyer) qu_save.autobuyer.limit = new Decimal(qu_save.autobuyer.limit)
 			if (player.dilation.bestTP == undefined) player.dilation.bestTP = hasAch("ng3p18") || hasAch("ng3p37") ? player.dilation.tachyonParticles : 0

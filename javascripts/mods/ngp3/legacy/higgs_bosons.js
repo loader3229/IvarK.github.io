@@ -75,7 +75,6 @@ function bosonicLabReset() {
 		wnb: new Decimal(0),
 		zb: new Decimal(0)
 	}
-	delete qu_save.nanofield.apgWoke
 
 	for (let g = 1; g <= br.limits[maxBLLvl]; g++) player.ghostify.bl.glyphs.push(new Decimal(0))
 	if (!hasAch("ng3p104")) {

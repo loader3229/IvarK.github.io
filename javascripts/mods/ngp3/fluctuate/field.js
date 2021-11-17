@@ -1,6 +1,6 @@
-//SYNTHESIS
-let synt = {
-	unl: (force) => force ? fluc.unl() : synt_tmp.unl && synt_tmp.eff,
+//FLUCTUANT FIELD
+let ff = {
+	unl: (force) => force ? fluc.unl() : ff_tmp.unl && ff_tmp.eff,
 
 	data: {
 		all: ["am", "dil", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"],
@@ -48,7 +48,7 @@ let synt = {
 		f6: {
 			//Overseer
 			//Red Charge -> Obsure Galaxies
-			targ: () => synt.getColorCharge("r"),
+			targ: () => ff.getColorCharge("r"),
 			based: "Red Charge",
 			req: 21,
 			eff: (x) => 1,
@@ -57,7 +57,7 @@ let synt = {
 		f7: {
 			//Advancement
 			//Green Charge -> Extra Replicanti Compressors
-			targ: () => synt.getColorCharge("g"),
+			targ: () => ff.getColorCharge("g"),
 			based: "Green Charge",
 			req: 34,
 			eff: (x) => 1,
@@ -65,7 +65,7 @@ let synt = {
 		f8: {
 			//Dominant
 			//Blue Charge -> Higher PB11 Cap
-			targ: () => synt.getColorCharge("b"),
+			targ: () => ff.getColorCharge("b"),
 			based: "Blue Charge",
 			req: 55,
 			eff: (x) => 1,
@@ -84,92 +84,83 @@ let synt = {
 	},
 
 	setup() {
-		synt_save = {
-			am: {},
-			dil: {},
-
-			f1: {},
-			f2: {},
-			f3: {},
-			f4: {},
-			f5: {},
-			f6: {},
-			f7: {},
-			f8: {},
+		ff_save = {
+			links: {},
+			arcs: {},
 		}
-		fluc_save.synt = synt_save
-		return synt_save
+		fluc_save.ff = ff_save
+		return ff_save
 	},
 	compile() {
-		synt_tmp = { unl: this.unl(true) }
+		ff_tmp = { unl: this.unl(true) }
 		if (!tmp.ngp3) return
 
-		var data = synt_save || this.setup()
+		var data = ff_save || this.setup()
 		this.updateTmp()
 	},
 
 	update(diff) {
 	},
 	updateTmp() {
-		synt_tmp = {
-			unl: synt_tmp.unl
+		ff_tmp = {
+			unl: ff_tmp.unl
 		}
 
-		synt_tmp.unlocked = []
-		synt_tmp.nextAt = 1/0
-		for (var i = 0; i < synt.data.all.length; i++) {
-			var id = synt.data.all[i]
-			if (synt.isUnlocked(id)) synt_tmp.unlocked.push(id)
-			else synt_tmp.nextAt = Math.min(synt_tmp.nextAt, synt.data[id].req)
+		ff_tmp.unlocked = []
+		ff_tmp.nextAt = 1/0
+		for (var i = 0; i < ff.data.all.length; i++) {
+			var id = ff.data.all[i]
+			if (ff.isUnlocked(id)) ff_tmp.unlocked.push(id)
+			else ff_tmp.nextAt = Math.min(ff_tmp.nextAt, ff.data[id].req)
 		}
 
-		synt.updateTmpOnTick()
+		ff.updateTmpOnTick()
 	},
 	updateTmpOnTick() {
-		if (!synt_tmp.unl) return
+		if (!ff_tmp.unl) return
 
 		//Energy
-		synt_tmp.eng = {}
-		for (var i = 0; i < synt.data.all.length; i++) {
-			var id = synt.data.all[i]
-			synt_tmp.eng[id] = synt.getEnergy(id)
+		ff_tmp.eng = {}
+		for (var i = 0; i < ff.data.all.length; i++) {
+			var id = ff.data.all[i]
+			ff_tmp.eng[id] = ff.getEnergy(id)
 		}
 
 		//Strength
-		synt_tmp.str = {}
-		for (var i = 0; i < synt.data.all.length; i++) {
-			var id = synt.data.all[i]
-			synt_tmp.str[id] = synt.getStrength(id)
+		ff_tmp.str = {}
+		for (var i = 0; i < ff.data.all.length; i++) {
+			var id = ff.data.all[i]
+			ff_tmp.str[id] = ff.getStrength(id)
 		}
 
 		//Boosts
-		synt_tmp.eff = {}
+		ff_tmp.eff = {}
 		for (var i = 1; i <= 8; i++) {
 			var id = "f" + i
-			synt_tmp.eff[id] = synt.data[id].eff(synt_tmp.str[id] * synt_tmp.eng[id])
+			ff_tmp.eff[id] = ff.data[id].eff(ff_tmp.str[id] * ff_tmp.eng[id])
 		}
 	},
 
 	updateTab() {
-		for (var i = 0; i < synt.data.all.length; i++) {
-			var id = synt.data.all[i]
-			getEl("synt_eng_" + id).textContent = shorten(synt_tmp.eng[id]) + " Energy" + (shiftDown ? " (based on " + synt.data[id].based + ")" : " (" + formatPercentage(synt_tmp.str[id]) + "%)")
+		for (var i = 0; i < ff.data.all.length; i++) {
+			var id = ff.data.all[i]
+			getEl("ff_eng_" + id).textContent = shorten(ff_tmp.eng[id]) + " Energy" + (shiftDown ? " (based on " + ff.data[id].based + ")" : " (" + formatPercentage(ff_tmp.str[id]) + "%)")
 		}
 
 		for (var i = 1; i <= 8; i++) {
 			var id = "f" + i
-			var eff = synt_tmp.eff[id]
-			getEl("synt_eff_" + id).textContent = (synt.data[id].effDisp || shorten)(eff)
+			var eff = ff_tmp.eff[id]
+			getEl("ff_eff_" + id).textContent = (ff.data[id].effDisp || shorten)(eff)
 		}
 
-		synt.updateDisplays() // Temp
+		ff.updateDisplays() // Temp
 	},
 	updateDisplays() {
-		for (var i = 0; i < synt.data.all.length; i++) {
-			var id = synt.data.all[i]
-			getEl("synt_btn_" + id).style.visibility = synt.isUnlocked(id) ? "visible" : "hidden"
+		for (var i = 0; i < ff.data.all.length; i++) {
+			var id = ff.data.all[i]
+			getEl("ff_btn_" + id).style.visibility = ff.isUnlocked(id) ? "visible" : "hidden"
 		}
-		getEl("synt_unl").textContent = synt_tmp.unlocked.length == 10 ? "" : "Next Synthesizer unlocks at " + getFullExpansion(synt_tmp.nextAt) + " Fluctuant Energy."
+		getEl("ff_unl").textContent = ff_tmp.unlocked.length == 10 ? "" : "Next ??? unlocks at " + getFullExpansion(ff_tmp.nextAt) + " Fluctuant Energy."
 	},
 
 	getColorCharge(color) {
@@ -182,13 +173,13 @@ let synt = {
 	},
 
 	getEnergy(id) {
-		return synt.data[id].targ()
+		return ff.data[id].targ()
 	},
 	getStrength(id) {
 		return 1
 	},
 	isUnlocked(id) {
-		return fluc_save.energy >= (synt.data[id].req || 0)
+		return fluc_save.energy >= (ff.data[id].req || 0)
 	},
 
 	linkPower() {
@@ -198,6 +189,6 @@ let synt = {
 		
 	},
 }
-let synt_tmp = {}
-let synt_save
-let SYNTHESIS = synt
+let ff_tmp = {}
+let ff_save
+let ffHESIS = ff

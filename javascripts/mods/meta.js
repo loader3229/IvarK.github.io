@@ -145,7 +145,6 @@ function getMetaShiftRequirement() {
 	if (tmp.ngp3_mul) data.mult--
 
 	data.amount += data.mult * Math.max(mdb - 4, 0)
-	if (isTreeUpgActive(1)) data.amount -= getTreeUpgradeEffect(1)
 	if (hasNU(1)) data.amount -= tmp.nu[1]
 	
 	return data

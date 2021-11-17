@@ -218,7 +218,6 @@ function getDimensionFinalMultiplier(tier) {
 	if (tier == 1 && player.tickspeedBoosts == undefined && player.infinityUpgrades.includes("postinfi60")) mult = mult.times(getNewB60Mult())
 	let useHigherNDReplMult = player.dilation.active && hasMTS("t323")
 	if (useHigherNDReplMult) mult = mult.times(tmp.nrm)
-	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) mult = mult.pow(tmp.nf.effects.dil_effect_exp)
 
 	if (tmp.ngC) {
 		mult = softcap(mult, "nds_ngC")
@@ -330,7 +329,6 @@ function getMPTBase(focusOn) {
 	ret += getECReward(3)
 	if (inNGM(2)) if (hasGalUpg(33) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || tmp.ngmX > 3) && player.currentChallenge != "postcngm3_4") ret *= galMults.u33();
 	if (focusOn == "no-QC5") return ret
-	if (isNanoEffectUsed("per_10_power")) ret += tmp.nf.effects.per_10_power
 	return ret
 }
 
@@ -572,7 +570,6 @@ function getDimensionProductionPerSecond(tier) {
 	if (tier == 1 && (inNC(7) || player.currentChallenge == "postcngm3_3" || player.pSac !== undefined)) ret = ret.plus(getDimensionProductionPerSecond(2))
 
 	let tick = dilates(Decimal.div(1e3, getTickspeed()), "tick")
-	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) tick = tick.pow(tmp.nf.effects.dil_effect_exp)
 	ret = ret.times(tick)
 	return ret
 }

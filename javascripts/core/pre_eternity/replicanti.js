@@ -479,7 +479,7 @@ function updateReplicantiTemp() {
 
 	data.baseChance = Math.round(player.replicanti.chance * 100)
 	if (enB.active("glu", 5)) data.baseChance = Math.pow(data.baseChance, enB_tmp.glu5.exp)
-	if (synt.unl()) data.baseChance = Math.pow(data.baseChance, synt_tmp.eff.f1)
+	if (ff.unl()) data.baseChance = Math.pow(data.baseChance, ff_tmp.eff.f1)
 	data.baseChance *= enB.glu[5].adjustChance(data.str)
 
 	let pow = 1

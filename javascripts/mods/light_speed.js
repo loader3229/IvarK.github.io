@@ -3,7 +3,7 @@ let LIGHT_SPEED = {
 		let data = aarMod.ls
 		return (data && data[id]) || 1
 	},
-	options: ["game", "rep", "dil", "tt", "nf", "tod", "gph", "bl"],
+	options: ["game", "rep", "dil", "tt", "tod", "gph", "bl"],
 	reqs: {
 		game() {
 			return true
@@ -16,9 +16,6 @@ let LIGHT_SPEED = {
 		},
 		tt() {
 			return hasDilationUpg(10) || pH.did("quantum")
-		},
-		nf() {
-			return tmp.ngp3 && player.masterystudies.includes("d11")
 		},
 		tod() {
 			return tmp.ngp3 && player.masterystudies.includes("d12")

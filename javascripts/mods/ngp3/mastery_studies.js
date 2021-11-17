@@ -131,25 +131,7 @@ var mTs = {
 		},
 		d8() {
 			return "5 positronic charge"
-		},
-		d9() {
-			return "COMING IN BETA V0.5"
-		},
-		d10() {
-			return "Complete Paired Challenge 4"
-		},
-		d11() {
-			return getFullExpansion(10) + " worker replicants"
-		},
-		d12() {
-			return getFullExpansion(10) + " Eighth Emperor Dimensions"
-		},
-		d13() {
-			return getFullExpansion(16) + " Nanofield rewards"
-		},
-		d14() {
-			return "Get 'The Challenging Day' achievement"
-		},
+		}
 	},
 	types: {t: "time", ec: "ec", d: "dil"},
 	studies: [],

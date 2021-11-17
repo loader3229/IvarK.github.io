@@ -2582,7 +2582,7 @@ td.grey {
 	text-shadow: 0px 0px 3px #bfff00, 0px 0px 6px #7fff00
 }
 
-.synt_btn {
+.ff_btn {
 	position: relative;
 	width: 120px;
 	height: 120px;
@@ -2590,17 +2590,17 @@ td.grey {
 	margin: 3px;
 	vertical-align: top;
 }
-.synt_btn.storebtn {
+.ff_btn.storebtn {
 	border-radius: 4px;
 	background: linear-gradient(#3f002f, #3f2f00);
 	box-shadow: inset 0px 0px 36px #ffdfdf, inset 0px 0px 36px #ffbfdf;
 	text-shadow: 0px 0px 6px #ff003f;
-	animation: synt 4s infinite
+	animation: ff 4s infinite
 }
-.synt_btn.storebtn b {
+.ff_btn.storebtn b {
 	color: #ff3f00;
 }
-@keyframes synt {
+@keyframes ff {
 	0% {
 		border-color: #bf009f;
 		box-shadow: inset 0px 0px 36px #ff00bf;

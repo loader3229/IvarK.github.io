@@ -208,20 +208,6 @@ dev.giveAllPCs = function() {
 	PCs.updateDisp()
 }
 
-dev.addReward = function(){
-	qu_save.nanofield.rewards += 1
-}
-
-dev.setReward = function(n){
-	qu_save.nanofield.rewards = n
-}
-
-dev.addSpin = function(n){
-	qu_save.tod.r.spin = qu_save.tod.r.spin.add(Decimal.pow(10,n))
-	qu_save.tod.b.spin = qu_save.tod.b.spin.add(Decimal.pow(10,n))
-	qu_save.tod.g.spin = qu_save.tod.g.spin.add(Decimal.pow(10,n))
-}
-
 dev.addGHP = function(n){
 	player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(Decimal.pow(10,n))
 }

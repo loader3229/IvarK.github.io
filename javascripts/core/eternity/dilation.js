@@ -652,7 +652,6 @@ function getFreeGalaxyGainMult() {
 	let galaxyMult = hasDilationUpg(4) ? 2 : 1
 	if (hasDilationUpg("ngmm1")) galaxyMult *= 2
 	if (aarMod.ngudpV && !aarMod.nguepV) galaxyMult /= 1.5
-	if (isNanoEffectUsed("dil_gal_gain")) galaxyMult *= tmp.nf.effects.dil_gal_gain
 	let exp = tmp.ngp3_exp ? 1.1 : 1
 	return Math.pow(galaxyMult, exp)
 }

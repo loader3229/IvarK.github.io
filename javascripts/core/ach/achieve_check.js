@@ -214,29 +214,12 @@ function checkNGp2Achieve() {
 	if (player.meta.resets >= (tmp.ngp3 ? 7 : 10)) giveAchievement("Meta-boosting to the max")
 }
 
-function getTwoDecaysBool(){
-	branches = ['r', 'g', 'b']
-	for (i = 0; i < 3; i++){
-		if (!qu_save.tod[branches[i]].decays) return false
-		if (qu_save.tod[branches[i]].decays < 2) return false	
-	}
-	return true
-}
-
 function preHiggsNGp3AchieveCheck() {
 	//Time Studies
 	let checkEmpty = player.timestudy.studies.length < 1
 
 	//Quantum
 	let usedQuarks = qu_save.usedQuarks
-
-	//Tree of Decay
-	let noTree = false
-	let minUQ = getMinimumUnstableQuarks()
-	for (var u = 1; u <= 8; u++) {
-		if (getTreeUpgradeLevel(u) > 0) break
-		else noTree = true
-	}
 
 	//Able to get "Rid of you"
 	let ableToGetRid2 = checkEmpty && player.dilation.active
@@ -323,15 +306,13 @@ function preHiggsNGp3AchieveCheck() {
 			else if (player.money.log10() >= 1.6e12 && d == 8) giveAchievement("ERROR 404: DIMENSIONS NOT FOUND")
 		}
 	}
-	if (false) giveAchievement("Impossible expectations")
 	if (player.timestudy.theorem >= 1.1e7 && qu_save.wasted) giveAchievement("Studies are wasted")
 	if (player.infinityPoints.gte(Decimal.pow(10, 2.75e5)) && ableToGetRid6) giveAchievement("Are you currently dying?")
-	if (qu_save.nanofield.rewards >= 21 && noTree) giveAchievement("But I don't want to grind!")
 	if (player.replicanti.amount.log10() >= 1/0) giveAchievement("Will it be enough?")
 	if (qu_save.bigRip.active) {
 		let ableToGetRid7 = ableToGetRid2 && player.epmult.eq(1)
 		let ableToGetRid8 = ableToGetRid7 && !qu_save.breakEternity.did
-		let ableToGetRid9 = ableToGetRid8 && noTree
+		let ableToGetRid9 = ableToGetRid8
 		let ableToGetRid10 = ableToGetRid9
 		if (player.currentEternityChall == "eterc7" && player.galaxies == 1 && player.money.log10() >= 8e7) giveAchievement("Time Immunity")
 		if (!player.timestudy.studies.includes(11) && player.timeShards.log10() >= 215) giveAchievement("You're not really smart.")
@@ -342,7 +323,6 @@ function preHiggsNGp3AchieveCheck() {
 		if (player.matter.log10() >= 5000) giveAchievement("Really?")
 	}
 	if (qu_save.bigRip.spaceShards.log10() >= 33 && !qu_save.breakEternity.did) giveAchievement("Finite Time")
-	if (minUQ.quarks.log10() >= 1e12 && minUQ.decays >=2 && !qu_save.bigRip.times) giveAchievement("Weak Decay")		
 	if (Decimal.gte(getInfinitied(), 1/0)) giveAchievement("Meta-Infinity confirmed?")
 	if (Decimal.gte(getEternitied(), 1/0)) giveAchievement("Everlasting Eternities")
 	if (player.options.secrets && player.options.secrets.ghostlyNews && !player.options.newsHidden) giveAchievement("Two tickers")
@@ -351,8 +331,6 @@ function preHiggsNGp3AchieveCheck() {
 	if (qu_save.best <= 300) giveAchievement("And the winner is...")
 	if (qMs.tmp.amt >= 21) giveAchievement("Special Relativity")
 	if (qu_save.best <= 10) giveAchievement("Quantum doesn't take so long")
-	if (player.masterystudies.includes("d13")) giveAchievement("Do protons decay?")
-	if (getTotalRadioactiveDecays() >= 10) giveAchievement("Radioactive Decaying to the max!")
 	if (tmp.quUnl) giveAchievement("Sub-atomic")
 }
 
@@ -360,17 +338,14 @@ function atHiggsAchCheck(){
 	if (player.ghostify.hb.higgs >= 1) giveAchievement("The Holy Particle")
 	if (player.ghostify.ghostlyPhotons.enpowerments >= 25) giveAchievement("Bright as the Anti-Sun")
 	if (qu_save.quarks.log10() >= 4e4) giveAchievement("Are these another...")
-	if (player.ghostify.reference && getMinimumUnstableQuarks().decays >= 2) giveAchievement("... references to EC8?")
 	if (player.ghostify.hb.bosonicSemipowerment && player.ghostify.ghostlyPhotons.lights[7] >= tmp.leReq / 2) giveAchievement("Bosonic Semipowerment")
 	if (player.ghostify.times >= Math.pow(Number.MAX_VALUE, 1/4)) giveAchievement("The Ghostliest Side")
 	if (player.money.log10() >= 1e18) giveAchievement("Meta-Quintillion")
-	if (player.unstableThisGhostify <= 10 && getTwoDecaysBool()) giveAchievement("... references to EC8?")
 }
 
 function atGravDimsAchCheck(){
 	if (GDs.unlocked()) giveAchievement("The Power of Relativity")
 	if (player.ghostify.ghostParticles.plus(1).log10() >= 5e3) giveAchievement("Einstein's Ghost")
-	if (qu_save.nanofield.rewards >= 250) giveAchievement("Gigafield")
 	if (qu_save.bigRip.bestThisRun.plus(1).log10() >= Math.sqrt(2) * 1e12) giveAchievement("Do you even how to?")
 	// Brutally Challenging is on quantum_challenges.js
 	if (player.ghostify.time <= 100 && player.money.plus(1).log10() >= 1/0) giveAchievement("Auto-Ghost Speedrunning")

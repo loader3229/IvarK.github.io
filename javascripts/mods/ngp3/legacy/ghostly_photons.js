@@ -44,10 +44,6 @@ function getLightThreshold(l) {
 
 function getLightThresholdIncrease(l) {
 	let x = tmp.lti[l]
-	if (isNanoEffectUsed("light_threshold_speed")) {
-		let y = 1 / tmp.nf.effects.light_threshold_speed
-		if (y < 1) x = Math.pow(x, y)
-	}
 	return x
 }
 
@@ -86,11 +82,11 @@ function updateRaysPhotonsDisplay(){
 function updateLightBoostDisplay(){
 	let gphData = player.ghostify.ghostlyPhotons
 	getEl("lightMax1").textContent = getFullExpansion(gphData.maxRed)
-	getEl("lightBoost1").textContent = tmp.le[0].toFixed(3)
-	getEl("lightBoost2").textContent = tmp.le[1].toFixed(2)
+	//getEl("lightBoost1").textContent = tmp.le[0].toFixed(3)
+	//getEl("lightBoost2").textContent = tmp.le[1].toFixed(2)
 	//getEl("lightBoost3").textContent = getFullExpansion(Math.floor(tmp.le[2]))
-	getEl("lightBoost4").textContent = formatPercentage(tmp.le[3] - 1)
-	getEl("lightBoost5").textContent = formatPercentage(tmp.le[4]) + (hasBosonicUpg(11) ? "+" + formatPercentage(tmp.blu[11]) : "")
+	//getEl("lightBoost4").textContent = formatPercentage(tmp.le[3] - 1)
+	//getEl("lightBoost5").textContent = formatPercentage(tmp.le[4]) + (hasBosonicUpg(11) ? "+" + formatPercentage(tmp.blu[11]) : "")
 	getEl("lightBoost6").textContent = shorten(tmp.le[5])
 	getEl("lightBoost7").textContent = shorten(tmp.le[6])
 }
@@ -182,19 +178,7 @@ var leBoosts = {
 	1: {
 		leThreshold: 1,
 		eff() {
-			let le1exp = 0.75
-			if (tmp.ngp3_exp) {
-				le1exp += 0.2
-				if (player.ghostify.ghostlyPhotons.unl) le1exp += .15
-				if (player.ghostify.wzb.unl) le1exp += .15
-			}
-			let le1mult = 500
-			if (tmp.ngp3_exp) le1mult *= 2
-			let eff = Math.pow(Math.log10(tmp.effL[3] + 1), le1exp) * le1mult
-			return {effect: eff}
-		},
-		effDesc(x) {
-			return getFullExpansion(Math.floor(x.effect))
+			return tmp.leBonus[1]
 		}
 	},
 	2: {
@@ -209,10 +193,7 @@ var leBoosts = {
 	3: {
 		leThreshold: 3,
 		eff() {
-			return Math.pow(tmp.effL[0].normal + 1, 0.1) * 2 - 1
-		},
-		effDesc(x) {
-			return x.toFixed(2)
+			return tmp.leBonus[3]
 		}
 	},
 	4: {
@@ -245,11 +226,7 @@ var leBoosts = {
 		},
 		leThreshold: 16,
 		eff() {
-			let exp = Math.min(Math.pow(tmp.effL[2] + 1, 0.25) - 1, 600)
-			return Math.pow(3, exp)
-		},
-		effDesc(x) {
-			return shorten(x)
+			return tmp.leBonus[6]
 		}
 	},
 	7: {
@@ -305,5 +282,4 @@ function updateLEmpowermentBoosts(){
 		getEl("le"+e).style.visibility = unlocked ? "visible" : "hidden"
 		if (unlocked && leBoosts[e].effDesc) getEl("leBoost" + e).textContent = leBoosts[e].effDesc(tmp.leBonus[e])
 	}
-	if (boosts >= 1) getEl("leBoost1Total").textContent = getFullExpansion(Math.floor(tmp.leBonus[1].total))
 }

@@ -26,7 +26,7 @@ let fluc = {
 			delete player.flun
 		}
 
-		fluc_tmp = { unl: this.unl(true) }
+		fluc_tmp = { unl: this.unl(true)  }
 		fluc.updateConf()
 		if (!tmp.ngp3) return
 
@@ -61,11 +61,11 @@ let fluc = {
 
 			if (fluc_save.energy == 0) {
 				fluc_tmp.unl = true
-				synt_tmp.unl = true
+				ff_tmp.unl = true
 				pH.onPrestige("fluctuate")
 			}
 			fluc_save.energy += gain
-			synt.updateTmp()
+			ff.updateTmp()
 		}
 		fluc.doReset()
 	},
@@ -95,14 +95,14 @@ let fluc = {
 
 	update(diff) {
 		FDs.update(diff)
-		synt.update(diff)
+		ff.update(diff)
 	},
 	updateTmp() {
-		synt.updateTmp()
+		ff.updateTmp()
 	},
 	updateTmpOnTick() {
 		FDs.updateTmp()
-		synt.updateTmpOnTick()
+		ff.updateTmpOnTick()
 	},
 
 	updateHeader() {
@@ -111,12 +111,12 @@ let fluc = {
 		getEl("fluc_gain").textContent = gain ? "(+" + getFullExpansion(gain) + " Fluctuant Energy: Next at " + shortenCosts(fluc.req(fluc_save.energy + gain)) + ")" : ""
 
 		//Temp: Quantum Field is not ready!
-		getEl("qf_unl").style.display = fluc_save.energy >= 11 ? "none" : ""
+		getEl("unknown_unl").style.display = fluc_save.energy >= 11 ? "none" : ""
 		getEl("the_end").style.display = fluc_save.energy >= 11 ? "" : "none"
 	},
 	updateTab() {
 		getEl("fluc_req").textContent = shorten(fluc.req())
-		if (getEl("syntTab").style.display == "block") synt.updateTab()
+		if (getEl("ffTab").style.display == "block") ff.updateTab()
 	},
 	showTab(tabName) {
 		//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName

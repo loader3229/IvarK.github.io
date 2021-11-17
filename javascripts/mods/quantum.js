@@ -5,7 +5,7 @@ function quantum(auto, force, attrs, mode, quick) {
 
 	var data = {}
 	if (mode == "qc") {
-		if ((!QCs.done(1) || player.options.challConf || aarMod.quantumConf) && !quick) {
+		if (((!QCs.done(1) && !pH.did("fluctuate")) || player.options.challConf || aarMod.quantumConf) && !quick) {
 			if (!confirm("This performs a forced Quantum reset, but you will be brought into a real challenge. All rebuyables will also be resetted. Are you sure you want to take this challenge down?")) return
 		}
 		data.qc = [attrs.qc]
@@ -361,14 +361,10 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
 
 	if (tmp.ngp3) {
-		if (!force) {
-			if (pH.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
-			if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode != "t") rotateAutoUnstable()
-		} //bounds if (!force)
+		if (!force && pH.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 
 		pH.updateActive()
 
-		nanofieldResetOnQuantum()
 		player.eternityBuyer.tpUpgraded = false
 		player.eternityBuyer.slowStopped = false
 		qu_save.notrelative = true
@@ -520,7 +516,6 @@ function handleQuantumDisplays(prestige) {
 
 	QCs.updateDisp()
 
-	updateTODStuff()
 	updateBreakEternity()
 }
 

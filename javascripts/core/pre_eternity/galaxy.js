@@ -103,7 +103,7 @@ function getGalaxyRequirement(offset = 0, display) {
 
 				let pow = Decimal.pow(getRemoteScalingBase(), (tmp.grd.gals - remoteStart + 1) * speed2)
 				let obsStart = 1e3
-				if (synt.unl()) obsStart *= synt_tmp.eff.f6
+				if (ff.unl()) obsStart *= ff_tmp.eff.f6
 				if (pow.gte(obsStart)) {
 					pow = pow.pow(Math.pow(pow.log10() / 3, 2))
 					scaling = Math.max(scaling, 4)
@@ -184,8 +184,6 @@ function getRemoteScalingStart(galaxies) {
 		if (galaxies > darkStart) n -= galaxies - darkStart
 
 		for (var t = 251; t <= 253; t++) if (hasMTS(t)) n += getMTSMult(t)
-
-		if (isNanoEffectUsed("remote_start")) n += tmp.nf.effects.remote_start
 		if (galaxies > 1/0 && !tmp.be) n -= galaxies
 	}
 	return n

@@ -474,7 +474,6 @@ function giveAchievement(name, noUpdate) {
 		updateBosonicLimits()
 	}
 	if (name == "Bright as the Anti-Sun" && !tmp.bl.upgrades.includes(32)) tmp.bl.upgrades.push(32)
-	if (name == "... references to EC8?") updateTODStuff()
 	if (name == "Not-so-very-challenging") QCs.updateDisp()
 
 	if (!noUpdate) {

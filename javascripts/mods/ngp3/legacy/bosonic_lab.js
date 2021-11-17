@@ -1,20 +1,18 @@
 //Bosonic Lab
 function canUnlockBosonicLab() {
-	let max = getMaximumUnstableQuarks()
-	return tmp.quActive && (max.decays >= 6 || max.quarks.e >= 5e10) && max.decays >= 5 && player.ghostify.ghostlyPhotons.enpowerments >= 3
+	return false
 }
   
 function updateBLUnlocks() {
 	let unl = player.ghostify.wzb.unl
 	getEl("blUnl").style.display = unl ? "none" : ""
 	getEl("blDiv").style.display = unl ? "" : "none"
-	getEl("nftabs").style.display = unl ? "" : "none"
 	if (!unl) updateBLUnlockDisplay()
 	updateBosonicLimits()
 }
 
 function updateBLUnlockDisplay() {
-	getEl("blUnl").textContent = "To unlock Bosonic Lab, you need to get " + shortenCosts(Decimal.pow(10, 5e10)) + " " + getUQName(5) + " quarks and 3 Light Empowerments first."
+	getEl("blUnl").textContent = "To unlock Bosonic Lab, you need to get ???"
 }
 
 function getBosonicWattGain() {
@@ -672,7 +670,6 @@ function buyBosonicUpgrade(id, quick) {
 	player.ghostify.bl.upgrades.push(id)
 	player.ghostify.bl.am = player.ghostify.bl.am.sub(getBosonicFinalCost(bu.reqData[id][0]))
 	if (!quick) updateTmp()
-	if (id == 21 || id == 22) updateNanoRewardTemp()
 	if (id == 32 || id == 65) tmp.updateLights = true
 	delete player.ghostify.hb.bosonicSemipowerment
 	return true
@@ -864,8 +861,8 @@ var bu = {
 		13: "Radioactive Decays boost the effect of Light Empowerments.",
 		14: "???",
 		15: "Ghostifies and dilated time power up each other.",
-		21: "Replace first Nanofield reward with a boost to slow down Dimension Supersonic scaling.",
-		22: "Replace seventh Nanofield reward with a boost to neutrino gain and preon charge.",
+		21: "???",
+		22: "???",
 		23: "Assigning gives more colored quarks based on your meta-antimatter.",
 		24: "You produce 1% of Space Shards on Big Rip per second, but Break Eternity upgrades that boost space shard gain are nerfed.",
 		25: "???",
@@ -906,7 +903,7 @@ var bu = {
 		13() {
 			if (!tmp.quActive) return 1
 
-			let decays = getRadioactiveDecays('r') + getRadioactiveDecays('g') + getRadioactiveDecays('b')
+			let decays = 0
 			let exp = bu62.active("gph") ? 2/3 : 0.5
 			let x = Math.pow(decays, exp)
 

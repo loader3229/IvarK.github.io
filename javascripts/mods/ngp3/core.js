@@ -786,20 +786,6 @@ function changeAutoGhost(o) {
 	}
 }
 
-function rotateAutoUnstable() {
-	var tg=player.ghostify.automatorGhosts[3].on
-	if (player.ghostify.automatorGhosts[4].rotate == "l") {
-		player.ghostify.automatorGhosts[3].on = player.ghostify.automatorGhosts[1].on
-		player.ghostify.automatorGhosts[1].on = player.ghostify.automatorGhosts[2].on
-		player.ghostify.automatorGhosts[2].on = tg
-	} else {
-		player.ghostify.automatorGhosts[3].on = player.ghostify.automatorGhosts[2].on
-		player.ghostify.automatorGhosts[2].on = player.ghostify.automatorGhosts[1].on
-		player.ghostify.automatorGhosts[1].on = tg
-	}
-	for (var g = 1; g < 4; g++) getEl("isAutoGhostOn" + g).checked = player.ghostify.automatorGhosts[g].on
-}
-
 const MAX_AUTO_GHOSTS = 25
 
 //v2.1
@@ -951,8 +937,9 @@ function setupSaveDataNGP3() {
 	FDs_save = (fluc_save && fluc_save.dims)
 	FDs.compile()
 
-	synt_save = (fluc_save && fluc_save.synt)
-	synt.compile()
+	delete fluc_save.synt
+	ff_save = (fluc_save && fluc_save.ff)
+	ff.compile()
 
 	//Quantum
 	pos_save = (qu_save && qu_save.pos)
@@ -1055,7 +1042,7 @@ function getAQGainExp(x) {
 function getReplStealth() {
 	var x = 1
 	if (enB.active("glu", 5)) x *= enB_tmp.glu5.int
-	if (synt.unl()) x *= synt_tmp.eff.f2
+	if (ff.unl()) x *= ff_tmp.eff.f2
 	if (futureBoost("quantum_tunneling") && dev.boosts.tmp[5]) x *= dev.boosts.tmp[5]
 	return x
 }
