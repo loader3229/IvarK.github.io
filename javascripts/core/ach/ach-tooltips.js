@@ -392,7 +392,7 @@ function setR17Tooltip() {
 	//ng3p38/////
 
 	//ACHIEVEMENT ROW 17
-	max.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e15) + " Metastable Energy in 1-day Fluctuate run. Reward: ???")
+	max.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e15) + " Metastable Energy in 1-day Fluctuate run. Reward: Replicantis boost Fluctuant Dimensions.")
 	noDil.setAttribute('ach-tooltip', "Reach " + "[TBD]" /*shortenCosts(Decimal.pow(10, 1/0))*/ + " replicanti without having Tachyon Particles. Reward: Boost the TP gain for first 5 dilation runs.")
 }
 

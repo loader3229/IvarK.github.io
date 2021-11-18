@@ -4270,17 +4270,11 @@ function doEternityButtonDisplayUpdating(diff){
 }
 
 function doQuantumButtonDisplayUpdating(diff){
-	let inBR = inBigRip()
-
-	var currentQKmin = new Decimal(0)
 	if (pH.did("quantum") && isQuantumReached()) {
-		var bigRipped = !tmp.ngp3 ? false : player.quantum.bigRip.active
-		if (!bigRipped) {
-			currentQKmin = quarkGain().dividedBy(qu_save.time / 600)
-			if (currentQKmin.gt(QKminpeak) && pH.can("quantum")) {
-				QKminpeak = currentQKmin
-				QKminpeakValue = quarkGain()
-			}
+		currentQKmin = quarkGain().dividedBy(qu_save.time / 600)
+		if (currentQKmin.gt(QKminpeak) && pH.can("quantum")) {
+			QKminpeak = currentQKmin
+			QKminpeakValue = quarkGain()
 		}
 	}
 

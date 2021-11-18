@@ -529,66 +529,6 @@ button, div.storebtn {
 	color: #ff3f00 !important
 }
 
-#dilstudy12.dilationupgbought, #nanofieldtabbtn button, #produceQuarkCharge, .nfReward {
-	background-color: #4c4c4c !important;
-	color: #e5e5e5 !important;
-	box-shadow: 1px 2px rgba(229,229,229,0.4);
-	animation: none
-}
-
-#dilstudy12.dilationupg, #nanofieldtabbtn button:hover, #produceQuarkCharge:hover {
-	background-color: #727272 !important;
-	color: #e5e5e5 !important
-}
-
-#dilstudy12.dilationupg:hover {
-	background-color: #999999 !important
-}
-
-#quarkAntienergy, #quarkAntienergyRate, #quarkChargeProductionCap {
-	color: #e539e5 !important
-}
-
-#dilstudy13.dilationupgbought, #todtabbtn button {
-	background-color: #993f00 !important;
-	color: #191919 !important
-}
-
-#dilstudy13.dilationupg, #todtabbtn button:hover {
-	background-color: #995626 !important;
-	color: #191919 !important
-}
-
-#dilstudy13.dilationupg:hover {
-	background-color: #99613a !important
-}
-
-#redBtn, .gluonupgrade.r {
-	background-color: #e50000 !important;
-	color: #191919 !important;
-	box-shadow: 1px 2px rgba(229,229,229,0.4);
-	text-shadow: none
-}
-
-#redBtn:hover, .gluonupgrade.r:hover {
-	background-color: #e53939 !important;
-	color: #191919 !important;
-	box-shadow: 1px 2px rgba(229,229,229,0.4)
-}
-
-#blueBtn, .gluonupgrade.b {
-	background-color: #0000e5 !important;
-	color: #191919 !important;
-	box-shadow: 1px 2px rgba(229,229,229,0.4);
-	text-shadow: none
-}
-
-#blueBtn:hover, .gluonupgrade.b:hover {
-	background-color: #3939e5 !important;
-	color: #191919 !important;
-	box-shadow: 1px 2px rgba(229,229,229,0.4)
-}
-
 #dilstudy14.dilationupgbought, .bigripbtn, .quickBigRip, .gluonupgradebought.bigrip {
 	background-color: #5be567 !important;
 	color: #191919 !important;

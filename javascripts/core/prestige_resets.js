@@ -113,10 +113,10 @@ function doEternityResetStuff(layer = 4, chall) {
 
 function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	var headstart = !tmp.ngp3
-	var oheHeadstart = bigRip ? tmp.bruActive[2] : tmp.ngp3
+	var oheHeadstart = tmp.ngp3
 	var keepABnICs = oheHeadstart || hasAch("ng3p12")
 	var turnSomeOn = !bigRip || tmp.bruActive[1]
-	var bigRipChanged = tmp.ngp3 && bigRip != qu_save.bigRip.active
+	var bigRipChanged = false
 
 	if (qMs.tmp.amt < 1) {
 		if (player.dimensionMultDecrease <= 3) player.dimensionMultDecrease = 3
@@ -181,7 +181,6 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	if (!player.dilation.bestTP) player.dilation.bestTP = player.dilation.tachyonParticles
 	player.dilation = {
 		studies:
-			bigRip ? (tmp.bruActive[12] ? [1, 2, 3, 4, 5, 6] : tmp.bruActive[10] ? [1] : []) :
 			!qMs.isOn(5) ? [] :
 			qMs.tmp.amt >= 9 ? [1, 2, 3, 4, 5, 6] : qMs.tmp.amt >= 6 ? [1, 2, 3, 4, 5] : [1],
 		active: false,
@@ -361,7 +360,7 @@ function resetEternityChallenges(bigRip, ngpp) {
 	let ecUpTo = ngpp ? 12 : 14
 	let data = {}
 
-	let kept = ngpp || (bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 2)
+	let kept = ngpp || qMs.tmp.amt >= 2
 	if (kept) for (let ec = 1; ec <= ecUpTo; ec++) data['eterc' + ec] = player.eternityChalls['eterc' + ec]
 	player.eternityChalls = data
 

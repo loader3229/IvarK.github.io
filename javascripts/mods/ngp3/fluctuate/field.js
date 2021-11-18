@@ -3,7 +3,7 @@ let ff = {
 	unl: (force) => force ? fluc.unl() : ff_tmp.unl && ff_tmp.eff,
 
 	data: {
-		all: ["am", "dil", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"],
+		all: ["am", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"],
 
 		f1: {
 			//Superefficient
@@ -75,11 +75,6 @@ let ff = {
 			targ: () => 0,
 			req: 1,
 			based: "antimatter"
-		},
-		dil: {
-			targ: () => 0,
-			req: 100,
-			based: "dilation runs"
 		}
 	},
 
@@ -160,7 +155,7 @@ let ff = {
 			var id = ff.data.all[i]
 			getEl("ff_btn_" + id).style.visibility = ff.isUnlocked(id) ? "visible" : "hidden"
 		}
-		getEl("ff_unl").textContent = ff_tmp.unlocked.length == 10 ? "" : "Next ??? unlocks at " + getFullExpansion(ff_tmp.nextAt) + " Fluctuant Energy."
+		getEl("ff_unl").textContent = ff_tmp.unlocked.length == 9 ? "" : "Next Perk unlocks at " + getFullExpansion(ff_tmp.nextAt) + " Fluctuant Energy."
 	},
 
 	getColorCharge(color) {
@@ -191,4 +186,4 @@ let ff = {
 }
 let ff_tmp = {}
 let ff_save
-let ffHESIS = ff
+let FLUCTUANT_FIELD = ff

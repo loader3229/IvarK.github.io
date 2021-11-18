@@ -630,12 +630,12 @@ function replicantiDisplay() {
 		let limit = getReplicantiLimit(true)
 		let time = hasDilationUpg(6)
 		let dil = hasAch("r137") && tmp.ngp3_boost
-		let fluc = dev.boosts.tmp[7]
+		let fluc = hasAch("ng3p36")
 		getEl("replicantiamount").textContent = shortenDimensions(player.replicanti.amount) + (limit.lt(1/0) ? (" / ") + shortenDimensions(limit) : "")
 		getEl("replicantieff").textContent = shiftDown ? "Effective Replicantis: " + shorten(getReplEff()) : ""
-		getEl("replicantimult").textContent = shorten(fluc ? dev.boosts.tmp[7] : dil ? getReplDilBonus() : time ? tmp.rm.pow(0.1) :getIDReplMult()) + "x"
+		getEl("replicantimult").textContent = (fluc ? "~" : "") + shorten(fluc ? FDs.repMult(1) : dil ? getReplDilBonus() : time ? tmp.rm.pow(0.1) :getIDReplMult()) + "x"
 		getEl("replDesc").textContent = (shiftDown ? "more " : "") +
-			(fluc ? "Fluctuant Dimensions" : dil ? "dilated time" : time ? "Time Dimensions" : tmp.ngC ? "IP gain (after softcaps) & all Normal Dimensions" : " Infinity Dimensions")
+			(fluc ? "Fluctuant Dimensions (FD1 shown)" : dil ? "dilated time" : time ? "Time Dimensions" : tmp.ngC ? "IP gain (after softcaps) & all Normal Dimensions" : " Infinity Dimensions")
 		getEl("replStr").textContent = tmp.rep.str > 1 && shiftDown ? "Replicanti Stealth: " + formatPercentage(tmp.rep.str) + "%" : ""
 
 		repApproxDisplay()

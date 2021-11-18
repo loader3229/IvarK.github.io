@@ -1633,7 +1633,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(11/16/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(11/17/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -5075,79 +5075,80 @@
 			<br>
 			<span id="ff_unl">Next ??? unlocks at ??? Fluctuant Energy.</span>
 			<br>
-			<b class="red">??? restarts your Quantum run!</b>
+			<b class="red">Linking/Arcing restarts your Quantum run!</b>
 			<br>
 			<button class="storebtn" onclick="ff.clear()">Clear</button>
 			<button class="storebtn" onclick="ff.exportPreset()">Export</button>
 			<button class="storebtn" onclick="ff.importPreset()">Import</button>
 			<br><br>
 
-			<button class="fluctuatebtn ff_btn" id="ff_btn_am">
-				<b style="font-size: 16px">Antimatter</b><br>
-				<span id="ff_eng_am"></span>
-			</button>
-			<button class="dilationupg ff_btn" id="ff_btn_dil">
-				<b style="font-size: 16px">Dilation</b><br>
-				<span id="ff_eng_dil"></span>
-			</button>
-			<br><br>
+			<div style="position: relative; height: 720px; width: 720px; margin: auto">
+				<button class="fluctuatebtn ff_btn" id="ff_btn_am" style="position: absolute; top: 270px; left: 270px; height: 180px; width: 180px">
+					<b style="font-size: 16px">Antimatter</b><br>
+					<span id="ff_eng_am"></span>
+				</button>
+				<br><br>
 
-			<!-- ??? 1 - 4 -->
-			<button class="storebtn ff_btn" id="ff_btn_f1">
-				<b style="font-size: 12px">Superefficient</b><br>
-				<span id="ff_eng_f1"></span><br><br>
-				^<span id="ff_eff_f1">1.00</span> Replicate Chance Exponent
-				<br><br>Affects: Effect
-			</button>
-			<button class="storebtn ff_btn" id="ff_btn_f2">
-				<b style="font-size: 16px">Accelerator</b><br>
-				<span id="ff_eng_f2"></span><br><br>
-				<span id="ff_eff_f2">1.00</span>x Replicanti Stealth
-				<br><br>Affects: Energy
-			</button>
-			<button class="storebtn ff_btn" id="ff_btn_f3">
-				<b style="font-size: 16px">Excite</b><br>
-				<span id="ff_eng_f3"></span><br><br>
-				<span id="ff_eff_f3">1.00</span>x Higher Altitudes
-				<br><br>Affects: None
-			</button>
-			<button class="storebtn ff_btn" id="ff_btn_f4">
-				<b style="font-size: 16px">Stretch</b><br>
-				<span id="ff_eng_f4"></span><br><br>
-				<span id="ff_eff_f4">1.00</span>x Longer Altitudes
-				<br><br>Affects: None
-			</button>
-			<br><br>
+				<!-- ??? 1 - 4 -->
+				<button class="storebtn ff_btn" id="ff_btn_f1" style="position: absolute; top: 300px; left: 0px">
+					<b style="font-size: 12px">Superefficient</b><br>
+					<span id="ff_eng_f1"></span><br><br>
+					^<span id="ff_eff_f1">1.00</span> Replicate Chance Exponent
+					<br><br>Affects: Effect
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f2" style="position: absolute; top: 106px; left: 106px">
+					<b style="font-size: 16px">Accelerator</b><br>
+					<span id="ff_eng_f2"></span><br><br>
+					<span id="ff_eff_f2">1.00</span>x Replicanti Stealth
+					<br><br>Affects: Energy
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f3" style="position: absolute; top: 0px; left: 300px">
+					<b style="font-size: 16px">Excite</b><br>
+					<span id="ff_eng_f3"></span><br><br>
+					<span id="ff_eff_f3">1.00</span>x Higher Altitudes
+					<br><br>Affects: None
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f4" style="position: absolute; top: 106px; left: 493px">
+					<b style="font-size: 16px">Stretch</b><br>
+					<span id="ff_eng_f4"></span><br><br>
+					<span id="ff_eff_f4">1.00</span>x Longer Altitudes
+					<br><br>Affects: None
+				</button>
+				<br><br>
 
-			<!-- ??? 5 - 8 -->
-			<button class="storebtn ff_btn" id="ff_btn_f5">
-				<b style="font-size: 16px">Flux</b><br>
-				<span id="ff_eng_f5"></span><br><br>
-				^<span id="ff_eff_f5">1.00</span> Positronic Charge
-				<br><br>Affects: None
-			</button>
-			<button class="storebtn ff_btn" id="ff_btn_f6">
-				<b style="font-size: 16px">Overseer</b><br>
-				<span id="ff_eng_f6"></span><br><br>
-				+<span id="ff_eff_f6">0.00</span>% later Obscure Galaxies
-				<br><br>Affects: None
-			</button>
-			<button class="storebtn ff_btn" id="ff_btn_f7">
-				<b style="font-size: 16px">Advancement</b><br>
-				<span id="ff_eng_f7"></span><br><br>
-				+<span id="ff_eff_f7">0.00</span> Replicated Compressors
-				<br><br>Affects: None
-			</button>
-			<button class="storebtn ff_btn" id="ff_btn_f8">
-				<b style="font-size: 16px">Dominant</b><br>
-				<span id="ff_eng_f8"></span><br><br>
-				^<span id="ff_eff_f8">1.00</span> cap of PB11 multiplier
-				<br><br>Affects: None
-			</button>
+				<!-- ??? 5 - 8 -->
+				<button class="storebtn ff_btn" id="ff_btn_f5" style="position: absolute; top: 300px; left: 600px">
+					<b style="font-size: 16px">Flux</b><br>
+					<span id="ff_eng_f5"></span><br><br>
+					^<span id="ff_eff_f5">1.00</span> Positronic Charge
+					<br><br>Affects: None
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f6" style="position: absolute; top: 493px; left: 493px">
+					<b style="font-size: 16px">Overseer</b><br>
+					<span id="ff_eng_f6"></span><br><br>
+					+<span id="ff_eff_f6">0.00</span>% later Obscure Galaxies
+					<br><br>Affects: None
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f7" style="position: absolute; top: 600px; left: 300px">
+					<b style="font-size: 16px">Advancement</b><br>
+					<span id="ff_eng_f7"></span><br><br>
+					+<span id="ff_eff_f7">0.00</span> Replicated Compressors
+					<br><br>Affects: None
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f8" style="position: absolute; top: 493px; left: 106px">
+					<b style="font-size: 16px">Dominant</b><br>
+					<span id="ff_eng_f8"></span><br><br>
+					^<span id="ff_eff_f8">1.00</span> cap of PB11 multiplier
+					<br><br>Affects: None
+				</button>
+			</div>
+			<br><br>
+			<div class="footer"></div>
 		</div>
 		<div class="flucTab" id="unknownTab">
 			<span id="unknown_unl">You need 11 Fluctuant Energy in order to unlock Quantum Field.</span>
 			<span id="the_end">Congratulations! You have reached the end for now... Check the Discord to see when Quantum Field is ready!</span>
+			<div class="footer bottom"></div>
 		</div>
 	</div>
 		<div class='tab' id='ghostify'>

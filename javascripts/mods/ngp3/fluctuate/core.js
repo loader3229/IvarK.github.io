@@ -165,7 +165,7 @@ let FDs = {
 
 	update(diff) {
 		var eng = fluc_save.energy
-		FDs_save.shards = Math.max(FDs_save.shards, Math.floor(eng * Math.min(eng / 2.5 + 3, 8)))
+		FDs_save.shards = Math.max(FDs_save.shards, Math.floor(eng * Math.min(eng / 4 + 3, 8)))
 
 		for (var i = 7; i >= 1; i--) FDs_save[i].amt = FDs_save[i].amt.add(FDs_save[i+1].amt.times(this.dimMult(i + 1)).times(diff / 50))
 		FDs_save.meta = FDs_save.meta.add(FDs_save[1].amt.times(this.dimMult(1)).times(diff))
@@ -174,8 +174,8 @@ let FDs = {
 		if (!fluc.unl()) return
 		var eng_log = FDs_save.meta.add(1).log10()
 		FDs_tmp = {
-			eff_rep: Math.log10(eng_log / 10 + 1) + 1,
-			eff_qe: (3 / 1.75 - 1) * Math.min(Math.log10(eng_log / 50 + 1), 1) + 1
+			eff_rep: Math.min(Math.cbrt(eng_log / 20 + 1), 4),
+			eff_qe: (3 / 1.75 - 1) * Math.min(Math.cbrt(eng_log / 15 + 1) - 1, 1) + 1
 		}
 	},
 	updateDisp() {
@@ -206,11 +206,18 @@ let FDs = {
 	cost(x) {
 		return Math.min(Math.floor(FDs_save[x].bgt * 1.75 + x), 12)
 	},
+
 	dimMult(x) {
-		var r = Decimal.pow(2.5, FDs_save[x].bgt - 1).max(1)
+		var r = Decimal.pow(2, FDs_save[x].bgt - 1).max(1)
 		if (hasAch("ng3p31")) r = r.times(1.5)
-		if (dev.boosts.tmp[7]) r = r.times(dev.boosts.tmp[7])
+		if (hasAch("ng3p36")) r = r.times(FDs.repMult(x))
 		return r
+	},
+	repMult(t) {
+		//Fluctuant Replicantis
+		var x = (getReplEff().max(1).log10() / 5e5 + 1) / Math.pow(t, 2)
+		if (x <= 1) return 1
+		return Math.sqrt(x)
 	}
 }
 let FDs_tmp = {}

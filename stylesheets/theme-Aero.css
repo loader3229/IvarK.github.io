@@ -1177,67 +1177,6 @@ td .timestudybought.pos_study {
     }
 }
 
-.gluonupgrade.r {
-    background: linear-gradient(45deg, #f004, #f002), linear-gradient(#444, #111) !important;
-    color: #f77 !important;
-    border: 1px solid #f77 !important;
-    box-shadow: inset 0 0 15px #f773;
-    text-shadow: 0 0 5px #000;
-    animation: none !important;
-}
-.gluonupgrade.r:hover {
-    box-shadow: inset 0 0 15px #f773, 0 0 8px #f777;
-}
-.gluonupgradebought.r {
-    background: linear-gradient(45deg, #f006, #f003), linear-gradient(#222, #666) !important;
-    color: #f77 !important;
-    border: 1px solid #f77 !important;
-    box-shadow: inset 0 0 15px #f775, 0 0 8px #f777;
-    text-shadow: 0 0 5px #000;
-    animation: none !important;
-}
-.gluonupgrade.g {
-    background: linear-gradient(45deg, #0f04, #0f02), linear-gradient(#444, #111) !important;
-    color: #7f7 !important;
-    border: 1px solid #7f7 !important;
-    box-shadow: inset 0 0 15px #7f73;
-    text-shadow: 0 0 5px #000;
-    animation: none !important;
-}
-.gluonupgrade.g:hover {
-    box-shadow: inset 0 0 15px #7f73, 0 0 8px #7f77;
-}
-.gluonupgradebought.g {
-    background: linear-gradient(45deg, #0f06, #0f03), linear-gradient(#222, #666) !important;
-    color: #7f7 !important;
-    border: 1px solid #7f7 !important;
-    box-shadow: inset 0 0 15px #7f75, 0 0 8px #7f77;
-    text-shadow: 0 0 5px #000;
-    animation: none !important;
-}
-.gluonupgrade.b {
-    background: linear-gradient(45deg, #00f4, #00f2), linear-gradient(#444, #111) !important;
-    color: #77f !important;
-    border: 1px solid #77f !important;
-    box-shadow: inset 0 0 15px #77f3;
-    text-shadow: 0 0 5px #000;
-    animation: none !important;
-}
-.gluonupgrade.b:hover {
-    box-shadow: inset 0 0 15px #77f3, 0 0 8px #77f7;
-}
-.gluonupgradebought.b {
-    background: linear-gradient(45deg, #00f6, #00f3), linear-gradient(#222, #666) !important;
-    color: #77f !important;
-    border: 1px solid #77f !important;
-    box-shadow: inset 0 0 15px #77f5, 0 0 8px #77f7;
-    text-shadow: 0 0 5px #000;
-    animation: none !important;
-}
-.gluonupgrade.chosenbtn {
-    font-size: 12px;
-}
-
 .ff_btn.storebtn {
 	background: linear-gradient(#3f002f, #3f2f00) !important;
 }

@@ -420,24 +420,15 @@ function switchAB() {
 }
 
 function getAMforGHPGain(){
-	return inBigRip() ? qu_save.bigRip.bestThisRun.log10() : player.money.plus(1).log10() / (tmp.quActive && qu_save.breakEternity.upgrades.includes(13) ? 1e6 : 2e6)
+	return new Decimal(1)
 }
 
 function getGHPGain() {
-	if (!pH.did("ghostify")) return new Decimal(1)
-	let log = 0 //getAMforGHPGain() / QCs.getGoalMA([6, 8], "ghp_gain") - 1
-	if (hasAch("ng3p58")) { 
-		//the square part of the formula maxes at e10, and gets weaker after ~e60 total
-		let x = Math.min(7, log / 2) + Math.min(3, log / 2)
-		y = player.ghostify.ghostParticles.plus(Decimal.pow(10, log)).plus(10).log10()
-		if (!hasAch("ng3p84")) x = Math.min(x, 600 / y)
-		log += x
-	}
-	return Decimal.pow(10, log).times(getGHPMult()).floor()
+	return new Decimal(1)
 }
 
 function getGHPBaseMult() {
-	return Decimal.pow(20 / 9, player.ghostify.multPower - 1)
+	return new Decimal(1)
 }
 
 function getGHPMult() {
