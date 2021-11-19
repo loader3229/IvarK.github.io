@@ -335,16 +335,13 @@ function preHiggsNGp3AchieveCheck() {
 }
 
 function atHiggsAchCheck(){
-	if (player.ghostify.hb.higgs >= 1) giveAchievement("The Holy Particle")
 	if (player.ghostify.ghostlyPhotons.enpowerments >= 25) giveAchievement("Bright as the Anti-Sun")
 	if (qu_save.quarks.log10() >= 4e4) giveAchievement("Are these another...")
-	if (player.ghostify.hb.bosonicSemipowerment && player.ghostify.ghostlyPhotons.lights[7] >= tmp.leReq / 2) giveAchievement("Bosonic Semipowerment")
 	if (player.ghostify.times >= Math.pow(Number.MAX_VALUE, 1/4)) giveAchievement("The Ghostliest Side")
 	if (player.money.log10() >= 1e18) giveAchievement("Meta-Quintillion")
 }
 
 function atGravDimsAchCheck(){
-	if (GDs.unlocked()) giveAchievement("The Power of Relativity")
 	if (player.ghostify.ghostParticles.plus(1).log10() >= 5e3) giveAchievement("Einstein's Ghost")
 	if (qu_save.bigRip.bestThisRun.plus(1).log10() >= Math.sqrt(2) * 1e12) giveAchievement("Do you even how to?")
 	// Brutally Challenging is on quantum_challenges.js
@@ -375,5 +372,5 @@ function ALLACHIEVECHECK(){
 	if (!tmp.ngp3) return
 
 	if (!hasAch("ng3p101")) preHiggsNGp3AchieveCheck()
-	if (player.ghostify && player.ghostify.hb) beyondHiggsAchieveCheck()
+	if (player.ghostify) beyondHiggsAchieveCheck()
 }

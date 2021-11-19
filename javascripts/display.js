@@ -614,7 +614,6 @@ function updateDimensionsDisplay() {
 		if (getEl("pdims").style.display == "block") paradoxDimDisplay()
 		if (getEl("metadimensions").style.display == "block") updateMetaDimensions()
 		if (getEl("fdims").style.display == "block") FDs.updateDisp()
-		if (getEl("gdims").style.display == "block") GDs.updateDisplayOnTick()
 	}
 	tickspeedDisplay()
 	if (getEl("stats").style.display == "block" && getEl("statistics").style.display == "block") STATSDisplay()

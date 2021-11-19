@@ -1068,7 +1068,6 @@
 					<td id="pdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('pdims')">Paradox Dimensions</button></td>
 					<td id="mdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('metadimensions')">Meta Dimensions</button></td>
 					<td id="fdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('fdims')">Fluctuant Dimensions</button></td>
-					<td id="gdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('gdims')">Gravity Dimensions</button></td>
 					<td id="prodtabbtn"><button class="secondarytabbtn" onclick="showDimTab('production')">Production</button></td>
 				</tr>
 			</table>
@@ -1398,89 +1397,6 @@
 					</tbody>
 				</table>
 			</div>
-			<div id="gdims" class="dimtab">
-				<button class="gluonupgrade bl" onclick="teleportToBL()">Teleport to Bosonic Lab.</button>
-				<br>
-				<table style="font-size: 15px; width: 100%">
-					<tr>
-						<td id="gvCell" colspan=3 style="text-align: center; width: 60%">
-							You have <span id="gv" style="font-size: 35px">0.0</span> Gravitons. <span id="gvRate" style="font-size: 25px">+0.0/s</span><br>
-							You have <span id="gdWatt" style="font-size: 25px">0.00</span>x Bosonic Speed, which boosts all Gravity Dimensions by <span id="gdMult" style="font-size: 25px">1.00</span>x before exponents.
-						</td>
-						<td rowspan=12 style="text-align: center; vertical-align: 0; width: 40%">
-							The Gravity Well produced <span id="gvPow" style="font-size: 35px"></span> <span id="gvPowScaling"></span> from your Gravitons and Gravity Radiation.
-							<span id="gvNoPow"><br>(You will start getting Power at <span id="gvPowStart"></span> Gravitons)</span>
-							Multiplied by <span id="gvEneMult" style="font-size: 25px"></span>, it currently contains <span id="gvEne" style="font-size: 25px"></span> Energy, which translates to:
-							<br>
-							<table id="gvBoosts" style="width: 100%"></table>
-							<table style="width: 100%"><tr>
-								<td>Charge: <span class="gvBoost" id="gvCharge">0.00%</span> stronger</td>
-								<td style="text-align: right"><button class="storebtn" id="gvUncharge" onclick="GDs.unchargeBoost()">Uncharge</button></td>
-							</tr>
-							<tr>
-								<td colspan=2 style="vertical-align: 0">
-									Supercharge: <span class="gvBoost" id="gvSupercharge">0.00%</span> stronger<br>
-									<b class="warning">WARNING!</b> <b>This requires you to reduce the universe to Planck Scale!</b><br>
-									(requires <span id="plReq"></span>)
-								</td>
-							</tr>
-							</table>
-						</td>
-					</tr>
-					<tr id="gd1Row">
-						<td id="gd1"></td>
-						<td id="gd1Amount" style="text-align: right"></td>
-					</tr>
-					<tr id="gd2Row">
-						<td id="gd2"></td>
-						<td id="gd2Amount" style="text-align: right"></td>
-					</tr>
-					<tr id="gd3Row">
-						<td id="gd3"></td>
-						<td id="gd3Amount" style="text-align: right"></td>
-					</tr>
-					<tr id="gd4Row">
-						<td id="gd4"></td>
-						<td id="gd4Amount" style="text-align: right"></td>
-					</tr>
-					<tr>
-						<td id="gdBoostDesc">
-							Gravity Dimension Shift (0 + 0): Requires ??? Gravity Radiation
-						</td>
-						<td style="text-align: right">
-							<button class="storebtn" id="gdBoost" style="width: 240px" onclick="GDs.gdBoost()">Unlock a new Dimension</button>
-						</td>
-					</tr>
-					<tr>
-						<td id="extraGDB" colspan=2>
-							Next extra Gravity Dimension Shift / Boost is at ??? Higgs Bosons
-						</td>
-					</tr>
-					<tr>
-						<td id="grCell" colspan=3 style="text-align: center">
-							You have <span id="gr" style="font-size: 25px">0.0</span> Gravity Radiation.<br>
-							You have <span id="rdTick" style="font-size: 25px">0</span> Radiation Ticks.
-							<span id="rdNextTickDiv">Next at <span id="rdNextTick" style="font-size: 25px">Infinite</span>x Bosonic Speed.</span>
-						</td>
-					</tr>
-					<tr>
-						<td>First Radiation Dimension</td>
-						<td id="rd1Amount" style="text-align: right"></td>
-					</tr>
-					<tr>
-						<td>Second Radiation Dimension</td>
-						<td id="rd2Amount" style="text-align: right"></td>
-					</tr>
-					<tr>
-						<td>Third Radiation Dimension</td>
-						<td id="rd3Amount" style="text-align: right"></td>
-					</tr>
-					<tr>
-						<td>Fourth Radiation Dimension</td>
-						<td id="rd4Amount" style="text-align: right"></td>
-					</tr>
-				</table>
-			</div>
 			<div id="production" class="dimtab">
 				<b>seconds of history:</b>
 				<input type="number" value="10" onchange="updateChartValues()" id="chartDurationInput"></input>
@@ -1633,7 +1549,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(11/17/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(11/18/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -5584,18 +5500,6 @@
 							Overdrive Speed: <span id="odSpeed" style="font-size:25px"></span><span id="odSpeedWBBt"></span><br>
 							<input id="odSlider" style="width: 180px;" type="range" min="0" max="30" class="slider" oninput="changeOverdriveSpeed()">
 						</td>
-					</tr><tr id="bosonicResets">
-						<td>
-							You have <span id="hb" style="font-size:35px">0</span> Higgs Bosons.
-							<br>
-							<button class="gluonupgrade hb" id="hbReset" onclick="higgsReset()">Reset Bosonic Lab for <span id="hbResetGain">1</span> Higgs.<br>(Requires <span id="hbResetReq"></span> Bosonic Antimatter)</button>
-						</td>
-						<td id="gvBlCell">
-							You have <span class="gvBoost" id="gvBlAmount" style="font-size:35px"></span> Gravitons.
-							<br>
-							<button class="gluonupgrade gv" onclick="GDs.teleport()">Teleport to Gravity Dimensions.</button>
-						</td>
-						<td></td>
 					</tr></table>
 					<span id="nextParticle"></span><br>
 					<b style="font-size: 35px">Bosonic Runes</b><br>
@@ -5997,8 +5901,6 @@
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/big_rip.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/bosonic_lab.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/ghostly_photons.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/legacy/gravity_dimensions.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/legacy/higgs_bosons.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/neutrinos.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/core.js"></script>
 

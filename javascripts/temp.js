@@ -212,7 +212,6 @@ function updateNGP3TempStuff(init) {
 }
 
 function updateGhostifyTempStuff() {
-	GDs.updateTmp()
 	updateBosonicLabTemp()
 	if (tmp.quActive) updatePPTITemp() //preon power threshold increase
 	if (pH.did("ghostify") && player.ghostify.ghostlyPhotons.unl) {
@@ -441,8 +440,8 @@ function updateBosonicAMDimReturnsTemp() {
 	if (!pH.did("ghostify")) return
 	if (!player.ghostify.wzb.unl) return
 
-	data.start = getHiggsRequirement()
-	data.base = getHiggsRequirementMult()
+	data.start = new Decimal(1e100)
+	data.base = new Decimal(1e100)
 	data.offset = 1 / Math.log(data.base) - 1
 	data.offset2 = 1 - Math.log10(data.offset + 1) / Math.log10(data.base)
 	data.postDim = player.ghostify.bl.am.div(data.start)

@@ -863,7 +863,7 @@ function doubleMSMult(x) {
 }
 
 function isAtEndGame() {
-	return tmp.ngp3 && false
+	return fluc.unl() && fluc_save.eng >= 11
 }
 
 //Auto-Preset

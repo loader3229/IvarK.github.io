@@ -590,7 +590,7 @@ strong { color: #0072e5 }
 .orange {
 	color: #e57200
 }
-.yellow, #enB_pos_eng, #enB_pos_amt, #hbUnspent, #bosonicFactorEffect {
+.yellow, #enB_pos_eng, #enB_pos_amt {
 	color: #e5e500
 }
 .indigo {
@@ -677,40 +677,6 @@ strong { color: #0072e5 }
 }
 .tau #zNeSymbol {
 	transform: translate(-50%, 10%)
-}
-.gluonupgrade.hb {
-	background: radial-gradient(#007fff, transparent 50%, transparent 100%), radial-gradient(#001fff, #007fff, transparent 60%, transparent 100%), linear-gradient(transparent, #007fff 50%, transparent 100%), radial-gradient(#bfdfff, #191919 50%, #bfdfff 100%);
-	background-position: center;
-	border-color: #007fff !important
-}
-.gluonupgrade.hb:hover {
-	border-color: #bfdfff !important;
-	color: #e5e5e5 !important
-}
-.gv, #gdtabbtn button {
-	border-color: #0b298d !important;
-	animation: none
-}
-.gv:hover, #gdtabbtn button:hover {
-	background-color: #0b298d !important;
-	color: #0f1529 !important
-}
-#gvPow, #gvEne, #gvEneMult {
-	color: #485faa !important
-}
-#gvRadioPow {
-	color: #5c8340 !important
-}
-.planckbtn {
-	border-color: #2f3f00 !important;
-	color: #bfff00 !important;
-}
-.planckbtn:hover {
-	border-color: #5f7f00 !important;
-	color: #efffbf !important;
-}
-.pl {
-	color: #bfff00 !important;
 }
 
 .notifyjs-bootstrap-info {

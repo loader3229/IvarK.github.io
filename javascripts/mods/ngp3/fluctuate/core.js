@@ -217,7 +217,8 @@ let FDs = {
 		//Fluctuant Replicantis
 		var x = (getReplEff().max(1).log10() / 5e5 + 1) / Math.pow(t, 2)
 		if (x <= 1) return 1
-		return Math.sqrt(x)
+		return 1
+		//return Math.pow(10, Math.sqrt(x) - 1)
 	}
 }
 let FDs_tmp = {}

@@ -49,7 +49,6 @@ function getLightThresholdIncrease(l) {
 
 function getPhotonicFlow() {
 	let x = new Decimal(1)
-	if (GDs.boostUnl('gph')) x = Decimal.pow(x, GDs.tmp.gph)
 	return x
 }
 
@@ -123,7 +122,6 @@ function getLightEmpowermentReq(le) {
 
 	if (hasAch("ng3p116")) x /= 2
 	if (hasAch("ng3p95")) x -= 1
-	if (bu62.active("gph")) x = 1/0
 
 	tmp.leReqScale = scale
 	return Math.floor(x)

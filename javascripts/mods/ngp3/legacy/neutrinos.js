@@ -34,7 +34,6 @@ function updateNeutrinoUpgradeDisplay() {
 }
 
 function isNeutrinoUpgUnlocked(u) {
-	if (u >= 16) return GDs.unlocked()
 	if (u >= 13) return player.ghostify.ghostlyPhotons.unl
 	if (u >= 5) return player.ghostify.times >= u - 2
 	return true
@@ -277,7 +276,7 @@ var neutrinoUpgrades = {
 	},
 	17: {
 		eff() {
-			return 1 - 1 / Math.max(player.ghostify.hb.higgs / 150, 1)
+			return 1
 		},
 		effDesc(x) {
 			return x.toFixed(3)

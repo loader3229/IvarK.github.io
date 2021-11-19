@@ -1267,21 +1267,6 @@ td .timestudybought.pos_study {
     animation: none !important;
 }
 
-.gluonupgrade.hb {
-	background:
-        linear-gradient(90deg, #0000, #ff02, #0000), 
-        linear-gradient(#550, #110) !important;
-    color: #fff !important;
-    border: 1px solid #fff !important;
-    box-shadow: inset 0 0 15px #0003;
-    text-shadow: 0 0 5px #000;
-    animation: none !important;
-}
-.gluonupgrade.hb:hover {
-    text-shadow: 0 0 5px #000, 0 0 5px #000;
-    box-shadow: inset 0 0 15px #fff3, 0 0 8px #fff7;
-}
-
 #produceQuarkCharge {
     background: linear-gradient(#445, #222) !important;
     color: #aab !important;

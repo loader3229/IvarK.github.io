@@ -19,7 +19,6 @@ function getBosonicWattGain() {
 	let x = Math.max(player.money.log10() / 2e16 - 1, 0)
 	if (hasAch("ng3p91")) x *= getAchBWtMult()
 	if (isEnchantUsed(34)) x *= tmp.bEn[34]
-	if (GDs.boostUnl('bl')) x = Decimal.pow(x, getBosonicSpeedExp())
 	return x
 }
 
@@ -37,14 +36,7 @@ function getBatteryGainPerSecond(toSub) {
 	return toAdd
 }
 
-function getBosonicSpeedExp() {
-	let x = 1
-	if (GDs.boostUnl('bl')) x *= GDs.tmp.bl
-	return x
-}
-
 function getOverdriveFinalSpeed() {
-	if (GDs.boostUnl('bl')) return Decimal.pow(tmp.bl.odSpeed, getBosonicSpeedExp())
 	return tmp.bl.odSpeed
 }
 
@@ -200,12 +192,7 @@ function getBosonicAMFinalProduction() {
 let maxBLLvl = 3
 function updateBosonicLimits() {
 	//Bosonic Level?
-	let lvl = 0
-	if (player.ghostify.hb) {
-		if (GDs.unlocked()) lvl = 3
-		else if (player.ghostify.hb.higgs > 0) lvl = 2
-		else if (player.ghostify.wzb.unl) lvl = 1
-	}
+	let lvl = 3
 
 	//Bosonic Lab
 	br.limit = br.limits[lvl]
@@ -277,14 +264,6 @@ function updateBosonicLabTab(){
 	if (getEl("bextab").style.display=="block") updateBosonExtractorTab()
 	if (getEl("butab").style.display=="block") updateBosonicUpgradeDescs()
 	if (getEl("wzbtab").style.display=="block") updateWZBosonsTab()
-	if (player.ghostify.hb.unl) {
-		let req = getHiggsRequirement()
-		getEl("hb").textContent = getFullExpansion(player.ghostify.hb.higgs)
-		getEl("hbReset").className = "gluonupgrade " + (player.ghostify.bl.am.gte(req) ? "hb" : "unavailablebtn")
-		getEl("hbResetReq").textContent = shorten(req)
-		getEl("hbResetGain").textContent = player.ghostify.bl.am.gte(req) && player.ghostify.hb.higgs ? "+" + getFullExpansion(getHiggsGain()) : ""
-	}
-	if (GDs.unlocked()) getEl("gvBlAmount").textContent = shortenMoney(GDs.save.gv)
 }
 
 function teleportToBL() {
@@ -344,7 +323,6 @@ function getExtractTime() {
 	let data = player.ghostify.bl
 	let r = new Decimal(br.scalings[data.typeToExtract] || 1/0)
 	r = r.div(tmp.wzb.wbt)
-	if (hasAch("ng3p95")) r = r.div(Math.sqrt(1 + player.ghostify.hb.higgs))
 	return r
 }
 
@@ -538,10 +516,7 @@ var bEn = {
 			return Decimal.pow(Decimal.add(l, 100).log10(), 4).div(16)
 		},
 		34(l) {
-			let x = player.ghostify.hb.higgs
-			if (!tmp.ngp3_exp) x = Math.sqrt(x / 2)
-
-			return x * Math.log10(l.times(1e3).max(1).log10() + 1) + 1
+			return 1
 		},
 		15(l) {
 			let x = Math.pow(Math.log10(l.add(1).log10() + 1) / 5 + 1, 2)
@@ -552,9 +527,7 @@ var bEn = {
 			return 0.65 - 0.15 / Math.sqrt(l.add(1).log10() / 50 + 1)
 		},
 		35(l) {
-			let hb = player.ghostify.hb.higgs
-			if (hb <= 200) return new Decimal(1)
-			return Decimal.pow(100, Math.sqrt(hb / 100 - 2) * Math.pow(l.add(1).log10(), 1/3))
+			return new Decimal(1)
 		},
 		45(l) {
 			return 2.5 - 1.5 / (Math.log10(l.add(1).log10() / 300 + 1) / 2 + 1)
@@ -671,7 +644,6 @@ function buyBosonicUpgrade(id, quick) {
 	player.ghostify.bl.am = player.ghostify.bl.am.sub(getBosonicFinalCost(bu.reqData[id][0]))
 	if (!quick) updateTmp()
 	if (id == 32 || id == 65) tmp.updateLights = true
-	delete player.ghostify.hb.bosonicSemipowerment
 	return true
 }
 
@@ -904,7 +876,7 @@ var bu = {
 			if (!tmp.quActive) return 1
 
 			let decays = 0
-			let exp = bu62.active("gph") ? 2/3 : 0.5
+			let exp = 0.5
 			let x = Math.pow(decays, exp)
 
 			if (tmp.ngp3_exp) x = x + 1
@@ -966,11 +938,11 @@ var bu = {
 		},
 		52() {
 			let log = player.replicanti.amount.max(1).log10()
-			let div1 = bu62.active("rep") ? 5e8 : 7.5e8
+			let div1 = 7.5e8
 			let div2 = 1e3
 
 			return {
-				ig: Math.pow(log / div1 + 1, bu62.active("rep") ? 0.125 : 0.1),
+				ig: Math.pow(log / div1 + 1, 0.1),
 				it: Math.log10(log + 1) / div2 + 1
 			}
 		},
@@ -978,7 +950,7 @@ var bu = {
 			return hasBosonicUpg(64) ? tmp.blu[64].gs : 0.95
 		},
 		62() {
-			return bu62.eff[GDs.save.gc || "none"]()
+			return 1
 		},
 		63() {
 			let x = player.ghostify.time
@@ -987,12 +959,12 @@ var bu = {
 		},
 		64() {
 			return {
-				gs: 0.95 / (Math.log10(player.ghostify.hb.higgs / 2e3 + 1) / 10 + 1),
-				gh: player.ghostify.hb.higgs * 3
+				gs: 1,
+				gh: 0
 			}
 		},
 		65() {
-			return Math.max(15 - player.ghostify.hb.higgs / 1e3, 0)
+			return 15
 		}
 	},
 	effectDescs: {
@@ -1033,7 +1005,7 @@ var bu = {
 			)
 		},
 		62(x) {
-			return bu62.desc[GDs.save.gc || "none"](x)
+			return "Removed."
 		},
 		63(x) {
 			return formatPercentage(x - 1, 2) + "% stronger"

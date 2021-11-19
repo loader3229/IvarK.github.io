@@ -305,7 +305,6 @@ function setupHTMLAndData() {
 	setupBosonicExtraction()
 	setupBosonicUpgrades()
 	setupBosonicRunes()
-	GDs.setupHTML()
 }
 
 function updateNewPlayer(mode, preset) {
@@ -1669,23 +1668,7 @@ function changeSaveDesc(saveId, placement) {
 		var isSaveQuantumed = temp.quantum ? temp.quantum.times > 0 : false
 
 		msg += "<span style='font-size: 12px'>"
-		if (isSaveGhostified) {
-			if (temp.achievements.includes("ng3p101")) {
-				var data=temp.ghostify.gds
-				msg += "Gravitons: " + shorten(new Decimal(data.gv)) + ", Extra Gravity Dimension Shifts / Boosts: " + getFullExpansion(data.extraGDBs || 0)
-			} else if (temp.achievements.includes("ng3p91")) {
-				var data=temp.ghostify.hb
-				msg += "Bosonic Antimatter: " + shorten(new Decimal(temp.ghostify.bl.am)) + ", Higgs Bosons: " + getFullExpansion(data.higgs)
-			} else if (temp.achievements.includes("ng3p81")) {
-				var data=temp.ghostify.wzb
-				msg += "Bosonic Antimatter: " + shorten(new Decimal(temp.ghostify.bl.am)) + ", W + Bosons: " + shortenDimensions(new Decimal(data.wpb)) + ", W- Bosons: " + shortenDimensions(new Decimal(data.wnb)) + ", Z Bosons: " + shortenDimensions(new Decimal(data.zb))
-			} else if (temp.achievements.includes("ng3p71")) {
-				var data=temp.ghostify.ghostlyPhotons
-				var lights=0
-				for (var l=0;l<8;l ++ ) lights += data.lights[l]
-				msg += "Ghostly Photons: " + shortenDimensions(new Decimal(data.amount)) + ", Dark Matter: " + shortenDimensions(new Decimal(data.darkMatter)) + ", Ghostly Rays: " + shortenDimensions(new Decimal(data.ghostlyRays)) + ", Lights: " + getFullExpansion(lights) + ", Light Empowerments: " + getFullExpansion(data.enpowerments)
-			} else msg += "Ghost Particles: " + shortenDimensions(new Decimal(temp.ghostify.ghostParticles)) + ", Neutrinos: " + shortenDimensions(Decimal.add(temp.ghostify.neutrinos.electron, temp.ghostify.neutrinos.mu).add(temp.ghostify.neutrinos.tau).round())
-		} else if (isSaveFluctuated) {
+		if (isSaveFluctuated) {
 			msg += "Fluctuant Energy: " + getFullExpansion(temp.fluc.energy)
 		} else if (isSaveQuantumed) {
 			if (!temp.masterystudies) msg += "Endgame of NG++"
@@ -2153,7 +2136,6 @@ function onNotationChange() {
 		if (!player.ghostify.ghostlyPhotons.unl) getEl("gphUnl").textContent = "To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
 		else if (!player.ghostify.wzb.unl) updateBLUnlockDisplay()
 		else updateBosonUnlockDisplay()
-		GDs.updateDisplay()
 	}
 	getEl("achmultlabel").textContent = "Current achievement multiplier on each Dimension: " + shortenMoney(player.achPow) + "x"
 	setAndMaybeShow('bestTP', tmp.quActive, () => "Your best Tachyon Particles was " + shorten(player.dilation.bestTP) + ".")
@@ -3589,8 +3571,6 @@ function doNGP3UnlockStuff(){
 		if (!player.ghostify.reached && qu_save.bigRip.active && qu_save.bigRip.bestThisRun.gte(Decimal.pow(10, QCs.getGoalMA(undefined, true)))) doGhostifyUnlockStuff()
 		if (!player.ghostify.ghostlyPhotons.unl && qu_save.bigRip.active && qu_save.bigRip.bestThisRun.gte(Decimal.pow(10, 6e9))) doPhotonsUnlockStuff()
 		if (!player.ghostify.wzb.unl && canUnlockBosonicLab()) doBosonsUnlockStuff()
-		unlockHiggs()
-		GDs.unl()
 	}
 }
 
@@ -3641,16 +3621,8 @@ function ghostifyAutomationUpdatingPerSecond() {
 	if (!isAutoGhostsSafe) return
 
 	//Ghostify Layer
-	//Priorities: GD Boost -> Light Empowerment -> Higgs Bosons -> Rest
-	if (isAutoGhostActive(25)) GDs.gdBoost()
+	//Priorities: Light Empowerment -> Rest
 	if (player.ghostify.ghostlyPhotons.unl && isAutoGhostActive(23)) lightEmpowerment(true)
-	if (isAutoGhostActive(24)) {
-		let data = player.ghostify.automatorGhosts[24]
-		let higgs = player.ghostify.hb.higgs
-		let gain = getHiggsGain()
-
-		if (gain >= data.i || (higgs + gain) / higgs >= data.m) higgsReset(true)
-	}
 	if (player.ghostify.wzb.unl && isAutoGhostActive(20)) buyMaxBosonicUpgrades()
 	if (isAutoGhostActive(16)) {
 		maxNeutrinoMult()
@@ -4707,12 +4679,6 @@ function gameLoop(diff) {
 			if (player.ghostify.milestones >= 8 && tmp.quActive) passiveQuantumLevelStuff(diff)
 			if (ETER_UPGS.has(15)) updateEternityUpgrades() // to fix the 5ep upg display
 			if (pH.did("ghostify")) {
-				if (GDs.unlocked()) {
-					// Gravity Dimensions
-					GDs.gdTick(diff)
-					GDs.gainRDTicks()
-					if (getEl("gdims").style.display != "none") GDs.updateDisplay()
-				}
 				if (player.ghostify.wzb.unl) WZBosonsUpdating(diff) // Bosonic Lab
 				if (player.ghostify.ghostlyPhotons.unl) ghostlyPhotonsUpdating(diff) // Ghostly Photons
 				ghostifyAutomationUpdating(diff)

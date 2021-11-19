@@ -1774,7 +1774,6 @@ function updateNGp3DisplayStuff(){
 	updateGPHUnlocks()
 	updateBLUnlocks()
 	updateBosonicStuffCosts()
-	updateHiggsUnlocks()
 }
 
 function setSomeQuantumAutomationDisplay(){
@@ -1983,7 +1982,6 @@ function onLoad(noOffline) {
 	getEl("maxTimeDimensions").style.display = removeMaxTD ? "none" : ""
 
 	getEl("ghostifyAnimBtn").style.display=pH.did("ghostify")?"inline-block":"none"
-	GDs.unlDisplay()
 	notifyId=qMs.tmp.amt
 	notifyId2=player.masterystudies===undefined?0:player.ghostify.milestones
 	showHideFooter()
@@ -2062,29 +2060,17 @@ END OF ONLOAD
 
 var welcomeUpdates = []
 function setupNGP31Versions() {
-	var rollback = 0
-
 	if (aarMod.ngp3lV) {
 		alert("NG+3L is no longer supported. This save will now go through a mandatory migration to NG+3R.")
 		delete aarMod.ngp3lV
 	}
-	if (aarMod.newGame3PlusVersion === undefined) aarMod.newGame3PlusVersion = 2.21
-	if ((aarMod.newGame3PlusVersion < 2.3 && player.ghostify.hb === undefined) || player.ghostify.hb.amount !== undefined) player.ghostify.hb = setupHiggsSave()
-	else {
-		tmp.hb = player.ghostify.hb
 
-		delete tmp.hb.higgsUnspent
-		delete tmp.hb.particlesUnlocked
-		delete tmp.hb.field
-	}
-	if (aarMod.newGame3PlusVersion < 3) player.ghostify.gds = GDs.setup()
-	else {
-		if (player.ghostify.gds.gdBoosts === undefined) player.ghostify.gds = GDs.setup()
-		if (!qu_save.pos) qu_save.pos = pos.setup()
-	}
+	if (!qu_save.pos) qu_save.pos = pos.setup()
+	delete player.ghostify.hb
 	aarMod.newGame3PlusVersion = 3
 
 	//NG+3R Builds
+	var rollback = 0
 	if (aarMod.ngp3Build === undefined) aarMod.ngp3Build = 0
 	if (aarMod.ngp3Build < 20210517) {
 		delete qu_save.challenge
@@ -2681,8 +2667,8 @@ function conToDeciGhostify(){
 			player.ghostify.wzb.wnb=new Decimal(player.ghostify.wzb.wnb)
 			player.ghostify.wzb.zb=new Decimal(player.ghostify.wzb.zb)
 		}
+		if (player.ghostify.gds) delete player.ghostify.gds //No Gravity Dimensions for NG+3R. :(
 	}
-	GDs.compile()
 }
 
 function transformSaveToDecimal() {
