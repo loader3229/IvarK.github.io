@@ -4248,7 +4248,7 @@ function doQuantumButtonDisplayUpdating(diff){
 			QKminpeak = currentQKmin
 			QKminpeakValue = quarkGain()
 		}
-	}
+	} else currentQKmin = new Decimal(0)
 
 	var showGain = !isQuantumFirst() ? "QK" : ""
 	getEl("quantumbtnFlavor").textContent = showGain != "" ? "" : QCs.inAny() ? "The unseening has been detected... Complete this challenging experiment!" : "The spacetime has been conceptualized... It's time to go quantum!"
