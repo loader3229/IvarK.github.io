@@ -67,7 +67,7 @@ var PCs = {
 				false,
 				false,
 			],
-			goal_divs: [null, 0.1, 0.95, 0.35, 0.95, 0.45, 0.5, 0.4, 0.75],
+			goal_divs: [null, 0.1, 0.95, 0.35, 0.95, 0.45, 0.5, 0.4, 0.775],
 			milestone_reqs: [null, 1, 2, 3, 4, 5, 7],
 			milestone_unls: [null,
 				true,
@@ -299,7 +299,7 @@ var PCs = {
 		div -= PCs_tmp.temp
 
 		var r = qc1.pow(qc2.log(base) / div)
-		var pow = Math.pow(1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) * (hasAch("ng3pr16") ? 0.9 : 1) / 3)
+		var pow = Math.pow(1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) * (hasAch("ng3pr16") ? 0.89 : 1) / 3)
 		if (pos >= 50) pow *= 1.25
 		pow /= this.shrunkerEff()
 

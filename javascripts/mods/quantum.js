@@ -162,7 +162,7 @@ function doQuantumProgress() {
 	if (!first && quarkGain().gte(Number.MAX_VALUE)) {
 		var fluctuate = Decimal.pow(10, Math.pow(10, 13.5))
 		percentage = player.money.log(fluctuate)
-		name = "Percentage until Quantum+ (" + shortenCosts(fluctuate) + " antimatter)"
+		name = "Percentage until Fluctuate (" + shortenCosts(fluctuate) + " antimatter)"
 		className = "quantumProgress"
 	} else if (!first && quarkGain().gte(256)) {
 		var qkLog = quarkGain().log(2)

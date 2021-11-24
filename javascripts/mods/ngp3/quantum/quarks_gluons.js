@@ -301,7 +301,7 @@ function updateColorPowers() {
 
 	//Exponents
 	let e = 1
-	if (hasAch("ng3pr12")) {
+	if (PCs.milestoneUnl(5)) {
 		let c = 0
 		for (var i = 1; i <= 4; i++) if (PCs.milestoneDone(i * 10 + 5)) c++
 		e = Math.pow(1.025, c)
@@ -946,7 +946,9 @@ var enB = {
 		},
 		eff(x) {
 			var eng = this.engEff()
-			if (this.charged(x)) eng = eng.times(this.chargeEff(x))
+			var charge = this.chargeEff(x)
+			if (this.charged(x)) eng = eng.times(charge)
+			else if (hasAch("ng3pr13")) eng = eng.times(Math.pow(charge, 0.1))
 			return eng
 		},
 
@@ -956,10 +958,11 @@ var enB = {
 				Math.pow(1.5, Math.max((pos_tmp.cloud && pos_tmp.cloud.total) || 0, 2)) *
 				Math.pow(2, lvl - this[x].tier)
 			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
-			if (hasAch("ng3pr13")) req *= 0.9
+			if (hasAch("ng3pr12")) req *= 0.8
 			if (PCs.milestoneDone(42) && lvl == 1) req *= 6
 			if (str.unl()) req *= str.nerf_pb(x)
-			return req
+			if (hasAch("ng3pr12")) req -= 2
+			return Math.max(req, 0)
 		},
 		chargeEff(x) {
 			var lvl = this.lvl(x)
@@ -967,6 +970,7 @@ var enB = {
 			if (PCs.milestoneDone(42) && lvl == 1) eff = 8
 			if (PCs.milestoneDone(23) && pos.isUndercharged(x)) eff++
 			if (str.unl()) eff += str.eff_pb(x)
+			if (hasAch("ng3pr13")) eff += 0.5
 			return eff
 		},
 		charged(x, lvl) {
@@ -1328,7 +1332,7 @@ var enB = {
 			var list = []
 			if (!active) list.push("Inactive")
 			else if (mastered && type == "pos") list.push("Tier " + data[i].tier)
-			if (charged) list.push("<b class='charged'>" + shortenDimensions(data.chargeEff(i)) + "x Charged</b>")
+			if (charged) list.push("<b class='charged'>" + shortenMoney(data.chargeEff(i)) + "x Charged</b>")
 			else if (mastered && (type != "pos" || !pos_tmp.cloud.allMastered)) list.push("Mastered")
 			if (!charged && type == "pos") list.push(!enB.mastered("pos", i) && !enB.colorMatch("pos", i) ? "Mismatched" : "Self-boost is at " + shorten(enB.pos.chargeReq(i)) + " charge")
 			if (data[i].type && (!mastered || shiftDown)) list.push((this.anti(type, i) ? "anti-" : "") + data[i].type.toUpperCase() + "-type boost")

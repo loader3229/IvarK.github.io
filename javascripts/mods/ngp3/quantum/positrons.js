@@ -180,7 +180,7 @@ var pos = {
 		else eng = Decimal.pow(pcSum, pos_tmp.mults.pc_exp)
 		if (futureBoost("potential_strings") && dev.boosts.tmp[3]) eng = eng.times(dev.boosts.tmp[3])
 
-		pos_save.eng = eng
+		pos_save.eng = isNaN(eng.e) ? new Decimal(0) : eng
 
 		this.updateUndercharged()
 	},
@@ -235,9 +235,9 @@ var pos = {
 		var charged = match && enB.pos.charged(i)
 		var undercharged = match && this.isUndercharged(i)
 		getEl("pos_boost" + i + "_charge").textContent = undercharged ?
-			(shiftDown ? shortenDimensions(enB.pos.chargeEff(i)) + "x Undercharged!" :
+			(shiftDown ? shortenMoney(enB.pos.chargeEff(i)) + "x Undercharged!" :
 			"Undercharged! (Switch to Tier " + pos_tmp.undercharged[i] + ")") :
-			charged ? shortenDimensions(enB.pos.chargeEff(i)) + "x Charged" :
+			charged ? shortenMoney(enB.pos.chargeEff(i)) + "x Charged" :
 			"Charge: " + shorten(enB.pos.chargeReq(i, true))
 		getEl("pos_boost" + i + "_charge").className = undercharged ? "undercharged" : charged ? "charged" : ""
 	},

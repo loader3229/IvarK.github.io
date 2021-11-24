@@ -566,6 +566,8 @@ var QCs = {
 
 			switch() {
 				var qc8 = QCs_save.qc8
+				if (qc8.order.length < 2) return
+
 				var eb12 = enB.active("glu", 12)
 				qc8.index++
 				if (qc8.index >= qc8.order.length) qc8.index = 0

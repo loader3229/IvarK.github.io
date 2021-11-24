@@ -270,7 +270,7 @@ function preHiggsNGp3AchieveCheck() {
 		for (var i = 1; i <= 4; i++) {
 			if (PCs.posDone(50 + i)) cond++
 		}
-		if (cond >= 2) giveAchievement("Stonking The Pairs")
+		if (cond >= 1) giveAchievement("Stonking The Pairs")
 	}
 	if (QCs.inAny() && str_tmp.vibrated === 0 && player.meta.bestAntimatter.e >= 1.6e3) giveAchievement("Get rid of you by yourself...")
 

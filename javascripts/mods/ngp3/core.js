@@ -1021,9 +1021,9 @@ function getAQGainExp(x) {
 
 	let r = 1
 	if (PCs.unl()) r = Math.log10(x.log10() + 1) * PCs_tmp.eff2 + 1
-	if (hasAch("ng3pr12")) {
+	if (PCs.milestoneUnl(5)) {
 		let c = 0
-		for (var i = 1; i <= 4; i++) if (PCs.milestoneDone(i * 10 + 5)) c++
+		for (var i = 5; i <= 8; i++) if (PCs.milestoneDone(i * 10 + 5)) c++
 		r *= Math.pow(1.03, c)
 	}
 	if (futureBoost("quark_gluon_plasma")) r = Math.pow(x.log10() * r / 100 + 1, 1/3)
@@ -1044,15 +1044,18 @@ var ngp3Welcomes = {
 		0.5: "<b class='lime'>Paired Challenges!</b> Can you complete 2 challenges at once, and level up your progression? Unlocks after completing Quantum Challenge 7!",
 		0.6: "<b class='lime'>Strings!</b> Can you vibrate a string of boosts, which adjusts them at a sawtooth rate?",
 		0.61: "<b class='lime'>Strings, again!</b> Yes, I decided to rework Strings for better balancing and less confusion. This also removes Nerfed modifier and reworks Entangled Boosters and Perks.",
+		0.611: "<b class='lime'>PC8 combinations!</b> Due to a severe bug for QC8, I am releasing an extra update, which PC8 combinations are slightly easier! (+ some String-era buffs)",
 		0.7: () => "<b class='green flucEne'>A new layer: Fluctuate!</b> Well, that's kinda early... Welcome to the new era of NG+3! Can you reach " + shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter to get there?"
 	},
 	verbs: {
-		0.61: "reworks"
+		0.61: "reworks",
+		0.611: "nerfs"
 	},
 	goals: {
 		0.5: () => getFullExpansion(8) + " PC combinations + " + shortenCosts(Decimal.pow(10, 1e13)) + " antimatter",
 		0.6: () => shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter",
 		0.61: () => shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter",
+		0.611: () => shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter",
 		0.7: () => "<b class='flucEne'>" + getFullExpansion(12) + " Fluctuant Energy</b>",
 	}
 }

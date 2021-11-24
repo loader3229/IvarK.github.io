@@ -2103,13 +2103,14 @@ function setupNGP31Versions() {
 		if (aarMod.ngp3r < 0.5) welcomeUpdates.push(0.5)
 		if (aarMod.ngp3r < 0.6) welcomeUpdates.push(0.6)
 		if (aarMod.ngp3r < 0.61) welcomeUpdates.push(0.61)
+		if (aarMod.ngp3r < 0.611) welcomeUpdates.push(0.611)
 
 		if (!beta && (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.7 : aarMod.ngp3r < 0.7)) welcomeUpdates.push(0.7)
 		if (beta && aarMod.ngp3r < 0.7) welcomeUpdates.push("alpha")
 	}
 	aarMod.ngp3r = 0.7
 	aarMod.ngp3Alpha = beta
-	aarMod.ngp3Build = 20211013
+	aarMod.ngp3Build = 20211124
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) player.timestudy.auto = {}
 	if (rollback) rollbackQuantum(rollback)
@@ -2571,6 +2572,7 @@ function conToDeciLateEter(){
         player.eternityBuyer.limit = new Decimal(player.eternityBuyer.limit)
         player.eternityChallGoal = new Decimal(player.eternityChallGoal)
         player.replicanti.amount = new Decimal(player.replicanti.amount)
+		delete player.replicanti.infinityPoints
         if (player.boughtDims) {
                 player.replicanti.limit = new Decimal(player.replicanti.limit)
                 player.replicanti.newLimit = new Decimal(player.replicanti.newLimit)

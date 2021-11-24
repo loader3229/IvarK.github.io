@@ -23,8 +23,7 @@ var gameSpeed = 1
 function setupFooterHTML() {
 	var html = "<table id='footer' style='display: table !important'><tr><td><div style='text-align: center'>" + 
 			"<a href='howto.html' target='_newtab'>How to play</a> | " + 
-			"<a href='about.html' target='_newtab'>About</a> | " +  
-			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
+			"<a href='about.html' target='_newtab'>About</a> | " + 
 			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a> |-| " + 
 			"<a href='http://ng-plus-plus-plus.fandom.com' target='_newtab'>Wiki</a> | " +  
 			(beta || preBeta ?
@@ -3127,19 +3126,15 @@ function eternity(force, auto, forceRespec, dilated = false) {
 		pH.updateDisplay()
 	}
 	if (gainedEternityPoints().gte(player.eternityPoints) && player.eternityPoints.gte("1e1185") && (tmp.ngp3 ? player.dilation.active && player.quantum.bigRip.active : false)) giveAchievement("Gonna go fast")
+
 	var oldEP = player.eternityPoints
-	player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints())
+	if (pH.can("eternity")) player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints())
 	if (player.eternityPoints.lt(1e16)) player.eternityPoints = player.eternityPoints.round()
 	var array = [player.thisEternity, gainedEternityPoints()]
 	if (player.dilation.active) array = [player.thisEternity, getTPGain().sub(player.dilation.totalTachyonParticles).max(0), "d2"]
 	else if (player.currentEternityChall != "") array.push(player.eternityChallUnlocked)
-	else if (tmp.be) {
-		qu_save.breakEternity.eternalMatter = qu_save.breakEternity.eternalMatter.add(getEMGain())
-		if (player.ghostify.milestones < 15) qu_save.breakEternity.eternalMatter = qu_save.breakEternity.eternalMatter.round()
-		array = [player.thisEternity, getEMGain(), "b"]
-		updateBreakEternity()
-	}
 	addEternityTime(array)
+
 	player.thisEternity = 0
 	forceRespec = doCheckECCompletionStuff() || forceRespec
 
@@ -3845,7 +3840,7 @@ function incrementTimesUpdating(diffStat){
 		if (QCs_save.qc8.time > 50) {
 			QCs_save.qc8.time = 0
 			QCs.data[8].switch()
-			bigCrunch(true)
+			if (tmp.ri) bigCrunch(true)
 		}
 	}
 
