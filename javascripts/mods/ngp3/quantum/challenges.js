@@ -542,7 +542,7 @@ var QCs = {
 		},
 		8: {
 			unl: () => hasAch("ng3p25"),
-			desc: "All Entangled Boosts are anti'd. You have to setup a cycle of 2 entanglements, and there's a 5-second timer that constantly switches your gluon kind. (NOT BUGFIXED YET)",
+			desc: "All Entangled Boosts are anti'd. You have to setup a cycle of 2 entanglements, and there's a 5-second timer that constantly switches your gluon kind.",
 			goal: () => enB.glu.boosterEff() >= 220,
 			goalDisp: "220 Quantum Power",
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.1),
@@ -563,6 +563,8 @@ var QCs = {
 
 			switch() {
 				var qc8 = QCs_save.qc8
+				if (qc8.order.length < 2) return
+
 				var eb12 = enB.active("glu", 12)
 				qc8.index++
 				if (qc8.index >= qc8.order.length) qc8.index = 0

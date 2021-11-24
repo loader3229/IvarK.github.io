@@ -1017,14 +1017,14 @@ function doFeatureProgress() {
 	let reqNum
 	let reqFormat
 
-	if (pH.can("quPlus")) {}
+	if (pH.can("fluctuate")) {}
 	else if (str.unl()) {
 		res = player.money
 		reqFormat = shortenCosts(res)
 		reqNum = Decimal.pow(10, Math.pow(10, 13.5))
 		req = shortenCosts(reqNum) + " antimatter"
 		percentage = res.log(reqNum)
-		feature = "Quantum+"
+		feature = "Fluctuate"
 	} else if (PCs.unl()) {
 		res = PCs_save.comps.length
 		reqNum = 8

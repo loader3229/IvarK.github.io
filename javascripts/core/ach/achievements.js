@@ -169,7 +169,7 @@ const allAchievements = {
         ng3pr18 : "Get rid of you by yourself...",
 
         ng3p31 : "ERROR 500: INTERNAL DIMENSION ERROR",
-        ng3p32 : "Quantum+ Reached!", // UNNAMED ACHIEVEMENT
+        ng3p32 : "Fluctuate Reached!", // UNNAMED ACHIEVEMENT
         ng3p33 : "Never make paradoxes!",
         ng3p34 : "ng3p35", // UNDETERMINED ACHIEVEMENT
         ng3p35 : "ng3p35", // UNDETERMINED ACHIEVEMENT
