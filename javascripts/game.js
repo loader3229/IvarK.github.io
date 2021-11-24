@@ -23,8 +23,7 @@ var gameSpeed = 1
 function setupFooterHTML() {
 	var html = "<table id='footer' style='display: table !important'><tr><td><div style='text-align: center'>" + 
 			"<a href='howto.html' target='_newtab'>How to play</a> | " + 
-			"<a href='about.html' target='_newtab'>About</a> | " +  
-			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
+			"<a href='about.html' target='_newtab'>About</a> | " + 
 			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a> |-| " + 
 			"<a href='http://ng-plus-plus-plus.fandom.com' target='_newtab'>Wiki</a> | " +  
 			(beta || preBeta ?
