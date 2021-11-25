@@ -8,7 +8,7 @@ let ff = {
 		f1: {
 			//Superefficient
 			//Quantum Eff -> Replicanti Chance Exp
-			targ: () => tmp.qe && tmp.qe.exp && 1 / Math.min(2 - tmp.qe.exp * 2, 1) - 1,
+			targ: () => tmp.qe && tmp.qe.exp && 2 / Math.min(2 - tmp.qe.exp * 2, 1) - 1,
 			based: "Quantum Efficiency",
 			req: 1,
 			eff: (x) => 1,
@@ -72,8 +72,8 @@ let ff = {
 		},
 
 		am: {
-			targ: () => 0,
-			req: 1,
+			targ: () => Math.log10(Decimal.add(player.money, 1).log10() + 1),
+			req: 0,
 			based: "antimatter"
 		}
 	},
@@ -105,7 +105,7 @@ let ff = {
 		ff_tmp.nextAt = 1/0
 		for (var i = 0; i < ff.data.all.length; i++) {
 			var id = ff.data.all[i]
-			if (ff.isUnlocked(id)) ff_tmp.unlocked.push(id)
+			if (ff.isActive(id)) ff_tmp.unlocked.push(id)
 			else ff_tmp.nextAt = Math.min(ff_tmp.nextAt, ff.data[id].req)
 		}
 
@@ -132,14 +132,14 @@ let ff = {
 		ff_tmp.eff = {}
 		for (var i = 1; i <= 8; i++) {
 			var id = "f" + i
-			ff_tmp.eff[id] = ff.data[id].eff(ff_tmp.str[id] * ff_tmp.eng[id])
+			ff_tmp.eff[id] = ff.data[id].eff(ff_tmp.eng[id])
 		}
 	},
 
 	updateTab() {
 		for (var i = 0; i < ff.data.all.length; i++) {
 			var id = ff.data.all[i]
-			getEl("ff_eng_" + id).textContent = shorten(ff_tmp.eng[id]) + " Energy" + (shiftDown ? " (based on " + ff.data[id].based + ")" : " (" + formatPercentage(ff_tmp.str[id]) + "%)")
+			getEl("ff_eng_" + id).textContent = shorten(ff_tmp.eng[id]) + " Energy" + (shiftDown ? " (based on " + ff.data[id].based + ")" : ff.isActive(id) ? "" : " (Inactive)")
 		}
 
 		for (var i = 1; i <= 8; i++) {
@@ -175,6 +175,9 @@ let ff = {
 	},
 	isUnlocked(id) {
 		return fluc_save.energy >= (ff.data[id].req || 0)
+	},
+	isActive(id) {
+		return id == "am" || ff.isUnlocked(id) && false
 	},
 
 	linkPower() {
