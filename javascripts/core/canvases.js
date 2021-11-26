@@ -34,6 +34,8 @@ function resizeCanvas() {
 	msc.height = document.body.scrollHeight;
 	qkc.width = document.body.scrollWidth;
 	qkc.height = document.body.scrollHeight;
+	ff_c.width = document.body.scrollWidth;
+	ff_c.height = document.body.scrollHeight;
 	drawStudyTree();
 	drawMasteryTree();
 }

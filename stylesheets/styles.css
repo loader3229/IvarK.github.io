@@ -1534,7 +1534,7 @@ button {
     border-radius: 7px;
 }
 
-#studyTreeCanvas, #studyTreeCanvas2, #dilationCanvas, #blackHoleCanvas, #quarkCanvas {
+#studyTreeCanvas, #studyTreeCanvas2, #dilationCanvas, #blackHoleCanvas, #quarkCanvas, #ff_canvas {
     top: 0;
     left: 0;
     position: absolute;

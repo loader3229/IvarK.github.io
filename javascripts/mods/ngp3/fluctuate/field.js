@@ -10,7 +10,7 @@ let ff = {
 			//Quantum Eff -> Replicanti Chance Exp
 			targ: () => tmp.qe && tmp.qe.exp && 2 / Math.min(2 - tmp.qe.exp * 2, 1) - 1,
 			based: "Quantum Efficiency",
-			req: 1,
+			req: 0, //1,
 			eff: (x) => 1,
 		},
 		f2: {
@@ -18,7 +18,7 @@ let ff = {
 			//Replicanti Energy -> Replicanti Stealth
 			targ: () => QCs_save && QCs_save.qc5 && Math.log10(QCs_save.qc5.add(1).log10() + 1),
 			based: "Replicanti Energy",
-			req: 3,
+			req: 0, //3,
 			eff: (x) => 1,
 		},
 		f3: {
@@ -26,7 +26,7 @@ let ff = {
 			//Quantum Energy -> Higher Altitudes
 			targ: () => qu_save && Decimal.add(qu_save.quarkEnergy, 1).log10(),
 			based: "Quantum Energy",
-			req: 5,
+			req: 0, //5,
 			eff: (x) => 1,
 		},
 		f4: {
@@ -34,7 +34,7 @@ let ff = {
 			//Vibration Energy -> Longer Altitudes
 			targ: () => str_save && Math.log10(str_save.energy + 1),
 			based: "Vibration Energy",
-			req: 8,
+			req: 0, //8,
 			eff: (x) => 1,
 		},
 		f5: {
@@ -42,7 +42,7 @@ let ff = {
 			//Positronic Charge -> Gain Exponent
 			targ: () => pos_save && Decimal.add(pos_save.eng, 1).log10(),
 			based: "Positronic Charge",
-			req: 13,
+			req: 0, //13,
 			eff: (x) => 1,
 		},
 		f6: {
@@ -50,7 +50,7 @@ let ff = {
 			//Red Charge -> Obsure Galaxies
 			targ: () => ff.getColorCharge("r"),
 			based: "Red Charge",
-			req: 21,
+			req: 0, //21,
 			eff: (x) => 1,
 			effDisp: (x) => formatPercentage(x - 1),
 		},
@@ -59,7 +59,7 @@ let ff = {
 			//Green Charge -> Extra Replicanti Compressors
 			targ: () => ff.getColorCharge("g"),
 			based: "Green Charge",
-			req: 34,
+			req: 0, //34,
 			eff: (x) => 1,
 		},
 		f8: {
@@ -67,13 +67,13 @@ let ff = {
 			//Blue Charge -> Higher PB11 Cap
 			targ: () => ff.getColorCharge("b"),
 			based: "Blue Charge",
-			req: 55,
+			req: 0, //55,
 			eff: (x) => 1,
 		},
 
 		am: {
 			targ: () => Math.log10(Decimal.add(player.money, 1).log10() + 1),
-			req: 0,
+			req: 0, //0,
 			based: "antimatter"
 		}
 	},
@@ -156,6 +156,31 @@ let ff = {
 			getEl("ff_btn_" + id).style.visibility = ff.isUnlocked(id) ? "visible" : "hidden"
 		}
 		getEl("ff_unl").textContent = ff_tmp.unlocked.length == 9 ? "" : "Next Perk unlocks at " + getFullExpansion(ff_tmp.nextAt) + " Fluctuant Energy."
+
+		ff.draw("ff_btn_f1", "ff_btn_f2", 1)
+		ff.draw("ff_btn_f2", "ff_btn_f3", 1)
+		ff.draw("ff_btn_f4", "ff_btn_f5", 1)
+		ff.draw("ff_btn_f5", "ff_btn_f6", 1)
+		ff.draw("ff_btn_f2", "ff_btn_am", 2)
+		ff.draw("ff_btn_f5", "ff_btn_am", 2)
+		ff.draw("ff_btn_f7", "ff_btn_am", 2)
+		ff.draw("ff_btn_am", "ff_btn_f8", 3)
+	},
+	draw(a, b, c) {
+		var start = getEl(a).getBoundingClientRect();
+		var end = getEl(b).getBoundingClientRect();
+		var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
+		var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
+		var x2 = end.left + (end.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
+		var y2 = end.top + (end.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
+
+		ff_ctx.lineWidth = 8
+		ff_ctx.beginPath()
+		ff_ctx.strokeStyle = [null, "#ff3f00", "#ff003f", "#ffdf00"][c]
+
+		ff_ctx.moveTo(x1, y1)
+		ff_ctx.lineTo(x2, y2)
+		ff_ctx.stroke()
 	},
 
 	getColorCharge(color) {
@@ -180,9 +205,7 @@ let ff = {
 		return id == "am" || ff.isUnlocked(id) && false
 	},
 
-	linkPower() {
-		
-	},
+
 	clear() {
 		
 	},
@@ -190,3 +213,6 @@ let ff = {
 let ff_tmp = {}
 let ff_save
 let FLUCTUANT_FIELD = ff
+
+var ff_c = getEl("ff_canvas");
+var ff_ctx = ff_c.getContext("2d");
