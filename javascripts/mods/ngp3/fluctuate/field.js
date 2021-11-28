@@ -72,7 +72,7 @@ let ff = {
 		},
 
 		am: {
-			targ: () => Math.log10(Decimal.add(player.money, 1).log10() + 1),
+			targ: () => Math.log10(Decimal.add(player.money, 1).log10() / 2 + 1),
 			req: 0,
 			based: "antimatter"
 		}
