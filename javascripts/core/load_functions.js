@@ -17,8 +17,8 @@ function setOptionsIfUndefined(){
 	if (player.options.tetration === undefined) player.options.tetration = {base: 2}
 	if (player.options.hypersci === undefined) player.options.hypersci = {bump: 10}
 	if (player.options.spazzy === undefined) player.options.spazzy = {subNotation: "Scientific"}
-	if (player.options.standard === undefined) player.options.standard = {useMyr: false}
-	if (player.options.aas === undefined) player.options.aas = {useHyphen: false, useDe: false}
+	if (player.options.standard === undefined) player.options.standard = { useMyr: false, useTam: false }
+	if (player.options.aas === undefined) player.options.aas = { useDe: false }
 	if (player.options.newsHidden === undefined) player.options.newsHidden = false;
 	if (player.options.sacrificeConfirmation === undefined) player.options.sacrificeConfirmation = true;
 	if (player.options.retryChallenge === undefined) player.options.retryChallenge = false;

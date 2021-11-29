@@ -1427,22 +1427,20 @@
 					<tr>
 						<td><div><button id="save" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Save</button></div></td>
 						<td><div><button id="load" class="storebtn" onclick='load_saves()' style="color:black; width: 200px; height: 55px; font-size: 20px">Load</button></div></td>
-						<td><div><button id="rename" class="storebtn" onclick='rename_save()' style="color:black; width: 200px; height: 55px; font-size: 20px">Rename</button></div></td>
-					</tr>
-					<tr>
 						<td><div><button id="exportbtn" class="storebtn" onclick='export_save()' style="color:black; width: 200px; height: 55px; font-size: 20px">Export</button></div></td>
 						<td><div><button id="importbtn" class="storebtn" onclick='import_save("current")' style="color:black; width: 200px; height: 55px; font-size: 20px">Import</button></div></td>
-						<td><div><button id="autoSave" onclick='toggleAutoSave()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
 					</tr>
 					<tr>
+						<td><div><button id="autoSave" onclick='toggleAutoSave()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
 						<td><div><button onclick="pauseGame()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 8px"><p id="pauseStatus" style="font-size:20px">Pause</p>(Stops all time, production, and automation)</button></div></td>
 						<td><div><button onclick='reload()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 8px"><p style="font-size: 20px">Rollback</p>(to last save point)</button></div></td>
-						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="autoSaveInterval">Auto-save interval: 30s</b><input id="autoSaveIntervalSlider" style="width: 170px;" type="range" min="15" max="120" value="30" class="slider" oninput="changeAutoSaveInterval()"></div></td>
+						<td><div><button id="reset" onclick="reset_game()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">RESET THE GAME</button></div></td>
 					</tr>
 					<tr>
+						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="autoSaveInterval">Auto-save interval: 30s</b><input id="autoSaveIntervalSlider" style="width: 170px;" type="range" min="15" max="120" value="30" class="slider" oninput="changeAutoSaveInterval()"></div></td>
+						<td><div><button id="rename" class="storebtn" onclick='rename_save()' style="color:black; width: 200px; height: 55px; font-size: 20px">Rename</button></div></td>
 						<td><div><button id="offlineProgress" onclick='toggleOfflineProgress()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button></div></td>
-						<td><div><button id="reset" onclick="reset_game()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">RESET THE GAME</button></div></td>
-						<td></td>
+						<td><div><button id="tabsSave" onclick="toggleTabsSave()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
 					</tr>
 					<tr>
 						<td><div><button id="bugExport" onclick="bugExport()" class="storebtn" style="color:black; width:200px; height:55px; font-size:12px; display:none">Export "Infinite" bug save<br><b>(WARNING: This disappears when you reload the game!)</button></b></div></td>
@@ -1461,7 +1459,6 @@
 					<tr>
 						<td><div><button id="animationoptionsbtn" class="storebtn" onclick="showOptions('animationoptions')" style="color:black; width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
 						<td><div><button id="layerDispOptions" onclick="showOptions('layervisibilitymenu')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide layers</button></div></td>
-						<td><div><button id="tabsSave" onclick="toggleTabsSave()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button></div></td>
 					</tr>
 					<tr>
 						<td><div><button id="notation" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:10px" onclick="showOptions('notationmenu')"></button></div></td>
@@ -1549,7 +1546,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(11/27/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(11/28/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -4990,7 +4987,7 @@
 		</table>
 		<div class="flucTab" id="ffTab">
 			<br>
-			<span id="ff_eng">You have assorted 0 Fluctuant Energy in this field.</span>
+			<span id="ff_eng"></span>
 			<br>
 			<span id="ff_unl">Next ??? unlocks at ??? Fluctuant Energy.</span>
 			<br>
@@ -5004,54 +5001,62 @@
 			<canvas id="ff_canvas"></canvas>
 			<div style="position: relative; height: 720px; width: 720px; margin: auto">
 				<button class="fluctuatebtn ff_btn" id="ff_btn_am" style="position: absolute; top: 270px; left: 270px; height: 180px; width: 180px">
-					<b style="font-size: 16px">Antimatter</b><br>
-					<span id="ff_eng_am"></span>
+					<b style="font-size: 24px">Antimatter</b><br>
+					<span id="ff_eng_am" style="font-size: 15px"></span><br>
+					(click here to link with any perk)
 				</button>
-				<br><br>
 
-				<!-- ??? 1 - 4 -->
-				<button class="storebtn ff_btn" id="ff_btn_f1" style="position: absolute; top: 300px; left: 0px">
+				<!-- Perks 1 - 6 -->
+				<button class="storebtn ff_btn" id="ff_btn_f1" style="position: absolute; top: 300px; left: 600px">
 					<b style="font-size: 12px">Superefficient</b><br>
-					<span id="ff_eng_f1"></span><br><br>
 					(Inactive) ^<span id="ff_eff_f1">1.00</span> Replicate Chance Exponent
 				</button>
-				<button class="storebtn ff_btn" id="ff_btn_f2" style="position: absolute; top: 106px; left: 106px">
-					<b style="font-size: 16px">Accelerator</b><br>
-					<span id="ff_eng_f2"></span><br><br>
+				<button class="storebtn ff_btn" id="ff_btn_f2" style="position: absolute; top: 150px; left: 560px">
+					<b>Accelerator</b><br>
 					(Inactive) <span id="ff_eff_f2">1.00</span>x Replicanti Stealth
 				</button>
-				<button class="storebtn ff_btn" id="ff_btn_f3" style="position: absolute; top: 0px; left: 300px">
-					<b style="font-size: 16px">Excite</b><br>
-					<span id="ff_eng_f3"></span><br><br>
+				<button class="storebtn ff_btn" id="ff_btn_f3" style="position: absolute; top: 40px; left: 450px">
+					<b>Excite</b><br>
 					(Inactive) <span id="ff_eff_f3">1.00</span>x Higher Altitudes
 				</button>
-				<button class="storebtn ff_btn" id="ff_btn_f4" style="position: absolute; top: 106px; left: 493px">
-					<b style="font-size: 16px">Stretch</b><br>
-					<span id="ff_eng_f4"></span><br><br>
+				<button class="storebtn ff_btn" id="ff_btn_f4" style="position: absolute; top: 0px; left: 300px">
+					<b>Stretch</b><br>
 					(Inactive) <span id="ff_eff_f4">1.00</span>x Longer Altitudes
 				</button>
-				<br><br>
-
-				<!-- ??? 5 - 8 -->
-				<button class="storebtn ff_btn" id="ff_btn_f5" style="position: absolute; top: 300px; left: 600px">
-					<b style="font-size: 16px">Flux</b><br>
-					<span id="ff_eng_f5"></span><br><br>
+				<button class="storebtn ff_btn" id="ff_btn_f5" style="position: absolute; top: 40px; left: 150px">
+					<b>Flux</b><br>
 					(Inactive) ^<span id="ff_eff_f5">1.00</span> Positronic Charge
 				</button>
-				<button class="storebtn ff_btn" id="ff_btn_f6" style="position: absolute; top: 493px; left: 493px">
-					<b style="font-size: 16px">Overseer</b><br>
-					<span id="ff_eng_f6"></span><br><br>
+				<button class="storebtn ff_btn" id="ff_btn_f6" style="position: absolute; top: 150px; left: 40px">
+					<b>Overseer</b><br>
 					(Inactive) +<span id="ff_eff_f6">0.00</span>% later Obscure Galaxies
 				</button>
-				<button class="storebtn ff_btn" id="ff_btn_f7" style="position: absolute; top: 600px; left: 300px">
-					<b style="font-size: 16px">Advancement</b><br>
-					<span id="ff_eng_f7"></span><br><br>
+
+				<!-- Perks 7 - 12 -->
+				<button class="storebtn ff_btn" id="ff_btn_f7" style="position: absolute; top: 300px; left: 0px">
+					<b>Advancement</b><br>
 					(Inactive) +<span id="ff_eff_f7">0.00</span> Replicated Compressors
 				</button>
-				<button class="storebtn ff_btn" id="ff_btn_f8" style="position: absolute; top: 493px; left: 106px">
-					<b style="font-size: 16px">Dominant</b><br>
-					<span id="ff_eng_f8"></span><br><br>
+				<button class="storebtn ff_btn" id="ff_btn_f8" style="position: absolute; top: 450px; left: 40px">
+					<b>Dominant</b><br>
 					(Inactive) ^<span id="ff_eff_f8">1.00</span> cap of PB11 multiplier
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f9" style="position: absolute; top: 560px; left: 150px">
+					<b>???</b><br>
+					(Inactive) <span id="ff_eff_f9">1.00</span>x to something
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f10" style="position: absolute; top: 600px; left: 300px">
+					<b>???</b><br>
+					<span id="ff_eng_f10"></span><br><br>
+					(Inactive) <span id="ff_eff_f10">1.00</span>x to something
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f11" style="position: absolute; top: 560px; left: 450px">
+					<b>???</b><br>
+					(Inactive) <span id="ff_eff_f11">1.00</span>x to something
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f12" style="position: absolute; top: 450px; left: 560px">
+					<b>???</b><br>
+					(Inactive) <span id="ff_eff_f12">1.00</span>x to something
 				</button>
 			</div>
 			<br><br>
@@ -5734,8 +5739,8 @@
 			Bump to next F at: <input id="hypersciBump" style="width: 170px" onchange="switchNotationOption('hypersci','bump')"></input><br>
 			<b>Standard</b>
 			Use Myrillions: <input type="checkbox" id="useMyr" onchange="switchNotationOption('standard','useMyr')"><br>
+			Use Tamara's: <input type="checkbox" id="useTam" onchange="switchNotationOption('standard','useTam')"><br>
 			<b>AAS</b>
-			Use hyphen (-) separators: <input type="checkbox" id="useHyphens" onchange="switchNotationOption('aas','useHyphens')"><br>
 			Use De as 1e33: <input type="checkbox" id="useDe" onchange="switchNotationOption('aas','useDe')"><br>
 			<b>Psi</b>
 			Max characters (min: 2, max: 30): <input id="maxLength" style="width: 170px" type="number" min=2 max=30 onchange="switchNotationOption('psi','maxLength')"></input><br>

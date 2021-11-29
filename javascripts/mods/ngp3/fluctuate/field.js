@@ -12,6 +12,7 @@ let ff = {
 			based: "Quantum Efficiency",
 			req: 1,
 			eff: (x) => 1,
+			effDisp: (x) => "???", //formatPercentage(x - 1),
 		},
 		f2: {
 			//Accelerator
@@ -20,6 +21,7 @@ let ff = {
 			based: "Replicanti Energy",
 			req: 2,
 			eff: (x) => 1,
+			effDisp: (x) => "???", //formatPercentage(x - 1),
 		},
 		f3: {
 			//Excite
@@ -28,6 +30,7 @@ let ff = {
 			based: "Quantum Energy",
 			req: 4,
 			eff: (x) => 1,
+			effDisp: (x) => "???", //formatPercentage(x - 1),
 		},
 		f4: {
 			//Stretch
@@ -36,6 +39,7 @@ let ff = {
 			based: "Vibration Energy",
 			req: 5,
 			eff: (x) => 1,
+			effDisp: (x) => "???", //formatPercentage(x - 1),
 		},
 		f5: {
 			//Flux
@@ -44,6 +48,7 @@ let ff = {
 			based: "Positronic Charge",
 			req: 7,
 			eff: (x) => 1,
+			effDisp: (x) => "???", //formatPercentage(x - 1),
 		},
 		f6: {
 			//Overseer
@@ -52,7 +57,7 @@ let ff = {
 			based: "Red Charge",
 			req: 9,
 			eff: (x) => 1,
-			effDisp: (x) => formatPercentage(x - 1),
+			effDisp: (x) => "???", //formatPercentage(x - 1),
 		},
 		f7: {
 			//Advancement
@@ -61,6 +66,7 @@ let ff = {
 			based: "Green Charge",
 			req: 9,
 			eff: (x) => 1,
+			effDisp: (x) => "???", //formatPercentage(x - 1),
 		},
 		f8: {
 			//Dominant
@@ -69,6 +75,7 @@ let ff = {
 			based: "Blue Charge",
 			req: 9,
 			eff: (x) => 1,
+			effDisp: (x) => "???", //formatPercentage(x - 1),
 		},
 
 		am: {
@@ -80,7 +87,8 @@ let ff = {
 
 	setup() {
 		ff_save = {
-			links: {},
+			links: [],
+			prod: 0,
 			arcs: {},
 		}
 		fluc_save.ff = ff_save
@@ -91,6 +99,10 @@ let ff = {
 		if (!tmp.ngp3) return
 
 		var data = ff_save || this.setup()
+		if (!data.prod) {
+			data.prod = 0
+			data.links = []
+		}
 		this.updateTmp()
 	},
 
@@ -105,7 +117,7 @@ let ff = {
 		ff_tmp.nextAt = 1/0
 		for (var i = 0; i < ff.data.all.length; i++) {
 			var id = ff.data.all[i]
-			if (ff.isActive(id)) ff_tmp.unlocked.push(id)
+			if (ff.isUnlocked(id)) ff_tmp.unlocked.push(id)
 			else ff_tmp.nextAt = Math.min(ff_tmp.nextAt, ff.data[id].req)
 		}
 
@@ -121,13 +133,6 @@ let ff = {
 			ff_tmp.eng[id] = ff.getEnergy(id)
 		}
 
-		//Strength
-		ff_tmp.str = {}
-		for (var i = 0; i < ff.data.all.length; i++) {
-			var id = ff.data.all[i]
-			ff_tmp.str[id] = ff.getStrength(id)
-		}
-
 		//Boosts
 		ff_tmp.eff = {}
 		for (var i = 1; i <= 8; i++) {
@@ -137,10 +142,10 @@ let ff = {
 	},
 
 	updateTab() {
-		for (var i = 0; i < ff.data.all.length; i++) {
+		/*for (var i = 0; i < ff.data.all.length; i++) {
 			var id = ff.data.all[i]
 			getEl("ff_eng_" + id).textContent = shorten(ff_tmp.eng[id]) + " Energy" + (shiftDown ? " (based on " + ff.data[id].based + ")" : "")
-		}
+		}*/
 
 		for (var i = 1; i <= 8; i++) {
 			var id = "f" + i
@@ -155,16 +160,17 @@ let ff = {
 			var id = ff.data.all[i]
 			getEl("ff_btn_" + id).style.visibility = ff.isUnlocked(id) ? "visible" : "hidden"
 		}
-		getEl("ff_unl").textContent = ff_tmp.unlocked.length == 9 ? "" : "Next Perk unlocks at " + getFullExpansion(ff_tmp.nextAt) + " Fluctuant Energy."
+		getEl("ff_eng").textContent = "You have assorted " + getFullExpansion(0) + " / " + getFullExpansion(fluc_save.energy) + " Fluctuant Energy in this field."
+		getEl("ff_unl").textContent = ff_tmp.nextAt == 1/0 ? "" : "Next Perk unlocks at " + getFullExpansion(ff_tmp.nextAt) + " Fluctuant Energy."
 
-		ff.draw("f1", "f2", 1)
+		/*ff.draw("f1", "f2", 1)
 		ff.draw("f2", "f3", 1)
 		ff.draw("f4", "f5", 1)
 		ff.draw("f5", "f6", 1)
 		ff.draw("f2", "am", 2)
 		ff.draw("f5", "am", 2)
 		ff.draw("f7", "am", 2)
-		ff.draw("am", "f8", 3)
+		ff.draw("am", "f8", 3)*/
 	},
 	draw(a, b, c) {
 		if (!ff.isUnlocked(a)) return

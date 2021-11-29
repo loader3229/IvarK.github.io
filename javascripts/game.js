@@ -2090,7 +2090,7 @@ var notationArray = [
 
 	"Standard", "AAS", "Maximus Standard",
 
-	"Letters", "Emojis", "Brackets", "Infinity", "Game percentages", "Greek", "Hexadecimal", "Morse code", "Spazzy", "Country Codes", "Iroha", "Symbols", "Lines", "Simplified Written", "Time", "Base-64", "Myriads", /*"Layered Symbols",*/ "AF2019", "AF5LN", "Blind"
+	"Letters", "Emojis", "Brackets", "Infinity", "Game percentages", "Greek", "Hexadecimal", "Morse code", "Spazzy", "Country Codes", "Iroha", "Symbols", "Lines", "Simplified Written", "Time", "Base-64", "Myriads", "Fonster", "Fonster (Words)", /*"Layered Symbols",*/ "AF2019", "AF5LN", "Blind"
 ]
 
 function updateNotationOption() {
@@ -2212,9 +2212,9 @@ function openNotationOptions() {
 		var letters = [null, 'E', 'F', 'G', 'H']
 		getEl("psiLetter").textContent = (player.options.psi.letter[0] ? "Force " + letters[player.options.psi.letter[0]] : "Automatically choose letter")
 		getEl("chosenSubNotation").textContent = "Sub-notation: " + (player.options.spazzy.subNotation == "Emojis" ? "Cancer" : player.options.spazzy.subNotation)
-		getEl("useHyphens").checked = player.options.aas.useHyphens
 		getEl("useDe").checked = player.options.aas.useDe
 		getEl("useMyr").checked = player.options.standard.useMyr
+		getEl("useTam").checked = player.options.standard.useTam
 	} else {
 		getEl("openpsioptions").textContent = "Notation options"
 		getEl("mainnotationoptions1").style.display = ""
