@@ -36,7 +36,7 @@ let fluc = {
 	},
 
 	gain() {
-		if (!fluc.unl()) return fluc.res().gte(fluc.req(0)) ? 1 : 0
+		if (!fluc.unl()) return 1
 		return Math.max(fluc.targ() - fluc_save.energy, 0)
 	},
 	res() {

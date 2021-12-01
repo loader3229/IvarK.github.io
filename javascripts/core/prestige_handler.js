@@ -37,7 +37,7 @@ var pH = {
 				getQuarkGain().gte(1)
 		},
 		fluctuate() {
-			return fluc.gain() > 0
+			return fluc.res().gte(fluc.req())
 		},
 		ghostify() {
 			return false

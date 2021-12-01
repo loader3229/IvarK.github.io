@@ -3,7 +3,7 @@ let ff = {
 	unl: (force) => force ? fluc.unl() : ff_tmp.unl && ff_tmp.eff,
 
 	data: {
-		all: ["am", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"],
+		all: ["am", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12"],
 
 		f1: {
 			//Superefficient
@@ -77,6 +77,34 @@ let ff = {
 			eff: (x) => 1,
 			effDisp: (x) => "???", //formatPercentage(x - 1),
 		},
+		f9: {
+			targ: () => 1,
+			based: "???",
+			req: 1/0,
+			eff: (x) => 1,
+			effDisp: (x) => "???", //formatPercentage(x - 1),
+		},
+		f10: {
+			targ: () => 1,
+			based: "???",
+			req: 1/0,
+			eff: (x) => 1,
+			effDisp: (x) => "???", //formatPercentage(x - 1),
+		},
+		f11: {
+			targ: () => 1,
+			based: "???",
+			req: 1/0,
+			eff: (x) => 1,
+			effDisp: (x) => "???", //formatPercentage(x - 1),
+		},
+		f12: {
+			targ: () => 1,
+			based: "???",
+			req: 1/0,
+			eff: (x) => 1,
+			effDisp: (x) => "???", //formatPercentage(x - 1),
+		},
 
 		am: {
 			targ: () => Math.log10(Decimal.add(player.money, 1).log10() / 2 + 1),
@@ -147,7 +175,7 @@ let ff = {
 			getEl("ff_eng_" + id).textContent = shorten(ff_tmp.eng[id]) + " Energy" + (shiftDown ? " (based on " + ff.data[id].based + ")" : "")
 		}*/
 
-		for (var i = 1; i <= 8; i++) {
+		for (var i = 1; i <= 12; i++) {
 			var id = "f" + i
 			var eff = ff_tmp.eff[id]
 			getEl("ff_eff_" + id).textContent = (ff.data[id].effDisp || shorten)(eff)
