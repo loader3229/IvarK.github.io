@@ -50,13 +50,13 @@ function getShortAbbreviation(e, aas) {
 
 function toTier1Abb(t1, t2, aas) {
 	let prefixes = aas ? [
-		['', 'U', 'D', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'O', 'N'],
-		['', 'Dc', 'Vg', 'Tg', 'Qd', 'Qi', 'Se', 'St', 'Og', 'Nn'],
-		['', 'Ce', 'Dn', 'Tc', 'Qe', 'Qu', 'Sc', 'Si', 'Oe', 'Ne']
-	] : [
 		["", "U", "D", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "N"],
 		["", "De", "Vg", "Tg", "Qg", "Qq", "Sg", "St", "Og", "Ng"],
 		["", "Ce", "Dc", "Tc", "Qe", "Qu", "Se", "Su", "Oe", "Ne"]
+	] : [
+		['', 'U', 'D', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'O', 'N'],
+		['', 'Dc', 'Vg', 'Tg', 'Qd', 'Qi', 'Se', 'St', 'Og', 'Nn'],
+		['', 'Ce', 'Dn', 'Tc', 'Qe', 'Qu', 'Sc', 'Si', 'Oe', 'Ne']
 	]
 	let o = t1 % 10
 	let t = Math.floor(t1 / 10) % 10
@@ -91,10 +91,10 @@ function toTier2Abb(t2, aas) {
 	let prefixes2 = tam ?
 		["", "M", "D", "Tr", "Te", "P", "H", "Hp", "Oc", "En"]
 	: [
-		["", "Mi", "Mc", "Na", "Pc", "Fm", "At", "Zp", "Yc", "Xn"],
-		["", "Me", !aas || player.options.aas.useDe ? "Du" : "De", "Tr", "Te", "P", "Hx", "Hp", "Ot", "E"],
-		["", "c", "Ic", "Tcn", "Trc", "Pcn", "Hcn", "Hpc", "Ocn", "Ecn"],
-		["", "Hc", "Dh", "Th", "Trh", "Ph", "Hh", "Hph", "Oh", "Eh"]
+		["", "Mi", "Mc", "Na", aas ? "Pi" : "Pc", aas ? "Fem" : "Fm", "At", "Zep", "Yo", "Xe"],
+		["", "Me", "Du", "Tr", "Te", "Pe", "He", "Hp", "Ot", "En"],
+		["", "C", "Ic", "TCn", "TeC", "PCn", "HCn", "HpC", "OCn", "ECn"],
+		["", "Hc", "DHe", "THt", "TeH", "PHc", "HHe", "HpH", "OHt", "EHc"]
 	]
 	// Now supporting Tamara's illions!
 	// https://tamaramacadam.me/maths/largenumbers/illions.html
@@ -117,10 +117,9 @@ function toTier2Abb(t2, aas) {
 		r += prefixes2[o] + "n"
 	} else {
 		if (t2 < 10 && !tam) return standardize(prefixes2[0][t2], aas)
-		if (t2 % 100 == 10) r = 'V'
-		else r = prefixes2[1][t2 % 10]
-		if (!aas || (t2 <= 10 || t2 >= 20)) r += prefixes2[2][Math.floor(t2 / 10) % 10]
-		r += prefixes2[3][Math.floor(t2 / 100)]
+		if (t == 1 && o == 0) r += "Vc"
+		else r += prefixes2[1][o] + prefixes2[2][t]
+		r += prefixes2[3][h]
 	}
 
 	return standardize(r, aas)
