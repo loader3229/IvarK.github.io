@@ -500,7 +500,7 @@ function handleDispOutOfQuantum(bigRip) {
 	if (!keepQCs && getEl("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
 	if (!keepPCs && getEl("pairedChalls").style.display == "block") showChallengesTab("normalchallenges")
 	if (!keepBE && getEl("breakEternity").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
-	if (!keepRC && getEl("lasttencompressors").style.display == "block") showStatisticsTab("stats")
+	if (!keepRC && getEl("lasttencompressors").style.display == "block") showStatsTab("stats")
 
 	getEl("qctabbtn").parentElement.style.display = keepQCs ? "" : "none"
 	getEl("pctabbtn").parentElement.style.display = keepPCs ? "" : "none"
