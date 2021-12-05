@@ -237,7 +237,13 @@ function updateColorCharge(update) {
 	colorCharge.subCancel = hasAch("ng3p13") ? Math.pow(charge, 0.75) * 4 : 0
 
 	//Death Mode
-	if (tmp.dtMode) qu_save.entColor = usedQuarks[sorted[0]].gte(0) && usedQuarks[sorted[1]].gte(0) ? sorted[0] + sorted[1] : ""
+	if (tmp.dtMode) {
+		var fixes = {
+			rb: "br"
+		}
+		var color = sorted[0] + sorted[1]
+		qu_save.entColor = usedQuarks[sorted[0]].gte(0) && usedQuarks[sorted[1]].gte(0) ? fixes[color] || color : ""
+	}
 
 	if (update) updateQuarksTabOnUpdate()
 }
