@@ -133,6 +133,14 @@ let ff = {
 		}
 		this.updateTmp()
 	},
+	reset() {
+		ff_save = {
+			links: [],
+			prod: 0,
+			arcs: {},
+		}
+		ff.updateTmp()
+	},
 
 	update(diff) {
 	},

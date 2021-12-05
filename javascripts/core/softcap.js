@@ -18,8 +18,8 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: Decimal.pow(10, 8e4),
-			pow: (x) => 1 / Math.log2(x.log10() / 2e4 - 2),
-			derv: false
+			pow: (x) => Math.max(1 / Math.log2(x.log10() / 2e4 - 2), 0.5),
+			derv: true
 		},
 	},
 	tt: {

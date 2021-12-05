@@ -34,6 +34,21 @@ let fluc = {
 		data.bestAM = new Decimal(data.bestAM || player.money)
 		this.updateTmp()
 	},
+	resetLayer() {
+		fluc_save.best = 999999999
+		fluc_save.bestAM = new Decimal(0)
+		fluc_save.last10 = [
+			[999999999, 0], [999999999, 0],
+			[999999999, 0], [999999999, 0],
+			[999999999, 0], [999999999, 0],
+			[999999999, 0], [999999999, 0],
+			[999999999, 0], [999999999, 0],
+		]
+		fluc_save.energy = 0
+
+		FDs.reset()
+		ff.reset()
+	},
 
 	gain() {
 		if (!fluc.unl()) return 1
@@ -161,6 +176,14 @@ let FDs = {
 		var data = FDs_save || this.setup()
 		data.meta = new Decimal(data.meta)
 		for (var i = 1; i <= 8; i++) FDs_save[i].amt = new Decimal(FDs_save[i].amt)
+	},
+	reset() {
+		FDs_save = {
+			shards: 0,
+			spent: 0,
+			meta: new Decimal(0)
+		}
+		for (var i = 1; i <= 8; i++) FDs_save[i] = { amt: new Decimal(0), bgt: 0 }
 	},
 
 	update(diff) {

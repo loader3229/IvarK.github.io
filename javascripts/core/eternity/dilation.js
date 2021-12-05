@@ -146,7 +146,7 @@ function getDilationTPFormulaExp(disable){
 function getAMEffToTP() {
 	let div = 400
 	let dil = player.dilation.times || 0
-	if (hasAch("ng3p37")) div /= Math.pow(2, 5 - dil)
+	if (hasAch("ng3p37")) div /= Math.pow(1.15, 5 - dil)
 	return div
 }
 
@@ -158,11 +158,11 @@ function getTPGain() {
 	if (amLog < 1 / amLogEff) return new Decimal(0)
 
 	//Base TP
-	let gain = Decimal.pow(amLog * amLogEff, getTPExp())
+	let gain = Decimal.pow(amLog / amLogEff, getTPExp())
 	gain = gain.times(getTPMult())
 
 	//NG Condensed
-	if (!reset && tmp.ngC) {
+	if (tmp.ngC) {
 		gain = softcap(gain, "tp_ngC")
 		if (hasDilationUpg("ngp3c3")) gain = gain.times(10)
 		if (hasDilationUpg("ngp3c6")) gain = gain.times(getDil83Mult())

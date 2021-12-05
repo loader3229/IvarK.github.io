@@ -1015,9 +1015,9 @@ function doFeatureProgress() {
 	let percentage
 	let feature
 	let res
+	let resFormat = shorten
 	let req
 	let reqNum
-	let reqFormat
 
 	if (pH.did("fluctuate")) {
 		if (fluc_save.energy < 11) {
@@ -1030,7 +1030,7 @@ function doFeatureProgress() {
 		}
 	} else if (str.unl()) {
 		res = player.money
-		reqFormat = shortenCosts(res)
+		resFormat = shortenCosts
 		reqNum = Decimal.pow(10, Math.pow(10, 13.5))
 		req = shortenCosts(reqNum) + " antimatter"
 		percentage = res.log(reqNum)
@@ -1088,5 +1088,5 @@ function doFeatureProgress() {
 	percentage = percentage === undefined ? "100%" : Math.min(percentage * 100, 100).toFixed(1) + "%"
 	getEl("progressbar").style.width = percentage
 	getEl("progresspercent").textContent = percentage
-	getEl("progresspercent").setAttribute('ach-tooltip', feature ? "Reach " + req + " to unlock " + feature + ". (" + (reqFormat || res) + ")" : "All features unlocked!")
+	getEl("progresspercent").setAttribute('ach-tooltip', feature ? "Reach " + req + " to unlock " + feature + ". (" + resFormat(res) + " / " + resFormat(reqNum) + ")" : "All features unlocked!")
 }
