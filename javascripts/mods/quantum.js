@@ -94,7 +94,10 @@ function quarkGain(base) {
 	if (!base) {
 		r = r.pow(getAQGainExp(r))
 		if (hasAch("ng3pr16")) r = r.times(3)
-		if (hasAch("ng3p32")) r = Decimal.pow(r.log10(), 6).times(10).add(1)
+		if (hasAch("ng3p32")) {
+			r = Decimal.pow(r.log10(), 10).add(1)
+			r = r.div(r.add(1).log10() / 10 + 1)
+		}
 	}
 	return r
 }

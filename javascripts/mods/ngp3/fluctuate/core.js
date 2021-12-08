@@ -190,14 +190,14 @@ let FDs = {
 		var eng = fluc_save.energy
 		FDs_save.shards = Math.max(FDs_save.shards, Math.floor(eng * Math.min(eng / 4 + 3, 8)))
 
-		for (var i = 7; i >= 1; i--) FDs_save[i].amt = FDs_save[i].amt.add(FDs_save[i+1].amt.times(this.dimMult(i + 1)).times(diff / 50))
+		for (var i = 7; i >= 1; i--) FDs_save[i].amt = FDs_save[i].amt.add(FDs_save[i+1].amt.times(this.dimMult(i + 1)).times(diff / 20))
 		FDs_save.meta = FDs_save.meta.add(FDs_save[1].amt.times(this.dimMult(1)).times(diff))
 	},
 	updateTmp() {
 		if (!fluc.unl()) return
 		var eng_log = FDs_save.meta.add(1).log10()
 		FDs_tmp = {
-			eff_rep: Math.min(Math.cbrt(eng_log / 20 + 1), 4),
+			eff_rep: Math.min(Math.cbrt(eng_log / 10 + 1), 4),
 			eff_qe: (3 / 1.75 - 1) * Math.min(Math.cbrt(eng_log / 15 + 1) - 1, 1) + 1
 		}
 	},

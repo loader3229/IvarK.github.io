@@ -11,8 +11,8 @@ let ff = {
 			targ: () => tmp.qe && tmp.qe.exp && 2 / Math.min(2 - tmp.qe.exp * 2, 1) - 1,
 			based: "Quantum Efficiency",
 			req: 1,
-			eff: (x) => 1,
-			effDisp: (x) => "???", //formatPercentage(x - 1),
+			eff: (x) => x / 100 + 1,
+			effDisp: (x) => "^" + shorten(x) + " Replicate Chance Exponent"
 		},
 		f2: {
 			//Accelerator
@@ -21,7 +21,7 @@ let ff = {
 			based: "Replicanti Energy",
 			req: 2,
 			eff: (x) => 1,
-			effDisp: (x) => "???", //formatPercentage(x - 1),
+			effDisp: (x) => shorten(x) + "x Replicanti Stealth"
 		},
 		f3: {
 			//Excite
@@ -30,7 +30,7 @@ let ff = {
 			based: "Quantum Energy",
 			req: 4,
 			eff: (x) => 1,
-			effDisp: (x) => "???", //formatPercentage(x - 1),
+			effDisp: (x) => formatPercentage(x - 1) + "% Higher Altitudes",
 		},
 		f4: {
 			//Stretch
@@ -39,16 +39,16 @@ let ff = {
 			based: "Vibration Energy",
 			req: 5,
 			eff: (x) => 1,
-			effDisp: (x) => "???", //formatPercentage(x - 1),
+			effDisp: (x) => formatPercentage(x - 1) + "% Longer Vibrations",
 		},
 		f5: {
 			//Flux
-			//Positronic Charge -> Gain Exponent
+			//Galaxies -> Positronic Charge Exponent
 			targ: () => pos_save && Decimal.add(pos_save.eng, 1).log10(),
-			based: "Positronic Charge",
+			based: "Galaxies",
 			req: 7,
 			eff: (x) => 1,
-			effDisp: (x) => "???", //formatPercentage(x - 1),
+			effDisp: (x) => "^" + shorten(x) + " Positronic Charge"
 		},
 		f6: {
 			//Overseer
@@ -57,7 +57,7 @@ let ff = {
 			based: "Red Charge",
 			req: 9,
 			eff: (x) => 1,
-			effDisp: (x) => "???", //formatPercentage(x - 1),
+			effDisp: (x) => formatPercentage(x - 1) + "% later Obscure Galaxies",
 		},
 		f7: {
 			//Advancement
@@ -66,7 +66,7 @@ let ff = {
 			based: "Green Charge",
 			req: 9,
 			eff: (x) => 1,
-			effDisp: (x) => "???", //formatPercentage(x - 1),
+			effDisp: (x) => "+" + shorten(x) + " Replicated Compressors",
 		},
 		f8: {
 			//Dominant
@@ -75,7 +75,7 @@ let ff = {
 			based: "Blue Charge",
 			req: 9,
 			eff: (x) => 1,
-			effDisp: (x) => "???", //formatPercentage(x - 1),
+			effDisp: (x) => "^" + shorten(x) + " to PB11 limit",
 		},
 		f9: {
 			targ: () => 1,
@@ -107,7 +107,7 @@ let ff = {
 		},
 
 		am: {
-			targ: () => Math.log10(Decimal.add(player.money, 1).log10() / 2 + 1),
+			targ: () => Math.sqrt(Math.log10(Decimal.add(player.money, 1).log10() + 1)),
 			req: 0,
 			based: "antimatter"
 		}
@@ -116,7 +116,7 @@ let ff = {
 	setup() {
 		ff_save = {
 			links: [],
-			prod: 0,
+			prod: [],
 			arcs: {},
 		}
 		fluc_save.ff = ff_save
@@ -128,9 +128,10 @@ let ff = {
 
 		var data = ff_save || this.setup()
 		if (!data.prod) {
-			data.prod = 0
+			data.prod = []
 			data.links = []
 		}
+		if (data.prod === 0) data.prod = []
 		this.updateTmp()
 	},
 	reset() {
@@ -163,31 +164,30 @@ let ff = {
 		if (!ff_tmp.unl) return
 
 		//Energy
-		ff_tmp.eng = {}
+		ff_tmp.eng = ff.getEnergy("am")
 		for (var i = 0; i < ff.data.all.length; i++) {
 			var id = ff.data.all[i]
-			ff_tmp.eng[id] = ff.getEnergy(id)
+			if (this.isProducing(id)) ff_tmp.eng += ff.getEnergy(id)
 		}
 
 		//Boosts
 		ff_tmp.eff = {}
 		for (var i = 1; i <= 8; i++) {
 			var id = "f" + i
-			ff_tmp.eff[id] = ff.data[id].eff(ff_tmp.eng[id])
+			ff_tmp.eff[id] = ff.data[id].eff(Math.max(ff_tmp.eng - i, 0))
 		}
 	},
 
 	updateTab() {
-		/*for (var i = 0; i < ff.data.all.length; i++) {
-			var id = ff.data.all[i]
-			getEl("ff_eng_" + id).textContent = shorten(ff_tmp.eng[id]) + " Energy" + (shiftDown ? " (based on " + ff.data[id].based + ")" : "")
-		}*/
-
 		for (var i = 1; i <= 12; i++) {
 			var id = "f" + i
 			var eff = ff_tmp.eff[id]
-			getEl("ff_eff_" + id).textContent = (ff.data[id].effDisp || shorten)(eff)
+			getEl("ff_eff_" + id).textContent =
+				(this.isActive(id) ? "" : "(Inactive) ") +
+				ff.data[id].effDisp(eff) +
+				(this.isProducing(id) ? " [+0 Energy]" : "")
 		}
+		getEl("ff_eng_am").textContent = "[" + shorten(ff_tmp.eng) + " Energy]"
 
 		ff.updateDisplays() // Temp
 	},
@@ -248,6 +248,9 @@ let ff = {
 	},
 	isActive(id) {
 		return id == "am" || ff.isUnlocked(id) && false
+	},
+	isProducing(id) {
+		return ff_save.prod.includes(id)
 	},
 
 

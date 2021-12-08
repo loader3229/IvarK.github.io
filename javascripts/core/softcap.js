@@ -17,9 +17,9 @@ var softcap_data = {
 		name: "Tickspeed reduction",
 		1: {
 			func: "pow",
-			start: Decimal.pow(10, 8e4),
-			pow: (x) => Math.max(1 / Math.log2(x.log10() / 2e4 - 2), 0.5),
-			derv: true
+			start: Decimal.pow(10, 8e3),
+			pow: (x) => 0.75,
+			derv: false
 		},
 	},
 	tt: {
