@@ -4711,7 +4711,7 @@ function gameLoop(diff) {
 	IPMultBuyUpdating()
 	doEternityButtonDisplayUpdating(diff)
 	doQuantumButtonDisplayUpdating(diff)
-	if (pH.can("fluctuate")) getEl("fluctuateReset").textContent = "Fluctuate the Quantum Mechanics for +" + getFullExpansion(fluc.gain()) + " Energy."
+	if (pH.can("fluctuate")) getEl("fluctuateReset").textContent = fluc.unl() ? "Fluctuate the Quantum Mechanics for +" + getFullExpansion(fluc.gain()) + " Energy." : "Fluctuate through the field..."
 	doGhostifyButtonDisplayUpdating(diff)
 
 	updateMoney();
