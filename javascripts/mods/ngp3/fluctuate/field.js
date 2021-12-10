@@ -199,6 +199,10 @@ let ff = {
 		getEl("ff_eng").textContent = "You have assorted " + getFullExpansion(0) + " / " + getFullExpansion(fluc_save.energy) + " Fluctuant Energy in this field."
 		getEl("ff_unl").textContent = ff_tmp.nextAt == 1/0 ? "" : "Next Perk unlocks at " + getFullExpansion(ff_tmp.nextAt) + " Fluctuant Energy."
 
+		getEL("ff_pos_eff").style.display = ff.unl() ? "" : "none"
+		getEL("ff_pc_eff").style.display = ff.unl() ? "" : "none"
+		getEL("ff_str_eff").style.display = ff.unl() ? "" : "none"
+
 		/*ff.draw("f1", "f2", 1)
 		ff.draw("f2", "f3", 1)
 		ff.draw("f4", "f5", 1)

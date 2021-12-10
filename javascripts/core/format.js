@@ -52,7 +52,7 @@ function toTier1Abb(t1, t2, aas) {
 	let prefixes = aas ? [
 		["", "U", "D", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "N"],
 		["", "De", "Vg", "Tg", "Qg", "Qq", "Sg", "St", "Og", "Ng"],
-		["", "Ce", "Dc", "Tc", "Qe", "Qu", "Se", "Su", "Oe", "Ne"]
+		["", "Ce", "Dc", "Tc", "Qe", "Qu", "Se", "Si", "Oe", "Ne"],
 	] : [
 		['', 'U', 'D', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'O', 'N'],
 		['', 'Dc', 'Vg', 'Tg', 'Qd', 'Qi', 'Se', 'St', 'Og', 'Nn'],
