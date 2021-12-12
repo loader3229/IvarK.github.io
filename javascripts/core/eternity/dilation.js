@@ -47,11 +47,15 @@ function getDilTimeGainPerSecond() {
 	let gain = player.dilation.tachyonParticles.times(Decimal.pow(2, getDilUpgPower(1)))
 
 	//Boosts
-	gain = gain.times(getEternityBoostToDT()) //Eternities -> DT (e25 DT upgrade)
+	if (NGP3andVanillaCheck()) {
+		if (player.achievements.includes("r132")) gain = gain.times(Math.max(Math.pow(player.galaxies, 0.04), 1))
+		if (player.achievements.includes("r137") && player.dilation.active) gain = gain.times(2)
+	}
 
 	//NG++
 	if (hasDilationUpg('ngpp6')) gain = gain.times(getDil17Bonus())
 	if (hasDilationUpg('ngusp3')) gain = gain.times(getD22Bonus())
+	gain = gain.times(getEternityBoostToDT()) //Eternities -> DT (e25 DT upgrade)
 
 	//NG+3
 	if (hasAch("r137") && tmp.ngp3_boost) gain = gain.times(getReplDilBonus())
@@ -108,6 +112,9 @@ function getDil3Power() {
 
 function getTPMult() {
 	let ret = Decimal.pow(getDil3Power(), getDilUpgPower(3))
+	if (NGP3andVanillaCheck()) {
+		if (player.achievements.includes("r132")) ret = ret.times(Math.max(Math.pow(player.galaxies, 0.04), 1))
+	}
 
 	//NG Update
 	if (hasDilationUpg("ngud1")) ret = ret.times(getD18Bonus())
@@ -520,6 +527,9 @@ function getTTProduction(display) {
 
 function getTTGenPart(x) {
 	x = x.div(2e4)
+	if (NGP3andVanillaCheck()) {
+		if (player.achievements.includes("r137") && player.dilation.active) x = x.times(2)
+	}
 	if (tmp.ngp3) x = softcap(x, "tt")
 	return x
 }
