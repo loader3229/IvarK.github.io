@@ -113,6 +113,11 @@ let fluc = {
 		ff.update(diff)
 	},
 	updateTmp() {
+		fluc_tmp.temp = {
+			pos: fluc_save.energy / 3 + 1,
+			pc: fluc_save.energy / 10,
+			str: 0,
+		}
 		ff.updateTmp()
 	},
 	updateTmpOnTick() {
@@ -128,6 +133,14 @@ let fluc = {
 		//Temp: Quantum Field is not ready!
 		getEl("unknown_unl").style.display = fluc_save.energy >= 11 ? "none" : ""
 		getEl("the_end").style.display = fluc_save.energy >= 11 ? "" : "none"
+
+		//Temp: Temporary boosts
+		getEl("fluc_boost_pos").style.display = fluc.unl() ? "" : "none"
+		getEl("fluc_boost_pos").textContent = "Fluctuate Boost [Temp]: " + formatReductionPercentage(fluc_tmp.temp.pos) + "% equal to all tiers"
+		getEl("fluc_boost_pc").style.display = fluc.unl() ? "" : "none"
+		getEl("fluc_boost_pc").textContent = "Fluctuate Boost [Temp]: +^" + fluc_tmp.temp.pc.toFixed(2) + " to PC goal reduction sum"
+		getEl("fluc_boost_str").style.display = fluc.unl() ? "" : "none"
+		getEl("fluc_boost_str").textContent = "Fluctuate Boost [Temp]: /" + fluc_tmp.temp.str.toFixed(2) + " to negative impacts"
 	},
 	updateTab() {
 		getEl("fluc_req").textContent = shorten(fluc.req())

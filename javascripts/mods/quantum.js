@@ -63,17 +63,6 @@ function getQKGain(){
 	return quarkGain()
 }
 
-function getQCtotalTime(){
-	return 1 / 0 //Rework coming soon
-}
-
-function getQCtoQKEffect(){
-	var time = getQCtotalTime()
-	var ret = 1 + 192 * 3600 * 10 / time
-	if (ret > 999) ret = 333 * Math.log10(ret + 1)
-	return ret
-}
-
 function getQuantumReqSource() {
 	return tmp.ngp3 ? player.meta.bestAntimatter : player.meta.antimatter
 }
@@ -96,7 +85,7 @@ function quarkGain(base) {
 		if (hasAch("ng3pr16")) r = r.times(3)
 		if (hasAch("ng3p32")) {
 			r = Decimal.pow(r.log10(), 10).add(1)
-			r = r.div(r.add(1).log10() / 10 + 1)
+			r = r.div(Math.min(r.add(1).log10() / 10 + 1, 3))
 		}
 	}
 	return r

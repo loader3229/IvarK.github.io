@@ -45,7 +45,6 @@ button {
 }
 
 .challengesbtn {
-
     width:150px;
     height: 30px;
     color: black;
@@ -2580,6 +2579,12 @@ td.grey {
 .ve {
 	color: #9fbf00;
 	text-shadow: 0px 0px 3px #bfff00, 0px 0px 6px #7fff00
+}
+.fluc_boost {
+	font-size: 24px;
+	display: block;
+	color: #ff007f;
+	text-shadow: 0px 0px 1px #ff3f00, 0px 0px 6px #ff9f7f
 }
 
 .ff_btn {
