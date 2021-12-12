@@ -854,6 +854,11 @@ function toggleLEConf() {
 	getEl("leConfirmBtn").textContent = "Light Empowerment confirmation: O" + (aarMod.leNoConf ? "FF" : "N")
 }
 
+//v2.302
+function NGP3andVanillaCheck() {
+	return tmp.ngp3 || !player.aarexModifications.newGamePlusPlusVersion
+}
+
 //v3
 function moreEMsUnlocked() {
 	return tmp.ngp3 && (hasDilationStudy(1) || pH.did("quantum"))

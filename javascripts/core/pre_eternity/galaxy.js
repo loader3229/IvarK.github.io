@@ -58,7 +58,7 @@ function getGalaxyRequirement(offset = 0, display) {
 
 	let scaling = 0
 	let mult = getGalaxyReqMultiplier()
-	let exp = 0.5
+	let exp = 1
 	let isNum = true
 
 	let base = 80

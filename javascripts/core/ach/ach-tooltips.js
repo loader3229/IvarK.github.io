@@ -252,7 +252,7 @@ function setR12Tooltip() {
 }
 
 function setR13Tooltip() {
-	// Row 13 (5/8)
+	// Row 13 (6/8)
 	//r131/////
 	let unique = getEl("Unique snowflakes")
 	let infstuff = getEl("I never liked this infinity stuff anyway")
@@ -263,10 +263,21 @@ function setR13Tooltip() {
 	let thisis = getEl("This is what I have to do to get rid of you.")
 
 	//Setup rewards
+	let uniqueReward = []
+	if (tmp.ngp3_boost) uniqueReward.push("Your infinitied stat boosts Eternitied, but not banked infinities")
+	if (NGP3andVanillaCheck()) uniqueReward.push("gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies")
+	uniqueReward = wordizeList(uniqueReward, true)
+
 	let potato3Reward = []
 	if (inNGM(2)) potato3Reward.push("the Galaxy boost to Galaxy points gain is buffed based on a specific value (~663 galaxies)")
 	if (tmp.ngp3_boost) potato3Reward.push("TS131 doesn't disable RG autobuyer anymore")
 	potato3Reward = wordizeList(potato3Reward, true)
+
+	let thinkingReward = [] // for the achievement "This is what I have to do to get rid of you."
+	if (tmp.ngp3_boost) thinkingReward.push("Replicantis boost dilated time gain")
+	if (tmp.ngp3_boost && !tmp.exMode) thinkingReward.push("TS141 is always " + shortenCosts(1e40) + "x")
+	if (NGP3andVanillaCheck()) thinkingReward.push("gain 2x more DT and TT while dilated")
+	thinkingReward = wordizeList(thinkingReward, true)
 
 	let thisisReward = [] // for the achievement "This is what I have to do to get rid of you."
 	if (inNGM(2)) thisisReward.push("g23 is more effective based on your best IP in dilation")
@@ -274,11 +285,11 @@ function setR13Tooltip() {
 	thisisReward = wordizeList(thisisReward, true)
 
 	//ACHIEVEMENT ROW 13
-	unique.setAttribute('ach-tooltip', "Have 540 galaxies without having any Replicated Galaxies." + (tmp.ngp3_boost ? " Reward: Your infinitied stat boosts Eternitied, but not banked infinities." : ""))
+	unique.setAttribute('ach-tooltip', "Have 540 galaxies without having any Replicated Galaxies." + (uniqueReward != "" ? " Reward: " + uniqueReward + "." : ""))
 	potato3.setAttribute('ach-tooltip', "Get more than "+shortenCosts(new Decimal("1e8296262"))+" ticks per second." + (potato3Reward != "" ? " Reward: " + potato3Reward + "." : ""))
 	infstuff.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e140000"))+" IP without buying IDs or IP multipliers. Reward: " + (tmp.ngp3 && !tmp.bgMode ? "Outside of Eternity Challenges, you keep all your Infinity Challenges on Eternities" : "You start eternities with all Infinity Challenges unlocked and completed") + (player.meta ? ", and boost Infinitied gain by DT^0.25." : "."))
 	when.setAttribute('ach-tooltip', "Reach "+shortenCosts( new Decimal("1e20000"))+" replicanti. Reward: You gain replicanti 2 times faster under " + shortenMoney(Number.MAX_VALUE) + " replicanti" + (tmp.ngp3_boost ? " and you can always buy max RGs." : "."))
-	thinking.setAttribute('ach-tooltip', "Eternity for " + shortenCosts( new Decimal("1e600")) + " EP in 1 minute or less while Dilated" + (tmp.ngp3_boost ? " Reward: Replicantis boost dilated time gain" : "") + (tmp.ngp3_boost && !tmp.exMode ? " and TS141 is always " + shortenCosts(1e40) + "." : "."))
+	thinking.setAttribute('ach-tooltip', "Eternity for " + shortenCosts( new Decimal("1e600")) + " EP in 1 minute or less while dilated." + (thinkingReward != "" ? " Reward: " + thinkingReward + "." : ""))
 	thisis.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal('1e20000')) + " IP without any time studies while Dilated." + (thisisReward != "" ? " Reward: " + thisisReward + "." : ""))
 }
 

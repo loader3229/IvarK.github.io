@@ -2187,7 +2187,7 @@ function setupNGP31Versions() {
 		/*if (!beta && (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.611 : aarMod.ngp3r < 0.611)) welcomeUpdates.push(0.611)
 		if (beta && aarMod.ngp3r < 0.611) welcomeUpdates.push("alpha")*/
 	}
-	aarMod.ngp3r = 0.611
+	aarMod.ngp3r = 0.612
 	aarMod.ngp3Alpha = beta
 	aarMod.ngp3Build = 20211124
 
