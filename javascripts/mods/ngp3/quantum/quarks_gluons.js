@@ -972,6 +972,7 @@ var enB = {
 		},
 		chargeEff(x) {
 			var lvl = this.lvl(x)
+			//if (fluc.unl()) lvl = 3 * (1 - fluc_tmp.temp.pos) + lvl * (1 - fluc_tmp.temp.pos)
 			var eff = 2 * lvl
 			if (PCs.milestoneDone(42) && lvl == 1) eff = 8
 			if (PCs.milestoneDone(23) && pos.isUndercharged(x)) eff++
