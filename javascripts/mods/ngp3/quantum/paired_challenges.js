@@ -297,6 +297,7 @@ var PCs = {
 		var base = Number.MAX_VALUE
 		var div = PCs.data.goal_divs[list[0]] + PCs.data.goal_divs[list[1]] + 1
 		div -= PCs_tmp.temp
+		if (fluc_tmp.temp) div += fluc_tmp.temp.pc
 
 		var r = qc1.pow(qc2.log(base) / div)
 		var pow = Math.pow(1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) * (hasAch("ng3pr16") ? 0.89 : 1) / 3)
