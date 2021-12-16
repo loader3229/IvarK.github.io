@@ -95,7 +95,6 @@ var QCs = {
 			rewardDesc: (x) => "Unlock Replicanti Compressors, but there is a limit on Replicantis. Compressors greatly speed up Replicanti Slowdown!",
 			rewardEff: () => true,
 
-			nerfDesc: (x) => "TT softcap is harsher, QC7 is applied, and Meta Accelerator boosts are disabled.",
 			perkDesc: (x) => "You gain 0.2 extra Compressors on compressing in at least 5 seconds, or for the first time. (+" + shortenMoney(x) + ")",
 			perkEff() {
 				return QCs_save.qc1.perkBoosts / 5
@@ -318,7 +317,6 @@ var QCs = {
 				return Decimal.add(x, 1)
 			},
 
-			nerfDesc: (x) => "Only excluded Positronic Boosts work.",
 			perkDesc: (x) => "Mastered Entangled Boosts are 50% stronger, but mastery requires " + shortenCosts(500) + " Quantum Power. Also, they are always active.",
 			perkEff() {
 				return 1
@@ -356,7 +354,6 @@ var QCs = {
 				return 1
 			},
 
-			nerfDesc: (x) => "You can only dilate once, and meta-antimatter only get boosted by antimatter.",
 			perkDesc: (x) => "Start at 1 TP, and Eternity Points boost Meta Dimensions.",
 			perkEff() {
 				return 1
@@ -384,7 +381,6 @@ var QCs = {
 				return
 			},
 
-			nerfDesc: (x) => "Changing the disabled kind restarts this challenge.",
 			perkDesc: (x) => "You can disable separately in dilation runs.",
 			perkEff() {
 				return 1
@@ -447,7 +443,6 @@ var QCs = {
 				return 1
 			},
 
-			nerfDesc: (x) => "Eternitying also resets Replicanti Energy, and Replicanti Energy doesn't give you more Vibration Energy.",
 			perkDesc: (x) => "Replicanti Energy effects are doubled.",
 			perkEff() {
 				return 1
@@ -507,7 +502,6 @@ var QCs = {
 				return x
 			},
 
-			nerfDesc: (x) => "The effect of Nullons is changed drastically.",
 			perkDesc: (x) => "Start with 5s Eternity time, but Eternity time is 2x slower.",
 			perkEff() {
 				return 1
@@ -535,7 +529,6 @@ var QCs = {
 				return 1
 			},
 
-			nerfDesc: (x) => "You can’t fill the branches in Mastery Studies except singles. (not implemented)",
 			perkDesc: (x) => "Temporaily convert base RGs into extra base RGs.",
 			perkEff() {
 				return 1
@@ -556,7 +549,6 @@ var QCs = {
 				return 1
 			},
 
-			nerfDesc: (x) => "Positrons and Positronic Boosts are disabled.",
 			perkDesc: (x) => "For Entangled Boosts that are matched with your entanglement, they get mastered.",
 			perkEff() {
 				return 1

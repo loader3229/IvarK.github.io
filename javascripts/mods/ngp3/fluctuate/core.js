@@ -116,7 +116,7 @@ let fluc = {
 		fluc_tmp.temp = {
 			pos: fluc_save.energy / 3 + 1,
 			pc: fluc_save.energy / 10,
-			str: 0,
+			str: 1,
 		}
 		ff.updateTmp()
 	},
@@ -140,7 +140,7 @@ let fluc = {
 		getEl("fluc_boost_pc").style.display = fluc.unl() ? "" : "none"
 		getEl("fluc_boost_pc").textContent = "Fluctuate Boost [Temp]: +^" + fluc_tmp.temp.pc.toFixed(2) + " to PC goal reduction sum"
 		getEl("fluc_boost_str").style.display = fluc.unl() ? "" : "none"
-		getEl("fluc_boost_str").textContent = "Fluctuate Boost [Temp]: /" + fluc_tmp.temp.str.toFixed(2) + " to negative impacts [not implemented]"
+		getEl("fluc_boost_str").textContent = "Fluctuate Boost [Temp]: " + formatPercentage(1 / fluc_tmp.temp.str) + "% to negative changes"
 	},
 	updateTab() {
 		getEl("fluc_req").textContent = shorten(fluc.req())

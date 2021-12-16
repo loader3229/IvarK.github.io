@@ -177,6 +177,7 @@ let str = {
 			var d = Math.abs(p)
 			var y = p + x
 			var add = 0.17 - 0.14 * d + 0.25 * ((d + 1) % 2)
+			if (fluc.unl() && fluc_tmp.temp && add < 0) add /= fluc_tmp.temp
 			str_tmp.alt[y] = (str_tmp.alt[y] || 0) + add
 		}
 	},
