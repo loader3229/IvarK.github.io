@@ -13,7 +13,7 @@ var pos = {
 			rg: {
 				galName: "base Replicated Galaxies",
 				pow(x) {
-					return QCs.done(4) ? x * pos_tmp.mults.gal * (PCs.milestoneDone(41) ? 3 : 2) / 5 : 0
+					return QCs.done(4) ? x * pos_tmp.mults.gal * (PCs.milestoneDone(41) && PCs_save.lvl > 8 ? 3 : 2) / 5 : 0
 				},
 				sacGals(x) {
 					return Math.min(player.replicanti.galaxies / 4, x)
@@ -22,7 +22,7 @@ var pos = {
 			eg: {
 				galName: "extra Replicated Galaxies",
 				pow(x) {
-					return PCs.milestoneDone(43) ? x * pos_tmp.mults.gal / 5 : 0
+					return PCs.milestoneDone(41) && PCs_save.lvl > 12 ? x * pos_tmp.mults.gal / 5 : 0
 				},
 				sacGals(x) {
 					return Math.min(tmp.extraRG * pos_tmp.mults.gal, x)
@@ -31,7 +31,7 @@ var pos = {
 			tg: {
 				galName: "Tachyonic Galaxies",
 				pow(x) {
-					return 0 //x / 4
+					return PCs.milestoneDone(41) && PCs_save.lvl > 16 ? x * pos_tmp.mults.gal / 5 : 0
 				},
 				sacGals(x) {
 					return Math.min(player.dilation.freeGalaxies * pos_tmp.mults.gal, x)
@@ -39,9 +39,9 @@ var pos = {
 			}
 		},
 		undercharged: {
-			1: () => PCs.milestoneDone(42) ? [] : [2].concat(PCs.milestoneDone(22) ? [3] : []),
-			2: () => PCs.milestoneDone(42) ? [1, 3] : [3],
-			3: () => PCs.milestoneDone(42) ? [].concat(PCs.milestoneDone(22) ? [1] : []) : []
+			1: () => [2],
+			2: () => [3],
+			3: () => []
 		}
 	},
 	setup() {
@@ -119,7 +119,7 @@ var pos = {
 		if (!data.unl) return
 
 		data.mults = {
-			mdb: QCs.done(3) ? (PCs.milestoneDone(31) ? 1/3 : 0.3) : 0.25,
+			mdb: QCs.done(3) ? 0.3 : 0.25,
 			mdb_eff: QCs.done(5) ? 1.5 : 1,
 			gal: QCs.done(5) ? 0.2 : 0.25,
 			pc_base: QCs.done(5) ? 1 / 100 : 1 / 125,
@@ -344,7 +344,7 @@ var pos = {
 	canSwap(x) {
 		var old = enB.pos.lvl(x, true)
 		var nw = enB.pos.lvl(pos_tmp.cloud.chosen, true)
-		return !pos_tmp.cloud.next[x] && (PCs.milestoneDone(22) ? old != nw : Math.abs(old - nw) == 1)
+		return !pos_tmp.cloud.next[x] && Math.abs(old - nw) == 1
 	},
 	getSwaps() {
 		return this.swapsDisabled() ? {} : pos_tmp.cloud.swaps

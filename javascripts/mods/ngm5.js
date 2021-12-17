@@ -394,7 +394,7 @@ function getPDProduction(d) {
 
 function getPDDesc(d) {
 	let txt = shortenDimensions(player.pSac.dims[d].amount)
-	if (isDimUnlocked(d + 2)) txt += ' (+' + shorten(getPDRate(d)) + dimDescEnd
+	if (aarMod.logRateChange !== 2 && isDimUnlocked(d + 2)) txt += ' (+' + shorten(getPDRate(d)) + dimDescEnd
 	return txt
 }
 

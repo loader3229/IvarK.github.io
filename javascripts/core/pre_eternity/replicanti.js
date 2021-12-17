@@ -331,7 +331,7 @@ function getReplicantiIntervalMult() {
 	if (enB.active("pos", 2)) {
 		var pos2_log = enB_tmp.pos2.mult.log10()
 		if (pos2_log > 1e5) pos2_log = Math.pow(pos2_log / 1e5, 3/4) * 1e5
-		if (futureBoost("replicante_tunneling")) pos2_log *= tmp.rep.str
+		if (PCs.milestoneDone(33)) pos2_log *= tmp.rep.str //Replicante Tunneling + Clovers
 		interval = interval.div(Decimal.pow(10, pos2_log))
 	}
 	if (tmp.ngC && ngC.tmp) interval = interval.div(ngC.tmp.rep.eff1)

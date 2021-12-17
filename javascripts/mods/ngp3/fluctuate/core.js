@@ -55,7 +55,7 @@ let fluc = {
 		return Math.max(fluc.targ() - fluc_save.energy, 0)
 	},
 	res() {
-		return fluc.unl() ? fluc_save.bestAM : player.money
+		return fluc.unl() ? fluc_save.bestAM : player.totalmoney
 	},
 	targ() {
 		return Math.floor((Math.log10(fluc.res().log10()) - 13.5) * 20 + 1)
@@ -83,6 +83,7 @@ let fluc = {
 			ff.updateTmp()
 		}
 		fluc.doReset()
+		fluc.updateTmp()
 	},
 	doReset(auto, force) {
 		doFluctuateResetStuff()
@@ -116,7 +117,7 @@ let fluc = {
 		fluc_tmp.temp = {
 			pos: fluc_save.energy / 3 + 1,
 			pc: fluc_save.energy / 10,
-			str: 1,
+			str: 1 + fluc_save.energy / 10,
 		}
 		ff.updateTmp()
 	},
@@ -203,8 +204,8 @@ let FDs = {
 		var eng = fluc_save.energy
 		FDs_save.shards = Math.max(FDs_save.shards, Math.floor(eng * Math.min(eng / 4 + 3, 8)))
 
-		for (var i = 7; i >= 1; i--) FDs_save[i].amt = FDs_save[i].amt.add(FDs_save[i+1].amt.times(this.dimMult(i + 1)).times(diff / 20))
-		FDs_save.meta = FDs_save.meta.add(FDs_save[1].amt.times(this.dimMult(1)).times(diff))
+		for (var i = 7; i >= 1; i--) FDs_save[i].amt = FDs_save[i].amt.add(this.dimProd(i + 1).times(diff))
+		FDs_save.meta = FDs_save.meta.add(this.dimProd(1).times(diff))
 	},
 	updateTmp() {
 		if (!fluc.unl()) return
@@ -223,7 +224,7 @@ let FDs = {
 		for (var i = 1; i <= 8; i++) {
 			getEl("fd" + i + "_row").style.display = i == 1 || FDs_save[i - 1].bgt > 0 ? "" : "none"
 			getEl("fd" + i).textContent = DISPLAY_NAMES[i] + " Fluctuant Dimension x" + shorten(this.dimMult(i))
-			getEl("fd" + i + "_amt").textContent = shortenDimensions(FDs_save[i].amt)
+			getEl("fd" + i + "_amt").textContent = shortenDimensions(FDs_save[i].amt) + this.dimDesc(i)
 			getEl("fd" + i + "_buy").textContent = shortenDimensions(this.cost(i)) + " DS"
 			getEl("fd" + i + "_buy").className = this.unspent() >= this.cost(i) ? "storebtn" : "unavailablebtn"
 		}
@@ -254,7 +255,26 @@ let FDs = {
 		var x = (getReplEff().max(1).log10() / 5e5 + 1) / Math.pow(t, 2)
 		if (x <= 1) return 1
 		return Math.pow(10, Math.pow(Math.log10(x + 1) - 1, 0.75))
-		
+	},
+
+	dimProd(x) {
+		return this.dimMult(x).times(FDs_save[x].amt).times(x == 1 ? 1 : 0.05)
+	},
+	dimRate(amt, prod) {
+		var r
+		if (aarMod.logRateChange) {
+			r = amt.add(prod).log10() - amt.log10()
+			if (r < 0 || isNaN(r)) r = 0
+		} else r = prod.div(amt)
+		return r
+	},
+	dimDesc(x) {
+		if (aarMod.logRateChange === 2) return ''
+		if (x >= 8) return ''
+
+		var prod = this.dimProd(x + 1)
+		if (prod.eq(0)) return ''
+		return ' (+' + shorten(this.dimRate(FDs_save[x].amt, prod)) + dimDescEnd
 	}
 }
 let FDs_tmp = {}

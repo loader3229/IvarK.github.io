@@ -23,6 +23,7 @@ function setNGm5Tooltip() {
 	//ngm5p16/
 	//ngm5p17/
 	let TimePx = getEl("Time Paradox")
+
 	//ACHIEVEMENT ROW 1.5
 	TimePx.setAttribute('ach-tooltip', "Get at least " + formatValue(player.options.notation, 1e20, 0, 0) + " Paradox Power.")
 }
@@ -30,7 +31,7 @@ function setNGm5Tooltip() {
 function setR2Tooltip() {
 	// Row 2 (6/8)
 	let infinity = getEl("To infinity!")
-	//r22/////
+	let fake = getEl("Fake News")
 	let ndial = getEl("The 9th Dimension is a lie");
 	let apocAchieve = getEl("Antimatter Apocalypse");
 	//r25/////
@@ -40,6 +41,7 @@ function setR2Tooltip() {
 
 	//ACHIEVEMENT ROW 2
 	ndial.setAttribute('ach-tooltip', "Have exactly 99 Eighth Dimensions. Reward: Eighth Dimensions are 10% stronger" + (player.tickspeedBoosts == undefined ? "." : " and you gain more GP based on your Eighth Dimensions and your Tickspeed Boosts."));
+	fake.setAttribute('ach-tooltip', tmp.ngp3_boost ? "Have at least 100 Eighth Dimensions." : "Encounter 50 different news messages.")
 	apocAchieve.setAttribute('ach-tooltip', "Get over " + formatValue(player.options.notation, 1e80, 0, 0) + " antimatter.");
 	gal.setAttribute('ach-tooltip', 'Buy an Antimatter Galaxy. ' + (inNGM(4) ? "Reward: Upon a Time Dimension Boost, your Dimension Boosts don’t reset unless you have more Time Dimension Boosts than your Dimension Boosts." : ""));
 	doubleGal.setAttribute('ach-tooltip', 'Buy 2 Antimatter Galaxies. ' + (player.tickspeedBoosts !== undefined ? "Reward: Upon a Tickspeed Boost, your Dimension Boosts" + (inNGM(4) ? " and Time Dimension Boosts" : "") + " don’t reset unless you have more Tickspeed Boosts than " + (inNGM(5) ? "four times your Antimatter Galaxies." : "five times your Antimatter Galaxies minus eight.") : '') + (inNGM(4) ? " You start with 3 Time Dimension Boosts." : ""));
@@ -79,7 +81,7 @@ function setR4Tooltip() {
 
 	//ACHIEVEMENT ROW 4
 	sanic.setAttribute('ach-tooltip', "Get over " + formatValue(player.options.notation, 1e63, 0, 0) + " antimatter" + (tmp.ngmX >= 4 ? " and unlock new galaxy upgrades at " + formatValue(player.options.notation, 1e666, 0, 0) + " antimatter" : "") + ".")
-	cancer.setAttribute('ach-tooltip', "Buy " + (aarMod.newGameMinusVersion ? "10,000" : "10") + " Galaxies in total while using Cancer notation." + (inNGM(2) && player.tickspeedBoosts == undefined ? " Reward: Gain a multiplier to IP based on the number of galaxies bought in Cancer Notation.":""))
+	cancer.setAttribute('ach-tooltip', (tmp.ngp3_boost ? "Complete the Tickspeed Autobuyer Challenge." : "Buy " + (aarMod.newGameMinusVersion ? "10,000" : "10") + " Galaxies in total while using Cancer notation.") + (inNGM(2) && player.tickspeedBoosts == undefined ? " Reward: Gain a multiplier to IP based on the number of galaxies bought in Cancer Notation.":""))
 	zero.setAttribute('ach-tooltip',"Big Crunch without Dimension Shifts, Boosts or Galaxies in a challenge. Reward: Dimensions 1-4 are 25% stronger" + (inNGM(2) && player.tickspeedBoosts == undefined ? " and you get 1.25x more IP" : "") + (tmp.ngmX >= 4 ? " and gain more passive GP gain based on GP." : "."))
 	potato.setAttribute('ach-tooltip', "Get more than " + formatValue(player.options.notation, 1e29, 0, 0) + " ticks per second. Reward: Reduce the starting tick interval by 2%.");
 	dimensional.setAttribute('ach-tooltip', "Reach " + formatValue(player.options.notation, 1e12, 0, 0) + " of all Normal Dimensions, except for the 8th Dimension.");

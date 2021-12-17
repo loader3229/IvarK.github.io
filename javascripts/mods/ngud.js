@@ -81,7 +81,8 @@ function getBlackholeDimensionRateOfChange(tier) {
 
 function getBlackholeDimensionDescription(tier) {
 	if (!isBHDimUnlocked(tier + 1)) return getFullExpansion(player['blackholeDimension' + tier].bought)
-	else return shortenDimensions(player['blackholeDimension' + tier].amount) + ' (+' + formatValue(player.options.notation, getBlackholeDimensionRateOfChange(tier), 2, 2) + dimDescEnd;
+	else return shortenDimensions(player['blackholeDimension' + tier].amount) +
+		(aarMod.logRateChange !== 2 ? ' (+' + formatValue(player.options.notation, getBlackholeDimensionRateOfChange(tier), 2, 2) + dimDescEnd : "")
 }
 
 function getBlackholeUpgradeExponent() {

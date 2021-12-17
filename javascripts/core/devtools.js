@@ -314,13 +314,12 @@ dev.boosts = {
 		},
 	},
 	6: {
-		name: "Replicanti Release",
+		name: "???",
 		unl() {
-			return QCs_tmp.qc1
+			return false
 		},
 		eff(x) {
-			//Replicanti Release: Raise the replicanti limit and slow down Replicanti Slowdown, both at a same multiplier.
-			return 2
+			return 1
 		},
 	},
 	7: {
@@ -333,13 +332,12 @@ dev.boosts = {
 		},
 	},
 	8: {
-		name: "Replicante Clovers",
+		name: "???",
 		unl() {
-			return true
+			return false
 		},
 		eff(x) {
-			//Replicante Clovers: Replicanti Stealth boosts chance upgrades more by an exponent.
-			return 10
+			return 1
 		},
 	},
 }

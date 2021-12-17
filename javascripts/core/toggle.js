@@ -9,9 +9,9 @@ function togglePerformanceTicks() {
 }
 
 function toggleLogRateChange() {
-	aarMod.logRateChange=!aarMod.logRateChange
-	getEl("toggleLogRateChange").textContent = "Rate displays: "+(aarMod.logRateChange?"Logarithm":"Percentage")
-	dimDescEnd = (aarMod.logRateChange?" OoM":"%")+"/s)"
+	aarMod.logRateChange = (aarMod.logRateChange + 1) % 3
+	getEl("toggleLogRateChange").textContent = "Rate displays: " + ["Normal", "Logarithm", "None"][aarMod.logRateChange]
+	dimDescEnd = (aarMod.logRateChange ? " OoM" : "%") + "/s)"
 }
 
 function toggleTabsSave() {

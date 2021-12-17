@@ -13,17 +13,17 @@ let qMs = {
 			nextAt: (x) => Math.pow(2, (1 - x) / 2) * 86400 * qMs.data.sr.daysStart()
 		},
 		en: {
-			name: "Enegretic",
+			name: "Energetic",
 			targ: () => qu_save.bestEnergy || 0,
 			targDisp: shorten,
 			targKind: "energy",
 			gain(x) {
 				x = Math.sqrt(Math.max(x - 0.5, 0)) * 3
-				if (x > 200) x = Math.log2(x / 50) * 100
+				if (x > 20) x = Math.log10(x / 2) * 20
 				return x
 			},
 			nextAt(x) {
-				if (x > 200) x = Math.pow(2, x / 100) * 50
+				if (x > 20) x = Math.pow(10, x / 20) * 2
 				x = Math.pow(x / 3, 2) + 0.5
 				return x
 			}
@@ -34,8 +34,16 @@ let qMs = {
 			targ: () => new Decimal(player.dilation.bestTP || 0),
 			targDisp: shorten,
 			targKind: "TP",
-			gain: (x) => (x.max(1).log10() - 90) / 3 + 1,
-			nextAt: (x) => Decimal.pow(10, (x - 1) * 3 + 90)
+			gain(x) {
+				x = (x.max(1).log10() - 90) / 3 + 1
+				if (x > 20) x = Math.log10(x / 2) * 20
+				return x
+			},
+			nextAt(x) {
+				if (x > 20) x = Math.pow(10, x / 20) * 2
+				x = Decimal.pow(10, (x - 1) * 3 + 90)
+				return x
+			}
 		},
 		ch: {
 			name: "Challenging",
@@ -88,8 +96,7 @@ let qMs = {
 
 		//Milestones
 		for (var i = 1; i <= qMs.max; i++) {
-			if (data.points >= qMs[i].req) data.amt++
-			else delete qu_save.disabledRewards[i]
+			if (data.points >= qMs[i].req || evalData(qMs[i].forceGot)) data.amt++
 		}
 
 		if (qMs.tmp.amt >= 12) data.metaSpeed *= Math.pow(0.9, Math.pow(qMs.tmp.amt - 12 + 1, 1 + Math.max(qMs.tmp.amt - 15, 0) / 15))
@@ -155,14 +162,17 @@ let qMs = {
 
 		getEl("qMs_points").textContent = getFullExpansion(qMs.tmp.points)
 	},
+	isObtained(id) {
+		return qMs.tmp.amt >= id || evalData(qMs[id].forceGot)
+	},
 	isOn(id) {
-		return qMs.tmp.amt >= id && !qu_save.disabledRewards[id] && !qMs.forceOff(id)
+		return qMs.isObtained(id) && !qu_save.disabledRewards[id] && !qMs.forceOff(id)
 	},
 	forceOff(id) {
 		return evalData(qMs[id].forceDisable)
 	},
 	toggle(id) {
-		if (qMs.tmp.amt < id) return
+		if (!qMs.isObtained(id)) return
 		if (qMs.forceOff(id)) return
 		if (!evalData(qMs[id].disablable)) return
 
@@ -174,13 +184,13 @@ let qMs = {
 	max: 30,
 	1: {
 		req: 1,
-		eff: () => "Completing an EC only exits your challenge.",
-		effGot: () => "Completing an EC now only exits your challenge."
+		eff: () => "Completing an EC only exits your challenge, and unlock automation for TT and study presets.",
+		effGot: () => "Completing an EC now only exits your challenge, and you now can automate TT and study presets."
 	},
 	2: {
 		req: 2,
-		eff: () => "Unlock the autobuyer for TT and study presets, start with 3x more Eternities per milestone (" + shortenDimensions(Math.pow(3, qMs.tmp.amt >= 2 ? qMs.tmp.amt : 0) * 100) + "), and keep Eternity Challenges",
-		effGot: () => "You now can automatically buy TT, start with 3x more Eternities per milestone, and keep Eternity Challenges."
+		eff: () => "Start with 3x more Eternities per milestone (" + shortenDimensions(Math.pow(3, qMs.tmp.amt >= 2 ? qMs.tmp.amt : 0) * 100) + "), and keep Eternity Challenges",
+		effGot: () => "You now start with 3x more Eternities per milestone, and keep Eternity Challenges."
 	},
 	3: {
 		req: 3,
@@ -280,7 +290,8 @@ let qMs = {
 	},
 	21: {
 		req: 25,
-		forceDisable: () => !PCs.milestoneDone(32) && QCs.in(3),
+		forceGot: () => hasAch("ng3p25"),
+		forceDisable: () => QCs.in(3) && !hasAch("ng3p25"),
 		eff: () => "Every second, you gain Tachyon Particles, if you dilate",
 		effGot: () => "Every second, you now gain Tachyon Particles, if you dilate."
 	},
@@ -290,42 +301,42 @@ let qMs = {
 		effGot: () => "Gain banked infinities based on your post-crunch infinitied stat."
 	},
 	23: {
-		req: 50,
+		req: 40,
 		eff: () => "Unlock QoL features for quark assortion, like automation and respec.",
 		effGot: () => "You have unlocked QoL features for quark assortion!"
 	},
 	24: {
-		req: 75,
+		req: 50,
 		eff: () => "Able to max Meta-Dimension Boosts",
 		effGot: () => "You now can max Meta-Dimension Boosts."
 	},
 	25: {
-		req: 100,
+		req: 60,
 		eff: () => "Meta Dimension autobuyer is unlimited",
 		effGot: () => "Meta Dimension autobuyer is now unlimited."
 	},
 	26: {
-		req: 160,
+		req: 70,
 		eff: () => "You can disable swaps in any Quantum Challenge",
 		effGot: () => "You now can disable swaps in any Quantum Challenge."
 	},
 	27: {
-		req: 200,
+		req: 80,
 		eff: () => "Unlock the autobuyer for Replicated Expanders",
 		effGot: () => "Unlock the autobuyer for Replicated Expanders."
 	},
 	28: {
-		req: 430,
+		req: 130,
 		eff: () => "Keep Quantum Challenges and Entangled Boosts.",
 		effGot: () => "You now keep Quantum Challenges and Entangled Boosts."
 	},
 	29: {
-		req: 450,
+		req: 140,
 		eff: () => "Keep Paired Challenges and Positrons.",
 		effGot: () => "You now keep Paired Challenges and Positrons."
 	},
 	30: {
-		req: 500,
+		req: 150,
 		eff: () => "Keep your Vibration Energy.",
 		effGot: () => "You now keep your Vibration Energy."
 	},

@@ -20,6 +20,7 @@
 <body id="body" style="height: 95vh; " onload="initGame()">
 	<div id='ghostlyNewsTicker'><span id='ghostlyNewsTickerText'></span></div>
 	<div style="display:none;position:fixed;left:0;top:0"><textarea id="output" style="color:black; width: 200px; height: 55px;"></textarea></div>
+	<div id="bg" style="display: none"></div>
 	<div id="container" class="container" style="color:#4F5957; font-family: Typewriter; text-align:center; font-size: 11px; display:none">
 		<div id='ghostlyNewsTickerBlock'></div>
 		<div id='game' style='display:none'>
@@ -1299,9 +1300,9 @@
 				<button id="toggleallmetadims" style="width:300px; height: 30px; font-size: 12px" onclick="toggleAllMetaDims()" class="storebtn">Toggle all meta-dims autobuyer ON/OFF</button>
 			</div>
 			<div id="fdims" class="dimtab">
-				You made <span class="flucEne" id="fd_ds" style="font-size: 25px">0</span> Dimensional Shards from Fluctating.<br>
-				You have <span class="flucEne" id="fd_me" style="font-size: 35px">0.00</span> Metastable Energy, which is translated to
-				<span class="flucEne" id="fd_eff_rep" style="font-size: 35px">^1.00</span> to potential Replicantis and <span class="QKAmount" id="fd_eff_qe" style="font-size: 35px">^1.00</span> to Quantum Power.
+				You made <span class="flucEne" id="fd_ds" style="font-size: 15px">0</span> Dimensional Shards from Fluctating.<br>
+				You have <span class="flucEne" id="fd_me" style="font-size: 25px">0.00</span> Metastable Energy, which is translated to
+				<b class="flucEne" id="fd_eff_rep" style="font-size: 35px">^1.00</b> to potential Replicantis and <b class="QKAmount" id="fd_eff_qe" style="font-size: 35px">^1.00</b> to Quantum Power.
 				<br>
 				<button class="unavailablebtn" style="font-size: 12px" onclick="alert('Coming soon...')">Max All</button>
 				<table>
@@ -1546,7 +1547,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(12/15/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(12/16/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -1855,7 +1856,7 @@
 							<div id="To infinity!" class="achievement achievementlocked" style="background-image: url(images/9.png)" ach-tooltip="Reach Infinite antimatter. Reward: Start with 100 antimatter."><br></div>
 						</td>
 						<td id="r22">
-							<div id="Fake News" class="achievement achievementlocked" style="background-image: url(images/25.png)" ach-tooltip="Encounter 50 different news messages."><br></div>
+							<div id="Fake News" class="achievement achievementlocked" style="background-image: url(images/25.png)" ach-tooltip=""><br></div>
 						</td>
 						<td>
 							<div id="The 9th Dimension is a lie" class="achievement achievementlocked" style="background-image: url(images/11.png)" ach-tooltip="Have exactly 99 Eighth Dimensions. Reward: Eighth Dimensions are 10% stronger."><br></div>
@@ -2252,7 +2253,7 @@
 								<div id="Old memories come true" class="achievement achievementlocked" style="background-image: url(images/ng3p/24.png)"><br></div>
 							</td>
 							<td>
-								<div id="Twice in a row" class="achievement achievementlocked" style="background-image: url(images/ng3p/25.png)" ach-tooltip="Complete 3 Paired Challenge completions. Reward: Unlock Quantum Challenge 8, and unlock auto-presets and auto-completions for Quantum Challenges."><br></div>
+								<div id="Twice in a row" class="achievement achievementlocked" style="background-image: url(images/ng3p/25.png)" ach-tooltip="Complete 3 Paired Challenge completions. Reward: Unlock QC8 + automation for QCs, and keep 25 MP milestone permanently."><br></div>
 							</td>
 							<td>
 								<div id="Infinity Morals" class="achievement achievementlocked" style="background-image: url(images/ng3p/26.png)"><br></div>
@@ -3392,10 +3393,10 @@
 			</div>
 			<div id="pairedChalls" class="challengeTab">
 				<button class="secondarytabbtn" id="pctabbtn_milestone" onclick="showChallengesTab('pairedChallMilestones')">Milestones</button>
+				<b class="fluc_boost" id="fluc_boost_pc"></b>
 				<div id="pc_info">
-					<b class="fluc_boost" id="fluc_boost_pc"></b>
 					<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 20px">0 / 1</span>)</span><br>
-					Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Quantum Power (starting at <span id="pc_eff1_start"></span>), and make aQ boosts itself by <span id="pc_eff2" style="font-size: 20px"></span>.
+					Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Quantum Power (starting at <span id="pc_eff1_start"></span>), <span id="pc_eff2" style="font-size: 20px"></span> to aQs [by itself], and <span id="pc_eff3" style="font-size: 20px"></span> to goals.
 				</div>
 				<span id="pc_enter">
 					<br>
@@ -3413,7 +3414,6 @@
 				<table id="pc_table" align="center" style="margin: auto"></table>
 				<span id="pc_temp_color" style="font-size: 15px">Your <span id="pc_comps2" style="font-size: 20px"></span> completions are making PC goals <span id="pc_temp"></span>!</span>
 				<br>
-				<span id="pc_shrunker_div">Your <span id="pc_shrunker" style="font-size: 20px"></span> PC shrunkers are reducing all goals by <span id="pc_shrunker_eff" style="font-size: 15px"></span>.</span>
 			</div>
 			<div id="pairedChallMilestones" class="challengeTab">
 				<button class="secondarytabbtn" onclick="PCs.back()">Back</button>
@@ -3436,12 +3436,10 @@
 						<tr>
 							<td id="qc_milestone4_div"></td>
 							<td id="qc_milestone5_div"></td>
-							<td id="qc_milestone6_div"></td>
 						</tr>
 						<tr>
 							<td id="qc_milestone4_div2"><button class="qMs_reward" id="qc_milestone4">???</button></td>
 							<td id="qc_milestone5_div2"><button class="qMs_reward" id="qc_milestone5">???</button></td>
-							<td id="qc_milestone6_div2"><button class="qMs_reward" id="qc_milestone6">???</button></td>
 						</tr>
 					</table>
 				</div>
@@ -5593,10 +5591,11 @@
 	</div>
 	<div class="popup loadmenu" id="loadmenu" style="overflow-y:hidden; height: 360px">
 		<button class="closebtn storebtn" onclick="closeToolTip(true)">&times;</button>
-		<button id="newSaveBtn" class="storebtn" style="font-size: 15px" onclick="new_game()" style="display: inline">New save</button>
-		<button id="newImportBtn" class="storebtn" style="font-size: 15px" onclick="import_save('new')" style="display: inline">Import save</button>
-		<button id="newAdvSaveBtn" class="storebtn" style="font-size: 15px" onclick="new_game('adv')" style="display: inline">Other mods</button>
-		<button id="cancelNewSaveBtn" class="storebtn" style="font-size: 15px; display: none" onclick="show_mods()" style="display: inline">Cancel</button><br>
+		<button id="newSaveBtn" class="storebtn" style="font-size: 15px" onclick="show_mods('basic')">New game</button>
+		<button id="newImportBtn" class="storebtn" style="font-size: 15px" onclick="import_save('new')">Import</button>
+		<button id="cancelNewSaveBtn" class="storebtn" style="font-size: 15px; display: none" onclick="show_mods()">Saves</button>
+		<button id="newAdvSaveBtn" class="storebtn" style="font-size: 15px; display: none" onclick="show_mods('adv')" >Other mods</button>
+		<br>
 		<div id="savesTab" style="height:320px;overflow-y:auto">
 			To load without offline progress, load while holding shift.<br><br>
 			<table id='saves'>

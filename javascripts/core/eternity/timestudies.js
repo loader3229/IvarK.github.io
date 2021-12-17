@@ -78,13 +78,13 @@ function updateTheoremButtons() {
 		getEl("theoremam").style.display = "none"
 		getEl("theoremip").style.display = "none"
 		getEl("theoremep").style.display = "none"
-		getEl("autopresetsbtn").style.display = player.timestudy.auto && qMs.tmp.amt >= 2 ? "" : "none"
+		getEl("autopresetsbtn").style.display = player.timestudy.auto && qMs.tmp.amt >= 1 ? "" : "none"
 	} else {
 		getEl("theoremam").style.display = ""
 		getEl("theoremip").style.display = ""
 		getEl("theoremep").style.display = ""
 		getEl("theoremmax").style.display = ""
-		getEl("theoremmax").innerHTML = qMs.tmp.amt >= 2 ? ("Auto max: "+(player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max Theorems"
+		getEl("theoremmax").innerHTML = qMs.tmp.amt >= 1 ? ("Auto: "+(player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max"
 
 		getEl("theoremam").style.bottom = (offset - 75) + "px"
 		getEl("theoremip").style.bottom = (offset - 75) + "px"

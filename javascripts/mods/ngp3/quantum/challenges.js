@@ -110,9 +110,10 @@ var QCs = {
 			//Replicanti Compressors
 			boost() {
 				let qc1 = QCs_save.qc1
+				let p15 = PCs.milestoneDone(51) && player.dilation.active
 				if (!QCs_tmp.qc1) return false
 
-				if (QCs.perkActive(1) && (qc1.boosts == 0 || qc1.time >= 5)) qc1.perkBoosts++
+				if (QCs.perkActive(1) && (qc1.boosts == 0 || qc1.time >= 5 || p15)) qc1.perkBoosts++
 				if (PCs.milestoneDone(13) && tmp.rep.est.gte(1e6)) {
 					updateReplicantiTemp()
 					qc1.dilaters++
@@ -130,7 +131,7 @@ var QCs = {
 					tmp.rmPseudo = new Decimal(1)
 					player.replicanti.amount = new Decimal(1)
 
-					eternity(false, true)
+					eternity(false, true, false, p15)
 				}
 
 				QCs.data[1].fix = false
@@ -188,6 +189,7 @@ var QCs = {
 				if (PCs.milestoneDone(12)) data.lim = data.lim.pow(Math.log2(qc1.expands + 1) / 10 + 1)
 				data.lim = data.lim.max(Decimal.pow(10, 1.5e6 * distantBoosts))
 
+				//Replicanti Release
 				var release = 1
 				if (fluc.unl()) release *= FDs_tmp.eff_rep
 				if (release > 1) {
@@ -308,13 +310,10 @@ var QCs = {
 			goalMA: Decimal.pow(Number.MAX_VALUE, 2.4),
 			hint: "",
 
-			rewardDesc: (x) => "Color charge boosts itself by " + shorten(x) + "x.",
+			rewardDesc: (x) => "Quantum Power boosts color charge by " + shorten(x) + "x.",
 			rewardEff(str) {
 				str = str || colorCharge.normal.charge || new Decimal(0)
-				var x = str.add(1).log10() / 2
-				if (futureBoost("quantum_superbalancing")) x = str.div(1e3).max(x)
-				if (PCs.milestoneDone(21)) x = Decimal.times(x, 2)
-				return Decimal.add(x, 1)
+				return str.div(3).add(1).pow(enB.glu.boosterExp() / 6)
 			},
 
 			perkDesc: (x) => "Mastered Entangled Boosts are 50% stronger, but mastery requires " + shortenCosts(500) + " Quantum Power. Also, they are always active.",
@@ -453,10 +452,8 @@ var QCs = {
 			exp() {
 				var x = 1
 				if (PCs.milestoneDone(52)) {
-					var boosts = QCs.data[1].total()
-					var y = boosts / 20 + 1
-					if (PCs.milestoneDone(53)) y = Math.pow(y, boosts / 40 + 1)
-					x *= y
+					var b = QCs.data[1].total()
+					x *= Math.pow(b / 20 + 1, b / 40 + 1)
 				}
 				return x
 			},
@@ -494,7 +491,7 @@ var QCs = {
 			rewardDesc: (x) => "Replicantis also produce Replicanti Energy; but also boosted by time since Eternity. (" + shorten(QCs_tmp.rewards[6]) + "x)",
 			rewardEff(str) {
 				let t = player.thisEternity / 10
-				if (PCs.milestoneDone(63)) t = (t + 5) / 3
+				if (PCs.milestoneDone(63)) t = t / 5 + 5
 
 				let x = Math.log2(t + 2)
 				if (PCs.milestoneDone(61)) x *= x

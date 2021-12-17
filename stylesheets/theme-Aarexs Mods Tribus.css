@@ -1,49 +1,67 @@
-body {
-	background: linear-gradient(#001f2f, #002f2f, #001f2f)
+#bg {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	margin: 0;
+	z-index: -9;
+	display: block !important;
+	background: radial-gradient(#000f17, transparent), radial-gradient(farthest-corner at 100% 0%, #001f2f, #000000)
 }
 
 .container, div, b, input {
 	color: #bfefff;
-    font-family: 'Roboto' !important;
+	font-family: 'Arial', sans-serif;
     letter-spacing: 0.05em
 }
 
 button {
-	background: #000f1f !important;
-	border: 1px solid !important;
 	border-color: transparent;
-	border-radius: 6px !important;
-    font-family: 'Roboto' !important;
-    letter-spacing: 0.1em
+	border: 1px solid;
+	border-radius: 1px !important;
+    font-family: 'Arial' !important;
+    letter-spacing: 0.05em;
+	transition-duration: 0.5s;
+	text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.25)
 }
-
 button:hover {
-	transform: scale(1.1)
+	transform: scale(1.05)
 }
 
 .tabbtn {
-	background: rgba(127, 223, 255, 0.125) !important;
-	border-color: transparent transparent #7fdfff transparent !important;
-	box-shadow: 0px 3px 3px rgba(127, 223, 255, 0.25), inset 0px 0px 12px rgba(127, 223, 255, 0.125);
-	color: #bfefff !important
+	background: linear-gradient(#007f7f, transparent), rgba(0, 191, 255, 0.25) !important;
+	border-color: transparent transparent #00ffff transparent !important;
+	box-shadow: 1px 1px 4px rgba(0, 191, 255, 0.5);
+	color: #7fffff !important
+}
+.tabbtn:hover {
+	border: 3px solid;
 }
 
 .secondarytabbtn {
-	background: rgba(255, 223, 127, 0.125) !important;
-	border-color: transparent transparent #ffdf7f transparent !important;
-	box-shadow: 0px 3px 3px rgba(255, 223, 127, 0.25), inset 0px 0px 12px rgba(255, 223, 127, 0.125);
-	color: #ffefbf !important
+	background: linear-gradient(#7f7f00, transparent), rgba(255, 191, 0, 0.25) !important;
+	border-color: transparent transparent #ffbf00 transparent !important;
+	box-shadow: 1px 1px 4px rgba(255, 191, 0, 0.5);
+	color: #ffdf7f !important
 }
+.secondarytabbtn:hover {
+	border: 3px solid;
+}
+
 
 .storebtn {
-	background: rgba(159, 255, 127, 0.125) !important;
-	border-color: transparent transparent #9fff7f transparent !important;
-	box-shadow: 0px 3px 3px rgba(159, 255, 127, 0.25), inset 0px 0px 12px rgba(159, 255, 127, 0.125);
-	color: #cfffbf !important
+	background: linear-gradient(#00bf00, transparent), rgba(127, 255, 0, 0.25) !important;
+	border-color: transparent transparent #00ff00 transparent !important;
+	box-shadow: 1px 1px 4px rgba(127, 255, 0, 0.5);
+	color: #bfff7f !important
 }
-
+.storebtn:hover {
+	border: 3px solid;
+	background: rgba(127, 255, 0, 0.5)
+}
 .storebtn div, .storebtn b, .storebtn span, .storebtn p {
-	color: #cfffbf !important
+	color: #bfff7f !important
 }
 
 .unavailablebtn,
@@ -51,9 +69,9 @@ button:hover {
 .newdimlocked,
 .eternityupbtnlocked {
 	transform: scale(1) !important;
-	background: rgba(127, 127, 127, 0.25) !important;
-	border-color: transparent transparent #ff7f7f transparent !important;
-	box-shadow: 0px 0px 0px transparent, inset 0px 0px 12px rgba(127, 127, 127, 0.125);
+	background: linear-gradient(#3f2f2f, transparent), rgba(31, 31, 31, 0.25) !important;
+	border-color: transparent transparent #3f2f2f transparent !important;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
 	color: #ffbfbf !important
 }
 

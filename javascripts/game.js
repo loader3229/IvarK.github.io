@@ -1881,15 +1881,15 @@ function toggle_mod(id) {
 	I also dont know how to do this and this is supa ugly so pls fix
 	*/
 }
-function show_mods(type = 'basic') {
-	modsShown = modsShown ? false : type
+function show_mods(type) {
+	modsShown = type
 
 	getEl("savesTab").style.display = modsShown ? "none" : ""
 	getEl("modsTab").style.display = modsShown === 'basic' ? "" : "none"
 	getEl("advModsTab").style.display = modsShown === 'adv' ? "" : "none"
 
 	getEl("newSaveBtn").style.display = modsShown ? (modsShown === 'adv' ? "" : "none") : ""
-	getEl("newAdvSaveBtn").style.display = modsShown ? "none" : ""
+	getEl("newAdvSaveBtn").style.display = modsShown === "basic" ? "" : "none"
 	getEl("newImportBtn").style.display = modsShown ? "none" : ""
 	getEl("cancelNewSaveBtn").style.display = modsShown ? "" : "none"
 }
@@ -3507,7 +3507,7 @@ function dilationStuffABTick(){
 
 	if (isGamePaused()) return
 	if (canAutoUpgs && player.autoEterOptions.dilUpgs) autoBuyDilUpgs()
-	if (qMs.tmp.amt >= 21 && player.dilation.active && getTPGain().gt(player.dilation.tachyonParticles)) {
+	if (qMs.isObtained(21) && player.dilation.active && getTPGain().gt(player.dilation.tachyonParticles)) {
 		setTachyonParticles(getTPGain())
 		player.eternityBuyer.alwaysDilCond = false
 	}

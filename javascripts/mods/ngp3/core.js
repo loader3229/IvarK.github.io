@@ -63,9 +63,11 @@ function updateQuantumTabs() {
 }
 
 function toggleAutoTT() {
-	if (qMs.tmp.amt < 2) maxTheorems()
-	else player.autoEterOptions.tt = !player.autoEterOptions.tt
-	getEl("theoremmax").innerHTML = qMs.tmp.amt >= 2 ? ("Auto max: " + (player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max Theorems"
+	if (qMs.tmp.amt < 1) maxTheorems()
+	else {
+		player.autoEterOptions.tt = !player.autoEterOptions.tt
+		getEl("theoremmax").innerHTML = "Auto: " + (player.autoEterOptions.tt ? "ON" : "OFF")
+	}
 }
 
 //v1.8
@@ -1026,11 +1028,6 @@ function getAQGainExp(x) {
 
 	let r = 1
 	if (PCs.unl()) r = Math.log10(x.log10() + 1) * PCs_tmp.eff2 + 1
-	if (PCs.milestoneUnl(5)) {
-		let c = 0
-		for (var i = 5; i <= 8; i++) if (PCs.milestoneDone(i * 10 + 5)) c++
-		r *= Math.pow(1.03, c)
-	}
 	if (futureBoost("quark_gluon_plasma")) r = Math.pow(x.log10() * r / 100 + 1, 1/3)
 	return Math.min(r, 2e4)
 }

@@ -171,6 +171,8 @@ function checkOtherPreNGp3Achieve() {
 	if (tmp.ngp3) for (id = 0; id < player.masterystudies.length; id++) {
 		if (player.masterystudies[id].split("t")[1]) ableToGetRid2 = false
 	}
+	if (tmp.ngp3_boost && getAmount(8) >= 100) giveAchievement("Fake News")
+	if (tmp.ngp3_boost && player.challenges.includes("challenge5")) giveAchievement("Spreading Cancer")
 	if (player.why >= 1e6) giveAchievement("Should we tell them about buy max...")
 	if (infchallengeTimes < 7.5) giveAchievement("Never again")
 	if (player.totalTimePlayed >= 10 * 60 * 60 * 24 * 8) giveAchievement("One for each dimension")
@@ -182,7 +184,7 @@ function checkOtherPreNGp3Achieve() {
 	if (player.galaxies >= 540 && player.replicanti.galaxies == 0) giveAchievement("Unique snowflakes")
 	if (player.dilation.active) giveAchievement("I told you already, time is relative")
 	if (player.resets >= 10) giveAchievement("Boosting to the max")
-	if (player.spreadingCancer >= 10) giveAchievement("Spreading Cancer")
+	if (!tmp.ngp3_boost && player.spreadingCancer >= 10) giveAchievement("Spreading Cancer")
 	if (player.spreadingCancer >= 1000000) giveAchievement("Cancer = Spread")
 	if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
 	if (player.break) giveAchievement("Limit Break")

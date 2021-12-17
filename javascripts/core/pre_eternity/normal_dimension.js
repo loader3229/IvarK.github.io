@@ -239,7 +239,7 @@ function getDimensionDescription(tier) {
 	if (tier == 7 && player.currentEternityChall == "eterc7") toGain = infDimensionProduction(1).add(toGain)
 	if (tmp.inEC12) toGain = toGain.div(getEC12Mult())
 
-	return (!toGain.gt(0) ? getFullExpansion(bgt) : shortenND(amt)) + (player.money.e <= 1e6 ? " (" + getFullExpansion(bgt % 10) + ")" : "") + (toGain.gt(0) && player.money.e <= 1e9 ? getDimensionRateOfChangeDisplay(amt, toGain) : "")
+	return (!toGain.gt(0) ? getFullExpansion(bgt) : shortenND(amt)) + (aarMod.logRateChange !== 2 && player.money.e <= 1e6 ? " (" + getFullExpansion(bgt % 10) + ")" : "") + (toGain.gt(0) && player.money.e <= 1e9 ? getDimensionRateOfChangeDisplay(amt, toGain) : "")
 }
 
 function getDimensionRateOfChangeDisplay(current, toAdd) {

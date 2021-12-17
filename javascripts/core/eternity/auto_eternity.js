@@ -86,7 +86,7 @@ function toggle_preset_reset(load) {
 		aarMod.presetReset = !aarMod.presetReset
 		getEl("toggle_preset_reset").style.display = tmp.ngp3 ? "" : "none"
 	}
-	getEl("toggle_preset_reset").textContent = "Force Eternity: " + (aarMod.presetReset ? "ON" : "OFF")
+	getEl("toggle_preset_reset").textContent = "Eternity on load: " + (aarMod.presetReset ? "ON" : "OFF")
 }
 
 function load_preset(id, placement) {

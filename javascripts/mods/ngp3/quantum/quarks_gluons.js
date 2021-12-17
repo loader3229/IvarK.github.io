@@ -275,9 +275,14 @@ function getColorPowerQuantity(color, base) {
 
 	if (!base) {
 		if (hasMTS(314)) r = r.add(getColorPowerQuantity(color == "r" ? "g" : color == "g" ? "b" : "r", true).div(5))
+		if (PCs.milestoneDone(21)) r = r.add(getMinColorPower().div(4))
 		if (color == "r" && hasMTS(272)) r = r.div(5)
 	}
 	return r
+}
+
+function getMinColorPower() {
+	return getColorPowerQuantity("r", true).min(getColorPowerQuantity("g", true)).min(getColorPowerQuantity("b", true))
 }
 
 function getColorPowerMult(color) {
@@ -305,33 +310,34 @@ colorBoosts = {
 function updateColorPowers() {
 	if (!tmp.quUnl) return
 
+	let p23 = PCs.milestoneDone(23)
+
 	//Exponents
 	let e = 1
-	if (PCs.milestoneUnl(5)) {
-		let c = 0
-		for (var i = 1; i <= 4; i++) if (PCs.milestoneDone(i * 10 + 5)) c++
-		e = Math.pow(1.025, c)
-	}
+	if (PCs.milestoneDone(22)) e = Math.pow(1.025, (PCs_save.lvl - 1) / 7)
 
 	//Red
 	colorBoosts.r = Decimal.times(qu_save.colorPowers.r, 5).add(1).log10() / 3.5 + 1
 	if (hasMTS(272)) colorBoosts.r += 0.25
+	if (p23 && colorCharge.normal.color == "r") colorBoosts.r *= 1.1
 	colorBoosts.r = softcap(colorBoosts.r, "rp")
 	if (e > 1) colorBoosts.r = Math.pow(colorBoosts.r, e)
 
 	//Green
 	colorBoosts.g = Decimal.times(qu_save.colorPowers.g, 3).add(1).log10() + 1
 	if (futureBoost("quantum_superbalancing")) colorBoosts.g = Decimal.pow(qu_save.colorPowers.g, 1 / 4.4 / dev.quSb.k).div(1000).max(colorBoosts.g)
+	if (p23 && colorCharge.normal.color == "g") colorBoosts.g *= 1.1
 	if (e > 1) colorBoosts.g = Math.pow(colorBoosts.g, e)
 	colorBoosts.g = softcap(colorBoosts.g, "gp")
 
 	//Blue
 	colorBoosts.b_base = Decimal.times(qu_save.colorPowers.b, 1.5).add(1)
-	colorBoosts.b_exp = 1.5
-
-	if (e > 1) colorBoosts.b_exp *= e
 	if (enB.active("glu", 10)) colorBoosts.b_base = colorBoosts.b_base.times(enB_tmp.glu10)
+
+	colorBoosts.b_exp = 1.5
+	if (p23 && colorCharge.normal.color == "b") colorBoosts.b_exp *= 1.1
 	if (enB.active("glu", 11)) colorBoosts.b_exp *= enB_tmp.glu11
+	if (e > 1) colorBoosts.b_exp *= e
 
 	colorBoosts.b_base2 = colorBoosts.b_base.pow(colorBoosts.b_exp)
 	if (hasMTS(313)) colorBoosts.b_exp *= getMTSMult(313, "update")
@@ -633,7 +639,7 @@ var enB = {
 			return qu_save.entLvl || 0
 		},
 		engAmt(noBest) {
-			var x = noBest ? qu_save.quarkEnergy : qu_save.bestEnergy
+			var x = new Decimal(noBest ? qu_save.quarkEnergy : qu_save.bestEnergy)
 			if (noBest && QCs_tmp.qc5) x = x.add(QCs_tmp.qc5.eff)
 			return x
 		},
@@ -771,7 +777,7 @@ var enB = {
 			},
 
 			adjustChance(x) {
-				if (futureBoost("replicante_clovers") && dev.boosts.tmp[8]) x = Math.pow(x, dev.boosts.tmp[8])
+				x = Math.pow(x, Math.min(Math.sqrt(QCs_save.qc1.time / 6 + 1), 10))
 				return x
 			}
 		},
@@ -960,9 +966,10 @@ var enB = {
 
 		chargeReq(x, next, lvl) {
 			var lvl = lvl || this.lvl(x, next)
+			var scaling = PCs.milestoneDone(42) ? 1 - (PCs_save.lvl - 1) / 28 : 1
 			var req = this[x].chargeReq *
-				Math.pow(1.5, Math.max((pos_tmp.cloud && pos_tmp.cloud.total) || 0, 2)) *
-				Math.pow(2, lvl - this[x].tier)
+				Math.pow(1.5, Math.max((pos_tmp.cloud && pos_tmp.cloud.total) || 0, 2) * scaling) *
+				Math.pow(2, (lvl - this[x].tier) * scaling)
 			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
 			if (hasAch("ng3pr12")) req *= 0.8
 			if (PCs.milestoneDone(42) && lvl == 1) req *= 6
@@ -972,11 +979,11 @@ var enB = {
 		},
 		chargeEff(x) {
 			var lvl = this.lvl(x)
-			if (fluc.unl() && fluc_tmp.temp.pos) lvl = 3 * (1 - 1 / fluc_tmp.temp.pos) + lvl * (1 / fluc_tmp.temp.pos)
+			var scaling = PCs.milestoneDone(43) ? 1 - (PCs_save.lvl - 1) / 28 : 1
+			if (fluc.unl() && fluc_tmp.temp.pos) lvl = Math.pow(3, 1 - scaling) * Math.pow(lvl, scaling)
 
 			var eff = 2 * lvl
 			if (PCs.milestoneDone(42) && lvl == 1) eff = 8
-			if (PCs.milestoneDone(23) && pos.isUndercharged(x)) eff++
 			if (str.unl()) eff += str.eff_pb(x)
 			if (hasAch("ng3pr13")) eff += 0.5
 			return eff
@@ -1032,7 +1039,7 @@ var enB = {
 						slowStart += enB_tmp.pos9
 						accSpeed /= p9 * Math.max(p9 / 2, 1)
 					}
-					if (PCs.milestoneDone(33)) slowStart *= Math.pow(1.01, PCs_save.lvl)
+					if (PCs.milestoneDone(31)) slowStart *= Math.pow(1.01, PCs_save.lvl)
 					if (enB.active("glu", 9)) accSpeed *= enB_tmp.glu9
 					if (QCs.done(7)) accSpeed *= 1.25
 				}

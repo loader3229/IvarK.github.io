@@ -106,7 +106,7 @@ function getMDDescription(tier) {
 	if (tier == Math.min(8, player.meta.resets + 4)) return getFullExpansion(player.meta[tier].bought) + boughtEnd;
 	else {
 		let a = shortenDimensions(player.meta[tier].amount)
-		if (player.meta.antimatter.e >= 1e3) return a
+		if (aarMod.logRateChange === 2 || player.meta.antimatter.e >= 1e6) return a
 		let b = boughtEnd + ' (+' + formatValue(player.options.notation, getMDRateOfChange(tier), 2, 2) + dimDescEnd
 		return a+b
 	}

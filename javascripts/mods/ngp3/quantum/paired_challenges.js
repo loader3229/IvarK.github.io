@@ -2,58 +2,42 @@
 var PCs = {
 	milestones: {
 		11: "Replicanti Compressors are better. (per PC level)",
-		21: "The QC2 reward is doubled.",
-		31: "You sacrifice 33% MDBs instead of 30%.",
-		41: "You sacrifice Replicated Galaxies more.",
+		21: "The minimum Color Power adds all Color Powers by 25%.",
+		31: "Meta Accelerator slowdown starts 1% later per PC level.",
+		41: "More galaxies are contributed to Positronic Charge.",
 		51: "Sacrificed sources are greatly stronger.",
 		61: "The QC6 reward is squared.",
 		71: "Meta Accelerator accelerates faster based on your PC level.",
 		81: "EC14 reward power speeds up Replicantis more.",
 
 		12: "Unlock Replicated Expanders.",
-		22: "You can swap Positronic Boosts between 2 of any tiers.",
-		32: "25 MP milestone is activated in QC3.",
-		42: "Tier 1 charge is 8x, but require 6x more.",
+		22: "Raise the Color Power effects based on PC level.",
+		32: "Meta Accelerator affects Replicantis more.",
+		42: "Tiers and boosts affect the charge requirement less.",
 		52: "Replicated Compressors raise Replicanti Energy by an exponent.",
 		62: "Eternitying timewraps Meta Dimensions and Replicantis by 3 seconds.",
-		72: "Mastery Study cost multiplier is divided by 5x.",
+		72: "Mastery Studies are 5x cheaper.",
 		82: "Remote Galaxies scaling is slower based on its starting point.",
 
 		13: "Unlock Replicated Dilaters.",
-		23: "Undercharged boosts get a higher charge multiplier.",
-		33: "Meta Accelerator slowdown starts 1% later per PC level.",
-		43: "Extra Replicated Galaxies contribute to Positronic Charge.",
-		53: "Replicanti Compressors raise Replicanti Energy more.",
-		63: "Add the time efficiency of QC6 reward by 5s, and also slow down by 3x.",
+		23: "Color Charge multiplies its respective efficency by 10%.",
+		33: "Replicanti Stealth boosts interval from Meta Accelerator.",
+		43: "Tier 1 - 2 charges are closer to Tier 3.",
+		53: "Compressor Time raises Replicanti Stealth to Chance.",
+		63: "QC6 reward decay is 5x slower.",
 		73: "Remove the second softcap of TT generation.",
 		83: "Unlock the first Omega Set.",
 
-		14: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		24: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		34: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		44: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		54: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		64: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		74: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		84: "Unlock a new Perk, and gain 1 PC Shrunker.",
+		14: "Unlock a new Perk.",
+		24: "Unlock a new Perk.",
+		34: "Unlock a new Perk.",
+		44: "Unlock a new Perk.",
+		54: "Unlock a new Perk.",
+		64: "Unlock a new Perk.",
+		74: "Unlock a new Perk.",
+		84: "Unlock a new Perk.",
 
-		15: "Raise the Color Power effects by ^1.025.",
-		25: "Raise the Color Power effects by ^1.025.",
-		35: "Raise the Color Power effects by ^1.025.",
-		45: "Raise the Color Power effects by ^1.025.",
-		55: "Raise the anti-Quarks by ^1.03.",
-		65: "Raise the anti-Quarks by ^1.03.",
-		75: "Raise the anti-Quarks by ^1.03.",
-		85: "Raise the anti-Quarks by ^1.03.",
-
-		16: "???",
-		26: "???",
-		36: "???",
-		46: "???",
-		56: "???",
-		66: "???",
-		76: "???",
-		86: "???",
+		15: "Compressing keeps you dilated, and also give you 1 Dilater.",
 	},
 	setupData() {
 		var data = {
@@ -68,7 +52,7 @@ var PCs = {
 				false,
 			],
 			goal_divs: [null, 0.1, 0.95, 0.35, 0.95, 0.45, 0.5, 0.4, 0.775],
-			milestone_reqs: [null, 1, 2, 3, 4, 5, 7],
+			milestone_reqs: [null, 1, 2, 3, 4, 6],
 			milestone_unls: [null,
 				true,
 				true,
@@ -97,8 +81,7 @@ var PCs = {
 			challs: {},
 			comps: [],
 			lvl: 1,
-			best: PCs_save && PCs_save.best,
-			shrunkers: 0
+			best: PCs_save && PCs_save.best
 		}
 		qu_save.pc = PCs_save
 		return PCs_save
@@ -116,7 +99,6 @@ var PCs = {
 
 		this.updateTmp()
 		this.updateUsed()
-		this.resetShrunkers()
 	},
 	reset() {
 		PCs_save = this.setup()
@@ -189,7 +171,8 @@ var PCs = {
 		var eff = (PCs_save.lvl - 1) / 28
 		data.eff1_base = 1 + 0.75 * eff
 		data.eff1_start = futureBoost("quantum_superbalancing") ? 1000 : tmp.ngp3_mul ? 125 : 150
-		data.eff2 = Math.sqrt(eff) / 4
+		data.eff2 = Math.sqrt(eff) * Math.pow(1.03, eff * 4) / 4
+		data.eff3 = Math.pow(1.4, - (PCs_save.lvl - 1) / 28)
 
 		//Temperature
 		data.temp = Math.min(comps / 21 - 0.5, 1) * comps / 28
@@ -300,9 +283,10 @@ var PCs = {
 		if (fluc.unl() && fluc_tmp.temp) div += fluc_tmp.temp.pc
 
 		var r = qc1.pow(qc2.log(base) / div)
-		var pow = Math.pow(1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) * (hasAch("ng3pr16") ? 0.89 : 1) / 3)
+		var scaling = (hasAch("ng3pr16") ? 0.89 : 1) / 3
+		var pow = Math.pow(1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) * scaling)
+		pow *= PCs_tmp.eff3
 		if (pos >= 50) pow *= 1.25
-		pow /= this.shrunkerEff()
 
 		return r.pow(pow)
 	},
@@ -498,10 +482,6 @@ var PCs = {
 		getEl("pc_temp_color").style.display = PCs_save.lvl >= 2 ? "" : "none"
 		getEl("pc_temp_color").className = PCs_tmp.temp > 0 ? "hot" : PCs_tmp.temp < 0 ? "cool" : ""
 
-		getEl("pc_shrunker_div").style.display = hasAch("ng3pr12") ? "" : "none"
-		getEl("pc_shrunker").textContent = getFullExpansion(PCs_save.shrunkers)
-		getEl("pc_shrunker_eff").textContent = "^" + this.shrunkerEff().toFixed(3)
-
 		this.showMilestones(PCs_tmp.milestone || 0)
 	},
 	updateDispOnTick() {
@@ -511,6 +491,7 @@ var PCs = {
 		getEl("pc_eff1").textContent = "^" + enB.glu.boosterExp(0, true).toFixed(3)
 		getEl("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
 		getEl("pc_eff2").textContent = "^" + shorten(getAQGainExp())
+		getEl("pc_eff3").textContent = "^" + PCs_tmp.eff3.toFixed(3)
 	},
 	showMilestones(qc) {
 		PCs_tmp.milestone = qc
@@ -666,19 +647,6 @@ var PCs = {
 			PCs.resetButtons()
 		}
 	},
-
-	resetShrunkers() {
-		var qc = QCs_save
-		var mods = QCs.modData
-		if (!PCs.unl() || !qc.mod_comps || !qc.mod_comps.length) return
-
-		PCs_save.shrunkers = 0
-		for (var c = 1; c <= 8; c++) if (this.milestoneDone(c * 10 + 4)) PCs_save.shrunkers++
-	},
-	shrunkerEff() {
-		let x = PCs_save.shrunkers
-		return Math.pow(0.96, Math.sqrt(x))
-	}
 }
 var PCs_save = undefined
 var PCs_tmp = { unl: false }

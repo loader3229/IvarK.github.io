@@ -411,7 +411,8 @@ function setAarexModIfUndefined(){
 	if (aarMod.offlineProgress === undefined)  aarMod.offlineProgress = true
 	if (aarMod.autoSave === undefined) aarMod.autoSave = true
 	if (aarMod.progressBar === undefined) aarMod.progressBar = true
-	if (aarMod.logRateChange === undefined) aarMod.logRateChange = false
+	if (aarMod.logRateChange === undefined) aarMod.logRateChange = 0
+	else if (aarMod.logRateChange === false || aarMod.logRateChange === true) aarMod.logRateChange = aarMod.logRateChange ? 1 : 0
 	if (aarMod.hideProductionTab === undefined) aarMod.hideProductionTab = !(!player.boughtDims) && aarMod.ersVersion === undefined
 	if (aarMod.eternityChallRecords === undefined) aarMod.eternityChallRecords = {}
 	if (aarMod.popUpId === undefined) aarMod.popUpId = 0
@@ -1545,10 +1546,10 @@ function setConfirmationsDisplay(){
 
 function setOptionsDisplaysStuff1() {
 	setProgressBar("setup")
-	getEl("toggleLogRateChange").textContent = "Rate displays: "+(aarMod.logRateChange?"Logarithm":"Percentage")
+	getEl("toggleLogRateChange").textContent = "Rate displays: " + ["Normal", "Logarithm", "None"][aarMod.logRateChange]
 	getEl("tabsSave").textContent = "Saved tabs: O"+(aarMod.tabsSave.on?"N":"FF")
 	updatePerformanceTicks()
-	dimDescEnd = (aarMod.logRateChange?" OoM":"%")+"/s)"
+	dimDescEnd = (aarMod.logRateChange ? " OoM" : "%") + "/s)"
 
 	getEl("maxHighestTD").parentElement.parentElement.style.display = tmp.ngmX > 3 ? "" : "none"
 	getEl("maxHighestTD").textContent = "Max only highest Time Dimensions: O"+(aarMod.maxHighestTD?"N":"FF")
@@ -2110,7 +2111,7 @@ function setupNGP31Versions() {
 	}
 	aarMod.ngp3r = 0.7
 	aarMod.ngp3Alpha = beta
-	aarMod.ngp3Build = 20211204
+	aarMod.ngp3Build = 20211216
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) player.timestudy.auto = {}
 	if (rollback) {
@@ -2335,12 +2336,7 @@ function delete_save(saveId) {
 
 var ngModeMessages=[]
 function new_game(type) {
-	if (!type && modsShown === "basic") return
-
-	show_mods(type)
-	if (modsShown) return
-
-	//if (modes.ngmm == 4 && !confirm("Warning: NG-5 is currently in balance testing! It is not recommended to play this mod until a more stable version has been released. However, if you want to help test NG+5, you can disregard this message. You can contribute by talking in the NG-5 channel on the NG+3 Discord Server.")) return
+	if (modes.ngmm == 4 && !confirm("Warning: NG-5 is currently in work in progress! It is not recommended to play this mod until a more stable version has been released. However, if you want to help test NG+5, you can disregard this message. You can contribute by talking in the NG-5 channel on the NG+3 Discord Server.")) return
 
 	save_game(true)
 	clearInterval(gameLoopIntervalId)
