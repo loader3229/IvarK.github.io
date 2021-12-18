@@ -116,7 +116,7 @@ let ff = {
 	setup() {
 		ff_save = {
 			links: [],
-			prod: [],
+			prods: [],
 			arcs: {},
 		}
 		fluc_save.ff = ff_save
@@ -127,11 +127,10 @@ let ff = {
 		if (!tmp.ngp3) return
 
 		var data = ff_save || this.setup()
-		if (!data.prod) {
-			data.prod = []
-			data.links = []
-		}
-		if (data.prod === 0) data.prod = []
+		if (!data.links) data.links = []
+		if (!data.prods) data.prod = []
+		delete data.prod
+
 		this.updateTmp()
 	},
 	reset() {
@@ -250,7 +249,7 @@ let ff = {
 		return id == "am" || ff.isUnlocked(id) && false
 	},
 	isProducing(id) {
-		return ff_save.prod.includes(id)
+		return ff_save.prods && ff_save.prods.includes(id)
 	},
 
 

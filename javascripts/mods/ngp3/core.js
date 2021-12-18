@@ -932,12 +932,14 @@ function setupSaveDataNGP3() {
 	fluc_tmp.unl = fluc.unl(true)
 	fluc.compile()
 
-	FDs_save = (fluc_save && fluc_save.dims)
-	FDs.compile()
+	if (fluc_save) {
+		FDs_save = (fluc_save && fluc_save.dims)
+		FDs.compile()
 
-	delete fluc_save.synt
-	ff_save = (fluc_save && fluc_save.ff)
-	ff.compile()
+		delete fluc_save.synt
+		ff_save = (fluc_save && fluc_save.ff)
+		ff.compile()
+	}
 
 	//Quantum
 	pos_save = (qu_save && qu_save.pos)

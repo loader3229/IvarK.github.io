@@ -2336,7 +2336,7 @@ function delete_save(saveId) {
 
 var ngModeMessages=[]
 function new_game(type) {
-	if (modes.ngmm == 4 && !confirm("Warning: NG-5 is currently in work in progress! It is not recommended to play this mod until a more stable version has been released. However, if you want to help test NG+5, you can disregard this message. You can contribute by talking in the NG-5 channel on the NG+3 Discord Server.")) return
+	if (mods.ngmm == 4 && !confirm("Warning: NG-5 is currently in work in progress! It is not recommended to play this mod until a more stable version has been released. However, if you want to help test NG+5, you can disregard this message. You can contribute by talking in the NG-5 channel on the NG+3 Discord Server.")) return
 
 	save_game(true)
 	clearInterval(gameLoopIntervalId)
