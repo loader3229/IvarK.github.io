@@ -69,21 +69,25 @@ let fluc = {
 			if (!pH.can('fluctuate')) return
 			if (!auto && !fluc_save.noConf && !confirm("Fluctuating resets everything that Quantum resets, but also including Quantum content. You will gain Energy in transfer" + (this.unl() ? ". Make sure to check your Milestone Points before Fluctuating!" : ", and you permanently keep your feature unlocks."))) return
 
+			//Fluctuant Gain
 			for (var i = fluc_save.last10.length - 1; i > 0; i--) fluc_save.last10[i] = fluc_save.last10[i - 1]
 			var gain = fluc.gain()
 			fluc_save.last10[0] = [fluc_save.time, gain]
 			if (fluc_save.best > fluc_save.time) fluc_save.best = fluc_save.time
 
-			if (fluc_save.energy == 0) {
+			//Fluctuant
+			if (!fluc.unl()) {
 				fluc_tmp.unl = true
 				ff_tmp.unl = true
 				pH.onPrestige("fluctuate")
 			}
 			fluc_save.energy += gain
+			fluc.updateTmp()
+
+			//Fluctuant Field
 			ff.updateTmp()
 		}
 		fluc.doReset()
-		fluc.updateTmp()
 	},
 	doReset(auto, force) {
 		doFluctuateResetStuff()
@@ -254,7 +258,7 @@ let FDs = {
 		//Fluctuant Replicantis
 		var x = (getReplEff().max(1).log10() / 5e5 + 1) / Math.pow(t, 2)
 		if (x <= 1) return 1
-		return Math.pow(10, Math.pow(Math.log10(x + 1) - 1, 0.75))
+		return Math.pow(10, Math.pow(Math.log10(x), 0.75))
 	},
 
 	dimProd(x) {

@@ -230,8 +230,6 @@ function updateColorCharge(update) {
 		chargeMult = chargeMult.times(colorCharge.sub.eff)
 	} else delete colorCharge.sub
 
-	//Placeholder for ng3p38
-
 	colorCharge.normal = {
 		color: sorted[0],
 		chargeAmt: Decimal.sub(usedQuarks[sorted[0]], usedQuarks[sorted[1]]).round(),

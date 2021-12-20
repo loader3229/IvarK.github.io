@@ -113,8 +113,8 @@ var QCs = {
 				let p15 = PCs.milestoneDone(51) && player.dilation.active
 				if (!QCs_tmp.qc1) return false
 
-				if (QCs.perkActive(1) && (qc1.boosts == 0 || qc1.time >= 5 || p15)) qc1.perkBoosts++
-				if (PCs.milestoneDone(13) && tmp.rep.est.gte(1e6)) {
+				if (QCs.perkActive(1) && (qc1.boosts == 0 || qc1.time >= 5 )) qc1.perkBoosts++
+				if ((PCs.milestoneDone(13) && tmp.rep.est.gte(1e6)) || p15) {
 					updateReplicantiTemp()
 					qc1.dilaters++
 				}
@@ -313,7 +313,7 @@ var QCs = {
 			rewardDesc: (x) => "Quantum Power boosts color charge by " + shorten(x) + "x.",
 			rewardEff(str) {
 				str = str || colorCharge.normal.charge || new Decimal(0)
-				return str.div(3).add(1).pow(enB.glu.boosterExp() / 6)
+				return str.div(3).add(1).pow((enB.glu.boosterExp() || 1) / 6)
 			},
 
 			perkDesc: (x) => "Mastered Entangled Boosts are 50% stronger, but mastery requires " + shortenCosts(500) + " Quantum Power. Also, they are always active.",

@@ -251,6 +251,7 @@ function doFluctuateResetStuff(layer = 6) {
 	QCs.reset(qMs.tmp.amt < 28)
 	if (qMs.tmp.amt < 29) pos.reset()
 
+	fluc_save.bestAM = new Decimal(0)
 	fluc_save.time = 0
 	FDs_save.meta = new Decimal(0)
 	for (var i = 1; i <= 8; i++) FDs_save[i].amt = new Decimal(FDs_save[i].bgt)
