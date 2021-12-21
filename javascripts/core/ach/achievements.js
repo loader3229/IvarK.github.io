@@ -449,7 +449,6 @@ function giveAchievement(name, noUpdate) {
 		loadAutoBuyerSettings()
 	}
 	if (name == "Kee-hee-hee!") {
-		setAndMaybeShow('bestTPOverGhostifies', true, '"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
 		dev.giveAllNGAchievements()
 		for (let i = 1; i <= 8; i++){
 			if (!hasAch("ngpp1" + i)) player.achievements.push("ngpp1" + i)

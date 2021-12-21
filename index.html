@@ -1304,7 +1304,7 @@
 				You have <span class="flucEne" id="fd_me" style="font-size: 25px">0.00</span> Metastable Energy, which is translated to
 				<b class="flucEne" id="fd_eff_rep" style="font-size: 35px">^1.00</b> to potential Replicantis and <b class="QKAmount" id="fd_eff_qe" style="font-size: 35px">^1.00</b> to Quantum Power.
 				<br>
-				<button class="unavailablebtn" style="font-size: 12px" onclick="alert('Coming soon...')">Max All</button>
+				<button class="storebtn" style="font-size: 12px" onclick="FDs.maxAll()">Max All</button>
 				<table>
 					<tbody>
 					  <tr id="fd1_row" style="font-size: 17px">
@@ -1491,6 +1491,11 @@
 						<td><div><button id="maxHighestTD" onclick="maxHighestTD()" class="storebtn" style="color:black; width: 200px; height: 55px"></button></div></td>
 						<td><div><button id="autoApply" onclick="updateAutoApplyDisp(true)" class="storebtn" style="color:black; width: 200px; height: 55px">Auto-apply changes: ON</button></div></td>
 					</tr>
+					<tr>
+						<td></td>
+						<td><div><button ach-tooltip="Shows more options for Antimatter Dimensions, but less significant." id="advMode" onclick="toggleAdvMode()" class="storebtn" style="color:black; width: 200px; height: 55px">Advanced Options: ON</button></div></td>
+						<td></td>
+					</tr>
 				</table>
 			</div>
 			<div class='optionstab' id='light_speed' style='display:none'>
@@ -1547,7 +1552,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(12/19/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(12/20/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>

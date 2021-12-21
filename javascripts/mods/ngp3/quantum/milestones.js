@@ -93,6 +93,7 @@ let qMs = {
 			data["amt_" + type] = Math.min(Math.max(Math.floor(typeData.gain(data["targ_" + type])), 0), 1e3)
 			data.points += data["amt_" + type]
 		}
+		qu_save.bestMP = Math.max(qu_save.bestMP || 0, data.points)
 
 		//Milestones
 		for (var i = 1; i <= qMs.max; i++) {
@@ -113,14 +114,15 @@ let qMs = {
 			}
 
 			for (var i = 1; i <= qMs.max; i++) {
-				var shown = qMs.tmp.amt >= i - 1
+				var shown = fluc.unl() || qMs.tmp.amt >= i - 1
 				getEl("qMs_reward_" + i).style.display = shown ? "" : "none"
 
 				if (shown) {
-					getEl("qMs_reward_" + i).className = qMs.tmp.amt < i || qMs.forceOff(i) ? "qMs_locked" :
+					var got = qMs.isObtained(i)
+					getEl("qMs_reward_" + i).className = !got || qMs.forceOff(i) ? "qMs_locked" :
 						!evalData(this[i].disablable) ? "qMs_reward" :
 						"qMs_toggle_" + (!qu_save.disabledRewards[i] ? "on" : "off")
-					getEl("qMs_reward_" + i).innerHTML = qMs[i].eff() + (qMs.tmp.amt >= i ? "" : "<br>(requires " + getFullExpansion(qMs[i].req) + " MP)")
+					getEl("qMs_reward_" + i).innerHTML = qMs[i].eff() + (got ? "" : "<br>(requires " + getFullExpansion(qMs[i].req) + (this[i].best ? " best" : "") + " MP)")
 				}
 			}
 			getEl("qMs_next").textContent = qMs.tmp.amt >= qMs.max ? "" : "Next milestone unlocks at " + getFullExpansion(qMs[qMs.tmp.amt + 1].req) + " Milestone Points."
@@ -163,7 +165,8 @@ let qMs = {
 		getEl("qMs_points").textContent = getFullExpansion(qMs.tmp.points)
 	},
 	isObtained(id) {
-		return qMs.tmp.amt >= id || evalData(qMs[id].forceGot)
+		var d = qMs[id]
+		return (d.best ? qu_save.bestMP >= d.req : qMs.tmp.amt >= id) || evalData(d.forceGot)
 	},
 	isOn(id) {
 		return qMs.isObtained(id) && !qu_save.disabledRewards[id] && !qMs.forceOff(id)
@@ -327,16 +330,19 @@ let qMs = {
 	},
 	28: {
 		req: 130,
+		best: true,
 		eff: () => "Keep Quantum Challenges and Entangled Boosts.",
 		effGot: () => "You now keep Quantum Challenges and Entangled Boosts."
 	},
 	29: {
 		req: 140,
+		best: true,
 		eff: () => "Keep Paired Challenges and Positrons.",
 		effGot: () => "You now keep Paired Challenges and Positrons."
 	},
 	30: {
 		req: 150,
+		best: true,
 		eff: () => "Keep your Vibration Energy.",
 		effGot: () => "You now keep your Vibration Energy."
 	},

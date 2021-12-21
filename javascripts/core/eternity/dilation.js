@@ -713,6 +713,8 @@ function atDilationDisplay() {
 function updateDilationDisplay() {
 	if (atDilationDisplay()) {
 		getEl("tachyonParticleAmount").textContent = shortenMoney(player.dilation.tachyonParticles)
+		setAndMaybeShow('bestTP', tmp.quUnl, () => "Your best Tachyon Particles was " + shortenMoney(player.dilation.bestTP) + ".")
+
 		getEl("dilatedTimeAmount").textContent = shortenMoney(player.dilation.dilatedTime)
 		getEl("dilatedTimePerSecond").textContent = "+" + shortenMoney(getDilTimeGainPerSecond()) + "/s"
 		getEl("galaxyThreshold").textContent = shortenMoney(player.dilation.nextThreshold)

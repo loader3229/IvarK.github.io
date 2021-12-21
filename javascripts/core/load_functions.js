@@ -1871,7 +1871,6 @@ function updateNGModeMessage(){
 		ngModeMessages = ["Due to balancing changes, you are forced to quantum and reset your TT and your best TP, but you are given  " + shorten(setTTAfterQuantum) + " TT as compensation."]
 		player.timestudy.theorem = setTTAfterQuantum
 		player.dilation.bestTP = new Decimal(0)
-		getEl('bestTP').textContent = "Your best Tachyon particles was 0."
 	}
 }
 
@@ -1968,7 +1967,6 @@ function onLoad(noOffline) {
 		updateGalaxyControl()
 	} else if (getEl("ers_timestudies").style.display=="block") showEternityTab("timestudies",true)
 	poData=metaSave["presetsOrder"+(player.boughtDims?"_ers":"")]
-	setAndMaybeShow('bestTP', tmp.quUnl, () => "Your best Tachyon Particles was " + shorten(player.dilation.bestTP) + ".")
 	getEl('autoDisableQuantum').style.display=hasAch("ng3p66")?"":"none"
 	getEl("quarksAnimBtn").style.display=pH.did("quantum")&&player.masterystudies?"inline-block":"none"
 	getEl("quarksAnimBtn").textContent="Quarks: O"+(player.options.animations.quarks?"N":"FF")

@@ -244,8 +244,36 @@ let FDs = {
 		FDs_save[x].bgt++
 		FDs_save[x].amt = FDs_save[x].amt.add(1)
 	},
-	cost(x) {
-		return Math.min(Math.floor(FDs_save[x].bgt * 1.75 + x), 12)
+	maxAll() {
+		for (var i = 1; i <= 8; i++) FDs.max(i, FDs.unspent() / (9 - i))
+	},
+	max(x, ds) {
+		if (!ds) ds = FDs.unspent()
+		ds = Math.round(ds)
+
+		let cost = FDs.cost(x)
+		let spent = 0
+		let bgt = 0
+		while (ds - spent >= cost) {
+			if (cost == 12) {
+				let res = Math.floor((ds - spent) / 12)
+				spent += res * 12
+				bgt += res
+				break
+			} else {
+				spent += cost
+				bgt++
+				cost = FDs.cost(x, FDs_save[x].bgt + bgt)
+			}
+		}
+
+		FDs_save.spent += spent
+		FDs_save[x].bgt += bgt
+		FDs_save[x].amt = FDs_save[x].amt.add(bgt)
+	},
+	cost(x, amt) {
+		if (!amt) amt = FDs_save[x].bgt
+		return Math.min(Math.floor(amt * 1.75 + x), 12)
 	},
 
 	dimMult(x) {

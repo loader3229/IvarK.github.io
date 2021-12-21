@@ -2137,7 +2137,6 @@ function onNotationChange() {
 		else updateBosonUnlockDisplay()
 	}
 	getEl("achmultlabel").textContent = "Current achievement multiplier on each Dimension: " + shortenMoney(player.achPow) + "x"
-	setAndMaybeShow('bestTP', tmp.quActive, () => "Your best Tachyon Particles was " + shorten(player.dilation.bestTP) + ".")
 }
 
 function setNotation(id) {
@@ -3484,9 +3483,10 @@ function updateNGpp16Reward(){
 }
 
 function notifyQuantumMilestones(){
-	if (typeof notifyId == "undefined") notifyId = qMs.tmp.amt
-	if (qMs.tmp.amt > notifyId) {
-		notifyId = qMs.tmp.amt
+	var amt = fluc.unl() ? 27 : Math.min(qMs.tmp.amt, 27)
+	if (typeof notifyId == "undefined") notifyId = amt
+	if (amt > notifyId) {
+		notifyId = amt
 		$.notify("You have got a total of " + qMs[notifyId].req + " Milestone Points! " + qMs[notifyId].effGot(), "success")
 	}
 }
@@ -4571,7 +4571,6 @@ function setTachyonParticles(x) {
 		qu_save.notrelative = false
 		player.dilation.bestTP = Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles)
 	}
-	setAndMaybeShow('bestTP', tmp.quUnl, () => "Your best Tachyon Particles was " + shorten(player.dilation.bestTP) + ".")
 }
 
 function passiveQuantumLevelStuff(diff){
@@ -5427,6 +5426,7 @@ window.addEventListener('keyup', function(event) {
 	if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text") return false
 }, false);
 
+/* MIGHT MOVE THIS */
 function switchDecimalMode() {
 	if (confirm('You will change the number library preference to ' + (aarMod.breakInfinity ? 'logarithmica_numerus_lite':'break_infinity.min') + '.js. This requires the webpage to reload for this to take effect. Are you sure you want to do this?')) {
 		aarMod.breakInfinity = !aarMod.breakInfinity
@@ -5434,4 +5434,9 @@ function switchDecimalMode() {
 		save_game(true)
 		document.location.reload(true)
 	}
+}
+
+function toggleAdvMode() {
+	//metaSave.adv = false
+	alert('[BASIC MODE] SOON TO BE ENABLED... :TM:')
 }
