@@ -278,7 +278,7 @@ var pH = {
 		if (tmp_pH[layer].did) return
 		tmp_pH[layer].did = true
 		tmp_pH.layers++
-		getEl("layerDispOptions").style.display = ""
+		if (metaSave.advOpts) getEl("layerDispOptions").style.display = ""
 		//getEl("resetDispOptions").style.display = ""
 		getEl("hide_" + layer).style.display = ""
 		getEl("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + (pH.names[layer] || layer)

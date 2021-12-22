@@ -587,7 +587,7 @@ function updateNewPlayer(mode, preset) {
 			notation: "Scientific",
 			scientific: false,
 			challConf: true,
-			sacrificeConfirmation: true,
+			sacrificeConfirmation: !metaSave.advOpts,
 			retryChallenge: false,
 			bulkOn: true,
 			cloud: true,
@@ -597,30 +597,37 @@ function updateNewPlayer(mode, preset) {
 			eternityconfirm: true,
 			commas: "Commas",
 			updateRate: 50,
-			hideProductionTab: false,
+			hideProductionTab: !metaSave.advOpts,
 			chart: {
 				updateRate: 1000,
 				duration: 10,
 				warning: 0,
 			},
 			animations: {
-				floatingText: true,
-				bigCrunch: true,
-				eternity: true,
-				tachyonParticles: true,
+				floatingText: metaSave.advOpts,
+				bigCrunch: metaSave.advOpts,
+				eternity: metaSave.advOpts,
+				tachyonParticles: metaSave.advOpts,
 			}
 		},
 		aarexModifications: {
 			dilationConf: false,
 			offlineProgress: true,
 			autoSave: true,
-			progressBar: true,
-			logRateChange: false,
-			hideProductionTab: false,
+			progressBar: metaSave.advOpts,
+			logRateChange: metaSave.advOpts ? 0 : 2,
+			hideProductionTab: !metaSave.advOpts,
 			eternityChallRecords: {},
 			popUpId: 0,
 			tabsSave: {on: false},
-			breakInfinity: false
+			breakInfinity: false,
+
+			hideStats: !metaSave.advOpts,
+			hideRepresentation: !metaSave.advOpts,
+			hideSecretAchs: !metaSave.advOpts,
+			autoApply: !metaSave.advOpts,
+			noFooter: !metaSave.advOpts,
+			showAuto: !metaSave.advOpts,
 		}
 	}
 	aarMod = player.aarexModifications
@@ -5262,6 +5269,7 @@ function initGame() {
 	window.addEventListener("resize", resizeCanvas);
 
 	//On load
+	updateAdvOpts()
 	updateChart(true)
 	setTimeout(function(){
 		getEl("container").style.display = "block"
@@ -5436,7 +5444,32 @@ function switchDecimalMode() {
 	}
 }
 
-function toggleAdvMode() {
-	//metaSave.adv = false
-	alert('[BASIC MODE] SOON TO BE ENABLED... :TM:')
+function updateAdvOpts(toggle) {
+	if (toggle) {
+		metaSave.advOpts = !metaSave.advOpts
+		localStorage.setItem(metaSaveId, btoa(JSON.stringify(metaSave)))
+	}
+
+	var on = metaSave.advOpts
+	getEl("advOpts").textContent = "Advanced Options: " + (on ? "ON" : "OFF")
+
+	getEl("renderrate_div").style.display = on ? "" : "none"
+	getEl("animationoptionsbtn").style.display = on ? "" : "none"
+	getEl("autoSave").style.display = on ? "" : "none"
+	getEl("autoSaveIntDiv").style.display = on ? "" : "none"
+	getEl("pause").style.display = on ? "" : "none"
+	getEl("rename").style.display = on ? "" : "none"
+	getEl("load").style.display = on ? "" : "none"
+	getEl("reload").style.display = on ? "" : "none"
+	getEl("visibilityOpts").style.display = on ? "" : "none"
+	getEl("save_name").style.display = on ? "" : "none"
+	getEl("notation").style.display = on ? "" : "none"
+	getEl("tabsSave").style.display = on ? "" : "none"
+	getEl("hotkeys").style.display = on ? "" : "none"
+	getEl("retry").style.display = on ? "" : "none"
+	getEl("autoApply").style.display = on ? "" : "none"
+	getEl("toggleLogRateChange").style.display = on ? "" : "none"
+	getEl("decimalModeBtn").style.visibility = Decimal.gt(player.totalmoney, Decimal.pow(10, 9e15)) || !on ? "hidden" : "visible"
+	for (var i = 1; i <= 8; i++) getEl("advTheme" + i).style.display = on ? "" : "none"
+	pH.reset()
 }

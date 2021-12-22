@@ -405,7 +405,7 @@ function setAarexModIfUndefined(){
 	}
 
 	getEl("decimalMode").innerHTML = aarMod.breakInfinity ? "break_infinity.js<br>(slow, up to e9e15)" : "logarithmica_numerus.js<br>(fast, up to e1.79e308)"
-	getEl("decimalModeBtn").style.visibility = Decimal.gt(player.totalmoney,Decimal.pow(10, 9e15)) ? "hidden" : ""
+	getEl("decimalModeBtn").style.visibility = Decimal.gt(player.totalmoney, Decimal.pow(10, 9e15)) || !metaSave.adv ? "hidden" : "visible"
 
 	if (aarMod.dilationConf === undefined) aarMod.dilationConf = true
 	if (aarMod.offlineProgress === undefined)  aarMod.offlineProgress = true
@@ -2807,8 +2807,9 @@ function migrateOldSaves() {
 			}
 		}
 	}
-	if (metaSave.version < 2.01) metaSave.presetsOrder_ers=[]
-	metaSave.version = 2.02
+	if (metaSave.version < 2.01) metaSave.presetsOrder_ers = []
+	if (metaSave.version < 2.03) metaSave.advOpts = true
+	metaSave.version = 2.03
 }
 
 //Save Storage System
