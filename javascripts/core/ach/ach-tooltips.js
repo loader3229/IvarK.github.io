@@ -232,10 +232,10 @@ function setR12Tooltip() {
 	//r122/////
 	let fiveMore = getEl("5 more eternities until the update")
 	let newI = getEl("Eternities are the new infinity")
-	let eatass = getEl("Like feasting on a behind")
+	let feast = getEl("Like feasting on a behind")
 	let minaj = getEl("Popular music")
 	let layer = getEl("But I wanted another prestige layer...")
-	let fkoff = getEl("What do I have to do to get rid of you")
+	let rid = getEl("What do I have to do to get rid of you")
 
 	//Setup rewards
 	let layerReward = []
@@ -247,9 +247,9 @@ function setR12Tooltip() {
 	infiniteIP.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e30008"))+" IP." + (player.galacticSacrifice == undefined || player.tickspeedBoosts != undefined ? "" : " Reward: Your total galaxies boost Galaxy points gain."))
 	fiveMore.setAttribute('ach-tooltip', "Complete 50 unique Eternity Challenge tiers." + (inNGM(2) ? " Reward: Divide Infinity Dimension costs based on the multiplier of g11." : ""))
 	newI.setAttribute('ach-tooltip', "Eternity in under 200 milliseconds." + (inNGM(2) ? " Reward: The Eighth Normal Dimension to Galaxy points gain is buffed, and boost g13 based on your fastest Eternity time in Eternity Challenges." : "")) 
-	eatass.setAttribute('ach-tooltip', "Reach "+shortenCosts(1e100)+" IP without any Infinities or First Normal Dimensions. Reward: Gain an IP multiplier based on time spent in this Infinity.")
+	feast.setAttribute('ach-tooltip', "Reach "+shortenCosts(1e100)+" IP without any Infinities or First Normal Dimensions. Reward: Gain an IP multiplier based on time spent in this Infinity.")
 	layer.setAttribute('ach-tooltip', "Reach "+shortenMoney(Number.MAX_VALUE)+" EP." + (layerReward != "" ? " Reward: " + layerReward + "." : "")) 
-	fkoff.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e22000"))+" IP without any time studies. Reward: Gain a multiplier to Time Dimensions based on the amount of bought Time Studies.")
+	rid.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e22000"))+" IP without any time studies. Reward: Gain a multiplier to Time Dimensions based on the amount of bought Time Studies.")
 	minaj.setAttribute('ach-tooltip', "Have 180 times more non-bonus Replicated Galaxies than normal galaxies. Reward: Getting a Replicanti Galaxy divides your replicanti by " + shortenMoney(Number.MAX_VALUE) + " instead of resetting them to 1.")
 }
 
@@ -266,8 +266,8 @@ function setR13Tooltip() {
 
 	//Setup rewards
 	let uniqueReward = []
-	if (tmp.ngp3_boost) uniqueReward.push("Your infinitied stat boosts Eternitied, but not banked infinities")
-	if (NGP3andVanillaCheck()) uniqueReward.push("gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies")
+	if (tmp.ngp3_boost) uniqueReward.push("Normal Infinities boost Eternities")
+	if (NGP3andVanillaCheck()) uniqueReward.push("gain more TP and DT based on Antimatter Galaxies")
 	uniqueReward = wordizeList(uniqueReward, true)
 
 	let potato3Reward = []
@@ -277,13 +277,13 @@ function setR13Tooltip() {
 
 	let thinkingReward = [] // for the achievement "This is what I have to do to get rid of you."
 	if (tmp.ngp3_boost) thinkingReward.push("Replicantis boost dilated time gain")
-	if (tmp.ngp3_boost && !tmp.exMode) thinkingReward.push("TS141 is always " + shortenCosts(1e40) + "x")
-	if (NGP3andVanillaCheck()) thinkingReward.push("gain 2x more DT and TT while dilated")
+	if (tmp.ngp3_boost && !tmp.exMode) thinkingReward.push("TS141 is at least " + shortenCosts(1e25) + "x")
+	if (tmp.ngpX < 2) thinkingReward.push("gain 2x more DT and TT while dilated")
 	thinkingReward = wordizeList(thinkingReward, true)
 
 	let thisisReward = [] // for the achievement "This is what I have to do to get rid of you."
 	if (inNGM(2)) thisisReward.push("g23 is more effective based on your best IP in dilation")
-	if (tmp.ngp3_boost) thisisReward.push("you produce dilated time " + (tmp.ngp3_exp ? 3 : 2) + "x faster")
+	if (tmp.ngp3_boost) thisisReward.push("you produce dilated time " + (tmp.ngp3_exp ? 2 : 1.5) + "x faster")
 	thisisReward = wordizeList(thisisReward, true)
 
 	//ACHIEVEMENT ROW 13
@@ -313,19 +313,19 @@ function setR13p5Tooltip() {
 // When NG+3R comes out, these tooltips must start to be changed
 function setR14Tooltip() {
 	// Row 14 (4/8)
-	//ngpp11/////
+	let meta = getEl("I'm so meta")
 	//ngpp12/////
-	let onlywar = getEl("In the grim darkness of the far endgame")
+	let grim = getEl("In the grim darkness of the far endgame")
 	let metamax = getEl("Meta-boosting to the max")
 	let thecap = getEl("The cap is a million, not a trillion")
 	let neverenough = getEl("It will never be enough")
 	//ngpp17/////
 	let harmony = getEl("Universal harmony")
 
-	let onlywarReward = [] // for the achievement "In the grim darkness of the far endgame"
-	if (tmp.ngp3) onlywarReward.push("you gain 2x more dilated time and Tachyon particles")
-	if (aarMod.nguspV != undefined) onlywarReward.push("you can auto-buy Dilation upgrades every second if you have at least " + shortenMoney(new Decimal('1e40000')) + " EP")
-	onlywarReward = wordizeList(onlywarReward, true)
+	let grimReward = [] // for the achievement "In the grim darkness of the far endgame"
+	if (tmp.ngp3) grimReward.push("gain 2x more Tachyon Particles")
+	if (aarMod.nguspV != undefined) grimReward.push("you can auto-buy Dilation upgrades every second if you have at least " + shortenMoney(new Decimal('1e40000')) + " EP")
+	grimReward = wordizeList(grimReward, true)
 
 	let harmonyReward = [] // for the achievement "In the grim darkness of the far endgame"
 	if (player.exdilation === undefined) harmonyReward.push("Galaxies are 0.1% stronger")
@@ -333,10 +333,11 @@ function setR14Tooltip() {
 	harmonyReward = wordizeList(harmonyReward, true)
 
 	//ACHIEVEMENT ROW 14 (NG++)
-	onlywar.setAttribute('ach-tooltip', "Reach " + shortenMoney(new Decimal('1e40000')) + " EP." + (onlywarReward != "" ? " Reward: " + onlywarReward + "." : ""))
+	meta.setAttribute('ach-tooltip', "Unlock Meta Dimensions." + (tmp.ngp3_boost ? " Reward: TS121 is always 50x." : ""))
+	grim.setAttribute('ach-tooltip', "Reach " + shortenMoney(new Decimal('1e40000')) + " EP." + (grimReward != "" ? " Reward: " + grimReward + "." : ""))
 	thecap.setAttribute('ach-tooltip', "Get " + shortenDimensions(1e12)+" Eternities. Reward: Eternity Upgrade 2 " + (tmp.ngp3 ? "and TS231 use" : "uses") + " a better formula.")
 	metamax.setAttribute('ach-tooltip', "Get " + (tmp.ngp3 ? 7 : 10) + " Meta-Dimension Boosts. Reward: Meta-dimension boosts are " + (tmp.ngp3 ? 5 : 1) + "% stronger.")
-	neverenough.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal(tmp.ngp3 ? "1e60000" : "1e100000")) + " replicanti. Reward: " + (tmp.ngp3_boost ? "Replicated galaxies no longer reset the replicanti amount." : "You can always buy max RGs."))
+	neverenough.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal(tmp.ngp3 ? "1e60000" : "1e100000")) + " replicanti. Reward: " + (tmp.ngp3_boost ? "Replicated Galaxies no longer reset Replicantis." : "You can always buy max RGs."))
 	harmony.setAttribute('ach-tooltip', (player.meta ? "Have at least 700 normal, replicanti, and free dilated galaxies." : "Get the same amount (at least 300) of normal, replicanti, and Tachyonic Galaxies.") + (harmonyReward != "" ? " Reward: " + harmonyReward + "." : ""))
 }
 

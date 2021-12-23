@@ -47,10 +47,8 @@ function getDilTimeGainPerSecond() {
 	let gain = player.dilation.tachyonParticles.times(Decimal.pow(2, getDilUpgPower(1)))
 
 	//Boosts
-	if (NGP3andVanillaCheck()) {
-		if (player.achievements.includes("r132")) gain = gain.times(Math.max(Math.pow(player.galaxies, 0.04), 1))
-		if (player.achievements.includes("r137") && player.dilation.active) gain = gain.times(2)
-	}
+	if (NGP3andVanillaCheck() && player.achievements.includes("r132")) gain = gain.times(Math.max(Math.pow(player.galaxies, 0.04), 1))
+	if (tmp.ngpX < 2 && player.achievements.includes("r137") && player.dilation.active) gain = gain.times(2)
 
 	//NG++
 	if (hasDilationUpg('ngpp6')) gain = gain.times(getDil17Bonus())
@@ -60,8 +58,7 @@ function getDilTimeGainPerSecond() {
 	//NG+3
 	if (hasAch("r137") && tmp.ngp3_boost) gain = gain.times(getReplDilBonus())
 	if (tmp.ngp3) {
-		if (hasAch("r138")) gain = gain.times(tmp.ngp3_exp ? 3 : 2)
-		if (hasAch("ngpp13")) gain = gain.times(2)
+		if (hasAch("r138")) gain = gain.times(tmp.ngp3_exp ? 2 : 1.5)
 		if (hasAch("ng3p11")) gain = gain.times(Math.min(Math.max(Math.log10(player.eternityPoints.max(1).log10()) / 2, 1) / 2, 2.5))
 		if (enB.active("pos", 2)) gain = gain.times(enB_tmp.pos2.mult)
 		if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
@@ -112,9 +109,7 @@ function getDil3Power() {
 
 function getTPMult() {
 	let ret = Decimal.pow(getDil3Power(), getDilUpgPower(3))
-	if (NGP3andVanillaCheck()) {
-		if (player.achievements.includes("r132")) ret = ret.times(Math.max(Math.pow(player.galaxies, 0.04), 1))
-	}
+	if (NGP3andVanillaCheck() && player.achievements.includes("r132")) ret = ret.times(Math.max(Math.pow(player.galaxies, 0.04), 1))
 
 	//NG Update
 	if (hasDilationUpg("ngud1")) ret = ret.times(getD18Bonus())
@@ -189,7 +184,7 @@ function getReqForTPGain() {
 	let tp = player.dilation.totalTachyonParticles
 	if (tp.eq(0) || tmp.ngC) return 0
 
-	let log = tp.div(getTPMult()).pow(1 / getTPExp()).div(getAMEffToTP())
+	let log = tp.div(getTPMult()).pow(1 / getTPExp()).times(getAMEffToTP())
 	if (log.gt(player.totalmoney.log10())) return 0
 	return Decimal.pow(10, log.toNumber()).max("1e400")
 }
@@ -527,7 +522,7 @@ function getTTProduction(display) {
 
 function getTTGenPart(x) {
 	x = x.div(2e4)
-	if (NGP3andVanillaCheck()) {
+	if (tmp.ngpX < 2) {
 		if (player.achievements.includes("r137") && player.dilation.active) x = x.times(2)
 	}
 	if (tmp.ngp3) x = softcap(x, "tt")

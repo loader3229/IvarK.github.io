@@ -586,15 +586,15 @@ function updateNewPlayer(mode, preset) {
 			newsHidden: true,
 			notation: "Scientific",
 			scientific: false,
-			challConf: true,
-			sacrificeConfirmation: !metaSave.advOpts,
+			challConf: metaSave.advOpts,
+			sacrificeConfirmation: metaSave.advOpts,
 			retryChallenge: false,
 			bulkOn: true,
 			cloud: true,
 			hotkeys: true,
 			theme: undefined,
 			secretThemeKey: 0,
-			eternityconfirm: true,
+			eternityconfirm: !modsChosen.ngp && !metaSave.advOpts,
 			commas: "Commas",
 			updateRate: 50,
 			hideProductionTab: !metaSave.advOpts,
@@ -619,11 +619,12 @@ function updateNewPlayer(mode, preset) {
 			hideProductionTab: !metaSave.advOpts,
 			eternityChallRecords: {},
 			popUpId: 0,
-			tabsSave: {on: false},
+			tabsSave: {on: !metaSave.advOpts},
 			breakInfinity: false,
 
 			hideStats: !metaSave.advOpts,
 			hideRepresentation: !metaSave.advOpts,
+			hideCompletedAchs: !metaSave.advOpts,
 			hideSecretAchs: !metaSave.advOpts,
 			autoApply: !metaSave.advOpts,
 			noFooter: !metaSave.advOpts,
@@ -2076,8 +2077,8 @@ function gainedEternityPoints() {
 	var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e / getEPGainBase() - 0.7).times(uEPM ? 1 : player.epmult)
 	if (aarMod.newGameExpVersion) ret = ret.times(10)
 	if (hasTimeStudy(61)) ret = ret.times(tsMults[61]())
-	if (hasTimeStudy(121)) ret = ret.times(hasAch("ngpp11") ? 50 : ((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) 
-	if (hasTimeStudy(122)) ret = ret.times(hasAch("ngpp11") ? 50 : 35)
+	if (hasTimeStudy(121)) ret = ret.times(tmp.ngp3_boost && hasAch("ngpp11") ? 50 : ((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) 
+	if (hasTimeStudy(122)) ret = ret.times(35)
 	if (hasTimeStudy(123)) ret = ret.times(Math.sqrt(1.39*player.thisEternity/10))
 	if (hasGalUpg(51)) ret = ret.times(galMults.u51())
 	if (tmp.ngp3 && tmp.be) ret = ret.times(getBreakUpgMult(7))

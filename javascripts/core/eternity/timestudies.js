@@ -734,8 +734,7 @@ let tsMults = {
 		return x
 	},
 	141() {
-		if (hasAch("r137") && tmp.ngp3_boost && !tmp.exMode) return new Decimal(1e40)
-		return Decimal.div(1e45, Decimal.pow(15, Math.log(player.thisInfinityTime + 1) * Math.pow(player.thisInfinityTime + 1, 0.125))).max(1)
+		return Decimal.div(1e45, Decimal.pow(15, Math.log(player.thisInfinityTime + 1) * Math.pow(player.thisInfinityTime + 1, 0.125))).max(hasAch("r137") && tmp.ngp3_boost && !tmp.exMode ? 1e25 : 1)
 	},
 	211() {
 		return inNGM(2) ? 1 : 5

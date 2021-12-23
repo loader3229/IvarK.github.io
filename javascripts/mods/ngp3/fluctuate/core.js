@@ -248,10 +248,10 @@ let FDs = {
 		for (var i = 1; i <= 8; i++) FDs.max(i, FDs.unspent() / (9 - i))
 	},
 	max(x, ds) {
-		if (!ds) ds = FDs.unspent()
+		if (!ds) ds = this.unspent()
 		ds = Math.round(ds)
 
-		let cost = FDs.cost(x)
+		let cost = this.cost(x)
 		let spent = 0
 		let bgt = 0
 		while (ds - spent >= cost) {
@@ -263,7 +263,7 @@ let FDs = {
 			} else {
 				spent += cost
 				bgt++
-				cost = FDs.cost(x, FDs_save[x].bgt + bgt)
+				cost = this.cost(x, FDs_save[x].bgt + bgt)
 			}
 		}
 
