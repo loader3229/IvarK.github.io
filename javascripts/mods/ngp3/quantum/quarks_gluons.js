@@ -621,7 +621,7 @@ var enB = {
 			return (tmp.quActive && Decimal.add(qu_save.gluons.rg, qu_save.gluons.gb).add(qu_save.gluons.br).gt(0)) || fluc.unl()
 		},
 
-		costs: [1,4,6,7,8,9,10,12,13,15,36,40,45,60,75,80],
+		costs: [1,4,6,7,8,9,10,12,13,15,36,40,45,60,80],
 		cost(x) {
 			if (x === undefined) x = this.amt()
 			if (!this.costs[x]) return
@@ -756,9 +756,9 @@ var enB = {
 		},
 		5: {
 			req: 6,
-			masReq: 15,
+			masReq: 12,
 
-			title: "Otherworldly Galaxies",
+			title: "Replicanti Stealth",
 			type: "b",
 			eff(x) {
 				let r = {
@@ -768,7 +768,7 @@ var enB = {
 				return r
 			},
 			disp(x) {
-				return "Strengthen all replicanti upgrades by <span style='font-size: 18px'>^" + shorten(x.exp) + "</span>, <span style='font-size: 15px'>+" + formatPercentage(x.int - 1) + "%</span>. (stealth)"
+				return "Strengthen all replicanti upgrades by <span style='font-size: 18px'>^" + shorten(x.exp) + "</span>, <span style='font-size: 15px'>+" + formatPercentage(x.int - 1) + "%</span>."
 			},
 			dispFull(x) {
 				return "Strengthen all replicanti upgrades by ^" + shorten(x.exp) + ", +" + formatPercentage(x.int - 1) + "%."
@@ -820,7 +820,7 @@ var enB = {
 		},
 		8: {
 			req: 8,
-			masReq: 16,
+			masReq: 15,
 
 			title: "Meta Resynergizer II",
 			type: "r",
@@ -855,7 +855,7 @@ var enB = {
 		},
 		10: {
 			req: 11,
-			masReq: 16,
+			masReq: 15,
 
 			title: "Blue Saturation",
 			type: "g",
@@ -872,7 +872,7 @@ var enB = {
 		},
 		11: {
 			req: 13,
-			masReq: 16,
+			masReq: 15,
 
 			title: "Blue Unseeming",
 			type: "r",
@@ -890,7 +890,7 @@ var enB = {
 		},
 		12: {
 			req: 14,
-			masReq: 16,
+			masReq: 15,
 
 			title: "Color Subcharge",
 			type: "b",
