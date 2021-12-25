@@ -171,7 +171,7 @@ var PCs = {
 		var eff = (PCs_save.lvl - 1) / 28
 		data.eff1_base = 1 + 0.75 * eff
 		data.eff1_start = futureBoost("quantum_superbalancing") ? 1000 : tmp.ngp3_mul ? 125 : 150
-		data.eff2 = Math.sqrt(eff) * Math.pow(1.03, eff * 4) / 4
+		data.eff2 = Math.sqrt(eff) * Math.pow(1.03, eff * 4) / 5
 		data.eff3 = Math.pow(1.4, - (PCs_save.lvl - 1) / 28)
 
 		//Temperature
