@@ -10,18 +10,17 @@ var PCs = {
 		71: "Meta Accelerator accelerates faster based on your PC level.",
 		81: "EC14 reward power speeds up Replicantis more.",
 
-		12: "Unlock Replicated Expanders.",
+		12: "Unlock Replicated Dilaters.",
 		22: "Raise the Color Power effects based on PC level.",
-		32: "Meta Accelerator affects Replicantis more.",
-		42: "Tiers and boosts affect the charge requirement less.",
+		32: "Replicanti Stealth boosts interval from Meta Accelerator.",
+		42: "Positronic Boosts affect the charge requirement less.",
 		52: "Replicated Compressors raise Replicanti Energy by an exponent.",
 		62: "Eternitying timewraps Meta Dimensions and Replicantis by 3 seconds.",
 		72: "Mastery Studies are 5x cheaper.",
 		82: "Remote Galaxies scaling is slower based on its starting point.",
 
-		13: "Unlock Replicated Dilaters.",
+		13: "Unlock Replicated Expanders.",
 		23: "Color Charge multiplies its respective efficency by 10%.",
-		33: "Replicanti Stealth boosts interval from Meta Accelerator.",
 		43: "Tier 1 - 2 charges are closer to Tier 3.",
 		53: "Compressor Time raises Replicanti Stealth to Chance.",
 		63: "QC6 reward decay is 5x slower.",
@@ -171,7 +170,7 @@ var PCs = {
 		var eff = (PCs_save.lvl - 1) / 28
 		data.eff1_base = 1 + 0.75 * eff
 		data.eff1_start = futureBoost("quantum_superbalancing") ? 1000 : tmp.ngp3_mul ? 125 : 150
-		data.eff2 = Math.sqrt(eff) * Math.pow(1.03, eff * 4) / 5
+		data.eff2 = Math.sqrt(eff) * Math.pow(1.03, eff * 4) / 3
 		data.eff3 = Math.pow(1.4, - (PCs_save.lvl - 1) / 28)
 
 		//Temperature

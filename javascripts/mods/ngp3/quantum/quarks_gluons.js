@@ -638,7 +638,7 @@ var enB = {
 		},
 		engAmt(noBest) {
 			var x = new Decimal(noBest ? qu_save.quarkEnergy : qu_save.bestEnergy)
-			if (noBest && QCs_tmp.qc5) x = x.add(QCs_tmp.qc5.eff)
+			if (noBest && QCs_tmp.qc5) x = x.times(QCs_tmp.qc5.eff)
 			return x
 		},
 		lvlUp() {
@@ -763,7 +763,7 @@ var enB = {
 			eff(x) {
 				let r = {
 					int: Decimal.div(x, 2).add(1).log10() / 2 + 1,
-					exp: Math.min(Math.log10(Math.log10(x / 2e3 + 1) + 1) * (tmp.ngp3_mul ? 1.5 : 1) + 1, 2.5)
+					exp: Math.min(Math.log10(Math.log10(x / 2e3 + 1) + 1) * (tmp.ngp3_mul ? 1 : 0.8) + 1, 2.5)
 				}
 				return r
 			},
@@ -951,7 +951,7 @@ var enB = {
 
 		engEff(x) {
 			var eng = this.engAmt()
-			if (QCs_tmp.qc5) eng = eng.add(QCs_tmp.qc5.eff)
+			if (QCs_tmp.qc5) eng = eng.times(QCs_tmp.qc5.eff)
 			return eng
 		},
 		eff(x) {
@@ -964,13 +964,12 @@ var enB = {
 
 		chargeReq(x, next, lvl) {
 			var lvl = lvl || this.lvl(x, next)
-			var scaling = PCs.milestoneDone(42) ? 1 - (PCs_save.lvl - 1) / 28 : 1
+			var scaling = PCs.milestoneDone(42) ? Math.sqrt(1 - (PCs_save.lvl - 1) / 28) : 1
 			var req = this[x].chargeReq *
 				Math.pow(1.5, Math.max((pos_tmp.cloud && pos_tmp.cloud.total) || 0, 2) * scaling) *
-				Math.pow(2, (lvl - this[x].tier) * scaling)
+				Math.pow(2, (lvl - this[x].tier))
 			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
 			if (hasAch("ng3pr12")) req *= 0.8
-			if (PCs.milestoneDone(42) && lvl == 1) req *= 6
 			if (str.unl()) req *= str.nerf_pb(x)
 			if (hasAch("ng3pr12")) req -= 2
 			return Math.max(req, 0)
@@ -1232,13 +1231,12 @@ var enB = {
 			title: "Eternity Transfinition",
 			tier: 3,
 			eff(x) {
-				let exp = Math.min(3e-8 * Math.log2(x / 300 + 1), 1e-5) * getAQGainExp()
-				let cap = Decimal.pow(5, Math.pow(x, 0.4))
-				if (ff.unl()) cap = cap.pow(ff_tmp.eff.f8)
+				let ep = player.eternityPoints
+				let exp = getAQGainExp() / 1e8
+				exp *= Math.min(Math.sqrt(Math.log10(ep.add(1).log10() * Math.log2(x / 100 + 1) + 1)), 100)
 				return {
 					exp: exp,
-					cap: cap,
-					gain: player.eternityPoints.max(1).pow(exp).min(cap)
+					gain: ep.max(1).pow(exp)
 				}
 			},
 			disp(x) {

@@ -203,7 +203,7 @@ var pos = {
 		if (!pos_tmp.cloud.shown) {
 			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "(^" + (1 / enB_tmp.pos4).toFixed(3) + ")"
 			if (enB.has("pos", 7)) getEl("enB_pos2_mention_1").textContent = enB.name("pos", 2)
-			if (enB.has("pos", 11)) getEl("enB_pos11_info").textContent = "(x^" + (enB_tmp.pos11.exp == 0 ? 0 : "1/" + shorten(1 / enB_tmp.pos11.exp)) + ", cap of " + shorten(enB_tmp.pos11.cap) + "x)"
+			if (enB.has("pos", 11)) getEl("enB_pos11_info").textContent = "(x^" + (enB_tmp.pos11.exp == 0 ? 0 : "1/" + shorten(1 / enB_tmp.pos11.exp)) + ")"
 			if (enB.has("pos", 12)) getEl("enB_pos2_mention_2").textContent = enB.name("pos", 2)
 
 			for (var i = 1; i <= enB.pos.max; i++) {

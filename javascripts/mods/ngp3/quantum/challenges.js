@@ -114,7 +114,7 @@ var QCs = {
 				if (!QCs_tmp.qc1) return false
 
 				if (QCs.perkActive(1) && (qc1.boosts == 0 || qc1.time >= 5 )) qc1.perkBoosts++
-				if ((PCs.milestoneDone(13) && tmp.rep.est.gte(1e6)) || p15) {
+				if (PCs.milestoneDone(12) && (player.dilation.active || qc1.time <= 5 || qc1.dilaters / qc1.boosts < 2/5)) {
 					updateReplicantiTemp()
 					qc1.dilaters++
 				}
@@ -182,11 +182,11 @@ var QCs = {
 					data.scalingExp = 1 / (1 + boosts / (20 + pc11 * 5))
 					data.effMult = this.eff(eff, pc11)
 				}
-				if (PCs.milestoneDone(13)) data.dilaterEff = qc1.dilaters / 5 + 1
+				if (PCs.milestoneDone(12)) data.dilaterEff = Decimal.pow(10, (Math.pow(1.5, qc1.dilaters) - 1) * 1e6)
 				if (QCs.perkActive(1)) data.effMult = Math.pow(data.effMult, data.effExp / 2 + 0.5)
 
 				//Replicanti Limit
-				if (PCs.milestoneDone(12)) data.lim = data.lim.pow(Math.log2(qc1.expands + 1) / 10 + 1)
+				if (PCs.milestoneDone(13)) data.lim = data.lim.pow(Math.log2(qc1.expands + 1) / 10 + 1)
 				data.lim = data.lim.max(Decimal.pow(10, 1.5e6 * distantBoosts))
 
 				//Replicanti Release
@@ -221,8 +221,8 @@ var QCs = {
 
 			updateDisp() {		
 				getEl("replCompressDiv").style.display = QCs_tmp.qc1 ? "" : "none"
-				getEl("repExpand").style.display = PCs.milestoneDone(12) ? "" : "none"
-				getEl("replDilaterDiv").style.display = PCs.milestoneDone(13) ? "" : "none"
+				getEl("repExpand").style.display = PCs.milestoneDone(13) ? "" : "none"
+				getEl("replDilaterDiv").style.display = PCs.milestoneDone(12) ? "" : "none"
 
 				if (!tmp.ngp3) return
 				if (!QCs_save) return
@@ -247,15 +247,15 @@ var QCs = {
 					getEl("replCompress").textContent = getFullExpansion(qc1.boosts) + (data.extra() > 0 ? " + " + shorten(data.extra()) : "")
 					getEl("replCompressEff").textContent = "^" + shorten(QCs_tmp.qc1.effExp) + ", x" + shorten(QCs_tmp.qc1.effMult)
 				}
-				if (PCs.milestoneDone(12)) {
+				if (PCs.milestoneDone(13)) {
 					getEl("repExpand").innerHTML = "Energize the Replicantis and expand their space." +
 						"<br>Cost: " + shorten(data.expandCost()) + " Replicanti Energy" +
 						"<br>(" + getFullExpansion(qc1.expands) + " Expansions)"
 					getEl("repExpand").className = data.canExpand() ? "storebtn" : "unavailablebtn"
 				}
-				if (PCs.milestoneDone(13)) {
+				if (PCs.milestoneDone(12)) {
 					getEl("replDilater").textContent = getFullExpansion(qc1.dilaters)
-					getEl("replDilaterEff").textContent = formatReductionPercentage(QCs_tmp.qc1.dilaterEff) + "%"
+					getEl("replDilaterEff").textContent = shortenCosts(QCs_tmp.qc1.dilaterEff)
 				}
 			},
 
@@ -463,10 +463,10 @@ var QCs = {
 
 				QCs_tmp.qc5 = {
 					mult: new Decimal(QCs_save.qc1.boosts + 1),
-					eff: Math.pow(QCs_save.qc5.div(2e6).add(1).log(2), 12 / 7) * 5
+					eff: Math.log10(QCs_save.qc5.div(2e6).add(1).log(2) + 1) / 5 + 1
 				}
 				if (QCs.isRewardOn(6)) QCs_tmp.qc5.mult = QCs_tmp.qc5.mult.times(QCs_tmp.rewards[6])
-				if (QCs.perkActive(5)) QCs_tmp.qc5.eff *= 2
+				if (QCs.perkActive(5)) QCs_tmp.qc5.eff = QCs_tmp.qc5.eff * 2 - 1
 			},
 
 			updateDisp() {		

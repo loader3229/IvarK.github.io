@@ -94,7 +94,7 @@ var softcap_data = {
 			func: "log",
 			start: new Decimal(1e12),
 			pow: 6,
-			mul: 100 / 12
+			mul: 90 / 12
 		},
 	},
 	ma: {
