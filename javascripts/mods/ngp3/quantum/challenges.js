@@ -114,7 +114,7 @@ var QCs = {
 				if (!QCs_tmp.qc1) return false
 
 				if (QCs.perkActive(1) && (qc1.boosts == 0 || qc1.time >= 5 )) qc1.perkBoosts++
-				if (PCs.milestoneDone(12) && (player.dilation.active || qc1.time <= 15 || qc1.dilaters / qc1.boosts < 0.75)) {
+				if (PCs.milestoneDone(12) && (player.dilation.active || qc1.time <= 50 || qc1.dilaters / qc1.boosts < 0.75)) {
 					updateReplicantiTemp()
 					qc1.dilaters++
 				}
