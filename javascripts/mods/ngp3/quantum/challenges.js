@@ -114,7 +114,7 @@ var QCs = {
 				if (!QCs_tmp.qc1) return false
 
 				if (QCs.perkActive(1) && (qc1.boosts == 0 || qc1.time >= 5 )) qc1.perkBoosts++
-				if (PCs.milestoneDone(12) && (player.dilation.active || qc1.time <= 5 || qc1.dilaters / qc1.boosts < 2/5)) {
+				if (PCs.milestoneDone(12) && (player.dilation.active || qc1.time <= 15 || qc1.dilaters / qc1.boosts < 0.75)) {
 					updateReplicantiTemp()
 					qc1.dilaters++
 				}
@@ -182,7 +182,7 @@ var QCs = {
 					data.scalingExp = 1 / (1 + boosts / (20 + pc11 * 5))
 					data.effMult = this.eff(eff, pc11)
 				}
-				if (PCs.milestoneDone(12)) data.dilaterEff = Decimal.pow(10, (Math.pow(1.5, qc1.dilaters) - 1) * 1e6)
+				if (PCs.milestoneDone(12)) data.dilaterEff = 1 - 1 / (qc1.dilaters / 3 + 1)
 				if (QCs.perkActive(1)) data.effMult = Math.pow(data.effMult, data.effExp / 2 + 0.5)
 
 				//Replicanti Limit
@@ -255,7 +255,7 @@ var QCs = {
 				}
 				if (PCs.milestoneDone(12)) {
 					getEl("replDilater").textContent = getFullExpansion(qc1.dilaters)
-					getEl("replDilaterEff").textContent = shortenCosts(QCs_tmp.qc1.dilaterEff)
+					getEl("replDilaterEff").textContent = "^" + QCs_tmp.qc1.dilaterEff.toFixed(3)
 				}
 			},
 

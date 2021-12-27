@@ -115,14 +115,21 @@ function getReplMult(next) {
 }
 
 function upgradeReplicantiChance() {
-	if (player.infinityPoints.gte(player.replicanti.chanceCost) && isChanceAffordable() && player.eterc8repl > 0) {
-		if (pH.did("ghostify")) if (player.ghostify.milestones < 11) player.infinityPoints = player.infinityPoints.minus(player.replicanti.chanceCost)
-		else player.infinityPoints = player.infinityPoints.minus(player.replicanti.chanceCost)
+	let cost = getRepChanceCost()
+	if (player.infinityPoints.gte(cost) && isChanceAffordable() && player.eterc8repl > 0) {
+		if (pH.did("ghostify")) if (player.ghostify.milestones < 11) player.infinityPoints = player.infinityPoints.minus(cost())
+		else player.infinityPoints = player.infinityPoints.minus(cost())
 		player.replicanti.chance = Math.round(player.replicanti.chance * 100 + 1) / 100
 		if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
 		getEl("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
 		player.replicanti.chanceCost = player.replicanti.chanceCost.times(1e15)
 	}
+}
+
+function getRepChanceCost() {
+	let r = player.replicanti.chanceCost
+	if (PCs.milestoneDone(12)) r = r.div(getRepCostDivisor().pow(QCs_tmp.qc1.dilaterEff))
+	return r
 }
 
 function isChanceAffordable() {
@@ -156,12 +163,21 @@ function replicantiIntervalCost(interval) {
 	} else {
 		expCost = x.div(1e3).log(0.9) * 10 + 140
 	}
-	return Decimal.pow(10, expCost)
+
+	let r = Decimal.pow(10, expCost)
+	if (PCs.milestoneDone(12)) r = r.div(getRepCostDivisor().pow(QCs_tmp.qc1.dilaterEff))
+	return r
 }
 
 function isIntervalAffordable() {
 	if (hasMTS(282)) return player.replicanti.interval > 1e-12
 	return player.replicanti.interval > (hasTS(22) || player.boughtDims ? 1 : 50)
+}
+
+function getRepCostDivisor() {
+	let ret = new Decimal(1)
+	if (hasTS(233)) ret = ret.times(tsMults[233]())
+	return ret
 }
 
 function getRGCost(offset = 0, costChange) {
@@ -194,8 +210,8 @@ function getRGCost(offset = 0, costChange) {
 		ret = ret.times(Decimal.pow(10, increase))
 	}
 
-	if (hasTS(233) && !costChange) ret = ret.dividedBy(tsMults[233]())
-
+	let div = getRepCostDivisor()
+	if (!costChange && div.gt(1)) ret = ret.dividedBy(div)
 	return ret
 }
 

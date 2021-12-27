@@ -663,9 +663,9 @@ function repApproxDisplay() {
 function repChanceDisplay() {
 	//CHANCE
 	let chance = tmp.rep.chance
-	let chanceDisplayEnding = (isChanceAffordable() && player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1% Cost: " + shortenCosts(player.replicanti.chanceCost) + " IP" : "")
+	let chanceDisplayEnding = (isChanceAffordable() && player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1% Cost: " + shortenCosts(getRepChanceCost()) + " IP" : "")
 	getEl("replicantichance").innerHTML = "Replicate " + (tmp.rep.freq ? "amount: " + shorten(tmp.rep.freq) + "x" : "chance: " + formatPercentage(chance, 0) + "%") + chanceDisplayEnding
-	getEl("replicantichance").className = (player.infinityPoints.gte(player.replicanti.chanceCost) && isChanceAffordable()) ? "storebtn" : "unavailablebtn"
+	getEl("replicantichance").className = (player.infinityPoints.gte(getRepChanceCost()) && isChanceAffordable()) ? "storebtn" : "unavailablebtn"
 }
 
 function repIntervalDisplay() {
@@ -675,7 +675,7 @@ function repIntervalDisplay() {
 	getEl("replicantiinterval").innerHTML = "Interval: " + timeDisplayShort(interval, true, 3) +
 		(isIntervalAffordable() && player.infinityPoints.lt(Decimal.pow(10, 1e10)) ?
 			"<br> -> " + timeDisplayShort(interval.times(getReplicantiBaseInterval(baseInt, 1).div(getReplicantiBaseInterval(baseInt))), true, 3) + 
-			" Cost: " + shortenCosts(player.replicanti.intervalCost) + " IP"
+			" Cost: " + shortenCosts(replicantiIntervalCost(baseInt)) + " IP"
 		: "")
 	getEl("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable()) ? "storebtn" : "unavailablebtn"
 }

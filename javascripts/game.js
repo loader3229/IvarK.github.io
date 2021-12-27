@@ -3460,7 +3460,7 @@ function replicantiShopABRun() {
 	if (getEternitied() >= 40 && (player.replicanti.auto[0]) && player.currentEternityChall !== "eterc8" && isChanceAffordable()) {
 		var chance = Math.round(player.replicanti.chance * 100)
 		var maxCost = hasMTS(265) ? 1 / 0 : new Decimal("1e1620").div(tmp.ngmX == 2 ? 1e60 : 1);
-		var bought = Math.max(Math.floor(player.infinityPoints.min(maxCost).div(player.replicanti.chanceCost).log(1e15) + 1), 0)
+		var bought = Math.max(Math.floor(player.infinityPoints.min(maxCost).div(getRepChanceCost()).log(1e15) + 1), 0)
 		if (!hasMTS(265)) bought = Math.min(bought, 100 - chance)
 		player.replicanti.chance = (chance + bought) / 100
 		player.replicanti.chanceCost = player.replicanti.chanceCost.times(Decimal.pow(1e15, bought))
