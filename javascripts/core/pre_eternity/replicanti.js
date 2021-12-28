@@ -492,7 +492,7 @@ function updateReplicantiTemp() {
 
 	data.baseChance = Math.round(player.replicanti.chance * 100)
 	if (enB.active("glu", 5)) data.baseChance = Math.pow(data.baseChance, enB_tmp.glu5.exp)
-	if (ff.unl()) data.baseChance = Math.pow(data.baseChance, ff_tmp.eff.f1)
+	if (PCs.milestoneDone(33) && enB_tmp.pos2) data.baseChance = Math.pow(data.baseChance, Math.min(Math.log10(enB_tmp.pos2.mult.log10() / 30 + 1) + 1, 10))
 	data.baseChance *= enB.glu[5].adjustChance(data.str)
 
 	let pow = 1

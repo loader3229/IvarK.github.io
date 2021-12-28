@@ -244,12 +244,12 @@ function doFluctuateResetStuff(layer = 6) {
 		gb: new Decimal(0),
 		br: new Decimal(0),
 	}
-	if (qMs.tmp.amt < 28) qu_save.entLvl = 0
+	if (!qMs.isObtained(27)) qu_save.entLvl = 0
 
-	if (qMs.tmp.amt < 30) str.reset()
-	if (qMs.tmp.amt < 29) PCs.reset()
-	QCs.reset(qMs.tmp.amt < 28)
-	if (qMs.tmp.amt < 29) pos.reset()
+	if (!qMs.isObtained(29)) str.reset()
+	if (!qMs.isObtained(28)) PCs.reset()
+	QCs.reset(!qMs.isObtained(27))
+	if (!qMs.isObtained(28)) pos.reset()
 
 	fluc_save.bestAM = new Decimal(0)
 	fluc_save.time = 0

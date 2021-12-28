@@ -3610,7 +3610,7 @@ function givePerSecondNeuts(){
 function doPerSecondNGP3Stuff(){
 	if (!tmp.ngp3) return
 
-	if (qMs.tmp.amt >= 27) QCs.data[1].autoExpand()
+	if (PCs.milestoneDone(13)) QCs.data[1].autoExpand()
 
 	doNGP3UnlockStuff()
 	notifyGhostifyMilestones()

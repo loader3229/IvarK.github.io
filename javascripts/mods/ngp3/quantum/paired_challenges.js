@@ -21,6 +21,7 @@ var PCs = {
 
 		13: "Unlock Replicated Expanders.",
 		23: "Color Charge multiplies its respective efficency by 10%.",
+		33: "Meta Accelerator raises Replicate Chance to an exponent.",
 		43: "Tier 1 - 2 charges are closer to Tier 3.",
 		53: "Compressor Time raises Replicanti Stealth to Chance.",
 		63: "QC6 reward decay is 5x slower.",
