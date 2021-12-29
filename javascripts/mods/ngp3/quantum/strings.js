@@ -44,13 +44,14 @@ let str = {
 
 		data.alt = {}
 		data.disable = {}
+		data.lastVibrate = 0
 		data.vibrated = vibrated.length
 		for (var i = 0; i < data.vibrated; i++) this.onVibrate(vibrated[i])
 		str_save.spent = str.veCost(data.vibrated)
 
 		//Powers
 		data.powers = {}
-		for (var i = 1; i <= 12; i++) {
+		for (var i = 1; i <= 18; i++) {
 			var pow = Math.ceil(i / 4)
 			data.powers[pow] = (data.powers[pow] || 0) + this.altitude(i)
 		}
@@ -66,7 +67,7 @@ let str = {
 		if (!unl) return
 		if (!str_tmp.setupHTML) return
 
-		for (var e = 1; e <= 12; e++) {
+		for (var e = 1; e <= 18; e++) {
 			var pos = this.data.pos[id]
 			var alt = this.altitude(e)
 			getEl("str_" + e + "_altitude").textContent = alt.toFixed(3)
@@ -88,9 +89,9 @@ let str = {
 		getEl("str_ve").textContent = shorten(ve)
 		getEl("str_ve_based").textContent = shiftDown ? "(based on Quantum Energy, Replicanti Energy, and PC level)" : ""
 
-		for (var i = 1; i <= 12; i++) {
+		for (var i = 1; i <= 18; i++) {
 			var alt = str.altitude(i)
-			getEl("str_" + i + "_eff").textContent = (alt < 0 ? "-" : "+") + shorten(Math.abs(alt) * str_tmp.str) + " to " + str.data.names[Math.ceil(i / 4) - 1]
+			getEl("str_" + i + "_eff").textContent = (alt < 0 ? "-" : "+") + shorten(Math.abs(alt) * str_tmp.str) + " to " + str.data.names[Math.ceil(i / 6) - 1]
 			getEl("str_" + i).className = (str_save.vibrated.includes(i) ? "chosenbtn" : str.canVibrate(i) ? "storebtn" : "unavailablebtn") + " pos_btn"
 		}
 
@@ -98,10 +99,10 @@ let str = {
 			var pow = str_tmp.powers[p]
 			getEl("str_" + p + "_power").textContent = str.data.names[p-1] + ": " + (pow < 0 ? "-" : "") + shorten(Math.abs(pow) * str_tmp.str)
 
-			var pb_nerf = str.nerf_pb(p * 4)
-			getEl("str_" + p + "_eb_eff").textContent = shorten(str.eff_eb(p * 4)) + "x stronger to Entangled Boosts " + (p * 4 - 3) + " - " + (p * 4)
-			getEl("str_" + p + "_eb_nerf").innerHTML = pow < 0 ? "<b class='warning'>Effective at " + shorten(str.nerf_eb(p * 4)) + " Quantum Power</b>" : ""
-			getEl("str_" + p + "_pb_eff").textContent = "+" + shorten(str.eff_pb(p * 4)) + "x charge multiplier to Positronic Boosts " + (p * 4 - 3) + " - " + (p * 4)
+			var pb_nerf = str.nerf_pb(p * 6)
+			getEl("str_" + p + "_eb_eff").textContent = shorten(str.eff_eb(p * 6)) + "x stronger to Entangled Boosts " + (p * 6 - 5) + " - " + (p * 6)
+			getEl("str_" + p + "_eb_nerf").innerHTML = pow < 0 ? "<b class='warning'>Effective at " + shorten(str.nerf_eb(p * 6)) + " Quantum Power</b>" : ""
+			getEl("str_" + p + "_pb_eff").textContent = "+" + shorten(str.eff_pb(p * 6)) + "x charge multiplier to Positronic Boosts " + (p * 6 - 5) + " - " + (p * 6)
 			getEl("str_" + p + "_pb_nerf").innerHTML = pb_nerf == 1 ? "" : "<b class='" + (pb_nerf < 1 ? "charged" : "warning") + "'>" + (pb_nerf < 1 ? "/" + shorten(1 / pb_nerf) : shorten(pb_nerf) + "x") + " charge requirement</b>"
 		}
 		getEl("str_strength").textContent = shiftDown ? "Manifold Surgery: " + shorten(str_tmp.str) + "x strength to String boosts" : ""
@@ -115,7 +116,7 @@ let str = {
 	setupBoost(x) {
 		return '<div class="str_boost' + '" id="str_' + x + '_div">' +
 			'<button id="str_' + x + '" onclick="str.vibrate(' + x + ')">' +
-			'<b>' + str.data.letters[Math.ceil(x / 4) - 1] + ((x - 1) % 4 + 1) + '</b><br>' +
+			'<b>' + str.data.letters[Math.ceil(x / 6) - 1] + ((x - 1) % 6 + 1) + '</b><br>' +
 			'<span id="str_' + x + '_eff"></span></button>' +
 			'<br><span id="str_' + x + '_altitude"></span></div>'
 	},
@@ -124,7 +125,7 @@ let str = {
 		str_tmp.setupHTML = true
 
 		var html = ""
-		for (var e = 1; e <= 12; e++) html += this.setupBoost(e)
+		for (var e = 1; e <= 18; e++) html += this.setupBoost(e)
 		getEl("str_boosts").innerHTML = html
 
 		str.updateDisp()
@@ -147,7 +148,7 @@ let str = {
 
 	//Vibrations
 	canVibrate(x) {
-		return str_save.energy >= str.veCost(str_tmp.vibrated + 1)
+		return str_save.energy >= str.veCost(str_tmp.vibrated + 1) &&  str_tmp.lastVibrate + 3 >= x
 	},
 	vibrate(x) {
 		var vibrated = str_save.vibrated
@@ -180,6 +181,7 @@ let str = {
 			if (fluc.unl() && fluc_tmp.temp && add < 0) add /= fluc_tmp.temp
 			str_tmp.alt[y] = (str_tmp.alt[y] || 0) + add
 		}
+		str_tmp.lastVibrate = Math.max(str_tmp.lastVibrate, x)
 	},
 
 	//Altitudes
@@ -191,7 +193,7 @@ let str = {
 	},
 	eff(x) {
 		if (!str.unl()) return 0
-		let r = str_tmp.powers[Math.ceil(x / 4)]
+		let r = str_tmp.powers[Math.ceil(x / 6)]
 		if (r < 0) r *= 1.5
 		r *= str_tmp.str / 4
 		return r

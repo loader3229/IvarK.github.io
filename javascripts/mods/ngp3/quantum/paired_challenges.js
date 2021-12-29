@@ -28,14 +28,14 @@ var PCs = {
 		73: "Remove the second softcap of TT generation.",
 		83: "Unlock the first Omega Set.",
 
-		14: "Unlock a new Perk.",
-		24: "Unlock a new Perk.",
-		34: "Unlock a new Perk.",
-		44: "Unlock a new Perk.",
-		54: "Unlock a new Perk.",
-		64: "Unlock a new Perk.",
-		74: "Unlock a new Perk.",
-		84: "Unlock a new Perk.",
+		14: "Perk: Gain extra Compressors on quick Compressing",
+		24: "Perk: Mastery is stronger, but requires more",
+		34: "Perk: Start with 1 TP and EP boosts Meta Dimensions",
+		44: "Perk: Disable galaxies separately in dilation",
+		54: "Perk: Double the Replicanti Energy effects",
+		64: "Perk: Eternity time is 5x slower",
+		74: "Perk: Temporaily convert base RGs into extra base RGs",
+		84: "Perk: Master the Entangled Boosts that are matched",
 
 		15: "Compressing keeps you dilated, and also give you 1 Dilater.",
 	},
@@ -463,6 +463,7 @@ var PCs = {
 		}
 		getEl("pc_info").style.display = PCs_save.lvl == 1 ? "none" : ""
 		getEl("pctabbtn_milestone").style.display = PCs_save.lvl == 1 ? "none" : ""
+		getEl("pctabbtn_perk").style.display = PCs_save.lvl < 4 ? "none" : ""
 
 		getEl("pc_enter").style.display = PCs_tmp.pick ? "none" : ""
 		getEl("pc_omega").style.display = PCs_tmp.pick >= 50 ? "" : "none"

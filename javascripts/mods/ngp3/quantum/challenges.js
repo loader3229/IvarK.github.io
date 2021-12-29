@@ -499,7 +499,7 @@ var QCs = {
 				return x
 			},
 
-			perkDesc: (x) => "Start with 5s Eternity time, but Eternity time is 2x slower.",
+			perkDesc: (x) => "Eternity time is 5x slower.",
 			perkEff() {
 				return 1
 			},
@@ -546,7 +546,7 @@ var QCs = {
 				return 1
 			},
 
-			perkDesc: (x) => "For Entangled Boosts that are matched with your entanglement, they get mastered.",
+			perkDesc: (x) => "Master the Entangled Boosts that are matched.",
 			perkEff() {
 				return 1
 			},
@@ -758,7 +758,7 @@ var QCs = {
 
 		//Perks
 		getEl("qc_perks").style.display = hasAch("ng3pr12") ? "inline" : "none"
-		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Perks'
+		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Perks [moving soon]'
 		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Perks only work in any Quantum Challenge!' : ""
 
 		getEl("disable_qc2_perk").style.display = this.perkUnl(2) ? "" : "none"
