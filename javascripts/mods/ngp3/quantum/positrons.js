@@ -53,7 +53,7 @@ var pos = {
 				eg: {sac: 0, qe: 0, pc: 0},
 				tg: {sac: 0, qe: 0, pc: 0}
 			},
-			eng: new Decimal(0),
+			eng: E(0),
 			lvl: 0,
 			swaps: {}
 		}
@@ -77,7 +77,7 @@ var pos = {
 		}
 		if (!data.swaps) data.swaps = {}
 
-		data.eng = new Decimal(data.eng)
+		data.eng = E(data.eng)
 
 		if (data.consumedQE) delete data.consumedQE
 		if (data.sacGals) delete data.sacGals
@@ -107,7 +107,7 @@ var pos = {
 	setupHTML() {
 		var html = ""
 		for (var i = 1; i <= enB.pos.max; i++) html += this.getCloudBtn(i)
-		getEl("pos_cloud1_boosts").innerHTML = html
+		el("pos_cloud1_boosts").innerHTML = html
 	},
 
 	updateTmp() {
@@ -143,7 +143,7 @@ var pos = {
 		let data = pos_tmp
 
 		//Meta Dimension Boosts or Quantum Energy -> Positrons
-		eng = new Decimal(0)
+		eng = E(0)
 		if (this.on()) {
 			let mdbStart = 0
 			let mdbMult = pos_tmp.mults.mdb
@@ -180,15 +180,15 @@ var pos = {
 		else eng = Decimal.pow(pcSum, pos_tmp.mults.pc_exp)
 		if (futureBoost("potential_strings") && dev.boosts.tmp[3]) eng = eng.times(dev.boosts.tmp[3])
 
-		pos_save.eng = isNaN(eng.e) ? new Decimal(0) : eng
+		pos_save.eng = isNaN(eng.e) ? E(0) : eng
 
 		this.updateUndercharged()
 	},
 
 	updateTab() {
-		getEl("pos_formula").textContent = getFullExpansion(pos_tmp.sac.mdb) + " Meta Dimension Boosts + " + shorten(pos_tmp.sac.qe) + " Quantum Energy ->"
-		getEl("pos_toggle").textContent = pos_save.on ? "ON" : "OFF"
-		getEl("pos_amt").textContent = getFullExpansion(pos_save.amt)
+		el("pos_formula").textContent = getFullExpansion(pos_tmp.sac.mdb) + " Meta Dimension Boosts + " + shorten(pos_tmp.sac.qe) + " Quantum Energy ->"
+		el("pos_toggle").textContent = pos_save.on ? "ON" : "OFF"
+		el("pos_amt").textContent = getFullExpansion(pos_save.amt)
 
 		let types = ["ng", "rg", "eg", "tg"]
 		let msg = []
@@ -197,25 +197,25 @@ var pos = {
 			var gals = pos_save.gals[type].sac
 			if (gals > 0 || type == "ng") msg.push(getFullExpansion(gals) + " sacrificed " + pos.data.types[type].galName)
 		}
-		getEl("pos_charge_formula").innerHTML = wordizeList(msg, false, " +<br>", false) + " -> "
+		el("pos_charge_formula").innerHTML = wordizeList(msg, false, " +<br>", false) + " -> "
 
 		enB.updateOnTick("pos")
 		if (!pos_tmp.cloud.shown) {
-			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "(^" + (1 / enB_tmp.pos4).toFixed(3) + ")"
-			if (enB.has("pos", 7)) getEl("enB_pos2_mention_1").textContent = enB.name("pos", 2)
-			if (enB.has("pos", 11)) getEl("enB_pos11_info").textContent = "(x^" + (enB_tmp.pos11.exp == 0 ? 0 : "1/" + shorten(1 / enB_tmp.pos11.exp)) + ")"
-			if (enB.has("pos", 12)) getEl("enB_pos2_mention_2").textContent = enB.name("pos", 2)
+			if (enB.has("pos", 4)) el("enB_pos4_exp").textContent = "(^" + (1 / enB_tmp.pos4).toFixed(3) + ")"
+			if (enB.has("pos", 7)) el("enB_pos2_mention_1").textContent = enB.name("pos", 2)
+			if (enB.has("pos", 11)) el("enB_pos11_info").textContent = "(x^" + (enB_tmp.pos11.exp == 0 ? 0 : "1/" + shorten(1 / enB_tmp.pos11.exp)) + ")"
+			if (enB.has("pos", 12)) el("enB_pos2_mention_2").textContent = enB.name("pos", 2)
 
 			for (var i = 1; i <= enB.pos.max; i++) {
 				if (!enB.has("pos", i)) return
-				getEl("enB_pos" + i).className = enB.color(i, "pos")
+				el("enB_pos" + i).className = enB.color(i, "pos")
 			}
 		}
 		if (pos_tmp.cloud.shown) {
 			for (var i = 1; i <= enB.pos.max; i++) {
 				if (!enB.mastered("pos", i)) continue
 
-				getEl("pos_boost" + i + "_btn").setAttribute('ach-tooltip', "Boost: " + enB.pos[i].dispFull(enB_tmp["pos" + i]) + (enB.pos.charged(i) ? "\nCharge: " + shortenDimensions(enB.pos.chargeEff(i)) + "x stronger" : ""))
+				el("pos_boost" + i + "_btn").setAttribute('ach-tooltip', "Boost: " + enB.pos[i].dispFull(enB_tmp["pos" + i]) + (enB.pos.charged(i) ? "\nCharge: " + shortenDimensions(enB.pos.chargeEff(i)) + "x stronger" : ""))
 				if (enB.mastered("pos", i)) pos.updateCharge(i)
 			}
 		}
@@ -223,9 +223,9 @@ var pos = {
 	switchTab() {
 		var shown = !pos_tmp.cloud.shown
 		pos_tmp.cloud.shown = shown
-		getEl("pos_boost_div").style.display = !shown ? "" : "none"
-		getEl("pos_cloud_div").style.display = shown ? "" : "none"
-		getEl("pos_tab").textContent = shown ? "Show boosts" : "Show cloud"
+		el("pos_boost_div").style.display = !shown ? "" : "none"
+		el("pos_cloud_div").style.display = shown ? "" : "none"
+		el("pos_tab").textContent = shown ? "Show boosts" : "Show cloud"
 	},
 
 	//Charging
@@ -234,12 +234,12 @@ var pos = {
 		var match = enB.pos.lvl(i, true) == lvl
 		var charged = match && enB.pos.charged(i)
 		var undercharged = match && this.isUndercharged(i)
-		getEl("pos_boost" + i + "_charge").textContent = undercharged ?
+		el("pos_boost" + i + "_charge").textContent = undercharged ?
 			(shiftDown ? shortenMoney(enB.pos.chargeEff(i)) + "x Undercharged!" :
 			"Undercharged! (Switch to Tier " + pos_tmp.undercharged[i] + ")") :
 			charged ? shortenMoney(enB.pos.chargeEff(i)) + "x Charged" :
 			"Charge: " + shorten(enB.pos.chargeReq(i, true))
-		getEl("pos_boost" + i + "_charge").className = undercharged ? "undercharged" : charged ? "charged" : ""
+		el("pos_boost" + i + "_charge").className = undercharged ? "undercharged" : charged ? "charged" : ""
 	},
 	isUndercharged(x) {
 		return pos_tmp.undercharged[x] !== undefined
@@ -293,18 +293,18 @@ var pos = {
 			var has = enB.mastered("pos", i)
 			var excluded = pos.excluded(i)
 
-			getEl("pos_boost" + i + "_btn").style.display = has ? "" : "none"
+			el("pos_boost" + i + "_btn").style.display = has ? "" : "none"
 			if (has) {
-				if (data.div[i] != nextLvl) getEl("pos_cloud" + nextLvl + "_boosts").appendChild(getEl("pos_boost" + i + "_btn"))
+				if (data.div[i] != nextLvl) el("pos_cloud" + nextLvl + "_boosts").appendChild(el("pos_boost" + i + "_btn"))
 				data.div[i] = nextLvl
 
-				getEl("pos_boost" + i + "_btn").className = (pos_tmp.cloud.chosen ? 
+				el("pos_boost" + i + "_btn").className = (pos_tmp.cloud.chosen ? 
 					(pos_tmp.cloud.chosen == i ? "chosenbtn" : this.canSwap(i) ? "storebtn" : "unavailablebtn") :
 					excluded ? "unavailablebtn" :
 					data.next[i] ? (nextLvl > originalLvl ? "chosenbtn3" : "chosenbtn") :
 					lvl != nextLvl ? "chosenbtn2" : "storebtn"
 				) + " pos_btn"
-				getEl("pos_boost" + i + "_excite").innerHTML = (lvl != nextLvl ? "(Next: " + lvl + " -> " + nextLvl + ")" : "Tier " + originalLvl + (originalLvl != lvl ? " -> " + lvl : "") + (pos_tmp.cloud.chosen == i ? "<br>(Selected)" : originalLvl != lvl ? "<br>(from PB" + pos_save.swaps[i] + ")" : ""))
+				el("pos_boost" + i + "_excite").innerHTML = (lvl != nextLvl ? "(Next: " + lvl + " -> " + nextLvl + ")" : "Tier " + originalLvl + (originalLvl != lvl ? " -> " + lvl : "") + (pos_tmp.cloud.chosen == i ? "<br>(Selected)" : originalLvl != lvl ? "<br>(from PB" + pos_save.swaps[i] + ")" : ""))
 				data[lvl] = (data[lvl] || 0) + 1
 
 				if (originalLvl != lvl) data.swaps_amt++
@@ -317,22 +317,22 @@ var pos = {
 		data.sum = data.total + data.exclude
 
 		for (var i = 1; i <= 3; i++) {
-			getEl("pos_cloud" + i + "_cell").innerHTML = "<b>Tier " + i + ": " + (data[i] || 0) + " / " + i * 2 + "</b>"
-			getEl("pos_cloud" + i + "_cell").className = "pos_tier " + (data[i] >= i * 2 ? "green" : "")
-			getEl("pos_cloud" + i + "_cell").style.display = data[i] ? "" : "none"
+			el("pos_cloud" + i + "_cell").innerHTML = "<b>Tier " + i + ": " + (data[i] || 0) + " / " + i * 2 + "</b>"
+			el("pos_cloud" + i + "_cell").className = "pos_tier " + (data[i] >= i * 2 ? "green" : "")
+			el("pos_cloud" + i + "_cell").style.display = data[i] ? "" : "none"
 		}
-		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " disabled" : "")
+		el("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " disabled" : "")
 
 		//Unlocks
 		var unl = enB.pos.amt() >= 7
 		if (!unl) data.shown = false
 
-		getEl("pos_tab").style.display = unl ? "" : "none"
-		getEl("pos_tab").textContent = data.shown ? "Show boosts" : "Show cloud"
-		getEl("pos_boost_div").style.display = !data.shown ? "" : "none"
-		getEl("pos_cloud_div").style.display = data.shown ? "" : "none"
-		getEl("pos_cloud_req").innerHTML = unl ? "" : "<br>To unlock Positronic Cloud, you need to get Level " + getFullExpansion(enB.pos.amt()) + " / " + getFullExpansion(7) + "."
-		getEl("pos_cloud_disabled").style.display = this.swapsDisabled() ? "" : "none"
+		el("pos_tab").style.display = unl ? "" : "none"
+		el("pos_tab").textContent = data.shown ? "Show boosts" : "Show cloud"
+		el("pos_boost_div").style.display = !data.shown ? "" : "none"
+		el("pos_cloud_div").style.display = data.shown ? "" : "none"
+		el("pos_cloud_req").innerHTML = unl ? "" : "<br>To unlock Positronic Cloud, you need to get Level " + getFullExpansion(enB.pos.amt()) + " / " + getFullExpansion(7) + "."
+		el("pos_cloud_disabled").style.display = this.swapsDisabled() ? "" : "none"
 	},
 	getCloudBtn: (x) => ('<button id="pos_boost' + x + '_btn" onclick="pos.swap(' + x + ')">' +
 							'<span>' +

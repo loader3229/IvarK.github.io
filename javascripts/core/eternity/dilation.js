@@ -24,7 +24,7 @@ function buyDilationStudy(name) {
 		}
 		player.dilation.studies.push(name)
 		player.timestudy.theorem -= dsStudyCosts[name]()
-		getEl("dilstudy"+name).className = "dilationupgbought"
+		el("dilstudy"+name).className = "dilationupgbought"
 		updateTimeStudyButtons(true)
 		drawStudyTree()
 	}
@@ -126,7 +126,7 @@ function getTPMult() {
 	//NG Condensed
 	if (tmp.ngC) {
 		if (player.dilation.rebuyables[6]) ret = ret.times(Decimal.pow(getDil6Base(), getDilUpgPower(6)))
-		if (hasDilationUpg("ngpp2")) ret = ret.times(Decimal.mul(nA(getEternitied(), 1), player.dilation.dilatedTime.plus(1).sqrt()).log10()+1)
+		if (hasDilationUpg("ngpp2")) ret = ret.times(Decimal.mul(c_add(getEternitied(), 1), player.dilation.dilatedTime.plus(1).sqrt()).log10()+1)
 	}
 	return ret
 }
@@ -157,7 +157,7 @@ function getTPGain() {
 
 	let amLog = player.money.log10()
 	let amLogEff = getAMEffToTP()
-	if (amLog < 1 / amLogEff) return new Decimal(0)
+	if (amLog < 1 / amLogEff) return E(0)
 
 	//Base TP
 	let gain = Decimal.pow(amLog / amLogEff, getTPExp())
@@ -197,7 +197,7 @@ function getReqForTPGainDisp() {
 }
 
 function getNGUDTGain(){
-	let gain = new Decimal(1)
+	let gain = E(1)
 	gain = gain.times(getBlackholePowerEffect())
 	if (ETER_UPGS.has(7)) gain = gain.times(1 + Math.log10(Math.max(1, player.money.log(10))) / 40)
 	if (ETER_UPGS.has(8)) gain = gain.times(1 + Math.log10(Math.max(1, player.infinityPoints.log(10))) / 20)
@@ -219,7 +219,7 @@ function getEternitiesAndDTBoostExp() {
 function getEternityBoostToDT(){
 	//Base Synergy
 	let eter = Decimal.max(getEternitied(), 1)
-	let gain = new Decimal(1)
+	let gain = E(1)
 	let baseExp = getEternitiesAndDTBoostExp()
 	if (baseExp > 0) gain = eter.pow(baseExp)
 
@@ -435,7 +435,7 @@ function getRebuyableDilUpgCost(id, lvl) {
 	if (id == 3 && tmp.ngp3_mul) costGroup[1] = 20
 
 	if (!lvl) lvl = player.dilation.rebuyables[id] || 0
-	let cost = new Decimal(costGroup[0]).times(Decimal.pow(costGroup[1], lvl))
+	let cost = E(costGroup[0]).times(Decimal.pow(costGroup[1], lvl))
 
 	if (aarMod.nguspV) {
 		if (id >= 4) cost = cost.times(1e7)
@@ -468,7 +468,7 @@ function buyDilationUpgrade(pos, max, isId) {
 		player.dilation.rebuyables[id[1]] = (player.dilation.rebuyables[id[1]] || 0) + 1
 		
 		if (id[1] == 2) {
-			if (!tmp.ngp3) player.dilation.dilatedTime = new Decimal(0)
+			if (!tmp.ngp3) player.dilation.dilatedTime = E(0)
 			resetDilationGalaxies()
 		}
 		if (id[1] >= 3) onBuyDilationUpgrade(id[1], 1)
@@ -487,17 +487,17 @@ function buyDilationUpgrade(pos, max, isId) {
 		}
 		if (id == "ngpp3" && tmp.ngp3 && !tmp.ngC) {
 			updateMilestones()
-			if (getEternitied() >= 1e9) player.dbPower = new Decimal(getDimensionBoostPower())
+			if (getEternitied() >= 1e9) player.dbPower = E(getDimensionBoostPower())
 		}
 		if (id == "ngpp6" && tmp.ngp3) {
 			setupMasteryStudiesHTML()
-			getEl("masterystudyunlock").style.display = ""
-			getEl("respecMastery").style.display = "block"
-			getEl("respecMastery2").style.display = "block"
+			el("masterystudyunlock").style.display = ""
+			el("respecMastery").style.display = "block"
+			el("respecMastery2").style.display = "block"
 			if (!quantumed) {
 				$.notify("Congratulations for unlocking Mastery Studies! You can either click the 'mastery studies' button\nor 'continue to mastery studies' button in the Time Studies menu.")
-				getEl("welcomeMessage").innerHTML = "Congratulations for reaching the end-game of NG++. In NG+3, the game keeps going with a lot of new content starting at Mastery Studies. You can either click the 'Mastery studies' tab button or 'Continue to mastery studies' button in the Time Studies menu to access the new Mastery Studies available."
-				getEl("welcome").style.display = "flex"
+				el("welcomeMessage").innerHTML = "Congratulations for reaching the end-game of NG++. In NG+3, the game keeps going with a lot of new content starting at Mastery Studies. You can either click the 'Mastery studies' tab button or 'Continue to mastery studies' button in the Time Studies menu to access the new Mastery Studies available."
+				el("welcome").style.display = "flex"
 			}
 		}
 	}
@@ -539,57 +539,57 @@ function updateDilationUpgradeButtons() {
 				DIL_UPG_UNLOCKED[id] = 1
 				updateDilationUpgradeCost(pos, id)
 			} else delete DIL_UPG_UNLOCKED[id]
-			getEl("dil" + pos).parentElement.style.display = unl ? "" : "none"
+			el("dil" + pos).parentElement.style.display = unl ? "" : "none"
 		}
-		if (unl) getEl("dil" + pos).className = hasDilationUpg(id) || (id == "r2" && !canBuyGalaxyThresholdUpg()) ? "dilationupgbought" : player.dilation.dilatedTime.gte(getDilUpgCost(id)) ? "dilationupg" : "dilationupglocked"
+		if (unl) el("dil" + pos).className = hasDilationUpg(id) || (id == "r2" && !canBuyGalaxyThresholdUpg()) ? "dilationupgbought" : player.dilation.dilatedTime.gte(getDilUpgCost(id)) ? "dilationupg" : "dilationupglocked"
 	}
 
-	getEl("dil11desc").textContent = "Currently: " + shorten(Decimal.pow(2, getDilUpgPower(1))) + "x"
-	getEl("dil12eff").textContent = "Scaling: +" + formatPercentage(getFreeGalaxyThresholdIncrease() - 1, 1, true) + "%"
+	el("dil11desc").textContent = "Currently: " + shorten(Decimal.pow(2, getDilUpgPower(1))) + "x"
+	el("dil12eff").textContent = "Scaling: +" + formatPercentage(getFreeGalaxyThresholdIncrease() - 1, 1, true) + "%"
 
 	var power = getDil3Power()
-	getEl("dil13desc").innerHTML = "You gain " + shorten(power) + "x more Tachyon Particles."
-	getEl("dil13eff").innerHTML = "Currently: " + shorten(Decimal.pow(power, getDilUpgPower(3))) + "x"
-	getEl("dil14eff").innerHTML = aarMod.nguspV ? "Currently: 3x -> " + (getDilUpgPower(4) / 2 + 3).toFixed(2) + "x" : "Currently: ^" + shorten(getTPExp()) + " -> ^" + shorten(getTPExp("post-dil4"))
+	el("dil13desc").innerHTML = "You gain " + shorten(power) + "x more Tachyon Particles."
+	el("dil13eff").innerHTML = "Currently: " + shorten(Decimal.pow(power, getDilUpgPower(3))) + "x"
+	el("dil14eff").innerHTML = aarMod.nguspV ? "Currently: 3x -> " + (getDilUpgPower(4) / 2 + 3).toFixed(2) + "x" : "Currently: ^" + shorten(getTPExp()) + " -> ^" + shorten(getTPExp("post-dil4"))
 
-	getEl("dil22desc").innerHTML = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Replicanti multiplier speeds up Time Dimensions.<br>Currently: " + shorten(tmp.rm.pow(getRepToTDExp())) + "x"
-	getEl("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
-	getEl("dil32desc").textContent = tmp.ngC ? "Replicated Condensers are 15% stronger." : "Unlock the ability to pick all the study paths from the first split."
-	getEl("dil34desc").textContent = tmp.ngC ? "Eternities, TP, & DT power up each other." : "Eternities and dilated time power up each other."
+	el("dil22desc").innerHTML = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Replicanti multiplier speeds up Time Dimensions.<br>Currently: " + shorten(tmp.rm.pow(getRepToTDExp())) + "x"
+	el("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
+	el("dil32desc").textContent = tmp.ngC ? "Replicated Condensers are 15% stronger." : "Unlock the ability to pick all the study paths from the first split."
+	el("dil34desc").textContent = tmp.ngC ? "Eternities, TP, & DT power up each other." : "Eternities and dilated time power up each other."
 
-	getEl("dil41desc").textContent = "Currently: " + shortenMoney(getTTProduction(true))+"/s"
+	el("dil41desc").textContent = "Currently: " + shortenMoney(getTTProduction(true))+"/s"
 
 	if (player.dilation.studies.includes(6)) {
-		getEl("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
-		getEl("dil52desc").textContent = "Currently: " + shortenMoney(getDil15Bonus()) + 'x';
-		getEl("dil54formula").textContent = tmp.ngp3 ? "(x^" + getDil17Exp().toFixed(4) + ")" : "(log(x)^0.5)"
-		getEl("dil54desc").textContent = "Currently: " + shortenMoney(getDil17Bonus()) + 'x';
+		el("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
+		el("dil52desc").textContent = "Currently: " + shortenMoney(getDil15Bonus()) + 'x';
+		el("dil54formula").textContent = tmp.ngp3 ? "(x^" + getDil17Exp().toFixed(4) + ")" : "(log(x)^0.5)"
+		el("dil54desc").textContent = "Currently: " + shortenMoney(getDil17Bonus()) + 'x';
 	}
-	if (player.exdilation != undefined) getEl("dil42desc").textContent = "Currently: "+shortenMoney(getD18Bonus())+"x"
+	if (player.exdilation != undefined) el("dil42desc").textContent = "Currently: "+shortenMoney(getD18Bonus())+"x"
 	if (isDilUpgUnlocked("ngusp2")) {
-		getEl("dil45desc").textContent = "Currently: +" + shortenMoney(getD21Bonus()) + " to exponent before softcap"
-		getEl("dil61desc").textContent = "Currently: " + shortenMoney(getD22Bonus()) + "x"
+		el("dil45desc").textContent = "Currently: +" + shortenMoney(getD21Bonus()) + " to exponent before softcap"
+		el("dil61desc").textContent = "Currently: " + shortenMoney(getD22Bonus()) + "x"
 	}
 	if (tmp.ngC) {
-		getEl("dil25desc").textContent = "Currently: "+shortenMoney((getDil26Mult()-1)*100)+"% stronger"
-		getEl("dil35desc").textContent = "Currently: +"+shortenMoney(getDil36Mult())
-		getEl("dil45desc").textContent = "Currently: "+shortenMoney((getDil46Mult()-1)*100)+"% stronger"
-		getEl("dil73desc").textContent = "Currently: "+shortenMoney(getDil83Mult())+"x"
-		getEl("dil75desc").textContent = "Currently: "+shortenMoney((getDil85Mult()-1)*100)+"% stronger"
+		el("dil25desc").textContent = "Currently: "+shortenMoney((getDil26Mult()-1)*100)+"% stronger"
+		el("dil35desc").textContent = "Currently: +"+shortenMoney(getDil36Mult())
+		el("dil45desc").textContent = "Currently: "+shortenMoney((getDil46Mult()-1)*100)+"% stronger"
+		el("dil73desc").textContent = "Currently: "+shortenMoney(getDil83Mult())+"x"
+		el("dil75desc").textContent = "Currently: "+shortenMoney((getDil85Mult()-1)*100)+"% stronger"
 	}
 }
 
 function updateDilationUpgradeCost(pos, id) {
-	if (id == "r2" && !canBuyGalaxyThresholdUpg()) getEl("dil" + pos + "cost").textContent = "Maxed out"
+	if (id == "r2" && !canBuyGalaxyThresholdUpg()) el("dil" + pos + "cost").textContent = "Maxed out"
 	else {
 		let r = getDilUpgCost(id)
 		if ((id == "r3" || id == "r4") && tmp.ngp3) r = shorten(r)
 		else if (id == "r3") r = formatValue(player.options.notation, getRebuyableDilUpgCost(3), 1, 1)
 		else r = shortenCosts(r)
-		getEl("dil" + pos + "cost").textContent = "Cost: " + r + " dilated time"
+		el("dil" + pos + "cost").textContent = "Cost: " + r + " dilated time"
 	}
 
-	if (id == "ngud1") getEl("dil42oom").textContent = shortenCosts(new Decimal("1e1000"))
+	if (id == "ngud1") el("dil42oom").textContent = shortenCosts(E("1e1000"))
 }
 
 function onDilationRebuyable() {
@@ -662,7 +662,7 @@ function getFreeGalaxyGainMult() {
 }
 
 function getFreeGalaxyThresholdStart() {
-	return new Decimal(1000)
+	return E(1000)
 }
 
 function resetDilationGalaxies() {
@@ -702,18 +702,18 @@ function dilateTime(auto, shortcut) {
 }
 
 function atDilationDisplay() {
-	return getEl("dilation").style.display == "block" && getEl("eternitystore").style.display == "block"
+	return el("dilation").style.display == "block" && el("eternitystore").style.display == "block"
 }
 
 function updateDilationDisplay() {
 	if (atDilationDisplay()) {
-		getEl("tachyonParticleAmount").textContent = shortenMoney(player.dilation.tachyonParticles)
+		el("tachyonParticleAmount").textContent = shortenMoney(player.dilation.tachyonParticles)
 		setAndMaybeShow('bestTP', tmp.quUnl, () => "Your best Tachyon Particles was " + shortenMoney(player.dilation.bestTP) + ".")
 
-		getEl("dilatedTimeAmount").textContent = shortenMoney(player.dilation.dilatedTime)
-		getEl("dilatedTimePerSecond").textContent = "+" + shortenMoney(getDilTimeGainPerSecond()) + "/s"
-		getEl("galaxyThreshold").textContent = shortenMoney(player.dilation.nextThreshold)
-		getEl("dilatedGalaxies").textContent = getFullExpansion(Math.floor(player.dilation.freeGalaxies))
+		el("dilatedTimeAmount").textContent = shortenMoney(player.dilation.dilatedTime)
+		el("dilatedTimePerSecond").textContent = "+" + shortenMoney(getDilTimeGainPerSecond()) + "/s"
+		el("galaxyThreshold").textContent = shortenMoney(player.dilation.nextThreshold)
+		el("dilatedGalaxies").textContent = getFullExpansion(Math.floor(player.dilation.freeGalaxies))
 
 		updateDilationRebuyableCosts()
 	}

@@ -21,7 +21,7 @@ function maxAllID() {
 			if (player.infinityPoints.lt(Decimal.pow(10, 1e10))) {
 				toBuy = Math.max(Math.floor(player.infinityPoints.div(9 - t).div(cost).times(costMult - 1).add(1).log(costMult)), 1)
 				let toSpend = Decimal.pow(costMult, toBuy).sub(1).div(costMult-1).times(cost).round()
-				if (toSpend.gt(player.infinityPoints)) player.infinityPoints = new Decimal(0)
+				if (toSpend.gt(player.infinityPoints)) player.infinityPoints = E(0)
 				else player.infinityPoints = player.infinityPoints.sub(toSpend)
 			} else toBuy = Math.floor(player.infinityPoints.div(cost).log(costMult))
 			dim.amount = dim.amount.add(toBuy * 10)
@@ -46,7 +46,7 @@ function hideMaxIDButton(onLoad = false) {
 		}
 	}
 	if (player.pSac !== undefined) hide = false
-	getEl("maxAllID").style.display = hide ? "none" : ""
+	el("maxAllID").style.display = hide ? "none" : ""
 }
 
 function infDimensionDescription(tier) {
@@ -55,7 +55,7 @@ function infDimensionDescription(tier) {
 	let tierAdd = (inNGM(5) ? 2 : 1) + tier
 	let tierMax = inNGM(5) ? 6 : 8
 
-	let toGain = new Decimal(0)
+	let toGain = E(0)
 	if (tierAdd <= tierMax) toGain = infDimensionProduction(tierAdd).div(10)
 	if (tier == 8) toGain = getECReward(7).add(toGain)
 	if (tmp.inEC12) toGain = toGain.div(getEC12Mult())
@@ -64,18 +64,18 @@ function infDimensionDescription(tier) {
 }
 
 function updateInfinityDimensions() {
-	if (getEl("dimensions").style.display == "block" && getEl("infinitydimensions").style.display == "block") {
+	if (el("dimensions").style.display == "block" && el("infinitydimensions").style.display == "block") {
 		updateInfPower()
 		for (let tier = 1; tier <= 8; ++tier) {
 			let unl = player.infDimensionsUnlocked[tier-1]
-			getEl("infRow" + tier).style.display = unl ? "" : "none"
+			el("infRow" + tier).style.display = unl ? "" : "none"
 			if (unl) {
-				getEl("infD" + tier).textContent = DISPLAY_NAMES[tier] + " Infinity Dimension x" + shortenMoney(infDimensionPower(tier));
-				getEl("infAmount" + tier).textContent = infDimensionDescription(tier);
-				getEl("infMax" + tier).textContent = (pH.did("quantum") ? '' : "Cost: ") + (player.pSac !== undefined ? shortenDimensions(player["infinityDimension" + tier].costAM) : shortenInfDimCosts(getIDCost(tier)) + " IP")
-				if (player.pSac !== undefined ? player.money.gte(player["infinityDimension"+tier].costAM) : player.infinityPoints.gte(getIDCost(tier))) getEl("infMax"+tier).className = "storebtn"
-				else getEl("infMax" + tier).className = "unavailablebtn"
-				getEl("infRow" + tier).style.visibility = "visible";
+				el("infD" + tier).textContent = DISPLAY_NAMES[tier] + " Infinity Dimension x" + shortenMoney(infDimensionPower(tier));
+				el("infAmount" + tier).textContent = infDimensionDescription(tier);
+				el("infMax" + tier).textContent = (pH.did("quantum") ? '' : "Cost: ") + (player.pSac !== undefined ? shortenDimensions(player["infinityDimension" + tier].costAM) : shortenInfDimCosts(getIDCost(tier)) + " IP")
+				if (player.pSac !== undefined ? player.money.gte(player["infinityDimension"+tier].costAM) : player.infinityPoints.gte(getIDCost(tier))) el("infMax"+tier).className = "storebtn"
+				else el("infMax" + tier).className = "unavailablebtn"
+				el("infRow" + tier).style.visibility = "visible";
 				if (tmp.ngC) ngC.condense.ids.update(tier)
 			}
 		}
@@ -86,7 +86,7 @@ function infDimensionProduction(tier) {
 	if (tier == 9) return getTimeDimensionProduction(1).pow(ECComps("eterc7") * 0.2).max(1).minus(1)
 	let dim = player["infinityDimension" + tier]
 	let ret = dim.amount
-	if (player.tickspeedBoosts !== undefined && player.currentChallenge == "postc2") return new Decimal(0)
+	if (player.tickspeedBoosts !== undefined && player.currentChallenge == "postc2") return E(0)
 	if (player.currentEternityChall == "eterc11") return ret
 	if (player.currentEternityChall == "eterc7") ret = dilates(ret.div(tmp.ngC ? 1 : player.tickspeed.div(1000)))
 	if (tmp.ngmX > 3) ret = ret.div(100)
@@ -97,7 +97,7 @@ function infDimensionProduction(tier) {
 }
 
 function getTotalIDEUMult(){
-	let mult = new Decimal(1)
+	let mult = E(1)
 	if (ETER_UPGS.has(1)) mult = mult.times(ETER_UPGS[1].mult())
 	if (ETER_UPGS.has(2)) mult = mult.times(ETER_UPGS[2].mult())
 	if (ETER_UPGS.has(3)) mult = mult.times(ETER_UPGS[3].mult())
@@ -105,7 +105,7 @@ function getTotalIDEUMult(){
 }
 
 function getInfDimPathIDMult(tier){
-	let mult = new Decimal(1)
+	let mult = E(1)
 	if (hasTimeStudy(72) && tier == 4) mult = mult.times(tmp.sacPow.pow(0.04).max(1).min("1e30000"))
 	if (hasTimeStudy(82)) mult = mult.times(Decimal.pow(1.0000109, Math.pow(getTotalDBs(), 2)).min(player.meta == undefined ? 1 / 0 : '1e80000'))
 	if (hasTimeStudy(92)) mult = mult.times(Decimal.pow(2, 600 / Math.max(player.bestEternity, 20)))
@@ -114,7 +114,7 @@ function getInfDimPathIDMult(tier){
 }
 
 function getBestUsedIDPower(){
-	let p = new Decimal(1)
+	let p = E(1)
 	for (let i = 1; i <= 8; i++){
 		if (player.infinityDimension1.amount.gt(0)) p = p.max(infDimensionPower(i))
 	}
@@ -129,8 +129,8 @@ function getStartingIDPower(tier){
 
 function infDimensionPower(tier) {
   	let dim = player["infinityDimension" + tier]
-  	if (player.currentEternityChall == "eterc2" || player.currentEternityChall == "eterc10") return new Decimal(0)
-  	if (player.currentEternityChall == "eterc11") return new Decimal(1)
+  	if (player.currentEternityChall == "eterc2" || player.currentEternityChall == "eterc10") return E(0)
+  	if (player.currentEternityChall == "eterc11") return E(1)
   
 	let mult = getStartingIDPower(tier)
   	mult = mult.times(infDimPow)
@@ -159,7 +159,7 @@ function infDimensionPower(tier) {
 	if (ECComps("eterc2") !== 0 && tier == 1) mult = mult.times(getECReward(2))
   	if (ECComps("eterc4") !== 0) mult = mult.times(getECReward(4))
 
-  	let ec9 = new Decimal(1)
+  	let ec9 = E(1)
   	if (ECComps("eterc9") !== 0) ec9 = getECReward(9)
   	if (player.galacticSacrifice === undefined) mult = mult.times(ec9)
 
@@ -176,18 +176,18 @@ function infDimensionPower(tier) {
 }
 
 function resetInfDimensions(full = (inNGM(5))) {
-	player.infinityPower = new Decimal(1)
+	player.infinityPower = E(1)
 	for (let t = 1; t <= 8; t++) {
 		let dim = player["infinityDimension" + t]
 		if (full) {
-			dim.cost = new Decimal(infBaseCost[t])
-			dim.power = new Decimal(1)
+			dim.cost = E(infBaseCost[t])
+			dim.power = E(1)
 			dim.baseAmount = 0
 		}
-		if (player.infDimensionsUnlocked[t - 1]) dim.amount = new Decimal(dim.baseAmount)
+		if (player.infDimensionsUnlocked[t - 1]) dim.amount = E(dim.baseAmount)
 		if (inNGM(5)) {
 			dim.bought = 0
-			dim.costAM = new Decimal(idBaseCosts[t])
+			dim.costAM = E(idBaseCosts[t])
 		}
 	}
 	if (full) resetInfDimUnlocked()
@@ -254,7 +254,7 @@ function buyManyInfinityDimension(tier, auto) {
 
 	if (player.pSac != undefined) player.chall2Pow = 0
 	if (player.currentEternityChall == "eterc8") player.eterc8ids -= 1
-	getEl("eterc8ids").textContent = "You have " + player.eterc8ids + " purchases left."
+	el("eterc8ids").textContent = "You have " + player.eterc8ids + " purchases left."
 	return true
 }
 
@@ -292,7 +292,7 @@ function getInfinityPowerEffect() {
 	log *= tmp.infPowExp 
 	if (inNGM(5)) {
 		if (log > 10) log = Math.pow(log * 200 - 1e3, 1/3)
-		if (!onPostBreak() && log > Math.log10(Number.MAX_VALUE)) return new Decimal(Number.MAX_VALUE)
+		if (!onPostBreak() && log > Math.log10(Number.MAX_VALUE)) return E(Number.MAX_VALUE)
 	}
 	return Decimal.pow(10, log)
 }
@@ -324,10 +324,10 @@ function getInfinityPowerEffectExp() {
 function switchAutoInf(tier) {
 	if (player.infDimBuyers[tier - 1]) {
 		player.infDimBuyers[tier - 1] = false
-		getEl("infauto"+tier).textContent = "Auto: OFF"
+		el("infauto"+tier).textContent = "Auto: OFF"
 	} else {
 		player.infDimBuyers[tier - 1] = true
-		getEl("infauto"+tier).textContent = "Auto: ON"
+		el("infauto"+tier).textContent = "Auto: ON"
 	}
 	hideMaxIDButton()
 }
@@ -336,13 +336,13 @@ function toggleAllInfDims() {
 	if (player.infDimBuyers[0]) {
 		for (let i = 1; i <= 8; i++) {
 			player.infDimBuyers[i - 1] = false
-			getEl("infauto" + i).textContent = "Auto: OFF"
+			el("infauto" + i).textContent = "Auto: OFF"
 		}
 	} else {
 		for (let i=1; i <= 8; i++) {
 			if (getEternitied() - 10 >= i) {
 				player.infDimBuyers[i - 1] = true
-				getEl("infauto" + i).textContent = "Auto: ON"
+				el("infauto" + i).textContent = "Auto: ON"
 			}
 		}
 	}
@@ -351,8 +351,8 @@ function toggleAllInfDims() {
 
 function loadInfAutoBuyers() {
 	for (let i = 1; i <= 8; i++) {
-		if (player.infDimBuyers[i - 1]) getEl("infauto" + i).textContent = "Auto: ON"
-		else getEl("infauto" + i).textContent = "Auto: OFF"
+		if (player.infDimBuyers[i - 1]) el("infauto" + i).textContent = "Auto: ON"
+		else el("infauto" + i).textContent = "Auto: OFF"
 	}
 	hideMaxIDButton(true)
 }
@@ -364,45 +364,45 @@ function getIDReplMult() {
 }
 
 function updateInfPower() {
-	getEl("infPowAmount").textContent = shortenMoney(player.infinityPower)
-	if (getEl("infPowEffectPower")) {
-		if (tmp.ngmX < 5 || tmp.infPow.log10() < 10) getEl("infPowEffectPower").textContent = tmp.infPowExp.toFixed(tmp.ngmX !== 5 ? 2 : 1)
-		else getEl("infPowEffectPower").textContent = Math.min(tmp.infPow.log10() / player.infinityPower.log10()).toFixed(1)
+	el("infPowAmount").textContent = shortenMoney(player.infinityPower)
+	if (el("infPowEffectPower")) {
+		if (tmp.ngmX < 5 || tmp.infPow.log10() < 10) el("infPowEffectPower").textContent = tmp.infPowExp.toFixed(tmp.ngmX !== 5 ? 2 : 1)
+		else el("infPowEffectPower").textContent = Math.min(tmp.infPow.log10() / player.infinityPower.log10()).toFixed(1)
 	}
-	getEl("infDimMultAmount").textContent = shortenMoney(tmp.infPow)
-	if (player.currentEternityChall == "eterc7") getEl("infPowPerSec").textContent = "You are getting " +shortenDimensions(infDimensionProduction(1))+" Seventh Dimensions per second."
+	el("infDimMultAmount").textContent = shortenMoney(tmp.infPow)
+	if (player.currentEternityChall == "eterc7") el("infPowPerSec").textContent = "You are getting " +shortenDimensions(infDimensionProduction(1))+" Seventh Dimensions per second."
 	else {
 		let r = infDimensionProduction(1)
 		if (inNGM(5)) r = r.plus(infDimensionProduction(2)).div(tmp.ec12Mult).times(getPDAcceleration())
-		getEl("infPowPerSec").textContent = "You are getting " + (inNGM(5) && r < 100 ? shortenND(r) : shortenDimensions(r)) + " Infinity Power per "  + (inNGM(5) && tmp.PDunl ? "real-life " : "") + "second."
+		el("infPowPerSec").textContent = "You are getting " + (inNGM(5) && r < 100 ? shortenND(r) : shortenDimensions(r)) + " Infinity Power per "  + (inNGM(5) && tmp.PDunl ? "real-life " : "") + "second."
 	}
 }
 
 function getNewInfReq() {
-	let reqs = [new Decimal("1e1100"), new Decimal("1e1900"), new Decimal("1e2400"), new Decimal("1e10500"), new Decimal("1e30000"), new Decimal("1e45000"), new Decimal("1e54000"), new Decimal("1e60000")]
+	let reqs = [E("1e1100"), E("1e1900"), E("1e2400"), E("1e10500"), E("1e30000"), E("1e45000"), E("1e54000"), E("1e60000")]
 	if (inNGM(2)) {
 		if (player.tickspeedBoosts === undefined) { // NG minus 2
-			reqs[1] = new Decimal("1e1500")
-			reqs[3] = new Decimal("1e9600")
+			reqs[1] = E("1e1500")
+			reqs[3] = E("1e9600")
 		} else { // NG minus 3
-			reqs[0] = new Decimal("1e1800")
-			reqs[1] = new Decimal("1e2400")
-			reqs[2] = new Decimal("1e4000")
+			reqs[0] = E("1e1800")
+			reqs[1] = E("1e2400")
+			reqs[2] = E("1e4000")
 		}
 		if (inNGM(4)){ // NG minus 4
-			reqs[1] = new Decimal("1e2385")
-			reqs[3] = new Decimal("1e9525")
+			reqs[1] = E("1e2385")
+			reqs[3] = E("1e9525")
 		}
 	}
 	if (tmp.ngC) {
-		reqs[0] = new Decimal("1e1450")
-		reqs[1] = new Decimal("1e1750")
-		reqs[2] = new Decimal("1e5825")
-		reqs[3] = new Decimal("1e7150")
-		reqs[4] = new Decimal("1e36000")
-		reqs[5] = new Decimal("1e37750")
-		reqs[6] = new Decimal("1e40500")
-		reqs[7] = new Decimal("1e53000")
+		reqs[0] = E("1e1450")
+		reqs[1] = E("1e1750")
+		reqs[2] = E("1e5825")
+		reqs[3] = E("1e7150")
+		reqs[4] = E("1e36000")
+		reqs[5] = E("1e37750")
+		reqs[6] = E("1e40500")
+		reqs[7] = E("1e53000")
 	}
 	for (let tier = 1; tier <= 8; tier++) if (!player.infDimensionsUnlocked[tier - 1] || tier == 8) return {money: reqs[tier - 1], tier: tier}
 }

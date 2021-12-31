@@ -56,7 +56,7 @@ function isDimUnlocked(d) {
 
 //Paradox Sacrifices
 function getPxGain() {
-	let r = new Decimal(player.money.max(1000).log10()-2)
+	let r = E(player.money.max(1000).log10()-2)
 	for (var d = 1; d < 9; d++) r = r.times(Math.pow(player[TIER_NAMES[d]+"Amount"].max(10).log10(), 2/5)) //we are gonna fiddle with this value a LOT.
 	r = r.times(puMults[12](hasPU(12, true)))
 	if (hasPU(34)) r = r.times(puMults[34]())
@@ -84,7 +84,7 @@ function pSacReset(force, chall, pxGain) {
 		}
 	}
 	player.pSac.time = 0
-	PXminpeak = new Decimal(0)
+	PXminpeak = E(0)
 	//resetPDs()
 	updateParadoxUpgrades()
 	galaxyReset(-player.galaxies)
@@ -294,8 +294,8 @@ function updateParadoxUpgrades() {
 	for (var r = 1; r <= puSizes.y; r++) {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
-			getEl("pu" + id).className = hasPU(id, r < 2) == (r > 1 || puCaps[id] || 1/0) ? "pubought" : player.pSac.px.gte(getPUCost(id, r < 2, hasPU(id, true))) ? "pupg" : "infinistorebtnlocked"
-			if (typeof(puDescs[id]) == "function") getEl("pud" + id).textContent = puDescs[id]()
+			el("pu" + id).className = hasPU(id, r < 2) == (r > 1 || puCaps[id] || 1/0) ? "pubought" : player.pSac.px.gte(getPUCost(id, r < 2, hasPU(id, true))) ? "pupg" : "infinistorebtnlocked"
+			if (typeof(puDescs[id]) == "function") el("pud" + id).textContent = puDescs[id]()
 		}
 	}
 }
@@ -305,9 +305,9 @@ function updatePUMults() {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
 			if (puMults[id]) {
-				if (id == 13) getEl("pue13").textContent = "^" + puMults[13](hasPU(13, true)).toFixed(2)
-				else if (id == 23) getEl("pue23").textContent = "+" + puMults[23]().toFixed(4)
-				else getEl("pue" + id).textContent = shorten(puMults[id](hasPU(id, true, r < 2))) + "x" + (puSoftcaps[id] && puSoftcaps[id]() ? " (softcapped)" : "")
+				if (id == 13) el("pue13").textContent = "^" + puMults[13](hasPU(13, true)).toFixed(2)
+				else if (id == 23) el("pue23").textContent = "+" + puMults[23]().toFixed(4)
+				else el("pue" + id).textContent = shorten(puMults[id](hasPU(id, true, r < 2))) + "x" + (puSoftcaps[id] && puSoftcaps[id]() ? " (softcapped)" : "")
 			}
 		}
 	}
@@ -318,7 +318,7 @@ function updatePUCosts() {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
 			var lvl = hasPU(id, true)
-			getEl("puc" + id).innerHTML = lvl >= puCaps[id] ? "" : "Cost: " + shortenDimensions(getPUCost(id, r < 2, hasPU(id, true))) + " Px" + (r == 1 ? "<br>" + getGalaxyScaleName(puScalings[id] ? puScalings[id](lvl) : 0) + "Level: " + getFullExpansion(lvl) + (puCaps[id] ? " / " + puCaps[id] : "") : "")
+			el("puc" + id).innerHTML = lvl >= puCaps[id] ? "" : "Cost: " + shortenDimensions(getPUCost(id, r < 2, hasPU(id, true))) + " Px" + (r == 1 ? "<br>" + getGalaxyScaleName(puScalings[id] ? puScalings[id](lvl) : 0) + "Level: " + getFullExpansion(lvl) + (puCaps[id] ? " / " + puCaps[id] : "") : "")
 		}
 	}
 }
@@ -410,12 +410,12 @@ function getPDRate(d) {
 
 function resetPDs(full) {
 	if (full) player.pSac.dims={}
-	player.pSac.dims.power = new Decimal(1)
+	player.pSac.dims.power = E(1)
 	if (full) { 
-		for (var d = 1; d < 9; d++) player.pSac.dims[d] = {cost: new Decimal(pdBaseCosts[d]), bought: 0, power: new Decimal(1)}
+		for (var d = 1; d < 9; d++) player.pSac.dims[d] = {cost: E(pdBaseCosts[d]), bought: 0, power: E(1)}
 		tmp.PDunl = false //Wait until the next update. 
 	}
-	for (var d = 1; d < 9; d++) player.pSac.dims[d].amount = new Decimal(player.pSac.dims[d].bought)
+	for (var d = 1; d < 9; d++) player.pSac.dims[d].amount = E(player.pSac.dims[d].bought)
 }
 
 function getPDAcceleration() {
@@ -426,7 +426,7 @@ function getPDAcceleration() {
 //Paradox Layer Reset
 function resetPSac() {
 	if (inNGM(5)) {
-		PXminpeak = new Decimal(0)
+		PXminpeak = E(0)
 		let keepPU = false //Wait until the next update comes.
 		let keepPUR = tmp.Greward >= 3
 		player.pSac = {
@@ -435,7 +435,7 @@ function resetPSac() {
 			normalTimes: 0,
 			forcedTimes: 0,
 			lostResets: (player.pSac && player.pSac.lostResets) || 0,
-			px: tmp.Greward >= 4 ? new Decimal(25 * player.galacticSacrifice.times) : new Decimal(tmp.Greward >= 2 ? 20 : 0),
+			px: tmp.Greward >= 4 ? E(25 * player.galacticSacrifice.times) : E(tmp.Greward >= 2 ? 20 : 0),
 			upgs: keepPU ? player.pSac.upgs : [],
 			rebuyables: keepPUR ? player.pSac.rebuyables : {}
 		}
@@ -449,7 +449,7 @@ function resetPSac() {
 
 function ParadoxUpgradeButtonTypeDisplay() {
 	if (tmp.ngmX < 5) return
-	let t = getEl("pUpgs")
+	let t = el("pUpgs")
 	for (let i = 1; i <= 6; i++) { //6 rows
 		var r = t.rows[i-1]
 		if (!puConditions["r"+i] || puConditions["r"+i]()) {
@@ -458,7 +458,7 @@ function ParadoxUpgradeButtonTypeDisplay() {
 				var c = r.cells[j-1]
 				if (!puConditions["c"+j] || puConditions["c"+j]()) {
 					c.style.display = ""
-					var e = getEl('pu' + i + j);
+					var e = el('pu' + i + j);
 					if (hasPU(i*10+j)) {
 						e.className = 'pubought'
 					} else if (i === 1 ? player.pSac.px.gte(puCosts[10+j](hasPU(10+j,true))) : player.pSac.px.gte(puCosts[i*10+j])) {
@@ -468,12 +468,12 @@ function ParadoxUpgradeButtonTypeDisplay() {
 					}
 					let upgId = i * 10 + j
 					let mult = puMults[upgId]
-					let elm = getEl('pue' + upgId)
+					let elm = el('pue' + upgId)
 
 					if (mult && elm) {
 						let display = puMults["u" + upgId]
 						mult = mult()
-						getEl('pue' + upgId).textContent = display ? display(mult) : shorten(mult)
+						el('pue' + upgId).textContent = display ? display(mult) : shorten(mult)
 					}
 				} else c.style.display = "none"
 			}
@@ -482,8 +482,8 @@ function ParadoxUpgradeButtonTypeDisplay() {
 }
 
 function updateGalaxyTabs() {
-	getEl("galupgsbtn").style.display = player.pSac !== undefined ? "" : "none"
-	getEl("galStonesbtn").style.display = player.pSac !== undefined ? "" : "none"
+	el("galupgsbtn").style.display = player.pSac !== undefined ? "" : "none"
+	el("galStonesbtn").style.display = player.pSac !== undefined ? "" : "none"
 	if (player.pSac === undefined) showGalTab("galUpgs")
 }
 
@@ -495,9 +495,9 @@ function updateGalstones() {
 		var name = "Greward" + i;
 		if (player.galacticSacrifice.times >= galStoneRequirements[i]) {
 			tmp.Greward++
-			getEl(name).className = "galStonereward"
+			el(name).className = "galStonereward"
 		} else {
-			getEl(name).className = "galStonerewardlocked"
+			el(name).className = "galStonerewardlocked"
 		}
 	}
 	if (tmp.Greward >= 5) tmp.PDunl = true

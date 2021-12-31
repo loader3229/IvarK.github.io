@@ -1,6 +1,6 @@
 let tmp = {
-	nrm: new Decimal(1),
-	rm: new Decimal(1),
+	nrm: E(1),
+	rm: E(1),
 	extraRG: 0,
 	it: 1,
 	rg4: false,
@@ -361,7 +361,7 @@ function updateBreakEternityUpgradesTemp() {
 }
 
 function updateBRU1Temp() {
-	tmp.bru[1] = new Decimal(1)
+	tmp.bru[1] = E(1)
 	if (!inBigRip()) return
 
 	let exp = 1
@@ -372,7 +372,7 @@ function updateBRU1Temp() {
 }
 
 function updateBRU8Temp() {
-	tmp.bru[8] = new Decimal(1)
+	tmp.bru[8] = E(1)
 	if (!inBigRip()) return
 
 	tmp.bru[8] = Decimal.pow(2, getTotalRGs()) // BRU8
@@ -399,7 +399,7 @@ function updateBRU15Temp() {
 
 function updateBRU16Temp() {
 	if (!inBigRip()) {
-		tmp.bru[16] = new Decimal(1)
+		tmp.bru[16] = E(1)
 		return
 	}
 	tmp.bru[16] = player.dilation.dilatedTime.div(1e100).pow(0.155).max(1)
@@ -420,8 +420,8 @@ function updateBigRipUpgradesTemp(){
 
 function updatePhotonsUnlockedBRUpgrades(){
 	if (!inBigRip()) {
-		tmp.bru[18] = new Decimal(1)
-		tmp.bru[19] = new Decimal(1)
+		tmp.bru[18] = E(1)
+		tmp.bru[19] = E(1)
 		return
 	}
 	var bigRipUpg18base = 1 + qu_save.bigRip.spaceShards.div(1e140).add(1).log10()
@@ -440,8 +440,8 @@ function updateBosonicAMDimReturnsTemp() {
 	if (!pH.did("ghostify")) return
 	if (!player.ghostify.wzb.unl) return
 
-	data.start = new Decimal(1e100)
-	data.base = new Decimal(1e100)
+	data.start = E(1e100)
+	data.base = E(1e100)
 	data.offset = 1 / Math.log(data.base) - 1
 	data.offset2 = 1 - Math.log10(data.offset + 1) / Math.log10(data.base)
 	data.postDim = player.ghostify.bl.am.div(data.start)
@@ -452,7 +452,7 @@ function updateBosonicEnchantsTemp(){
 	tmp.bEn = {lvl: {}}
 	for (var g2 = 2; g2 <= br.limit; g2++) for (var g1 = 1; g1 < g2; g1++) {
 		var id = g1 * 10 + g2
-		tmp.bEn.lvl[id] = player.ghostify.bl.enchants[id] || new Decimal(0)
+		tmp.bEn.lvl[id] = player.ghostify.bl.enchants[id] || E(0)
 		if (bEn.effects[id] !== undefined) tmp.bEn[id] = getEnchantEffect(id)
 	}
 }
@@ -505,7 +505,7 @@ function updatePowers() {
 	if (player.currentEternityChall == "eterc10") {
 		ec10bonus = Decimal.pow(getInfBoostInput(), 1e3).max(1)
 	} else {
-		ec10bonus = new Decimal(1)
+		ec10bonus = E(1)
 	}
 
 	tmp.mptb = getMPTBase()

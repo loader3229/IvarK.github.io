@@ -31,12 +31,12 @@ let fluc = {
 		if (!tmp.ngp3) return
 
 		var data = fluc_save || this.setup()
-		data.bestAM = new Decimal(data.bestAM || player.money)
+		data.bestAM = E(data.bestAM || player.money)
 		this.updateTmp()
 	},
 	resetLayer() {
 		fluc_save.best = 999999999
-		fluc_save.bestAM = new Decimal(0)
+		fluc_save.bestAM = E(0)
 		fluc_save.last10 = [
 			[999999999, 0], [999999999, 0],
 			[999999999, 0], [999999999, 0],
@@ -94,23 +94,23 @@ let fluc = {
 		handleDispOnQuantum(false)
 
 		resetUP()
-		GPminpeak = new Decimal(0)
-		IPminpeak = new Decimal(0)
-		bestRunIppm = new Decimal(0)
+		GPminpeak = E(0)
+		IPminpeak = E(0)
+		bestRunIppm = E(0)
 		EPminpeakType = 'normal'
-		EPminpeak = new Decimal(0)
-		QKminpeak = new Decimal(0)
-		QKminpeakValue = new Decimal(0)
+		EPminpeak = E(0)
+		QKminpeak = E(0)
+		QKminpeakValue = E(0)
 
-		getEl("eternitybtn").style.display = "none"
-		getEl("quantumbtn").style.display = "none"
-		getEl("fluctuateReset").style.display = "none"
+		el("eternitybtn").style.display = "none"
+		el("quantumbtn").style.display = "none"
+		el("fluctuateReset").style.display = "none"
 	},
 
 	updateConf(toggle) {
 		if (toggle) fluc_save.noConf = !fluc_save.noConf
-		getEl("fluc_conf").style.display = this.unl() ? "" : "none"
-		if (this.unl()) getEl("fluc_conf").textContent = "Fluctuate confirmation: " + (fluc_save.noConf ? "OFF" : "ON")
+		el("fluc_conf").style.display = this.unl() ? "" : "none"
+		if (this.unl()) el("fluc_conf").textContent = "Fluctuate confirmation: " + (fluc_save.noConf ? "OFF" : "ON")
 	},
 
 	update(diff) {
@@ -132,24 +132,24 @@ let fluc = {
 
 	updateHeader() {
 		let gain = fluc.gain()
-		getEl("fluctuantEnergy").textContent = getFullExpansion(fluc_save.energy)
-		getEl("fluc_gain").textContent = gain ? "(+" + getFullExpansion(gain) + " Fluctuant Energy: Next at " + shortenCosts(fluc.req(fluc_save.energy + gain)) + ")" : ""
+		el("fluctuantEnergy").textContent = getFullExpansion(fluc_save.energy)
+		el("fluc_gain").textContent = gain ? "(+" + getFullExpansion(gain) + " Fluctuant Energy: Next at " + shortenCosts(fluc.req(fluc_save.energy + gain)) + ")" : ""
 
 		//Temp: Quantum Field is not ready!
-		getEl("unknown_unl").style.display = fluc_save.energy >= 11 ? "none" : ""
-		getEl("the_end").style.display = fluc_save.energy >= 11 ? "" : "none"
+		el("unknown_unl").style.display = fluc_save.energy >= 11 ? "none" : ""
+		el("the_end").style.display = fluc_save.energy >= 11 ? "" : "none"
 
 		//Temp: Temporary boosts
-		getEl("fluc_boost_pos").style.display = fluc.unl() ? "" : "none"
-		getEl("fluc_boost_pos").textContent = "Fluctuate Boost [Temp]: " + formatReductionPercentage(fluc_tmp.temp.pos) + "% equal to all tiers"
-		getEl("fluc_boost_pc").style.display = fluc.unl() ? "" : "none"
-		getEl("fluc_boost_pc").textContent = "Fluctuate Boost [Temp]: +^" + fluc_tmp.temp.pc.toFixed(2) + " to PC goal reduction sum"
-		getEl("fluc_boost_str").style.display = fluc.unl() ? "" : "none"
-		getEl("fluc_boost_str").textContent = "Fluctuate Boost [Temp]: " + formatPercentage(1 / fluc_tmp.temp.str) + "% to negative changes"
+		el("fluc_boost_pos").style.display = fluc.unl() ? "" : "none"
+		el("fluc_boost_pos").textContent = "Fluctuate Boost [Temp]: " + formatReductionPercentage(fluc_tmp.temp.pos) + "% equal to all tiers"
+		el("fluc_boost_pc").style.display = fluc.unl() ? "" : "none"
+		el("fluc_boost_pc").textContent = "Fluctuate Boost [Temp]: +^" + fluc_tmp.temp.pc.toFixed(2) + " to PC goal reduction sum"
+		el("fluc_boost_str").style.display = fluc.unl() ? "" : "none"
+		el("fluc_boost_str").textContent = "Fluctuate Boost [Temp]: " + formatPercentage(1 / fluc_tmp.temp.str) + "% to negative changes"
 	},
 	updateTab() {
-		getEl("fluc_req").textContent = shorten(fluc.req())
-		if (getEl("ffTab").style.display == "block") ff.updateTab()
+		el("fluc_req").textContent = shorten(fluc.req())
+		if (el("ffTab").style.display == "block") ff.updateTab()
 	},
 	showTab(tabName) {
 		//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
@@ -192,16 +192,16 @@ let FDs = {
 		if (!fluc_save) return
 
 		var data = FDs_save || this.setup()
-		data.meta = new Decimal(data.meta)
-		for (var i = 1; i <= 8; i++) FDs_save[i].amt = new Decimal(FDs_save[i].amt)
+		data.meta = E(data.meta)
+		for (var i = 1; i <= 8; i++) FDs_save[i].amt = E(FDs_save[i].amt)
 	},
 	reset() {
 		FDs_save = {
 			shards: 0,
 			spent: 0,
-			meta: new Decimal(0)
+			meta: E(0)
 		}
-		for (var i = 1; i <= 8; i++) FDs_save[i] = { amt: new Decimal(0), bgt: 0 }
+		for (var i = 1; i <= 8; i++) FDs_save[i] = { amt: E(0), bgt: 0 }
 	},
 
 	update(diff) {
@@ -220,17 +220,17 @@ let FDs = {
 		}
 	},
 	updateDisp() {
-		getEl("fd_ds").textContent = shortenDimensions(this.unspent())
-		getEl("fd_me").textContent = shortenMoney(FDs_save.meta)
-		getEl("fd_eff_rep").textContent = "^" + shorten(FDs_tmp.eff_rep)
-		getEl("fd_eff_qe").textContent = "^" + shorten(FDs_tmp.eff_qe)
+		el("fd_ds").textContent = shortenDimensions(this.unspent())
+		el("fd_me").textContent = shortenMoney(FDs_save.meta)
+		el("fd_eff_rep").textContent = "^" + shorten(FDs_tmp.eff_rep)
+		el("fd_eff_qe").textContent = "^" + shorten(FDs_tmp.eff_qe)
 
 		for (var i = 1; i <= 8; i++) {
-			getEl("fd" + i + "_row").style.display = i == 1 || FDs_save[i - 1].bgt > 0 ? "" : "none"
-			getEl("fd" + i).textContent = DISPLAY_NAMES[i] + " Fluctuant Dimension x" + shorten(this.dimMult(i))
-			getEl("fd" + i + "_amt").textContent = shortenDimensions(FDs_save[i].amt) + this.dimDesc(i)
-			getEl("fd" + i + "_buy").textContent = shortenDimensions(this.cost(i)) + " DS"
-			getEl("fd" + i + "_buy").className = this.unspent() >= this.cost(i) ? "storebtn" : "unavailablebtn"
+			el("fd" + i + "_row").style.display = i == 1 || FDs_save[i - 1].bgt > 0 ? "" : "none"
+			el("fd" + i).textContent = DISPLAY_NAMES[i] + " Fluctuant Dimension x" + shorten(this.dimMult(i))
+			el("fd" + i + "_amt").textContent = shortenDimensions(FDs_save[i].amt) + this.dimDesc(i)
+			el("fd" + i + "_buy").textContent = shortenDimensions(this.cost(i)) + " DS"
+			el("fd" + i + "_buy").className = this.unspent() >= this.cost(i) ? "storebtn" : "unavailablebtn"
 		}
 	},
 

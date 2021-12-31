@@ -57,12 +57,12 @@ let str = {
 		}
 	},
 	updateDisp() {
-		getEl("stringstabbtn").style.display = PCs.unl() ? "" : "none"
+		el("stringstabbtn").style.display = PCs.unl() ? "" : "none"
 
 		var unl = this.unl()
-		getEl("str_unl").style.display = !unl ? "" : "none"
-		getEl("str_div").style.display = unl ? "" : "none"
-		if (unl) getEl("str_cost").textContent = "(the next vibration costs " + shorten(this.veCost(str_tmp.vibrated + 1) - this.veCost(str_tmp.vibrated)) + ")"
+		el("str_unl").style.display = !unl ? "" : "none"
+		el("str_div").style.display = unl ? "" : "none"
+		if (unl) el("str_cost").textContent = "(the next vibration costs " + shorten(this.veCost(str_tmp.vibrated + 1) - this.veCost(str_tmp.vibrated)) + ")"
 
 		if (!unl) return
 		if (!str_tmp.setupHTML) return
@@ -70,8 +70,8 @@ let str = {
 		for (var e = 1; e <= 18; e++) {
 			var pos = this.data.pos[id]
 			var alt = this.altitude(e)
-			getEl("str_" + e + "_altitude").textContent = alt.toFixed(3)
-			getEl("str_" + e).style.top = (1 - alt) * 72 + "px"
+			el("str_" + e + "_altitude").textContent = alt.toFixed(3)
+			el("str_" + e).style.top = (1 - alt) * 72 + "px"
 		}
 	},
 
@@ -86,27 +86,27 @@ let str = {
 		if (!str_tmp.setupHTML || !str_tmp.unl) return
 
 		let ve = str.veUnspent()
-		getEl("str_ve").textContent = shorten(ve)
-		getEl("str_ve_based").textContent = shiftDown ? "(based on Quantum Energy, Replicanti Energy, and PC level)" : ""
+		el("str_ve").textContent = shorten(ve)
+		el("str_ve_based").textContent = shiftDown ? "(based on Quantum Energy, Replicanti Energy, and PC level)" : ""
 
 		for (var i = 1; i <= 18; i++) {
 			var alt = str.altitude(i)
-			getEl("str_" + i + "_eff").textContent = (alt < 0 ? "-" : "+") + shorten(Math.abs(alt) * str_tmp.str) + " to " + str.data.names[Math.ceil(i / 6) - 1]
-			getEl("str_" + i).className = (str_save.vibrated.includes(i) ? "chosenbtn" : str.canVibrate(i) ? "storebtn" : "unavailablebtn") + " pos_btn"
+			el("str_" + i + "_eff").textContent = (alt < 0 ? "-" : "+") + shorten(Math.abs(alt) * str_tmp.str) + " to " + str.data.names[Math.ceil(i / 6) - 1]
+			el("str_" + i).className = (str_save.vibrated.includes(i) ? "chosenbtn" : str.canVibrate(i) ? "storebtn" : "unavailablebtn") + " pos_btn"
 		}
 
 		for (var p = 1; p <= 3; p++) {
 			var pow = str_tmp.powers[p]
-			getEl("str_" + p + "_power").textContent = str.data.names[p-1] + ": " + (pow < 0 ? "-" : "") + shorten(Math.abs(pow) * str_tmp.str)
+			el("str_" + p + "_power").textContent = str.data.names[p-1] + ": " + (pow < 0 ? "-" : "") + shorten(Math.abs(pow) * str_tmp.str)
 
 			var pb_nerf = str.nerf_pb(p * 6)
-			getEl("str_" + p + "_eb_eff").textContent = shorten(str.eff_eb(p * 6)) + "x stronger to Entangled Boosts " + (p * 6 - 5) + " - " + (p * 6)
-			getEl("str_" + p + "_eb_nerf").innerHTML = pow < 0 ? "<b class='warning'>Effective at " + shorten(str.nerf_eb(p * 6)) + " Quantum Power</b>" : ""
-			getEl("str_" + p + "_pb_eff").textContent = "+" + shorten(str.eff_pb(p * 6)) + "x charge multiplier to Positronic Boosts " + (p * 6 - 5) + " - " + (p * 6)
-			getEl("str_" + p + "_pb_nerf").innerHTML = pb_nerf == 1 ? "" : "<b class='" + (pb_nerf < 1 ? "charged" : "warning") + "'>" + (pb_nerf < 1 ? "/" + shorten(1 / pb_nerf) : shorten(pb_nerf) + "x") + " charge requirement</b>"
+			el("str_" + p + "_eb_eff").textContent = shorten(str.eff_eb(p * 6)) + "x stronger to Entangled Boosts " + (p * 6 - 5) + " - " + (p * 6)
+			el("str_" + p + "_eb_nerf").innerHTML = pow < 0 ? "<b class='warning'>Effective at " + shorten(str.nerf_eb(p * 6)) + " Quantum Power</b>" : ""
+			el("str_" + p + "_pb_eff").textContent = "+" + shorten(str.eff_pb(p * 6)) + "x charge multiplier to Positronic Boosts " + (p * 6 - 5) + " - " + (p * 6)
+			el("str_" + p + "_pb_nerf").innerHTML = pb_nerf == 1 ? "" : "<b class='" + (pb_nerf < 1 ? "charged" : "warning") + "'>" + (pb_nerf < 1 ? "/" + shorten(1 / pb_nerf) : shorten(pb_nerf) + "x") + " charge requirement</b>"
 		}
-		getEl("str_strength").textContent = shiftDown ? "Manifold Surgery: " + shorten(str_tmp.str) + "x strength to String boosts" : ""
-		getEl("str_strength_based").textContent = shiftDown ? "(based on total Vibration Energy)" : ""
+		el("str_strength").textContent = shiftDown ? "Manifold Surgery: " + shorten(str_tmp.str) + "x strength to String boosts" : ""
+		el("str_strength_based").textContent = shiftDown ? "(based on total Vibration Energy)" : ""
 	},
 	updateFeatureOnTick() {
 		str_save.energy = Math.max(str_save.energy, this.veGain())
@@ -126,7 +126,7 @@ let str = {
 
 		var html = ""
 		for (var e = 1; e <= 18; e++) html += this.setupBoost(e)
-		getEl("str_boosts").innerHTML = html
+		el("str_boosts").innerHTML = html
 
 		str.updateDisp()
 	},

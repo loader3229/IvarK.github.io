@@ -1,6 +1,6 @@
 function toggleChallengeRetry() {
 	player.options.retryChallenge = !player.options.retryChallenge
-	getEl("retry").textContent = "Automatically retry challenges: O" + (player.options.retryChallenge ? "N" : "FF")
+	el("retry").textContent = "Automatically retry challenges: O" + (player.options.retryChallenge ? "N" : "FF")
 }
 
 function togglePerformanceTicks() {
@@ -10,13 +10,13 @@ function togglePerformanceTicks() {
 
 function toggleLogRateChange() {
 	aarMod.logRateChange = (aarMod.logRateChange + 1) % 3
-	getEl("toggleLogRateChange").textContent = "Rate displays: " + ["Normal", "Logarithm", "None"][aarMod.logRateChange]
+	el("toggleLogRateChange").textContent = "Rate displays: " + ["Normal", "Logarithm", "None"][aarMod.logRateChange]
 	dimDescEnd = (aarMod.logRateChange ? " OoM" : "%") + "/s)"
 }
 
 function toggleTabsSave() {
 	aarMod.tabsSave.on =! aarMod.tabsSave.on
-	getEl("tabsSave").textContent = "Saved tabs: O" + (aarMod.tabsSave.on ? "N" : "FF")
+	el("tabsSave").textContent = "Saved tabs: O" + (aarMod.tabsSave.on ? "N" : "FF")
 }
 
 function infMultAutoToggle() {
@@ -25,7 +25,7 @@ function infMultAutoToggle() {
 			let toBuy = Math.max(Math.floor(player.infinityPoints.div(player.infMultCost).times(ipMultCostIncrease - 1).plus(1).log(ipMultCostIncrease)), 1)
 			let toSpend = Decimal.pow(ipMultCostIncrease, toBuy).sub(1).div(ipMultCostIncrease - 1).times(player.infMultCost).round()
 
-			if (toSpend.gt(player.infinityPoints)) player.infinityPoints = new Decimal(0)
+			if (toSpend.gt(player.infinityPoints)) player.infinityPoints = E(0)
 			else player.infinityPoints = player.infinityPoints.sub(toSpend)
 
 			let multInc = Decimal.pow(getIPMultPower(), toBuy)
@@ -34,27 +34,27 @@ function infMultAutoToggle() {
 			player.autoIP = player.autoIP.times(multInc)
 
 			if (player.autobuyers[11].priority !== undefined && player.autobuyers[11].priority !== null && player.autoCrunchMode == "amount") player.autobuyers[11].priority = multInc.times(player.autobuyers[11].priority)
-			if (player.autoCrunchMode == "amount") getEl("priority12").value = formatValue("Scientific", player.autobuyers[11].priority, 2, 0)
+			if (player.autoCrunchMode == "amount") el("priority12").value = formatValue("Scientific", player.autobuyers[11].priority, 2, 0)
 		}
 	} else {
 		player.infMultBuyer = !player.infMultBuyer
-		getEl("infmultbuyer").textContent = "Autobuy IP mult: O" + (player.infMultBuyer ? "N" : "FF")
+		el("infmultbuyer").textContent = "Autobuy IP mult: O" + (player.infMultBuyer ? "N" : "FF")
 	}
 }
 
 function toggleEternityConf() {
 	player.options.eternityconfirm = !player.options.eternityconfirm
-	getEl("eternityconf").textContent = "Eternity confirmation: O" + (player.options.eternityconfirm ? "N" : "FF")
+	el("eternityconf").textContent = "Eternity confirmation: O" + (player.options.eternityconfirm ? "N" : "FF")
 }
 
 function toggleDilaConf() {
 	aarMod.dilationConf = !aarMod.dilationConf
-	getEl("dilationConfirmBtn").textContent = "Dilation confirmation: O" + (aarMod.dilationConf ? "N" : "FF")
+	el("dilationConfirmBtn").textContent = "Dilation confirmation: O" + (aarMod.dilationConf ? "N" : "FF")
 }
 
 function toggleOfflineProgress() {
 	aarMod.offlineProgress = !aarMod.offlineProgress
-	getEl("offlineProgress").textContent = "Offline progress: O"+(aarMod.offlineProgress?"N":"FF")
+	el("offlineProgress").textContent = "Offline progress: O"+(aarMod.offlineProgress?"N":"FF")
 }
 
 function toggleAutoBuyers() {
@@ -74,20 +74,20 @@ function toggleAutoBuyers() {
 function toggleBulk() {
 	if (player.options.bulkOn) {
 		player.options.bulkOn = false
-		getEl("togglebulk").textContent = "Enable bulk buy"
+		el("togglebulk").textContent = "Enable bulk buy"
 	} else {
 		player.options.bulkOn = true
-		getEl("togglebulk").textContent = "Disable bulk buy"
+		el("togglebulk").textContent = "Disable bulk buy"
 	}
 }
 
 function toggleHotkeys() {
 	if (player.options.hotkeys) {
 		player.options.hotkeys = false
-		getEl("hotkeys").textContent = "Enable hotkeys"
+		el("hotkeys").textContent = "Enable hotkeys"
 	} else {
 		player.options.hotkeys = true
-		getEl("hotkeys").textContent = "Disable hotkeys"
+		el("hotkeys").textContent = "Disable hotkeys"
 	}
 }
 
@@ -99,40 +99,40 @@ function respecToggle() {
 function toggleProductionTab() {
 	// 0 == visible, 1 == not visible
 	aarMod.hideProductionTab=!aarMod.hideProductionTab
-	getEl("hideProductionTab").textContent = (aarMod.hideProductionTab?"Show":"Hide")+" production tab"
-	if (getEl("production").style.display == "block") showDimTab("antimatterdimensions")
+	el("hideProductionTab").textContent = (aarMod.hideProductionTab?"Show":"Hide")+" production tab"
+	if (el("production").style.display == "block") showDimTab("antimatterdimensions")
 }
 
 function toggleRepresentation() {
 	// 0 == visible, 1 == not visible
 	aarMod.hideRepresentation=!aarMod.hideRepresentation
-	getEl("hideRepresentation").textContent=(aarMod.hideRepresentation?"Show":"Hide")+" antimatter representation"
+	el("hideRepresentation").textContent=(aarMod.hideRepresentation?"Show":"Hide")+" antimatter representation"
 }
 
 function toggleReplAuto(i) {
 	if (i == "chance") {
 		if (player.replicanti.auto[0]) {
 			player.replicanti.auto[0] = false
-			getEl("replauto1").textContent = "Auto: OFF"
+			el("replauto1").textContent = "Auto: OFF"
 		} else {
 			player.replicanti.auto[0] = true
-			getEl("replauto1").textContent = "Auto: ON"
+			el("replauto1").textContent = "Auto: ON"
 		}
 	} else if (i == "interval") {
 		if (player.replicanti.auto[1]) {
 			player.replicanti.auto[1] = false
-			getEl("replauto2").textContent = "Auto: OFF"
+			el("replauto2").textContent = "Auto: OFF"
 		} else {
 			player.replicanti.auto[1] = true
-			getEl("replauto2").textContent = "Auto: ON"
+			el("replauto2").textContent = "Auto: ON"
 		}
 	} else if (i == "galaxy") {
 		if (player.replicanti.auto[2]) {
 			player.replicanti.auto[2] = false
-			getEl("replauto3").textContent = "Auto: OFF"
+			el("replauto3").textContent = "Auto: OFF"
 		} else {
 			player.replicanti.auto[2] = true
-			getEl("replauto3").textContent = "Auto: ON"
+			el("replauto3").textContent = "Auto: ON"
 		}
 	}
 }

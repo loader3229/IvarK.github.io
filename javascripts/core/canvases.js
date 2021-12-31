@@ -6,15 +6,15 @@ var direction = 0;
 var velocityX = 0;
 var velocityY = 0;
 
-var canvas = getEl("studyTreeCanvas");
+var canvas = el("studyTreeCanvas");
 var ctx = canvas.getContext("2d");
-var canvas3 = getEl("dilationCanvas");
+var canvas3 = el("dilationCanvas");
 var ctx3 = canvas3.getContext("2d");
-var bhc = getEl("blackHoleCanvas");
+var bhc = el("blackHoleCanvas");
 var bhctx = bhc.getContext("2d");
-var msc = getEl("studyTreeCanvas2");
+var msc = el("studyTreeCanvas2");
 var msctx = msc.getContext("2d");
-var qkc = getEl("quarkCanvas");
+var qkc = el("quarkCanvas");
 var qkctx = qkc.getContext("2d");
 
 function resizeCanvas() {
@@ -50,16 +50,16 @@ function animationOnOff(name) {
     if (name == "bigCrunch" && shiftDown && player.options.animations[name] !== "always") player.options.animations[name] = "always"
     else if (player.options.animations[name]) player.options.animations[name] = false;
     else player.options.animations[name] = true;
-    if (name == "floatingText") getEl("floatingTextAnimBtn").textContent = "Floating text: " + ((player.options.animations.floatingText) ? "ON" : "OFF")
-    else if (name == "bigCrunch") getEl("bigCrunchAnimBtn").textContent = "Big crunch: " + (player.options.animations.bigCrunch === "always" ? "ALWAYS" : player.options.animations.bigCrunch ? "ON" : "OFF")
-    else if (name == "tachyonParticles") getEl("tachyonParticleAnimBtn").textContent = "Tachyon particles: " + ((player.options.animations.tachyonParticles) ? "ON" : "OFF")
-    else if (name == "blackHole") getEl("blackHoleAnimBtn").textContent = "Black hole: " + ((player.options.animations.blackHole) ? "ON" : "OFF")
-    else if (name == "quarks") getEl("quarksAnimBtn").textContent="Quarks: O"+(player.options.animations[name]?"N":"FF")
-    else if (name == "ghostify") getEl("ghostifyAnimBtn").textContent="Ghostify: O"+(player.options.animations[name]?"N":"FF")
+    if (name == "floatingText") el("floatingTextAnimBtn").textContent = "Floating text: " + ((player.options.animations.floatingText) ? "ON" : "OFF")
+    else if (name == "bigCrunch") el("bigCrunchAnimBtn").textContent = "Big crunch: " + (player.options.animations.bigCrunch === "always" ? "ALWAYS" : player.options.animations.bigCrunch ? "ON" : "OFF")
+    else if (name == "tachyonParticles") el("tachyonParticleAnimBtn").textContent = "Tachyon particles: " + ((player.options.animations.tachyonParticles) ? "ON" : "OFF")
+    else if (name == "blackHole") el("blackHoleAnimBtn").textContent = "Black hole: " + ((player.options.animations.blackHole) ? "ON" : "OFF")
+    else if (name == "quarks") el("quarksAnimBtn").textContent="Quarks: O"+(player.options.animations[name]?"N":"FF")
+    else if (name == "ghostify") el("ghostifyAnimBtn").textContent="Ghostify: O"+(player.options.animations[name]?"N":"FF")
 }
 
 function drawAnimations(ts){
-    if (player.dilation.tachyonParticles.gte(1) && getEl("eternitystore").style.display !== "none" && getEl("dilation").style.display !== "none" && player.options.animations.tachyonParticles) {
+    if (player.dilation.tachyonParticles.gte(1) && el("eternitystore").style.display !== "none" && el("dilation").style.display !== "none" && player.options.animations.tachyonParticles) {
         ctx3.clearRect(0, 0, canvas.width, canvas.height);
         if (player.options.theme == "Aarex's Modifications") ctx3.fillStyle="#e5e5e5";
         else if (player.options.theme == "Dark" || player.options.theme == "Dark Metro") ctx3.fillStyle="#FFF";
@@ -101,7 +101,7 @@ function drawAnimations(ts){
 }
 
 function drawTreeBranch(num1, num2) {
-    if (getEl("timestudies").style.display === "none") return
+    if (el("timestudies").style.display === "none") return
     var name1 = parseInt(num1);
     var isECName = false;
     var isDilStudyName = false;
@@ -115,8 +115,8 @@ function drawTreeBranch(num1, num2) {
     } else {
         var name2 = parseInt(num2)
     }
-    var start = getEl(num1).getBoundingClientRect();
-    var end = getEl(num2).getBoundingClientRect();
+    var start = el(num1).getBoundingClientRect();
+    var end = el(num2).getBoundingClientRect();
     var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
     var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
     var x2 = end.left + (end.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
@@ -174,7 +174,7 @@ function drawTreeBranch(num1, num2) {
 
 function drawStudyTree() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (getEl("secretstudy").style.opacity != "0") drawTreeBranch("11", "secretstudy");
+    if (el("secretstudy").style.opacity != "0") drawTreeBranch("11", "secretstudy");
     drawTreeBranch("11", "21");
     drawTreeBranch("11", "22");
     drawTreeBranch("21", "31");
@@ -292,17 +292,17 @@ function drawStudyTree() {
 	}
     if (player.meta) drawTreeBranch("dilstudy5", "dilstudy6")
     if (player.masterystudies) drawTreeBranch("dilstudy6", "masteryportal")
-    if (shiftDown && getEl("eternitystore").style.display !== "none" && getEl("timestudies").style.display !== "none") {
+    if (shiftDown && el("eternitystore").style.display !== "none" && el("timestudies").style.display !== "none") {
         for (i=0; i<all.length; i++) {
-            var start = getEl(all[i]).getBoundingClientRect();
+            var start = el(all[i]).getBoundingClientRect();
             var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
             var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
             ctx.fillStyle = 'white';
             ctx.strokeStyle = 'black';
             ctx.lineWidth = 3;
             ctx.font = "15px Typewriter";
-            if (getEl(all[i]).className.split(" ")[1] !== undefined || all[i] > 220) {
-                var tempName = getEl(all[i]).className.split(" ")[1];
+            if (el(all[i]).className.split(" ")[1] !== undefined || all[i] > 220) {
+                var tempName = el(all[i]).className.split(" ")[1];
                 var name;
                 if (all[i] == 222 || all[i] == 223 || all[i] == 226 || all[i] == 227 || all[i] == 232 || all[i] == 233) name = "Dark"
                 else if (all[i] == 221 || all[i] == 224 || all[i] == 225 || all[i] == 228 || all[i] == 231 || all[i] == 234) name = "Light"

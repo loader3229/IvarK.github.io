@@ -1,12 +1,12 @@
 function cantHoldInfinitiesCheck(){
-	if (getDimensionFinalMultiplier(1).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(2).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(3).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(4).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(5).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(6).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(7).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(8).gte(new Decimal("1e308"))) giveAchievement("Can't hold all these infinities")
+	if (getDimensionFinalMultiplier(1).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(2).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(3).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(4).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(5).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(6).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(7).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(8).gte(E("1e308"))) giveAchievement("Can't hold all these infinities")
 }
 
 function antitablesHaveTurnedCheck(){
@@ -104,7 +104,7 @@ function checkIPReqAchieve(){
 	}
 	var ableToGetRid2 = checkEmpty && player.dilation.active 
 	
-	if (player.infinityPoints.gte(new Decimal("1e22000")) && checkEmpty) giveAchievement("What do I have to do to get rid of you")
+	if (player.infinityPoints.gte(E("1e22000")) && checkEmpty) giveAchievement("What do I have to do to get rid of you")
 	if (player.infinityPoints.gte(1e100) && player.firstAmount.equals(0) && player.infinitied == 0 && player.resets <= 4 && player.galaxies <= 1 && player.replicanti.galaxies == 0) giveAchievement("Like feasting on a behind")
 	if (player.infinityPoints.gte('9.99999e999')) giveAchievement("This achievement doesn't exist II");
 	if (player.infinityPoints.gte('1e30008')) giveAchievement("Can you get infinite IP?");
@@ -117,7 +117,7 @@ function checkIPReqAchieve(){
 		player.infinityDimension7.baseAmount == 0 &&
 		player.infinityDimension8.baseAmount == 0 &&
 		player.infMultCost.equals(10) &&
-		player.infinityPoints.gt(new Decimal("1e140000"))) giveAchievement("I never liked this infinity stuff anyway")
+		player.infinityPoints.gt(E("1e140000"))) giveAchievement("I never liked this infinity stuff anyway")
 	if (ableToGetRid2 && player.infinityPoints.log10() >= 20000) giveAchievement("This is what I have to do to get rid of you.")
 }
 
@@ -125,7 +125,7 @@ function checkReplicantiBasedReqAchieve(){
 	if (player.replicanti.amount.gte(Number.MAX_VALUE) && player.thisInfinityTime < 600*30) giveAchievement("Is this safe?");
 	if (player.replicanti.galaxies >= 10 && player.thisInfinityTime < 150) giveAchievement("The swarm");
 	if (player.replicanti.galaxies >= 180 * player.galaxies && player.galaxies >= 1) giveAchievement("Popular music")
-	if (player.replicanti.amount.gt(new Decimal("1e20000"))) giveAchievement("When will it be enough?")
+	if (player.replicanti.amount.gt(E("1e20000"))) giveAchievement("When will it be enough?")
 	if (player.boughtDims && player.replicanti.amount.gt("1e1000000")) giveAchievement("Do you really need a guide for this?");
 	if (player.replicanti.amount.gt(tmp.ngp3 ? "1e60000" : "1e100000")) giveAchievement("It will never be enough")
 }

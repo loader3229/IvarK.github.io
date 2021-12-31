@@ -83,7 +83,7 @@ var pH = {
 			bigCrunch()
 		},
 		eternity() {
-			getEl("eternitybtn").onclick()
+			el("eternitybtn").onclick()
 		},
 		interreality() {
 			alert("Coming soon...")
@@ -198,8 +198,8 @@ var pH = {
 	},
 	tmp: {},
 	reset() {
-		getEl("layerDispOptions").style.display = "none"
-		//getEl("resetDispOptions").style.display = "none"
+		el("layerDispOptions").style.display = "none"
+		//el("resetDispOptions").style.display = "none"
 
 		var did = false
 		tmp_pH = { layers: 0 }
@@ -212,8 +212,8 @@ var pH = {
 					tmp_pH.lastDid = p
 				}
 				if (did) pH.onPrestige(p)
-				else getEl("hide_" + p).style.display = "none"
-			} else getEl("hide_" + p).style.display = "none"
+				else el("hide_" + p).style.display = "none"
+			} else el("hide_" + p).style.display = "none"
 		}
 
 		pH.updateActive()
@@ -239,12 +239,12 @@ var pH = {
 				tmp_pH[p].order = tmp_pH.shown
 			}
 
-			getEl(d[0]).style.display = prestigeShown ? "" : "none"
-			getEl(d[1]).style.display = tabShown ? "" : "none"
-			getEl(d[2]).style.display = tabShown ? "" : "none"
+			el(d[0]).style.display = prestigeShown ? "" : "none"
+			el(d[1]).style.display = tabShown ? "" : "none"
+			el(d[2]).style.display = tabShown ? "" : "none"
 
-			getEl(d[0]).className = "presBtn presPos" + tmp_pH.shown + " " + p + "btn"
-			getEl(d[1]).className = "presCurrency" + tmp_pH.shown
+			el(d[0]).className = "presBtn presPos" + tmp_pH.shown + " " + p + "btn"
+			el(d[1]).className = "presCurrency" + tmp_pH.shown
 		}
 
 		//Blockages
@@ -252,9 +252,9 @@ var pH = {
 		if (!isEmptiness && QCs.in(4)) blockRank = blockRank + 2
 
 		var haveBlock = blockRank >= 3
-		getEl("bigcrunch").parentElement.style.top = haveBlock ? (Math.floor(blockRank / 3) * 120 + 19) + "px" : "19px"
-		getEl("quantumBlock").style.display = haveBlock ? "" : "none"
-		getEl("quantumBlock").style.height = haveBlock ? (Math.floor(blockRank / 3) * 120 + 12) + "px" : "120px"
+		el("bigcrunch").parentElement.style.top = haveBlock ? (Math.floor(blockRank / 3) * 120 + 19) + "px" : "19px"
+		el("quantumBlock").style.display = haveBlock ? "" : "none"
+		el("quantumBlock").style.height = haveBlock ? (Math.floor(blockRank / 3) * 120 + 12) + "px" : "120px"
 
 		//Infinity Dimension unlocks
 		if (player.break && !player.infDimensionsUnlocked[7] && getEternitied() < 25) {
@@ -263,11 +263,11 @@ var pH = {
 		}
 
 		//Time Dilation
-		if (player.dilation.active) getEl("eternitybtn").className = "presBtn presPos" + (tmp_pH.eternity.shown ? tmp_pH.eternity.order : tmp_pH.shown + 1) + " dilationbtn"
+		if (player.dilation.active) el("eternitybtn").className = "presBtn presPos" + (tmp_pH.eternity.shown ? tmp_pH.eternity.order : tmp_pH.shown + 1) + " dilationbtn"
 
 		//Quantum (after Neutrino Upgrade 16)
 		let bigRipAndQuantum = !hasNU(16)
-		if (!bigRipAndQuantum && !QCs.inAny()) getEl("quantumbtn").style.display = "none"
+		if (!bigRipAndQuantum && !QCs.inAny()) el("quantumbtn").style.display = "none"
 	},
 	updateActive() {
 		tmp.eterUnl = pH.did("eternity")
@@ -278,10 +278,10 @@ var pH = {
 		if (tmp_pH[layer].did) return
 		tmp_pH[layer].did = true
 		tmp_pH.layers++
-		if (metaSave.advOpts) getEl("layerDispOptions").style.display = ""
-		//getEl("resetDispOptions").style.display = ""
-		getEl("hide_" + layer).style.display = ""
-		getEl("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + (pH.names[layer] || layer)
+		if (metaSave.advOpts) el("layerDispOptions").style.display = ""
+		//el("resetDispOptions").style.display = ""
+		el("hide_" + layer).style.display = ""
+		el("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + (pH.names[layer] || layer)
 
 		pH.updateActive()
 	},
@@ -291,26 +291,26 @@ var pH = {
 			var p = pH.order[x]
 			html += '<button id="hide_' + p + '" onclick="pH.hideOption(\'' + p + '\')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button> '
 		}
-		getEl("hideLayers").innerHTML = html
+		el("hideLayers").innerHTML = html
 	},
 	hideOption(layer) {
 		if (aarMod.layerHidden[layer]) delete aarMod.layerHidden[layer]
 		else aarMod.layerHidden[layer] = true
 
-		getEl("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + (pH.names[layer] || layer)
+		el("hide_" + layer).innerHTML = (aarMod.layerHidden[layer] ? "Show" : "Hide") + " " + (pH.names[layer] || layer)
 
-		if (layer == "infinity") getEl("postctabbtn").parentElement.style.display = pH.shown("infinity") && (player.postChallUnlocked >= 1 || pH.did("eternity")) ? "" : "none"
+		if (layer == "infinity") el("postctabbtn").parentElement.style.display = pH.shown("infinity") && (player.postChallUnlocked >= 1 || pH.did("eternity")) ? "" : "none"
 		if (layer == "eternity") updateEternityChallenges()
 		if (layer == "quantum") handleDispOutOfQuantum()
 		if (!aarMod.layerHidden[layer]) return
 
 		if (layer == "infinity") {
-			if (getEl("infinitydimensions").style.display == "block") showDimTab("antimatterdimensions")
-			if (getEl("breakchallenges").style.display == "block") showChallengesTab("normalchallenges")
+			if (el("infinitydimensions").style.display == "block") showDimTab("antimatterdimensions")
+			if (el("breakchallenges").style.display == "block") showChallengesTab("normalchallenges")
 		}
 		if (layer == "eternity") {
-			if (getEl("timedimensions").style.display == "block" || getEl("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
-			if (getEl("eternitychallenges").style.display == "block") showChallengesTab("normalchallenges")
+			if (el("timedimensions").style.display == "block" || el("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
+			if (el("eternitychallenges").style.display == "block") showChallengesTab("normalchallenges")
 		}
 	}
 }

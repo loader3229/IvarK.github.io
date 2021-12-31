@@ -14,7 +14,7 @@ let ETER_UPGS = {
 		unl: () => true,
 		cost: 10,
 		eternities(){
-			let e = nMx(getEternitied(), 0)
+			let e = c_max(getEternitied(), 0)
 			if (typeof(e) == "number" && isNaN(e)) e = 0
 			return e
 		},
@@ -23,9 +23,9 @@ let ETER_UPGS = {
 
 			if (player.boughtDims) return Decimal.pow(e, Decimal.times(e, 2).add(1).log(4))
 
-			let cap = nMn(e, 1e5)
+			let cap = c_min(e, 1e5)
 			let soft = 0
-			if (e > 1e5) soft = nS(e, cap)
+			if (e > 1e5) soft = c_sub(e, cap)
 
 			let achReward = 1
 			if (hasAch("ngpp15")) {
@@ -138,22 +138,22 @@ let ETER_UPGS = {
 	updateDisplayOnTick() {
 		for (let i = 1; i <= this.total; i++) {
 			if (this[i].unl()) {
-				let cost = new Decimal(this[i].cost)
+				let cost = E(this[i].cost)
 				let mult = this[i].mult && this[i].mult()
 
-				getEl("eter" + i).innerHTML = this[i].desc() + (mult ? "<br>Currently: " + shorten(mult) + "x" : "") + "<br>Cost: " + shortenCosts(cost) + " EP" 
+				el("eter" + i).innerHTML = this[i].desc() + (mult ? "<br>Currently: " + shorten(mult) + "x" : "") + "<br>Cost: " + shortenCosts(cost) + " EP" 
 			}
 		}
 
-		getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
-		getEl("epmult").className = player.eternityPoints.gte(player.epmultCost) ? "eternityupbtn" : "eternityupbtnlocked"
+		el("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
+		el("epmult").className = player.eternityPoints.gte(player.epmultCost) ? "eternityupbtn" : "eternityupbtnlocked"
 	},
 	updateDisplayOnSecond() {
 		for (let i = 1; i <= this.total; i++) {
 			let unl = this[i].unl()
 
-			getEl("eter" + i).parentElement.style.display = unl ? "" : "none"
-			if (unl) getEl("eter" + i).className = ETER_UPGS.has(i) ? "eternityupbtnbought" : player.eternityPoints.gte(this[i].cost) ? "eternityupbtn" : "eternityupbtnlocked"
+			el("eter" + i).parentElement.style.display = unl ? "" : "none"
+			if (unl) el("eter" + i).className = ETER_UPGS.has(i) ? "eternityupbtnbought" : player.eternityPoints.gte(this[i].cost) ? "eternityupbtn" : "eternityupbtnlocked"
 		}
 	}
 }
@@ -192,7 +192,7 @@ function buyEPMult() {
 		player.epmult = player.epmult.times(5)
 		if (player.autoEterMode === undefined || player.autoEterMode === 'amount') {
 			player.eternityBuyer.limit = Decimal.times(player.eternityBuyer.limit, 5);
-			getEl("priority13").value = formatValue("Scientific", player.eternityBuyer.limit, 2, 0);
+			el("priority13").value = formatValue("Scientific", player.eternityBuyer.limit, 2, 0);
 		}
 		if (player.eternityPoints.lt(Decimal.pow(10, 1e10))) player.eternityPoints = player.eternityPoints.minus(player.epmultCost)
 		player.epmultCost = getEPMultCost(Math.round(player.epmult.log(5)))

@@ -181,22 +181,22 @@ let ff = {
 		for (var i = 1; i <= 12; i++) {
 			var id = "f" + i
 			var eff = ff_tmp.eff[id]
-			getEl("ff_eff_" + id).textContent =
+			el("ff_eff_" + id).textContent =
 				(this.isActive(id) ? "" : "(Inactive) ") +
 				ff.data[id].effDisp(eff) +
 				(this.isProducing(id) ? " [+0 Energy]" : "")
 		}
-		getEl("ff_eng_am").textContent = "[" + shorten(ff_tmp.eng) + " Energy]"
+		el("ff_eng_am").textContent = "[" + shorten(ff_tmp.eng) + " Energy]"
 
 		ff.updateDisplays() // Temp
 	},
 	updateDisplays() {
 		for (var i = 0; i < ff.data.all.length; i++) {
 			var id = ff.data.all[i]
-			getEl("ff_btn_" + id).style.visibility = ff.isUnlocked(id) ? "visible" : "hidden"
+			el("ff_btn_" + id).style.visibility = ff.isUnlocked(id) ? "visible" : "hidden"
 		}
-		getEl("ff_eng").textContent = "You have assorted " + getFullExpansion(0) + " / " + getFullExpansion(fluc_save.energy) + " Fluctuant Energy in this field."
-		getEl("ff_unl").textContent = ff_tmp.nextAt == 1/0 ? "" : "Next Perk unlocks at " + getFullExpansion(ff_tmp.nextAt) + " Fluctuant Energy."
+		el("ff_eng").textContent = "You have assorted " + getFullExpansion(0) + " / " + getFullExpansion(fluc_save.energy) + " Fluctuant Energy in this field."
+		el("ff_unl").textContent = ff_tmp.nextAt == 1/0 ? "" : "Next Perk unlocks at " + getFullExpansion(ff_tmp.nextAt) + " Fluctuant Energy."
 
 		/*ff.draw("f1", "f2", 1)
 		ff.draw("f2", "f3", 1)
@@ -211,8 +211,8 @@ let ff = {
 		if (!ff.isUnlocked(a)) return
 		if (!ff.isUnlocked(b)) return
 
-		var start = getEl("ff_btn_" + a).getBoundingClientRect();
-		var end = getEl("ff_btn_" + b).getBoundingClientRect();
+		var start = el("ff_btn_" + a).getBoundingClientRect();
+		var end = el("ff_btn_" + b).getBoundingClientRect();
 		var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
 		var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
 		var x2 = end.left + (end.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
@@ -228,7 +228,7 @@ let ff = {
 	},
 
 	getColorCharge(color) {
-		let r = new Decimal(0)
+		let r = E(0)
 		if (colorCharge !== undefined) {
 			if (colorCharge.normal && colorCharge.normal.color) r = colorCharge.normal.charge
 			if (colorCharge.sub && colorCharge.sub.color) r = colorCharge.sub.charge
@@ -261,5 +261,5 @@ let ff_tmp = {}
 let ff_save
 let FLUCTUANT_FIELD = ff
 
-var ff_c = getEl("ff_canvas");
+var ff_c = el("ff_canvas");
 var ff_ctx = ff_c.getContext("2d");

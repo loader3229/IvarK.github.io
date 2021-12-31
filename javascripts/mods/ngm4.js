@@ -41,7 +41,7 @@ function resetTDsOnNGM4() {
 }
 
 //v2.1
-getEl("challenge16").onclick = function () {
+el("challenge16").onclick = function () {
 	startNormalChallenge(16)
 }
 
@@ -62,20 +62,20 @@ function cantReset() {
 	return inNGM(4) && inNC(14) && getTotalResets() >= 10
 }
 
-getEl("buyerBtnTDBoost").onclick = function () {
+el("buyerBtnTDBoost").onclick = function () {
 	buyAutobuyer(14)
 }
 
 function maxHighestTD() {
 	aarMod.maxHighestTD=!aarMod.maxHighestTD
-	getEl("maxHighestTD").textContent = "Buy Max the highest tier of Time Dimensions: O"+(aarMod.maxHighestTD?"N":"FF")
+	el("maxHighestTD").textContent = "Buy Max the highest tier of Time Dimensions: O"+(aarMod.maxHighestTD?"N":"FF")
 }
 
 function getMaxTDCost() {
 	if (!hasAch("r36")) return Number.MAX_VALUE
 	let x = Decimal.pow(Number.MAX_VALUE, 10)
 
-	if (player.currentChallenge == "postcngm3_1") x = new Decimal(1e60)
+	if (player.currentChallenge == "postcngm3_1") x = E(1e60)
 	else if (player.currentChallenge != "") x = Decimal.pow(10, 1000)
 
 	if (player.infinityUpgrades.includes("postinfi53")) x = x.pow(1 + tmp.cp / 3)
@@ -84,7 +84,7 @@ function getMaxTDCost() {
 }
 
 function getNGM4GalaxyEff() {
-	let e = new Decimal(1)
+	let e = E(1)
 	if (hasAch("r66")) {
 		e = e.times(Math.log10(player.galacticSacrifice.galaxyPoints.max(1e86).log10() + 14) / 2)
 		if (player.galacticSacrifice.galaxyPoints.gt(1e86)) e = e.add(player.galacticSacrifice.galaxyPoints.div(1e86).minus(1).min(10).div(100))

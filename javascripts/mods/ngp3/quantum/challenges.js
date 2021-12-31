@@ -36,13 +36,13 @@ var QCs = {
 			value: 0,
 			percentage: 0
 		}
-		getEl("setAutoExpand_value").value = qc1.autoExpand.value
-		getEl("setAutoExpand_percentage").value = qc1.autoExpand.percentage
+		el("setAutoExpand_value").value = qc1.autoExpand.value
+		el("setAutoExpand_percentage").value = qc1.autoExpand.percentage
 
 		if (typeof(data.qc2) !== "number") data.qc2 = data.cloud_disable || 1
 		delete QCs_save.qc3
 		if (data.qc4 === undefined || data.qc4.normal === undefined) data.qc4 = { normal: data.qc4 || "ng", dil: "ng" }
-		data.qc5 = new Decimal(data.qc5)
+		data.qc5 = E(data.qc5)
 		if (data.qc8 === undefined) {
 			data.qc8 = {
 				index: 0,
@@ -71,7 +71,7 @@ var QCs = {
 			autoExpand: QCs_save.qc1 && QCs_save.qc1.autoExpand
 		}
 		if (!QCs_save.qc2) QCs_save.qc2 = 1
-		QCs_save.qc5 = new Decimal(0)
+		QCs_save.qc5 = E(0)
 		QCs_save.qc6 = 0
 		QCs_save.qc7 = QCs.perkActive(7) ? Math.sqrt(player.replicanti.galaxies) : 0 //QC7 perk
 		if (QCs_save.qc8) QCs_save.qc8.time = 0
@@ -127,9 +127,9 @@ var QCs = {
 				if (hasAch("ng3p33")) {
 					player.replicanti.amount = player.replicanti.amount.pow(0.9)
 				} else {
-					tmp.rm = new Decimal(1)
-					tmp.rmPseudo = new Decimal(1)
-					player.replicanti.amount = new Decimal(1)
+					tmp.rm = E(1)
+					tmp.rmPseudo = E(1)
+					player.replicanti.amount = E(1)
 
 					eternity(false, true, false, p15)
 				}
@@ -220,9 +220,9 @@ var QCs = {
 			},
 
 			updateDisp() {		
-				getEl("replCompressDiv").style.display = QCs_tmp.qc1 ? "" : "none"
-				getEl("repExpand").style.display = PCs.milestoneDone(13) ? "" : "none"
-				getEl("replDilaterDiv").style.display = PCs.milestoneDone(12) ? "" : "none"
+				el("replCompressDiv").style.display = QCs_tmp.qc1 ? "" : "none"
+				el("repExpand").style.display = PCs.milestoneDone(13) ? "" : "none"
+				el("replDilaterDiv").style.display = PCs.milestoneDone(12) ? "" : "none"
 
 				if (!tmp.ngp3) return
 				if (!QCs_save) return
@@ -238,24 +238,24 @@ var QCs = {
 					html += (first == fin - 1 ? "" : first + " - ") + getFullExpansion(fin) + " Replicanti Compressors: " +
 					timeDisplay(last[i - 1][1]) + "<br>"
 				}
-				getEl("lasttencompressors").innerHTML = html
+				el("lasttencompressors").innerHTML = html
 			},
 			updateDispOnTick() {
 				let qc1 = QCs_save.qc1
 				let data = QCs.data[1]
 				if (QCs_tmp.qc1) {
-					getEl("replCompress").textContent = getFullExpansion(qc1.boosts) + (data.extra() > 0 ? " + " + shorten(data.extra()) : "")
-					getEl("replCompressEff").textContent = "^" + shorten(QCs_tmp.qc1.effExp) + ", x" + shorten(QCs_tmp.qc1.effMult)
+					el("replCompress").textContent = getFullExpansion(qc1.boosts) + (data.extra() > 0 ? " + " + shorten(data.extra()) : "")
+					el("replCompressEff").textContent = "^" + shorten(QCs_tmp.qc1.effExp) + ", x" + shorten(QCs_tmp.qc1.effMult)
 				}
 				if (PCs.milestoneDone(13)) {
-					getEl("repExpand").innerHTML = "Energize the Replicantis and expand their space." +
+					el("repExpand").innerHTML = "Energize the Replicantis and expand their space." +
 						"<br>Cost: " + shorten(data.expandCost()) + " Replicanti Energy" +
 						"<br>(" + getFullExpansion(qc1.expands) + " Expansions)"
-					getEl("repExpand").className = data.canExpand() ? "storebtn" : "unavailablebtn"
+					el("repExpand").className = data.canExpand() ? "storebtn" : "unavailablebtn"
 				}
 				if (PCs.milestoneDone(12)) {
-					getEl("replDilater").textContent = getFullExpansion(qc1.dilaters)
-					getEl("replDilaterEff").textContent = "^" + QCs_tmp.qc1.dilaterEff.toFixed(3)
+					el("replDilater").textContent = getFullExpansion(qc1.dilaters)
+					el("replDilaterEff").textContent = "^" + QCs_tmp.qc1.dilaterEff.toFixed(3)
 				}
 			},
 
@@ -284,7 +284,7 @@ var QCs = {
 				this.expand(true)
 			},
 			setAutoExpand(x) {
-				QCs_save.qc1.autoExpand[x] = parseInt(getEl("setAutoExpand_" + x).value)
+				QCs_save.qc1.autoExpand[x] = parseInt(el("setAutoExpand_" + x).value)
 			},
 
 			//Stats
@@ -312,7 +312,7 @@ var QCs = {
 
 			rewardDesc: (x) => "Quantum Power boosts color charge by " + shorten(x) + "x.",
 			rewardEff(str) {
-				str = str || colorCharge.normal.charge || new Decimal(0)
+				str = str || colorCharge.normal.charge || E(0)
 				return str.div(3).add(1).pow((enB.glu.boosterExp() || 1) / 6)
 			},
 
@@ -328,9 +328,9 @@ var QCs = {
 
 				let unl = futureBoost("exclude_any_qc") ? QCs.inAny() : QCs.in(2)
 				for (let t = 1; t <= 3; t++) {
-					getEl("pos_cloud" + t + "_toggle").parentElement.style.display = unl && pos_tmp.cloud[t] ? "" : "none"
-					getEl("pos_cloud" + t + "_cell").colspan = unl && pos_tmp.cloud[t] ? 1 : 2
-					if (unl) getEl("pos_cloud" + t + "_toggle").className = (QCs_save.qc2 == t ? "chosenbtn" : "storebtn") + " longbtn"
+					el("pos_cloud" + t + "_toggle").parentElement.style.display = unl && pos_tmp.cloud[t] ? "" : "none"
+					el("pos_cloud" + t + "_cell").colspan = unl && pos_tmp.cloud[t] ? 1 : 2
+					if (unl) el("pos_cloud" + t + "_toggle").className = (QCs_save.qc2 == t ? "chosenbtn" : "storebtn") + " longbtn"
 				}
 			},
 			switch(x) {
@@ -409,16 +409,16 @@ var QCs = {
 			},
 
 			updateDisp() {		
-				getEl("qc4_div").style.display = QCs.in(4) ? "" : "none"
-				getEl("qc4_select").style.display = "Select one to disable:" + (!QCs.perkActive(4) ? "" : " (" + player.dilation.active ? "Dilation" : "Normal" + ")")
-				getEl("coinsPerSec").style.display = QCs.in(4) ? "none" : ""
-				getEl("tickSpeedRow").style.display = QCs.in(4) ? "none" : ""
+				el("qc4_div").style.display = QCs.in(4) ? "" : "none"
+				el("qc4_select").style.display = "Select one to disable:" + (!QCs.perkActive(4) ? "" : " (" + player.dilation.active ? "Dilation" : "Normal" + ")")
+				el("coinsPerSec").style.display = QCs.in(4) ? "none" : ""
+				el("tickSpeedRow").style.display = QCs.in(4) ? "none" : ""
 
 				if (!QCs.in(4)) return
 				var types = ["ng", "rg", "eg", "tg"]
 				for (var t = 0; t < types.length; t++) {
 					var type = types[t]
-					getEl("qc4_" + type).className = (QCs_save.qc4[QCs_tmp.qc4.type] == type ? "chosenbtn" : "storebtn")
+					el("qc4_" + type).className = (QCs_save.qc4[QCs_tmp.qc4.type] == type ? "chosenbtn" : "storebtn")
 				}
 			},
 			switch(x) {
@@ -462,7 +462,7 @@ var QCs = {
 				if (!QCs.in(5) && !QCs.done(6)) return
 
 				QCs_tmp.qc5 = {
-					mult: new Decimal(QCs_save.qc1.boosts + 1),
+					mult: E(QCs_save.qc1.boosts + 1),
 					eff: Math.log10(QCs_save.qc5.div(2e6).add(1).log(2) + 1) / 5 + 1
 				}
 				if (QCs.isRewardOn(6)) QCs_tmp.qc5.mult = QCs_tmp.qc5.mult.times(QCs_tmp.rewards[6])
@@ -470,14 +470,14 @@ var QCs = {
 			},
 
 			updateDisp() {		
-				getEl("qc5_div").style.display = QCs_tmp.qc5 ? "" : "none"
+				el("qc5_div").style.display = QCs_tmp.qc5 ? "" : "none"
 			},
 			updateDispOnTick() {		
 				let exp = QCs.data[5].exp()
-				getEl("qc5_eng").textContent = shorten(QCs_save.qc5)
-				getEl("qc5_eng_mult").textContent = shiftDown ? " (+" + shorten(Math.max(QCs_tmp.qc5.mult, 1)) + " per " + shorten(Decimal.pow(10, 1 / Math.min(QCs_tmp.qc5.mult, 1))) + "x)" : ""
-				getEl("qc5_eng_exp").textContent = exp > 1 ? shorten(exp) : ""
-				getEl("qc5_eff").textContent = shorten(QCs_tmp.qc5.eff)
+				el("qc5_eng").textContent = shorten(QCs_save.qc5)
+				el("qc5_eng_mult").textContent = shiftDown ? " (+" + shorten(Math.max(QCs_tmp.qc5.mult, 1)) + " per " + shorten(Decimal.pow(10, 1 / Math.min(QCs_tmp.qc5.mult, 1))) + "x)" : ""
+				el("qc5_eng_exp").textContent = exp > 1 ? shorten(exp) : ""
+				el("qc5_eff").textContent = shorten(QCs_tmp.qc5.eff)
 			},
 		},
 		6: {
@@ -568,8 +568,8 @@ var QCs = {
 
 				var qc8 = QCs_save.qc8
 				var qc8_in = QCs.in(8)
-				getEl("qc8_note").innerHTML = qc8_in ? "You have to Big Crunch to switch your gluon kind!<br>Used kinds: " + qc8.order.length + " / 2" : ""
-				getEl("qc8_clear").style.display = qc8_in ? "" : "none"
+				el("qc8_note").innerHTML = qc8_in ? "You have to Big Crunch to switch your gluon kind!<br>Used kinds: " + qc8.order.length + " / 2" : ""
+				el("qc8_clear").style.display = qc8_in ? "" : "none"
 
 				if (qc8_in) {
 					updateGluonsTabOnUpdate()
@@ -577,7 +577,7 @@ var QCs = {
 					var kinds = ["rg", "gb", "br"]
 					for (var k = 0; k < kinds.length; k++) {
 						var kind = kinds[k]
-						getEl("entangle_" + kind).className = qc8.order[qc8.index] == kind ? "chosenbtn2" : qc8.order.includes(kind) ? "chosenbtn" : qc8.order.length == 2 ? "unavailablebtn" : "gluonupgrade " + kind
+						el("entangle_" + kind).className = qc8.order[qc8.index] == kind ? "chosenbtn2" : qc8.order.includes(kind) ? "chosenbtn" : qc8.order.length == 2 ? "unavailablebtn" : "gluonupgrade " + kind
 					}
 				}
 			},
@@ -685,7 +685,7 @@ var QCs = {
 	disablePerk(x) {
 		if (QCs.inAny() && !confirm("This will restart this challenge! Are you sure?")) return
 		QCs_save.disable_perks[x] = !QCs_save.disable_perks[x]
-		getEl("disable_qc" + x + "_perk").textContent = (QCs_save.disable_perks[x] ? "Enable" : "Disable") + " QC" + x + " Perk"
+		el("disable_qc" + x + "_perk").textContent = (QCs_save.disable_perks[x] ? "Enable" : "Disable") + " QC" + x + " Perk"
 
 		if (QCs.inAny()) restartQuantum()
 	},
@@ -696,11 +696,11 @@ var QCs = {
 
 	toggle_auto() {
 		QCs_save.auto = !QCs_save.auto
-		getEl("auto_qc").textContent = "Auto-completions: " + (QCs_save.auto ? "ON" : "OFF")
+		el("auto_qc").textContent = "Auto-completions: " + (QCs_save.auto ? "ON" : "OFF")
 	},
 	disable_swaps() {
 		QCs_save.disable_swaps.on = !QCs_save.disable_swaps.on
-		getEl("swaps_toggle").textContent = (QCs_save.disable_swaps.on ? "Enable" : "Disable") + " swaps in challenge"
+		el("swaps_toggle").textContent = (QCs_save.disable_swaps.on ? "Enable" : "Disable") + " swaps in challenge"
 	},
 
 	setupDiv() {
@@ -708,7 +708,7 @@ var QCs = {
 
 		let html = ""
 		for (let x = 1; x <= this.data.max; x++) html += (x % 2 == 1 ? "<tr>" : "") + this.divTemp(x) + ((x + 1) % 2 == 1 ? "</tr>" : "")
-		getEl("qcs_div").innerHTML = html
+		el("qcs_div").innerHTML = html
 
 		this.divInserted = true
 	},
@@ -733,36 +733,36 @@ var QCs = {
 		//Quantum Challenges
 		if (!unl) return
 
-		getEl("qc_effects").innerHTML = QCs_tmp.show_perks ? "" : "All quantum mechanics will change, when entering a Quantum Challenge:<br>" +
+		el("qc_effects").innerHTML = QCs_tmp.show_perks ? "" : "All quantum mechanics will change, when entering a Quantum Challenge:<br>" +
 			(tmp.bgMode ? "No" : (tmp.exMode ? "No" : "Reduced") + " global Quantum Energy bonus, no") + " gluon nerfs, and mastered boosts only work."
 		for (let qc = 1; qc <= this.data.max; qc++) {
 			var cUnl = QCs_tmp.unl_challs.includes(qc)
-			getEl("qc_" + qc + "_div").style.display = cUnl ? "" : "none"
+			el("qc_" + qc + "_div").style.display = cUnl ? "" : "none"
 
 			if (QCs_tmp.show_perks) {
 				var reqs = this.data[qc].overlapReqs
-				getEl("qc_" + qc + "_desc").textContent = this.data[qc].perkDesc(QCs_tmp.perks[qc])
-				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.getGoalMA(qc, "up")) + " MA"
-				getEl("qc_" + qc + "_btn").textContent = this.perkUnl(qc) ? (this.perkActive(qc) ? "Perk Activated" : "Completed") : "Locked"
-				getEl("qc_" + qc + "_btn").className = this.perkUnl(qc) ? "completedchallengesbtn" : "lockedchallengesbtn"
+				el("qc_" + qc + "_desc").textContent = this.data[qc].perkDesc(QCs_tmp.perks[qc])
+				el("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.getGoalMA(qc, "up")) + " MA"
+				el("qc_" + qc + "_btn").textContent = this.perkUnl(qc) ? (this.perkActive(qc) ? "Perk Activated" : "Completed") : "Locked"
+				el("qc_" + qc + "_btn").className = this.perkUnl(qc) ? "completedchallengesbtn" : "lockedchallengesbtn"
 			} else if (cUnl) {
-				getEl("qc_" + qc + "_desc").textContent = evalData(this.data[qc].desc)
-				getEl("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.data[qc].goalMA) + " meta-antimatter and " + evalData(this.data[qc].goalDisp)
-				getEl("qc_" + qc + "_btn").textContent = this.started(qc) ? "Running" : this.done(qc) ? "Completed" : "Start"
-				getEl("qc_" + qc + "_btn").className = this.started(qc) ? "onchallengebtn" : this.done(qc) ? "completedchallengesbtn" : "challengesbtn"
+				el("qc_" + qc + "_desc").textContent = evalData(this.data[qc].desc)
+				el("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.data[qc].goalMA) + " meta-antimatter and " + evalData(this.data[qc].goalDisp)
+				el("qc_" + qc + "_btn").textContent = this.started(qc) ? "Running" : this.done(qc) ? "Completed" : "Start"
+				el("qc_" + qc + "_btn").className = this.started(qc) ? "onchallengebtn" : this.done(qc) ? "completedchallengesbtn" : "challengesbtn"
 			}
 		}
-		getEl("restart_qc").style.display = QCs.inAny() ? "" : "none"
-		getEl("auto_qc").style.display = hasAch("ng3p25") ? "" : "none"
-		getEl("auto_qc").textContent = "Auto-completions: " + (QCs_save.auto ? "ON" : "OFF")
+		el("restart_qc").style.display = QCs.inAny() ? "" : "none"
+		el("auto_qc").style.display = hasAch("ng3p25") ? "" : "none"
+		el("auto_qc").textContent = "Auto-completions: " + (QCs_save.auto ? "ON" : "OFF")
 
 		//Perks
-		getEl("qc_perks").style.display = hasAch("ng3pr12") ? "inline" : "none"
-		getEl("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Perks [moving soon]'
-		getEl("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Perks only work in any Quantum Challenge!' : ""
+		el("qc_perks").style.display = hasAch("ng3pr12") ? "inline" : "none"
+		el("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Perks [moving soon]'
+		el("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Perks only work in any Quantum Challenge!' : ""
 
-		getEl("disable_qc2_perk").style.display = this.perkUnl(2) ? "" : "none"
-		getEl("disable_qc2_perk").textContent = (QCs_save.disable_perks[2] ? "Enable" : "Disable") + " QC2 Perk"
+		el("disable_qc2_perk").style.display = this.perkUnl(2) ? "" : "none"
+		el("disable_qc2_perk").textContent = (QCs_save.disable_perks[2] ? "Enable" : "Disable") + " QC2 Perk"
 	},
 	updateDispOnTick() {
 		if (!this.divInserted) return
@@ -770,7 +770,7 @@ var QCs = {
 		for (let qc = 1; qc <= this.data.max; qc++) {
 			if (QCs_tmp.unl_challs.includes(qc)) {
 				var hint = evalData(this.data[qc].hint)
-				getEl("qc_" + qc + "_reward").innerHTML = 
+				el("qc_" + qc + "_reward").innerHTML = 
 				QCs_tmp.show_perks ? "" :
 				(shiftDown || QCs.in(qc)) && hint ? "Hint: " + hint :
 				"Reward: " + evalData(this.data[qc].rewardDesc, [QCs_tmp.rewards[qc]])

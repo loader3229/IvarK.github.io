@@ -1,5 +1,5 @@
 function getDimensionBoostPower(next, focusOn) {
-	if (inNC(11) || inNC(15) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_1") return new Decimal(1);
+	if (inNC(11) || inNC(15) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_1") return E(1);
 
 	var ret = 2
 	if (!inNGM(2)) {
@@ -24,7 +24,7 @@ function getDimensionBoostPower(next, focusOn) {
 
 	if (player.currentEternityChall == "eterc13") ret = Decimal.pow(10, Math.sqrt(ret.log10() * (player.galaxies + getTotalRGs() + getEffectiveTGs())))
 
-	return new Decimal(ret)
+	return E(ret)
 }
 
 function softReset(bulk, tier = 1) {
@@ -39,8 +39,8 @@ function softReset(bulk, tier = 1) {
 
 	if (moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[0] && tier == 1) {
 		skipResets()
-		player.matter = new Decimal(0)
-		player.postC8Mult = new Decimal(1)
+		player.matter = E(0)
+		player.postC8Mult = E(1)
 		player.dbPower = getDimensionBoostPower()
 		return
 	}
@@ -48,15 +48,15 @@ function softReset(bulk, tier = 1) {
 	doDimBoostResetStuff()
 
 	if (player.resets > 4 && tmp.ngmX < 5) {
-		getEl("confirmation").style.display = "inline-block";
-		getEl("sacrifice").style.display = "inline-block";
-		getEl("confirmations").style.display = "inline-block";
-		getEl("sacConfirmBtn").style.display = "inline-block";
+		el("confirmation").style.display = "inline-block";
+		el("sacrifice").style.display = "inline-block";
+		el("confirmations").style.display = "inline-block";
+		el("sacConfirmBtn").style.display = "inline-block";
 	}
 
 	if (inNGM(2) && player.galaxies > 0 && player.resets > (inNGM(5) ? 3 : 4)) {
-		getEl("gSacrifice").style.display = "inline-block"
-		getEl("gConfirmation").style.display = "inline-block"
+		el("gSacrifice").style.display = "inline-block"
+		el("gConfirmation").style.display = "inline-block"
 	}
 
 	hideDimensions()
@@ -73,7 +73,7 @@ function setInitialMoney() {
 	if (hasAch("r54")) x = 2e5
 	if (hasAch("r55")) x = 1e10
 	if (hasAch("r78")) x = 2e25
-	player.money = new Decimal(x)
+	player.money = E(x)
 }
 
 function setInitialResetPower() {
@@ -173,7 +173,7 @@ function getSupersonicMultIncrease() {
 	return r
 }
 
-getEl("softReset").onclick = function () {
+el("softReset").onclick = function () {
 	if (cantReset()) return
 	var req = getShiftRequirement()
 	if (tmp.ri || getAmount(req.tier) < req.amount) return;

@@ -34,19 +34,19 @@ function canUnlockEC(idx, cost, study, study2) {
 			break;
 
 		case 7:
-			if (player.money.gte(new Decimal(ecStarts[7]).times(new Decimal(ecMults[7]).pow(ECComps("eterc7"))))) return true
+			if (player.money.gte(E(ecStarts[7]).times(E(ecMults[7]).pow(ECComps("eterc7"))))) return true
 			break;
 
 		case 8:
-			if (player.infinityPoints.gte(new Decimal(ecStarts[8]).times(new Decimal(ecMults[8]).pow(ECComps("eterc8"))))) return true
+			if (player.infinityPoints.gte(E(ecStarts[8]).times(E(ecMults[8]).pow(ECComps("eterc8"))))) return true
 			break;
 
 		case 9:
-			if (player.infinityPower.gte(new Decimal(ecStarts[9]).times(new Decimal(ecMults[9]).pow(ECComps("eterc9"))))) return true
+			if (player.infinityPower.gte(E(ecStarts[9]).times(E(ecMults[9]).pow(ECComps("eterc9"))))) return true
 			break;
 
 		case 10:
-			if (player.eternityPoints.gte(new Decimal(ecStarts[10]).times(new Decimal(ecMults[10]).pow(ECComps("eterc10"))))) return true
+			if (player.eternityPoints.gte(E(ecStarts[10]).times(E(ecMults[10]).pow(ECComps("eterc10"))))) return true
 			break;
 
 		case 11:
@@ -83,7 +83,7 @@ let ECCosts = [null,
 		550, 1,   1]
 
 for (let ecnum = 1; ecnum <= 12; ecnum ++){
-	getEl("ec" + ecnum + "unl").onclick = function(){
+	el("ec" + ecnum + "unl").onclick = function(){
 		if (canUnlockECFromNum(ecnum)) {
 			unlockEChall(ecnum)
 			player.timestudy.theorem -= ECCosts[ecnum]
@@ -95,7 +95,7 @@ for (let ecnum = 1; ecnum <= 12; ecnum ++){
 function unlockEChall(idx) {
 	if (player.eternityChallUnlocked == 0) {
 		player.eternityChallUnlocked = idx
-		getEl("eterc" + player.eternityChallUnlocked + "div").style.display = "inline-block"
+		el("eterc" + player.eternityChallUnlocked + "div").style.display = "inline-block"
 		if (!justImported) showTab("challenges")
 		if (!justImported) showChallengesTab("eternitychallenges")
 		if (idx < 13) {
@@ -109,10 +109,10 @@ function unlockEChall(idx) {
 function updateECUnlockButtons() {
 	for (let ecnum = 1; ecnum <= 12; ecnum ++){
 		let s = "ec" + ecnum + "unl"
-		if (canUnlockECFromNum(ecnum)) getEl(s).className = "eternitychallengestudy"
-		else getEl(s).className = "eternitychallengestudylocked"
+		if (canUnlockECFromNum(ecnum)) el(s).className = "eternitychallengestudy"
+		else el(s).className = "eternitychallengestudylocked"
 	}
-	if (player.eternityChallUnlocked !== 0) getEl("ec" + player.eternityChallUnlocked + "unl").className = "eternitychallengestudybought"
+	if (player.eternityChallUnlocked !== 0) el("ec" + player.eternityChallUnlocked + "unl").className = "eternitychallengestudybought"
 }
 
 function resetEternityChallUnlocks() {
@@ -256,20 +256,20 @@ function updateEternityChallenges() {
 			tmp.ec+=ecdata
 			locked=false
 		}
-		getEl(property+"div").style.display=ecdata?"inline-block":"none"
-		getEl(property).textContent=ecdata>4?"Completed":"Locked"
-		getEl(property).className=ecdata>4?"completedchallengesbtn":"lockedchallengesbtn"
+		el(property+"div").style.display=ecdata?"inline-block":"none"
+		el(property).textContent=ecdata>4?"Completed":"Locked"
+		el(property).className=ecdata>4?"completedchallengesbtn":"lockedchallengesbtn"
 	}
 	if (player.eternityChallUnlocked>0) {
 		var property="eterc"+player.eternityChallUnlocked
 		var onchallenge=player.currentEternityChall==property
 		locked=false
-		getEl(property+"div").style.display="inline-block"
-		getEl(property).textContent=onchallenge?"Running":"Start"
-		getEl(property).className=onchallenge?"onchallengebtn":"challengesbtn"
+		el(property+"div").style.display="inline-block"
+		el(property).textContent=onchallenge?"Running":"Start"
+		el(property).className=onchallenge?"onchallengebtn":"challengesbtn"
 	}
 	if (pH.did("quantum")) locked = false
-	getEl("eterctabbtn").parentElement.style.display = pH.shown("eternity") && !locked ? "" : "none"
+	el("eterctabbtn").parentElement.style.display = pH.shown("eternity") && !locked ? "" : "none"
 }
 
 function startEternityChallenge(n) {
@@ -277,11 +277,11 @@ function startEternityChallenge(n) {
 	if (player.options.challConf) if (!confirm("You will start over with just your time studies, eternity upgrades and achievements. You need to reach a set IP goal with special conditions.")) return
 	if (pH.did("ghostify") && name == "eterc10") player.ghostify.under = false
 	let oldStat = getEternitied()
-	player.eternities = nA(player.eternities, gainEternitiedStat())
+	player.eternities = c_add(player.eternities, gainEternitiedStat())
 	player.thisEternity = 0
 	if (player.tickspeedBoosts != undefined) player.tickspeedBoosts = 0
-	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25);
-	else player.infinityPoints = new Decimal(0);
+	if (hasAch("r104")) player.infinityPoints = E(2e25);
+	else player.infinityPoints = E(0);
 
 	player.eternityChallGoal = getECGoal("eterc" + n)
 	player.currentEternityChall = "eterc" + n
@@ -335,7 +335,7 @@ function getECReward(x) {
 		return Math.max(x, 1)
 	}
 	if (x == 7) {
-		if (c == 0 && player.currentEternityChall !== "eterc7") return new Decimal(0)
+		if (c == 0 && player.currentEternityChall !== "eterc7") return E(0)
 
 		let timeProd = getTimeDimensionProduction(1)
 		if (player.currentEternityChall === "eterc7") return timeProd
@@ -381,7 +381,7 @@ function doCheckECCompletionStuff() {
 		//Special
 		if (qMs.tmp.amt >= 1) {
 			if (ecNum > 12) {
-				getEl("ec" + ecNum + "Req").style.display = "block"
+				el("ec" + ecNum + "Req").style.display = "block"
 				mTs.ecReqNumsStored[ecNum] = mTs.ecReqNums[ecNum]()
 				updateMasteryStudyTextDisplay()
 			}
@@ -428,29 +428,29 @@ function getECMults() {
 }
 
 function ECRewardDisplayUpdating() {
-	getEl("ec1reward").textContent = "Reward: "+shortenMoney(getECReward(1))+"x on all Time Dimensions (based on time spent this Eternity)"
-	getEl("ec2reward").textContent = "Reward: Infinity Power affects the 1st Infinity Dimension with reduced effect. Currently: " + shortenMoney(getECReward(2)) + "x"
-	getEl("ec3reward").textContent = "Reward: Increase the multiplier for buying 10 Dimensions. Currently: " + shorten(getDimensionPowerMultiplier("no-QC5")) + "x"
-	getEl("ec4reward").textContent = "Reward: Infinity Dimensions gain a multiplier from unspent IP. Currently: " + shortenMoney(getECReward(4)) + "x"
-	getEl("ec5reward").textContent = "Reward: Galaxy cost scaling starts " + getECReward(5) + " galaxies later."
-	getEl("ec6reward").textContent = "Reward: Further reduce the dimension cost multiplier increase. Currently: " + player.dimensionMultDecrease.toFixed(1) + "x "
-	getEl("ec7reward").textContent = "Reward: First Time Dimensions produce Eighth Infinity Dimensions. Currently: " + shortenMoney(infDimensionProduction(9)) + " per second. "
-	getEl("ec8reward").textContent = "Reward: Infinity Power powers up replicanti galaxies. Currently: " + (getECReward(8) * 100 - 100).toFixed(2) + "%"
-	getEl("ec9reward").textContent = "Reward: Infinity Dimensions gain a " + (inNGM(2) ? "post dilation " : "") + " multiplier based on your Time Shards. Currently: "+shortenMoney(getECReward(9))+"x "
-	getEl("ec10reward").textContent = "Reward: Time Dimensions gain a multiplier from your Infinities. Currently: " + shortenMoney(getECReward(10)) + "x "
-	getEl("ec11reward").textContent = "Reward: Further reduce the tickspeed cost multiplier increase. Currently: " + player.tickSpeedMultDecrease.toFixed(2) + "x" + (tmp.ngC ? ", and galaxies are " + shorten((getECReward(11) - 1) * 100) + "% stronger (based on free tickspeed upgrades)":" ")
-	getEl("ec12reward").textContent = "Reward: Infinity Dimension cost multipliers are reduced. (x^" + getECReward(12) + ")"
-	getEl("ec13reward").textContent = "Reward: For boosting dimension boosts, everything except meta-antimatter boosts them more. (x^1 -> ^" + getECReward(13).toFixed(2) + ")"
+	el("ec1reward").textContent = "Reward: "+shortenMoney(getECReward(1))+"x on all Time Dimensions (based on time spent this Eternity)"
+	el("ec2reward").textContent = "Reward: Infinity Power affects the 1st Infinity Dimension with reduced effect. Currently: " + shortenMoney(getECReward(2)) + "x"
+	el("ec3reward").textContent = "Reward: Increase the multiplier for buying 10 Dimensions. Currently: " + shorten(getDimensionPowerMultiplier("no-QC5")) + "x"
+	el("ec4reward").textContent = "Reward: Infinity Dimensions gain a multiplier from unspent IP. Currently: " + shortenMoney(getECReward(4)) + "x"
+	el("ec5reward").textContent = "Reward: Galaxy cost scaling starts " + getECReward(5) + " galaxies later."
+	el("ec6reward").textContent = "Reward: Further reduce the dimension cost multiplier increase. Currently: " + player.dimensionMultDecrease.toFixed(1) + "x "
+	el("ec7reward").textContent = "Reward: First Time Dimensions produce Eighth Infinity Dimensions. Currently: " + shortenMoney(infDimensionProduction(9)) + " per second. "
+	el("ec8reward").textContent = "Reward: Infinity Power powers up replicanti galaxies. Currently: " + (getECReward(8) * 100 - 100).toFixed(2) + "%"
+	el("ec9reward").textContent = "Reward: Infinity Dimensions gain a " + (inNGM(2) ? "post dilation " : "") + " multiplier based on your Time Shards. Currently: "+shortenMoney(getECReward(9))+"x "
+	el("ec10reward").textContent = "Reward: Time Dimensions gain a multiplier from your Infinities. Currently: " + shortenMoney(getECReward(10)) + "x "
+	el("ec11reward").textContent = "Reward: Further reduce the tickspeed cost multiplier increase. Currently: " + player.tickSpeedMultDecrease.toFixed(2) + "x" + (tmp.ngC ? ", and galaxies are " + shorten((getECReward(11) - 1) * 100) + "% stronger (based on free tickspeed upgrades)":" ")
+	el("ec12reward").textContent = "Reward: Infinity Dimension cost multipliers are reduced. (x^" + getECReward(12) + ")"
+	el("ec13reward").textContent = "Reward: For boosting dimension boosts, everything except meta-antimatter boosts them more. (x^1 -> ^" + getECReward(13).toFixed(2) + ")"
 
 	if (!tmp.rep.ec14) updateEC14BaseReward()
 	let ec14 = tmp.rep.ec14
-	getEl("ec14reward").innerHTML = shiftDown ?
+	el("ec14reward").innerHTML = shiftDown ?
 		("Reward: (Based on replicate interval)<br>Base speedup: " + shorten(ec14.baseInt) + "x, slowdown deacceleration: " + formatPercentage(ec14.acc) + "% slowdown") :
 		(
 			(ec14.interval.lt(1) ? "Speed up the replicate interval by " + shorten(Decimal.pow(ec14.interval, -1)) + "x" : "Slow down the replicate interval by " + shorten(ec14.interval) + "x") +
 			", in return of " + shorten(ec14.ooms) + "x slower slowdown."
 		)
 
-	getEl("ec10span").textContent = shortenMoney(ec10bonus) + "x"
-	getEl("eterc7ts").textContent = tmp.ngC ? "does nothing" : "affects all dimensions normally"
+	el("ec10span").textContent = shortenMoney(ec10bonus) + "x"
+	el("eterc7ts").textContent = tmp.ngC ? "does nothing" : "affects all dimensions normally"
 }

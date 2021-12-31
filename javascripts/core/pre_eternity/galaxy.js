@@ -15,11 +15,11 @@ function galaxyReset(bulk) {
 	if (player.options.notation == "Emojis") player.spreadingCancer += bulk
 
 	if (player.infinitied < 1 && player.eternities == 0 && !quantumed) {
-		getEl("sacrifice").style.display = "none"
-		getEl("confirmation").style.display = "none"
+		el("sacrifice").style.display = "none"
+		el("confirmation").style.display = "none"
 		if (inNGM(2) && (player.galaxies > 0 || (inNGM(2) ? player.galacticSacrifice.times > 0 : false))) {
-			getEl("gSacrifice").style.display = "inline-block"
-			getEl("gConfirmation").style.display = "inline-block"
+			el("gSacrifice").style.display = "inline-block"
+			el("gConfirmation").style.display = "inline-block"
 		}
 	}
 	if (!hasAch("r111")) setInitialMoney()
@@ -30,7 +30,7 @@ function galaxyReset(bulk) {
 	tmp.tickUpdate = true;
 }
 
-getEl("secondSoftReset").onclick = function() {
+el("secondSoftReset").onclick = function() {
 	let ngm4 = tmp.ngmX ? tmp.ngmX >= 4 : false
 	let bool1 = !inNC(11) || ngm4
 	let bool2 = player.currentChallenge != "postc1"

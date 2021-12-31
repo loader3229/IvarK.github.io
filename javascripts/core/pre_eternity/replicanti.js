@@ -7,10 +7,10 @@ function getReplUnlCost() {
 function unlockReplicantis() {
 	let cost = getReplUnlCost()
 	if (player.infinityPoints.gte(cost)) {
-		getEl("replicantidiv").style.display = "inline-block"
-		getEl("replicantiunlock").style.display = "none"
+		el("replicantidiv").style.display = "inline-block"
+		el("replicantiunlock").style.display = "none"
 		player.replicanti.unl = true
-		player.replicanti.amount = new Decimal(1)
+		player.replicanti.amount = E(1)
 		player.infinityPoints = player.infinityPoints.minus(cost)
 		ls.reset()
 	}
@@ -47,11 +47,11 @@ function replicantiIncrease(diff) {
 }
 
 function getReplicantiLimit(cap = false) {
-	let lim = player.boughtDims ? player.replicanti.limit : new Decimal(Number.MAX_VALUE)
+	let lim = player.boughtDims ? player.replicanti.limit : E(Number.MAX_VALUE)
 	let limBroke = isReplicantiLimitBroken()
 
 	if (cap) {
-		if (limBroke) lim = new Decimal(1/0)
+		if (limBroke) lim = E(1/0)
 		else if (tmp.ngC) {
 			if (hasTS(52)) lim = lim.pow(tsMults[52]())
 			if (hasTS(192)) lim = lim.times(player.timeShards.plus(1))
@@ -69,16 +69,16 @@ function isReplicantiLimitBroken() {
 }
 
 function getReplEff() {
-	if (dev.noRep) return new Decimal(1)
-	if (QCs.in(5)) return new Decimal(1)
+	if (dev.noRep) return E(1)
+	if (QCs.in(5)) return E(1)
 
 	var x = getReplBaseEff().max(tmp.rmPseudo || 0)
 	return x
 }
 
 function getReplBaseEff(x) {
-	if (dev.noRep) return new Decimal(1)
-	if (QCs.in(5)) return new Decimal(1)
+	if (dev.noRep) return E(1)
+	if (QCs.in(5)) return E(1)
 
 	if (!x) x = player.replicanti.amount
 	if (tmp.ngp3) {
@@ -89,8 +89,8 @@ function getReplBaseEff(x) {
 }
 
 function getReplMult(next) {
-	if (dev.noRep) return new Decimal(1)
-	if (QCs.in(5)) return new Decimal(1)
+	if (dev.noRep) return E(1)
+	if (QCs.in(5)) return E(1)
 
 	let exp = 2
 	if (inNGM(2)) exp = Math.max(2, Math.pow(player.galaxies, .4))
@@ -106,7 +106,7 @@ function getReplMult(next) {
 
 	if (hasTS(102)) {
 		let rg = getFullEffRGs()
-		let base = new Decimal(replmult)
+		let base = E(replmult)
 
 		replmult = base.times(Decimal.pow(5, rg))
 		if (hasMTS(292)) replmult = replmult.max(base.pow(getMTSMult(292)))
@@ -121,7 +121,7 @@ function upgradeReplicantiChance() {
 		else player.infinityPoints = player.infinityPoints.minus(cost())
 		player.replicanti.chance = Math.round(player.replicanti.chance * 100 + 1) / 100
 		if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
-		getEl("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
+		el("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
 		player.replicanti.chanceCost = player.replicanti.chanceCost.times(1e15)
 	}
 }
@@ -147,7 +147,7 @@ function upgradeReplicantiInterval() {
 	else player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
 
 	if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
-	getEl("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
+	el("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
 }
 
 function replicantiIntervalUpgCost(upgs) {
@@ -155,7 +155,7 @@ function replicantiIntervalUpgCost(upgs) {
 }
 
 function replicantiIntervalCost(interval) {
-	let x = new Decimal(interval)
+	let x = E(interval)
 	let expCost
 	if (x.lte(1)) {
 		expCost = Math.pow(x.toNumber(), -4) * 1200
@@ -175,7 +175,7 @@ function isIntervalAffordable() {
 }
 
 function getRepCostDivisor() {
-	let ret = new Decimal(1)
+	let ret = E(1)
 	if (hasTS(233)) ret = ret.times(tsMults[233]())
 	return ret
 }
@@ -222,7 +222,7 @@ function upgradeReplicantiGalaxy() {
 		player.replicanti.galCost = getRGCost(1)
 		player.replicanti.gal += 1
 		if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
-		getEl("eterc8repl").textContent = "You have "+player.eterc8repl+" purchases left."
+		el("eterc8repl").textContent = "You have "+player.eterc8repl+" purchases left."
 		return true
 	}
 	return false
@@ -239,7 +239,7 @@ function replicantiGalaxy() {
 
 function replicantiGalaxyBulkModeToggle() {
 	player.galaxyMaxBulk = !player.galaxyMaxBulk
-	getEl('replicantibulkmodetoggle').textContent = "Mode: " + (player.galaxyMaxBulk ? "Max" : "Singles")
+	el('replicantibulkmodetoggle').textContent = "Mode: " + (player.galaxyMaxBulk ? "Max" : "Singles")
 }
 
 function canGetReplicatedGalaxy() {
@@ -314,11 +314,11 @@ function getReplGalaxyEff() {
 
 function replicantiGalaxyAutoToggle() {
 	player.replicanti.galaxybuyer=!player.replicanti.galaxybuyer
-	getEl("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
+	el("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
 }
 
 function getReplicantiBaseInterval(speed, next = 0) {
-	speed = new Decimal(speed || player.replicanti.interval)
+	speed = E(speed || player.replicanti.interval)
 
 	var upgs = Math.round(Decimal.div(speed, 1e3).log(0.9))
 	upgs += next
@@ -340,7 +340,7 @@ function getReplicantiIntervalMult() {
 	if (player.replicanti.amount.gt(Number.MAX_VALUE) || hasTS(133)) interval *= 10
 	if (player.replicanti.amount.lt(Number.MAX_VALUE) && hasAch("r134")) interval /= 2
 
-	interval = new Decimal(interval)
+	interval = E(interval)
 	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))
 	if (player.dilation.upgrades.includes('ngpp1') && aarMod.nguspV && !aarMod.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
@@ -447,7 +447,7 @@ function updateEC14BaseReward() {
 
 		data.ooms = softcap(div, "ec14").max(1).log10() * data.acc + 1
 	} else {
-		data.baseInt = new Decimal(1)
+		data.baseInt = E(1)
 		data.interval = data.baseInt
 		data.acc = 0
 		data.ooms = 1
@@ -455,7 +455,7 @@ function updateEC14BaseReward() {
 }
 
 function boostReplicateInterval() {
-	let x = new Decimal(1)
+	let x = E(1)
 	let data = tmp.rep
 	let pow = getECReward(14)
 
@@ -587,14 +587,14 @@ function handleReplTabs() {
 	let major = QCs_tmp.qc1 !== undefined && pH.shown("quantum")
 
 	if (major != (tmp.repMajor || false)) {
-		getEl("replicantitabbtn").style.display = major || player.infinityUpgradesRespecced ? "none" : ""
+		el("replicantitabbtn").style.display = major || player.infinityUpgradesRespecced ? "none" : ""
 
-		if (major && getEl("replicantis").style.display == "block") showInfTab("preinf")
+		if (major && el("replicantis").style.display == "block") showInfTab("preinf")
 
-		getEl("replicantis").className = major ? "" : "inftab"
-		getEl("replicantis").style.display = major || getEl("repMajor").style.display == "block" ? "" : "none"
-		getEl(major ? "repMajor" : "infinity").appendChild(getEl("replicantis"))
+		el("replicantis").className = major ? "" : "inftab"
+		el("replicantis").style.display = major || el("repMajor").style.display == "block" ? "" : "none"
+		el(major ? "repMajor" : "infinity").appendChild(el("replicantis"))
 	}
-	getEl("repMajorBtn").style.display = major && !isEmptiness ? "" : "none"
+	el("repMajorBtn").style.display = major && !isEmptiness ? "" : "none"
 	tmp.repMajor = major
 }

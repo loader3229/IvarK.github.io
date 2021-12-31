@@ -1,10 +1,10 @@
 function updateERSTTDesc() {
-	getEl("ts1desc").textContent = shorten(calcTotalSacrificeBoost()) + "x -> " + shorten(calcTotalSacrificeBoost(true)) + "x"
-	getEl("ts2desc").textContent = getFullExpansion(getTotalTickGained()) + " -> " + getFullExpansion(getTotalTickGained(true))
-	getEl("ts3desc").textContent = shorten(getReplMult()) + "x -> " + shorten(getReplMult(true)) + "x"
-	getEl("ts4desc").textContent = shorten(getDimensionBoostPower()) + "x -> " + shorten(getDimensionBoostPower(true)) + "x"
-	getEl("ts5desc").textContent = shorten(gainedInfinityPoints()) + "x -> " + shorten(gainedInfinityPoints(5)) + "x"
-	getEl("ts6desc").textContent = shorten(gainedInfinityPoints()) + "x -> " + shorten(gainedInfinityPoints(6)) + "x"
+	el("ts1desc").textContent = shorten(calcTotalSacrificeBoost()) + "x -> " + shorten(calcTotalSacrificeBoost(true)) + "x"
+	el("ts2desc").textContent = getFullExpansion(getTotalTickGained()) + " -> " + getFullExpansion(getTotalTickGained(true))
+	el("ts3desc").textContent = shorten(getReplMult()) + "x -> " + shorten(getReplMult(true)) + "x"
+	el("ts4desc").textContent = shorten(getDimensionBoostPower()) + "x -> " + shorten(getDimensionBoostPower(true)) + "x"
+	el("ts5desc").textContent = shorten(gainedInfinityPoints()) + "x -> " + shorten(gainedInfinityPoints(5)) + "x"
+	el("ts6desc").textContent = shorten(gainedInfinityPoints()) + "x -> " + shorten(gainedInfinityPoints(6)) + "x"
 }
 
 function get_c(next) {
@@ -36,17 +36,17 @@ function getTotalTickGained(next) {
 }
 
 function updateGalaxyControl() {
-	getEl("galStrength").value = Math.log10(player.replicanti.newLimit.log(2)) / Math.log10(2) / 10
-	getEl("replLimit").value = formatValue("Scientific", player.replicanti.newLimit, 2, 0)
+	el("galStrength").value = Math.log10(player.replicanti.newLimit.log(2)) / Math.log10(2) / 10
+	el("replLimit").value = formatValue("Scientific", player.replicanti.newLimit, 2, 0)
 }
 
 function setReplicantiNewGalaxyStrength() {
-	player.replicanti.newLimit = Decimal.pow(2, Math.pow(2, parseFloat(getEl("galStrength").value) * 10))
-	getEl("replLimit").value = formatValue("Scientific", player.replicanti.newLimit, 2, 0)
+	player.replicanti.newLimit = Decimal.pow(2, Math.pow(2, parseFloat(el("galStrength").value) * 10))
+	el("replLimit").value = formatValue("Scientific", player.replicanti.newLimit, 2, 0)
 }
 
 function setReplicantiNewLimit() {
-	var value = fromValue(getEl("replLimit").value)
+	var value = fromValue(el("replLimit").value)
 	if (!isNaN(break_infinity_js ? value : value.logarithm)) player.replicanti.newLimit = value
-	getEl("galStrength").value = Math.log10(new Decimal(player.replicanti.newLimit).log(2)) / Math.log10(2) / 10
+	el("galStrength").value = Math.log10(E(player.replicanti.newLimit).log(2)) / Math.log10(2) / 10
 }

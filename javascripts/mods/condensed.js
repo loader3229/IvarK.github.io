@@ -38,7 +38,7 @@ let CONDENSED = {
 			if (c2 > 9) c2 = Math.pow(c2 / 9, 3) * 9
 
 			let mult = hasTimeStudy(197) ? (rep.plus(1).log10() + 2) : 2
-			data2.eff2 = new Decimal(rep.max(1).log10())
+			data2.eff2 = E(rep.max(1).log10())
 					.div(3)
 					.times(Math.pow(c2 * data2.pow, 0.95) / 2.5)
 					.times(hasTimeStudy(24) ? mult : 1)
@@ -81,13 +81,13 @@ let CONDENSED = {
 	},
 	resetHTML() {
 		for (var d = 1; d <= 8; d++) {
-			getEl("CondenseDiv" + d).style.display = tmp.ngC ? "" : "none"
-			getEl("infCndCont" + d).style.display = tmp.ngC ? "" : "none"
-			getEl("timeCndCont" + d).style.display = tmp.ngC ? "" : "none"
+			el("CondenseDiv" + d).style.display = tmp.ngC ? "" : "none"
+			el("infCndCont" + d).style.display = tmp.ngC ? "" : "none"
+			el("timeCndCont" + d).style.display = tmp.ngC ? "" : "none"
 		}
-		getEl("postinfir7").style.display = tmp.ngC ? "" : "none"
-		getEl("postinfir8").style.display = tmp.ngC ? "" : "none"
-		getEl("replNGC").style.display = tmp.ngC ? "" : "none"
+		el("postinfir7").style.display = tmp.ngC ? "" : "none"
+		el("postinfir8").style.display = tmp.ngC ? "" : "none"
+		el("replNGC").style.display = tmp.ngC ? "" : "none"
 	},
 	condense: {
 		costStart: {
@@ -151,7 +151,7 @@ let CONDENSED = {
 				return pow
 			},
 			eff(x) {
-				if (!ngC.tmp) return new Decimal(1)
+				if (!ngC.tmp) return E(1)
 				let amt = ngC.save.normal[x] + ngC.tmp.nds.free
 				return Decimal.pow(player.money.plus(1).log10() + 1, amt * ngC.tmp.nds.pow)
 			},
@@ -159,8 +159,8 @@ let CONDENSED = {
 				let costPart = pH.did("quantum") ? '' : 'Condense: '
 				let cost = this.cost(x)
 				let resource = getOrSubResource(x)
-				getEl("Condense" + x).textContent = costPart + shortenPreInfCosts(cost)
-				getEl("Condense" + x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
+				el("Condense" + x).textContent = costPart + shortenPreInfCosts(cost)
+				el("Condense" + x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
 			},
 			buy(x) {
 				let res = getOrSubResource(x)
@@ -196,7 +196,7 @@ let CONDENSED = {
 				return x
 			},
 			costDiv() {
-				let div = new Decimal(1)
+				let div = E(1)
 				if (player.infinityUpgrades.includes("postinfi81")) div = div.times(ngC.breakInfUpgs[81]())
 				return div
 			},
@@ -221,21 +221,21 @@ let CONDENSED = {
 				return ret
 			},
 			eff(x) {
-				if (!ngC.tmp) return new Decimal(1)
+				if (!ngC.tmp) return E(1)
 				let amt = ngC.save.inf[x] + ngC.tmp.ids.free
 				return Decimal.pow(player.infinityPower.plus(1).log10() + 1, amt * ngC.tmp.ids.pow)
 			},
 			update(x) {
 				if (!pH.did("infinity")) {
-					getEl("infCnd" + x).textContent = "Condense: LOCKED"
+					el("infCnd" + x).textContent = "Condense: LOCKED"
 					return
 				}
 
 				let costPart = pH.did("quantum") ? '' : 'Condense: '
 				let cost = this.cost(x)
 				let resource = player.infinityPoints
-				getEl("infCnd" + x).textContent = costPart + shortenPreInfCosts(cost) + (inNGM(5) ? " IP" : "")
-				getEl("infCnd" + x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
+				el("infCnd" + x).textContent = costPart + shortenPreInfCosts(cost) + (inNGM(5) ? " IP" : "")
+				el("infCnd" + x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
 			},
 			buy(x) {
 				let res = player.infinityPoints
@@ -261,18 +261,18 @@ let CONDENSED = {
 				return cost
 			},
 			update() {
-				getEl("replCond").textContent = getFullExpansion(ngC.save.repl)
-				getEl("replCond1").textContent = shorten(ngC.tmp.rep.eff1)
-				getEl("replCond2").textContent = shorten(ngC.tmp.rep.eff2)
+				el("replCond").textContent = getFullExpansion(ngC.save.repl)
+				el("replCond1").textContent = shorten(ngC.tmp.rep.eff1)
+				el("replCond2").textContent = shorten(ngC.tmp.rep.eff2)
 
 				let cost = this.cost()
-				getEl("replCondenseReq").textContent = shortenCosts(cost)
-				getEl("replCondense").className = player.replicanti.amount.gte(cost) ? "storebtn" : "unavailablebtn"
+				el("replCondenseReq").textContent = shortenCosts(cost)
+				el("replCondense").className = player.replicanti.amount.gte(cost) ? "storebtn" : "unavailablebtn"
 			},
 			buy() {
 				let cost = this.cost()
 				if (player.replicanti.amount.lt(cost)) return;
-				player.replicanti.amount = new Decimal(1)
+				player.replicanti.amount = E(1)
 				ngC.save.repl++
 			},
 			pow() {
@@ -292,7 +292,7 @@ let CONDENSED = {
 				return x
 			},
 			costDiv() {
-				let div = new Decimal(1)
+				let div = E(1)
 				if (hasTimeStudy(203)) div = tsMults[203]()
 				return div
 			},
@@ -313,21 +313,21 @@ let CONDENSED = {
 				return ret
 			},
 			eff(x) {
-				if (!ngC.tmp) return new Decimal(1)
+				if (!ngC.tmp) return E(1)
 				let amt = ngC.save.time[x] + ngC.tmp.tds.free
 				return Decimal.pow(player.timeShards.plus(1).log10() + 1, amt * ngC.tmp.tds.pow)
 			},
 			update(x) {
 				if (!pH.did("eternity")) {
-					getEl("timeCnd" + x).textContent = "Condense: LOCKED"
+					el("timeCnd" + x).textContent = "Condense: LOCKED"
 					return
 				}
 
 				let costPart = pH.did("quantum") ? '' : 'Condense: '
 				let cost = this.cost(x)
 				let resource = player.eternityPoints
-				getEl("timeCnd" + x).textContent = costPart + shortenPreInfCosts(cost) + (inNGM(4) ? " EP" : "")
-				getEl("timeCnd" + x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
+				el("timeCnd" + x).textContent = costPart + shortenPreInfCosts(cost) + (inNGM(4) ? " EP" : "")
+				el("timeCnd" + x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
 			},
 			buy(x) {
 				let res = player.eternityPoints
@@ -355,34 +355,34 @@ let CONDENSED = {
 	},
 	breakInfUpgs: {
 		display() {
-			if (player.infinityUpgrades.includes("postinfi70")) getEl("postinfi70").className = "infinistorebtnbought"
-			else if (player.infinityPoints.gte(1e6)) getEl("postinfi70").className = "infinistorebtn1"
-			else getEl("postinfi70").className = "infinistorebtnlocked"
-			if (player.infinityUpgrades.includes("postinfi71")) getEl("postinfi71").className = "infinistorebtnbought"
-			else if (player.infinityPoints.gte(5e7)) getEl("postinfi71").className = "infinistorebtn1"
-			else getEl("postinfi71").className = "infinistorebtnlocked"
-			if (player.infinityUpgrades.includes("postinfi72")) getEl("postinfi72").className = "infinistorebtnbought"
-			else if (player.infinityPoints.gte(1e17)) getEl("postinfi72").className = "infinistorebtn1"
-			else getEl("postinfi72").className = "infinistorebtnlocked"
+			if (player.infinityUpgrades.includes("postinfi70")) el("postinfi70").className = "infinistorebtnbought"
+			else if (player.infinityPoints.gte(1e6)) el("postinfi70").className = "infinistorebtn1"
+			else el("postinfi70").className = "infinistorebtnlocked"
+			if (player.infinityUpgrades.includes("postinfi71")) el("postinfi71").className = "infinistorebtnbought"
+			else if (player.infinityPoints.gte(5e7)) el("postinfi71").className = "infinistorebtn1"
+			else el("postinfi71").className = "infinistorebtnlocked"
+			if (player.infinityUpgrades.includes("postinfi72")) el("postinfi72").className = "infinistorebtnbought"
+			else if (player.infinityPoints.gte(1e17)) el("postinfi72").className = "infinistorebtn1"
+			else el("postinfi72").className = "infinistorebtnlocked"
 
-			if (player.infinityUpgrades.includes("postinfi80")) getEl("postinfi80").className = "infinistorebtnbought"
-			else if (player.infinityPoints.gte(1e24)) getEl("postinfi80").className = "infinistorebtn1"
-			else getEl("postinfi80").className = "infinistorebtnlocked"
-			if (player.infinityUpgrades.includes("postinfi81")) getEl("postinfi81").className = "infinistorebtnbought"
-			else if (player.infinityPoints.gte(1e33)) getEl("postinfi81").className = "infinistorebtn1"
-			else getEl("postinfi81").className = "infinistorebtnlocked"
-			if (player.infinityUpgrades.includes("postinfi82")) getEl("postinfi82").className = "infinistorebtnbought"
-			else if (player.infinityPoints.gte(1e36)) getEl("postinfi82").className = "infinistorebtn1"
-			else getEl("postinfi82").className = "infinistorebtnlocked"
+			if (player.infinityUpgrades.includes("postinfi80")) el("postinfi80").className = "infinistorebtnbought"
+			else if (player.infinityPoints.gte(1e24)) el("postinfi80").className = "infinistorebtn1"
+			else el("postinfi80").className = "infinistorebtnlocked"
+			if (player.infinityUpgrades.includes("postinfi81")) el("postinfi81").className = "infinistorebtnbought"
+			else if (player.infinityPoints.gte(1e33)) el("postinfi81").className = "infinistorebtn1"
+			else el("postinfi81").className = "infinistorebtnlocked"
+			if (player.infinityUpgrades.includes("postinfi82")) el("postinfi82").className = "infinistorebtnbought"
+			else if (player.infinityPoints.gte(1e36)) el("postinfi82").className = "infinistorebtn1"
+			else el("postinfi82").className = "infinistorebtnlocked"
 
 
-			getEl("postinfi70").innerHTML = "Normal Condensers are stronger based on your Dimension Boosts<br>Currently: "+shorten(this[70]())+"x<br>Cost: "+shortenCosts(1e6)+" IP"
-			getEl("postinfi71").innerHTML = "Normal Condensers cost scale 40% slower<br>Cost: "+shortenCosts(5e7)+" IP"
-			getEl("postinfi72").innerHTML = "Normal Condensers are stronger based on your Infinity Condensers<br>Currently: "+shorten(this[72]())+"x<br>Cost: "+shortenCosts(1e17)+" IP"
+			el("postinfi70").innerHTML = "Normal Condensers are stronger based on your Dimension Boosts<br>Currently: "+shorten(this[70]())+"x<br>Cost: "+shortenCosts(1e6)+" IP"
+			el("postinfi71").innerHTML = "Normal Condensers cost scale 40% slower<br>Cost: "+shortenCosts(5e7)+" IP"
+			el("postinfi72").innerHTML = "Normal Condensers are stronger based on your Infinity Condensers<br>Currently: "+shorten(this[72]())+"x<br>Cost: "+shortenCosts(1e17)+" IP"
 
-			getEl("postinfi80").innerHTML = "Infinity Power boosts Infinity Point gain<br>Currently: "+shorten(this[80]())+"x<br>Cost: "+shortenCosts(1e24)+" IP"
-			getEl("postinfi81").innerHTML = "Infinity Condensers are cheaper based on your Infinity Points<br>Currently: /"+shorten(this[81]())+"<br>Cost: "+shortenCosts(1e33)+" IP"
-			getEl("postinfi82").innerHTML = "Dimensional Sacrifice also divides tickspeed, and both other upgrades in this row use better formulas<br>Cost: "+shortenCosts(1e36)+" IP"
+			el("postinfi80").innerHTML = "Infinity Power boosts Infinity Point gain<br>Currently: "+shorten(this[80]())+"x<br>Cost: "+shortenCosts(1e24)+" IP"
+			el("postinfi81").innerHTML = "Infinity Condensers are cheaper based on your Infinity Points<br>Currently: /"+shorten(this[81]())+"<br>Cost: "+shortenCosts(1e33)+" IP"
+			el("postinfi82").innerHTML = "Dimensional Sacrifice also divides tickspeed, and both other upgrades in this row use better formulas<br>Cost: "+shortenCosts(1e36)+" IP"
 		},
 		70() {
 			let r = Math.sqrt(getTotalDBs())
@@ -415,35 +415,35 @@ let CONDENSED = {
 	},
 	eterUpgs: {
 		display() {
-			getEl("eter10").className = (player.eternityUpgrades.includes(10)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e625")) ? "eternityupbtn" : "eternityupbtnlocked"
-			getEl("eter11").className = (player.eternityUpgrades.includes(11)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e875")) ? "eternityupbtn" : "eternityupbtnlocked"
-			getEl("eter12").className = (player.eternityUpgrades.includes(12)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e1350")) ? "eternityupbtn" : "eternityupbtnlocked"
+			el("eter10").className = (player.eternityUpgrades.includes(10)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e625")) ? "eternityupbtn" : "eternityupbtnlocked"
+			el("eter11").className = (player.eternityUpgrades.includes(11)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e875")) ? "eternityupbtn" : "eternityupbtnlocked"
+			el("eter12").className = (player.eternityUpgrades.includes(12)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e1350")) ? "eternityupbtn" : "eternityupbtnlocked"
 		}
 	}
 }
 let ngC = CONDENSED
 
-getEl("postinfi70").onclick = function() {
+el("postinfi70").onclick = function() {
     buyInfinityUpgrade("postinfi70", 1e6);
 }
 
-getEl("postinfi71").onclick = function() {
+el("postinfi71").onclick = function() {
     buyInfinityUpgrade("postinfi71", 5e7);
 }
 
-getEl("postinfi72").onclick = function() {
+el("postinfi72").onclick = function() {
     buyInfinityUpgrade("postinfi72", 1e17);
 }
 
-getEl("postinfi80").onclick = function() {
+el("postinfi80").onclick = function() {
     buyInfinityUpgrade("postinfi80", 1e24);
 }
 
-getEl("postinfi81").onclick = function() {
+el("postinfi81").onclick = function() {
     buyInfinityUpgrade("postinfi81", 1e33);
 }
 
-getEl("postinfi82").onclick = function() {
+el("postinfi82").onclick = function() {
     buyInfinityUpgrade("postinfi82", 1e36);
 }
 

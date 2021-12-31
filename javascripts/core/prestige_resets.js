@@ -6,15 +6,15 @@ function doDimBoostResetStuff(layer = 1) {
 	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < tmp.ngp3_em[0]) resetDimensions()
 
 	player.totalBoughtDims = resetTotalBought()
-	player.sacrificed = new Decimal(0)
-	player.chall3Pow = new Decimal(0.01)
-	player.matter = new Decimal(0)
-	player.chall11Pow = new Decimal(1)
+	player.sacrificed = E(0)
+	player.chall3Pow = E(0.01)
+	player.matter = E(0)
+	player.chall11Pow = E(1)
 	player.postC4Tier = 1
-	player.postC8Mult = new Decimal(1)
+	player.postC8Mult = E(1)
 
 	if (player.currentChallenge == "postc2") {
-		player.eightAmount = new Decimal(1)
+		player.eightAmount = E(1)
 		player.eightBought = 1
 	}
 }
@@ -22,7 +22,7 @@ function doDimBoostResetStuff(layer = 1) {
 function doGalaxyResetStuff(layer = 2) {
 	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < tmp.ngp3_em[4]) {
 		player.resets = 0
-		if (player.dbPower) player.dbPower = new Decimal(1)
+		if (player.dbPower) player.dbPower = E(1)
 	}
 	if (tmp.ngmX >= 3) player.tickspeedBoosts = 0
 	player.tdBoosts = resetTDBoosts()
@@ -39,16 +39,16 @@ function doCrunchResetStuff(layer = 3, chall) {
 	if (tmp.ngmX >= 5) resetPSac()
 
 	player.thisInfinityTime = 0
-	IPminpeak = new Decimal(0)
+	IPminpeak = E(0)
 
 	doGalaxyResetStuff(layer)
 }
 
 function doEternityResetStuff(layer = 4, chall) {
-	player.infinityPoints = new Decimal(hasAch("r104") ? 2e25 : 0)
+	player.infinityPoints = E(hasAch("r104") ? 2e25 : 0)
 	player.infinitied = 0
-	player.infMult = new Decimal(1)
-	player.infMultCost = new Decimal(10)
+	player.infMult = E(1)
+	player.infMultCost = E(10)
 	if (hasAch("r85")) player.infMult = player.infMult.times(4)
 	if (hasAch("r93")) player.infMult = player.infMult.times(4)
 	playerInfinityUpgradesOnEternity()
@@ -62,12 +62,12 @@ function doEternityResetStuff(layer = 4, chall) {
 
 	player.partInfinityPoint = 0
 	player.partInfinitied = 0
-	player.autoIP = new Decimal(0)
+	player.autoIP = E(0)
 	player.autoTime = 1e300
 
 	player.thisEternity = QCs.perkActive(6) ? 5 : 0
 	player.bestInfinityTime = 9999999999
-	player.lastTenRuns = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
+	player.lastTenRuns = [[600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)]]
 
 	player.tickSpeedMultDecrease = getEternitied() >= 20 ? player.tickSpeedMultDecrease : 10
 	player.tickSpeedMultDecreaseCost = getEternitied() >= 20 ? player.tickSpeedMultDecreaseCost : 3e6
@@ -86,17 +86,17 @@ function doEternityResetStuff(layer = 4, chall) {
 
 	if (chall == 14) player.replicanti.kept = player.replicanti.amount
 	player.replicanti.amount = layer >= 5 ? (
-		new Decimal(getEternitied() >= 50 ? 1 : 0)
+		E(getEternitied() >= 50 ? 1 : 0)
 	) : (
 		moreEMsUnlocked() && getEternitied() >= tmp.ngp3_em[2] && (chall == 0 || chall == "dil") && !QCs.in(5) ? Decimal.pow(player.replicanti.kept || player.replicanti.amount, 0.995).floor().max(1) :
-		new Decimal(getEternitied() >= 50 ? 1 : 0)
+		E(getEternitied() >= 50 ? 1 : 0)
 	)
 	if (chall != 14) delete player.replicanti.kept
 
 	player.dilation.active = chall == "dil"
 
 	delete tmp.rmPseudo
-	tmp.rm = new Decimal(1)
+	tmp.rm = E(1)
 
 	player.eterc8ids = 50
 	player.eterc8repl = 40
@@ -124,19 +124,19 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	}
 
 	player.bestEternity = 9999999999
-	player.lastTenEternities = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
+	player.lastTenEternities = [[600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)]]
 
 	player.infinitiedBank = 0
 	if (!headstart) player.eternities = qMs.tmp.amt >= 2 ? 100 * Math.pow(3, qMs.tmp.amt) : oheHeadstart ? 100 : 0
-	player.eternityPoints = new Decimal(0)
+	player.eternityPoints = E(0)
 
 	var keepTS = bigRip ? tmp.bruActive[12] : qMs.isOn(3)
 	if (keepTS) respecTimeStudies()
 	else player.timestudy = {
 		theorem: 0,
-		amcost: new Decimal("1e20000"),
-		ipcost: new Decimal(1),
-		epcost: new Decimal(1),
+		amcost: E("1e20000"),
+		ipcost: E(1),
+		epcost: E(1),
 		studies: [],
 		auto: player.timestudy.auto
 	}
@@ -145,21 +145,21 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 	player.respecMastery = false
 
 	if (!qMs.isOn(3)) player.eternityUpgrades = []
-	player.epmult = new Decimal(1)
-	player.epmultCost = new Decimal(500)
+	player.epmult = E(1)
+	player.epmultCost = E(500)
 
 	player.etercreq = 0
 	player.eternityChallUnlocked = 0
 	player.currentEternityChall = ""
-	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
+	player.eternityChallGoal = E(Number.MAX_VALUE)
 
-	player.autoIP = new Decimal(0)
+	player.autoIP = E(0)
 	player.autoTime = 1e300
 	player.infMultBuyer = bigRipChanged ? turnSomeOn : oheHeadstart ? player.infMultBuyer : false
 	player.autoCrunchMode = keepABnICs ? player.autoCrunchMode : "amount"
 	player.autoEterMode = keepABnICs ? player.autoEterMode : "amount"
 	player.eternityBuyer = keepABnICs ? player.eternityBuyer : {
-		limit: new Decimal(0),
+		limit: E(0),
 		isOn: false
 	}
 	if (tmp.ngp3) {
@@ -184,10 +184,10 @@ function doQuantumResetStuff(layer = 5, bigRip, isQC, qcData){
 			!qMs.isOn(5) ? [] :
 			qMs.tmp.amt >= 9 ? [1, 2, 3, 4, 5, 6] : qMs.tmp.amt >= 6 ? [1, 2, 3, 4, 5] : [1],
 		active: false,
-		tachyonParticles: new Decimal(QCs.perkActive(3) ? 1 : 0),
-		dilatedTime: new Decimal(0),
+		tachyonParticles: E(QCs.perkActive(3) ? 1 : 0),
+		dilatedTime: E(0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
-		nextThreshold: new Decimal(1000),
+		nextThreshold: E(1000),
 		freeGalaxies: 0,
 		upgrades: newUpgs,
 		autoUpgrades: [],
@@ -215,34 +215,34 @@ function doFluctuateResetStuff(layer = 6) {
 	qu_save.time = 0
 	qu_save.times = 0
 	qu_save.best = 999999999
-	qu_save.last10 = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
+	qu_save.last10 = [[600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)]]
 
 	player.timestudy.theorem = 0
 
-	player.dilation.tachyonParticles = new Decimal(0)
-	player.dilation.totalTachyonParticles = new Decimal(0)
-	player.dilation.bestTP = new Decimal(0)
+	player.dilation.tachyonParticles = E(0)
+	player.dilation.totalTachyonParticles = E(0)
+	player.dilation.bestTP = E(0)
 
-	quantumWorth = new Decimal(0)
-	qu_save.quarks = new Decimal(0)
+	quantumWorth = E(0)
+	qu_save.quarks = E(0)
 	qu_save.usedQuarks = {
-		r: new Decimal(0),
-		g: new Decimal(0),
-		b: new Decimal(0),
+		r: E(0),
+		g: E(0),
+		b: E(0),
 	}
 	qu_save.colorPowers = {
-		r: new Decimal(0),
-		g: new Decimal(0),
-		b: new Decimal(0),
+		r: E(0),
+		g: E(0),
+		b: E(0),
 	}
 
-	qu_save.bestEnergy = new Decimal(0)
-	qu_save.quarkEnergy = new Decimal(0)
+	qu_save.bestEnergy = E(0)
+	qu_save.quarkEnergy = E(0)
 
 	qu_save.gluons = {
-		rg: new Decimal(0),
-		gb: new Decimal(0),
-		br: new Decimal(0),
+		rg: E(0),
+		gb: E(0),
+		br: E(0),
 	}
 	if (!qMs.isObtained(27)) qu_save.entLvl = 0
 
@@ -251,10 +251,10 @@ function doFluctuateResetStuff(layer = 6) {
 	QCs.reset(!qMs.isObtained(27))
 	if (!qMs.isObtained(28)) pos.reset()
 
-	fluc_save.bestAM = new Decimal(0)
+	fluc_save.bestAM = E(0)
 	fluc_save.time = 0
-	FDs_save.meta = new Decimal(0)
-	for (var i = 1; i <= 8; i++) FDs_save[i].amt = new Decimal(FDs_save[i].bgt)
+	FDs_save.meta = E(0)
+	for (var i = 1; i <= 8; i++) FDs_save[i].amt = E(FDs_save[i].bgt)
 
 	updateQEGainTmp()
 	qMs.update()
@@ -272,12 +272,12 @@ function resetDimensions() {
 
 function NC10NDCostsOnReset() {
 	if (inNC(10) || player.currentChallenge == "postc1") {
-		player.thirdCost = new Decimal(100)
-		player.fourthCost = new Decimal(500)
-		player.fifthCost = new Decimal(2500)
-		player.sixthCost = new Decimal(2e4)
-		player.seventhCost = new Decimal(2e5)
-		player.eightCost = new Decimal(4e6)
+		player.thirdCost = E(100)
+		player.fourthCost = E(500)
+		player.fifthCost = E(2500)
+		player.sixthCost = E(2e4)
+		player.seventhCost = E(2e5)
+		player.eightCost = E(4e6)
 	}
 }
 
@@ -315,20 +315,20 @@ function doNormalChallengeResetStuff() {
 }
 
 function resetInfDimensions(full) {
-	player.infinityPower = new Decimal(1)
+	player.infinityPower = E(1)
 	for (var t = 1; t < 9; t++) {
 		let dim = player["infinityDimension" + t]
 		if (full) {
-			dim.cost = new Decimal(infBaseCost[t])
-			dim.power = new Decimal(1)
+			dim.cost = E(infBaseCost[t])
+			dim.power = E(1)
 			dim.bought = 0
 			dim.baseAmount = 0
 		} else d.power = Decimal.pow(getInfBuy10Mult(t), d.baseAmount)
 		if (player.pSac !== undefined) {
-			dim.costAM = new Decimal(idBaseCosts[t])
+			dim.costAM = E(idBaseCosts[t])
 			dim.boughtAM = 0	
 		}
-		if (player.infDimensionsUnlocked[t - 1]) dim.amount = new Decimal(dim.baseAmount)
+		if (player.infDimensionsUnlocked[t - 1]) dim.amount = E(dim.baseAmount)
 	}
 	if (full) {
 		player.infDimensionsUnlocked = resetInfDimUnlocked()
@@ -342,19 +342,19 @@ function resetInfDimensions(full) {
 function resetTimeDimensions(full) {
 	let boostPower = getDimensionBoostPower()
 	let ngm4 = tmp.ngmX >= 4
-	player.timeShards = new Decimal(0)
-	player.tickThreshold = new Decimal(ngm4 ? 0.01 : 1)
+	player.timeShards = E(0)
+	player.tickThreshold = E(ngm4 ? 0.01 : 1)
 	player.totalTickGained = 0
 	for (var t = 1; t <= 8; t++) {
 		let dim = player["timeDimension" + t]
 		if (full || ngm4) {
 			dim.cost = TIME_DIM_COSTS[t].cost()
-			dim.power = ngm4 ? Decimal.pow(boostPower, player.tdBoosts - t + 1) : new Decimal(1)
+			dim.power = ngm4 ? Decimal.pow(boostPower, player.tdBoosts - t + 1) : E(1)
 			dim.bought = 0
 		}
-		dim.amount = new Decimal(dim.bought)
+		dim.amount = E(dim.bought)
 	}
-	getEl("totaltickgained").textContent = "You've gained " + getFullExpansion(player.totalTickGained) + " tickspeed upgrades."
+	el("totaltickgained").textContent = "You've gained " + getFullExpansion(player.totalTickGained) + " tickspeed upgrades."
 }
 
 function resetEternityChallenges(bigRip, ngpp) {
@@ -388,12 +388,12 @@ function getBigRipOnGhostifyData(nBRU){
 		active: false,
 		conf: qu_save.bigRip.conf,
 		times: 0,	
-		bestThisRun: new Decimal(0),
+		bestThisRun: E(0),
 		totalAntimatter: qu_save.bigRip.totalAntimatter,
 		bestGals: qu_save.bigRip.bestGals,
 		savedAutobuyersNoBR: qu_save.bigRip.savedAutobuyersNoBR,
 		savedAutobuyersBR: qu_save.bigRip.savedAutobuyersBR,
-		spaceShards: new Decimal(hasAch("ng3p105") ? 1e25 : 0),
+		spaceShards: E(hasAch("ng3p105") ? 1e25 : 0),
 		upgrades: bm ? nBRU : []
 	}
 }
@@ -402,7 +402,7 @@ function getBreakEternityDataOnGhostify(nBEU, bm){
 	return {
 		unlocked: bm > 14,
 		break: bm > 14 ? qu_save.breakEternity.break : false,
-		eternalMatter: new Decimal(hasAch("ng3p105") ? 1e25 : 0),
+		eternalMatter: E(hasAch("ng3p105") ? 1e25 : 0),
 		upgrades: bm > 14 ? nBEU : [],
 		epMultPower: 0
 	}
@@ -414,12 +414,12 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 		times: 0,
 		time: 0,
 		best: 9999999999,
-		last10: [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]],
+		last10: [[600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)]],
 		disabledRewards: qu_save.disabledRewards,
 		metaAutobuyerWait: 0,
 		autobuyer: {
 			enabled: false,
-			limit: new Decimal(0),
+			limit: E(0),
 			mode: "amount",
 			peakTime: 0
 		},
@@ -431,11 +431,11 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 		},
 		assortPercentage: qu_save.assortPercentage,
 		assignAllRatios: qu_save.assignAllRatios,
-		quarks: new Decimal(0),
+		quarks: E(0),
 		usedQuarks: {
-			r: new Decimal(0),
-			g: new Decimal(0),
-			b: new Decimal(0)
+			r: E(0),
+			g: E(0),
+			b: E(0)
 		},
 		colorPowers: {
 			r: 0,
@@ -443,9 +443,9 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			b: 0
 		},
 		gluons: {
-			rg: new Decimal(0),
-			gb: new Decimal(0),
-			br: new Decimal(0)
+			rg: E(0),
+			gb: E(0),
+			br: E(0)
 		},
 		pos: pos.setup(),
 		qc: QCs.setup(),
@@ -487,7 +487,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	resetNormalDimensions()
 	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.totalBoughtDims = resetTotalBought()
-	player.sacrificed = new Decimal(0)
+	player.sacrificed = E(0)
 	player.currentChallenge = ""
 	player.setsUnlocked = 0
 	player.infinitied = 0
@@ -501,56 +501,56 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	player.interval = null
 	player.partInfinityPoint = 0
 	player.partInfinitied = 0
-	player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
+	player.costMultipliers = [E(1e3), E(1e4), E(1e5), E(1e6), E(1e8), E(1e10), E(1e12), E(1e15)]
 	player.chall2Pow = 1
-	player.chall3Pow = new Decimal(0.01)
-	player.matter = new Decimal(0)
-	player.chall11Pow = new Decimal(1)
-	player.lastTenRuns = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
-	player.lastTenEternities = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
-	player.infMult = new Decimal(1)
-	player.infMultCost = new Decimal(10)
+	player.chall3Pow = E(0.01)
+	player.matter = E(0)
+	player.chall11Pow = E(1)
+	player.lastTenRuns = [[600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)]]
+	player.lastTenEternities = [[600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)], [600*60*24*31, E(0)]]
+	player.infMult = E(1)
+	player.infMultCost = E(10)
 	player.tickSpeedMultDecrease = Math.max(player.tickSpeedMultDecrease, bm > 1 ? 1.25 : 2)
 	player.postC4Tier = 1
-	player.postC8Mult = new Decimal(1)
+	player.postC8Mult = E(1)
 	player.overXGalaxiesTickspeedBoost = player.tickspeedBoosts == undefined ? player.overXGalaxiesTickspeedBoost : 0
 	player.postChallUnlocked = hasAch("r133") ? order.length : 0
 	player.postC4Tier = 0
-	player.postC3Reward = new Decimal(1)
-	player.eternityPoints = new Decimal(0)
+	player.postC3Reward = E(1)
+	player.eternityPoints = E(0)
 	player.eternities = bm ? 1e13 : 1e10
 	player.thisEternity = 0
 	player.bestEternity = 9999999999
 	player.eternityUpgrades = bm ? [1, 2, 3, 4, 5, 6] : []
-	player.epmult = new Decimal(1)
-	player.epmultCost = new Decimal(500)
+	player.epmult = E(1)
+	player.epmultCost = E(500)
 	resetInfDimensions(true)
 	resetTimeDimensions(true)
 	player.infDimBuyers = bm ? player.infDimBuyers : [false, false, false, false, false, false, false, false]
 	player.challengeTarget = 0
 	player.replicanti = {
-		amount: new Decimal(bm ? 1 : 0),
+		amount: E(bm ? 1 : 0),
 		unl: bm > 0,
 		chance: 0.01,
-		chanceCost: new Decimal(inNGM(2) ? 1e90 : 1e150),
+		chanceCost: E(inNGM(2) ? 1e90 : 1e150),
 		interval: 1000,
-		intervalCost: new Decimal(inNGM(2) ? 1e80 : 1e140),
+		intervalCost: E(inNGM(2) ? 1e80 : 1e140),
 		gal: 0,
 		galaxies: 0,
-		galCost: new Decimal(inNGM(2) ? 1e110 : 1e170),
+		galCost: E(inNGM(2) ? 1e110 : 1e170),
 		galaxybuyer: player.replicanti.galaxybuyer,
 		auto: bm ? player.replicanti.auto : [false, false, false]
 	}
 	player.timestudy = bm ? player.timestudy : {
 		theorem: 0,
-		amcost: new Decimal("1e20000"),
-		ipcost: new Decimal(1),
-		epcost: new Decimal(1),
+		amcost: E("1e20000"),
+		ipcost: E(1),
+		epcost: E(1),
 		studies: [],
 	}
 	player.currentEternityChall = ""
 	player.etercreq = 0
-	player.autoIP = new Decimal(0)
+	player.autoIP = E(0)
 	player.autoTime = 1e300
 	player.infMultBuyer = bm ? player.infMultBuyer : false
 	player.autoEterMode = bm ? player.autoEterMode : "amount"
@@ -558,7 +558,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	player.respec = false
 	player.respecMastery = false
 	player.eternityBuyer = bm ? player.eternityBuyer : {
-		limit: new Decimal(0),
+		limit: E(0),
 		isOn: false,
 		dilationMode: false,
 		dilationPerAmount: player.eternityBuyer.dilationPerAmount,
@@ -577,10 +577,10 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 		studies: bm ? player.dilation.studies : [],
 		active: false,
 		times: 0,
-		tachyonParticles: new Decimal(0),
-		dilatedTime: new Decimal(0),
-		bestTP: new Decimal(0),
-		nextThreshold: new Decimal(1000),
+		tachyonParticles: E(0),
+		dilatedTime: E(0),
+		bestTP: E(0),
+		nextThreshold: E(1000),
 		freeGalaxies: 0,
 		upgrades: bm ? player.dilation.upgrades : [],
 		autoUpgrades: bm ? player.dilation.autoUpgrades : aarMod.nguspV ? [] : undefined,
@@ -601,12 +601,12 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 function doPreInfinityGhostifyResetStuff(implode){
 	setInitialMoney()
 	setInitialResetPower()
-	GPminpeak = new Decimal(0)
+	GPminpeak = E(0)
 	if (implode) showTab("dimensions")
-	getEl("tickSpeed").style.visibility = "hidden"
-	getEl("tickSpeedMax").style.visibility = "hidden"
-	getEl("tickLabel").style.visibility = "hidden"
-	getEl("tickSpeedAmount").style.visibility = "hidden"
+	el("tickSpeed").style.visibility = "hidden"
+	el("tickSpeedMax").style.visibility = "hidden"
+	el("tickLabel").style.visibility = "hidden"
+	el("tickSpeedAmount").style.visibility = "hidden"
 	hideDimensions()
 	tmp.tickUpdate = true
 }
@@ -614,18 +614,18 @@ function doPreInfinityGhostifyResetStuff(implode){
 function doInfinityGhostifyResetStuff(implode, bm){
 	if (hasAch("r85")) player.infMult = player.infMult.times(4)
 	if (hasAch("r93")) player.infMult = player.infMult.times(4)
-	player.infinityPoints = new Decimal(hasAch("r104") ? 2e25 : 0)
+	player.infinityPoints = E(hasAch("r104") ? 2e25 : 0)
 	player.challenges = challengesCompletedOnEternity()
-	IPminpeak = new Decimal(0)
+	IPminpeak = E(0)
 	if (isEmptiness) {
 		showTab("dimensions")
 		isEmptiness = false
-		getEl("quantumtabbtn").style.display = "inline-block"
-		getEl("ghostifytabbtn").style.display = "inline-block"
+		el("quantumtabbtn").style.display = "inline-block"
+		el("ghostifytabbtn").style.display = "inline-block"
 	}
-	getEl("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points."
-	getEl("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points."
-	getEl("infmultbuyer").textContent = "Max buy IP mult"
+	el("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points."
+	el("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points."
+	el("infmultbuyer").textContent = "Max buy IP mult"
 	if (implode) showChallengesTab("normalchallenges")
 	updateChallenges()
 	updateNCVisuals()
@@ -633,7 +633,7 @@ function doInfinityGhostifyResetStuff(implode, bm){
 	hideMaxIDButton()
 	doInitInfMultStuff()
 	updateLastTenRuns()
-	if ((getEl("metadimensions").style.display == "block" && !bm) || implode) showDimTab("antimatterdimensions")
+	if ((el("metadimensions").style.display == "block" && !bm) || implode) showDimTab("antimatterdimensions")
 	resetInfDimensions(true)
 }
 
@@ -658,7 +658,7 @@ function doTOUSOnGhostify(bm){
 
 function doEternityGhostifyResetStuff(implode, bm){
 	EPminpeakType = 'normal'
-	EPminpeak = new Decimal(0)
+	EPminpeak = E(0)
 	doTOUSOnGhostify(bm) // theory of ultimate studies
 	if (!bm) {
 		resetEternityChallenges()
@@ -668,9 +668,9 @@ function doEternityGhostifyResetStuff(implode, bm){
 	player.dilation.totalTachyonParticles = player.dilation.bestTP
 	player.meta.bestOverQuantums = getMetaAntimatterStart()
 	doMetaDimensionsReset()
-	getEl("eternitybtn").style.display = "none"
-	getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
-	if (implode) showEternityTab("timestudies", getEl("eternitystore").style.display == "none")
+	el("eternitybtn").style.display = "none"
+	el("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
+	if (implode) showEternityTab("timestudies", el("eternitystore").style.display == "none")
 	updateLastTenEternities()
 	resetTimeDimensions(true)
 	updateRespecButtons()
@@ -687,24 +687,24 @@ function doEternityGhostifyResetStuff(implode, bm){
 }
 
 function doQuantumGhostifyResetStuff(implode, bm){
-	qu_save.quarkEnergy = new Decimal(0)
+	qu_save.quarkEnergy = E(0)
 	tmp.eds = qu_save.emperorDimensions
-	QKminpeak = new Decimal(0)
-	QKminpeakValue = new Decimal(0)
+	QKminpeak = E(0)
+	QKminpeakValue = E(0)
 	if (implode) showQuantumTab("uquarks")
 	var permUnlocks = [7,9,10,10,11,11,12,12]
 	if (bm > 3) {
 		for (var c = 0; c < 3; c++) qu_save.tod[colors[c]].upgrades[1] = 5
 	}
 	if (!bm) {
-		getEl('rebuyupgauto').style.display = "none"
-		getEl('toggleallmetadims').style.display = "none"
-		getEl('metaboostauto').style.display = "none"
-		getEl("autoBuyerQuantum").style.display = "none"
-		getEl('toggleautoquantummode').style.display = "none"
+		el('rebuyupgauto').style.display = "none"
+		el('toggleallmetadims').style.display = "none"
+		el('metaboostauto').style.display = "none"
+		el("autoBuyerQuantum").style.display = "none"
+		el('toggleautoquantummode').style.display = "none"
 	}
 
-	getEl("quantumbtn").style.display = "none"
+	el("quantumbtn").style.display = "none"
 	updateColorCharge()
 	updateGluonsTabOnUpdate("prestige")
 	updateQuantumWorth("quick")
@@ -713,30 +713,30 @@ function doQuantumGhostifyResetStuff(implode, bm){
 }
 
 function doGhostifyGhostifyResetStuff(bm, force){
-	GHPminpeak = new Decimal(0)
-	GHPminpeakValue = new Decimal(0)
-	getEl("ghostifybtn").style.display = "none"
+	GHPminpeak = E(0)
+	GHPminpeakValue = E(0)
+	el("ghostifybtn").style.display = "none"
 	if (!ghostified) {
 		ghostified = true
-		getEl("ghostifytabbtn").style.display = "inline-block"
-		getEl("ghostparticles").style.display = ""
-		getEl("ghostifyAnimBtn").style.display = "inline-block"
-		getEl("ghostifyConfirmBtn").style.display = "inline-block"
+		el("ghostifytabbtn").style.display = "inline-block"
+		el("ghostparticles").style.display = ""
+		el("ghostifyAnimBtn").style.display = "inline-block"
+		el("ghostifyConfirmBtn").style.display = "inline-block"
 		giveAchievement("Kee-hee-hee!")
 	} else if (player.ghostify.times > 2 && player.ghostify.times < 11) {
 		$.notify("You unlocked " + (player.ghostify.times + 2) + "th Neutrino upgrade!", "success")
 		updateNeutrinoUpgradeUnlock(player.ghostify.times + 2)
 	}
-	getEl("GHPAmount").textContent = shortenDimensions(player.ghostify.ghostParticles)
+	el("GHPAmount").textContent = shortenDimensions(player.ghostify.ghostParticles)
 	if (bm < 7) {
-		player.ghostify.neutrinos.electron = new Decimal(0)
-		player.ghostify.neutrinos.mu = new Decimal(0)
-		player.ghostify.neutrinos.tau = new Decimal(0)
+		player.ghostify.neutrinos.electron = E(0)
+		player.ghostify.neutrinos.mu = E(0)
+		player.ghostify.neutrinos.tau = E(0)
 		player.ghostify.neutrinos.generationGain = 1
 	} else if (!force) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
-	player.ghostify.ghostlyPhotons.amount = new Decimal(0)
-	player.ghostify.ghostlyPhotons.darkMatter = new Decimal(0)
-	player.ghostify.ghostlyPhotons.ghostlyRays = new Decimal(0)
+	player.ghostify.ghostlyPhotons.amount = E(0)
+	player.ghostify.ghostlyPhotons.darkMatter = E(0)
+	player.ghostify.ghostlyPhotons.ghostlyRays = E(0)
 	tmp.bl.watt = 0
 	player.ghostify.under = true
 	updateLastTenGhostifies()

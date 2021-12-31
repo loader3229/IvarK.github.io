@@ -31,7 +31,7 @@ let qMs = {
 		rl: {
 			name: "Relativistic",
 			unl: () => pos.unl(),
-			targ: () => new Decimal(player.dilation.bestTP || 0),
+			targ: () => E(player.dilation.bestTP || 0),
 			targDisp: shorten,
 			targKind: "TP",
 			gain(x) {
@@ -110,40 +110,40 @@ let qMs = {
 				var typeData = qMs.data[type]
 				var unl = typeData.unl ? typeData.unl() : true
 
-				getEl("qMs_" + type + "_cell").style.display = unl ? "" : "none"
+				el("qMs_" + type + "_cell").style.display = unl ? "" : "none"
 			}
 
 			for (var i = 1; i <= qMs.max; i++) {
 				var shown = fluc.unl() || qMs.tmp.amt >= i - 1
-				getEl("qMs_reward_" + i).style.display = shown ? "" : "none"
+				el("qMs_reward_" + i).style.display = shown ? "" : "none"
 
 				if (shown) {
 					var got = qMs.isObtained(i)
-					getEl("qMs_reward_" + i).className = !got || qMs.forceOff(i) ? "qMs_locked" :
+					el("qMs_reward_" + i).className = !got || qMs.forceOff(i) ? "qMs_locked" :
 						!evalData(this[i].disablable) ? "qMs_reward" :
 						"qMs_toggle_" + (!qu_save.disabledRewards[i] ? "on" : "off")
-					getEl("qMs_reward_" + i).innerHTML = qMs[i].eff() + (got ? "" : "<br>(requires " + getFullExpansion(qMs[i].req) + (this[i].best ? " best" : "") + " MP)")
+					el("qMs_reward_" + i).innerHTML = qMs[i].eff() + (got ? "" : "<br>(requires " + getFullExpansion(qMs[i].req) + (this[i].best ? " best" : "") + " MP)")
 				}
 			}
-			getEl("qMs_next").textContent = qMs.tmp.amt >= qMs.max ? "" : "Next milestone unlocks at " + getFullExpansion(qMs[qMs.tmp.amt + 1].req) + " Milestone Points."
+			el("qMs_next").textContent = qMs.tmp.amt >= qMs.max ? "" : "Next milestone unlocks at " + getFullExpansion(qMs[qMs.tmp.amt + 1].req) + " Milestone Points."
 		}
 
-		getEl('dilationmode').style.display = qMs.tmp.amt >= 4 ? "block" : "none"
-		getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 11 || pH.did("fluctuate") ? "" : "none"
-		getEl('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
-		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 17 ? "block" : "none"
-		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 17 ? "" : "none"
-		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 20 ? "" : "none"
-		getEl('repExpandAuto').style.display = PCs.milestoneDone(13) ? "" : "none"
+		el('dilationmode').style.display = qMs.tmp.amt >= 4 ? "block" : "none"
+		el('rebuyupgauto').style.display = qMs.tmp.amt >= 11 || pH.did("fluctuate") ? "" : "none"
+		el('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
+		el("autoBuyerQuantum").style.display = qMs.tmp.amt >= 17 ? "block" : "none"
+		el('toggleautoquantummode').style.display = qMs.tmp.amt >= 17 ? "" : "none"
+		el('rebuyupgmax').style.display = qMs.tmp.amt < 20 ? "" : "none"
+		el('repExpandAuto').style.display = PCs.milestoneDone(13) ? "" : "none"
 
         var autoAssignUnl = qMs.tmp.amt >= 23
-		getEl('respec_quarks').style.display = autoAssignUnl ? "" : "none"
-        getEl('autoAssign').style.display = autoAssignUnl ? "" : "none"
-        getEl('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
+		el('respec_quarks').style.display = autoAssignUnl ? "" : "none"
+        el('autoAssign').style.display = autoAssignUnl ? "" : "none"
+        el('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
 
 		if (QCs.unl()) {
-			getEl("swaps_toggle").style.display = qMs.tmp.amt >= 26 ? "" : "none"
-			getEl("swaps_toggle").textContent = (QCs_save.disable_swaps.on ? "Enable" : "Disable") + " swaps in challenge"
+			el("swaps_toggle").style.display = qMs.tmp.amt >= 26 ? "" : "none"
+			el("swaps_toggle").textContent = (QCs_save.disable_swaps.on ? "Enable" : "Disable") + " swaps in challenge"
 		}
 	},
 	updateDisplayOnTick() {
@@ -154,15 +154,15 @@ let qMs = {
 			var unl = typeData.unl ? typeData.unl() : true
 
 			if (unl) {
-				getEl("qMs_" + type + "_points").textContent = "+" + getFullExpansion(qMs.tmp["amt_" + type]) + " MP"
+				el("qMs_" + type + "_points").textContent = "+" + getFullExpansion(qMs.tmp["amt_" + type]) + " MP"
 				if (typeData.targ) {
-					getEl("qMs_" + type + "_target").textContent = typeData.targDisp(qMs.tmp["targ_" + type])
-					getEl("qMs_" + type + "_next").textContent = qMs.tmp["amt_" + type] > 50 ? "" : "(Next at: " + typeData.targDisp(typeData.nextAt(qMs.tmp["amt_" + type] + 1)) + " " + typeData.targKind + ")"
+					el("qMs_" + type + "_target").textContent = typeData.targDisp(qMs.tmp["targ_" + type])
+					el("qMs_" + type + "_next").textContent = qMs.tmp["amt_" + type] > 50 ? "" : "(Next at: " + typeData.targDisp(typeData.nextAt(qMs.tmp["amt_" + type] + 1)) + " " + typeData.targKind + ")"
 				}
 			}
 		}
 
-		getEl("qMs_points").textContent = getFullExpansion(qMs.tmp.points)
+		el("qMs_points").textContent = getFullExpansion(qMs.tmp.points)
 	},
 	isObtained(id) {
 		var d = qMs[id]
@@ -181,7 +181,7 @@ let qMs = {
 
 		let on = !qu_save.disabledRewards[id]
 		qu_save.disabledRewards[id] = on
-		getEl("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
+		el("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
 	},
 
 	max: 29,

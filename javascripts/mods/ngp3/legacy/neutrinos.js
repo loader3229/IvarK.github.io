@@ -1,35 +1,35 @@
 function updateNeutrinoBoostDisplay(){
-	if (player.ghostify.neutrinos.boosts >= 1) getEl("neutrinoBoost1").textContent = shorten(tmp.nb[1])
-	if (player.ghostify.neutrinos.boosts >= 2) getEl("neutrinoBoost2").textContent = shorten(tmp.nb[2])
-	if (player.ghostify.neutrinos.boosts >= 3) getEl("neutrinoBoost3").textContent = shorten(tmp.nb[3])
-	if (player.ghostify.neutrinos.boosts >= 4) getEl("neutrinoBoost4").textContent = shorten(tmp.nb[4])
-	if (player.ghostify.neutrinos.boosts >= 5) getEl("neutrinoBoost5").textContent = shorten(tmp.nb[5])
-	if (player.ghostify.neutrinos.boosts >= 6) getEl("neutrinoBoost6").textContent = formatReductionPercentage(tmp.nb[6])
-	if (player.ghostify.neutrinos.boosts >= 7) getEl("neutrinoBoost7").textContent = shorten(tmp.nb[7])
-	if (player.ghostify.neutrinos.boosts >= 8) getEl("neutrinoBoost8").textContent = formatPercentage(tmp.nb[8] - 1)
-	if (player.ghostify.neutrinos.boosts >= 9) getEl("neutrinoBoost9").textContent = shorten(tmp.nb[9])
-	if (player.ghostify.neutrinos.boosts >= 10) getEl("neutrinoBoost10").textContent = tmp.nb[10].toFixed(4)
-	if (player.ghostify.neutrinos.boosts >= 11) getEl("neutrinoBoost11").textContent = shorten(tmp.nb[11])
-	if (player.ghostify.neutrinos.boosts >= 12) getEl("neutrinoBoost12").textContent = "^" + shorten(tmp.nb[12])
+	if (player.ghostify.neutrinos.boosts >= 1) el("neutrinoBoost1").textContent = shorten(tmp.nb[1])
+	if (player.ghostify.neutrinos.boosts >= 2) el("neutrinoBoost2").textContent = shorten(tmp.nb[2])
+	if (player.ghostify.neutrinos.boosts >= 3) el("neutrinoBoost3").textContent = shorten(tmp.nb[3])
+	if (player.ghostify.neutrinos.boosts >= 4) el("neutrinoBoost4").textContent = shorten(tmp.nb[4])
+	if (player.ghostify.neutrinos.boosts >= 5) el("neutrinoBoost5").textContent = shorten(tmp.nb[5])
+	if (player.ghostify.neutrinos.boosts >= 6) el("neutrinoBoost6").textContent = formatReductionPercentage(tmp.nb[6])
+	if (player.ghostify.neutrinos.boosts >= 7) el("neutrinoBoost7").textContent = shorten(tmp.nb[7])
+	if (player.ghostify.neutrinos.boosts >= 8) el("neutrinoBoost8").textContent = formatPercentage(tmp.nb[8] - 1)
+	if (player.ghostify.neutrinos.boosts >= 9) el("neutrinoBoost9").textContent = shorten(tmp.nb[9])
+	if (player.ghostify.neutrinos.boosts >= 10) el("neutrinoBoost10").textContent = tmp.nb[10].toFixed(4)
+	if (player.ghostify.neutrinos.boosts >= 11) el("neutrinoBoost11").textContent = shorten(tmp.nb[11])
+	if (player.ghostify.neutrinos.boosts >= 12) el("neutrinoBoost12").textContent = "^" + shorten(tmp.nb[12])
 }
 
 function updateNeutrinoAmountDisplay(){
-	getEl("electronNeutrinos").textContent = shortenDimensions(player.ghostify.neutrinos.electron)
-	getEl("muonNeutrinos").textContent = shortenDimensions(player.ghostify.neutrinos.mu)
-	getEl("tauNeutrinos").textContent = shortenDimensions(player.ghostify.neutrinos.tau)
+	el("electronNeutrinos").textContent = shortenDimensions(player.ghostify.neutrinos.electron)
+	el("muonNeutrinos").textContent = shortenDimensions(player.ghostify.neutrinos.mu)
+	el("tauNeutrinos").textContent = shortenDimensions(player.ghostify.neutrinos.tau)
 }
 
 function updateNeutrinoUpgradeDisplay() {
 	var sum = player.ghostify.neutrinos.electron.add(player.ghostify.neutrinos.mu).add(player.ghostify.neutrinos.tau).round()
 	for (var u = 1; u <= neutrinoUpgrades.max; u++) if (isNeutrinoUpgUnlocked(u)) {
-		if (hasNU(u)) getEl("neutrinoUpg" + u).className = "gluonupgradebought neutrinoupg"
-		else if (sum.gte(tmp.nuc[u])) getEl("neutrinoUpg" + u).className = "gluonupgrade neutrinoupg"
-		else getEl("neutrinoUpg" + u).className = "gluonupgrade unavailablebtn"
+		if (hasNU(u)) el("neutrinoUpg" + u).className = "gluonupgradebought neutrinoupg"
+		else if (sum.gte(tmp.nuc[u])) el("neutrinoUpg" + u).className = "gluonupgrade neutrinoupg"
+		else el("neutrinoUpg" + u).className = "gluonupgrade unavailablebtn"
 
 		eff = tmp.nu[u]
 		if (eff == undefined) continue
-		if (u == 12) getEl("neutrinoUpg12").setAttribute('ach-tooltip', neutrinoUpgrades[u].effDesc(eff))
-		else getEl("neutrinoUpg" + u + "Pow").textContent = neutrinoUpgrades[u].effDesc(eff)
+		if (u == 12) el("neutrinoUpg12").setAttribute('ach-tooltip', neutrinoUpgrades[u].effDesc(eff))
+		else el("neutrinoUpg" + u + "Pow").textContent = neutrinoUpgrades[u].effDesc(eff)
 	}
 }
 
@@ -41,8 +41,8 @@ function isNeutrinoUpgUnlocked(u) {
 
 function updateNeutrinoUpgradeUnlock(u) {
 	let unl = isNeutrinoUpgUnlocked(u)
-	if (u % 3 == 1) getEl("neutrinoUpg" + u).parentElement.parentElement.style.display = isNeutrinoUpgUnlocked(u) ? "" : "none"
-	else getEl("neutrinoUpg" + u).style.display = isNeutrinoUpgUnlocked(u) ? "" : "none"
+	if (u % 3 == 1) el("neutrinoUpg" + u).parentElement.parentElement.style.display = isNeutrinoUpgUnlocked(u) ? "" : "none"
+	else el("neutrinoUpg" + u).style.display = isNeutrinoUpgUnlocked(u) ? "" : "none"
 }
 
 function updateNeutrinoUpgradeUnlocks(rangeMin, rangeMax) {
@@ -54,29 +54,29 @@ function updateNeutrinosTab(){
 	var generations = ["electron", "Muon", "Tau"]
 	var neutrinoGain = getNeutrinoGain()
 	var sum = player.ghostify.neutrinos.electron.add(player.ghostify.neutrinos.mu).add(player.ghostify.neutrinos.tau).round()
-	getEl("neutrinosGain").textContent="You gain " + shortenDimensions(neutrinoGain) + " " + generations[player.ghostify.neutrinos.generationGain - 1] + " neutrino" + (neutrinoGain.eq(1) ? "" : "s") + " each time you get 1 normal galaxy."
+	el("neutrinosGain").textContent="You gain " + shortenDimensions(neutrinoGain) + " " + generations[player.ghostify.neutrinos.generationGain - 1] + " neutrino" + (neutrinoGain.eq(1) ? "" : "s") + " each time you get 1 normal galaxy."
 	setAndMaybeShow("neutrinosGainGhostify",hasAch("ng3p68"),'"You gain "+shortenDimensions(Decimal.times(\''+neutrinoGain.toString()+'\',qu_save.bigRip.bestGals*2e3))+" of all neutrinos each time you become a ghost 1x time."')
 	
 	updateNeutrinoAmountDisplay()
 	updateNeutrinoBoostDisplay()
 	updateNeutrinoUpgradeDisplay()
 	
-	if (player.ghostify.ghostParticles.gte(getNeutrinoBoostCost())) getEl("neutrinoUnlock").className = "gluonupgrade neutrinoupg"
-	else getEl("neutrinoUnlock").className = "gluonupgrade unavailablebtn"
-	if (player.ghostify.ghostParticles.gte(Decimal.pow(4,player.ghostify.neutrinos.multPower-1).times(2))) getEl("neutrinoMultUpg").className = "gluonupgrade neutrinoupg"
-	else getEl("neutrinoMultUpg").className = "gluonupgrade unavailablebtn"
-	if (sum.gte(getGHPMultCost())) getEl("ghpMultUpg").className = "gluonupgrade neutrinoupg"
-	else getEl("ghpMultUpg").className = "gluonupgrade unavailablebtn"
+	if (player.ghostify.ghostParticles.gte(getNeutrinoBoostCost())) el("neutrinoUnlock").className = "gluonupgrade neutrinoupg"
+	else el("neutrinoUnlock").className = "gluonupgrade unavailablebtn"
+	if (player.ghostify.ghostParticles.gte(Decimal.pow(4,player.ghostify.neutrinos.multPower-1).times(2))) el("neutrinoMultUpg").className = "gluonupgrade neutrinoupg"
+	else el("neutrinoMultUpg").className = "gluonupgrade unavailablebtn"
+	if (sum.gte(getGHPMultCost())) el("ghpMultUpg").className = "gluonupgrade neutrinoupg"
+	else el("ghpMultUpg").className = "gluonupgrade unavailablebtn"
 }
 
 function onNotationChangeNeutrinos() {
 	if (player.masterystudies == undefined) return
-	getEl("neutrinoUnlockCost").textContent=shortenDimensions(getNeutrinoBoostCost())
-	getEl("neutrinoMult").textContent=shortenDimensions(Decimal.pow(5, player.ghostify.neutrinos.multPower - 1))
-	getEl("neutrinoMultUpgCost").textContent=shortenDimensions(Decimal.pow(4, player.ghostify.neutrinos.multPower-1).times(2))
-	getEl("ghpMult").textContent = shortenMoney(getGHPBaseMult())
-	getEl("ghpMultUpgCost").textContent=shortenDimensions(getGHPMultCost())
-	for (var u = 1; u <= neutrinoUpgrades.max; u++) getEl("neutrinoUpg" + u + "Cost").textContent=shortenDimensions(new Decimal(tmp.nuc[u]))
+	el("neutrinoUnlockCost").textContent=shortenDimensions(getNeutrinoBoostCost())
+	el("neutrinoMult").textContent=shortenDimensions(Decimal.pow(5, player.ghostify.neutrinos.multPower - 1))
+	el("neutrinoMultUpgCost").textContent=shortenDimensions(Decimal.pow(4, player.ghostify.neutrinos.multPower-1).times(2))
+	el("ghpMult").textContent = shortenMoney(getGHPBaseMult())
+	el("ghpMultUpgCost").textContent=shortenDimensions(getGHPMultCost())
+	for (var u = 1; u <= neutrinoUpgrades.max; u++) el("neutrinoUpg" + u + "Cost").textContent=shortenDimensions(E(tmp.nuc[u]))
 }
 
 function getNeutrinoGain() {
@@ -95,15 +95,15 @@ function buyNeutrinoUpg(id) {
 }
 
 function updateNeutrinoBoosts() {
-	for (var b = 1; b <= neutrinoBoosts.max; b++) getEl("neutrinoBoost" + (b % 3 == 1 ? "Row" + (b + 2) / 3 : "Cell" + b)).style.display = player.ghostify.neutrinos.boosts >= b ? "" : "none"
-	getEl("neutrinoUnlock").style.display = player.ghostify.neutrinos.boosts >= 12 ? "none" : ""
-	getEl("neutrinoUnlockCost").textContent = shortenDimensions(getNeutrinoBoostCost())
+	for (var b = 1; b <= neutrinoBoosts.max; b++) el("neutrinoBoost" + (b % 3 == 1 ? "Row" + (b + 2) / 3 : "Cell" + b)).style.display = player.ghostify.neutrinos.boosts >= b ? "" : "none"
+	el("neutrinoUnlock").style.display = player.ghostify.neutrinos.boosts >= 12 ? "none" : ""
+	el("neutrinoUnlockCost").textContent = shortenDimensions(getNeutrinoBoostCost())
 }
 
 function getNeutrinoBoostCost() {
 	let data = neutrinoBoosts[player.ghostify.neutrinos.boosts + 1]
 	let x = data ? data.cost : 1/0
-	return new Decimal(x)
+	return E(x)
 }
 
 function unlockNeutrinoBoost() {
@@ -124,8 +124,8 @@ function buyNeutrinoMult() {
 	if (!player.ghostify.ghostParticles.gte(cost)) return
 	player.ghostify.ghostParticles=player.ghostify.ghostParticles.sub(cost).round()
 	player.ghostify.neutrinos.multPower++
-	getEl("neutrinoMult").textContent=shortenDimensions(Decimal.pow(5, player.ghostify.neutrinos.multPower-1))
-	getEl("neutrinoMultUpgCost").textContent=shortenDimensions(Decimal.pow(4, player.ghostify.neutrinos.multPower-1).times(2))
+	el("neutrinoMult").textContent=shortenDimensions(Decimal.pow(5, player.ghostify.neutrinos.multPower-1))
+	el("neutrinoMultUpgCost").textContent=shortenDimensions(Decimal.pow(4, player.ghostify.neutrinos.multPower-1).times(2))
 }
 
 function maxNeutrinoMult() {
@@ -135,8 +135,8 @@ function maxNeutrinoMult() {
 	let toSpend = Decimal.pow(4, toBuy).sub(1).div(3).times(cost)
 	player.ghostify.ghostParticles = player.ghostify.ghostParticles.sub(toSpend.min(player.ghostify.ghostParticles)).round()
 	player.ghostify.neutrinos.multPower += toBuy
-	getEl("neutrinoMult").textContent = shortenDimensions(Decimal.pow(5, player.ghostify.neutrinos.multPower - 1))
-	getEl("neutrinoMultUpgCost").textContent = shortenDimensions(Decimal.pow(4, player.ghostify.neutrinos.multPower - 1).times(2))
+	el("neutrinoMult").textContent = shortenDimensions(Decimal.pow(5, player.ghostify.neutrinos.multPower - 1))
+	el("neutrinoMultUpgCost").textContent = shortenDimensions(Decimal.pow(4, player.ghostify.neutrinos.multPower - 1).times(2))
 }
 
 let neutrinoBoosts = {
@@ -265,7 +265,7 @@ var neutrinoUpgrades = {
 	},
 	14: {
 		eff() {
-			if (!tmp.quActive) return new Decimal(1)
+			if (!tmp.quActive) return E(1)
 			var base = player.ghostify.ghostParticles.add(1).log10()
 			var colorsPortion = Math.pow(qu_save.colorPowers.r + qu_save.colorPowers.g + qu_save.colorPowers.b, 1/3)
 			return Decimal.pow(base, colorsPortion * 0.8 + 1).max(1)

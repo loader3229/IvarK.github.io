@@ -204,7 +204,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			}
 		}
 		if (notation === "Spazzy") {
-			value = new Decimal(value)
+			value = E(value)
 			var log = value.log10()
 			var sin = Math.sin(log)
 			var cos = Math.cos(log)
@@ -216,7 +216,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			return result
 		}
 		if (notation === "AF5LN") {
-			value = new Decimal(value)
+			value = E(value)
 			var progress = Math.round(Math.log10(value.add(1).log10() + 1)/Math.log10(Number.MAX_VALUE) * 11881375)
 			var uppercased = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 			var result = ""
@@ -227,12 +227,12 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 			return result
 		}
 		if (notation === "Hyperscientific" || notation === "Layered scientific" || notation === "Layered logarithm" || notation === "Tetrational scientific" || notation === "Hyper-E") {
-			value = new Decimal(value)
+			value = E(value)
 			var e = value
 			var f = 0
 			var bump = player.options.hypersci.bump || 10
 			while (e.gt(bump)) {
-				e = new Decimal(e.log10())
+				e = E(e.log10())
 				f ++
 			}
 			e = e.toFixed(2 + f)
@@ -336,7 +336,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 				power = Decimal.log10(value)
 				prefix = e
 			} else {
-				power = new Decimal(value).log(base)
+				power = E(value).log(base)
 				if (base >= 1e3) var prefix = formatValue("Mixed scientific", base, 2, 0)
 				else prefix = base
 				prefix += "^"
@@ -380,7 +380,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
 		  else if (base >= 1e3) var prefix = formatValue("Mixed scientific", base, 2, 0)
 		  else var prefix = base
 		  while (value > 1) {
-			value = new Decimal(value).log(base)
+			value = E(value).log(base)
 			count++;
 		  }
 		  return prefix + "⇈" + (value + count).toFixed(Math.max(places, 0, Math.min(count-1, 4)));
@@ -710,7 +710,7 @@ function getMyriadAbbreviation(x) {
 }
 
 function getMyriadStandard(v, places = 2) {
-	v = new Decimal(v)
+	v = E(v)
 
 	var log = Math.floor(v.log10())
 	var mant = v.mantissa

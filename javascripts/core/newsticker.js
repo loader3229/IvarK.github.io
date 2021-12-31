@@ -353,7 +353,7 @@ amNewsArray = [
 ["Which one looks different? Preons or anti-preons?", 'hasAch("ng3p81")', "am136"],
 ["???", false, "am137"],
 ["GET A FREE PASS TO A GHOST TRANSFORMATION MACHINE NOW! IT IS TOTALLY WORTH IT!", 'pH.did("ghostify")', "am138"],
-['I told you "don\'t click that news" or else you will get a useless achievement.', "hasAch('ng3ps12')", "am139"],
+['I told you "don\'t click that news" or el_se you will get a useless achievement.', "hasAch('ng3ps12')", "am139"],
 ["Want to decay a quark multiple times? Be a Bosonic Lab scientist!", "pH.did('ghostify') && player.ghostify.ghostlyPhotons.enpowerments>3", "am140"],
 ["???", false, "am141"],
 ["BOSONIC OVERDRIVE!!!", 'hasAch("ng3p81") && tmp.bl.odSpeed.gt(1) && tmp.bl.battery.gt(0)', "am142"],
@@ -436,7 +436,7 @@ amNewsArray = [
 ["Why is there a big crunch and a big rip although a heat death would be more likely to happen?", "hasAch('ng3p51')", "am219"],
 ["Thousands of people in protest as Aarex adds scamify for 1 minute.", true, "am220"],
 ["We live in not just a universe and a multiverse, but ONE MEGAVERSE.", true, "am221"],
-["Antimatter dimensions is a metaphor for communism. There is only one source of production doing all the work, AKA first dimensions, while everyone else shares the antimatter. But wait, does that mean matter is always capitalistic? That can't be true, considering that the soviets were communists, and they were made of matter. Wat, maybe they was'nt? Antimatter dimensions takes place inside the soviet union confirmed? That means the soviet union still exists, because if it does'nt, then that means it's physically impossible for antimatter dimensions to exist? But the soviet unions does'nt exist, wich means antimatterr dimensions should'nt exist. This means the universe cannot exist, because there is a paradox, but the universe DOES exist, so it can't be a paradox, there has to be some other solution. Wait, the first word of the soviet anthem is \"Soyuz\", wich means \"Union\", in english. This could mean that the antimatter dimensions are actually in union with the time BEFORE 1991, but it still exists today. Antimatter dimensions hjas confirmed that time travel is possible. Hevipelle, please show us your secret. He's probably not gonna answer, because he is technically Stalin. \"Hevipelle\", is just the project name of Stalins top secret time travel machine. Stalin then went into the machine, and tried to hide in the least popular game genre, incremental games. Stalin then decided to make an further lie by saying he's finnish. It all makes sense now! The communist dimensions and the complete dictatorship of the player. Now, you might be wondering why Stalin still existed after the time travel. Well, the only possibility is that the time travel machine somehow moved into a timeline where he never used it. But wait, this means that Stalin never actually used the time machine. Yet another paradox! Well, this one is quite explainable. You see, there are 5 timelines. The first one, where Stalin didd use the time machine, but antimatter dimensions never existed, the second one where he did'nt use the time machine, but he still existed in the present, there is also a third one where he made a timeline union, wich connected the first and second timeline through yet another machine. There is also the 4th, where he has taken over the univerese and it's where he does most of his stuff. There is also the final and 5th one, the timeline where antimatter dimensions is happening. Tgis means that both timeline 1,2 and 5 are crossingg each other, while the third are combining them. This means i should be able to enter into the second timeline wich makes it so i can get a time machine to reach into the 4th timeline. 5 hours later and i have finally gotten into the 4th timeline, where i met face to face with Stalin himself. He looked very strong and he saw me. He immedeatly tried to talk to me and we camÃ© to the conclusion that we needed more of a crew. We went to get some help from Vladimir Putin, who quickly went under the alias of \"Aarex\", who made a 6th timeline wich is ng+++. However, Stalin got so afraid of the quality of Putins content, so he got a meantal illness. But he had one final wish. To create the \"Reality\" update, wich would end the antimatter dimensions timeline. But putin was trying to make a reworked version of ng+++. This meant creating a 7th timeline. Howeverr, i also wanted to do something. I created the \"NG+1e308\" timeline, but it ended before it even started. However, everythhing was going great until Slabdrill found us and tried to attack us. We quickly trapped him inside a ninth timeline. From there he made countless attempts of addeing his timeline into another timeline i the forrm of a ninth dimension, but Putin did nott let him. The wall between the ninth timeline and the rest was just too strong.  However, you might be wondering how you too can gain access to all of this, well, at firtrst you need t-    (Gets shot by Stalin) the AD:NGA mod, the 10th timeline with a fractal engine inspired mechanic and Rhendevous relics, you need 20 Rhendevous resets to get the 20-relic, a inter-timeline transport device with the Buy-N-Large logo, the 15-relic is a Buy-N-Large time machine.", true, "am222"],
+["Antimatter dimensions is a metaphor for communism. There is only one source of production doing all the work, AKA first dimensions, while everyone else shares the antimatter. But wait, does that mean matter is always capitalistic? That can't be true, considering that the soviets were communists, and they were made of matter. Wat, maybe they was'nt? Antimatter dimensions takes place inside the soviet union confirmed? That means the soviet union still exists, because if it does'nt, then that means it's physically impossible for antimatter dimensions to exist? But the soviet unions does'nt exist, wich means antimatterr dimensions should'nt exist. This means the universe cannot exist, because there is a paradox, but the universe DOES exist, so it can't be a paradox, there has to be some other solution. Wait, the first word of the soviet anthem is \"Soyuz\", wich means \"Union\", in english. This could mean that the antimatter dimensions are actually in union with the time BEFORE 1991, but it still exists today. Antimatter dimensions hjas confirmed that time travel is possible. Hevipelle, please show us your secret. He's probably not gonna answer, because he is technically Stalin. \"Hevipelle\", is just the project name of Stalins top secret time travel machine. Stalin then went into the machine, and tried to hide in the least popular game genre, incremental games. Stalin then decided to make an further lie by saying he's finnish. It all makes sense now! The communist dimensions and the complete dictatorship of the player. Now, you might be wondering why Stalin still existed after the time travel_. Well, the only possibility is that the time travel machine somehow moved into a timeline where he never used it. But wait, this means that Stalin never actually used the time machine. Yet another paradox! Well, this one is quite explainable. You see, there are 5 timelines. The first one, where Stalin didd use the time machine, but antimatter dimensions never existed, the second one where he did'nt use the time machine, but he still existed in the present, there is also a third one where he made a timeline union, wich connected the first and second timeline through yet another machine. There is also the 4th, where he has taken over the univerese and it's where he does most of his stuff. There is also the final and 5th one, the timeline where antimatter dimensions is happening. Tgis means that both timeline 1,2 and 5 are crossingg each other, while the third are combining them. This means i should be able to enter into the second timeline wich makes it so i can get a time machine to reach into the 4th timeline. 5 hours later and i have finally gotten into the 4th timeline, where i met face to face with Stalin himself. He looked very strong and he saw me. He immedeatly tried to talk to me and we camÃ© to the conclusion that we needed more of a crew. We went to get some help from Vladimir Putin, who quickly went under the alias of \"Aarex\", who made a 6th timeline wich is ng+++. However, Stalin got so afraid of the quality of Putins content, so he got a meantal illness. But he had one final wish. To create the \"Reality\" update, wich would end the antimatter dimensions timeline. But putin was trying to make a reworked version of ng+++. This meant creating a 7th timeline. Howeverr, i also wanted to do something. I created the \"NG+1e308\" timeline, but it ended before it even started. However, everythhing was going great until Slabdrill found us and tried to attack us. We quickly trapped him inside a ninth timeline. From there he made countless attempts of addeing his timeline into another timeline i the forrm of a ninth dimension, but Putin did nott let him. The wall between the ninth timeline and the rest was just too strong.  However, you might be wondering how you too can gain access to all of this, well, at firtrst you need t-    (Gets shot by Stalin) the AD:NGA mod, the 10th timeline with a fractal engine inspired mechanic and Rhendevous relics, you need 20 Rhendevous resets to get the 20-relic, a inter-timeline transport device with the Buy-N-Large logo, the 15-relic is a Buy-N-Large time machine.", true, "am222"],
 ["So, Spelpotatis is trying to beat me by news tickers, I will not stop until I win.", true, "am223"],
 ["[Insert a news ticker which would cause an armageddon, but doesn't really happen due to: I am being restricted in your computer. Computers can't do real life stuff, unless they are robots.]", true, "am224"],
 ["Alright. My news tickers have too many stuff made by Aarex. If you wish for a lucky moment, click me to split into 2.", true, "am225"],
@@ -486,7 +486,7 @@ amNewsArray = [
 ["Welcome to Deep Quantum, where strings are everywhere.", "str.unl()", "am269"],
 ["Number of perfect lines: Absolutely zero.", "str.unl()", "am270"],
 ["Absolute zero. That's how many particles didn't contain.", "str.unl()", "am271"],
-["It is year 2077. We haven't eliminated matter bots, but we are trying to outsmart them. We are developing a brain transplant technology which detects if you are a human by nanobots for resources and materials.", true, "am272"],
+["It is year 2077. We haven't el_iminated matter bots, but we are trying to outsmart them. We are developing a brain transplant technology which detects if you are a human by nanobots for resources and materials.", true, "am272"],
 ["For the first time, I saw a interesting moment for the first time. This moment shows people standing on the extractor, which can safely move on dark matter goo.", true, "am273"],
 ["You ever think how messed up AD is? You're shredding through countless realities, turning them to nothing and annihilating them completely, only to rebuild them out of antimatter and then tear them down in one final crunch Thousands upon thousands of dimensions are destroyed each second, parallel universes like our own, universes that could harbor life, turned into nothing but antimatter in a matter of moments and then collapsed completely. Even multiverses aren't enough, and the spacetime continuum eventually rips as we dilate time itself to satiate our bloodlust.", true, "am274"],
 ["Does any of the news here actually get added into the game?", true, "am275"],
@@ -509,7 +509,7 @@ function scrollNextMessage() {
         //don't run if hidden to save performance
         if (typeof (player) == "undefined") return
         if (player.options.newsHidden) return false
-        var s = getEl('news');
+        var s = el('news');
         updateNewsArray();
         tmp.blankedOut = false
 
@@ -644,7 +644,7 @@ ghostlyNewsArray = [//Ghostly news ticker messages
 ["I wonder where all the news gets broadcasted from...", true, "gn54"],
 ["'now i know why i can't get access to the ghostly news!' - usavictor", true, "gn55"],
 ["Ghostify is just Quantum but spooky.", true, "gn56"],
-["Void-Preontius, the Void Ultra-Omnipotent Ghost, decided to take over not only the Barrel... He took over the Barrel!", true, "gn57"],
+["Void-Preontius, the Void Ultra-Omnipotent Ghost, decided to take over not only the Barrel_... He took over the Barrel!", true, "gn57"],
 ["GHOST IS YOU", true, "gn58"],
 ["Error 404: Ghost Matter not found", true, "gn59"],
 ["Ghost scientists have built a quick transportation to the Gravity Well!", false, "gn60"],
@@ -676,7 +676,7 @@ function nextGhostlyNewsTickerMsg() {
 	} catch(e) {
 		console.log("Newsarray doesn't work at idx " + ghostlyNewsIndex)
 	}
-	var newsText = getEl("ghostlyNewsTickerText")
+	var newsText = el("ghostlyNewsTickerText")
 	newsText.textContent = ghostlyNewsArray[ghostlyNewsIndex][0]
 	newsText.innerHTML = "<b>NEWS!</b> " + newsText.innerHTML
 	newsText.style.left = "100%"
@@ -704,11 +704,11 @@ function nextGhostlyNewsTickerMsg() {
 
 function toggleGhostlyNews(force) {
 	player.options.secrets.ghostlyNews = !player.options.secrets.ghostlyNews
-	getEl("ghostlyNewsTicker").style.height = (player.options.secrets.ghostlyNews ? 24 : 0)+"px"
-	getEl("ghostlyNewsTickerBlock").style.height = (player.options.secrets.ghostlyNews ? 16 : 0)+"px"
-	getEl("ghostlynewsbtn").textContent = (player.options.secrets.ghostlyNews ? "Hide" : "Show") + " ghostly news ticker"
+	el("ghostlyNewsTicker").style.height = (player.options.secrets.ghostlyNews ? 24 : 0)+"px"
+	el("ghostlyNewsTickerBlock").style.height = (player.options.secrets.ghostlyNews ? 16 : 0)+"px"
+	el("ghostlynewsbtn").textContent = (player.options.secrets.ghostlyNews ? "Hide" : "Show") + " ghostly news ticker"
 }
 
-getEl("ghostlyNewsTicker").onclick = function () {
+el("ghostlyNewsTicker").onclick = function () {
 	if (tmp.blankedOut2) giveAchievement("Blanked out")
 };
