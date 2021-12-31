@@ -6,12 +6,15 @@ function quantum(auto, force, attrs, mode, quick) {
 	var data = {}
 	if (mode == "qc") {
 		if (((!QCs.done(1) && !pH.did("fluctuate")) || player.options.challConf || aarMod.quantumConf) && !quick) {
-			if (!confirm("This performs a forced Quantum reset, but you will be brought into a real challenge. All rebuyables will also be resetted. Are you sure you want to take this challenge down?")) return
+			if (!confirm("This starts a Quantum run, but nerfs will be applied. Are you sure do you want to conquer it?")) return
 		}
 		data.qc = [attrs.qc]
 		if (QCs_tmp.show_perks) data.mod = "up"
 	}
 	if (mode == "pc") {
+		if (((PCs_save.lvl == 1 && !pH.did("fluctuate")) || player.options.challConf || aarMod.quantumConf) && !quick) {
+			if (!confirm("Starting a Paired Challenge also reduces all Meta Dimensions by ^0.95. Are you sure? Tip: If you are stuck, feel free to exit and reassign it with a different combination.")) return
+		}
 		data.pc = attrs.pc
 		data.qc = PCs.convBack(PCs_save.challs[attrs.pc])
 	}

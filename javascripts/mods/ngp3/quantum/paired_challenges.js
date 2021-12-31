@@ -152,12 +152,23 @@ var PCs = {
 
 		//Positionist
 		data.comps = {}
-		for (var i = 1; i <= 8; i++) data.comps[i] = 0
+		data.row_comps = {}
+		for (var i = 1; i <= 8; i++) {
+			data.comps[i] = 0
+			data.row_comps[i] = 0
+		}
 		for (var i = 0; i < PCs_save.comps.length; i++) {
 			var id = PCs.convBack(PCs_save.comps[i])
 			data.comps[id[0]]++
 			data.comps[id[1]]++
 		}
+		for (var y = 1; y <= 7; y++) {
+			for (var x = 1; x <= 4; x++) {
+				var c = PCs_save.challs[y * 10 + x]
+				if (PCs_save.comps.includes(c)) data.row_comps[y]++
+			}
+		}
+
 
 		//Level up!
 		var oldLvl = PCs_save.lvl
@@ -173,14 +184,6 @@ var PCs = {
 		data.eff1_start = futureBoost("quantum_superbalancing") ? 1000 : tmp.ngp3_mul ? 125 : 150
 		data.eff2 = Math.sqrt(eff) * Math.pow(1.03, eff * 4) / 3
 		data.eff3 = Math.pow(1.4, - (PCs_save.lvl - 1) / 28)
-
-		//Temperature
-		data.temp = Math.min(comps / 21 - 0.5, 1) * comps / 28
-		if (data.temp > 0) data.temp *= 2
-		if (tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp) {
-			if (data.temp > 0) data.temp /= 2
-			data.temp -= 0.1
-		}
 	},
 	occupy(x, c) {
 		var d = PCs_tmp.occupied
@@ -257,6 +260,7 @@ var PCs = {
 			quantum(false, true, {pc: x}, "pc")
 			return
 		} else {
+			if (!PCs.posUnl(x)) return
 			if (PCs_tmp.pick == x) delete PCs_tmp.pick
 			else PCs_tmp.pick = x
 			PCs_tmp.picked = []
@@ -279,14 +283,19 @@ var PCs = {
 		var qc2 = QCs.data[list[1]].goalMA
 		var base = Number.MAX_VALUE
 		var div = PCs.data.goal_divs[list[0]] + PCs.data.goal_divs[list[1]] + 1
-		div -= PCs_tmp.temp
 		if (fluc.unl() && fluc_tmp.temp) div += fluc_tmp.temp.pc
 
 		var r = qc1.pow(qc2.log(base) / div)
 		var scaling = (hasAch("ng3pr16") ? 0.89 : 1) / 3
-		var pow = Math.pow(1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) * scaling)
+		var mul = PCs_save.comps.length
+		for (var y = 1; y <= 4; y++) {
+			if (Math.floor(pos / 10) != y) mul -= PCs_tmp.row_comps[y] / 4
+		}
+		mul *= scaling
+		if (pos >= 50) mul += 2
+
+		var pow = Math.pow(1.1, mul)
 		pow *= PCs_tmp.eff3
-		if (pos >= 50) pow *= 1.25
 
 		return r.pow(pow)
 	},
@@ -331,13 +340,11 @@ var PCs = {
 		return PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestone_reqs[pos % 10]
 	},
 	lvlReq(pc) {
-		if (pc >= 50) return PCs.rowUnl(Math.floor(pc / 10)) ? 0 : 1/0
-		if (QCs_save.comps / 2 < pc % 10) return 1/0
-		var x = Math.floor(pc / 10) * 4 - 4
-		if (pc < 20) x++
-
-		x += pc % 10 - 1
-		return x
+		if (pc > 50) return this.rowUnl(Math.floor(pc / 10)) ? 0 : 1/0
+		return Math.floor(pc / 10) * 2 + pc % 10 - 2
+	},
+	posUnl(pc) {
+		return PCs_save.comps.length >= (Math.floor(pc / 10) * 2 + pc % 10 - 3)
 	},
 	rowUnl(x) {
 		return evalData(PCs.data.row_unls[x])
@@ -349,10 +356,10 @@ var PCs = {
 	setupButton: (pc) => '<td><button id="pc' + pc + '" class="challengesbtn" style="border-radius: 10px" onclick="PCs.start(' + pc + ')"></button></td>',
 	buttonTxt(pc) {
 		var id = PCs.sort(PCs_save.challs[pc])
-		return '<b style="font-size: 18px">' + PCs.name(pc) + '</b><br>' + (
+		return '<b style="font-size: 16px">' + PCs.name(pc) + '</b><br>' + (
 			PCs_save.challs[pc] ? "QC " + wordizeList(PCs.convBack(id), false, " + ", false) :
 			PCs_tmp.pick == pc ? "Cancel" :
-			!PCs_tmp.pick ? "Assign" : ""
+			PCs.posUnl(pc) && !PCs_tmp.pick ? "Assign" : ""
 		) + (
 			PCs_tmp.pick || !PCs_save.challs[pc] || PCs.done(id) ? "" : "<br>Goal: " + shorten(PCs.goal(id, pc)) + " MA"
 		)
@@ -430,7 +437,7 @@ var PCs = {
 			PCs_save.in == pc && !exit ? "onchallengebtn" :
 			PCs_save.challs[pc] && PCs_save.comps.includes(PCs.sort(PCs_save.challs[pc])) ? "completedchallengesbtn" :
 			PCs_save.challs[pc] ? "quantumbtn" :
-			"challengesbtn"
+			PCs.posUnl(pc) ? "challengesbtn" : "lockedchallengesbtn"
 		)
 		el.innerHTML = this.buttonTxt(pc)
 	},
@@ -453,8 +460,8 @@ var PCs = {
 			getEl("pc_comp" + i).textContent = PCs_tmp.comps[i] + " / 7"
 		}
 
-		getEl("pc_lvl").textContent = getFullExpansion(PCs_save.lvl)
-		getEl("pc_comps").textContent = getFullExpansion(PCs_save.comps.length) + " / " + getFullExpansion(Math.min(PCs_save.lvl, 16))
+		getEl("pc_lvl").textContent = "Level " + getFullExpansion(PCs_save.lvl)
+		getEl("pc_comps").textContent = PCs_save.lvl > 28 ? "" : ": " + getFullExpansion(PCs_save.comps.length) + " completed / " + getFullExpansion(PCs_save.lvl)
 		for (var i = 1; i <= 8; i++) {
 			var respec = PCs_save.challs[i * 10 + 1] || PCs_save.challs[i * 10 + 2] || PCs_save.challs[i * 10 + 3] || PCs_save.challs[i * 10 + 4]
 			getEl("pc_row_" + i).style.display = data.rowUnl(i) ? "" : "none"
@@ -477,11 +484,6 @@ var PCs = {
 				getEl("pc_pick" + i).style.display = QCs.done(i) ? "" : "none"
 			}
 		}
-
-		getEl("pc_comps2").textContent = getFullExpansion(PCs_save.comps.length)
-		getEl("pc_temp").innerHTML = formatPercentage(Math.abs(PCs_tmp.temp)) + "<sup>o</sup> " + (PCs_tmp.temp > 0 ? "hotter" : "cooler")
-		getEl("pc_temp_color").style.display = PCs_save.lvl >= 2 ? "" : "none"
-		getEl("pc_temp_color").className = PCs_tmp.temp > 0 ? "hot" : PCs_tmp.temp < 0 ? "cool" : ""
 
 		this.showMilestones(PCs_tmp.milestone || 0)
 	},

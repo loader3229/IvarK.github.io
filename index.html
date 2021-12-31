@@ -1552,7 +1552,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.7: Quantum Overseer)</p>
-				<p class="warning" id='versionDescAlpha'>(12/28/21a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(12/30/21a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -3401,16 +3401,17 @@
 				<button class="secondarytabbtn" id="pctabbtn_perk" onclick="showChallengesTab('pairedChallPerks')">Perks [soon]</button>
 				<b class="fluc_boost" id="fluc_boost_pc"></b>
 				<div id="pc_info">
-					<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 20px">0 / 1</span>)</span><br>
-					Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Quantum Power (starting at <span id="pc_eff1_start"></span>), <span id="pc_eff2" style="font-size: 20px"></span> to aQs [by itself], and <span id="pc_eff3" style="font-size: 20px"></span> to goals.
+					<span id="pc_lvl" style="font-size: 25px"></span>
+					<span id="pc_comps" style="font-size: 20px"></span>
+					<br>
+					Reward: <span id="pc_eff1" style="font-size: 20px"></span> to Quantum Power [starting at <span id="pc_eff1_start"></span>], <span id="pc_eff2" style="font-size: 20px"></span> to aQs self-boost, and <span id="pc_eff3" style="font-size: 20px"></span> to goals.
 				</div>
 				<span id="pc_enter">
 					<br>
-					<p id="pc_penalty">Note: Starting a Paired Challenge reduces Meta Dimensions by ^0.95! (acts like you are in QC7)</p>
-					Note 2: Exiting a Paired Challenge automatically unassigns it, unless it is completed!
+					<b class="red" id="pc_penalty">Paired Challenges have a ^0.95 Meta Dimensions penalty!</b>
 					<br>
-					<button class="storebtn" onclick="PCs.exportPreset()" style="width: 120px; height: 48px">Export combinations</button>
-					<button class="storebtn" onclick="PCs.importPreset()" style="width: 120px; height: 48px">Import combinations</button>
+					<button class="storebtn" onclick="PCs.exportPreset()" style="width: 96px; height: 48px">Export</button>
+					<button class="storebtn" onclick="PCs.importPreset()" style="width: 96px; height: 48px">Import</button>
 				</span>
 				<span id="pc_omega">
 					<br>
@@ -3418,12 +3419,11 @@
 				</span>
 				<span id="pc_pick"></span>
 				<table id="pc_table" align="center" style="margin: auto"></table>
-				<span id="pc_temp_color" style="font-size: 15px">Your <span id="pc_comps2" style="font-size: 20px"></span> completions are making PC goals <span id="pc_temp"></span>!</span>
 				<br>
 			</div>
 			<div id="pairedChallMilestones" class="challengeTab">
 				<button class="secondarytabbtn" onclick="PCs.back()">Back</button>
-				<button class="secondarytabbtn" id="qc_milestone_all_btn" onclick="PCs.showMilestones('all')">Show all milestones</button>
+				<button class="secondarytabbtn" id="qc_milestone_all_btn" onclick="PCs.showMilestones('all')">All Milestones</button>
 				<table id="qc_milestones" align="center" style="margin: auto"></table>
 				<div id="qc_milestone_div">
 					<b id="qc_milestone_header" style="font-size: 20px">QC1 Milestones</b>

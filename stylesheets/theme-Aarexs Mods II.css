@@ -411,7 +411,7 @@ button, div.storebtn {
 }
 
 .QKAmount, 
-#pc_lvl, #pc_eff1, #pc_eff2,
+#pc_lvl, #pc_eff1, #pc_eff2, #pc_eff3,
 #normalReplGatherRate, #gatherRate, #gatheredQuarks, #workerReplGatherRate, #babyReplGatherRate, .empQuarks, #quarksNanofield, #quarkLoss,
 #gbRepl, #quarkEnergy, #quarkEnergyMult, #quarkEnergyEffect1, #quarkEnergyEffect2, #bestQE, #enB_glu_amt, #quarkTranslation, #gbEDs, #quarkCharge, #quarkChargeRate {
 	color: #72e500 !important

@@ -148,7 +148,7 @@ let str = {
 
 	//Vibrations
 	canVibrate(x) {
-		return str_save.energy >= str.veCost(str_tmp.vibrated + 1) &&  str_tmp.lastVibrate + 3 >= x
+		return str_save.energy >= str.veCost(str_tmp.vibrated + 1) && str_tmp.lastVibrate + 2 >= x && str_tmp.vibrated + 4 >= x
 	},
 	vibrate(x) {
 		var vibrated = str_save.vibrated
@@ -177,7 +177,7 @@ let str = {
 		for (var p = -range; p <= range; p++) {
 			var d = Math.abs(p)
 			var y = p + x
-			var add = 0.17 - 0.14 * d + 0.25 * ((d + 1) % 2)
+			var add = 0.17 - 0.13 * d + 0.25 * ((d + 1) % 2)
 			if (fluc.unl() && fluc_tmp.temp && add < 0) add /= fluc_tmp.temp
 			str_tmp.alt[y] = (str_tmp.alt[y] || 0) + add
 		}
