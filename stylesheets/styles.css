@@ -2561,15 +2561,17 @@ td.grey {
 	position: revert;
 	font-size: 8px;
 }
-.str_boost .storebtn {
+.str_boost .storebtn, .str_upg {
 	background: linear-gradient(black, transparent, black), linear-gradient(#1f3f00, transparent, #1f3f00), linear-gradient(30deg, #3f7f00, transparent, #5f7f00), linear-gradient(#7fff00, #bfff00);
 	color: #efffbf;
     border-color: #bfff7f;
+	transition-duration: 0.5s;
 	animation: str 5s linear infinite
 }
-.str_boost .storebtn:hover {
+.str_boost .storebtn:hover, .str_upg:hover {
 	box-shadow: 0px 0px 12px inset #7fff00;
-	color: #7fff00
+	color: #7fff00;
+	cursor: pointer
 }
 .str_boost .chosenbtn {
 	background: linear-gradient(30deg, #3f7f00, transparent, #5f7f00), linear-gradient(#7fff00, #bfff00);

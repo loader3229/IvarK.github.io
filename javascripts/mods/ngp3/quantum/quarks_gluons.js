@@ -652,7 +652,6 @@ var enB = {
 
 			r = r.times(tmp.glB[enB.mastered("glu", x) ? "masAmt" : "enAmt"])
 			if (QCs.perkActive(2) && enB.mastered("glu", x)) r = r.times(1.5)
-			if (str.unl() && amt.gte(str.nerf_eb(x))) r = r.times(str.eff_eb(x))
 			return r
 		},
 		boosterEff() {
@@ -660,6 +659,7 @@ var enB = {
 			if (pos.on()) amt = amt.add(enB.pos.target())
 
 			if (hasAch("ng3pr14")) amt = amt.times(1.1)
+			if (str.unl() && str_tmp.effs) amt = amt.times(str_tmp.effs.a1)
 
 			if (PCs.unl() && amt.gt(PCs_tmp.eff1_start)) amt = amt.div(PCs_tmp.eff1_start).pow(this.boosterExp()).times(PCs_tmp.eff1_start)
 
@@ -970,7 +970,6 @@ var enB = {
 				Math.pow(2, (lvl - this[x].tier))
 			if (hasAch("ng3p28")) req /= Math.sqrt(this[x].chargeReq)
 			if (hasAch("ng3pr12")) req *= 0.8
-			if (str.unl()) req *= str.nerf_pb(x)
 			if (hasAch("ng3pr12")) req -= 2
 			return Math.max(req, 0)
 		},
@@ -981,7 +980,7 @@ var enB = {
 
 			var eff = 2 * lvl
 			if (PCs.milestoneDone(42) && lvl == 1) eff = 8
-			if (str.unl()) eff += str.eff_pb(x)
+			if (str.unl() && str_tmp.effs) eff += str_tmp.effs.b1
 			if (hasAch("ng3pr13")) eff += 0.5
 			return eff
 		},
@@ -1233,7 +1232,7 @@ var enB = {
 			eff(x) {
 				let ep = player.eternityPoints
 				let exp = getAQGainExp() / 1e8
-				exp *= Math.min(Math.sqrt(Math.log10(ep.add(1).log10() * Math.log2(x / 100 + 1) + 1)), 100)
+				exp *= Math.min(Math.sqrt(Math.log10(ep.add(1).log10() * Math.log2(x / 100 + 1) * 2 + 1)), 100)
 				return {
 					exp: exp,
 					gain: ep.max(1).pow(exp)

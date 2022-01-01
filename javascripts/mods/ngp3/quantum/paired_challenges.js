@@ -183,7 +183,6 @@ var PCs = {
 		data.eff1_base = 1 + 0.75 * eff
 		data.eff1_start = futureBoost("quantum_superbalancing") ? 1000 : tmp.ngp3_mul ? 125 : 150
 		data.eff2 = Math.sqrt(eff) * Math.pow(1.03, eff * 4) / 3
-		data.eff3 = Math.pow(1.4, - (PCs_save.lvl - 1) / 28)
 	},
 	occupy(x, c) {
 		var d = PCs_tmp.occupied
@@ -281,20 +280,22 @@ var PCs = {
 
 		var qc1 = QCs.data[list[0]].goalMA
 		var qc2 = QCs.data[list[1]].goalMA
+		var r = qc1.pow(qc2.log(base) / div)
 		var base = Number.MAX_VALUE
 		var div = PCs.data.goal_divs[list[0]] + PCs.data.goal_divs[list[1]] + 1
 		if (fluc.unl() && fluc_tmp.temp) div += fluc_tmp.temp.pc
 
-		var r = qc1.pow(qc2.log(base) / div)
-		var scaling = hasAch("ng3pr16") ? 0.89 : 1
-		var mul = PCs_save.comps.length * 3 + //Completion Scaling
+		var scaling = hasAch("ng3pr16") ? 0.95 : 1
+		if (str.unl() && str_tmp.effs) scaling /= str_tmp.effs.b2
+
+		var mul = PCs_save.comps.length * 3 * scaling + //Completion Scaling
 			(Math.floor(pos / 10) - 1) + //Row Scaling
 			PCs_tmp.row_comps[Math.floor(pos / 10)] - //Row Completion Scaling
 			(PCs_tmp.row_comps[5] + PCs_tmp.row_comps[6] + PCs_tmp.row_comps[7]) * 5 //Omega Sets
 		if (pos >= 50) mul += Math.floor(pos / 10) - 4
 
 		var pow = Math.pow(1 + div / 150, mul)
-		pow *= PCs_tmp.eff3
+		if (str.unl() && str_tmp.effs) pow /= str_tmp.effs.a2
 		return r.pow(pow)
 	},
 	done(pc) {
@@ -338,11 +339,22 @@ var PCs = {
 		return PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestone_reqs[pos % 10]
 	},
 	lvlReq(pc) {
-		if (pc > 50) return this.rowUnl(Math.floor(pc / 10)) ? 0 : 1/0
-		return Math.floor(pc / 10) * 2 + pc % 10 - 2
+		let y = Math.floor(pc / 10)
+		if (y > 4 && !this.rowUnl(y)) return 1/0
+
+		let lvl = pc % 10
+		if (y >= 3) lvl += y * 3
+		else if (y == 2) lvl += 2
 	},
 	posUnl(pc) {
-		return PCs_save.comps.length >= (Math.floor(pc / 10) * 2 + pc % 10 - 3)
+		let y = Math.floor(pc / 10)
+		if (y > 4 && !this.rowUnl(y)) return
+
+		let lvl = pc % 10
+		if (y >= 3) lvl += y * 3
+		else if (y == 2) lvl += 2
+
+		return PCs_save.comps.length + 1 >= lvl
 	},
 	rowUnl(x) {
 		return evalData(PCs.data.row_unls[x])
@@ -359,7 +371,7 @@ var PCs = {
 			PCs_tmp.pick == pc ? "Cancel" :
 			PCs.posUnl(pc) && !PCs_tmp.pick ? "Assign" : ""
 		) + (
-			PCs_tmp.pick || !PCs_save.challs[pc] ? "" : "<br>Goal: " + shorten(PCs.goal(id, pc)) + " MA"
+			PCs_tmp.pick || !PCs_save.challs[pc] || PCs.posDone(pc) ? "" : "<br>Goal: " + shorten(PCs.goal(id, pc)) + " MA"
 		)
 	},
 	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Show</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
@@ -492,7 +504,6 @@ var PCs = {
 		el("pc_eff1").textContent = "^" + enB.glu.boosterExp(0, true).toFixed(3)
 		el("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
 		el("pc_eff2").textContent = "^" + shorten(getAQGainExp())
-		el("pc_eff3").textContent = "^" + PCs_tmp.eff3.toFixed(3)
 	},
 	showMilestones(qc) {
 		PCs_tmp.milestone = qc

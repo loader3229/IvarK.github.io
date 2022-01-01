@@ -499,12 +499,12 @@ button, div.storebtn {
 	box-shadow: 1px 2px rgba(229,229,229,0.4)
 }
 
-#stringstabbtn button, .str_boost .storebtn {
+#stringstabbtn button, .str_boost .storebtn, .str_upg {
 	background: linear-gradient(black, transparent, black), linear-gradient(#1f3f00, transparent, #1f3f00), linear-gradient(30deg, #3f7f00, transparent, #5f7f00), linear-gradient(#7fff00, #bfff00);
 	color: #efffbf !important;
 	animation: str 5s linear infinite
 }
-#stringstabbtn button:hover, .str_boost .storebtn:hover {
+#stringstabbtn button:hover, .str_boost .storebtn:hover, .str_upg:hover {
 	box-shadow: 1px 2px rgba(229,229,229,0.4), 0px 0px 12px inset #7fff00;
 	color: #7fff00 !important
 }
