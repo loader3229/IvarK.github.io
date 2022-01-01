@@ -18,9 +18,9 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: Decimal.pow(10, 8e3),
-			pow: (x) => 0.75,
+			pow: (x) => 5/6,
 			derv: false
-		},
+		}
 	},
 	tt: {
 		name: "TT production",
@@ -93,7 +93,7 @@ var softcap_data = {
 		1: {
 			func: "log",
 			start: E(1e12),
-			pow: 6,
+			pow: 5,
 			mul: 90 / 12
 		},
 	},

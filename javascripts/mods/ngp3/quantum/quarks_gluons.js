@@ -693,9 +693,7 @@ var enB = {
 			title: "Quantum Tesla",
 			type: "r",
 			eff(x) {
-				let r = Decimal.cbrt(x).times(0.75).add(1)
-				if (r.gte(40)) r = r.div(r.div(40).log(4) + 1)
-				return r
+				return Decimal.cbrt(x).times(0.75).add(1)
 			},
 			disp(x) {
 				return shorten(x) + "x"
@@ -1232,7 +1230,7 @@ var enB = {
 			eff(x) {
 				let ep = player.eternityPoints
 				let exp = getAQGainExp() / 1e8
-				exp *= Math.min(Math.sqrt(Math.log10(ep.add(1).log10() * Math.log2(x / 100 + 1) * 2 + 1)), 100)
+				exp *= Math.min(Math.sqrt(Math.log10(ep.add(1).log10() * Math.log2(x / 100 + 1) + 1)), 100)
 				return {
 					exp: exp,
 					gain: ep.max(1).pow(exp)

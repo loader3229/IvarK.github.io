@@ -53,7 +53,7 @@ let str = {
 				eff: (x) => x + 1,
 				effDisp: (x) => "Protect first " + x + " vibrations.",
 
-				req: (x) => Math.pow(2, x * x + 3),
+				req: (x) => Math.pow(1.5, x * x) * 8,
 				res: () => str_save.energy,
 				resDisp: "Vibration Energy"
 			},
@@ -231,7 +231,7 @@ let str = {
 		return str_save.energy >= str.veCost(str_tmp.vibrated + 1) &&
 			str_tmp.lastVibrate + 2 >= x &&
 			last >= x &&
-			last - 4 < x
+			last - str.upgEff(1) < x
 	},
 	protect(x, vib) {
 		return x <= Math.floor(vib * 1.2 + 3) || vib <= str.upgEff(2) || x <= str.upgEff(3)

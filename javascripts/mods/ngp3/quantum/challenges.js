@@ -113,7 +113,7 @@ var QCs = {
 				let p15 = PCs.milestoneDone(51) && player.dilation.active
 				if (!QCs_tmp.qc1) return false
 
-				if (QCs.perkActive(1) && (qc1.boosts == 0 || qc1.time >= 5 )) qc1.perkBoosts++
+				if (QCs.perkActive(1) && (qc1.boosts == 0 || qc1.time <= 50)) qc1.perkBoosts++
 				if (PCs.milestoneDone(12) && (player.dilation.active || qc1.time <= 50 || qc1.dilaters / qc1.boosts < 0.75)) {
 					updateReplicantiTemp()
 					qc1.dilaters++
@@ -140,7 +140,7 @@ var QCs = {
 			scalings: [5],
 
 			eff(eff, pc11 = 0) {
-				var eff = Math.min(eff * (1 + 2 * pc11) / 10 + 1, 5)
+				var eff = Math.min(eff * (1 + 2 * pc11) / 15 + 1, 2)
 				return eff
 			},
 			extra() {
