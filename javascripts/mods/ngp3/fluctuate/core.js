@@ -1,6 +1,6 @@
 //FLUCTUATE
 let fluc = {
-	unl: (force) => force ? (fluc_save && fluc_save.energy > 0) : fluc_tmp.unl,
+	unl: () => false, //(force) => force ? (fluc_save && fluc_save.energy > 0) : fluc_tmp.unl,
 
 	setup() {
 		fluc_save = {
@@ -65,6 +65,8 @@ let fluc = {
 		return Decimal.pow(10, Math.pow(10, 13.5 + x / 20))
 	},
 	reset(auto, force) {
+		alert("This layer will be out in the next update! ~ Aarex: the Omnisity of NG+3")
+		/*
 		if (!force) {
 			if (!pH.can('fluctuate')) return
 			if (!auto && !fluc_save.noConf && !confirm("Fluctuating resets everything that Quantum resets, but also including Quantum content. You will gain Energy in transfer" + (this.unl() ? ". Make sure to check your Milestone Points before Fluctuating!" : ", and you permanently keep your feature unlocks."))) return
@@ -88,6 +90,7 @@ let fluc = {
 			ff.updateTmp()
 		}
 		fluc.doReset()
+		*/
 	},
 	doReset(auto, force) {
 		doFluctuateResetStuff()

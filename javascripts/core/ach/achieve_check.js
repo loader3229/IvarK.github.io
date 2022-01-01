@@ -276,6 +276,8 @@ function preHiggsNGp3AchieveCheck() {
 	}
 	if (QCs.inAny() && str_tmp.vibrated === 0 && player.meta.bestAntimatter.e >= 1.6e3) giveAchievement("Get rid of you by yourself...")
 
+	return //WILL MOVE FOR UPCOMING UPDATES
+
 	//ROW 17
 	if (pH.can("quantum") && QCs.in(3) && player.meta[2].bought == 0 && player.meta[3].bought == 0 && player.meta[4].bought == 0 && player.meta[5].bought == 0 && player.meta[6].bought == 0 && player.meta[7].bought == 0 && player.meta[8].bought == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
 	if (pH.did("fluctuate")) giveAchievement("Feel the Momentum")

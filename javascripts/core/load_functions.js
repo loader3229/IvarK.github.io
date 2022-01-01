@@ -2107,10 +2107,10 @@ function setupNGP31Versions() {
 		if (aarMod.ngp3r < 0.61) welcomeUpdates.push(0.61)
 		if (aarMod.ngp3r < 0.611) welcomeUpdates.push(0.611)
 
-		if (!beta && (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.7 : aarMod.ngp3r < 0.7)) welcomeUpdates.push(0.7)
-		if (beta && aarMod.ngp3r < 0.7) welcomeUpdates.push("alpha")
+		if (!beta && (aarMod.ngp3Alpha ? aarMod.ngp3r == 0.62 : aarMod.ngp3r < 0.62)) welcomeUpdates.push(0.62)
+		if (beta && aarMod.ngp3r < 0.62) welcomeUpdates.push("alpha")
 	}
-	aarMod.ngp3r = 0.7
+	aarMod.ngp3r = 0.62
 	aarMod.ngp3Alpha = beta
 	aarMod.ngp3Build = 20220101
 
