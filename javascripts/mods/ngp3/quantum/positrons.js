@@ -123,7 +123,7 @@ var pos = {
 			mdb_eff: QCs.done(5) ? 1.5 : 1,
 			gal: QCs.done(5) ? 0.2 : 0.25,
 			pc_base: QCs.done(5) ? 1 / 100 : 1 / 125,
-			pc_exp: futureBoost("quantum_superbalancing") ? 4 : 2
+			pc_exp: qu_superbalanced() ? 4 : 2
 		}
 		if (ff.unl()) data.mults.pc_exp *= ff_tmp.eff.f5
 		if (PCs.milestoneDone(51)) data.mults.pc_base *= 1.2

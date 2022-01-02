@@ -219,7 +219,7 @@ let FDs = {
 		var eng_log = FDs_save.meta.add(1).log10()
 		FDs_tmp = {
 			eff_rep: Math.min(Math.cbrt(eng_log / 10 + 1), 4),
-			eff_qe: (3 / 1.75 - 1) * Math.min(Math.cbrt(eng_log / 15 + 1) - 1, 1) + 1
+			eff_qe: (12 - 5 / Math.pow(eng_log / 10 + 1, .2)) / 7
 		}
 	},
 	updateDisp() {

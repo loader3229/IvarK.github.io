@@ -226,7 +226,7 @@ function updateColorCharge(update) {
 			: 1).times(chargeMult)
 		}
 		colorCharge.sub.eff = Math.log10(getQuantumLogEff(colorCharge.sub.charge, 1, 4) + 1) * 1.5 + 1
-		if (futureBoost("quantum_superbalancing")) colorCharge.sub.eff = colorCharge.sub.charge.sqrt().div(1000).max(colorCharge.sub.eff)
+		if (qu_superbalanced()) colorCharge.sub.eff = colorCharge.sub.charge.sqrt().div(1000).max(colorCharge.sub.eff)
 		chargeMult = chargeMult.times(colorCharge.sub.eff)
 	} else delete colorCharge.sub
 
@@ -323,7 +323,7 @@ function updateColorPowers() {
 
 	//Green
 	colorBoosts.g = Decimal.times(qu_save.colorPowers.g, 3).add(1).log10() + 1
-	if (futureBoost("quantum_superbalancing")) colorBoosts.g = Decimal.pow(qu_save.colorPowers.g, 1 / 4.4 / dev.quSb.k).div(1000).max(colorBoosts.g)
+	if (qu_superbalanced()) colorBoosts.g = Decimal.pow(qu_save.colorPowers.g, 1 / 4.4 / dev.quSb.k).div(1000).max(colorBoosts.g)
 	if (p23 && colorCharge.normal.color == "g") colorBoosts.g *= 1.1
 	if (e > 1) colorBoosts.g = Math.pow(colorBoosts.g, e)
 	colorBoosts.g = softcap(colorBoosts.g, "gp")
@@ -407,7 +407,7 @@ function updateQEGainTmp() {
 	if (enB.active("pos", 1)) data.expNum = enB_tmp.pos1
 	if (data.expNum > data.expDen - 1) data.expNum = data.expDen - 1 / Math.sqrt(data.expNum - data.expDen + 2)
 	if (QCs.in(2)) data.expNum += 0.5
-	if (futureBoost("quantum_superbalancing")) data.expNum = Math.max(data.expNum, data.expDen)
+	if (qu_superbalanced()) data.expNum = Math.max(data.expNum, data.expDen)
 
 	data.exp = data.expNum / data.expDen
 	qu_save.expEnergy = data.exp
@@ -629,8 +629,9 @@ var enB = {
 		},
 		target(x, noBest) {
 			var eng = x ? E(x) : this.engAmt(noBest)
+			var pow = futureBoost("hypergluonic_flux") && dev.boosts.tmp[6] ? dev.boosts.tmp[6] : 2/3
 			eng = eng.sub(eng.min(1))
-			return eng.pow(1 / 1.5).times(3).add(1)
+			return eng.pow(pow).times(3).add(1)
 		},
 
 		amt() {
@@ -672,7 +673,7 @@ var enB = {
 			if (PCs.unl() && (display || amt.gte(PCs_tmp.eff1_start))) {
 				exp *= PCs_tmp.eff1_base
 				if (pH.did("fluctuate")) exp *= FDs_tmp.eff_qe
-				if (pH.did("quantum_superbalancing")) exp = 3
+				if (qu_superbalanced()) exp = 3
 			}
 			return Math.min(exp, 3)
 		},
@@ -841,7 +842,7 @@ var enB = {
 			anti: true,
 			eff(x) {
 				var r = Decimal.div(x, 100).add(1).log(3) + 1
-				if (futureBoost("quantum_superbalancing")) r = Math.max(r, Decimal.pow(x, 1 / 6 / dev.quSb.jP).toNumber() / 100)
+				if (qu_superbalanced()) r = Math.max(r, Decimal.pow(x, 1 / 6 / dev.quSb.jP).toNumber() / 100)
 				return r
 			},
 			disp(x) {
@@ -876,7 +877,7 @@ var enB = {
 			type: "r",
 			eff(x) {
 				var r = Math.sqrt(Decimal.div(x, 500).add(1).log10() / 3 + 1)
-				if (futureBoost("quantum_superbalancing")) r = Math.max(r, Decimal.add(x, 1).pow(1 / dev.quSb.jP / 12).toNumber())
+				if (qu_superbalanced()) r = Math.max(r, Decimal.add(x, 1).pow(1 / dev.quSb.jP / 12).toNumber())
 				return r
 			},
 			disp(x) {

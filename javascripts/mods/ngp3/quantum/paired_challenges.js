@@ -52,15 +52,13 @@ var PCs = {
 				false,
 			],
 			goal_divs: [null, 0.1, 0.95, 0.35, 0.95, 0.45, 0.5, 0.4, 0.775],
-			milestone_reqs: [null, 1, 2, 3, 4, 6],
+			milestone_reqs: [null, 1, 2, 3, 4, 5],
 			milestone_unls: [null,
 				true,
 				true,
 				() => hasAch("ng3pr12"),
 				() => hasAch("ng3pr12"),
-				() => hasAch("ng3pr12"),
-				() => hasAch("ng3p32"),
-				() => hasAch("ng3p32"),
+				() => false //hasAch("ng3pr12")
 			],
 			letters: [null, "A", "B", "C", "D", "Ω1", "Ω2", "Ω3", "Ω4"],
 			all: [],
@@ -181,7 +179,7 @@ var PCs = {
 		//Boosts
 		var eff = (PCs_save.lvl - 1) / 28
 		data.eff1_base = 1 + 0.75 * eff
-		data.eff1_start = futureBoost("quantum_superbalancing") ? 1000 : tmp.ngp3_mul ? 125 : 150
+		data.eff1_start = qu_superbalanced() ? 1000 : tmp.ngp3_mul ? 125 : 150
 		data.eff2 = Math.sqrt(eff) * Math.pow(1.03, eff * 4) / 3
 	},
 	occupy(x, c) {

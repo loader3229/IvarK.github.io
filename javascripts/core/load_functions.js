@@ -2271,8 +2271,8 @@ function export_save(id) {
 	copyToClipboard(save, null, "save #" + placement)
 }
 
-function copyToClipboard(x, el, msg) {
-	let output = el(el || "output")
+function copyToClipboard(x, el_, msg) {
+	let output = el(el_ || "output")
 	let parent = output.parentElement
 
 	parent.style.display = ""

@@ -140,7 +140,7 @@ var QCs = {
 			scalings: [5],
 
 			eff(eff, pc11 = 0) {
-				var eff = Math.min(eff * (1 + 2 * pc11) / 15 + 1, 2)
+				var eff = Math.min(eff * (1 + 2 * pc11) / 15 + 1, 3)
 				return eff
 			},
 			extra() {

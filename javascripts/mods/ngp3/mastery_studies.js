@@ -212,12 +212,17 @@ var mTs = {
 		},
 
 		311() {
-			var exp = Math.min(Math.log10(Math.log10(qu_save.colorPowers.r / 100 + 1) + 1), 1)
+			var red = Math.log10(qu_save.colorPowers.r / 100 + 1)
+			var lim = 18 + Math.sqrt(red + 1)
+			var exp = Math.min(Math.log10(red + 1), 1.5 - 15 / lim)
 			var eff = hasTS(232) ? Math.pow(tsMults[232](), exp) : 1
 			return {
 				exp: exp,
 				eff: eff
 			}
+			//"The Singularity": sing = 10/(1-10x/15)
+			//Only if this and TS232 has been applied
+			//Formula capped at ^1.5-15/sing
 		},
 		312() {
 			var mul = Math.min(Math.log10(qu_save.colorPowers.g / 100 + 1) / 30, 1)

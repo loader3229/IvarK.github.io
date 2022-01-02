@@ -19,7 +19,24 @@ function galaxyReqDisplay(){
 	var nextGal = getGalaxyRequirement(0, true)
 	var totalReplGalaxies = getTotalRGs()
 	var totalTypes = player.dilation.freeGalaxies ? 3 : totalReplGalaxies ? 2 : 1
-	el("secondResetLabel").innerHTML = getGalaxyScaleName(nextGal.scaling) + 'Antimatter Galaxies ('+ getFullExpansion(player.galaxies) + (totalTypes >= 2 ? ' + ' + getFullExpansion(totalReplGalaxies) : '') + (totalTypes >= 3 ? ' + ' + getFullExpansion(Math.round(player.dilation.freeGalaxies)) : '') +'): requires ' + getFullExpansion(nextGal.amt) + ' '+DISPLAY_NAMES[inNC(4) || player.pSac != undefined ? 6 : 8]+' Dimensions'
+	el("secondResetLabel").innerHTML = getGalaxyScaleName(nextGal.scaling) + 'Antimatter Galaxies' +
+		' (' +
+			getFullExpansion(player.galaxies) +
+			(totalTypes >= 2 ? ' + ' + getFullExpansion(totalReplGalaxies) : '') +
+			(totalTypes >= 3 ? ' + ' + getFullExpansion(Math.round(player.dilation.freeGalaxies)) : '')
+		+ ')' +
+		': requires ' + getFullExpansion(nextGal.amt) + ' '+DISPLAY_NAMES[inNC(4) || player.pSac != undefined ? 6 : 8]+' Dimensions'
+
+	var sing = hasTS(232) && hasMTS(311)
+	el("theSingularity").style.display = shiftDown && sing ? "" : "none"
+	if (sing) {
+		var ts311 = mTs_tmp[311]
+		var singEff = 10 / (1 - 10 * ts311.exp / 15)
+		el("theSingularityLabel").textContent = "<- THE SINGULARITY: ^" + singEff.toFixed(2) + " GALAXY POWER" + " > " + formatPercentage(Math.pow(tsMults[232](), ts311.eff + 1)) + "% EFFICENCY ->"
+
+		el("theSingularityBtn").style.display = singEff > 90 ? "" : "none"
+		el("theSingularityBtn").className = player.money.e >= 1e180 && singEff > 100 ? "storebtn" : "unavailablebtn"
+	}
 }
 
 var galaxyScalings = ["", "Distant ", "Farther ", "Remote ", "Obscure "]

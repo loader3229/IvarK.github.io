@@ -15,12 +15,12 @@ To make a new softcap using this function
 var softcap_data = {
 	tsRed: {
 		name: "Tickspeed reduction",
-		1: {
+		/*1: {
 			func: "pow",
 			start: Decimal.pow(10, 8e3),
 			pow: (x) => 5/6,
 			derv: false
-		}
+		}*/
 	},
 	tt: {
 		name: "TT production",
@@ -94,7 +94,7 @@ var softcap_data = {
 			func: "log",
 			start: E(1e12),
 			pow: 5,
-			mul: 90 / 12
+			mul: 5
 		},
 	},
 	ma: {

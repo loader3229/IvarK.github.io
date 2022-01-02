@@ -314,12 +314,13 @@ dev.boosts = {
 		},
 	},
 	6: {
-		name: "???",
+		name: "Hypergluonic Flux",
 		unl() {
-			return false
+			return tmp.quActive
 		},
 		eff(x) {
-			return 1
+			//Hypergluonic Flux: Increase the scaling of Quantum Power.
+			return (3 - 40 / (Math.log10(player.money.add(1).log10() + 1) + 20)) / 3
 		},
 	},
 	7: {
@@ -342,15 +343,29 @@ dev.boosts = {
 	},
 }
 
-dev.quSb = {
-	//^3 Quantum Power: Rebalancing
-	k: 3,
-	j: 6,
-	jP: 3,
-
-	on: false //This boost should be enabled in this line, not in dev.boosts.on!
+function futureBoost(x) {
+	return dev.boosts.on
 }
 
-function futureBoost(x) {
-	return x == "quantum_superbalancing" ? dev.quSb.on : dev.boosts.on
+//QUANTUM SINGULARITY / SUPREMACY?!
+dev.quSb = {
+	//^3 Quantum Power: Rebalancing
+	k: 3, //Quantum Energy
+	j: 6, //Quantum Power
+	jP: 3, //Positronic Charge
+
+	on: false //This boost should be enabled in this line, not in dev.boosts.on!
+
+	/*
+	Replicanti Upgrades: ^2.5 cap?
+	QC2 reward: ^1
+	Color Subcharge: ^0.5
+	Green Power: n^1/4k
+	Meta Accelerator Speed: n^1/6jP
+	Meta Accelerator Slowdown: n^1/6jP
+	*/
+}
+
+function qu_superbalanced() {
+	return dev.quSb.on
 }
