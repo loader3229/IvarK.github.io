@@ -213,7 +213,7 @@ var mTs = {
 
 		311() {
 			var red = Math.log10(qu_save.colorPowers.r / 100 + 1)
-			var lim = 18 + Math.sqrt(red + 1)
+			var lim = 15 + Math.sqrt(red * 1.5 + 1)
 			var exp = Math.min(Math.log10(red + 1), 1.5 - 15 / lim)
 			var eff = hasTS(232) ? Math.pow(tsMults[232](), exp) : 1
 			return {

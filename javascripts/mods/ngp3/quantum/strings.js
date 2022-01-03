@@ -110,14 +110,18 @@ let str = {
 		data.disable = {}
 		data.lastVibrate = 0
 		data.vibrated = vibrated.length
-		for (var i = 0; i < data.vibrated; i++) this.onVibrate(vibrated[i])
+		for (var i = 0; i < data.vibrated; i++) {
+			this.onVibrate(vibrated[i])
+		}
 		str_save.spent = str.veCost(data.vibrated)
 
 		//Powers
 		data.powers = {}
+		data.used = {}
 		for (var i = 1; i <= 18; i++) {
 			var pow = Math.ceil(i / 6)
 			data.powers[pow] = (data.powers[pow] || 0) + this.altitude(i)
+			if (vibrated.includes(i)) data.used[pow] = (data.used[pow] || 0) + 1
 		}
 	},
 	updateDisp() {
@@ -227,14 +231,15 @@ let str = {
 
 	//Vibrations
 	canVibrate(x) {
-		let last = Math.floor(str_tmp.vibrated * 1.2 + 3)
+		let last = Math.floor(str_tmp.vibrated * 1.5 + 3)
 		return str_save.energy >= str.veCost(str_tmp.vibrated + 1) &&
 			str_tmp.lastVibrate + 2 >= x &&
+			(str_tmp.used[Math.ceil(x / 6)] || 0) < 3 &&
 			last >= x &&
 			last - str.upgEff(1) < x
 	},
 	protect(x, vib) {
-		return x <= Math.floor(vib * 1.2 + 3) || vib <= str.upgEff(2) || x <= str.upgEff(3)
+		return x <= Math.floor(vib * 1.5 + 3) || vib <= str.upgEff(2) || x <= str.upgEff(3)
 	},
 	vibrate(x) {
 		var vibrated = str_save.vibrated

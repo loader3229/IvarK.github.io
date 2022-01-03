@@ -494,11 +494,11 @@ amNewsArray = [
 , true, "am276"],
 ["In September 2020, I suddenly lost my interest on Numberblocks, and even left the community dedicated to it. At the time when I wrote this, It's been 1 year. Don't worry, I will use BAN and SAN for googological numbers in this game, if I want to go beyond ee308.", true, "am277"],
 ["τεμΩαrεx", "tmp.ngp3", "am278"],
-["Aarex went back to Googology, just to compete with strongest computable notations. Will he do it?", "tmp.ngp3", "am279"],
 ["Although the number on the only posted 9/18/2021 news ticker number is probably in the range of 120 <= x <= 600", true, "am280"],
 ["In an alternate universe, @TruthNotScam9 convinced Aarex to add Scamify, leaving many sparks of outrage from the players. Both of them died soon afterward.", "tmp.ngp3", "am281"],
-["It's 2026, Aarex became a googologist legend. He is not yet addicted to large number games...", "am282"],
-["It's 2023. Aarex pledged to return NG+3R development after few months of hiatus. However, he instead trying to quit developing.", "am283"],
+["~<: NEXTA COMMUNINC: CONSTELLA' THE STARS ~:> Stellarika Aarex's speaking to Sollings: The infamous \"Kibb's Point\" [<.>] has been disintegrated! aSAN~1,318,273^{*.*++} has been landed in release, featuring unseen methods extending to Kibb's Axioms! Be warned! Monstrous Xaliens pulled a nefarious abduct against aSAN~1,318,271! One is that -=>> is a numerous burst to (1,(((1,1,2),2)),2) arrays! Our megalo-arithmetic lab is working tediously for a drone evaluating their n...", "tmp.ngp3", "am282"],
+["It's 2023. Aarex managed to release an content update, but inflation seems to force him to reduce the formulas or underestimate the growth rate.", "tmp.ngp3", "am283"],
+["We are getting close to the true nature of Quantum. More to seem soon...", "isAtEndGame()", "am284"],
 /*NEXT ID: am274*/
 ];}
 
