@@ -18,8 +18,8 @@ let str = {
 				disp: (x) => "+" + shorten(x) + "x charge multiplier"
 			},
 			a2: {
-				req: 1,
-				eff: (x) => Math.sqrt(x / 2 + 1),
+				req: 1.1,
+				eff: (x) => Math.sqrt(x / 3 + 1),
 				disp: (x) => "^" + (1 / x).toFixed(3) + " to PC goals"
 			},
 			b2: {
