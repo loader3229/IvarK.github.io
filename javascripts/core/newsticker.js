@@ -549,7 +549,7 @@ function scrollNextMessage() {
 			var googol = aar && Math.random() > 2/3 && player.money.e > 100 && !googolShown
 
 			googolShown = googol
-			if (googolNewsArray) {
+			if (googol) {
 				var array = googolNewsArray
 				nextMsgIndex = 0
 				while (googolNewsArray[nextMsgIndex+1] && evalData(googolNewsArray[nextMsgIndex+1][1])) nextMsgIndex++
