@@ -586,7 +586,7 @@ var enB = {
 
 			if (this.has(type, num)) {
 				var eff = this[type][num].eff
-				if (eff !== undefined) data.eff[type + num] = eff(this[type].eff(num))
+				if (eff !== undefined) data[type + num] = eff(this[type].eff(num))
 			}
 		}
 	},
