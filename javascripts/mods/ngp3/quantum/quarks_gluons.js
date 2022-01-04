@@ -418,8 +418,10 @@ function updateQuarkEnergyEffects() {
 
 function updateGluonicBoosts() {
 	tmp.glB = {}
-	if (!tmp.quActive) return
-
+	if (!tmp.quActive) {
+		enB.updateTmp()
+		return
+	}
 
 	let data = tmp.glB
 	let enBData = enB
@@ -557,6 +559,8 @@ var enB = {
 
 		data.unl = {}
 		data.eff = {}
+		if (!tmp.quActive) return
+
 		for (var x = 0; x < this.types.length; x++) {
 			var type = this.types[x]
 			var typeData = this[type]
