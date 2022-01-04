@@ -434,8 +434,10 @@ function updateQuarkEnergyEffects() {
 
 function updateGluonicBoosts() {
 	tmp.glB = {}
-	if (!tmp.quActive) return
-
+	if (!tmp.quActive) {
+		enB.updateTmp()
+		return
+	}
 
 	let data = tmp.glB
 	let enBData = enB
@@ -501,7 +503,7 @@ var enB = {
 	active(type, x) {
 		var data = this[type][x]
 
-		if (enB_tmp[type + x] === undefined) return false
+		if (enB_tmp.eff[type + x] === undefined) return false
 
 		if (!this.has(type, x)) return false
 		if (!this[type].activeReq(x)) return false
@@ -1351,7 +1353,7 @@ var enB = {
 			el("enB_" + type + i + "_name").textContent = shiftDown ? (data[i].title || "Unknown title.") : (data.name + " Boost #" + i)
 			el("enB_" + type + i + "_type").innerHTML = "(" + wordizeList(list, false, " - ", false) + ")" + (data[i].activeDispReq ? "<br>Requirement: " + data[i].activeDispReq() : "")
 
-			if (enB_tmp[type + i] !== undefined) el("enB_" + type + i + "_eff").innerHTML = data[i].disp(enB_tmp[type + i])
+			if (enB_tmp.eff[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].disp(enB_tmp.eff[type + i])
 		}
 	}
 }
