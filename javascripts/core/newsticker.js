@@ -499,82 +499,116 @@ amNewsArray = [
 ["~<: NEXTA COMMUNINC: CONSTELLA' THE STARS ~:> Stellarika Aarex's speaking to Sollings: The infamous \"Kibb's Point\" [<.>] has been disintegrated! aSAN~1,318,273^{*.*++} has been landed in release, featuring unseen methods extending to Kibb's Axioms! Be warned! Monstrous Xaliens pulled a nefarious abduct against aSAN~1,318,271! One is that -=>> is a numerous burst to (1,(((1,1,2),2)),2) arrays! Our megalo-arithmetic lab is working tediously for a drone evaluating their n...", "tmp.ngp3", "am282"],
 ["It's 2023. Aarex managed to release an content update, but inflation seems to force him to reduce the formulas or underestimate the growth rate.", "tmp.ngp3", "am283"],
 ["We are getting close to the true nature of Quantum. More to seem soon...", "isAtEndGame()", "am284"],
-/*NEXT ID: am274*/
+/*NEXT ID: am285*/
+]
+googolShown = false
+googolNewsArray = [
+/*GOOGOLOGISMS: NG+3R*/
+["You have at least Googol (10^100) antimatter!", () => player.money.e >= 100, "g1"],
+["You have at least Centillion (10^303) antimatter! Infinity time!", () => player.money.e >= 303, "g2"],
+["You have at least Googolchime (10^1,000) antimatter! You need at least a larger universe for that.", () => player.money.e >= 1e3, "g3"],
+["You have at least Millillion (10^3,003) antimatter! It's too big to comprehend this size.", () => player.money.e >= 3003, "g4"],
+["You have at least Googolbell (10^5,000) antimatter! Now we are getting to ethereal quantites.", () => player.money.e >= 5e3, "g5"],
+["You have at least Googoltoll (10^10,000) antimatter! That's at least 10 pages of decimal expansion.", () => player.money.e >= 1e4, "g6"],
+["You have at least Myrillion (10^30,003) antimatter! A rare -illion, huh? Nope.", () => player.money.e >= 30003, "g7"],
+["You have at least Googolgong (10^100,000) antimatter! That 'meta-bell' was too big!", () => player.money.e >= 1e5, "g8"],
+["You have at least Maximusmillillion (10^1,000,003) antimatter! Maximum OVERDRIVE!", () => player.money.e >= 1e6+3, "g9"],
+["You have at least Micrillion (10^3,000,003) antimatter!", () => player.money.e >= 3e6+3, "g10"],
+["You have at least Googolbong (10^100,000,000) antimatter!", () => player.money.e >= 1e8, "g11"],
+["You have at least Nanillion (10^3,000,000,003) antimatter!", () => player.money.e >= 3e9+3, "g12"],
+["You have at least Trialogue (10^10^10) antimatter!", () => player.money.e >= 1e10, "g13"],
+["You have at least Googolthrong (10^10^11) antimatter!", () => player.money.e >= 1e11, "g14"],
+["You have at least Picillion (10^(3*10^12+3)) antimatter!", () => player.money.e >= 3e12+3, "g15"],
+["You have at least Googolgandingan (10^10^14) antimatter!", () => player.money.e >= 1e14, "g16"],
+["You have at least Femtillion (10^(3*10^15+3)) antimatter!", () => player.money.e >= 3e15+3, "g17"],
+["You have at least Attillion (10^(3*10^18+3)) antimatter!", () => player.money.e >= 3e18+3, "g18"],
+["You have at least Zeptillion (10^(3*10^21+3)) antimatter! o_O;", () => player.money.e >= 3e21+3, "g19"],
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
 var scrollTimeouts = [];
 
 function scrollNextMessage() {
-        //don't run if hidden to save performance
-        if (typeof (player) == "undefined") return
-        if (player.options.newsHidden) return false
-        var s = el('news');
-        updateNewsArray();
-        tmp.blankedOut = false
+	//don't run if hidden to save performance
+	if (typeof (player) == "undefined") return
+	if (player.options.newsHidden) return false
+	var s = el('news');
+	updateNewsArray();
+	tmp.blankedOut = false
 
-		var nextMsgIndex
-		var nextMsgCond
-		var nextMsgId
+	var nextMsgIndex
+	var nextMsgCond
+	var nextMsgId
 
-        //select a message at random
-        try {
-			nextMsgCond = false
-			while (!nextMsgCond) {
-				// randomly choose from either normal news or aarex news
-				var array = ((hasAch("r22") && Math.random() > 0.5) || aarMod.newGamePlusVersion || tmp.ngp3) ? amNewsArray : newsArray
-				nextMsgIndex = Math.min(Math.floor(Math.random() * array.length), array.length)
-				var func = array[nextMsgIndex][1]
-				nextMsgCond = typeof(func) == "function" ? func() : eval(func);
-				nextMsgId = array[nextMsgIndex][2];
+	//select a message at random
+	try {
+		nextMsgCond = false
+		while (!nextMsgCond) {
+			// randomly choose from either normal news or aarex news
+			var aar = (hasAch("r22") || aarMod.newGamePlusVersion || tmp.ngp3) && Math.random() > 0.5
+			var googol = aar && Math.random() > 2/3 && player.money.e > 100 && !googolShown
+
+			googolShown = googol
+			if (googolNewsArray) {
+				var array = googolNewsArray
+				nextMsgIndex = 0
+				while (googolNewsArray[nextMsgIndex+1] && evalData(googolNewsArray[nextMsgIndex+1][1])) nextMsgIndex++
 			}
-        } catch(e) {
-			console.log("Newsarray doesn't work at idx " + nextMsgIndex)
-        }
-        scrollTimeouts.forEach(function(v) {clearTimeout(v);});
-        scrollTimeouts = [];
+			if (nextMsgIndex === undefined) {
+				var array = aar ? amNewsArray : newsArray
+				nextMsgIndex = Math.min(Math.floor(Math.random() * array.length), array.length)
+			}
+			var func = array[nextMsgIndex][1]
 
-        //set the text
-        var m = array[nextMsgIndex][0];
-		if (typeof(m) == "function") m = m()
-        s.textContent = m
-        
-        //get the parent width so we can start the message beyond it
-        let parentWidth = s.parentElement.clientWidth;
-        
-        //set the transition to blank so the move happens immediately
-        s.style.transition = '';
-        //move div_text to the right, beyond the edge of the div_container
-        s.style.transform = 'translateX('+parentWidth+'px)';
-        
-        //we need to use a setTimeout here to allow the browser time to move the div_text before we start the scrolling
-        scrollTimeouts.push(setTimeout( function() {
-                //distance to travel is s.parentElement.clientWidth + s.clientWidth + parent padding
-                //we want to travel at rate pixels per second so we need to travel for (distance / rate) seconds
-                let dist = s.parentElement.clientWidth + s.clientWidth + 20; //20 is div_container padding
-                let rate = 100; //change this value to change the scroll speed
-                let transformDuration = dist / rate;
-                if (!player.options.newsHidden && !player.newsArray.includes(nextMsgId)) {
-                        player.newsArray.push(nextMsgId)
-                        if (!tmp.ngp3_boost && player.newsArray.length >= 50) giveAchievement("Fake News")
-                        if (player.newsArray.length >= 400) giveAchievement("400% Breaking News")
-                }
+			nextMsgCond = evalData(func)
+			nextMsgId = array[nextMsgIndex][2]
+		}
+	} catch(e) {
+		console.log("Newsarray doesn't work at idx " + nextMsgIndex)
+	}
+	scrollTimeouts.forEach(function(v) {clearTimeout(v);});
+	scrollTimeouts = [];
 
+	//set the text
+	var m = array[nextMsgIndex][0];
+	if (typeof(m) == "function") m = m()
+	s.textContent = m
+	
+	//get the parent width so we can start the message beyond it
+	let parentWidth = s.parentElement.clientWidth;
+	
+	//set the transition to blank so the move happens immediately
+	s.style.transition = '';
+	//move div_text to the right, beyond the edge of the div_container
+	s.style.transform = 'translateX('+parentWidth+'px)';
+	
+	//we need to use a setTimeout here to allow the browser time to move the div_text before we start the scrolling
+	scrollTimeouts.push(setTimeout( function() {
+			//distance to travel is s.parentElement.clientWidth + s.clientWidth + parent padding
+			//we want to travel at rate pixels per second so we need to travel for (distance / rate) seconds
+			let dist = s.parentElement.clientWidth + s.clientWidth + 20; //20 is div_container padding
+			let rate = aarMod.newsRate || 100; //change this value to change the scroll speed
+			let transformDuration = dist / rate;
+			if (!player.options.newsHidden && !player.newsArray.includes(nextMsgId)) {
+				player.newsArray.push(nextMsgId)
+				if (!tmp.ngp3_boost && player.newsArray.length >= 50) giveAchievement("Fake News")
+				if (player.newsArray.length >= 400) giveAchievement("400% Breaking News")
+			}
 
-                //set the transition duration
-                s.style.transition = 'transform '+transformDuration+'s linear';
-                let textWidth = s.clientWidth;
-                //we need to move it to -(width+parent padding) before it won't be visible
-                s.style.transform = 'translateX(-'+(textWidth+5)+'px)';
-                //automatically start the next message scrolling after this one finishes
-                //you could add more time to this timeout if you wanted to have some time between messages
-                scrollTimeouts.push(setTimeout(function() {
-		        if (nextMsgId == "am104") {
-			        tmp.blankedOut=true
-			        setTimeout(scrollNextMessage, 60e3)
-		        } else scrollNextMessage()
-                }, Math.ceil(transformDuration * 1000)));
-        }, 100));
+			//set the transition duration
+			s.style.transition = 'transform '+transformDuration+'s linear';
+			let textWidth = s.clientWidth;
+			//we need to move it to -(width+parent padding) before it won't be visible
+			s.style.transform = 'translateX(-'+(textWidth+5)+'px)';
+			//automatically start the next message scrolling after this one finishes
+			//you could add more time to this timeout if you wanted to have some time between messages
+			scrollTimeouts.push(setTimeout(function() {
+			if (nextMsgId == "am104") {
+				tmp.blankedOut = true
+				setTimeout(scrollNextMessage, 0)
+			} else scrollNextMessage()
+			}, Math.ceil(transformDuration * 1000)));
+	}, 100));
 }
 
 function fixNewsArray() {

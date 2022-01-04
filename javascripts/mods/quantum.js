@@ -49,7 +49,7 @@ function getQuantumReq(base) {
 	let exp = tmp.ngp3_mul ? 1 : tmp.ngp3 ? 1.25 : 1
 	if (!base && tmp.ngp3) {
 		if (QCs.inAny()) return QCs.getGoalMA()
-		if (enB.active("pos", 4)) exp /= enB_tmp.pos4
+		if (enB.active("pos", 4)) exp /= enB_tmp.eff.pos4
 	}
 	return Decimal.pow(Number.MAX_VALUE, exp)
 }
@@ -80,7 +80,7 @@ function quarkGain(base) {
 
 	let log = Math.max(ma.div(maReq).log(2) * 5 / 8192, 0)
 	log = Math.pow(log + 1, 3) - 1
-	if (enB.active("pos", 11)) log += enB_tmp.pos11.gain.log10()
+	if (enB.active("pos", 11)) log += enB_tmp.eff.pos11.gain.log10()
 	
 	let r = Decimal.pow(10, log)
 	if (!base) {
@@ -98,7 +98,7 @@ function quarkGainNextAt(qk) {
 	if (!qk) qk = quarkGain()
 
 	qk = Decimal.add(qk, 1).log10()
-	if (enB.active("pos", 11)) qk -= player.eternityPoints.max(1).log10() * enB_tmp.pos11
+	if (enB.active("pos", 11)) qk -= player.eternityPoints.max(1).log10() * enB_tmp.eff.pos11
 	if (qk > 3 && PCs.unl()) qk = Math.pow(qk / 3, 1 / PCs_tmp.eff2) * 3
 	qk = Math.pow(qk + 1, 1 / 3) - 1
 

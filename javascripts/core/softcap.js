@@ -101,7 +101,7 @@ var softcap_data = {
 		name: "effective meta-antimatter",
 		1: {
 			func: "pow",
-			start: () => E(Number.MAX_VALUE).pow((enB.active("pos", 2) && enB_tmp.pos2.igal_softcap) || 1),
+			start: () => E(Number.MAX_VALUE).pow((enB.active("pos", 2) && enB_tmp.eff.pos2.igal_softcap) || 1),
 			pow(x) {
 				let l2 = Decimal.log(x, 2)
 				return 1 / (Math.log2(l2 / softcap_data.ma[1].start().log(2)) / 4 + 2)

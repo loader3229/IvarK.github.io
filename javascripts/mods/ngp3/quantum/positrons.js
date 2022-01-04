@@ -176,7 +176,7 @@ var pos = {
 			pcSum += save_data.pc
 		}
 
-		if (!pos.on() && enB.active("glu", 6)) eng = enB_tmp.glu6
+		if (!pos.on() && enB.active("glu", 6)) eng = enB_tmp.eff.glu6
 		else eng = Decimal.pow(pcSum, pos_tmp.mults.pc_exp)
 		if (futureBoost("potential_strings") && dev.boosts.tmp[3]) eng = eng.times(dev.boosts.tmp[3])
 
@@ -201,9 +201,9 @@ var pos = {
 
 		enB.updateOnTick("pos")
 		if (!pos_tmp.cloud.shown) {
-			if (enB.has("pos", 4)) el("enB_pos4_exp").textContent = "(^" + (1 / enB_tmp.pos4).toFixed(3) + ")"
+			if (enB.has("pos", 4)) el("enB_pos4_exp").textContent = "(^" + (1 / enB_tmp.eff.pos4).toFixed(3) + ")"
 			if (enB.has("pos", 7)) el("enB_pos2_mention_1").textContent = enB.name("pos", 2)
-			if (enB.has("pos", 11)) el("enB_pos11_info").textContent = "(x^" + (enB_tmp.pos11.exp == 0 ? 0 : "1/" + shorten(1 / enB_tmp.pos11.exp)) + ")"
+			if (enB.has("pos", 11)) el("enB_pos11_info").textContent = "(x^" + (enB_tmp.eff.pos11.exp == 0 ? 0 : "1/" + shorten(1 / enB_tmp.eff.pos11.exp)) + ")"
 			if (enB.has("pos", 12)) el("enB_pos2_mention_2").textContent = enB.name("pos", 2)
 
 			for (var i = 1; i <= enB.pos.max; i++) {

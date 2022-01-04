@@ -44,7 +44,7 @@ let str = {
 				eff: (x) => 4 + x,
 				effDisp: (x) => "Able to vibrate last " + x + " positions.",
 
-				req: (x) => Decimal.pow(10, x / 3.5 + 3.6),
+				req: (x) => Decimal.pow(10, 3.75 + x * x / 4),
 				res: () => qu_save.bestEnergy,
 				resDisp: "Quantum Energy"
 			},
@@ -53,7 +53,7 @@ let str = {
 				eff: (x) => x + 1,
 				effDisp: (x) => "Protect first " + x + " vibrations.",
 
-				req: (x) => Math.pow(1.5, x * x) * 8,
+				req: (x) => Math.pow(2, x * x) * 8,
 				res: () => str_save.energy,
 				resDisp: "Vibration Energy"
 			},
@@ -233,8 +233,8 @@ let str = {
 	canVibrate(x) {
 		let last = Math.floor(str_tmp.vibrated * 1.5 + 3)
 		return str_save.energy >= str.veCost(str_tmp.vibrated + 1) &&
-			str_tmp.lastVibrate + 2 >= x &&
-			(str_tmp.used[Math.ceil(x / 6)] || 0) < 3 &&
+			str_tmp.lastVibrate + 3 >= x &&
+			(str_tmp.used[Math.ceil(x / 6)] || 0) < 4 &&
 			last >= x &&
 			last - str.upgEff(1) < x
 	},

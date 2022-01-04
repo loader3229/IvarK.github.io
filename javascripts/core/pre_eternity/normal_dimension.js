@@ -295,9 +295,9 @@ function canBuyDimension(tier) {
 }
 	
 function getDimensionPowerMultiplier(focusOn, debug) {
-	let ret = focusOn || inNC(9) || player.currentChallenge=="postc1" ? getMPTBase(focusOn) : tmp.mptb
+	let ret = focusOn || inNC(9) || player.currentChallenge == "postc1" ? getMPTBase(focusOn) : tmp.mptb
 	let exp = 1
-	if (tmp.ngp3 && focusOn != "linear") exp = focusOn == "no-rg4" ? getMPTExp(focusOn) : tmp.mpte
+	if (tmp.ngp3 && focusOn != "linear") exp = tmp.mpte
 	if (exp > 1) ret = Decimal.pow(ret, exp)
 	if (aarMod.newGameMult !== undefined) {
 		ret = Decimal.times(ret, Math.log10(getTotalDBs() + 1) + 1)
@@ -334,7 +334,7 @@ function getMPTBase(focusOn) {
 
 function getMPTExp(focusOn) {
 	let x = 1
-	if (enB.active("pos", 3)) x *= enB_tmp.pos3
+	if (enB.active("pos", 3)) x *= enB_tmp.eff.pos3
 	return x
 }
 	
@@ -638,7 +638,7 @@ function getInfBoostInput(inf) {
 function getInfEffExp(x) {
 	let exp = 1
 	if (hasTS(31)) exp *= 4
-	if (enB.active("pos", 10)) exp *= enB_tmp.pos10
+	if (enB.active("pos", 10)) exp *= enB_tmp.eff.pos10
 	return exp
 }
 
