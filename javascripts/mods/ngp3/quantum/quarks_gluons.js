@@ -556,6 +556,7 @@ var enB = {
 		enB_tmp = data
 
 		data.unl = {}
+		data.eff = {}
 		for (var x = 0; x < this.types.length; x++) {
 			var type = this.types[x]
 			var typeData = this[type]
@@ -585,7 +586,7 @@ var enB = {
 
 			if (this.has(type, num)) {
 				var eff = this[type][num].eff
-				if (eff !== undefined) data[type + num] = eff(this[type].eff(num))
+				if (eff !== undefined) data.eff[type + num] = eff(this[type].eff(num))
 			}
 		}
 	},
@@ -1334,7 +1335,7 @@ var enB = {
 		}
 	}
 }
-var enB_tmp = { unl: {} }
+var enB_tmp = { unl: {}, eff: {} }
 let ENTANGLED_BOOSTS = enB
 
 function gainQKOnQuantum(qkGain, quick) {
