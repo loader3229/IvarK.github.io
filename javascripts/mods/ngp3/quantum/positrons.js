@@ -167,7 +167,7 @@ var pos = {
 			pcSum += save_data.pc
 		}
 
-		if (!pos.on() && enB.active("glu", 6)) eng = enB_tmp.glu6
+		if (!pos.on() && enB.active("glu", 6)) eng = enB_tmp.eff.glu6
 		else eng = Decimal.pow(pcSum, pos_tmp.mults.pc_exp)
 		if (futureBoost("potential_strings") && dev.boosts.tmp[3]) eng = eng.times(dev.boosts.tmp[3])
 
@@ -192,9 +192,9 @@ var pos = {
 
 		enB.updateOnTick("pos")
 		if (!pos_tmp.cloud.shown) {
-			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "(^" + (1 / enB_tmp.pos4).toFixed(3) + ")"
+			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "(^" + (1 / enB_tmp.eff.pos4).toFixed(3) + ")"
 			if (enB.has("pos", 7)) getEl("enB_pos2_mention_1").textContent = enB.name("pos", 2)
-			if (enB.has("pos", 11)) getEl("enB_pos11_info").textContent = "(x^1/" + shorten(1 / enB_tmp.pos11.exp) + ", cap of " + shorten(enB_tmp.pos11.cap) + "x)"
+			if (enB.has("pos", 11)) getEl("enB_pos11_info").textContent = "(x^1/" + shorten(1 / enB_tmp.eff.pos11.exp) + ", cap of " + shorten(enB_tmp.eff.pos11.cap) + "x)"
 			if (enB.has("pos", 12)) getEl("enB_pos2_mention_2").textContent = enB.name("pos", 2)
 
 			for (var i = 1; i <= enB.pos.max; i++) {
@@ -206,7 +206,7 @@ var pos = {
 			for (var i = 1; i <= enB.pos.max; i++) {
 				if (!enB.mastered("pos", i)) continue
 
-				getEl("pos_boost" + i + "_btn").setAttribute('ach-tooltip', "Boost: " + enB.pos[i].dispFull(enB_tmp["pos" + i]) + (enB.pos.charged(i) ? "\nCharge: " + shortenDimensions(enB.pos.chargeEff(i)) + "x stronger" : ""))
+				getEl("pos_boost" + i + "_btn").setAttribute('ach-tooltip', "Boost: " + enB.pos[i].dispFull(enB_tmp.eff["pos" + i]) + (enB.pos.charged(i) ? "\nCharge: " + shortenDimensions(enB.pos.chargeEff(i)) + "x stronger" : ""))
 				if (enB.mastered("pos", i)) pos.updateCharge(i)
 			}
 		}

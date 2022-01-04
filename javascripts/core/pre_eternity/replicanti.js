@@ -260,7 +260,7 @@ function updateExtraReplBase() {
 var extraReplMulti = 1
 function updateExtraReplMult() {
 	let x = 1
-	if (enB.active("glu", 2)) x *= enB_tmp.glu2
+	if (enB.active("glu", 2)) x *= enB_tmp.eff.glu2
 	extraReplMulti = x
 }
 
@@ -307,7 +307,7 @@ function getReplicantiBaseInterval(speed, next = 0) {
 	var upgs = Math.round(Decimal.div(speed, 1e3).log(0.9))
 	upgs += next
 
-	if (enB.active("glu", 5)) upgs = Math.pow(upgs, enB_tmp.glu5.exp)
+	if (enB.active("glu", 5)) upgs = Math.pow(upgs, enB_tmp.eff.glu5.exp)
 	upgs *= tmp.rep.str
 
 	speed = Decimal.pow(0.9, upgs).times(1e3)
@@ -329,7 +329,7 @@ function getReplicantiIntervalMult() {
 	if (player.dilation.upgrades.includes('ngpp1') && aarMod.nguspV && !aarMod.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
 	if (enB.active("pos", 2)) {
-		var pos2_log = enB_tmp.pos2.mult.log10()
+		var pos2_log = enB_tmp.eff.pos2.mult.log10()
 		if (pos2_log > 1e5) pos2_log = Math.pow(pos2_log / 1e5, 3/4) * 1e5
 		if (futureBoost("replicante_tunneling")) pos2_log *= tmp.rep.str
 		interval = interval.div(Decimal.pow(10, pos2_log))
@@ -475,7 +475,7 @@ function updateReplicantiTemp() {
 	data.ln = player.replicanti.amount.ln()
 
 	data.baseChance = Math.round(player.replicanti.chance * 100)
-	if (enB.active("glu", 5)) data.baseChance = Math.pow(data.baseChance, enB_tmp.glu5.exp)
+	if (enB.active("glu", 5)) data.baseChance = Math.pow(data.baseChance, enB_tmp.eff.glu5.exp)
 	data.baseChance *= enB.glu[5].adjustChance(data.str)
 
 	let pow = 1

@@ -26,7 +26,7 @@ function getMetaAntimatterStart(bigRip) {
 function getDilationMDMultiplier() {
 	let pow = 0.1
 	let div = 1e40
-	if (enB.active("glu", 8)) pow = enB_tmp.glu8
+	if (enB.active("glu", 8)) pow = enB_tmp.eff.glu8
 	if (aarMod.nguspV !== undefined) div = 1e50
 
 	if (aarMod.ngudpV && !aarMod.nguepV) {
@@ -56,7 +56,7 @@ function getMDMultiplier(tier) {
 	if (tier % 2 == 1 && hasAch("ng3p24")) ret = ret.times(player.meta[tier + 1].amount.max(1).log10() / 10 + 1)
 
 	//Positronic Boosts:
-	if (tier == 1 && enB.active("pos", 2)) ret = ret.times(enB_tmp.pos2.mult)
+	if (tier == 1 && enB.active("pos", 2)) ret = ret.times(enB_tmp.eff.pos2.mult)
 
 	//Dilation Upgrades:
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
@@ -97,7 +97,7 @@ function getMetaBoostPower() {
 
 	let exp = 1
 	if (tmp.ngp3 && hasAch("ngpp14")) exp = 1.05
-	if (enB.active("glu", 6) && pos.on()) exp *= enB_tmp.glu6
+	if (enB.active("glu", 6) && pos.on()) exp *= enB_tmp.eff.glu6
 	return Math.pow(r, exp)
 }
 
@@ -338,7 +338,7 @@ function getDil17Bonus() {
 }
 
 function getDil17Exp() {
-	if (enB.active("glu", 4)) return enB_tmp.glu4
+	if (enB.active("glu", 4)) return enB_tmp.eff.glu4
 	return 0.003
 }
 
@@ -392,8 +392,8 @@ function updateMetaDimensions () {
 	getEl("quantum").className = pH.can("quantum") ? 'quantumbtn' : 'unavailablebtn'
 
 	getEl("metaAccelerator").innerHTML = enB.active("pos", 2) ?
-		"Meta Accelerator: " + shorten(enB_tmp.pos2.mult) + "x to MA, DT, and replicate interval" +
-		(shiftDown ? "<br>(Base: " + shorten(enB_tmp.pos2.base) + ", raised by ^" + shorten(enB_tmp.pos2.exp) + ", exp speed: +" + enB_tmp.pos2.speed.toFixed(3) + "/MDB" + ", accelerator: +^" + enB_tmp.pos2.acc.toFixed(3) + " speed/MDB" + ", slowdown start: " + shorten(enB_tmp.pos2.slowdown) + " MDBs)" : "")
+		"Meta Accelerator: " + shorten(enB_tmp.eff.pos2.mult) + "x to MA, DT, and replicate interval" +
+		(shiftDown ? "<br>(Base: " + shorten(enB_tmp.eff.pos2.base) + ", raised by ^" + shorten(enB_tmp.eff.pos2.exp) + ", exp speed: +" + enB_tmp.eff.pos2.speed.toFixed(3) + "/MDB" + ", accelerator: +^" + enB_tmp.eff.pos2.acc.toFixed(3) + " speed/MDB" + ", slowdown start: " + shorten(enB_tmp.eff.pos2.slowdown) + " MDBs)" : "")
 	: ""
 }
 
@@ -415,10 +415,10 @@ function getMetaUnlCost() {
 function getPataAccelerator() {
 	var x = qu_save.time / 24000
 	if (enB.pos.charged(2)) x *= enB.pos.chargeEff(2) / 2 + 1
-	if (enB.active("pos", 7)) x *= enB_tmp.pos7
+	if (enB.active("pos", 7)) x *= enB_tmp.eff.pos7
 
 	var cap = 1
-	if (enB.active("pos", 12)) cap += enB_tmp.pos12
+	if (enB.active("pos", 12)) cap += enB_tmp.eff.pos12
 
 	x = Math.min(x, cap)
 	if (QCs.perkActive(3)) x = cap

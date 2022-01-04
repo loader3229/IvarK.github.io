@@ -336,7 +336,7 @@ function getMPTBase(focusOn) {
 
 function getMPTExp(focusOn) {
 	let x = 1
-	if (enB.active("pos", 3)) x *= enB_tmp.pos3
+	if (enB.active("pos", 3)) x *= enB_tmp.eff.pos3
 	return x
 }
 	
@@ -641,7 +641,7 @@ function getInfBoostInput(inf) {
 function getInfEffExp(x) {
 	let exp = 1
 	if (hasTS(31)) exp *= 4
-	if (enB.active("pos", 10)) exp *= enB_tmp.pos10
+	if (enB.active("pos", 10)) exp *= enB_tmp.eff.pos10
 	return exp
 }
 

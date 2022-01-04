@@ -318,8 +318,8 @@ function updateColorPowers() {
 	colorBoosts.b_exp = 1.5
 
 	if (e > 1) colorBoosts.b_exp *= e
-	if (enB.active("glu", 10)) colorBoosts.b_base = colorBoosts.b_base.times(enB_tmp.glu10)
-	if (enB.active("glu", 11)) colorBoosts.b_exp *= enB_tmp.glu11
+	if (enB.active("glu", 10)) colorBoosts.b_base = colorBoosts.b_base.times(enB_tmp.eff.glu10)
+	if (enB.active("glu", 11)) colorBoosts.b_exp *= enB_tmp.eff.glu11
 
 	colorBoosts.b_base2 = colorBoosts.b_base.pow(colorBoosts.b_exp)
 	if (hasMTS(313)) colorBoosts.b_exp *= getMTSMult(313, "update")
@@ -364,7 +364,7 @@ function getQuantumEnergyMult() {
 	if (QCs.in(2)) return new Decimal(1)
 
 	let x = new Decimal(1)
-	if (enB.active("glu", 1)) x = enB_tmp.glu1
+	if (enB.active("glu", 1)) x = enB_tmp.eff.glu1
 	if (tmp.ngp3_mul && tmp.glb) x = x.add((tmp.glB.r.mult + tmp.glB.g.mult + tmp.glB.b.mult) / 15)
 	if (tmp.ngp3_mul) x = x.times(1.25)
 	if (dev.boosts.tmp[3]) x = x.times(dev.boosts.tmp[3])
@@ -388,7 +388,7 @@ function updateQEGainTmp() {
 	if (enB.active("pos", 1)) data.expDen = 1
 
 	data.expNum = 1
-	if (enB.active("pos", 1)) data.expNum = enB_tmp.pos1
+	if (enB.active("pos", 1)) data.expNum = enB_tmp.eff.pos1
 	if (data.expNum > data.expDen - 1) data.expNum = data.expDen - 1 / Math.sqrt(data.expNum - data.expDen + 2)
 	if (QCs.in(2)) data.expNum += 0.5
 	if (futureBoost("quantum_superbalancing")) data.expNum = Math.max(data.expNum, data.expDen)
@@ -453,7 +453,7 @@ function getGluonEffNerf(x, color) {
 	if (!QCs.isntCatched()) return 0
 
 	let mult = 1
-	if (enB.active("pos", 5)) mult /= enB_tmp.pos5
+	if (enB.active("pos", 5)) mult /= enB_tmp.eff.pos5
 
 	let r = Math.max(Math.pow(Decimal.add(x, 1).log10() * mult, 2) - colorCharge.subCancel, 0)
 	if (tmp.ngp3_mul) r *= 0.5
@@ -485,7 +485,7 @@ var enB = {
 	active(type, x) {
 		var data = this[type][x]
 
-		if (enB_tmp[type + x] === undefined) return false
+		if (enB_tmp.eff[type + x] === undefined) return false
 
 		if (!this.has(type, x)) return false
 		if (!this[type].activeReq(x)) return false
@@ -586,7 +586,7 @@ var enB = {
 
 			if (this.has(type, num)) {
 				var eff = this[type][num].eff
-				if (eff !== undefined) data[type + num] = eff(this[type].eff(num))
+				if (eff !== undefined) data.eff[type + num] = eff(this[type].eff(num))
 			}
 		}
 	},
@@ -1012,12 +1012,12 @@ var enB = {
 
 				if (!QCs.in(3)) {
 					if (enB.active("pos", 9)) {
-						var p9 = 1 + enB_tmp.pos9 / 4
-						slowStart += enB_tmp.pos9
+						var p9 = 1 + enB_tmp.eff.pos9 / 4
+						slowStart += enB_tmp.eff.pos9
 						accSpeed /= p9 * Math.max(p9 / 2, 1)
 					}
 					if (PCs.milestoneDone(33)) slowStart *= Math.pow(1.01, PCs_save.lvl)
-					if (enB.active("glu", 9)) accSpeed *= enB_tmp.glu9
+					if (enB.active("glu", 9)) accSpeed *= enB_tmp.eff.glu9
 					if (QCs.done(7)) accSpeed *= 1.25
 				}
 
@@ -1331,7 +1331,7 @@ var enB = {
 			getEl("enB_" + type + i + "_name").textContent = shiftDown ? (data[i].title || "Unknown title.") : (data.name + " Boost #" + i)
 			getEl("enB_" + type + i + "_type").innerHTML = "(" + wordizeList(list, false, " - ", false) + ")" + (data[i].activeDispReq ? "<br>Requirement: " + data[i].activeDispReq() : "")
 
-			if (enB_tmp[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].disp(enB_tmp[type + i])
+			if (enB_tmp.eff[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].disp(enB_tmp.eff[type + i])
 		}
 	}
 }
