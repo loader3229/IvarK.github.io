@@ -26,7 +26,7 @@ var PCs = {
 		53: "Compressor Time raises Replicanti Stealth to Chance.",
 		63: "QC6 reward decay is 5x slower.",
 		73: "Remove the second softcap of TT generation.",
-		83: "Unlock the first Omega Set.",
+		83: "Unlock the Omega Sets.",
 
 		14: "Perk: Gain extra Compressors on quick Compressing",
 		24: "Perk: Mastery is stronger, but requires more",
@@ -47,9 +47,9 @@ var PCs = {
 				true,
 				() => str.unl(),
 				() => PCs.milestoneDone(83),
-				false,
-				false,
-				false,
+				() => PCs.milestoneDone(83) && fluc.unl() && PCs.lvl >= 14,
+				() => PCs.milestoneDone(83) && fluc.unl() && PCs.lvl >= 18,
+				false
 			],
 			goal_divs: [null, 0.1, 0.95, 0.35, 0.95, 0.45, 0.5, 0.4, 0.775],
 			milestone_reqs: [null, 1, 2, 3, 4, 5],
@@ -136,15 +136,9 @@ var PCs = {
 				var d = PCs_tmp.used.d2
 				for (var i = 1; i <= 8; i++) {
 					var p = PCs.sort(i * 10 + PCs_tmp.picked[0])
-					if (d.includes(p)) this.occupy(i)
+					var omega = PCs_tmp.pick >= 50
+					if (!omega == d.includes(p)) this.occupy(i)
 				}
-			}
-
-			if (PCs_tmp.pick < 50 && l == 2) {
-				var p1 = PCs_tmp.used.p1
-				var p2 = PCs_tmp.used.p2
-				var p = p1.includes(PCs_tmp.picked[0]) ? p1 : p2
-				for (var i = 1; i <= 8; i++) if (p.includes(i)) this.occupy(i)
 			}
 		}
 
@@ -251,13 +245,13 @@ var PCs = {
 		PCs.updateDisp()
 	},
 	start(x) {
+		if (!PCs.posUnl(x)) return
 		if (PCs_tmp.pick && PCs_tmp.pick != x) return
 		var c = PCs_save.challs
 		if (c[x]) {
 			quantum(false, true, {pc: x}, "pc")
 			return
 		} else {
-			if (!PCs.posUnl(x)) return
 			if (PCs_tmp.pick == x) delete PCs_tmp.pick
 			else PCs_tmp.pick = x
 			PCs_tmp.picked = []
@@ -288,7 +282,7 @@ var PCs = {
 		var scaling = hasAch("ng3pr16") ? 0.95 : 1
 		if (str.unl() && str_tmp.effs) scaling /= str_tmp.effs.b2
 
-		var mul = PCs_save.comps.length * 3 * scaling + //Completion Scaling
+		var mul = PCs_save.comps.length * Math.max(PCs_save.comps.length / 4, 3) * scaling + //Completion Scaling
 			(Math.floor(pos / 10) - 1) + //Row Scaling
 			PCs_tmp.row_comps[Math.floor(pos / 10)] - //Row Completion Scaling
 			(PCs_tmp.row_comps[5] + PCs_tmp.row_comps[6] + PCs_tmp.row_comps[7]) * 5 //Omega Sets
@@ -343,15 +337,15 @@ var PCs = {
 		if (y > 4 && !this.rowUnl(y)) return 1/0
 
 		let lvl = pc % 10
-		if (y >= 3) lvl += y * 3
+		if (y >= 3) lvl += y * 3 - 1
 		else if (y == 2) lvl += 2
 	},
 	posUnl(pc) {
 		let y = Math.floor(pc / 10)
-		if (y > 4 && !this.rowUnl(y)) return
+		if (y > 4) return PCs.milestoneDone(83) && (pc % 10 == 1 || PCs.posDone(pc - 1))
 
 		let lvl = pc % 10
-		if (y >= 3) lvl += y * 3
+		if (y >= 3) lvl += y * 3 - 1
 		else if (y == 2) lvl += 2
 
 		return PCs_save.comps.length + 1 >= lvl
@@ -366,13 +360,15 @@ var PCs = {
 	setupButton: (pc) => '<td><button id="pc' + pc + '" class="challengesbtn" style="border-radius: 10px" onclick="PCs.start(' + pc + ')"></button></td>',
 	buttonTxt(pc) {
 		var id = PCs.sort(PCs_save.challs[pc])
-		return '<b style="font-size: 16px">' + PCs.name(pc) + '</b><br>' + (
+		var r = '<b style="font-size: 16px">' + PCs.name(pc) + "</b>"
+		if (PCs.posUnl(pc)) r += '<br>' + (
 			PCs_save.challs[pc] ? "QC " + wordizeList(PCs.convBack(id), false, " + ", false) :
 			PCs_tmp.pick == pc ? "Cancel" :
-			PCs.posUnl(pc) && !PCs_tmp.pick ? "Assign" : ""
+			!PCs_tmp.pick ? "Assign" : ""
 		) + (
 			PCs_tmp.pick || !PCs_save.challs[pc] || PCs.posDone(pc) ? "" : "<br>Goal: " + shorten(PCs.goal(id, pc)) + " MA"
 		)
+		return r
 	},
 	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Show</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
 	setupMilestoneHeader() {
@@ -443,11 +439,11 @@ var PCs = {
 
 		el_.style.display = ""
 		el_.className = (
+			!PCs.posUnl(pc) ? "lockedchallengesbtn" :
 			PCs_tmp.pick ? (PCs_tmp.pick == pc ? "onchallengebtn" : "lockedchallengesbtn") :
 			PCs_save.in == pc && !exit ? "onchallengebtn" :
 			PCs_save.challs[pc] && PCs_save.comps.includes(PCs.sort(PCs_save.challs[pc])) ? "completedchallengesbtn" :
-			PCs_save.challs[pc] ? "quantumbtn" :
-			PCs.posUnl(pc) ? "challengesbtn" : "lockedchallengesbtn"
+			PCs_save.challs[pc] ? "quantumbtn" : "challengesbtn"
 		)
 		el_.innerHTML = this.buttonTxt(pc)
 	},
@@ -463,7 +459,6 @@ var PCs = {
 		if (!PCs_tmp.unl) return
 		if (!PCs.data.setupHTML) return
 		var data = PCs
-
 
 		for (var i = 1; i <= 8; i++) {
 			el("pc_comp" + i + "_div").style.display = PCs_tmp.comps[i] ? "" : "none"

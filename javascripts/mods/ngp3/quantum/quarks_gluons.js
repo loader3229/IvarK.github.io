@@ -992,7 +992,7 @@ var enB = {
 				eff = Math.pow(eff, 1 - scaling) * Math.pow(PCs.milestoneDone(42) ? 8 : 6, scaling)
 			}
 
-			if (str.unl() && str_tmp.effs) eff += str_tmp.effs.b2
+			if (str.unl() && str_tmp.effs) eff += str_tmp.effs.b1
 			if (hasAch("ng3pr13")) eff += 0.5
 			return eff
 		},

@@ -2098,6 +2098,10 @@ function setupNGP31Versions() {
 		str_save.vibrated = []
 		str.updateTmp()
 	}
+	if (aarMod.ngp3Build < 20220105) {
+		PCs.respecSet([51, 52, 53, 54], true)
+		PCs.updateTmp()
+	}
 
 	welcomeUpdates = []
 	if (aarMod.ngp3Build) {
@@ -2112,7 +2116,7 @@ function setupNGP31Versions() {
 	}
 	aarMod.ngp3r = 0.62
 	aarMod.ngp3Alpha = beta
-	aarMod.ngp3Build = 20220103
+	aarMod.ngp3Build = 20220105
 
 	if (tmp.ngp3_boost && !player.timestudy.auto) player.timestudy.auto = {}
 	if (rollback) {
