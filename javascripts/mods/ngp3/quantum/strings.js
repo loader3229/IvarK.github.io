@@ -327,6 +327,8 @@ let str = {
 
 		str_save.vibrated = []
 		str_save.spent = 0
+		str_tmp.used = {}
+		str_tmp.lastVibrate = 0
 		str_tmp.vibrated = 0
 
 		var ve = str_save.energy
@@ -335,6 +337,8 @@ let str = {
 			if (str.canVibrate(k)) {
 				str_save.vibrated.push(k)
 				str_tmp.vibrated++
+				str_tmp.used = (str_tmp.lastVibrate[Math.ceil(k / 6)] || 0) + 1
+				str_tmp.lastVibrate = Math.max(str_tmp.lastVibrate, k)
 				str_save.spent = str.veCost(str_tmp.vibrated)
 			}
 		}

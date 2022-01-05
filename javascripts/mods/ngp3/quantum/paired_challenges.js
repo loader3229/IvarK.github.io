@@ -279,10 +279,11 @@ var PCs = {
 		var qc1 = QCs.data[list[0]].goalMA
 		var qc2 = QCs.data[list[1]].goalMA
 		var div = PCs.data.goal_divs[list[0]] + PCs.data.goal_divs[list[1]] + 1
-		if (fluc.unl() && fluc_tmp.temp) div += fluc_tmp.temp.pc
+		var relDiv = div
+		if (fluc.unl() && fluc_tmp.temp) relDiv += fluc_tmp.temp.pc
 
 		var base = Number.MAX_VALUE
-		var r = qc1.pow(qc2.log(base) / div)
+		var r = qc1.pow(qc2.log(base) / relDiv)
 
 		var scaling = hasAch("ng3pr16") ? 0.95 : 1
 		if (str.unl() && str_tmp.effs) scaling /= str_tmp.effs.b2

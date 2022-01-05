@@ -575,6 +575,8 @@ var enB = {
 
 		data.unl = {}
 		data.eff = {}
+		if (!tmp.quActive) return
+
 		for (var x = 0; x < this.types.length; x++) {
 			var type = this.types[x]
 			var typeData = this[type]
@@ -975,14 +977,22 @@ var enB = {
 			if (hasAch("ng3pr12")) req -= 2
 			return Math.max(req, 0)
 		},
+		chargeEffs: [
+			null,
+			() => PCs.milestoneDone(42) ? 8 : 2,
+			4,
+			6,
+		],
 		chargeEff(x) {
 			var lvl = this.lvl(x)
-			var scaling = PCs.milestoneDone(43) ? 1 - (PCs_save.lvl - 1) / 28 : 1
-			if (fluc.unl() && fluc_tmp.temp.pos) lvl = Math.pow(3, 1 - scaling) * Math.pow(lvl, scaling)
+			var eff = evalData(this.chargeEffs[lvl])
 
-			var eff = 2 * lvl
-			if (PCs.milestoneDone(42) && lvl == 1) eff = 8
-			if (str.unl() && str_tmp.effs) eff += str_tmp.effs.b1
+			if (fluc.unl() && fluc_tmp.temp.pos) {
+				var scaling = PCs.milestoneDone(42) ? Math.sqrt(1 - (PCs_save.lvl - 1) / 28) : 1
+				eff = Math.pow(eff, 1 - scaling) * Math.pow(PCs.milestoneDone(42) ? 8 : 6, scaling)
+			}
+
+			if (str.unl() && str_tmp.effs) eff += str_tmp.effs.b2
 			if (hasAch("ng3pr13")) eff += 0.5
 			return eff
 		},
