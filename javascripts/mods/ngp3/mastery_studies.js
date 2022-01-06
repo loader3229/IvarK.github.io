@@ -147,7 +147,7 @@ var mTs = {
 			if (hasNU(6)) return 0
 
 			var x = player.meta.resets
-			x *= 13 / (x / 50 + 1) + Math.max(Math.log2(x / 25), 1) * 2
+			x *= 13 / (x / 50 + 1) + Math.min(Math.max(Math.log2(x / 25), 1) * 2, 10)
 			if (tmp.ngp3_mul) x *= 1.25
 			return x
 		},
@@ -213,7 +213,7 @@ var mTs = {
 
 		311() {
 			var red = Math.log10(qu_save.colorPowers.r / 100 + 1)
-			var lim = 15 + Math.sqrt(red * 1.5 + 1)
+			var lim = 15 + Math.sqrt(red + 1)
 			var exp = Math.min(Math.log10(red + 1), 1.5 - 15 / lim)
 			var eff = hasTS(232) ? Math.pow(tsMults[232](), exp) : 1
 			return {

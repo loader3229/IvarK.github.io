@@ -321,6 +321,7 @@ var QCs = {
 			perkEff() {
 				return 1
 			},
+			perkToggle: true,
 
 			overlapReqs: [1/0, 1/0],
 
@@ -684,9 +685,11 @@ var QCs = {
 		return QCs_tmp.perks[x] !== undefined && this.perkUnl(x) && this.inAny() && !(QCs_save.disable_perks && QCs_save.disable_perks[x])
 	},
 	disablePerk(x) {
+		if (!QCs.perkUnl(x)) return
 		if (QCs.inAny() && !confirm("This will restart this challenge! Are you sure?")) return
 		QCs_save.disable_perks[x] = !QCs_save.disable_perks[x]
 		el("disable_qc" + x + "_perk").textContent = (QCs_save.disable_perks[x] ? "Enable" : "Disable") + " QC" + x + " Perk"
+		el("pc_perk_" + x).className = "qMs_toggle_" + (!QCs_save.disable_perks[x] ? "on" : "off")
 
 		if (QCs.inAny()) restartQuantum()
 	},
@@ -734,36 +737,20 @@ var QCs = {
 		//Quantum Challenges
 		if (!unl) return
 
-		el("qc_effects").innerHTML = QCs_tmp.show_perks ? "" : "All quantum mechanics will change, when entering a Quantum Challenge:<br>" +
+		el("qc_effects").innerHTML = "All quantum mechanics will change, when entering a Quantum Challenge:<br>" +
 			(tmp.bgMode ? "No" : (tmp.exMode ? "No" : "Reduced") + " global Quantum Energy bonus, no") + " gluon nerfs, and mastered boosts only work."
 		for (let qc = 1; qc <= this.data.max; qc++) {
 			var cUnl = QCs_tmp.unl_challs.includes(qc)
 			el("qc_" + qc + "_div").style.display = cUnl ? "" : "none"
 
-			if (QCs_tmp.show_perks) {
-				var reqs = this.data[qc].overlapReqs
-				el("qc_" + qc + "_desc").textContent = this.data[qc].perkDesc(QCs_tmp.perks[qc])
-				el("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.getGoalMA(qc, "up")) + " MA"
-				el("qc_" + qc + "_btn").textContent = this.perkUnl(qc) ? (this.perkActive(qc) ? "Perk Activated" : "Completed") : "Locked"
-				el("qc_" + qc + "_btn").className = this.perkUnl(qc) ? "completedchallengesbtn" : "lockedchallengesbtn"
-			} else if (cUnl) {
-				el("qc_" + qc + "_desc").textContent = evalData(this.data[qc].desc)
-				el("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.data[qc].goalMA) + " meta-antimatter and " + evalData(this.data[qc].goalDisp)
-				el("qc_" + qc + "_btn").textContent = this.started(qc) ? "Running" : this.done(qc) ? "Completed" : "Start"
-				el("qc_" + qc + "_btn").className = this.started(qc) ? "onchallengebtn" : this.done(qc) ? "completedchallengesbtn" : "challengesbtn"
-			}
+			el("qc_" + qc + "_desc").textContent = evalData(this.data[qc].desc)
+			el("qc_" + qc + "_goal").textContent = "Goal: " + shorten(this.data[qc].goalMA) + " meta-antimatter and " + evalData(this.data[qc].goalDisp)
+			el("qc_" + qc + "_btn").textContent = this.started(qc) ? "Running" : this.done(qc) ? "Completed" : "Start"
+			el("qc_" + qc + "_btn").className = this.started(qc) ? "onchallengebtn" : this.done(qc) ? "completedchallengesbtn" : "challengesbtn"
 		}
 		el("restart_qc").style.display = QCs.inAny() ? "" : "none"
 		el("auto_qc").style.display = hasAch("ng3p25") ? "" : "none"
 		el("auto_qc").textContent = "Auto-completions: " + (QCs_save.auto ? "ON" : "OFF")
-
-		//Perks
-		el("qc_perks").style.display = hasAch("ng3pr12") ? "inline" : "none"
-		el("qc_perks").textContent = QCs_tmp.show_perks ? "Back" : 'Perks [moving soon]'
-		el("qc_perks_note").textContent = QCs_tmp.show_perks ? 'Note: Perks only work in any Quantum Challenge!' : ""
-
-		el("disable_qc2_perk").style.display = this.perkUnl(2) ? "" : "none"
-		el("disable_qc2_perk").textContent = (QCs_save.disable_perks[2] ? "Enable" : "Disable") + " QC2 Perk"
 	},
 	updateDispOnTick() {
 		if (!this.divInserted) return

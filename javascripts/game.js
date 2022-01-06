@@ -1670,7 +1670,6 @@ function changeSaveDesc(saveId, placement) {
 			(isSaveCurrent ? "Selected" : "Played for " + timeDisplayShort(temp.totalTimePlayed)) + "<br>" +
 			"<span style='font-size: 16px'>" + shortenMoney(E(temp.totalmoney)) + " antimatter</span><br>"
 
-		var isSaveGhostified = temp.ghostify ? temp.ghostify.times > 0 : false
 		var isSaveFluctuated = temp.fluc ? temp.fluc.energy > 0 : false
 		var isSaveQuantumed = temp.quantum ? temp.quantum.times > 0 : false
 
@@ -1889,6 +1888,12 @@ function toggle_mod(id) {
 	I also dont know how to do this and this is supa ugly so pls fix
 	*/
 }
+
+function new_save() {
+	if (modsShown == "adv") new_game()
+	else show_mods('basic')
+}
+
 function show_mods(type) {
 	modsShown = type
 
@@ -4136,7 +4141,7 @@ function bigCrunchButtonUpdating(){
 			pH.updateDisplay()
 		}
 	} else if ((player.break && player.currentChallenge == "") || player.infinityUpgradesRespecced != undefined) {
-		if (player.money.gte(Number.MAX_VALUE) && tmp_pH.infinity.shown) {
+		if (player.money.gte(Number.MAX_VALUE) && pH_tmp.infinity.shown) {
 			el("postInfinityButton").style.display = "inline-block"
 			var currentIPmin = gainedInfinityPoints().dividedBy(player.thisInfinityTime/600)
 			if (currentIPmin.gt(IPminpeak)) IPminpeak = currentIPmin
@@ -4256,7 +4261,7 @@ function doQuantumButtonDisplayUpdating(diff){
 	var showGain = !isQuantumFirst() ? "QK" : ""
 	el("quantumbtnFlavor").textContent = showGain != "" ? "" : QCs.inAny() ? "The unseening has been detected... Complete this challenging experiment!" : "The spacetime has been conceptualized... It's time to go quantum!"
 	el("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain " + shortenDimensions(quarkGain()) + " anti-Quark" + (quarkGain().eq(1) ? "." : "s.") : ""
-	el("quantumbtnQKNextAt").textContent = showGain == "QK" && currentQKmin.lt(10) && !pH.did("fluctuate") ? "Next at " + shorten(getQuantumReqSource()) + " / " + shorten(quarkGainNextAt()) + " MA" : ""
+	el("quantumbtnQKNextAt").textContent = showGain == "QK" && currentQKmin.lt(10) && !PCs.unl() && !fluc.unl() ? "Next at " + shorten(getQuantumReqSource()) + " / " + shorten(quarkGainNextAt()) + " MA" : ""
 	if (showGain != "QK" || currentQKmin.gt(1e30) || pH.did("fluctuate")) {
 		el("quantumbtnRate").textContent = ''
 		el("quantumbtnPeak").textContent = ''
@@ -4450,7 +4455,8 @@ function progressBarUpdating(){
 	el("progressbar").className = ""
 	el("progress").style.bottom = aarMod.noFooter || el("TTbuttons").style.display == "block" ? "5px" : ""
 
-	if (aarMod.featureProgress) doFeatureProgress()
+	if (aarMod.featureProgress === 2) doGoogologicalProgress()
+	else if (aarMod.featureProgress) doFeatureProgress()
 	else if (el("metadimensions").style.display == "block") doQuantumProgress() 
 	else if (player.currentChallenge !== "") {
 		currentChallengeProgress()
@@ -4477,6 +4483,7 @@ function challengeOverallDisplayUpdating(){
 		if (el("eternitychallenges").style.display == "block") ECRewardDisplayUpdating()
 		if (el("quantumchallenges").style.display == "block") QCs.updateDispOnTick()
 		if (el("pairedChalls").style.display == "block") PCs.updateDispOnTick()
+		if (el("pairedChallPerks").style.display == "block") PCs.updatePerksOnTick()
 	}
 }
 
@@ -4513,7 +4520,7 @@ function newIDDisplayUpdating() {
 			if (player.infDimBuyers[req.tier-1] && player.currentEternityChall != "eterc8") buyMaxInfDims(req.tier)
 			req = getNewInfReq()
 		}
-	} else if (player.break && player.currentChallenge == "" && !player.infDimensionsUnlocked[7] && tmp_pH.infinity.shown) {
+	} else if (player.break && player.currentChallenge == "" && !player.infDimensionsUnlocked[7] && pH_tmp.infinity.shown) {
 		el("newDimensionButton").style.display = "inline-block"
 		el("newDimensionButton").textContent = "Get " + shortenCosts(req.money) + " antimatter to unlock a new Dimension."
 		if (player.money.gte(req.money)) el("newDimensionButton").className = "presPos" + newDimPresPos + " newdim"

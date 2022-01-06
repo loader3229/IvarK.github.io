@@ -218,7 +218,7 @@ let str = {
 	veGain() {
 		let r = qu_save.quarkEnergy.add(1).log10() / 3
 		r *= Math.log10(QCs_save.qc5.add(1).log10() / 5 + 1) + 1
-		r *= Math.pow(Math.max(r / 2, 2), PCs_save.lvl / 8 - 1)
+		r *= Math.pow(Math.max(r / 2, 2), Math.max(PCs_save.lvl / 8 - 1, 0))
 		if (hasAch("ng3p34")) r *= 1.2
 		return r
 	},

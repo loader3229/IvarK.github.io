@@ -106,7 +106,6 @@
 
 		<div id="tickSpeedRow">
 			<div id="tickLabel" style="visibility: hidden">Make the game 10% faster.</div>
-			<span id="softcap_tsRed_disp"></span>
 			<button id="tickSpeed" style="color:black; visibility: hidden; height: 25px;width: 200px; font-size: 12px" class="storebtn">Cost: 1000</button>
 			<button id="tickSpeedMax" onclick="buyMaxTickSpeed()" style="color:black; visibility: hidden; height: 25px; font-size: 12px" class="storebtn">Buy Max</button>
 			<div id="tickSpeedAmount" style="visibility: hidden">Tickspeed: 1000</div>
@@ -1561,7 +1560,7 @@
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<p id='versionDescBeta'>(Beta v0.62: String Manifold)</p>
-				<p class="warning" id='versionDescAlpha'>(1/5/22a Alpha Build)</p>
+				<p class="warning" id='versionDescAlpha'>(1/5/22b Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -1676,7 +1675,6 @@
 				NOTE^2: This does not encompass all softcaps, instead only the ones that are handeled by the general softcapping function
 				<br>
 				<br>
-				<div id="softcap_tsRed"></div>
 				<div id="softcap_rep"></div>
 				<div id="softcap_rInt"></div>
 				<div id="softcap_it"></div>
@@ -2287,13 +2285,13 @@
 								<div id="Completing the Quantum" class="achievement achievementlocked" style="background-image: url(images/ng3p/32.png)" ach-tooltip="Unlock Strings. Reward: Charging requires 20% + 2 less."></div>
 							</td>
 							<td>
-								<div id="Bursted Em All!" class="achievement achievementlocked" style="background-image: url(images/ng3p/33.png)" ach-tooltip="Charge 6 Positronic Boosts with at least 9x multiplier. Reward: Non-charged boosts are slightly charged."></div>
+								<div id="Bursted Em All!" class="achievement achievementlocked" style="background-image: url(images/ng3p/33.png)" ach-tooltip="Charge 6 Positronic Boosts with at least 8x multiplier. Reward: Non-charged boosts are slightly charged."></div>
 							</td>
 							<td>
 								<div id="The Power of Science!" class="achievement achievementlocked" style="background-image: url(images/ng3p/34.png)" ach-tooltip="Reach ^1 Quantum efficiency. Reward: You gain 10% more Quantum Power and add +0.5x charge multiplier."></div>
 							</td>
 							<td>
-								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/ng3p/35.png)" ach-tooltip="Complete all milestones with 3 combinations. PC goals increase 5% slower from PC combinations."></div>
+								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/ng3p/35.png)" ach-tooltip="Complete all milestones with 3 combinations."></div>
 							</td>
 							<td>
 								<div id="I can't get my multipliers higher!" class="achievement achievementlocked" style="background-image: url(images/ng3p/36.png)"><br></div>
@@ -3393,20 +3391,16 @@
 				</table>
 			</div>
 			<div id="quantumchallenges" class="challengeTab">
-				<button class="secondarytabbtn" id="qc_perks" style="width: 200px" onclick="QCs.viewPerks()">View perks</button>
-				<br>
 				<span id="qc_effects"></span>
-				<span id="qc_perks_note"></span>
 				<br>
 				<button class="storebtn" id="restart_qc" style="width: 120px; height: 48px" onclick="QCs.restart()">Restart Challenge</button>
 				<button class="storebtn" id="auto_qc" style="width: 120px; height: 48px; font-size: 11px" onclick="QCs.toggle_auto()"></button>
 				<button class="storebtn" id="swaps_toggle" style="width: 120px; height: 48px" onclick="QCs.disable_swaps()"></button>
-				<button class="storebtn" id="disable_qc2_perk" style="width: 120px; height: 48px" onclick="QCs.disablePerk(2)"></button>
 				<table class="table" id="qcs_div" style="margin: 0 auto"></table>
 			</div>
 			<div id="pairedChalls" class="challengeTab">
 				<button class="secondarytabbtn" id="pctabbtn_milestone" onclick="showChallengesTab('pairedChallMilestones')">Milestones</button>
-				<button class="secondarytabbtn" id="pctabbtn_perk" onclick="showChallengesTab('pairedChallPerks')">Perks [soon]</button>
+				<button class="secondarytabbtn" id="pctabbtn_perk" onclick="showChallengesTab('pairedChallPerks')">Perks</button>
 				<b class="fluc_boost" id="fluc_boost_pc"></b>
 				<div id="pc_info">
 					<span id="pc_lvl" style="font-size: 25px"></span>
@@ -3420,6 +3414,7 @@
 					<br>
 					<button class="storebtn" onclick="PCs.exportPreset()" style="width: 96px; height: 48px">Export</button>
 					<button class="storebtn" onclick="PCs.importPreset()" style="width: 96px; height: 48px">Import</button>
+					<button class="storebtn" id="disable_qc2_perk" style="width: 96px; height: 48px" onclick="QCs.disablePerk(2)"></button>
 				</span>
 				<span id="pc_omega">
 					<br>
@@ -3468,7 +3463,7 @@
 			<div id="pairedChallPerks" class="challengeTab">
 				<button class="secondarytabbtn" onclick="showChallengesTab('pairedChalls')">Back</button>
 				<br>
-				<b class="red">Perks will be moved into here soon! For now, check out Quantum Challenges and click the Perks button if possible.</b>
+				<b class="red">All perks only work in any Quantum Challenge!</b>
 				<table class="table" align="center" style="margin: auto">
 					<tr>
 						<td>Perk #1</td>
@@ -3477,10 +3472,10 @@
 						<td>Perk #4</td>
 					</tr>
 					<tr>
-						<td><button class="qMs_reward">??? (Locked)</button></td>
-						<td><button class="qMs_reward">???</button></td>
-						<td><button class="qMs_reward">??? (Activated)</button></td>
-						<td><button class="qMs_reward">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_1" style="font-size: 10px">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_2" onclick="QCs.disablePerk(2)" style="font-size: 10px">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_3">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_4">???</button></td>
 					</tr>
 					<tr>
 						<td>Perk #5</td>
@@ -3489,10 +3484,10 @@
 						<td>Perk #8</td>
 					</tr>
 					<tr>
-						<td><button class="qMs_reward">???</button></td>
-						<td><button class="qMs_reward">???</button></td>
-						<td><button class="qMs_reward">???</button></td>
-						<td><button class="qMs_reward">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_5">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_6">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_7">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_8">???</button></td>
 					</tr>
 				</table>
 			</div>
@@ -5634,7 +5629,7 @@
 	</div>
 	<div class="popup loadmenu" id="loadmenu" style="overflow-y:hidden; height: 360px">
 		<button class="closebtn storebtn" onclick="closeToolTip(true)">&times;</button>
-		<button id="newSaveBtn" class="storebtn" style="font-size: 15px" onclick="show_mods('basic')">New game</button>
+		<button id="newSaveBtn" class="storebtn" style="font-size: 15px" onclick="new_save()">New game</button>
 		<button id="newImportBtn" class="storebtn" style="font-size: 15px" onclick="import_save('new')">Import</button>
 		<button id="cancelNewSaveBtn" class="storebtn" style="font-size: 15px; display: none" onclick="show_mods()">Saves</button>
 		<button id="newAdvSaveBtn" class="storebtn" style="font-size: 15px; display: none" onclick="show_mods('adv')" >Other mods</button>

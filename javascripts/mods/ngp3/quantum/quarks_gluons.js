@@ -557,7 +557,7 @@ var enB = {
 
 	mastered(type, x) {
 		if (enB_tmp.unl[type + x] !== 2) return false
-		if (type == "glu" && QCs.perkActive(2)) return enB_tmp.eff_eb.gte(500)
+		if (type == "glu" && QCs.perkActive(2)) return enB_tmp.eb.gte(500)
 		return true
 	},
 	getMastered(type, x) {
@@ -598,7 +598,7 @@ var enB = {
 	updateTmpOnTick() {
 		var data = enB_tmp
 
-		data.eff_eb = enB.glu.boosterEff()
+		data.eb = enB.glu.boosterEff()
 		for (var x = 0; x < this.priorities.length; x++) {
 			var boost = this.priorities[x]
 			var type = boost[0]
@@ -652,7 +652,7 @@ var enB = {
 		},
 
 		eff(x) {
-			var amt = enB_tmp.eff_eb
+			var amt = enB_tmp.eb
 			var r = amt.times(2 / 3)
 			r = r.sub(r.min(1))
 
@@ -881,7 +881,7 @@ var enB = {
 			title: "Blue Unseeming",
 			type: "r",
 			eff(x) {
-				var r = Math.sqrt(Decimal.div(x, 500).add(1).log10() / 3 + 1)
+				var r = Math.sqrt(Decimal.div(x, 200).add(1).log10() / 3 + 1)
 				if (qu_superbalanced()) r = Math.max(r, Decimal.add(x, 1).pow(1 / dev.quSb.jP / 12).toNumber())
 				return r
 			},
@@ -1243,8 +1243,9 @@ var enB = {
 			tier: 3,
 			eff(x) {
 				let ep = player.eternityPoints
-				let exp = getAQGainExp() / 1e8
-				exp *= Math.min(Math.sqrt(Math.log10(ep.add(1).log10() * Math.log2(x / 100 + 1) + 1)), 100)
+				let exp = Math.log10(ep.add(1).log(2) * Math.log2(x / 25 + 1) + 1)
+				if (exp > 10) exp = Math.min(Math.cbrt(exp * 10), 50)
+				exp *= getAQGainExp() / 1e8
 				return {
 					exp: exp,
 					gain: ep.max(1).pow(exp)
@@ -1461,7 +1462,7 @@ function updateGluonsTab() {
 	}
 
 	enB.updateOnTick("glu")
-	el("enB_eff").textContent = "Quantum Power: " + shorten(enB_tmp.eff_eb) + (enB.glu.boosterExp() > 1 ? " (^" + shorten(enB.glu.boosterExp()) + ")" : "")
+	el("enB_eff").textContent = "Quantum Power: " + shorten(enB_tmp.eb) + (enB.glu.boosterExp() > 1 ? " (^" + shorten(enB.glu.boosterExp()) + ")" : "")
 }
 
 //Display: On load

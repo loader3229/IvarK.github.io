@@ -1005,15 +1005,20 @@ function moveAutoTab(id, abb, btn, pos, autoShown, back) {
 }
 
 function setProgressBar(mode, id) {
+	var type = aarMod.featureProgress === true ? 1 : aarMod.featureProgress || 0
+
 	//OPTIONS
 	if (mode == "toggle") {
-		aarMod[id] = !aarMod[id]
-		if (id == "featureProgress") showHideFooter()
+		if (id == "featureProgress") {
+			type = (type + 1) % 3
+			aarMod[id] = type
+			showHideFooter()
+		} else aarMod[id] = !aarMod[id]
 	}
 	if (mode == "setup" || mode == "toggle") {
 		el("progressBarBtn").textContent = (aarMod.progressBar ? "Hide" : "Show") + " progress bar"
 		el("featureProgress").style.display = aarMod.progressBar && tmp.ngmX < 2 ? "" : "none"
-		el("featureProgress").textContent = "Feature progress bar: " + (aarMod.featureProgress ? "ON" : "OFF")
+		el("featureProgress").textContent = "Progress bar: " + ["Normal", "Feature", "Googological"][type]
 	}
 	if (mode == "setup") return
 
@@ -1105,4 +1110,41 @@ function doFeatureProgress() {
 	el("progressbar").style.width = percentage
 	el("progresspercent").textContent = percentage
 	el("progresspercent").setAttribute('ach-tooltip', feature ? "Reach " + req + " to unlock " + feature + ". (" + resFormat(res) + " / " + resFormat(reqNum) + ")" : "All features unlocked!")
+}
+
+var googolMilestones = [
+	//[Name, Exponent]
+	["Googol (10^100)", 100],
+	["Centillion (10^303)", 303],
+	["Googolchime (10^1,000)", 1e3],
+	["Millillion (10^3,003)", 3003],
+	["Googolbell (10^5,000)", 5e3],
+	["Googoltoll (10^10,000)", 1e4],
+	["Myrillion (10^30,003)", 30003],
+	["Googolgong (10^100,000)", 1e5],
+	["Maximusmillillion (10^1,000,003)", 1e6+3],
+	["Micrillion (10^3,000,003)", 3e6+3],
+	["Googolbong (10^100,000,000)", 1e8],
+	["Nanillion (10^3,000,000,003)", 3e9+3],
+	["Trialogue (10^10^10)", 1e10],
+	["Googolthrong (10^10^11)", 1e11],
+	["Picillion (10^(3*10^12+3))", 3e12+3],
+	["Googolgandingan (10^10^14)", 1e14],
+	["Femtillion (10^(3*10^15+3))", 3e15+3],
+	["Attillion (10^(3*10^18+3))", 3e18+3],
+	["Zeptillion (10^(3*10^21+3))", 3e21+3],
+]
+
+function doGoogologicalProgress() {
+	var am = new Decimal(player.totalmoney)
+	var req = googolMilestones[tmp.googol][1]
+	while (googolMilestones.length - 1 >= tmp.googol && am.gte(Decimal.pow(10, req))) {
+		tmp.googol++
+		req = googolMilestones[tmp.googol][1]
+	}
+
+	var percentage = Math.min(am.log10() / req * 100, 100).toFixed(2) + "%"
+	el("progressbar").style.width = percentage
+	el("progresspercent").textContent = percentage
+	el("progresspercent").setAttribute('ach-tooltip', "Percentage to " + googolMilestones[tmp.googol][0] + " antimatter")
 }

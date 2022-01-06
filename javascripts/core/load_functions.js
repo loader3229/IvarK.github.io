@@ -439,6 +439,7 @@ function doNGp3Init1() {
 	tmp.ngp3_mul = tmp.ngp3 && aarMod.newGameMult!== undefined
 	tmp.ngp3_exp = tmp.ngp3 && aarMod.newGameExpVersion !== undefined
 	tmp.ngp3_em = getNGP3EterMilestones()
+	tmp.googol = 0
 
 	setupSaveDataNGP3()
 
@@ -2092,8 +2093,6 @@ function setupNGP31Versions() {
 		player.dilation.studies = []
 	}
 	if (aarMod.ngp3Build < 20210802) PCs.reset()
-	if (aarMod.ngp3Build < 20210802 && Decimal.log10(player.money) >= 2e13) rollback = 1e20
-	if (aarMod.ngp3Build < 20211204 && Decimal.log10(player.money) >= 6e13) rollback = 1e190
 	if (aarMod.ngp3Build < 20211231) {
 		str_save.vibrated = []
 		str.updateTmp()
@@ -2102,6 +2101,8 @@ function setupNGP31Versions() {
 		PCs.respecSet([51, 52, 53, 54], true)
 		PCs.updateTmp()
 	}
+	if (aarMod.ngp3Build < 20220105 && Decimal.log10(player.money) >= 2e13) rollback = 1e20
+	//if (aarMod.ngp3Build < 20211204 && Decimal.log10(player.money) >= 6e13) rollback = 1e190
 
 	welcomeUpdates = []
 	if (aarMod.ngp3Build) {
@@ -2341,7 +2342,7 @@ function delete_save(saveId) {
 
 var ngModeMessages=[]
 function new_game(type) {
-	if (mods.ngmm == 4 && !confirm("Warning: NG-5 is currently in work in progress! It is not recommended to play this mod until a more stable version has been released. However, if you want to help test NG+5, you can disregard this message. You can contribute by talking in the NG-5 channel on the NG+3 Discord Server.")) return
+	if (!type && mods.ngmm == 4 && !confirm("Warning: NG-5 is currently in work in progress! It is not recommended to play this mod until a more stable version has been released. However, if you want to help test NG+5, you can disregard this message. You can contribute by talking in the NG-5 channel on the NG+3 Discord Server.")) return
 
 	save_game(true)
 	clearInterval(gameLoopIntervalId)

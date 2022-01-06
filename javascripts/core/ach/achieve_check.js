@@ -255,7 +255,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (!hasAch("ng3pr13")) {
 		var cond = 0
 		for (var i = 1; i <= 12; i++) {
-			if (enB.pos.charged(i) && enB.pos.chargeEff(i) >= 9) cond++
+			if (enB.pos.charged(i) && enB.pos.chargeEff(i) >= 8) cond++
 			if (cond >= 6) break
 		}
 		if (cond >= 6) giveAchievement("Bursted Em All!")

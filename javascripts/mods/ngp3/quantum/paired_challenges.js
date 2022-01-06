@@ -43,9 +43,9 @@ var PCs = {
 		var data = {
 			row_unls: [null,
 				true,
-				true,
-				true,
-				() => str.unl(),
+				() => PCs_save.lvl >= PCs.lvlReq(21),
+				() => PCs_save.lvl >= PCs.lvlReq(31),
+				() => PCs_save.lvl >= PCs.lvlReq(41) && str.unl(),
 				() => PCs.milestoneDone(83),
 				() => PCs.milestoneDone(83) && fluc.unl() && PCs.lvl >= 14,
 				() => PCs.milestoneDone(83) && fluc.unl() && PCs.lvl >= 18,
@@ -58,7 +58,7 @@ var PCs = {
 				true,
 				() => hasAch("ng3pr12"),
 				() => hasAch("ng3pr12"),
-				() => false //hasAch("ng3pr12")
+				() => fluc.unl()
 			],
 			letters: [null, "A", "B", "C", "D", "Ω1", "Ω2", "Ω3", "Ω4"],
 			all: [],
@@ -117,6 +117,7 @@ var PCs = {
 		PCs_tmp.occupied = []
 		if (PCs_tmp.pick) {
 			var l = PCs_tmp.picked.length + 1
+			var f = PCs_tmp.picked[0]
 			var s = Math.floor(PCs_tmp.pick / 10)
 			var c = PCs_save.challs
 			for (var i = 1; i <= 4; i++) {
@@ -126,8 +127,8 @@ var PCs = {
 					this.occupy(c_a % 10)
 				}
 			}
-			if (PCs_tmp.picked) this.occupy(PCs_tmp.picked[0])
 
+			if (f) this.occupy(f)
 			if (l == 1) {
 				var d = PCs_tmp.used.d1
 				for (var i = 0; i < d.length; i++) this.occupy(d[i])
@@ -135,10 +136,15 @@ var PCs = {
 			if (l == 2) {
 				var d = PCs_tmp.used.d2
 				for (var i = 1; i <= 8; i++) {
-					var p = PCs.sort(i * 10 + PCs_tmp.picked[0])
-					var omega = PCs_tmp.pick >= 50
-					if (!omega == d.includes(p)) this.occupy(i)
+					var p = PCs.sort(i * 10 + f)
+					if (d.includes(p)) this.occupy(i)
 				}
+
+				var p1 = PCs_tmp.used.p1
+				var p2 = PCs_tmp.used.p2
+				var omega = PCs_tmp.pick < 50
+				var p = p1.includes(PCs_tmp.picked[0]) ? p1 : p2
+				for (var i = 1; i <= 8; i++) if (omega == p.includes(i)) this.occupy(i)
 			}
 		}
 
@@ -279,7 +285,7 @@ var PCs = {
 		var base = Number.MAX_VALUE
 		var r = qc1.pow(qc2.log(base) / relDiv)
 
-		var scaling = hasAch("ng3pr16") ? 0.95 : 1
+		var scaling = 1
 		if (str.unl() && str_tmp.effs) scaling /= str_tmp.effs.b2
 
 		var mul = PCs_save.comps.length * Math.max(PCs_save.comps.length / 4, 3) * scaling + //Completion Scaling
@@ -334,11 +340,12 @@ var PCs = {
 	},
 	lvlReq(pc) {
 		let y = Math.floor(pc / 10)
-		if (y > 4 && !this.rowUnl(y)) return 1/0
+		if (y > 4) return this.rowUnl(y) ? 0 : 1/0
 
 		let lvl = pc % 10
 		if (y >= 3) lvl += y * 3 - 1
 		else if (y == 2) lvl += 2
+		return lvl
 	},
 	posUnl(pc) {
 		let y = Math.floor(pc / 10)
@@ -491,6 +498,15 @@ var PCs = {
 		}
 
 		this.showMilestones(PCs_tmp.milestone || 0)
+
+		//Perks
+		el("disable_qc2_perk").style.display = QCs.perkUnl(2) ? "" : "none"
+		el("disable_qc2_perk").textContent = (QCs_save.disable_perks[2] ? "Enable" : "Disable") + " QC2 Perk"
+		for (var i = 1; i <= 8; i++) {
+			el("pc_perk_" + i).className = QCs.perkUnl(i) ? 
+				(QCs.data[i].perkToggle ? "qMs_toggle_" + (!QCs_save.disable_perks[i] ? "on" : "off") : "qMs_reward")
+			: "qMs_locked"
+		}
 	},
 	updateDispOnTick() {
 		if (!PCs_tmp.unl) return
@@ -499,6 +515,11 @@ var PCs = {
 		el("pc_eff1").textContent = "^" + enB.glu.boosterExp(0, true).toFixed(3)
 		el("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
 		el("pc_eff2").textContent = "^" + shorten(getAQGainExp())
+	},
+	updatePerksOnTick() {
+		for (var i = 1; i <= 8; i++) {
+			el("pc_perk_" + i).textContent = QCs.perkUnl(i) ? QCs.data[i].perkDesc(QCs_tmp.perks[i]) : "Locked (" + PCs_tmp.row_comps[i] + " / 4 QC" + i + " combinations)"
+		}
 	},
 	showMilestones(qc) {
 		PCs_tmp.milestone = qc
