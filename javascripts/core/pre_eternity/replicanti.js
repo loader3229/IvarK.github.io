@@ -491,10 +491,17 @@ function updateReplicantiTemp() {
 	data.ln = player.replicanti.amount.ln()
 
 	data.baseChance = Math.round(player.replicanti.chance * 100)
-	if (enB.active("glu", 5)) data.baseChance = Math.pow(data.baseChance, enB_tmp.eff.glu5.exp)
-	if (PCs.milestoneDone(33) && enB_tmp.eff.pos2) data.baseChance = Math.pow(data.baseChance, Math.min(Math.log10(enB_tmp.eff.pos2.mult.log10() / 30 + 1) / 2 + 1, 3))
-	if (str.unl() && str_tmp.effs) data.baseChance = Math.pow(data.baseChance, str_tmp.effs.a3)
-	data.baseChance *= enB.glu[5].adjustChance(data.str)
+	if (tmp.ngp3) {
+		//Normal Boosts
+		let chanceExp = 1
+		if (PCs.milestoneDone(33) && enB_tmp.eff.pos2) chanceExp *= Math.min(Math.log10(enB_tmp.eff.pos2.mult.log10() / 30 + 1) / 2 + 1, 3)
+		if (str.unl() && str_tmp.effs) chanceExp *= str_tmp.effs.a3
+		if (chanceExp > 1) data.baseChance *= Math.pow(data.baseChance / 1e4 + 1, chanceExp - 1)
+
+		//Overpowerful Boosts
+		if (enB.active("glu", 5)) data.baseChance = Math.pow(data.baseChance, enB_tmp.eff.glu5.exp)
+		data.baseChance *= enB.glu[5].adjustChance(data.str)
+	}
 
 	let pow = 1
 	if (hasMTS(265)) pow = getMTSMult(265, "update")
