@@ -231,11 +231,14 @@ function preHiggsNGp3AchieveCheck() {
 	let ableToGetRid6 = ableToGetRid2 && QCs.in(6) && QCs.in(8)
 
 	if (player.meta.bestAntimatter.gte(Number.MAX_VALUE)) giveAchievement("I don't have enough fuel!")
+	if (tmp.quUnl) giveAchievement("Sub-atomic")
 	if (usedQuarks.r.max(usedQuarks.g).max(usedQuarks.b).gt(0) && colorCharge.normal.chargeAmt.eq(0)) giveAchievement("Hadronization")
 	if (player.galaxies >= 1100 && !player.dilation.studies.includes(1)) giveAchievement("No more tax fraud!")
+	if (qu_save.best <= 300) giveAchievement("And the winner is...")
 	if (player.money.gte(getOldAgeRequirement())) giveAchievement("Old age")
 	if (player.infinityPoints.log10() >= 3e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
 
+	if (qMs.tmp.amt >= 21) giveAchievement("Special Relativity")
 	if (QCs.done(3)) giveAchievement("We are not going squared.")
 	if (
 		player.meta.bestAntimatter.gte(Decimal.pow(Number.MAX_VALUE, 2)) &&
@@ -332,10 +335,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.options.secrets && player.options.secrets.ghostlyNews && !player.options.newsHidden) giveAchievement("Two tickers")
 	if (qu_save.breakEternity.did) giveAchievement("Time Breaker")
 	if (mTs.bought >= 48) giveAchievement("The Theory of Ultimate Studies")
-	if (qu_save.best <= 300) giveAchievement("And the winner is...")
-	if (qMs.tmp.amt >= 21) giveAchievement("Special Relativity")
 	if (qu_save.best <= 10) giveAchievement("Quantum doesn't take so long")
-	if (tmp.quUnl) giveAchievement("Sub-atomic")
 }
 
 function atHiggsAchCheck(){
