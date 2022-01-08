@@ -1116,6 +1116,7 @@ var googolMilestones = [
 	//[Name, Exponent]
 	["Googol (10^100)", 100],
 	["Centillion (10^303)", 303],
+	["Faxul (200!)", 374.8968886400403],
 	["Googolchime (10^1,000)", 1e3],
 	["Millillion (10^3,003)", 3003],
 	["Googolbell (10^5,000)", 5e3],

@@ -506,6 +506,7 @@ googolNewsArray = [
 /*GOOGOLOGISMS: NG+3R*/
 ["You have at least Googol (10^100) antimatter!", () => player.money.e >= 100, "g1"],
 ["You have at least Centillion (10^303) antimatter! Infinity time!", () => player.money.e >= 303, "g2"],
+["You have at least Faxul (200!) antimatter!", () => player.money.gte(Decimal.pow(10, 374.8968886400403)), "g20"],
 ["You have at least Googolchime (10^1,000) antimatter! You need at least a larger universe for that.", () => player.money.e >= 1e3, "g3"],
 ["You have at least Millillion (10^3,003) antimatter! It's too big to comprehend this size.", () => player.money.e >= 3003, "g4"],
 ["You have at least Googolbell (10^5,000) antimatter! Now we are getting to ethereal quantites.", () => player.money.e >= 5e3, "g5"],
