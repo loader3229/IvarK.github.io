@@ -2093,6 +2093,7 @@ function setupNGP31Versions() {
 		player.dilation.studies = []
 	}
 	if (aarMod.ngp3Build < 20210802) PCs.reset()
+	if (aarMod.ngp3Build < 20210802 && Decimal.log10(player.money) >= 2e13) rollback = 1e20
 	if (aarMod.ngp3Build < 20211231) {
 		str_save.vibrated = []
 		str.updateTmp()
@@ -2101,7 +2102,6 @@ function setupNGP31Versions() {
 		PCs.respecSet([51, 52, 53, 54], true)
 		PCs.updateTmp()
 	}
-	if (aarMod.ngp3Build < 20220105 && Decimal.log10(player.money) >= 2e13) rollback = 1e20
 	if (aarMod.ngp3Build < 20220106 && Decimal.log10(player.money) >= 6e13) rollback = 1e190
 
 	welcomeUpdates = []
@@ -2824,6 +2824,7 @@ function migrateOldSaves() {
 				localStorage.removeItem("studyTree"+id)
 			}
 		}
+		metaSave.advOpts = false
 	}
 	if (metaSave.version < 2.01) metaSave.presetsOrder_ers = []
 	if (metaSave.version < 2.03) metaSave.advOpts = true
@@ -2831,11 +2832,11 @@ function migrateOldSaves() {
 }
 
 //Save Storage System
-var beta = true
+var beta = false
 var preBeta = false
-var betaId = beta || preBeta ? "062-" : ""
-var correctBetaId = "062-"
-var betaLink = "v0.62-Testing"
+var betaId = beta || preBeta ? "A-" : ""
+var correctBetaId = "A-"
+var betaLink = "Respecced-Alpha"
 
 //Was "ds" before Respecced happened.
 var prefix = "Gds"
