@@ -1,6 +1,6 @@
 function getTickspeedMultiplier() {
-	if (isTickDisabled()) return new Decimal(1)
-	let x = new Decimal(getGalaxyTickSpeedMultiplier())
+	if (isTickDisabled()) return E(1)
+	let x = E(getGalaxyTickSpeedMultiplier())
 	if (tmp.be && qu_save.breakEternity.upgrades.includes(5)) x = x.div(getBreakUpgMult(5))
 	if (tmp.ngC && player.timestudy.studies.includes(25)) x = x.div(tsMults[25]())
 	if (inNC(6, 3)) x = x.add(getTotalDBs() * 1e-3)
@@ -147,14 +147,14 @@ function buyTickSpeed() {
 		player.tickspeed = player.tickspeed.times(tmp.tsReduce)
 		if (player.challenges.includes("postc3") || player.currentChallenge == "postc3" || isIC3Trapped()) player.postC3Reward = player.postC3Reward.times(getIC3Mult())
 	}
-	player.postC8Mult = new Decimal(1)
+	player.postC8Mult = E(1)
 	if (inNC(14) && player.tickspeedBoosts == undefined) player.tickBoughtThisInf.current++
 	player.why = player.why + 1
 	tmp.tickUpdate = true
 	return true
 }
 
-getEl("tickSpeed").onclick = function () {
+el("tickSpeed").onclick = function () {
 	buyTickSpeed()
 };
 
@@ -167,7 +167,7 @@ function resetTickspeed() {
 	if (hasAch("r66")) x *= 0.98
 	if (hasAch("r83")) x = Decimal.pow(0.95, player.galaxies).times(x)
 	if (tmp.ngmR) x = Decimal.pow(1.5, -player.galaxies).times(x)
-	player.tickspeed = new Decimal(x)
+	player.tickspeed = E(x)
 
 	divideTickspeedIC5()
 
@@ -176,12 +176,12 @@ function resetTickspeed() {
 	player.tickspeed = Decimal.pow(getTickspeedMultiplier(), pow).times(player.tickspeed)
 
 	//Tickspeed cost
-	player.tickSpeedCost = new Decimal(1e3)
+	player.tickSpeedCost = E(1e3)
 
 	//Tickspeed cost multiplier
 	let y = 10
 	if (tmp.ngmR) y = ngmR.adjustCostScale(y)
-	player.tickspeedMultiplier = new Decimal(y)
+	player.tickspeedMultiplier = E(y)
 }
 
 function getTickSpeedCostMultiplierIncrease() {
@@ -218,11 +218,11 @@ function buyMaxPostInfTickSpeed(mult) {
 	player.tickspeedMultiplier = player.tickspeedMultiplier.times(Decimal.pow(mi, buying-1))
 	if (!quantum){
 		if (player.money.gte(player.tickSpeedCost)) player.money = player.money.minus(player.tickSpeedCost)
-		else if (player.tickSpeedMultDecrease > 2) player.money = new Decimal(0)
+		else if (player.tickSpeedMultDecrease > 2) player.money = E(0)
 	}
 	player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
 	player.tickspeedMultiplier = player.tickspeedMultiplier.times(mi)
-	player.postC8Mult = new Decimal(1)
+	player.postC8Mult = E(1)
 }
 
 function cannotUsePostInfTickSpeed() {
@@ -245,7 +245,7 @@ function buyMaxTickSpeed() {
 			if (player.challenges.includes("postc3") || player.currentChallenge == "postc3" || isIC3Trapped()) player.postC3Reward = player.postC3Reward.times(Decimal.pow(getIC3Mult(), toBuy))
 		}
 		player.tickSpeedCost = player.tickSpeedCost.times(Decimal.pow(base, toBuy))
-		player.postC8Mult = new Decimal(1)
+		player.postC8Mult = E(1)
 		if (costIncreaseActive(player.tickSpeedCost)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(getTickSpeedCostMultiplierIncrease())
 	}
 	let mult = tmp.tsReduce
@@ -260,7 +260,7 @@ function buyMaxTickSpeed() {
 				player.tickspeed = player.tickspeed.times(mult);
 				if (player.challenges.includes("postc3") || player.currentChallenge == "postc3" || isIC3Trapped()) player.postC3Reward = player.postC3Reward.times(getIC3Mult())
 			}
-			player.postC8Mult = new Decimal(1)
+			player.postC8Mult = E(1)
 			if (!cannotUsePostInfTickSpeed()) buyMaxPostInfTickSpeed(mult);
 		}
 	} else {
@@ -282,7 +282,7 @@ function getTickspeedBeforeSoftcap() {
 }
 
 function getTickspeedBeforePostMults() {
-	let tick = (tmp.ts && tmp.ts.pre1) || new Decimal(1e3)
+	let tick = (tmp.ts && tmp.ts.pre1) || E(1e3)
 
 	if (player.infinityUpgradesRespecced != undefined) {
 		var log = 3 - tick.log10()
@@ -293,12 +293,12 @@ function getTickspeedBeforePostMults() {
 }
 
 function getTickspeed() {
-	if (isTickDisabled() || !tmp.ts) return new Decimal(1e3)
+	if (isTickDisabled() || !tmp.ts) return E(1e3)
 	return Decimal.div(tmp.ts.pre2 || 1e3, tmp.ts.faster || 1)
 }
 
 function getFasterTickspeed() {
-	let x = new Decimal(1)
+	let x = E(1)
 
 	if (player.singularity != undefined) x = x.times(getDarkMatterMult())
 	return x
@@ -340,6 +340,6 @@ function updateTickspeed() {
 
 	if (inNGM(2) && player.tickspeedBoosts == undefined && inNC(14)) {
 		label += "<br>You have " + (308 - player.tickBoughtThisInf.current) + " tickspeed purchases left."
-		getEl("tickSpeedAmount").innerHTML = label
-	} else getEl("tickSpeedAmount").textContent = label
+		el("tickSpeedAmount").innerHTML = label
+	} else el("tickSpeedAmount").textContent = label
 }

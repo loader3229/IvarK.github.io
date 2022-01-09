@@ -5,13 +5,16 @@ function quantum(auto, force, attrs, mode, quick) {
 
 	var data = {}
 	if (mode == "qc") {
-		if ((!QCs.done(1) || player.options.challConf || aarMod.quantumConf) && !quick) {
-			if (!confirm("This performs a forced Quantum reset, but you will be brought into a real challenge. All rebuyables will also be resetted. Are you sure you want to take this challenge down?")) return
+		if (((!QCs.done(1) && !pH.did("fluctuate")) || player.options.challConf || aarMod.quantumConf) && !quick) {
+			if (!confirm("This starts a Quantum run, but nerfs will be applied. Are you sure do you want to conquer it?")) return
 		}
 		data.qc = [attrs.qc]
 		if (QCs_tmp.show_perks) data.mod = "up"
 	}
 	if (mode == "pc") {
+		if (((PCs_save.lvl == 1 && !pH.did("fluctuate")) || player.options.challConf || aarMod.quantumConf) && !quick) {
+			if (!confirm("Starting a Paired Challenge also reduces all Meta Dimensions by ^0.95. Are you sure? Tip: If you are stuck, feel free to exit and reassign it with a different combination.")) return
+		}
 		data.pc = attrs.pc
 		data.qc = PCs.convBack(PCs_save.challs[attrs.pc])
 	}
@@ -63,23 +66,12 @@ function getQKGain(){
 	return quarkGain()
 }
 
-function getQCtotalTime(){
-	return 1 / 0 //Rework coming soon
-}
-
-function getQCtoQKEffect(){
-	var time = getQCtotalTime()
-	var ret = 1 + 192 * 3600 * 10 / time
-	if (ret > 999) ret = 333 * Math.log10(ret + 1)
-	return ret
-}
-
 function getQuantumReqSource() {
 	return tmp.ngp3 ? player.meta.bestAntimatter : player.meta.antimatter
 }
 
 function quarkGain(base) {
-	if (!pH.did("quantum")) return new Decimal(1)
+	if (!pH.did("quantum")) return E(1)
 
 	let ma = getQuantumReqSource().max(1)
 	let maReq = getQuantumReq()
@@ -87,15 +79,17 @@ function quarkGain(base) {
 	if (!tmp.ngp3) return Decimal.pow(10, ma.log(10) / Math.log10(Number.MAX_VALUE) - 1).floor()
 
 	let log = Math.max(ma.div(maReq).log(2) * 5 / 8192, 0)
-	let logExp = 3
-	log = Math.pow(log + 1, logExp) - 1
-
+	log = Math.pow(log + 1, 3) - 1
 	if (enB.active("pos", 11)) log += enB_tmp.eff.pos11.gain.log10()
 	
 	let r = Decimal.pow(10, log)
 	if (!base) {
 		r = r.pow(getAQGainExp(r))
 		if (hasAch("ng3pr16")) r = r.times(3)
+		if (fluc.unl()) {
+			r = Decimal.pow(r.log10(), 10).add(1)
+			r = r.div(Math.min(r.add(1).log10() / 10 + 1, 3))
+		}
 	}
 	return r
 }
@@ -106,25 +100,23 @@ function quarkGainNextAt(qk) {
 	qk = Decimal.add(qk, 1).log10()
 	if (enB.active("pos", 11)) qk -= player.eternityPoints.max(1).log10() * enB_tmp.eff.pos11
 	if (qk > 3 && PCs.unl()) qk = Math.pow(qk / 3, 1 / PCs_tmp.eff2) * 3
-
-	let logExp = 3
-	qk = Math.pow(qk + 1, 1 / logExp) - 1
+	qk = Math.pow(qk + 1, 1 / 3) - 1
 
 	return Decimal.pow(2, qk * 8192 / 5).times(getQuantumReq())
 }
 
 function toggleQuantumConf() {
 	aarMod.quantumConf = !aarMod.quantumConf
-	getEl("quantumConfirmBtn").textContent = "Quantum confirmation: " + (aarMod.quantumConf ? "ON" : "OFF")
+	el("quantumConfirmBtn").textContent = "Quantum confirmation: " + (aarMod.quantumConf ? "ON" : "OFF")
 }
 
-var averageQk = new Decimal(0)
+var averageQk = E(0)
 var bestQk
 function updateLastTenQuantums() {
 	if (!player.meta) return
 	var listed = 0
-	var tempTime = new Decimal(0)
-	var tempQK = new Decimal(0)
+	var tempTime = E(0)
+	var tempQK = E(0)
 	for (var i = 0; i < 10; i++) {
 		if (qu_save.last10[i][1].gt(0)) {
 			var qkpm = qu_save.last10[i][1].dividedBy(qu_save.last10[i][0] / 600)
@@ -135,12 +127,12 @@ function updateLastTenQuantums() {
 				else msg += " in Paired Challenge " + qu_save.last10[i][2][0] + " (QC" + qu_save.last10[i][2][1][0] + "+" + qu_save.last10[i][2][1][1] + ")"
 			}
 			msg += " and gave " + shortenDimensions(qu_save.last10[i][1]) +" aQ. "+ tempstring
-			getEl("quantumrun"+(i+1)).textContent = msg
+			el("quantumrun"+(i+1)).textContent = msg
 			tempTime = tempTime.plus(qu_save.last10[i][0])
 			tempQK = tempQK.plus(qu_save.last10[i][1])
 			bestQk = qu_save.last10[i][1].max(bestQk)
 			listed++
-		} else getEl("quantumrun" + (i + 1)).textContent = ""
+		} else el("quantumrun" + (i + 1)).textContent = ""
 	}
 	if (listed > 1) {
 		tempTime = tempTime.dividedBy(listed)
@@ -148,8 +140,8 @@ function updateLastTenQuantums() {
 		var qkpm = tempQK.dividedBy(tempTime / 600)
 		var tempstring = "(" + rateFormat(qkpm, "aQ") + ")"
 		averageQk = tempQK
-		getEl("averageQuantumRun").textContent = "Average time of the last " + listed + " Quantums: "+ timeDisplayShort(tempTime, false, 3) + " | Average QK gain: " + shortenDimensions(tempQK) + " aQ. " + tempstring
-	} else getEl("averageQuantumRun").textContent = ""
+		el("averageQuantumRun").textContent = "Average time of the last " + listed + " Quantums: "+ timeDisplayShort(tempTime, false, 3) + " | Average QK gain: " + shortenDimensions(tempQK) + " aQ. " + tempstring
+	} else el("averageQuantumRun").textContent = ""
 }
 
 function isQuantumFirst() {
@@ -183,13 +175,13 @@ function doQuantumProgress() {
 		percentage = getQuantumReqSource().log(goal)
 		name = "Percentage until Quantum" + (QCs.inAny() ? " Challenge completion" : "") + " (MA)"
 	}
-	getEl("progresspercent").setAttribute('ach-tooltip', name)
+	el("progresspercent").setAttribute('ach-tooltip', name)
 
 	//Set percentage
 	percentage = Math.min(percentage * 100, 100).toFixed(2) + "%"
-	if (getEl("progressbar").className != className) getEl("progressbar").className = className
-	getEl("progressbar").style.width = percentage
-	getEl("progresspercent").textContent = percentage
+	if (el("progressbar").className != className) el("progressbar").className = className
+	el("progressbar").style.width = percentage
+	el("progresspercent").textContent = percentage
 }
 
 //v2.90142
@@ -208,8 +200,8 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		pH.onPrestige("quantum")
 		pH.updateDisplay()
 		if (tmp.ngp3) {
-			getEl("bestAntimatterType").textContent = "Your best meta-antimatter for this quantum"
-			getEl("quarksAnimBtn").style.display = "inline-block"
+			el("bestAntimatterType").textContent = "Your best meta-antimatter for this quantum"
+			el("quarksAnimBtn").style.display = "inline-block"
 
 			updateMasteryStudyBoughts()
 			updateUnlockedMasteryStudies()
@@ -221,7 +213,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		isEmptiness = false
 		pH.updateDisplay()
 	}
-	getEl("quantumbtn").style.display = "none"
+	el("quantumbtn").style.display = "none"
 
 	// check if forced quantum
 	// otherwise, give rewards
@@ -239,7 +231,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 		if (qu_save.times >= 1e4) giveAchievement("Prestige No-lifer")
 
-		if (hasAch("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
+		if (hasAch("ng3p73")) player.infinitiedBank = c_add(player.infinitiedBank, gainBankedInf())
 	} //bounds the else statement to if (force)
 	var oheHeadstart = tmp.ngp3
 	var keepABnICs = oheHeadstart || hasAch("ng3p51")
@@ -248,11 +240,11 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	updateQuarkDisplay()
 
 	if (player.tickspeedBoosts !== undefined) player.tickspeedBoosts = 0
-	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25);
-	else player.infinityPoints = new Decimal(0);
+	if (hasAch("r104")) player.infinityPoints = E(2e25);
+	else player.infinityPoints = E(0);
 
 	// ng-2 display
-	getEl("galaxyPoints2").innerHTML = "You have <span class='GPAmount'>0</span> Galaxy points."
+	el("galaxyPoints2").innerHTML = "You have <span class='GPAmount'>0</span> Galaxy points."
 
 	/*
 		NEW GAME PLUS 3
@@ -261,13 +253,13 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	// Quantum
 	if (tmp.ngp3) {
 		qMs.update()
-		qu_save.quarkEnergy = new Decimal(0)
+		qu_save.quarkEnergy = E(0)
 		enB.updateTmpOnTick()
 	} else qu_save.gluons = 0;
 
 	// Positrons
 	if (pos.unl()) {
-		pos_save.eng = new Decimal(0)
+		pos_save.eng = E(0)
 		pos_save.swaps = {...pos_tmp.cloud.next}
 	}
 
@@ -355,35 +347,31 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 	player.challenges = challengesCompletedOnEternity()
 	if (getEternitied() < 50) {
-		getEl("replicantidiv").style.display = "none"
-		getEl("replicantiunlock").style.display = "inline-block"
-	} else if (getEl("replicantidiv").style.display === "none" && getEternitied() >= 50) {
-		getEl("replicantidiv").style.display = "inline-block"
-		getEl("replicantiunlock").style.display = "none"
+		el("replicantidiv").style.display = "none"
+		el("replicantiunlock").style.display = "inline-block"
+	} else if (el("replicantidiv").style.display === "none" && getEternitied() >= 50) {
+		el("replicantidiv").style.display = "inline-block"
+		el("replicantiunlock").style.display = "none"
 	}
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
 
 	if (tmp.ngp3) {
-		if (!force) {
-			if (pH.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
-			if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode != "t") rotateAutoUnstable()
-		} //bounds if (!force)
+		if (!force && pH.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 
 		pH.updateActive()
 
-		nanofieldResetOnQuantum()
 		player.eternityBuyer.tpUpgraded = false
 		player.eternityBuyer.slowStopped = false
 		qu_save.notrelative = true
 	} // bounds if tmp.ngp3
 	if (qMs.tmp.amt < 1) {
-		getEl("infmultbuyer").textContent = "Autobuy IP mult: OFF"
-		getEl("togglecrunchmode").textContent = "Auto crunch mode: amount"
-		getEl("limittext").textContent = "Amount of IP to wait until reset:"
+		el("infmultbuyer").textContent = "Autobuy IP mult: OFF"
+		el("togglecrunchmode").textContent = "Auto crunch mode: amount"
+		el("limittext").textContent = "Amount of IP to wait until reset:"
 	}
 	if (!oheHeadstart) {
 		player.autobuyers[9].bulk = Math.ceil(player.autobuyers[9].bulk)
-		getEl("bulkDimboost").value = player.autobuyers[9].bulk
+		el("bulkDimboost").value = player.autobuyers[9].bulk
 	}
 
 	// last few updates
@@ -397,7 +385,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 	updateAutobuyers()
 	if (hasAch("r85")) player.infMult = player.infMult.times(4);
 	if (hasAch("r93")) player.infMult = player.infMult.times(4);
-	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25);
+	if (hasAch("r104")) player.infinityPoints = E(2e25);
 	resetInfDimensions();
 	updateChallenges();
 	updateNCVisuals()
@@ -409,36 +397,36 @@ function quantumReset(force, auto, data, mode, implode = false) {
 		var infchalls = Array.from(document.getElementsByClassName('infchallengediv'))
 		for (var i = 0; i < infchalls.length; i++) infchalls[i].style.display = "none"
 	}
-	GPminpeak = new Decimal(0)
-	IPminpeak = new Decimal(0)
+	GPminpeak = E(0)
+	IPminpeak = E(0)
 	EPminpeakType = 'normal'
-	EPminpeak = new Decimal(0)
-	QKminpeak = new Decimal(0)
-	QKminpeakValue = new Decimal(0)
+	EPminpeak = E(0)
+	QKminpeak = E(0)
+	QKminpeakValue = E(0)
 	updateAutobuyers()
 	updateMilestones()
 	resetTimeDimensions()
 	if (oheHeadstart) {
-		getEl("replicantiresettoggle").style.display = "inline-block"
+		el("replicantiresettoggle").style.display = "inline-block"
 		skipResets()
 	} else {
 		hideDimensions()
-		if (tmp.ngp3) getEl("infmultbuyer").textContent="Max buy IP mult"
-		else getEl("infmultbuyer").style.display = "none"
+		if (tmp.ngp3) el("infmultbuyer").textContent="Max buy IP mult"
+		else el("infmultbuyer").style.display = "none"
 		hideMaxIDButton()
-		getEl("replicantidiv").style.display="none"
-		getEl("replicantiunlock").style.display="inline-block"
-		getEl("replicantiresettoggle").style.display = "none"
+		el("replicantidiv").style.display="none"
+		el("replicantiunlock").style.display="inline-block"
+		el("replicantiresettoggle").style.display = "none"
 		delete player.replicanti.galaxybuyer
 	}
 	var shortenedIP = shortenDimensions(player.infinityPoints)
-	getEl("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenedIP + "</span> Infinity points."
-	getEl("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenedIP + "</span> Infinity points."
+	el("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenedIP + "</span> Infinity points."
+	el("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenedIP + "</span> Infinity points."
 	updateEternityUpgrades()
-	getEl("totaltickgained").textContent = "You've gained "+player.totalTickGained.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
+	el("totaltickgained").textContent = "You've gained "+player.totalTickGained.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
 	hideDimensions()
 	tmp.tickUpdate = true
-	getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
+	el("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
 	updateTheoremButtons()
 	updateTimeStudyButtons()
 	updateDilationUpgradeCosts()
@@ -447,7 +435,7 @@ function quantumReset(force, auto, data, mode, implode = false) {
 
 	Marathon2 = 0;
 	setInitialMoney()
-	getEl("quantumConfirmBtn").style.display = "inline-block"
+	el("quantumConfirmBtn").style.display = "inline-block"
 }
 
 function handleDispOnQuantum(bigRip, prestige) {
@@ -457,36 +445,36 @@ function handleDispOnQuantum(bigRip, prestige) {
 	if (!tmp.ngp3) return
 
 	let keepECs = qMs.tmp.amt >= 2
-	if (!keepECs && getEl("eternitychallenges").style.display == "block") showChallengesTab('normalchallenges')
+	if (!keepECs && el("eternitychallenges").style.display == "block") showChallengesTab('normalchallenges')
 
 	let keepDil = player.dilation.studies.includes(1)
-	if (!keepDil && getEl("dilation").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display=="block")
+	if (!keepDil && el("dilation").style.display == "block") showEternityTab("timestudies", el("eternitystore").style.display=="block")
 
 	let keepMDs = keepDil && qMs.tmp.amt >= 6
-	if (!keepMDs && getEl("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
+	if (!keepMDs && el("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
 
 	let keepMSs = mTs.unl()
-	getEl("masterystudyunlock").style.display = keepMSs ? "" : "none"
-	getEl("respecMastery").style.display = keepMSs ? "block" : "none"
-	getEl("respecMastery2").style.display = keepMSs ? "block" : "none"
+	el("masterystudyunlock").style.display = keepMSs ? "" : "none"
+	el("respecMastery").style.display = keepMSs ? "block" : "none"
+	el("respecMastery2").style.display = keepMSs ? "block" : "none"
 	if (keepMSs) drawMasteryTree()
 	else {
 		performedTS = false
-		if (getEl("masterystudies").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
+		if (el("masterystudies").style.display == "block") showEternityTab("timestudies", el("eternitystore").style.display != "block")
 	}
 
-	enB.updateUnlock()
-
 	if (tmp.quActive) {
+		enB.updateUnlock()
+
 		let keepPos = pos.unl()
 		let keepStr = str.unl()
 
-		getEl("positronstabbtn").style.display = keepPos ? "" : "none"
-		getEl("stringstabbtn").style.display = keepStr ? "" : "none"
+		el("positronstabbtn").style.display = keepPos ? "" : "none"
+		el("stringstabbtn").style.display = keepStr ? "" : "none"
 		str.updateDisp()
 	
-		if (!keepPos && getEl("positrons").style.display == "block") showQuantumTab("uquarks")
-		if (!keepStr && getEl("strings").style.display == "block") showQuantumTab("uquarks")
+		if (!keepPos && el("positrons").style.display == "block") showQuantumTab("uquarks")
+		if (!keepStr && el("strings").style.display == "block") showQuantumTab("uquarks")
 	}
 }
 
@@ -495,17 +483,17 @@ function handleDispOutOfQuantum(bigRip) {
 	let keepQCs = keepQuantum && QCs.unl()
 	let keepPCs = keepQuantum && PCs.unl()
 	let keepBE = false
-	let keepRC = keepQuantum && QCs_tmp.qc1 && QCs_save.qc1.last && QCs_save.qc1.last.length >= 1
+	let keepRC = keepQuantum && (QCs.done(1) || pH.did("fluctuate")) && QCs_save.qc1.last && QCs_save.qc1.last.length >= 1
 
-	if (!keepQCs && getEl("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
-	if (!keepPCs && getEl("pairedChalls").style.display == "block") showChallengesTab("normalchallenges")
-	if (!keepBE && getEl("breakEternity").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
-	if (!keepRC && getEl("lasttencompressors").style.display == "block") showStatsTab("stats")
+	if (!keepQCs && el("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
+	if (!keepPCs && el("pairedChalls").style.display == "block") showChallengesTab("normalchallenges")
+	if (!keepBE && el("breakEternity").style.display == "block") showEternityTab("timestudies", el("eternitystore").style.display != "block")
+	if (!keepRC && el("lasttencompressors").style.display == "block") showStatsTab("stats")
 
-	getEl("qctabbtn").parentElement.style.display = keepQCs ? "" : "none"
-	getEl("pctabbtn").parentElement.style.display = keepPCs ? "" : "none"
-	getEl("breakEternityTabbtn").style.display = keepBE ? "" : "none"
-	getEl("pastcompressors").style.display = keepRC ? "" : "none"
+	el("qctabbtn").parentElement.style.display = keepQCs ? "" : "none"
+	el("pctabbtn").parentElement.style.display = keepPCs ? "" : "none"
+	el("breakEternityTabbtn").style.display = keepBE ? "" : "none"
+	el("pastcompressors").style.display = keepRC ? "" : "none"
 }
 
 function handleQuantumDisplays(prestige) {
@@ -523,19 +511,15 @@ function handleQuantumDisplays(prestige) {
 
 	QCs.updateDisp()
 
-	updateTODStuff()
 	updateBreakEternity()
 }
 
 function updateQuarkDisplay() {
 	let msg = ""
 	if (pH.did("quantum")) {
-		msg += "You have <b class='QKAmount'>"+shortenDimensions(qu_save.quarks)+"</b> "	
-		if (tmp.ngp3&&player.masterystudies.includes("d14")) msg += " aQ and <b class='SSAmount'>" + shortenDimensions(qu_save.bigRip.spaceShards) + "</b> Space Shard" + (qu_save.bigRip.spaceShards.round().eq(1) ? "" : "s")
-		else msg += "anti-Quark" + (qu_save.quarks.round().eq(1) ? "" : "s")
-		msg += "."
+		msg += "You have <b class='QKAmount'>"+shortenDimensions(qu_save.quarks)+"</b> anti-Quark" + (qu_save.quarks.round().eq(1) ? "" : "s") + "."
 	}
-	getEl("quarks").innerHTML=msg
+	el("quarks").innerHTML=msg
 }
 
 function metaReset2() {

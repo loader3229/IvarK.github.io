@@ -5,9 +5,10 @@
 <head>
 	<title>Antimatter Dimensions</title>
 	<link rel="icon" type="image/png" href="icon.png">
-	<meta name="Antimatter Dimensions" content="A game about huge numbers and watching them go up." charset="utf-8"/>
+	<meta name="AD: Aarex's Mods" content="A modification site of Antimatter Dimensions created by Aarex." charset="utf-8"/>
 	<script type="text/javascript" src="javascripts/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="javascripts/core/getel.js"></script>
+	<script type="text/javascript" src="javascripts/core/helper.js"></script>
+	<script type="text/javascript" src="javascripts/core/compatibility.js"></script>
 	<script type="text/javascript" src="javascripts/notify.js"></script>
 	<link rel="stylesheet" type="text/css" href="stylesheets/styles.css?12">
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
@@ -20,6 +21,7 @@
 <body id="body" style="height: 95vh; " onload="initGame()">
 	<div id='ghostlyNewsTicker'><span id='ghostlyNewsTickerText'></span></div>
 	<div style="display:none;position:fixed;left:0;top:0"><textarea id="output" style="color:black; width: 200px; height: 55px;"></textarea></div>
+	<div id="bg" style="display: none"></div>
 	<div id="container" class="container" style="color:#4F5957; font-family: Typewriter; text-align:center; font-size: 11px; display:none">
 		<div id='ghostlyNewsTickerBlock'></div>
 		<div id='game' style='display:none'>
@@ -73,8 +75,10 @@
 			</button>
 		</div>
 		<div style="position: relative">
-			<div id="fluctuateEmpty"></div>
-			<button id="fluctuateReset" class="storebtn" onclick="alert('This layer isn\'t implemented yet! However, it is currently work in progress. Import your save into the test server to see Fluctuate early! ~ Aarex')">See the wonders of Quantum...</button>
+			<div id="fluctuateInfo">
+				You have <b class="flucEne" id='fluctuantEnergy'>0</b> Fluctuant Energy.
+			</div>
+			<button id="fluctuateReset" class="storebtn" onclick="fluc.reset()">Fluctuate the Quantum Mechanics for 1 Energy.</button>
 		</div>
 		<div style="position: relative">
 			<div id="ghostparticles">
@@ -136,7 +140,7 @@
 			<button id="irTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="interrealitybtn" onclick='showTab("irTab")'>Interreality</button>
 			<button id="sgTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="singularitybtn" onclick='showTab("sgTab")'>Singularity</button>
 			<button id="quantumtabbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="quantumbtn" onclick='showTab("quantumtab")'>Quantum</button>
-			<button id="fluctuateBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="fluctuatebtn">Fluctuate</button>
+			<button id="fluctuateBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="fluctuatebtn" onclick='showTab("flucTab")'>Fluctuate</button>
 			<button id="ghostifytabbtn" style="font-family: Typewriter; font-size: 20px" class="ghostifybtn" onclick='showTab("ghostify")'>Ghostify</button>
 		</div>
 		<div id="emptiness" class="tab" style="font-size: 150%">
@@ -745,7 +749,6 @@
 					<p id="xdp">You have <span id="exDilationAmount" style="font-size:35px; color: black">0</span> ex-dilation, <span id="exDilationDesc"></span></p>
 				</div>
 				<p id='bestTP'></p>
-				<p id='bestTPOverGhostifies'></p>
 				<table>
 					<tr>
 						<td>
@@ -1065,7 +1068,7 @@
 					<td id="tdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('timedimensions')">Time Dimensions</button></td>
 					<td id="pdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('pdims')">Paradox Dimensions</button></td>
 					<td id="mdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('metadimensions')">Meta Dimensions</button></td>
-					<td id="gdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('gdims')">Gravity Dimensions</button></td>
+					<td id="fdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('fdims')">Fluctuant Dimensions</button></td>
 					<td id="prodtabbtn"><button class="secondarytabbtn" onclick="showDimTab('production')">Production</button></td>
 				</tr>
 			</table>
@@ -1103,6 +1106,14 @@
 						</td>
 						<td>
 							<button id="secondSoftReset" style="color:black; width: 200px; height: 35px; font-size: 9px" class="storebtn">Lose all your previous progress, but get a tickspeed boost</button>
+						</td>
+					</tr>
+					<tr id="theSingularity" style="font-size: 15px">
+						<td id="theSingularityLabel" style="text-align: center">
+							The Singularity: ^10 Galaxy Power
+						</td>
+						<td>
+							<button id="theSingularityBtn" style="color:black; width: 200px; height: 35px; font-size: 9px" class="storebtn">:[ ee180 ANTIMATTER + ^100 POWER REQUIRED TO ASCEND ]:</button>
 						</td>
 					</tr>
 				</table>
@@ -1296,87 +1307,103 @@
 				<button id="metaboostauto" style="width:160px; height: 30px; font-size: 12px" onclick="toggleAutoEter('metaboost')" class="storebtn">Toggle all ON/OFF</button>
 				<button id="toggleallmetadims" style="width:300px; height: 30px; font-size: 12px" onclick="toggleAllMetaDims()" class="storebtn">Toggle all meta-dims autobuyer ON/OFF</button>
 			</div>
-			<div id="gdims" class="dimtab">
-				<button class="gluonupgrade bl" onclick="teleportToBL()">Teleport to Bosonic Lab.</button>
+			<div id="fdims" class="dimtab">
+				You made <span class="flucEne" id="fd_ds" style="font-size: 15px">0</span> Dimensional Shards from Fluctating.<br>
+				You have <span class="flucEne" id="fd_me" style="font-size: 25px">0.00</span> Metastable Energy, which is translated to
+				<b class="flucEne" id="fd_eff_rep" style="font-size: 35px">^1.00</b> to potential Replicantis and <b class="QKAmount" id="fd_eff_qe" style="font-size: 35px">^1.00</b> to Quantum Power.
 				<br>
-				<table style="font-size: 15px; width: 100%">
-					<tr>
-						<td id="gvCell" colspan=3 style="text-align: center; width: 60%">
-							You have <span id="gv" style="font-size: 35px">0.0</span> Gravitons. <span id="gvRate" style="font-size: 25px">+0.0/s</span><br>
-							You have <span id="gdWatt" style="font-size: 25px">0.00</span>x Bosonic Speed, which boosts all Gravity Dimensions by <span id="gdMult" style="font-size: 25px">1.00</span>x before exponents.
-						</td>
-						<td rowspan=12 style="text-align: center; vertical-align: 0; width: 40%">
-							The Gravity Well produced <span id="gvPow" style="font-size: 35px"></span> <span id="gvPowScaling"></span> from your Gravitons and Gravity Radiation.
-							<span id="gvNoPow"><br>(You will start getting Power at <span id="gvPowStart"></span> Gravitons)</span>
-							Multiplied by <span id="gvEneMult" style="font-size: 25px"></span>, it currently contains <span id="gvEne" style="font-size: 25px"></span> Energy, which translates to:
-							<br>
-							<table id="gvBoosts" style="width: 100%"></table>
-							<table style="width: 100%"><tr>
-								<td>Charge: <span class="gvBoost" id="gvCharge">0.00%</span> stronger</td>
-								<td style="text-align: right"><button class="storebtn" id="gvUncharge" onclick="GDs.unchargeBoost()">Uncharge</button></td>
-							</tr>
-							<tr>
-								<td colspan=2 style="vertical-align: 0">
-									Supercharge: <span class="gvBoost" id="gvSupercharge">0.00%</span> stronger<br>
-									<b class="warning">WARNING!</b> <b>This requires you to reduce the universe to Planck Scale!</b><br>
-									(requires <span id="plReq"></span>)
-								</td>
-							</tr>
-							</table>
-						</td>
-					</tr>
-					<tr id="gd1Row">
-						<td id="gd1"></td>
-						<td id="gd1Amount" style="text-align: right"></td>
-					</tr>
-					<tr id="gd2Row">
-						<td id="gd2"></td>
-						<td id="gd2Amount" style="text-align: right"></td>
-					</tr>
-					<tr id="gd3Row">
-						<td id="gd3"></td>
-						<td id="gd3Amount" style="text-align: right"></td>
-					</tr>
-					<tr id="gd4Row">
-						<td id="gd4"></td>
-						<td id="gd4Amount" style="text-align: right"></td>
-					</tr>
-					<tr>
-						<td id="gdBoostDesc">
-							Gravity Dimension Shift (0 + 0): Requires ??? Gravity Radiation
-						</td>
-						<td style="text-align: right">
-							<button class="storebtn" id="gdBoost" style="width: 240px" onclick="GDs.gdBoost()">Unlock a new Dimension</button>
-						</td>
-					</tr>
-					<tr>
-						<td id="extraGDB" colspan=2>
-							Next extra Gravity Dimension Shift / Boost is at ??? Higgs Bosons
-						</td>
-					</tr>
-					<tr>
-						<td id="grCell" colspan=3 style="text-align: center">
-							You have <span id="gr" style="font-size: 25px">0.0</span> Gravity Radiation.<br>
-							You have <span id="rdTick" style="font-size: 25px">0</span> Radiation Ticks.
-							<span id="rdNextTickDiv">Next at <span id="rdNextTick" style="font-size: 25px">Infinite</span>x Bosonic Speed.</span>
-						</td>
-					</tr>
-					<tr>
-						<td>First Radiation Dimension</td>
-						<td id="rd1Amount" style="text-align: right"></td>
-					</tr>
-					<tr>
-						<td>Second Radiation Dimension</td>
-						<td id="rd2Amount" style="text-align: right"></td>
-					</tr>
-					<tr>
-						<td>Third Radiation Dimension</td>
-						<td id="rd3Amount" style="text-align: right"></td>
-					</tr>
-					<tr>
-						<td>Fourth Radiation Dimension</td>
-						<td id="rd4Amount" style="text-align: right"></td>
-					</tr>
+				<button class="storebtn" style="font-size: 12px" onclick="FDs.maxAll()">Max All</button>
+				<table>
+					<tbody>
+					  <tr id="fd1_row" style="font-size: 17px">
+						  <td id="fd1" class="rel">
+							  First Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd1_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd1_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(1)">Cost: 1 DS</button>
+						  </td>
+					  </tr>
+					  <tr id="fd2_row" style="font-size: 17px">
+						  <td id="fd2" class="rel">
+							  Second Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd2_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd2_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(2)">Cost: 2 DS</button>
+						  </td>
+					  </tr>
+					  <tr id="fd3_row" style="font-size: 17px">
+						  <td id="fd3" class="rel">
+							  Third Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd3_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd3_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(3)">Cost: 3 DS</button>
+						  </td>
+					  </tr>
+					  <tr id="fd4_row" style="font-size: 17px">
+						  <td id="fd4" class="rel">
+							  Fourth Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd4_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd4_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(4)">Cost: 4 DS</button>
+						  </td>
+					  </tr>
+					  <tr id="fd5_row" style="font-size: 17px">
+						  <td id="fd5" class="rel">
+							  Fifth Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd5_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd5_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(5)">Cost: 5 DS</button>
+						  </td>
+					  </tr>
+					  <tr id="fd6_row" style="font-size: 17px">
+						  <td id="fd6" class="rel">
+							  Sixth Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd6_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd6_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(6)">Cost: 6 DS</button>
+						  </td>
+					  </tr>
+					  <tr id="fd7_row" style="font-size: 17px">
+						  <td id="fd7" class="rel">
+							  Seventh Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd7_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd7_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(7)">Cost: 7 DS</button>
+						  </td>
+					  </tr>
+					  <tr id="fd8_row" style="font-size: 17px">
+						  <td id="fd8" class="rel">
+							  Eighth Fluctuant Dimension x1.00
+						  </td>
+						  <td>
+							  <div id="fd8_amt">0</div>
+						  </td>
+						  <td align="right" width="10%">
+							  <button id="fd8_buy" style="color:black; width: 195px; height: 30px" class="storebtn" onclick="FDs.buy(8)">Cost: 8 DS</button>
+						  </td>
+					  </tr>
+					</tbody>
 				</table>
 			</div>
 			<div id="production" class="dimtab">
@@ -1396,7 +1423,7 @@
 		<div id="options" class="tab" align="center">
 			<table class="table" align="center" style="margin: auto">
 				<tr>
-					<td><button class="secondarytabbtn" onclick="showOptionTab('saving')">Saves</button></td>
+					<td><button class="secondarytabbtn" onclick="showOptionTab('saving')">Saving</button></td>
 					<td><button class="secondarytabbtn" onclick="showOptionTab('displays')">Displays</button></td>
 					<td><button class="secondarytabbtn" onclick="showOptionTab('otheroptions')">Other Options</button></td>
 					<td id="lstabbtn"><button class="secondarytabbtn" onclick="showOptionTab('light_speed')">Light Speed</button></td>
@@ -1408,42 +1435,47 @@
 				<table>
 					<tr>
 						<td><div><button id="save" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Save</button></div></td>
-						<td><div><button id="load" class="storebtn" onclick='load_saves()' style="color:black; width: 200px; height: 55px; font-size: 20px">Load</button></div></td>
-						<td><div><button id="rename" class="storebtn" onclick='rename_save()' style="color:black; width: 200px; height: 55px; font-size: 20px">Rename</button></div></td>
-					</tr>
-					<tr>
 						<td><div><button id="exportbtn" class="storebtn" onclick='export_save()' style="color:black; width: 200px; height: 55px; font-size: 20px">Export</button></div></td>
+						<td><div><button id="exportbtn" class="storebtn" onclick='exporty()' style="color:black; width: 200px; height: 55px; font-size: 18px">Export into file</button></div></td>
 						<td><div><button id="importbtn" class="storebtn" onclick='import_save("current")' style="color:black; width: 200px; height: 55px; font-size: 20px">Import</button></div></td>
+					</tr>
+					<tr>
 						<td><div><button id="autoSave" onclick='toggleAutoSave()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
+						<td></td>
+						<td></td>
+						<td><div><button id="load" class="storebtn" onclick='load_saves()' style="color:black; width: 200px; height: 55px; font-size: 20px">Load</button></div></td>
 					</tr>
 					<tr>
-						<td><div><button onclick="pauseGame()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 8px"><p id="pauseStatus" style="font-size:20px">Pause</p>(Stops all time, production, and automation)</button></div></td>
-						<td><div><button onclick='reload()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 8px"><p style="font-size: 20px">Rollback</p>(to last save point)</button></div></td>
-						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="autoSaveInterval">Auto-save interval: 30s</b><input id="autoSaveIntervalSlider" style="width: 170px;" type="range" min="15" max="120" value="30" class="slider" oninput="changeAutoSaveInterval()"></div></td>
+						<td colspan=4><br><hr></td>
 					</tr>
 					<tr>
+						<td><div class="storebtn" id="autoSaveIntDiv" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="autoSaveInterval">Auto-save interval: 30s</b><input id="autoSaveIntervalSlider" style="width: 170px;" type="range" min="15" max="120" value="30" class="slider" oninput="changeAutoSaveInterval()"></div></td>
 						<td><div><button id="offlineProgress" onclick='toggleOfflineProgress()' class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button></div></td>
-						<td><div><button id="reset" onclick="reset_game()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">RESET THE GAME</button></div></td>
-						<td></td>
+						<td><div><button id="rename" class="storebtn" onclick='rename_save()' style="color:black; width: 200px; height: 55px; font-size: 20px">Rename</button></div></td>
+						<td><div><button onclick="pauseGame()" class="storebtn" id="pause" style="color:black; width: 200px; height: 55px; font-size: 8px"><p id="pauseStatus" style="font-size:20px">Pause</p>(Stops all time, production, and automation)</button></div></td>
 					</tr>
 					<tr>
-						<td><div><button id="bugExport" onclick="bugExport()" class="storebtn" style="color:black; width:200px; height:55px; font-size:12px; display:none">Export "Infinite" bug save<br><b>(WARNING: This disappears when you reload the game!)</button></b></div></td>
+						<td colspan=4><br><hr></td>
+					</tr>
+					<tr>
 						<td><div><button id="convertSave" onclick="convertSave(convert)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px"></button></div></td>
-						<td></td>
+						<td><div><button id="bugExport" onclick="bugExport()" class="storebtn" style="color:black; width:200px; height:55px; font-size:12px; display:none">Export "Infinite" bug save<br><b>(WARNING: This disappears when you reload the game!)</button></b></div></td>
+						<td><div><button onclick='reload()' class="storebtn" id="reload" style="color:black; width: 200px; height: 55px; font-size: 8px"><p style="font-size: 20px">Rollback</p>(to last save point)</button></div></td>
+						<td><div><button id="reset" onclick="reset_game()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">RESET THE GAME</button></div></td>
 					</tr>
 				</table>
 			</div>
 			<div class='optionstab' id='displays' style='display:none'>
 				<table>
 					<tr>
-						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size: 130%; text-align: center"><b id="renderrate">Render rate: 1 tick</b><input id="renderrateslider" style="width: 170px;" type="range" min="1" max="20" value="1" class="slider"></div></td>
 						<td><div><button id="theme" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 12px" onclick="showOptions('thememenu')"></button></div></td>
-						<td><div><button onclick="showOptions('visibilityoptions')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide stuff</button></div></td>
+						<td><div><button onclick="showOptions('visibilityoptions')" class="storebtn" id="visibilityOpts" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide stuff</button></div></td>
+						<td><div class="storebtn" id="renderrate_div" style="color:black; width: 198px; height: 55px; font-size: 130%; text-align: center"><b id="renderrate">Render rate: 1 tick</b><input id="renderrateslider" style="width: 170px;" type="range" min="1" max="20" value="1" class="slider"></div></td>
 					</tr>
 					<tr>
-						<td><div><button id="animationoptionsbtn" class="storebtn" onclick="showOptions('animationoptions')" style="color:black; width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
+						<td></td>
 						<td><div><button id="layerDispOptions" onclick="showOptions('layervisibilitymenu')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide layers</button></div></td>
-						<td><div><button id="tabsSave" onclick="toggleTabsSave()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button></div></td>
+						<td><div><button id="animationoptionsbtn" class="storebtn" onclick="showOptions('animationoptions')" style="color:black; width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
 					</tr>
 					<tr>
 						<td><div><button id="notation" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:10px" onclick="showOptions('notationmenu')"></button></div></td>
@@ -1474,6 +1506,11 @@
 						<td><div><button id="retry" onclick="toggleChallengeRetry()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%"></button></div></td>
 						<td><div><button id="maxHighestTD" onclick="maxHighestTD()" class="storebtn" style="color:black; width: 200px; height: 55px"></button></div></td>
 						<td><div><button id="autoApply" onclick="updateAutoApplyDisp(true)" class="storebtn" style="color:black; width: 200px; height: 55px">Auto-apply changes: ON</button></div></td>
+					</tr>
+					<tr>
+						<td><div><button id="tabsSave" onclick="toggleTabsSave()" class="storebtn" style="color:black; width: 200px; height: 55px"></button></div></td>
+						<td><div><button ach-tooltip="Shows more options for Antimatter Dimensions, but less significant." id="advOpts" onclick="updateAdvOpts(true)" class="storebtn" style="color:black; width: 200px; height: 55px">Advanced Options: ON</button></div></td>
+						<td></td>
 					</tr>
 				</table>
 			</div>
@@ -1530,8 +1567,8 @@
 				<p id='versionDescCreator'>Created by Aarex.</p>
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
-				<p id='versionDescBeta'>(Beta v0.612: String Rebalancing)</p>
-				<p class="warning" id='versionDescAlpha'>(10/7/21a Pre-Alpha Build)</p>
+				<p id='versionDescBeta'>(Beta v0.62: String Manifold)</p>
+				<p class="warning" id='versionDescAlpha'>(1/7/22a Alpha Build)</p>
 				<b class="warning" id='warningBeta'>THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
 				<br>
@@ -1839,7 +1876,7 @@
 							<div id="To infinity!" class="achievement achievementlocked" style="background-image: url(images/9.png)" ach-tooltip="Reach Infinite antimatter. Reward: Start with 100 antimatter."><br></div>
 						</td>
 						<td id="r22">
-							<div id="Fake News" class="achievement achievementlocked" style="background-image: url(images/25.png)" ach-tooltip="Encounter 50 different news messages."><br></div>
+							<div id="Fake News" class="achievement achievementlocked" style="background-image: url(images/25.png)" ach-tooltip=""><br></div>
 						</td>
 						<td>
 							<div id="The 9th Dimension is a lie" class="achievement achievementlocked" style="background-image: url(images/11.png)" ach-tooltip="Have exactly 99 Eighth Dimensions. Reward: Eighth Dimensions are 10% stronger."><br></div>
@@ -2174,7 +2211,7 @@
 						</tr>
 						<tr id="achRowngpp1">
 							<td>
-								<div id="I'm so meta" class="achievement achievementlocked" style="background-image: url(images/97.png)" ach-tooltip="Unlock Meta Dimensions. Reward: TS121 and TS122's multipliers are always 50x EP."><br></div>
+								<div id="I'm so meta" class="achievement achievementlocked" style="background-image: url(images/97.png)" ach-tooltip="Unlock Meta Dimensions."><br></div>
 							</td>
 							<td>
 								<div id="And still no ninth dimension..." class="achievement achievementlocked" style="background-image: url(images/98.png)" ach-tooltip="Buy a Eighth Meta Dimension. Reward: All Meta Dimensions are 10% stronger, and you start with 100 meta-antimatter on reset."><br></div>
@@ -2236,7 +2273,7 @@
 								<div id="Old memories come true" class="achievement achievementlocked" style="background-image: url(images/ng3p/24.png)"><br></div>
 							</td>
 							<td>
-								<div id="Twice in a row" class="achievement achievementlocked" style="background-image: url(images/ng3p/25.png)" ach-tooltip="Complete 3 Paired Challenge completions. Reward: Unlock Quantum Challenge 8, and unlock auto-presets and auto-completions for Quantum Challenges."><br></div>
+								<div id="Twice in a row" class="achievement achievementlocked" style="background-image: url(images/ng3p/25.png)" ach-tooltip="Complete 3 Paired Challenge completions. Reward: Unlock QC8 + automation for QCs, and keep 25 MP milestone permanently."><br></div>
 							</td>
 							<td>
 								<div id="Infinity Morals" class="achievement achievementlocked" style="background-image: url(images/ng3p/26.png)"><br></div>
@@ -2256,13 +2293,13 @@
 								<div id="Completing the Quantum" class="achievement achievementlocked" style="background-image: url(images/ng3p/32.png)" ach-tooltip="Unlock Strings. Reward: Charging requires 20% + 2 less."></div>
 							</td>
 							<td>
-								<div id="Bursted Em All!" class="achievement achievementlocked" style="background-image: url(images/ng3p/33.png)" ach-tooltip="Charge 6 Positronic Boosts with at least 9x multiplier. Reward: Non-charged boosts are slightly charged."></div>
+								<div id="Bursted Em All!" class="achievement achievementlocked" style="background-image: url(images/ng3p/33.png)" ach-tooltip="Charge 6 Positronic Boosts with at least 8x multiplier. Reward: Non-charged boosts are slightly charged."></div>
 							</td>
 							<td>
 								<div id="The Power of Science!" class="achievement achievementlocked" style="background-image: url(images/ng3p/34.png)" ach-tooltip="Reach ^1 Quantum efficiency. Reward: You gain 10% more Quantum Power and add +0.5x charge multiplier."></div>
 							</td>
 							<td>
-								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/ng3p/35.png)" ach-tooltip="Complete all milestones with 3 combinations. PC goals increase 11% slower from PC combinations."></div>
+								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/ng3p/35.png)" ach-tooltip="Complete all milestones with 3 combinations."></div>
 							</td>
 							<td>
 								<div id="I can't get my multipliers higher!" class="achievement achievementlocked" style="background-image: url(images/ng3p/36.png)"><br></div>
@@ -2274,33 +2311,32 @@
 								<div id="Get rid of you by yourself..." class="achievement achievementlocked" style="background-image: url(images/ng3p/38.png)"></div>
 							</td>
 						</tr>
-						<tr id="achRowng3p3">
+						<!--<tr id="achRowng3p3">
 							<td>
-								<div id="ERROR 500: INTERNAL DIMENSION ERROR" class="achievement achievementlocked" style="background-image: url(images/127.png)"></div>
+								<div id="ERROR 500: INTERNAL DIMENSION ERROR" class="achievement achievementlocked" style="background-image: url(images/ng3p/41.png)" ach-tooltip="Reach Quantum without 2nd - 8th Meta Dimensions while in QC3. Reward: Fluctuant Dimensions produce 50% faster."></div>
 							</td>
 							<td>
-								<div id="Fluctuate Reached!" class="achievement achievementlocked" style="background-image: url(images/128.png)" ach-tooltip="(Temporary name) Reach Fluctuate."></div>
+								<div id="Feel the Momentum" class="achievement achievementlocked" style="background-image: url(images/ng3p/42.png)" ach-tooltip="Fluctuate. Reward: Keep your dilation upgrade autobuyer, and anti-Quarks are greatly stronger, but you gain less aQ."></div>
 							</td>
 							<td>
-								<div id="Never make paradoxes!" class="achievement achievementlocked" style="background-image: url(images/129.png)"></div>
+								<div id="Never make paradoxes!" class="achievement achievementlocked" style="background-image: url(images/ng3p/43.png)" ach-tooltip="Get 1 String Power less than -1.5. Reward: +3 Milestone Points, and Replicanti Compressors only reduces Replicantis."></div>
 							</td>
 							<td>
-								<div id="ng3p34" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
+								<div id="String Eversion" class="achievement achievementlocked" style="background-image: url(images/ng3p/44.png)" ach-tooltip="Get 2 positive String Powers greater than 2.5. Reward: You gain 20% more Vibration Energy."></div>
 							</td>
 							<td>
-								<div id="ng3p35" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
+								<div id="Bullseye!" class="achievement achievementlocked" style="background-image: url(images/ng3p/45.png)" ach-tooltip="Get 1 String Power between -1 and -0.8. Reward: ^1.02 to Quantum Power. (limits to ^3)"></div>
 							</td>
 							<td>
-								<div id="ng3p36" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)"></div>
+								<div id="MAXIMUM OVERCHARGE" class="achievement achievementlocked" style="background-image: url(images/ng3p/46.png)"></div>
 							</td>
 							<td>
-								<div id="No dilation means no production." class="achievement achievementlocked" style="background-image: url(images/133.png)"><br></div>
+								<div id="No dilation means no production." class="achievement achievementlocked" style="background-image: url(images/ng3p/47.png)"><br></div>
 							</td>
 							<td>
-								<div id="I don't want you to live anymore." class="achievement achievementlocked" style="background-image: url(images/134.png)"></div>
+								<div id="I don't want you to live anymore." class="achievement achievementlocked" style="background-image: url(images/ng3p/48.png)" ach-tooltip="Get e??? MA without colored quarks. Reward: Colored quarks closer to others get their higher charges."></div>
 							</td>
 						</tr>
-						<!--
 						<tr id="achRowng3p4">
 							<td>
 								<div id="Time is not relative" class="achievement achievementlocked" style="background-image: url(images/135.png)"></div>
@@ -2318,7 +2354,7 @@
 								<div id="Do protons decay?" class="achievement achievementlocked" style="background-image: url(images/139.png)" ach-tooltip="Unlock Tree of Decay. Reward: You keep the two thirds power of your preons upon quantum when outside of a Quantum Challenge."></div>
 							</td>
 							<td>
-								<div id="Hardly marked" class="achievement achievementlocked" style="background-image: url(images/140.png)" ach-tooltip="Complete a PC with the QC3 & 8 combination. Reward: You keep the cube root of your normal replicants upon quantum when outside of a Quantum Challenge."></div>
+								<div id="Hardly marked" class="achievement achievementlocked" style="background-image: url(images/140.png)" ach-tooltip="Complete a PC with the QC3 & 8 combination. Reward: ???"></div>
 							</td>
 							<td>
 								<div id="Stop blocking me!" class="achievement achievementlocked" style="background-image: url(images/141.png)"></div>
@@ -2367,7 +2403,7 @@
 								<div id="Really?" class="achievement achievementlocked" style="background-image: url(images/154.png)"></div>
 							</td>
 							<td>
-								<div id="But I don't want to grind!" class="achievement achievementlocked" style="background-image: url(images/155.png)" ach-tooltip="Get the 21st Nanofield reward without having Tree Upgrades. Reward: Gain more quarks based on radioactive decays."></div>
+								<div id="But I don't want to grind!" class="achievement achievementlocked" style="background-image: url(images/155.png)" ach-tooltip="???. Reward: Gain more quarks based on radioactive decays."></div>
 							</td>
 							<td>
 								<div id="I rather oppose the theory of everything" class="achievement achievementlocked" style="background-image: url(images/156.png)" ach-tooltip="Become a ghost with at most 1x quantumed stat. Reward: You gain more Quarks based on your quantumed stat and you can auto-disable your 'Automatic Quantum' autobuyer with a specific amount of quantumed stat."></div>
@@ -2468,7 +2504,7 @@
 								<div id="Einstein's Ghost" class="achievement achievementlocked" style="background-image: url(images/185.png)"></div>
 							</td>
 							<td>
-								<div id="Gigafield" class="achievement achievementlocked" style="background-image: url(images/186.png)" ach-tooltip="Get 250 Nanorewards. Rewards: Bosonic Upgrades don't reset at all."></div>
+								<div id="Gigafield" class="achievement achievementlocked" style="background-image: url(images/186.png)" ach-tooltip="???. Reward: Bosonic Upgrades don't reset at all."></div>
 							</td>
 							<td>
 								<div id="X-Ranked" class="achievement achievementlocked" style="background-image: url(images/187.png)"></div>
@@ -3363,48 +3399,47 @@
 				</table>
 			</div>
 			<div id="quantumchallenges" class="challengeTab">
-				<button class="secondarytabbtn" id="qc_perks" style="width: 200px" onclick="QCs.viewPerks()">View perks</button>
-				<br>
 				<span id="qc_effects"></span>
-				<span id="qc_perks_note"></span>
 				<br>
 				<button class="storebtn" id="restart_qc" style="width: 120px; height: 48px" onclick="QCs.restart()">Restart Challenge</button>
 				<button class="storebtn" id="auto_qc" style="width: 120px; height: 48px; font-size: 11px" onclick="QCs.toggle_auto()"></button>
 				<button class="storebtn" id="swaps_toggle" style="width: 120px; height: 48px" onclick="QCs.disable_swaps()"></button>
-				<button class="storebtn" id="disable_qc2_perk" style="width: 120px; height: 48px" onclick="QCs.disablePerk(2)"></button>
 				<table class="table" id="qcs_div" style="margin: 0 auto"></table>
 			</div>
 			<div id="pairedChalls" class="challengeTab">
 				<button class="secondarytabbtn" id="pctabbtn_milestone" onclick="showChallengesTab('pairedChallMilestones')">Milestones</button>
+				<button class="secondarytabbtn" id="pctabbtn_perk" onclick="showChallengesTab('pairedChallPerks')">Perks</button>
+				<b class="fluc_boost" id="fluc_boost_pc"></b>
 				<div id="pc_info">
-					<span style="font-size: 15px">Your Paired Challenges is at level <span id="pc_lvl" style="font-size: 30px">1</span>. (Next: <span id="pc_comps" style="font-size: 20px">0 / 1</span>)</span><br>
-					Translated to <span id="pc_eff1" style="font-size: 20px"></span> to Quantum Power (starting at <span id="pc_eff1_start"></span>), and make aQ boosts itself by <span id="pc_eff2" style="font-size: 20px"></span>.
+					<span id="pc_lvl" style="font-size: 25px"></span>
+					<span id="pc_comps" style="font-size: 20px"></span>
+					<br>
+					Reward: <span id="pc_eff1" style="font-size: 20px"></span> to Quantum Power [starting at <span id="pc_eff1_start"></span>], <span id="pc_eff2" style="font-size: 20px"></span> to aQs self-boost.
 				</div>
 				<span id="pc_enter">
 					<br>
-					<p id="pc_penalty">Note: Starting a Paired Challenge reduces Meta Dimensions by ^0.95! (acts like you are in QC7)</p>
-					Note 2: Exiting a Paired Challenge automatically unassigns it, unless it is completed!
+					<b class="warning" id="pc_penalty">Paired Challenges have a ^0.95 Meta Dimensions penalty!</b>
 					<br>
-					<button class="storebtn" onclick="PCs.exportPreset()" style="width: 120px; height: 48px">Export combinations</button>
-					<button class="storebtn" onclick="PCs.importPreset()" style="width: 120px; height: 48px">Import combinations</button>
+					<button class="storebtn" onclick="PCs.exportPreset()" style="width: 96px; height: 48px">Export</button>
+					<button class="storebtn" onclick="PCs.importPreset()" style="width: 96px; height: 48px">Import</button>
+					<button class="storebtn" id="disable_qc2_perk" style="width: 96px; height: 48px" onclick="QCs.disablePerk(2)"></button>
 				</span>
 				<span id="pc_omega">
 					<br>
-					<b class="warning">You are assigning in a Omega Set! You can assign any combination, but goals are raised by ^1.25!</b>
+					<b class="warning">You are assigning in a Omega Set! You can do any unassignable combination you want to!</b>
 				</span>
 				<span id="pc_pick"></span>
 				<table id="pc_table" align="center" style="margin: auto"></table>
-				<span id="pc_temp_color" style="font-size: 15px">Your <span id="pc_comps2" style="font-size: 20px"></span> completions are making PC goals <span id="pc_temp"></span>!</span>
 				<br>
-				<span id="pc_shrunker_div">Your <span id="pc_shrunker" style="font-size: 20px"></span> PC shrunkers are reducing all goals by <span id="pc_shrunker_eff" style="font-size: 15px"></span>.</span>
 			</div>
 			<div id="pairedChallMilestones" class="challengeTab">
 				<button class="secondarytabbtn" onclick="PCs.back()">Back</button>
-				<button class="secondarytabbtn" id="qc_milestone_all_btn" onclick="PCs.showMilestones('all')">Show all milestones</button>
+				<button class="secondarytabbtn" id="qc_milestone_all_btn" onclick="PCs.showMilestones('all')">All Milestones</button>
 				<table id="qc_milestones" align="center" style="margin: auto"></table>
 				<div id="qc_milestone_div">
 					<b id="qc_milestone_header" style="font-size: 20px">QC1 Milestones</b>
 					<br>
+					<b class="red">All perks only work in any Quantum Challenge!</b>
 					<table class="table" align="center" style="margin: auto">
 						<tr>
 							<td id="qc_milestone1_div"></td>
@@ -3419,19 +3454,50 @@
 						<tr>
 							<td id="qc_milestone4_div"></td>
 							<td id="qc_milestone5_div"></td>
-							<td id="qc_milestone6_div"></td>
 						</tr>
 						<tr>
 							<td id="qc_milestone4_div2"><button class="qMs_reward" id="qc_milestone4">???</button></td>
 							<td id="qc_milestone5_div2"><button class="qMs_reward" id="qc_milestone5">???</button></td>
-							<td id="qc_milestone6_div2"><button class="qMs_reward" id="qc_milestone6">???</button></td>
 						</tr>
 					</table>
 				</div>
 				<div id="qc_milestone_all_div">
 					<b id="qc_milestone_header" style="font-size: 20px">All Milestones</b>
+					<br>
+					<b class="red">All perks only work in any Quantum Challenge!</b>
 					<table id="qc_milestone_all" class="table" align="center" style="margin: auto"></table>
 				</div>
+			</div>
+			<div id="pairedChallPerks" class="challengeTab">
+				<button class="secondarytabbtn" onclick="showChallengesTab('pairedChalls')">Back</button>
+				<br>
+				<b class="red">All perks only work in any Quantum Challenge!</b>
+				<table class="table" align="center" style="margin: auto">
+					<tr>
+						<td>Perk #1</td>
+						<td>Perk #2</td>
+						<td>Perk #3</td>
+						<td>Perk #4</td>
+					</tr>
+					<tr>
+						<td><button class="qMs_reward" id="pc_perk_1" style="font-size: 10px">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_2" onclick="QCs.disablePerk(2)" style="font-size: 10px">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_3">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_4">???</button></td>
+					</tr>
+					<tr>
+						<td>Perk #5</td>
+						<td>Perk #6</td>
+						<td>Perk #7</td>
+						<td>Perk #8</td>
+					</tr>
+					<tr>
+						<td><button class="qMs_reward" id="pc_perk_5">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_6">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_7">???</button></td>
+						<td><button class="qMs_reward" id="pc_perk_8">???</button></td>
+					</tr>
+				</table>
 			</div>
 			<div class="footer"></div>
 		</div>
@@ -4204,10 +4270,10 @@
 				<p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti, which is translated to <span id="replicantimult" style="font-size:23px; color: black">0</span> <span id="replDesc"></span>.</p>
 				<span id="replicantieff"></span> <span id="softcap_rep_disp"></span>
 				<p id="replCompressDiv">You have <span id="replCompress" style="font-size: 20px">0</span> Replicanti Compressors, which boosts the exponent of Replicantis by <span id="replCompressEff" style="font-size: 15px">^1.00, x1.00</span>.</p>
-				<p id="replDilaterDiv">You have <span id="replDilater" style="font-size: 20px">0</span> Replicanti Dilaters, which makes EC14 reward <span id="replDilaterEff" style="font-size: 15px">0.00%</span> closer to ^1.</p>
+				<p id="replDilaterDiv">You have <span id="replDilater" style="font-size: 20px">0</span> Replicanti Dilaters, which cheapens Replicanti upgrades by <span id="replDilaterEff" style="font-size: 15px">1.00</span> efficiency.</p>
 				<p id="qc5_div" style="font-size: 9px">
 					Replicantis have generated <span id="qc5_eng" style="font-size: 15px">0</span> energy<sup id="qc5_eng_exp">1</sup> in total<span id="qc5_eng_mult" style="font-size: 12px"></span>,
-					which translated to +<span id="qc5_eff" style="font-size: 12px">0</span> Quantum Energy and Positronic charge.
+					which translated to <span id="qc5_eff" style="font-size: 12px">0</span>x Quantum Energy and Positronic Charge.
 				</p>
 				<br>
 				<button class="storebtn" id="replicantichance" onclick="upgradeReplicantiChance()" style="width:180px; height: 50px; font-size: 10px">Replicate chance: 1%<br>+1% Costs: 1e6969 IP</button>
@@ -4344,13 +4410,6 @@
 				<td id='positronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('positrons')">Positrons</button></td>
 				<td id='stringstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('strings')">String</button></td>
 				<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Milestones</button></td>
-
-				<!--
-				OLD MECHANICS
-
-				<td id='nanofieldtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('nanofield')">Nanofield</button></td>
-				<td id='todtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('tod')">Tree of Decay</button></td>
-				-->
 			</tr>
 		</table>
 		<div class='quantumtab' id='uquarks'>
@@ -4659,6 +4718,18 @@
 						<span id="qMs_ch_next">0</span>
 					</td>
 				</tr>
+				<tr>
+					<td class="uv" id="qMs_fl_cell">
+						<b style="font-size: 25px">Fluctuant</b>
+						<span id="qMs_fl_points" style="font-size: 20px"></span><br>
+						(You have <span id="qMs_fl_target" style="font-size: 15px">0</span> Fluctuant Energy)<br>
+						<span id="qMs_fl_next">0</span>
+					</td>
+					<td class="cyan" id="qMs_ach_cell">
+						<b style="font-size: 25px">Achievement</b>
+						<span id="qMs_ach_points" style="font-size: 20px"></span>
+					</td>
+				</tr>
 			</table>
 			<p id="qMs_next"></p>
 			<table class="table" align="center" style="margin: auto" id="qMs_rewards">
@@ -4707,9 +4778,14 @@
 					<td><button class="qMs_locked" id="qMs_reward_26" onclick="qMs.toggle(26)"></button></td>
 					<td><button class="qMs_locked" id="qMs_reward_27" onclick="qMs.toggle(27)"></button></td>
 				</tr>
+				<tr>
+					<td><button class="qMs_locked" id="qMs_reward_28" onclick="qMs.toggle(28)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_29" onclick="qMs.toggle(29)"></button></td>
+				</tr>
 			</table>
 		</div>
 		<div class='quantumtab' id='positrons'>
+		<b class="fluc_boost" id="fluc_boost_pos"></b>
 		If Positrons are on, then Meta-Dimension Boosts and Quantum Energy are sacrificed for Positrons...
 		<br>
 		which allow Galaxies to be sacrificed for Positronic Charge!
@@ -4890,6 +4966,7 @@
 		<div class='quantumtab' id='strings'>
 			<p id="str_unl">Complete 8 PC completions to unlock String.</p>
 			<div id="str_div">
+				<b class="fluc_boost" id="fluc_boost_str"></b>
 				<table class="qTable">
 					<tr>
 						<td class="ve" id="str_1_power" style="font-size: 24px">Alpha: 0.00</td>
@@ -4897,24 +4974,14 @@
 						<td class="ve" id="str_3_power" style="font-size: 24px">Gamma: 0.00</td>
 					</tr>
 					<tr>
-						<td class="lime" id="str_1_eb_eff"></td>
-						<td class="lime" id="str_2_eb_eff"></td>
-						<td class="lime" id="str_3_eb_eff"></td>
+						<td class="lime" id="str_a1_boost"></td>
+						<td class="lime" id="str_a2_boost"></td>
+						<td class="lime" id="str_a3_boost"></td>
 					</tr>
 					<tr>
-						<td class="lime light" id="str_1_eb_nerf"></td>
-						<td class="lime light" id="str_2_eb_nerf"></td>
-						<td class="lime light" id="str_3_eb_nerf"></td>
-					</tr>
-					<tr>
-						<td class="yellow" id="str_1_pb_eff"></td>
-						<td class="yellow" id="str_2_pb_eff"></td>
-						<td class="yellow" id="str_3_pb_eff"></td>
-					</tr>
-					<tr>
-						<td class="yellow light" id="str_1_pb_nerf"></td>
-						<td class="yellow light" id="str_2_pb_nerf"></td>
-						<td class="yellow light" id="str_3_pb_nerf"></td>
+						<td class="lime light" id="str_b1_boost"></td>
+						<td class="lime light" id="str_b2_boost"></td>
+						<td class="lime light" id="str_b3_boost"></td>
 					</tr>
 					<tr>
 						<td colspan=3>
@@ -4940,103 +5007,114 @@
 				<span id="str_cost"></span>
 				<br><br>
 				<div class="str_boosts" id="str_boosts"></div>
-			</div>
-		</div>
-		<div class='quantumtab' id='nanofield'>
-			<table id='nftabs' align="center" style="margin: auto">
-				<tr>
-					<td><button class="secondarytabbtn" onclick="showNFTab('nanoverse')">The Nanoverse</button></td>
-					<td><button class="secondarytabbtn" onclick="showNFTab('antipreon')">Antipretus' Lair</button></td>
-				</tr>
-			</table>
-			<div class='nftab' id='nanoverse'>
-				You have <span id="quarksNanofield"></span> preons.<br>
-				<span id="ns"></span>
-				<table class="qTable"><tr><td>
-					You have <span id="preonEnergy" style="font-size:35px"></span> preon energy.<br>
-					You have <span id="quarkPower" style="font-size:35px"></span> preon power. Next at <span id="quarkPowerThreshold" style="font-size:35px"></span> preon energy.<br>
-					You are getting <span id="quarkEnergyRate"></span> preon energy per second if your preon anti-energy didn't reach its limit.
-				</td><td>
-					You have <span id="quarkCharge" style="font-size:35px"></span> preon charge.<br>
-					<button class="storebtn" id="produceQuarkCharge" onclick="startProduceQuarkCharge()"></button><br>
-					You are getting <span id="quarkChargeRate"></span> preon charge per second, but losing <span id="quarkLoss"></span> preons per second.
-				</td><td>
-					You have <span id="quarkAntienergy" style="font-size:35px"></span> preon anti-energy. At <span id="quarkChargeProductionCap" style="font-size:35px"></span>, your preon charge will stop producing energy and anti-energy.<br>
-					You are getting <span id="quarkAntienergyRate"></span> preon anti-energy per second.
-				</td></tr></table>
-				You have <span id="rewards" style="font-size:35px"></span> <span id="nfRewardScaling"></span>.
-				<table class="table" align=center style="margin: auto" id="nfRewards"></table>
 				<br><br>
-			</div>
-			<div class='nftab' id='antipreon'>
-				You have <span id="rewards_AP" style="font-size:35px"></span> Nanorewards.
-				<br><br>
-				<div id="apgInfo">
-					<b style="font-size: 35px">Welcome to my lair, ghosts!</b>
-					<br>
-					~ <span style="font-size: 25px"> Antipretus</span>, the Ghost Overseer of Antifield
-					<br><br>
-					<span id="sleepy">
-						<b style="font-size: 25px">Antipretus is sleepy...</b>
-						<br>
-						The scientists from Bosonic Lab know that he will take control of Nanoverse when he see a lot of Nanorewards from you.
-						<br><br>
-						<b class="warning">Don't get <span id="rewards_wake" style="font-size: 35px">104</span> rewards or else!</b>
-					</span>
-					<span id="woke">
-						<b class="warning" style="font-size: 35px">Antipretus has woken up and took control of your Nanoverse!</b>
-						<br><br>
-						<b style="font-size: 25px">The following effects are now applied!</b>
-						<br>
-						Each time you get 1 preon power:<br>
-						- You will lose preons faster when you start generating charge.<br>
-						- 1.41x slower charge production.<br>
-						- 1.41x faster anti-energy production.
-						<br><br>
-						Additionally, the power of Nanorewards have been softcapped!
-						<br><br>
-						However, the scientists decide to give you a slight quality of life boost. Your current reward gets 0.5 free tiers.
-						<br><br>
-						<b style="font-size: 35px">Good luck! :)</b>
-					</span>
-				</div>
-			</div>
-		</div>
-		<div class='quantumtab' id='tod'>
-			<span id="todspeed"></span>
-			<table class="qTable"><tr id="todRow"></tr></table>
-			<button class="storebtn" onclick="unstableAll()" style="width: 210px">Gain all unstable quarks</button>
-			<table class="table" align="center" style="margin: auto">
-				<tr>
-					<td><button id="redBtn" class="secondarytabbtn" onclick="showBranchTab('red')">Red Branch Upgrades</button></td>
-					<td><button id="greenBtn" class="secondarytabbtn" onclick="showBranchTab('green')">Green Branch Upgrades</button></td>
-					<td><button id="blueBtn" class="secondarytabbtn" onclick="showBranchTab('blue')">Blue Branch Upgrades</button></td>
-					<td><button class="secondarytabbtn" onclick="showBranchTab('upgrades')">Tree Upgrades</button></td>
-				</tr>
-			</table>
-			<div class="branchtab" id="redBranch"></div>
-			<div class="branchtab" id="greenBranch"></div>
-			<div class="branchtab" id="blueBranch"></div>
-			<div class="branchtab" id="upgradesBranch">
-				<span id="treeUpgradeEff"></span>
 				<table class="table" align="center" style="margin: auto"><tr>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg1' onclick='buyTreeUpg(1)' style='font-size:9px'>Meta Dimension Boosts are cheaper.<br><span id='treeupg1lvl'>?</span><br>Currently: -<span id='treeupg1current'>?</span><br><span id="treeupg1cost"></span></button></td>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg2' onclick='buyTreeUpg(2)' style='font-size:9px'>The TP gain formula exponent is increased.<br><span id='treeupg2lvl'>?</span><br>Currently: <span id='treeupg2current'>?</span><br><span id="treeupg2cost"></span></button></td>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg3' onclick='buyTreeUpg(3)' style='font-size:9px'>All branches are faster based on how many Tree upgrades have been bought.<br><span id='treeupg3lvl'>?</span><br>Currently: <span id='treeupg3current'>?</span>x<br><span id="treeupg3cost"></span></button></td>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg4' onclick='buyTreeUpg(4)' style='font-size:9px'>???<br><span id='treeupg4lvl'>?</span><br>Currently: <span id='treeupg4current'>?</span>x<br><span id="treeupg4cost"></span></button></td>
-				</tr><tr>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg5' onclick='buyTreeUpg(5)' style='font-size:9px'>All branches are faster based on your best-ever meta-antimatter.<br><span id='treeupg5lvl'>?</span><br>Currently: <span id='treeupg5current'>?</span>x<br><span id="treeupg5cost"></span></button></td>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg6' onclick='buyTreeUpg(6)' style='font-size:9px'>Emperor Dimensions produce faster.<br><span id='treeupg6lvl'>?</span><br>Currently: <span id='treeupg6current'>?</span>x<br><span id="treeupg6cost"></span></button></td>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg7' onclick='buyTreeUpg(7)' style='font-size:9px'>???<br><span id='treeupg7lvl'>?</span><br>Currently: <span id='treeupg7current'>?</span>x<br><span id="treeupg7cost"></span></button></td>
-					<td><button class='gluonupgrade unavailablebtn' id='treeupg8' onclick='buyTreeUpg(8)' style='font-size:9px'>???<br><span id='treeupg8lvl'>?</span><br>Currently: <span id='treeupg8current'>?</span>x<br><span id="treeupg8cost"></span></button></td>
+					<td><button class="str_upg" id="str_upg_1_btn" style="width: 240px; height: 160px" onclick="str.buyUpg(1)"><b id="str_upg_1_title" style="font-size: 15px"></b><span id="str_upg_1_eff"></span><br><span id="str_upg_1_cost"></span></button></td>
+					<td><button class="str_upg" id="str_upg_2_btn" style="width: 240px; height: 160px" onclick="str.buyUpg(2)"><b id="str_upg_2_title" style="font-size: 15px"></b><span id="str_upg_2_eff"></span><br><span id="str_upg_2_cost"></span></button></td>
+					<td><button class="str_upg" id="str_upg_3_btn" style="width: 240px; height: 160px" onclick="str.buyUpg(3)"><b id="str_upg_3_title" style="font-size: 15px"></b><span id="str_upg_3_eff"></span><br><span id="str_upg_3_cost"></span></button></td>
 				</tr></table>
-				<button class="storebtn" onclick="maxTreeUpg()" style="width: 190px">Max all upgrades</button>
 			</div>
-			<br>
-			<br>
-			<br>
 		</div>
 		<div class="footer bottom"></div>
+	</div>
+	<div class='tab' id="flucTab">
+		<br>
+		<span style="font-size: 20px">Get <span class="antimatter" id="fluc_req"></span> antimatter to Fluctuate again.</span>
+		<br>
+		<span class="flucEne" id="fluc_gain"></span>
+		<br>
+		<table class="table" align="center" style="margin: auto">
+			<tr>
+				<td><button class="secondarytabbtn" onclick="fluc.showTab('ffTab')">Fluctuant Field</button></td>
+				<td><button class="secondarytabbtn" onclick="fluc.showTab('unknownTab')">???</button></td>
+				<!--<td><button class="secondarytabbtn">Particle Decay</button></td>-->
+				<!--<td><button class="secondarytabbtn">Spatial Decay</button></td>-->
+			</tr>
+		</table>
+		<div class="flucTab" id="ffTab">
+			<br>
+			<span id="ff_eng"></span>
+			<br>
+			<span id="ff_unl">Next ??? unlocks at ??? Fluctuant Energy.</span>
+			<br>
+			<b class="red">Linking/Arcing restarts your Quantum run!</b>
+			<br>
+			<button class="storebtn" onclick="ff.clear()">Clear</button>
+			<button class="storebtn" onclick="ff.exportPreset()">Export</button>
+			<button class="storebtn" onclick="ff.importPreset()">Import</button>
+			<br><br>
+
+			<canvas id="ff_canvas"></canvas>
+			<div style="position: relative; height: 720px; width: 720px; margin: auto">
+				<button class="fluctuatebtn ff_btn" id="ff_btn_am" style="position: absolute; top: 270px; left: 270px; height: 180px; width: 180px">
+					<b style="font-size: 24px">Antimatter</b><br>
+					<span id="ff_eng_am" style="font-size: 15px"></span><br>
+					(click here to link with any perk)
+				</button>
+
+				<!-- Perks 1 - 6 -->
+				<button class="storebtn ff_btn" id="ff_btn_f1" style="position: absolute; top: 300px; left: 600px">
+					<b style="font-size: 12px">Superefficient</b><br>
+					<span id="ff_eff_f1"></span>
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f2" style="position: absolute; top: 150px; left: 560px">
+					<b>Accelerator</b><br>
+					<span id="ff_eff_f2"></span>
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f3" style="position: absolute; top: 40px; left: 450px">
+					<b>Excite</b><br>
+					<span id="ff_eff_f3"></span>
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f4" style="position: absolute; top: 0px; left: 300px">
+					<b>Stretch</b><br>
+					<span id="ff_eff_f4"></span>
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f5" style="position: absolute; top: 40px; left: 150px">
+					<b>Flux</b><br>
+					<span id="ff_eff_f5"></span>
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f6" style="position: absolute; top: 150px; left: 40px">
+					<b>Overseer</b><br>
+					<span id="ff_eff_f6"></span>
+				</button>
+
+				<!-- Perks 7 - 12 -->
+				<button class="storebtn ff_btn" id="ff_btn_f7" style="position: absolute; top: 300px; left: 0px">
+					<b>Advancement</b><br>
+					<span id="ff_eff_f7"></span>
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f8" style="position: absolute; top: 450px; left: 40px">
+					<b>Dominant</b><br>
+					<span id="ff_eff_f8"></span>
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f9" style="position: absolute; top: 560px; left: 150px">
+					<b>???</b><br>
+					<span id="ff_eff_f9"></span>
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f10" style="position: absolute; top: 600px; left: 300px">
+					<b>???</b><br>
+					<span id="ff_eff_f10"></span>
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f11" style="position: absolute; top: 560px; left: 450px">
+					<b>???</b><br>
+					<span id="ff_eff_f11"></span>
+				</button>
+				<button class="storebtn ff_btn" id="ff_btn_f12" style="position: absolute; top: 450px; left: 560px">
+					<b>???</b><br>
+					<span id="ff_eff_f12"></span>
+				</button>
+			</div>
+			<br><br>
+			<div class="footer"></div>
+		</div>
+		<div class="flucTab" id="unknownTab">
+			<span id="unknown_unl">You need 11 Fluctuant Energy in order to unlock Quantum Field.</span>
+			<span id="the_end">
+				Congratulations! You have reached the end for now... Check the Discord to see when this mechanic is ready!<br>
+				<b class="red">Note: There will actually be 4 new perks in Fluctuant Field!</b>
+			</span>
+			<div class="footer bottom"></div>
+		</div>
 	</div>
 		<div class='tab' id='ghostify'>
 			<table class="table" align="center" style="margin: auto">
@@ -5064,11 +5142,11 @@
 					</tr>
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow2">
 						<td id="neutrinoBoostCell4">They boost something by <span class="neutrinos" id="neutrinoBoost4">1.0</span>x.</td>
-						<td id="neutrinoBoostCell5">They reduce the nerf to red power boost over 130% by <span class="neutrinos" id="neutrinoBoost5">100.0</span>%.</td>
+						<td id="neutrinoBoostCell5">They boost something by <span class="neutrinos" id="neutrinoBoost5">1.0</span>x.</td>
 						<td id="neutrinoBoostCell6">They slow down Distant Antimatter Galaxies by <span class="neutrinos" id="neutrinoBoost6">0.0</span>%.<br>(Nerfed in Big Rip runs)</td>
 					</tr>
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow3">
-						<td>In Big Rips, they make Tree upgrades <span class="neutrinos" id="neutrinoBoost7">0.0</span>% more effective. (<span id="preNeutrinoBoost7Eff">100.0</span>% to <span class="neutrinos" id="neutrinoBoost7Eff" style="font-size:25px">100.0</span>%)</td>
+						<td id="neutrinoBoostCell7">They boost something by <span class="neutrinos" id="neutrinoBoost7">1.0</span>x.</td>
 						<td id="neutrinoBoostCell8">They strengthen the first Big Rip upgrade by <span class="neutrinos" id="neutrinoBoost8">0.0</span>%.</td>
 						<td id="neutrinoBoostCell9">In Big Rips, they multiply the IC3 reward for each tickspeed purchase by <span class="neutrinos" id="neutrinoBoost9">1.00</span>x.</td>
 					</tr>
@@ -5083,29 +5161,29 @@
 						<td><button id="ghpMultUpg" class="gluonupgrade unavailablebtn" onclick="buyGHPMult()">You gain 2.22x more GhP.<br>Currently: <span id="ghpMult"></span>x<br>Cost: <span id="ghpMultUpgCost"></span> of any neutrinos</button><br><button class="storebtn" onclick='maxGHPMult()' style='width:190px'>Max GhP mult</button></td>
 					</tr>
 					<tr>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg1" onclick="buyNeutrinoUpg(1)" style="font-size: 10px">Meta-Dimension Boosts cost cheaper.<br>Currently: -<span id="neutrinoUpg1Pow"></span><br>Cost: <span id="neutrinoUpg1Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg2" onclick="buyNeutrinoUpg(2)">Eggons hatch instantly, and workers do not consume others.<br>Cost: <span id="neutrinoUpg2Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg3" onclick="buyNeutrinoUpg(3)">Blue power boosts preon charge production.<br>Currently: <span id="neutrinoUpg3Pow"></span>x<br>Cost: <span id="neutrinoUpg3Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg1" onclick="buyNeutrinoUpg(1)">Meta-Dimension Boosts cost cheaper.<br>Currently: -<span id="neutrinoUpg1Pow"></span><br>Cost: <span id="neutrinoUpg1Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg2" onclick="buyNeutrinoUpg(2)">???<br>Cost: <span id="neutrinoUpg2Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg3" onclick="buyNeutrinoUpg(3)">???<br>Cost: <span id="neutrinoUpg3Cost"></span> of any neutrinos</button></td>
 					</tr>
 					<tr>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg4" onclick="buyNeutrinoUpg(4)" style="font-size: 10px">Gain quark spins faster and all branches are faster based on your tickspeed.<br>Currently: <span id="neutrinoUpg4Pow">1.0</span>x<br>Cost: <span id="neutrinoUpg4Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg5" onclick="buyNeutrinoUpg(5)">Triple the positron gain.<br>Cost: <span id="neutrinoUpg5Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg4" onclick="buyNeutrinoUpg(4)">???<br>Cost: <span id="neutrinoUpg4Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg5" onclick="buyNeutrinoUpg(5)">???<br>Cost: <span id="neutrinoUpg5Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg6" onclick="buyNeutrinoUpg(6)">Disable Remote Antimatter Galaxies scaling!<br>Cost: <span id="neutrinoUpg6Cost"></span> of any neutrinos</button></td>
 					</tr>
 					<tr>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg7" onclick="buyNeutrinoUpg(7)" style="font-size: 10px">Green power boosts odd Emperor Dimensions and preon charge production.<br>Currently: <span id="neutrinoUpg7Pow"></span>x<br>Cost: <span id="neutrinoUpg7Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg8" onclick="buyNeutrinoUpg(8)">Disable the meta-antimatter boost nerf to quark gain.<br>Cost: <span id="neutrinoUpg8Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg7" onclick="buyNeutrinoUpg(7)">???<br>Cost: <span id="neutrinoUpg7Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg8" onclick="buyNeutrinoUpg(8)">???<br>Cost: <span id="neutrinoUpg8Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg9" onclick="buyNeutrinoUpg(9)">Eternities and Space Shards boost each other.<br>Cost: <span id="neutrinoUpg9Cost"></span> of any neutrinos</button></td>
 					</tr>
 					<tr>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg10" onclick="buyNeutrinoUpg(10)">Banked eternities are counted in Quantum Challenges.<br>Cost: <span id="neutrinoUpg10Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg10" onclick="buyNeutrinoUpg(10)">Banked Eternities are counted in Quantum Challenges.<br>Cost: <span id="neutrinoUpg10Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg11" onclick="buyNeutrinoUpg(11)">8th Big Rip upgrade is never repealed and capped.<br>Cost: <span id="neutrinoUpg11Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg12" onclick="buyNeutrinoUpg(12)" style="font-size: 10px">In Big Rips, each galaxy type boosts differently.<br>Hover to see your current effects<br>Cost: <span id="neutrinoUpg12Cost"></span> of any neutrinos</button></td>
 					</tr>
 					<tr>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg13" onclick="buyNeutrinoUpg(13)">100 RG upgrade doesn't nerf the 100 BR upgrade.<br>Cost: <span id="neutrinoUpg13Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg14" onclick="buyNeutrinoUpg(14)" style="font-size: 10px">Gain more neutrinos based on your GhP and color powers.<br>Currently: <span id="neutrinoUpg14Pow"></span>x<br>Cost: <span id="neutrinoUpg14Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg15" onclick="buyNeutrinoUpg(15)">Your Nanorewards speed up Nanofield.<br>Currently: <span id="neutrinoUpg15Pow"></span>x<br>Cost: <span id="neutrinoUpg15Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg15" onclick="buyNeutrinoUpg(15)">???<br>Cost: <span id="neutrinoUpg15Cost"></span> of any neutrinos</button></td>
 					</tr>
 					<tr>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg16" onclick="buyNeutrinoUpg(16)">You can become a ghost without having to Big Rip, but at a reduced rate.<br>Cost: <span id="neutrinoUpg16Cost"></span> of any neutrinos</button></td>
@@ -5363,27 +5441,27 @@
 						</td>
 					</tr><tr>
 						<td>
-							They boost Tachyon particles boost to dilated time production by ^<span class="red" id="lightBoost1" style="font-size:35px"></span>.
+							They boost something by <span class="red" id="lightBoost1" style="font-size:35px">1.00</span>x.
 						</td>
 						<td>
-							They boost red Light strength by <span class="orange" id="lightStrength1" style="font-size:35px"></span>x and reduce preon power threshold increase to <span class="orange" id="lightBoost2" style="font-size:35px"></span>th root.
+							They boost red Light strength by <span class="orange" id="lightStrength1" style="font-size:35px"></span>x.
 						</td>
 						<td>
 							They boost orange Light strength by <span class="yellow" id="lightStrength2" style="font-size:35px"></span>x.
 						</td>
 						<td>
-							They boost yellow Light strength by <span class="green" id="lightStrength3" style="font-size:35px"></span>x and boost the preon effect by <span class="green" id="lightBoost4" style="font-size:35px"></span>%.
+							They boost yellow Light strength by <span class="green" id="lightStrength3" style="font-size:35px"></span>x.
 						</td>
 					</tr><tr>
 						<td id="le3">
-							In non-Big Rips, Red Light multiplies normal galaxy amount of 'Intergalactic' reward by <span class="red" id="leBoost3" style="font-size:35px"></span>x.<br>(Your best red Light doesn't boost this.)
+							They boost something by <span class="red" id="leBoost3" style="font-size:35px">1.00</span>x.
 						</td>
 						<td></td>
 						<td id="le6">
-							They boost something by <span class="yellow" id="leBoost6" style="font-size:35px"></span>x.
+							They boost something by <span class="yellow" id="leBoost6" style="font-size:35px">1.00</span>x.
 						</td>
 						<td id="le1">
-							Every 100% of green power effect, they add <span class="green" id="leBoost1" style="font-size:35px"></span> to Tachyonic Galaxies amount in Mastery Study 201.<br>(<span class="green" id="leBoost1Total" style="font-size:25px"></span> added to Tachyonic Galaxies amount)
+							They boost something by <span class="green" id="leBoost1" style="font-size:35px">1.00</span>x.
 						</td>
 					</tr><tr>
 						<td class="blue">
@@ -5413,7 +5491,7 @@
 						</td>
 					</tr><tr>
 						<td>
-							They boost green Light strength by <span class="blue" id="lightStrength4" style="font-size:35px"></span>x and reduce the nerf to blue power boost by <span class="blue" id="lightBoost5" style="font-size:35px"></span>%.
+							They boost green Light strength by <span class="blue" id="lightStrength4" style="font-size:35px"></span>x.
 						</td>
 						<td>
 							They boost blue Light strength by <span class="indigo" id="lightStrength5" style="font-size:35px"></span>x and increase your Neutrino gain by <span class="indigo" id="lightBoost6" style="font-size:35px"></span>x.
@@ -5471,18 +5549,6 @@
 							Overdrive Speed: <span id="odSpeed" style="font-size:25px"></span><span id="odSpeedWBBt"></span><br>
 							<input id="odSlider" style="width: 180px;" type="range" min="0" max="30" class="slider" oninput="changeOverdriveSpeed()">
 						</td>
-					</tr><tr id="bosonicResets">
-						<td>
-							You have <span id="hb" style="font-size:35px">0</span> Higgs Bosons.
-							<br>
-							<button class="gluonupgrade hb" id="hbReset" onclick="higgsReset()">Reset Bosonic Lab for <span id="hbResetGain">1</span> Higgs.<br>(Requires <span id="hbResetReq"></span> Bosonic Antimatter)</button>
-						</td>
-						<td id="gvBlCell">
-							You have <span class="gvBoost" id="gvBlAmount" style="font-size:35px"></span> Gravitons.
-							<br>
-							<button class="gluonupgrade gv" onclick="GDs.teleport()">Teleport to Gravity Dimensions.</button>
-						</td>
-						<td></td>
 					</tr></table>
 					<span id="nextParticle"></span><br>
 					<b style="font-size: 35px">Bosonic Runes</b><br>
@@ -5571,10 +5637,11 @@
 	</div>
 	<div class="popup loadmenu" id="loadmenu" style="overflow-y:hidden; height: 360px">
 		<button class="closebtn storebtn" onclick="closeToolTip(true)">&times;</button>
-		<button id="newSaveBtn" class="storebtn" style="font-size: 15px" onclick="new_game()" style="display: inline">New save</button>
-		<button id="newImportBtn" class="storebtn" style="font-size: 15px" onclick="import_save('new')" style="display: inline">Import save</button>
-		<button id="newAdvSaveBtn" class="storebtn" style="font-size: 15px" onclick="new_game('adv')" style="display: inline">Other mods</button>
-		<button id="cancelNewSaveBtn" class="storebtn" style="font-size: 15px; display: none" onclick="show_mods()" style="display: inline">Cancel</button><br>
+		<button id="newSaveBtn" class="storebtn" style="font-size: 15px" onclick="new_save()">New game</button>
+		<button id="newImportBtn" class="storebtn" style="font-size: 15px" onclick="import_save('new')">Import</button>
+		<button id="cancelNewSaveBtn" class="storebtn" style="font-size: 15px; display: none" onclick="show_mods()">Saves</button>
+		<button id="newAdvSaveBtn" class="storebtn" style="font-size: 15px; display: none" onclick="show_mods('adv')" >Other mods</button>
+		<br>
 		<div id="savesTab" style="height:320px;overflow-y:auto">
 			To load without offline progress, load while holding shift.<br><br>
 			<table id='saves'>
@@ -5683,6 +5750,7 @@
 			<button id="dilationConfirmBtn" class="storebtn" onclick="toggleDilaConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
 			<button id="exdilationConfirmBtn" class="storebtn" onclick="toggleExdilaConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
 			<button id="quantumConfirmBtn" class="storebtn" onclick="toggleQuantumConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
+			<button id="fluc_conf" class="storebtn" onclick="fluc.updateConf(true)" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
 			<button id="bigRipConfirmBtn" class="storebtn" onclick="toggleBigRipConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
 			<button id="ghostifyConfirmBtn" class="storebtn" onclick="toggleGhostifyConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
 			<button id="leConfirmBtn" class="storebtn" onclick="toggleLEConf()" style="width: 200px; height: 55px; font-size: 15px" style="display: inline"></button>
@@ -5717,8 +5785,8 @@
 			Bump to next F at: <input id="hypersciBump" style="width: 170px" onchange="switchNotationOption('hypersci','bump')"></input><br>
 			<b>Standard</b>
 			Use Myrillions: <input type="checkbox" id="useMyr" onchange="switchNotationOption('standard','useMyr')"><br>
+			Use Tamara's: <input type="checkbox" id="useTam" onchange="switchNotationOption('standard','useTam')"><br>
 			<b>AAS</b>
-			Use hyphen (-) separators: <input type="checkbox" id="useHyphens" onchange="switchNotationOption('aas','useHyphens')"><br>
 			Use De as 1e33: <input type="checkbox" id="useDe" onchange="switchNotationOption('aas','useDe')"><br>
 			<b>Psi</b>
 			Max characters (min: 2, max: 30): <input id="maxLength" style="width: 170px" type="number" min=2 max=30 onchange="switchNotationOption('psi','maxLength')"></input><br>
@@ -5758,16 +5826,16 @@
 				<button class='storebtn' onclick="setTheme()" style='width: 240px'>Select Normal</button>
 				<button class='storebtn' onclick="setTheme('Metro')" style='width: 240px'>Select Metro</button>
 				<button class='storebtn' onclick="setTheme('Dark')" style='width: 240px'>Select Dark</button>
-				<button class='storebtn' onclick="setTheme('Dark Metro')" style='width: 240px'>Select Dark Metro</button>
-				<button class='storebtn' onclick="setTheme('Inverted')" style='width: 240px'>Select Inverted</button>
-				<button class='storebtn' onclick="setTheme('Inverted Metro')" style='width: 240px'>Select Inverted Metro</button>
-				<button class='storebtn' onclick="setTheme('Aarex\'s Modifications')" style='width: 240px'>Select Aarex's Modifications</button>
-				<button class='storebtn' onclick="setTheme('Aarex\'s Mods II')" style='width: 240px'>Select Aarex's Mods II</button>
+				<button class='storebtn' id="advTheme1" onclick="setTheme('Dark Metro')" style='width: 240px'>Select Dark Metro</button>
+				<button class='storebtn' id="advTheme2" onclick="setTheme('Inverted')" style='width: 240px'>Select Inverted</button>
+				<button class='storebtn' id="advTheme3" onclick="setTheme('Inverted Metro')" style='width: 240px'>Select Inverted Metro</button>
+				<button class='storebtn' id="advTheme4" onclick="setTheme('Aarex\'s Modifications')" style='width: 240px'>Select Aarex's Modifications</button>
+				<button class='storebtn' id="advTheme5" onclick="setTheme('Aarex\'s Mods II')" style='width: 240px'>Select Aarex's Mods II</button>
 				<button class='storebtn' onclick="setTheme('Aarex\'s Mods Tribus')" style='width: 240px'>Select Aarex's Mods: Tribus</button>
-				<button class='storebtn' onclick="setTheme('AMT Literal')" style='width: 240px'>Select AM:T Literal</button>
+				<button class='storebtn' id="advTheme6" onclick="setTheme('AMT Literal')" style='width: 240px'>Select AM:T Literal</button>
 				<button class='storebtn' onclick="setTheme('Star Stream')" style='width: 240px'>Select Star Stream (by YYK)</button>
-				<button class='storebtn' onclick="setTheme('Void')" style='width: 240px'>Select Void (by Soul147)</button>
-				<button class='storebtn' onclick="setTheme('Void (uv)')" style='width: 240px'>Void (usavictor's version)</button>
+				<button class='storebtn' id="advTheme7" onclick="setTheme('Void')" style='width: 240px'>Select Void (by Soul147)</button>
+				<button class='storebtn' id="advTheme8" onclick="setTheme('Void (uv)')" style='width: 240px'>Void (usavictor's version)</button>
 				<button class='storebtn' onclick="setTheme('Aero')" style='width: 240px'>Select Aero (by ducdat0507)</button>
 			</div>
 		</p>
@@ -5831,7 +5899,6 @@
 <script type="text/javascript" src="javascripts/autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/break_infinity.min.js"></script>
 <script type="text/javascript" src="javascripts/logarithmica_numerus_lite.js"></script>
-<script type="text/javascript" src="javascripts/num_and_decimal_math.js"></script>
 <script type="text/javascript" src="javascripts/chart.js"></script>
 <script type="text/javascript" src="javascripts/lz-string.js"></script>
 
@@ -5877,14 +5944,13 @@
 <script type="text/javascript" src="javascripts/mods/ngp3/quantum/strings.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/quantum/milestones.js"></script>
 
+<script type="text/javascript" src="javascripts/mods/ngp3/fluctuate/core.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/fluctuate/field.js"></script>
+
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/big_rip.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/bosonic_lab.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/ghostly_photons.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/legacy/gravity_dimensions.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/legacy/higgs_bosons.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/legacy/nanofield.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/legacy/neutrinos.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/legacy/tod.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/core.js"></script>
 
 <script type="text/javascript" src="javascripts/mods/condensed.js"></script>

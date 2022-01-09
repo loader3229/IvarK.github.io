@@ -54,8 +54,8 @@ dev.doubleEverything = function() {
 }
 
 dev.spin3d = function() {
-	if (getEl("body").style.animation === "") getEl("body").style.animation = "spin3d 2s infinite"
-	else getEl("body").style.animation = ""
+	if (el("body").style.animation === "") el("body").style.animation = "spin3d 2s infinite"
+	else el("body").style.animation = ""
 }
 
 dev.cancerize = function() {
@@ -63,8 +63,8 @@ dev.cancerize = function() {
 	player.options.secretThemeKey = "Cancer";
 	setTheme(player.options.theme);
 	player.options.notation = "Emojis"
-	getEl("theme").textContent = "SO"
-	getEl("notation").textContent = "BEAUTIFUL"
+	el("theme").textContent = "SO"
+	el("notation").textContent = "BEAUTIFUL"
 }
 
 dev.fixSave = function() {
@@ -90,9 +90,9 @@ dev.fixSave = function() {
 	challengeMult = 1
 	unspentBonus = 1
 	infDimPow = 1
-	postc8Mult = new Decimal(0)
-	mult18 = new Decimal(1)
-	ec10bonus = new Decimal(1)
+	postc8Mult = E(0)
+	mult18 = E(1)
+	ec10bonus = E(1)
 	player = save_data;
 	save_game();
 	load_game();
@@ -101,47 +101,47 @@ dev.fixSave = function() {
 }
 
 dev.implode = function() {
-	getEl("body").style.animation = "implode 2s 1";
-	setTimeout(function(){ getEl("body").style.animation = ""; }, 2000)
+	el("body").style.animation = "implode 2s 1";
+	setTimeout(function(){ el("body").style.animation = ""; }, 2000)
 }
 
 dev.ghostify = function(gain, amount, seconds=4) {
-	getEl("ghostifyani").style.display = ""
-	getEl("ghostifyani").style.width = "100%"
-	getEl("ghostifyani").style.height = "100%"
-	getEl("ghostifyani").style.left = "0%"
-	getEl("ghostifyani").style.top = "0%"
-	getEl("ghostifyani").style.transform = "rotateZ(0deg)"
-	getEl("ghostifyani").style["transition-duration"] = (seconds / 4) + "s"
-	getEl("ghostifyanitext").style["transition-duration"] = (seconds / 8) + "s"
+	el("ghostifyani").style.display = ""
+	el("ghostifyani").style.width = "100%"
+	el("ghostifyani").style.height = "100%"
+	el("ghostifyani").style.left = "0%"
+	el("ghostifyani").style.top = "0%"
+	el("ghostifyani").style.transform = "rotateZ(0deg)"
+	el("ghostifyani").style["transition-duration"] = (seconds / 4) + "s"
+	el("ghostifyanitext").style["transition-duration"] = (seconds / 8) + "s"
 	setTimeout(function() {
-		getEl("ghostifyanigained").innerHTML = ghostified ? "You now have <b>" + shortenDimensions(amount) + "</b> Ghost Particles. (+" + shortenDimensions(gain) + ")" : "Congratulations for beating a PC with qcData 6 & 8 combination!"
-		getEl("ghostifyanitext").style.left = "0%"
-		getEl("ghostifyanitext").style.opacity = 1
+		el("ghostifyanigained").innerHTML = ghostified ? "You now have <b>" + shortenDimensions(amount) + "</b> Ghost Particles. (+" + shortenDimensions(gain) + ")" : "Congratulations for beating a PC with qcData 6 & 8 combination!"
+		el("ghostifyanitext").style.left = "0%"
+		el("ghostifyanitext").style.opacity = 1
 	}, seconds * 250)
 	setTimeout(function() {
-		getEl("ghostifyanitext").style.left = "100%"
-		getEl("ghostifyanitext").style.opacity = 0
+		el("ghostifyanitext").style.left = "100%"
+		el("ghostifyanitext").style.opacity = 0
 	}, seconds * 625)
 	setTimeout(function() {
-		getEl("ghostifyani").style.width = "0%"
-		getEl("ghostifyani").style.height = "0%"
-		getEl("ghostifyani").style.left = "50%"
-		getEl("ghostifyani").style.top = "50%"
-		getEl("ghostifyani").style.transform = "rotateZ(45deg)"
+		el("ghostifyani").style.width = "0%"
+		el("ghostifyani").style.height = "0%"
+		el("ghostifyani").style.left = "50%"
+		el("ghostifyani").style.top = "50%"
+		el("ghostifyani").style.transform = "rotateZ(45deg)"
 	}, seconds * 750)
 	setTimeout(dev.resetGhostify, seconds * 1000)
 }
 
 dev.resetGhostify = function() {
-	getEl("ghostifyani").style.width = "0%"
-	getEl("ghostifyani").style.height = "0%"
-	getEl("ghostifyani").style.left = "50%"
-	getEl("ghostifyani").style.top = "50%"
-	getEl("ghostifyani").style.transform = "rotateZ(-45deg)"
-	getEl("ghostifyani").style["transition-duration"] = "0s"
-	getEl("ghostifyanitext").style.left = "-100%"
-	getEl("ghostifyanitext").style["transition-duration"] = "0s"
+	el("ghostifyani").style.width = "0%"
+	el("ghostifyani").style.height = "0%"
+	el("ghostifyani").style.left = "50%"
+	el("ghostifyani").style.top = "50%"
+	el("ghostifyani").style.transform = "rotateZ(-45deg)"
+	el("ghostifyani").style["transition-duration"] = "0s"
+	el("ghostifyanitext").style.left = "-100%"
+	el("ghostifyanitext").style["transition-duration"] = "0s"
 }
 
 dev.updateCosts = function() {
@@ -187,9 +187,9 @@ dev.giveQuantumStuff = function(n, quick) {
 
 dev.quickQuantum = function(n, quick) {
 	if (!n) n = quarkGain()
-	qu_save.usedQuarks.r = new Decimal(0)
-	qu_save.usedQuarks.b = new Decimal(0)
-	qu_save.usedQuarks.g = new Decimal(0)
+	qu_save.usedQuarks.r = E(0)
+	qu_save.usedQuarks.b = E(0)
+	qu_save.usedQuarks.g = E(0)
 	qu_save.gluons.rg = Decimal.div(n, 3)
 	qu_save.gluons.gb = Decimal.div(n, 3)
 	qu_save.gluons.br = Decimal.div(n, 3)
@@ -206,20 +206,6 @@ dev.giveAllPCs = function() {
 
 	PCs.updateTmp()
 	PCs.updateDisp()
-}
-
-dev.addReward = function(){
-	qu_save.nanofield.rewards += 1
-}
-
-dev.setReward = function(n){
-	qu_save.nanofield.rewards = n
-}
-
-dev.addSpin = function(n){
-	qu_save.tod.r.spin = qu_save.tod.r.spin.add(Decimal.pow(10,n))
-	qu_save.tod.b.spin = qu_save.tod.b.spin.add(Decimal.pow(10,n))
-	qu_save.tod.g.spin = qu_save.tod.g.spin.add(Decimal.pow(10,n))
 }
 
 dev.addGHP = function(n){
@@ -328,13 +314,13 @@ dev.boosts = {
 		},
 	},
 	6: {
-		name: "Replicanti Release",
+		name: "Hypergluonic Flux",
 		unl() {
-			return QCs_tmp.qc1
+			return tmp.quActive
 		},
 		eff(x) {
-			//Replicanti Release: Raise the replicanti limit and slow down Replicanti Slowdown, both at a same multiplier.
-			return 2
+			//Hypergluonic Flux: Increase the scaling of Quantum Power.
+			return (3 - 40 / (Math.log10(player.money.add(1).log10() + 1) + 20)) / 3
 		},
 	},
 	7: {
@@ -347,26 +333,39 @@ dev.boosts = {
 		},
 	},
 	8: {
-		name: "Replicante Clovers",
+		name: "???",
 		unl() {
-			return true
+			return false
 		},
 		eff(x) {
-			//Replicante Clovers: Replicanti Stealth boosts chance upgrades more by an exponent.
-			return 10
+			return 1
 		},
 	},
 }
 
-dev.quSb = {
-	//^3 Quantum Power: Rebalancing
-	k: 3,
-	j: 6,
-	jP: 3,
-
-	on: false //This boost should be enabled in this line, not in dev.boosts.on!
+function futureBoost(x) {
+	return dev.boosts.on
 }
 
-function futureBoost(x) {
-	return x == "quantum_superbalancing" ? dev.quSb.on : dev.boosts.on
+//QUANTUM SINGULARITY / SUPREMACY?!
+dev.quSb = {
+	//^3 Quantum Power: Rebalancing
+	k: 3, //Quantum Energy
+	j: 6, //Quantum Power
+	jP: 3, //Positronic Charge
+
+	on: false //This boost should be enabled in this line, not in dev.boosts.on!
+
+	/*
+	Replicanti Upgrades: ^2.5 cap?
+	QC2 reward: ^1
+	Color Subcharge: ^0.5
+	Green Power: n^1/4k
+	Meta Accelerator Speed: n^1/6jP
+	Meta Accelerator Slowdown: n^1/6jP
+	*/
+}
+
+function qu_superbalanced() {
+	return dev.quSb.on
 }

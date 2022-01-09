@@ -1,12 +1,12 @@
 function cantHoldInfinitiesCheck(){
-	if (getDimensionFinalMultiplier(1).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(2).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(3).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(4).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(5).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(6).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(7).gte(new Decimal("1e308")) &&
-	getDimensionFinalMultiplier(8).gte(new Decimal("1e308"))) giveAchievement("Can't hold all these infinities")
+	if (getDimensionFinalMultiplier(1).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(2).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(3).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(4).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(5).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(6).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(7).gte(E("1e308")) &&
+	getDimensionFinalMultiplier(8).gte(E("1e308"))) giveAchievement("Can't hold all these infinities")
 }
 
 function antitablesHaveTurnedCheck(){
@@ -104,7 +104,7 @@ function checkIPReqAchieve(){
 	}
 	var ableToGetRid2 = checkEmpty && player.dilation.active 
 	
-	if (player.infinityPoints.gte(new Decimal("1e22000")) && checkEmpty) giveAchievement("What do I have to do to get rid of you")
+	if (player.infinityPoints.gte(E("1e22000")) && checkEmpty) giveAchievement("What do I have to do to get rid of you")
 	if (player.infinityPoints.gte(1e100) && player.firstAmount.equals(0) && player.infinitied == 0 && player.resets <= 4 && player.galaxies <= 1 && player.replicanti.galaxies == 0) giveAchievement("Like feasting on a behind")
 	if (player.infinityPoints.gte('9.99999e999')) giveAchievement("This achievement doesn't exist II");
 	if (player.infinityPoints.gte('1e30008')) giveAchievement("Can you get infinite IP?");
@@ -117,7 +117,7 @@ function checkIPReqAchieve(){
 		player.infinityDimension7.baseAmount == 0 &&
 		player.infinityDimension8.baseAmount == 0 &&
 		player.infMultCost.equals(10) &&
-		player.infinityPoints.gt(new Decimal("1e140000"))) giveAchievement("I never liked this infinity stuff anyway")
+		player.infinityPoints.gt(E("1e140000"))) giveAchievement("I never liked this infinity stuff anyway")
 	if (ableToGetRid2 && player.infinityPoints.log10() >= 20000) giveAchievement("This is what I have to do to get rid of you.")
 }
 
@@ -125,7 +125,7 @@ function checkReplicantiBasedReqAchieve(){
 	if (player.replicanti.amount.gte(Number.MAX_VALUE) && player.thisInfinityTime < 600*30) giveAchievement("Is this safe?");
 	if (player.replicanti.galaxies >= 10 && player.thisInfinityTime < 150) giveAchievement("The swarm");
 	if (player.replicanti.galaxies >= 180 * player.galaxies && player.galaxies >= 1) giveAchievement("Popular music")
-	if (player.replicanti.amount.gt(new Decimal("1e20000"))) giveAchievement("When will it be enough?")
+	if (player.replicanti.amount.gt(E("1e20000"))) giveAchievement("When will it be enough?")
 	if (player.boughtDims && player.replicanti.amount.gt("1e1000000")) giveAchievement("Do you really need a guide for this?");
 	if (player.replicanti.amount.gt(tmp.ngp3 ? "1e60000" : "1e100000")) giveAchievement("It will never be enough")
 }
@@ -171,6 +171,8 @@ function checkOtherPreNGp3Achieve() {
 	if (tmp.ngp3) for (id = 0; id < player.masterystudies.length; id++) {
 		if (player.masterystudies[id].split("t")[1]) ableToGetRid2 = false
 	}
+	if (tmp.ngp3_boost && getAmount(8) >= 100) giveAchievement("Fake News")
+	if (tmp.ngp3_boost && player.challenges.includes("challenge5")) giveAchievement("Spreading Cancer")
 	if (player.why >= 1e6) giveAchievement("Should we tell them about buy max...")
 	if (infchallengeTimes < 7.5) giveAchievement("Never again")
 	if (player.totalTimePlayed >= 10 * 60 * 60 * 24 * 8) giveAchievement("One for each dimension")
@@ -182,7 +184,7 @@ function checkOtherPreNGp3Achieve() {
 	if (player.galaxies >= 540 && player.replicanti.galaxies == 0) giveAchievement("Unique snowflakes")
 	if (player.dilation.active) giveAchievement("I told you already, time is relative")
 	if (player.resets >= 10) giveAchievement("Boosting to the max")
-	if (player.spreadingCancer >= 10) giveAchievement("Spreading Cancer")
+	if (!tmp.ngp3_boost && player.spreadingCancer >= 10) giveAchievement("Spreading Cancer")
 	if (player.spreadingCancer >= 1000000) giveAchievement("Cancer = Spread")
 	if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
 	if (player.break) giveAchievement("Limit Break")
@@ -214,29 +216,12 @@ function checkNGp2Achieve() {
 	if (player.meta.resets >= (tmp.ngp3 ? 7 : 10)) giveAchievement("Meta-boosting to the max")
 }
 
-function getTwoDecaysBool(){
-	branches = ['r', 'g', 'b']
-	for (i = 0; i < 3; i++){
-		if (!qu_save.tod[branches[i]].decays) return false
-		if (qu_save.tod[branches[i]].decays < 2) return false	
-	}
-	return true
-}
-
 function preHiggsNGp3AchieveCheck() {
 	//Time Studies
 	let checkEmpty = player.timestudy.studies.length < 1
 
 	//Quantum
 	let usedQuarks = qu_save.usedQuarks
-
-	//Tree of Decay
-	let noTree = false
-	let minUQ = getMinimumUnstableQuarks()
-	for (var u = 1; u <= 8; u++) {
-		if (getTreeUpgradeLevel(u) > 0) break
-		else noTree = true
-	}
 
 	//Able to get "Rid of you"
 	let ableToGetRid2 = checkEmpty && player.dilation.active
@@ -246,11 +231,14 @@ function preHiggsNGp3AchieveCheck() {
 	let ableToGetRid6 = ableToGetRid2 && QCs.in(6) && QCs.in(8)
 
 	if (player.meta.bestAntimatter.gte(Number.MAX_VALUE)) giveAchievement("I don't have enough fuel!")
+	if (tmp.quUnl) giveAchievement("Sub-atomic")
 	if (usedQuarks.r.max(usedQuarks.g).max(usedQuarks.b).gt(0) && colorCharge.normal.chargeAmt.eq(0)) giveAchievement("Hadronization")
 	if (player.galaxies >= 1100 && !player.dilation.studies.includes(1)) giveAchievement("No more tax fraud!")
+	if (qu_save.best <= 300) giveAchievement("And the winner is...")
 	if (player.money.gte(getOldAgeRequirement())) giveAchievement("Old age")
 	if (player.infinityPoints.log10() >= 3e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
 
+	if (qMs.tmp.amt >= 21) giveAchievement("Special Relativity")
 	if (QCs.done(3)) giveAchievement("We are not going squared.")
 	if (
 		player.meta.bestAntimatter.gte(Decimal.pow(Number.MAX_VALUE, 2)) &&
@@ -270,7 +258,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (!hasAch("ng3pr13")) {
 		var cond = 0
 		for (var i = 1; i <= 12; i++) {
-			if (enB.pos.charged(i) && enB.pos.chargeEff(i) >= 9) cond++
+			if (enB.pos.charged(i) && enB.pos.chargeEff(i) >= 8) cond++
 			if (cond >= 6) break
 		}
 		if (cond >= 6) giveAchievement("Bursted Em All!")
@@ -291,28 +279,47 @@ function preHiggsNGp3AchieveCheck() {
 	}
 	if (QCs.inAny() && str_tmp.vibrated === 0 && player.meta.bestAntimatter.e >= 1.6e3) giveAchievement("Get rid of you by yourself...")
 
-	if (false) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
+	return //WILL MOVE FOR UPCOMING UPDATES
+
+	//ROW 17
+	if (pH.can("quantum") && QCs.in(3) && player.meta[2].bought == 0 && player.meta[3].bought == 0 && player.meta[4].bought == 0 && player.meta[5].bought == 0 && player.meta[6].bought == 0 && player.meta[7].bought == 0 && player.meta[8].bought == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
+	if (pH.did("fluctuate")) giveAchievement("Feel the Momentum")
+	if (str.unl() && (str_tmp.powers[1] * str_tmp.str < -1.5 || str_tmp.powers[2] * str_tmp.str < -1.5 || str_tmp.powers[3] * str_tmp.str < -1.5)) giveAchievement("Never make paradoxes!")
+	if (str.unl() && !hasAch("ng3p44")) {
+		var cond1 = 0
+		var cond2 = 0
+		for (var i = 1; i <= 3; i++) {
+			if (str_tmp.powers[i] * str_tmp.str > 2.5) cond1++
+			if (str_tmp.powers[i] > 0) cond2++
+		}
+		if (cond1 == 2 && cond2 == 2) giveAchievement("String Eversion")
+	}
+	if (str.unl() && !hasAch("ng3p45")) {
+		for (var i = 1; i <= 3; i++) {
+			if (str_tmp.powers[i] > -1 && str_tmp.powers[i] < -0.8) {
+				giveAchievement("Bullseye!")
+				break
+			}
+		}
+	}
+	if (FDs_save.meta.gte(1e15) && fluc_save.time <= 86400) giveAchievement("MAXIMUM OVERCHARGE")
 	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")
-	if (player.meta.antimatter.e >= 1/0 && player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] == 0 && player.dilation.upgrades.length == 0) giveAchievement("Never make paradoxes!")
 	if (player.infinityPoints.gte(Decimal.pow(Number.MAX_VALUE, 1000)) && ableToGetRid5) giveAchievement("I don't want you to live anymore.")
 
-	if (pH.did("fluctuate")) giveAchievement("Fluctuate Reached!")
 	if (player.dilation.dilatedTime.log10() >= 411 && qu_save.notrelative) giveAchievement("Time is not relative")
 	if (!hasAch("ng3p42")) {
-		for (d = 2; d < 9; d++) {
+		for (var d = 2; d < 9; d++) {
 			if (player[TIER_NAMES[d]+"Amount"].gt(0) || player["infinityDimension"+d].amount.gt(0) || player["timeDimension"+d].amount.gt(0) || player.meta[d].amount.gt(0)) break
 			else if (player.money.log10() >= 1.6e12 && d == 8) giveAchievement("ERROR 404: DIMENSIONS NOT FOUND")
 		}
 	}
-	if (false) giveAchievement("Impossible expectations")
 	if (player.timestudy.theorem >= 1.1e7 && qu_save.wasted) giveAchievement("Studies are wasted")
 	if (player.infinityPoints.gte(Decimal.pow(10, 2.75e5)) && ableToGetRid6) giveAchievement("Are you currently dying?")
-	if (qu_save.nanofield.rewards >= 21 && noTree) giveAchievement("But I don't want to grind!")
 	if (player.replicanti.amount.log10() >= 1/0) giveAchievement("Will it be enough?")
 	if (qu_save.bigRip.active) {
 		let ableToGetRid7 = ableToGetRid2 && player.epmult.eq(1)
 		let ableToGetRid8 = ableToGetRid7 && !qu_save.breakEternity.did
-		let ableToGetRid9 = ableToGetRid8 && noTree
+		let ableToGetRid9 = ableToGetRid8
 		let ableToGetRid10 = ableToGetRid9
 		if (player.currentEternityChall == "eterc7" && player.galaxies == 1 && player.money.log10() >= 8e7) giveAchievement("Time Immunity")
 		if (!player.timestudy.studies.includes(11) && player.timeShards.log10() >= 215) giveAchievement("You're not really smart.")
@@ -323,35 +330,23 @@ function preHiggsNGp3AchieveCheck() {
 		if (player.matter.log10() >= 5000) giveAchievement("Really?")
 	}
 	if (qu_save.bigRip.spaceShards.log10() >= 33 && !qu_save.breakEternity.did) giveAchievement("Finite Time")
-	if (minUQ.quarks.log10() >= 1e12 && minUQ.decays >=2 && !qu_save.bigRip.times) giveAchievement("Weak Decay")		
 	if (Decimal.gte(getInfinitied(), 1/0)) giveAchievement("Meta-Infinity confirmed?")
 	if (Decimal.gte(getEternitied(), 1/0)) giveAchievement("Everlasting Eternities")
 	if (player.options.secrets && player.options.secrets.ghostlyNews && !player.options.newsHidden) giveAchievement("Two tickers")
 	if (qu_save.breakEternity.did) giveAchievement("Time Breaker")
 	if (mTs.bought >= 48) giveAchievement("The Theory of Ultimate Studies")
-	if (qu_save.best <= 300) giveAchievement("And the winner is...")
-	if (qMs.tmp.amt >= 21) giveAchievement("Special Relativity")
 	if (qu_save.best <= 10) giveAchievement("Quantum doesn't take so long")
-	if (player.masterystudies.includes("d13")) giveAchievement("Do protons decay?")
-	if (getTotalRadioactiveDecays() >= 10) giveAchievement("Radioactive Decaying to the max!")
-	if (tmp.quUnl) giveAchievement("Sub-atomic")
 }
 
 function atHiggsAchCheck(){
-	if (player.ghostify.hb.higgs >= 1) giveAchievement("The Holy Particle")
 	if (player.ghostify.ghostlyPhotons.enpowerments >= 25) giveAchievement("Bright as the Anti-Sun")
 	if (qu_save.quarks.log10() >= 4e4) giveAchievement("Are these another...")
-	if (player.ghostify.reference && getMinimumUnstableQuarks().decays >= 2) giveAchievement("... references to EC8?")
-	if (player.ghostify.hb.bosonicSemipowerment && player.ghostify.ghostlyPhotons.lights[7] >= tmp.leReq / 2) giveAchievement("Bosonic Semipowerment")
 	if (player.ghostify.times >= Math.pow(Number.MAX_VALUE, 1/4)) giveAchievement("The Ghostliest Side")
 	if (player.money.log10() >= 1e18) giveAchievement("Meta-Quintillion")
-	if (player.unstableThisGhostify <= 10 && getTwoDecaysBool()) giveAchievement("... references to EC8?")
 }
 
 function atGravDimsAchCheck(){
-	if (GDs.unlocked()) giveAchievement("The Power of Relativity")
 	if (player.ghostify.ghostParticles.plus(1).log10() >= 5e3) giveAchievement("Einstein's Ghost")
-	if (qu_save.nanofield.rewards >= 250) giveAchievement("Gigafield")
 	if (qu_save.bigRip.bestThisRun.plus(1).log10() >= Math.sqrt(2) * 1e12) giveAchievement("Do you even how to?")
 	// Brutally Challenging is on quantum_challenges.js
 	if (player.ghostify.time <= 100 && player.money.plus(1).log10() >= 1/0) giveAchievement("Auto-Ghost Speedrunning")
@@ -381,5 +376,5 @@ function ALLACHIEVECHECK(){
 	if (!tmp.ngp3) return
 
 	if (!hasAch("ng3p101")) preHiggsNGp3AchieveCheck()
-	if (player.ghostify && player.ghostify.hb) beyondHiggsAchieveCheck()
+	if (player.ghostify) beyondHiggsAchieveCheck()
 }

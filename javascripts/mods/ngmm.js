@@ -3,7 +3,7 @@ function inNGM(x) {
 }
 
 function getGSAmount(offset=0) { 
-	if (tmp.ri) return new Decimal(0)
+	if (tmp.ri) return E(0)
 	let galaxies = getGSGalaxies() + offset
 	let y = getGSGalaxyExp(galaxies)
 	let z = getGSDimboostExp(galaxies)
@@ -44,7 +44,7 @@ function getGPGain(offset = 0){
 }
 
 function getGPMultipliers(){
-	let ret = new Decimal(1)
+	let ret = E(1)
 	if (hasAch("r23") && player.tickspeedBoosts !== undefined) {
 		let tbDiv = 10
 		if (inNGM(4)) tbDiv = 5
@@ -158,7 +158,7 @@ function galacticSacrifice(auto, force, chall) {
 			if (player.firstAmount == 1 && player.resets == 0 && player.galaxies == 0 && inNC(12)) giveAchievement("ERROR 909: Dimension not found")
 		}
 		if (!chall && (force || !player.options.retryChallenge)) delete player.galacticSacrifice.chall
-		getEl("challengeconfirmation").style.display = "inline-block"
+		el("challengeconfirmation").style.display = "inline-block"
 		updateChallenges()
 		updateNCVisuals()
 		updateChallengeTimes()
@@ -169,7 +169,7 @@ function galacticSacrifice(auto, force, chall) {
 		giveAchievement("The hardest of sacrifices")
 		updateGalstones()
 	}
-	GPminpeak = new Decimal(0)
+	GPminpeak = E(0)
 	player.galacticSacrifice.time = 0
 	resetPSac()
 	galaxyReset(-player.galaxies)
@@ -177,7 +177,7 @@ function galacticSacrifice(auto, force, chall) {
 
 function resetGalacticSacrifice(eternity) {
 	return inNGM(2) ? {
-		galaxyPoints: hasAch("r33") && !eternity ? new Decimal(getInfinitied()).div(10).pow(2) : new Decimal(0),
+		galaxyPoints: hasAch("r33") && !eternity ? E(getInfinitied()).div(10).pow(2) : E(0),
 		time: 0,
 		times: 0,
 		upgrades: []
@@ -187,7 +187,7 @@ function resetGalacticSacrifice(eternity) {
 function newGalacticDataOnInfinity(layer, chall) {
 	if (!inNGM(2)) return
 
-	GPminpeak = new Decimal(0)
+	GPminpeak = E(0)
 
 	let kept = false
 	if (layer == 3) kept = hasAch(inNGM(3) ? "r36" : "r33")
@@ -195,7 +195,7 @@ function newGalacticDataOnInfinity(layer, chall) {
 
 	if (kept) {
 		var data = player.galacticSacrifice
-		data.galaxyPoints = player.tickspeedBoosts == undefined ? (eternity ? data.galaxyPoints : data.galaxyPoints.add(getGSAmount())) : new Decimal(0)
+		data.galaxyPoints = player.tickspeedBoosts == undefined ? (eternity ? data.galaxyPoints : data.galaxyPoints.add(getGSAmount())) : E(0)
 		if (player.tickspeedBoosts != undefined) data.times = 0
 		data.time = 0
 		return data
@@ -237,7 +237,7 @@ let galCosts = {
 }
 
 function getGalaxyUpgradeCost(i) {
-	if (inNGM(4) && galCosts[i + "ngm4"]) return new Decimal(galCosts[i + "ngm4"])
+	if (inNGM(4) && galCosts[i + "ngm4"]) return E(galCosts[i + "ngm4"])
 	return galCosts[i]
 }
 
@@ -269,8 +269,8 @@ function buyGalaxyUpgrade(i) {
 		}
 	}
 	if (i == 53) {
-		player.infMult = new Decimal(1)
-		player.infMultCost = new Decimal(10)
+		player.infMult = E(1)
+		player.infMultCost = E(10)
 	}
 }
 
@@ -305,39 +305,39 @@ function reduceDimCosts(upg) {
 }
 
 function galacticUpgradeSpanDisplay() {
-	getEl('galcost33').innerHTML = shortenCosts(getGalaxyUpgradeCost(33))
+	el('galcost33').innerHTML = shortenCosts(getGalaxyUpgradeCost(33))
 	if (inNGM(3)) {
-		getEl('galcost24').textContent = shortenCosts(1e3)
-		getEl('galcost34').textContent = shortenCosts(1e17)
+		el('galcost24').textContent = shortenCosts(1e3)
+		el('galcost34').textContent = shortenCosts(1e17)
 	}
 	if (inNGM(4)) {
-		getEl('galcost25').textContent = shortenCosts(1e3)
-		getEl('galcost35').textContent = shortenCosts(2e3)
-		getEl('galcost16').textContent = shortenCosts(1e16)
-		getEl('galcost26').textContent = shortenCosts(1e18)
-		getEl('galcost36').textContent = shortenCosts(1e22)
-		getEl('galcost41').textContent = shortenCosts(1e23)
-		getEl('galcost42').textContent = shortenCosts(1e25)
-		getEl('galcost43').textContent = shortenCosts(1e28)
-		getEl('galcost44').textContent = shortenCosts(1e31)
-		getEl('galcost45').textContent = shortenCosts(1e34)
-		getEl('galcost46').textContent = shortenCosts(1e40) 
+		el('galcost25').textContent = shortenCosts(1e3)
+		el('galcost35').textContent = shortenCosts(2e3)
+		el('galcost16').textContent = shortenCosts(1e16)
+		el('galcost26').textContent = shortenCosts(1e18)
+		el('galcost36').textContent = shortenCosts(1e22)
+		el('galcost41').textContent = shortenCosts(1e23)
+		el('galcost42').textContent = shortenCosts(1e25)
+		el('galcost43').textContent = shortenCosts(1e28)
+		el('galcost44').textContent = shortenCosts(1e31)
+		el('galcost45').textContent = shortenCosts(1e34)
+		el('galcost46').textContent = shortenCosts(1e40) 
 	} else if (player.infinityUpgrades.includes("postinfi63")) {
-		getEl("galcost41").textContent = shortenCosts(new Decimal("1e3800"))
-		getEl("galcost42").textContent = shortenCosts(new Decimal("1e4000"))
-		getEl("galcost43").textContent = shortenCosts(new Decimal("1e4200"))
+		el("galcost41").textContent = shortenCosts(E("1e3800"))
+		el("galcost42").textContent = shortenCosts(E("1e4000"))
+		el("galcost43").textContent = shortenCosts(E("1e4200"))
 	}
 	if (player.infinityUpgrades.includes("postinfi63")) {
-		getEl("galcost51").textContent = shortenCosts(new Decimal("1e5500"))
-		getEl("galcost52").textContent = shortenCosts(new Decimal("1e8000"))
-		getEl("galcost53").textContent = shortenCosts(new Decimal("1e25000"))
+		el("galcost51").textContent = shortenCosts(E("1e5500"))
+		el("galcost52").textContent = shortenCosts(E("1e8000"))
+		el("galcost53").textContent = shortenCosts(E("1e25000"))
 	}
 }
 
 function galacticUpgradeButtonTypeDisplay () {
-	getEl("galaxyPoints").innerHTML = "You have <span class='GPAmount'>" + shortenDimensions(player.galacticSacrifice.galaxyPoints) + "</span> Galaxy point" + (player.galacticSacrifice.galaxyPoints.eq(1)? "." : "s.")
+	el("galaxyPoints").innerHTML = "You have <span class='GPAmount'>" + shortenDimensions(player.galacticSacrifice.galaxyPoints) + "</span> Galaxy point" + (player.galacticSacrifice.galaxyPoints.eq(1)? "." : "s.")
 
-	let t = getEl("galTable")
+	let t = el("galTable")
 	for (let i = 1; i <= 5; i++) { //5 rows
 		var r = t.rows[i-1]
 		if (!galConditions["r"+i] || galConditions["r"+i]()) {
@@ -346,7 +346,7 @@ function galacticUpgradeButtonTypeDisplay () {
 				var c = r.cells[j-1]
 				if (!galConditions["c"+j] || galConditions["c"+j]()) {
 					c.style.display = ""
-					var e = getEl('galaxy' + i + j);
+					var e = el('galaxy' + i + j);
 					if (hasGalUpg(+(i + '' + j))) {
 						e.className = 'infinistorebtnbought'
 					} else if (player.galacticSacrifice.galaxyPoints.gte(getGalaxyUpgradeCost(i + '' + j)) && (i === 1 || hasGalUpg(+((i - 1) + '' + j)))) {
@@ -356,12 +356,12 @@ function galacticUpgradeButtonTypeDisplay () {
 					}
 					let upgId = i * 10 + j
 					let mult = galMults["u" + upgId]
-					let elm = getEl('galspan' + upgId)
+					let elm = el('galspan' + upgId)
 
 					if (mult && elm) {
 						let display = galMultDisplays["u" + upgId]
 						mult = mult()
-						getEl('galspan' + upgId).textContent = display ? display(mult) : shorten(mult)
+						el('galspan' + upgId).textContent = display ? display(mult) : shorten(mult)
 					}
 				} else c.style.display = "none"
 			}
@@ -389,25 +389,25 @@ function productAllTotalBought1() {
 }
 
 function productAllDims1(){
-	var ret = new Decimal(0)
+	var ret = E(0)
 	for (var i = 1; i <= 8; i++) {
 		ret = ret.add(Math.max(player[TIER_NAMES[i] + "Amount"].max(1).log10(),0));
 	}
 	return ret.max(1)
 }
 
-getEl("challenge13").onclick = function () {
+el("challenge13").onclick = function () {
 	startNormalChallenge(13)
 }
 
 //v1.3
 function gSacrificeConf() {
-	getEl("gConfirmation").checked = player.options.gSacrificeConfirmation
+	el("gConfirmation").checked = player.options.gSacrificeConfirmation
 	player.options.gSacrificeConfirmation = !player.options.gSacrificeConfirmation
-	getEl("gSacConfirmBtn").textContent = "Galactic Sacrifice confirmation: " + (player.options.gSacrificeConfirmation ? "ON" : "OFF")
+	el("gSacConfirmBtn").textContent = "Galactic Sacrifice confirmation: " + (player.options.gSacrificeConfirmation ? "ON" : "OFF")
 }
 
-getEl("challenge14").onclick = function () {
+el("challenge14").onclick = function () {
 	startNormalChallenge(14)
 }
 
@@ -431,7 +431,7 @@ function upgradeSacAutobuyer() {
 	updateAutobuyers();
 }
 
-getEl("buyerBtnGalSac").onclick = function () {
+el("buyerBtnGalSac").onclick = function () {
 	buyAutobuyer(12);
 }
 
@@ -440,25 +440,25 @@ function getPost01Mult() {
 	return Math.min(Math.pow(player.infinitied + 1, .3), Math.pow(Math.log(player.infinitied + 3), 3))
 }
 
-getEl("postinfi01").onclick = function() {
+el("postinfi01").onclick = function() {
 	buyInfinityUpgrade("galPointMult",player.tickspeedBoosts==undefined?1e3:1e4);
 }
 
-getEl("postinfi02").onclick = function() {
+el("postinfi02").onclick = function() {
 	buyInfinityUpgrade("dimboostCost",player.tickspeedBoosts==undefined?2e4:1e5);
 }
 
-getEl("postinfi03").onclick = function() {
+el("postinfi03").onclick = function() {
 	buyInfinityUpgrade("galCost",5e5);
 }
 
-getEl("postinfi04").onclick = function() {
+el("postinfi04").onclick = function() {
 	if (player.infinityPoints.gte(player.dimPowerIncreaseCost) && player.extraDimPowerIncrease < 40) {
 		player.infinityPoints = player.infinityPoints.minus(player.dimPowerIncreaseCost)
-		player.dimPowerIncreaseCost = new Decimal(player.tickspeedBoosts == undefined ? 1e3 : 3e5).times(Decimal.pow(4, Math.min(player.extraDimPowerIncrease, 15) + 1));
+		player.dimPowerIncreaseCost = E(player.tickspeedBoosts == undefined ? 1e3 : 3e5).times(Decimal.pow(4, Math.min(player.extraDimPowerIncrease, 15) + 1));
 		player.extraDimPowerIncrease += 1;
 		if (player.extraDimPowerIncrease > 15) player.dimPowerIncreaseCost = player.dimPowerIncreaseCost.times(Decimal.pow(Decimal.pow(4, 5), player.extraDimPowerIncrease - 15))
-		getEl("postinfi04").innerHTML = "Further increase all Dimension multipliers<br>x^" + galMults.u31().toFixed(2) + (player.extraDimPowerIncrease < 40 ? " -> x^" + ((galMults.u31() + 0.02).toFixed(2)) + "<br>Cost: " + shorten(player.dimPowerIncreaseCost) + " IP" : "")
+		el("postinfi04").innerHTML = "Further increase all Dimension multipliers<br>x^" + galMults.u31().toFixed(2) + (player.extraDimPowerIncrease < 40 ? " -> x^" + ((galMults.u31() + 0.02).toFixed(2)) + "<br>Cost: " + shorten(player.dimPowerIncreaseCost) + " IP" : "")
 	}
 }
 
@@ -487,37 +487,37 @@ function isADSCRunning() {
 }
 
 //v1.6
-getEl("postinfi50").onclick = function() {
+el("postinfi50").onclick = function() {
     buyInfinityUpgrade("postinfi50", player.tickspeedBoosts==undefined?1e25:2e18);
 }
 
-getEl("postinfi51").onclick = function() {
+el("postinfi51").onclick = function() {
     buyInfinityUpgrade("postinfi51", player.tickspeedBoosts==undefined?1e29:1e20);
 }
 
-getEl("postinfi52").onclick = function() {
+el("postinfi52").onclick = function() {
     buyInfinityUpgrade("postinfi52", player.tickspeedBoosts==undefined?1e33:1e25);
 }
 
-getEl("postinfi53").onclick = function() {
+el("postinfi53").onclick = function() {
     buyInfinityUpgrade("postinfi53", player.tickspeedBoosts==undefined?1e37:1e29);
 }
 
 //v1.9
-getEl("postinfi60").onclick = function() {
+el("postinfi60").onclick = function() {
     buyInfinityUpgrade("postinfi60", 1e50);
 }
 
-getEl("postinfi61").onclick = function() {
-    buyInfinityUpgrade("postinfi61", new Decimal("1e450"));
+el("postinfi61").onclick = function() {
+    buyInfinityUpgrade("postinfi61", E("1e450"));
 }
 
-getEl("postinfi62").onclick = function() {
-    buyInfinityUpgrade("postinfi62", new Decimal("1e700"));
+el("postinfi62").onclick = function() {
+    buyInfinityUpgrade("postinfi62", E("1e700"));
 }
 
-getEl("postinfi63").onclick = function() {
-    buyInfinityUpgrade("postinfi63", new Decimal("1e2000"));
+el("postinfi63").onclick = function() {
+    buyInfinityUpgrade("postinfi63", E("1e2000"));
 }
 
 function getNewB60Mult(){
@@ -654,7 +654,7 @@ let galMults = {
 		return r
 	},
 	u35: function() {
-		let r = new Decimal(1)
+		let r = E(1)
 		let p = getProductBoughtMult()
 		for (var d = 1; d < 9; d++) {
 			r = Decimal.times(player["timeDimension" + d].bought / 6, p).max(1).times(r)
@@ -803,6 +803,6 @@ function exitNGMM() {
 
 	tmp.ngmX = calcNGMX()
 	tmp.ngmX = tmp.ngmX
-	getEl("gSacrifice").style.display = "none"
+	el("gSacrifice").style.display = "none"
 	pH.reset()
 }

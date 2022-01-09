@@ -2,11 +2,11 @@ var testHarderNGp3 = false
 
 function updateNGP3EterUpgs() {
 	if (pH.did("quantum"))  {
-		getEl("eterrowMS").style.display = ""
-		getEl("eter13").className = (player.eternityUpgrades.includes(13)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"
-		getEl("eter14").className = (player.eternityUpgrades.includes(14)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"
-		getEl("eter15").className = (player.eternityUpgrades.includes(15)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"
-	} else getEl("eterrowMS").style.display = "none"
+		el("eterrowMS").style.display = ""
+		el("eter13").className = (player.eternityUpgrades.includes(13)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"
+		el("eter14").className = (player.eternityUpgrades.includes(14)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"
+		el("eter15").className = (player.eternityUpgrades.includes(15)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"
+	} else el("eterrowMS").style.display = "none"
 }
 
 //v1.5 
@@ -26,7 +26,7 @@ function showQuantumTab(tabName) {
 	}
 	if (oldTab != tabName) {
 		aarMod.tabsSave.tabQuantum = tabName
-		if (tabName == "uquarks" && getEl("quantumtab").style.display !== "none") {
+		if (tabName == "uquarks" && el("quantumtab").style.display !== "none") {
 			resizeCanvas()
 			requestAnimationFrame(drawQuarkAnimation)
 		}
@@ -47,25 +47,27 @@ var quantumTabs = {
 }
 
 function updateQuantumTabs() {
-	getEl("quarkEnergy").textContent = shorten(qu_save.quarkEnergy)
-	getEl("quarkEnergyMult").textContent = "(" + (tmp.qe.div != 1 && shiftDown ? shorten(tmp.qe.mult) + "x, /" + shorten(tmp.qe.div) : shorten(tmp.qe.mult.div(tmp.qe.div)) + "x") + ")"
+	el("quarkEnergy").textContent = shorten(qu_save.quarkEnergy)
+	el("quarkEnergyMult").textContent = "(" + (tmp.qe.div != 1 && shiftDown ? shorten(tmp.qe.mult) + "x, /" + shorten(tmp.qe.div) : shorten(tmp.qe.mult.div(tmp.qe.div)) + "x") + ")"
 
-	getEl("qw_info").style.display = shiftDown ? "" : "none"
-	getEl("qe_info").style.display = shiftDown ? "" : "none"
-	getEl("bestQE").textContent = shorten(qu_save.bestEnergy)
-	getEl("qeEff").textContent = "^" + qu_save.expEnergy.toFixed(3)
-	getEl("qeFrac").textContent = shorten(tmp.qe.expNum) + "/" + shorten(tmp.qe.expDen)
+	el("qw_info").style.display = shiftDown ? "" : "none"
+	el("qe_info").style.display = shiftDown ? "" : "none"
+	el("bestQE").textContent = shorten(qu_save.bestEnergy)
+	el("qeEff").textContent = "^" + qu_save.expEnergy.toFixed(3)
+	el("qeFrac").textContent = shorten(tmp.qe.expNum) + "/" + shorten(tmp.qe.expDen)
 
 	for (var i = 0; i < quantumTabs.tabIds.length; i++) {
 		var id = quantumTabs.tabIds[i]
-		if (getEl(id).style.display == "block") quantumTabs.update[id]()
+		if (el(id).style.display == "block") quantumTabs.update[id]()
 	}
 }
 
 function toggleAutoTT() {
-	if (qMs.tmp.amt < 2) maxTheorems()
-	else player.autoEterOptions.tt = !player.autoEterOptions.tt
-	getEl("theoremmax").innerHTML = qMs.tmp.amt >= 2 ? ("Auto max: " + (player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max Theorems"
+	if (qMs.tmp.amt < 1) maxTheorems()
+	else {
+		player.autoEterOptions.tt = !player.autoEterOptions.tt
+		el("theoremmax").innerHTML = "Auto: " + (player.autoEterOptions.tt ? "ON" : "OFF")
+	}
 }
 
 //v1.8
@@ -136,7 +138,7 @@ function respecTogglePC() {
 		quantum(true)
 	} else {
 		qu_save.pairedChallenges.respec = !qu_save.pairedChallenges.respec
-		getEl("respecPC").className = qu_save.pairedChallenges.respec ? "quantumbtn" : "storebtn"
+		el("respecPC").className = qu_save.pairedChallenges.respec ? "quantumbtn" : "storebtn"
 	}
 }
 
@@ -220,24 +222,24 @@ function maxAllDilUpgs() {
 function maybeShowFillAll() {
 	var display = "none"
 	if ((ETER_UPGS.has(10) && ETER_UPGS.has(11)) || ETER_UPGS.has(14)) display = "block"
-	getEl("fillAll").style.display = display
-	getEl("fillAll2").style.display = display
+	el("fillAll").style.display = display
+	el("fillAll2").style.display = display
 }
 
 //v1.9995
 function updateAutoQuantumMode() {
 	if (qu_save.autobuyer.mode == "amount") {
-		getEl("toggleautoquantummode").textContent = "Auto quantum mode: amount"
-		getEl("autoquantumtext").textContent = "Amount of QK to wait until reset:"
+		el("toggleautoquantummode").textContent = "Auto quantum mode: amount"
+		el("autoquantumtext").textContent = "Amount of QK to wait until reset:"
 	} else if (qu_save.autobuyer.mode == "relative") {
-		getEl("toggleautoquantummode").textContent = "Auto quantum mode: X times last quantum"
-		getEl("autoquantumtext").textContent = "X times last quantum:"
+		el("toggleautoquantummode").textContent = "Auto quantum mode: X times last quantum"
+		el("autoquantumtext").textContent = "X times last quantum:"
 	} else if (qu_save.autobuyer.mode == "time") {
-		getEl("toggleautoquantummode").textContent = "Auto quantum mode: time"
-		getEl("autoquantumtext").textContent = "Minimal seconds between quantums:"
+		el("toggleautoquantummode").textContent = "Auto quantum mode: time"
+		el("autoquantumtext").textContent = "Minimal seconds between quantums:"
 	} else if (qu_save.autobuyer.mode == "dilation") {
-		getEl("toggleautoquantummode").textContent = "Auto quantum mode: dilation"
-		getEl("autoquantumtext").textContent = "Amount of dilation runs to wait until reset:"
+		el("toggleautoquantummode").textContent = "Auto quantum mode: dilation"
+		el("autoquantumtext").textContent = "Amount of dilation runs to wait until reset:"
 	}
 }
 
@@ -252,7 +254,7 @@ function toggleAutoQuantumMode() {
 //v1.9997
 function toggleAutoReset() {
 	qu_save.autoOptions.replicantiReset = !qu_save.autoOptions.replicantiReset
-	getEl('autoReset').textContent = "Auto: " + (qu_save.autoOptions.replicantiReset ? "ON" : "OFF")
+	el('autoReset').textContent = "Auto: " + (qu_save.autoOptions.replicantiReset ? "ON" : "OFF")
 }
 
 //v2
@@ -288,7 +290,7 @@ function switchAB() {
 	}
 	if (player.autobuyers[11] % 1 !== 0) data.crunch = {
 		mode: player.autoCrunchMode,
-		amount: new Decimal(player.autobuyers[11].priority),
+		amount: E(player.autobuyers[11].priority),
 		on: player.autobuyers[11].isOn
 	}
 	data.eternity = {
@@ -374,7 +376,7 @@ function switchAB() {
 			interval: player.autobuyers[11].interval,
 			cost: player.autobuyers[11].cost,
 			bulk: 1,
-			priority: new Decimal(data.crunch.amount),
+			priority: E(data.crunch.amount),
 			tier: 1,
 			target: 12,
 			ticks: 0,
@@ -407,37 +409,28 @@ function switchAB() {
 	updateCheckBoxes()
 	loadAutoBuyerSettings()
 	if (player.autoCrunchMode == "amount") {
-		getEl("togglecrunchmode").textContent = "Auto crunch mode: amount"
-		getEl("limittext").textContent = "Amount of IP to wait until reset:"
+		el("togglecrunchmode").textContent = "Auto crunch mode: amount"
+		el("limittext").textContent = "Amount of IP to wait until reset:"
 	} else if (player.autoCrunchMode == "time") {
-		getEl("togglecrunchmode").textContent = "Auto crunch mode: time"
-		getEl("limittext").textContent = "Seconds between crunches:"
+		el("togglecrunchmode").textContent = "Auto crunch mode: time"
+		el("limittext").textContent = "Seconds between crunches:"
 	} else {
-		getEl("togglecrunchmode").textContent = "Auto crunch mode: X times last crunch"
-		getEl("limittext").textContent = "X times last crunch:"
+		el("togglecrunchmode").textContent = "Auto crunch mode: X times last crunch"
+		el("limittext").textContent = "X times last crunch:"
 	}
 	updateAutoEterMode()
 }
 
 function getAMforGHPGain(){
-	return inBigRip() ? qu_save.bigRip.bestThisRun.log10() : player.money.plus(1).log10() / (tmp.quActive && qu_save.breakEternity.upgrades.includes(13) ? 1e6 : 2e6)
+	return E(1)
 }
 
 function getGHPGain() {
-	if (!pH.did("ghostify")) return new Decimal(1)
-	let log = 0 //getAMforGHPGain() / QCs.getGoalMA([6, 8], "ghp_gain") - 1
-	if (hasAch("ng3p58")) { 
-		//the square part of the formula maxes at e10, and gets weaker after ~e60 total
-		let x = Math.min(7, log / 2) + Math.min(3, log / 2)
-		y = player.ghostify.ghostParticles.plus(Decimal.pow(10, log)).plus(10).log10()
-		if (!hasAch("ng3p84")) x = Math.min(x, 600 / y)
-		log += x
-	}
-	return Decimal.pow(10, log).times(getGHPMult()).floor()
+	return E(1)
 }
 
 function getGHPBaseMult() {
-	return Decimal.pow(20 / 9, player.ghostify.multPower - 1)
+	return E(1)
 }
 
 function getGHPMult() {
@@ -495,7 +488,7 @@ function ghostifyReset(implode, gain, amount, force) {
 		} else player.ghostify.ghostParticles = amount
 		for (var i=player.ghostify.last10.length-1; i>0; i--) player.ghostify.last10[i] = player.ghostify.last10[i-1]
 		player.ghostify.last10[0] = [player.ghostify.time, gain]
-		player.ghostify.times = nA(player.ghostify.times, bulk)
+		player.ghostify.times = c_add(player.ghostify.times, bulk)
 		player.ghostify.best = Math.min(player.ghostify.best, player.ghostify.time)
 		while (qu_save.times <= tmp.bm[player.ghostify.milestones]) player.ghostify.milestones++
 		if (!pH.did("ghostify")) {
@@ -548,7 +541,7 @@ function ghostifyReset(implode, gain, amount, force) {
 
 function toggleGhostifyConf() {
 	aarMod.ghostifyConf = !aarMod.ghostifyConf
-	getEl("ghostifyConfirmBtn").textContent = "Ghostify confirmation: O" + (aarMod.ghostifyConf ? "N" : "FF")
+	el("ghostifyConfirmBtn").textContent = "Ghostify confirmation: O" + (aarMod.ghostifyConf ? "N" : "FF")
 }
 
 function getGHPRate(num) {
@@ -557,25 +550,25 @@ function getGHPRate(num) {
 	return shorten(num) + " GhP/min"
 }
 
-var averageGHP = new Decimal(0)
+var averageGHP = E(0)
 var bestGHP
 function updateLastTenGhostifies() {
 	if (player.masterystudies === undefined) return
 	var listed = 0
-	var tempTime = new Decimal(0)
-	var tempGHP = new Decimal(0)
+	var tempTime = E(0)
+	var tempGHP = E(0)
 	for (var i=0; i<10; i++) {
 		if (player.ghostify.last10[i][1].gt(0)) {
 			var qkpm = player.ghostify.last10[i][1].dividedBy(player.ghostify.last10[i][0]/600)
 			var tempstring = shorten(qkpm) + " GhP/min"
 			if (qkpm<1) tempstring = shorten(qkpm*60) + " GhP/hour"
 			var msg = "The Ghostify " + (i == 0 ? '1 Ghostify' : (i+1) + ' Ghostifies') + " ago took " + timeDisplayShort(player.ghostify.last10[i][0], false, 3) + " and gave " + shortenDimensions(player.ghostify.last10[i][1]) +" GhP. "+ tempstring
-			getEl("ghostifyrun"+(i+1)).textContent = msg
+			el("ghostifyrun"+(i+1)).textContent = msg
 			tempTime = tempTime.plus(player.ghostify.last10[i][0])
 			tempGHP = tempGHP.plus(player.ghostify.last10[i][1])
 			bestGHP = player.ghostify.last10[i][1].max(bestGHP)
 			listed++
-		} else getEl("ghostifyrun"+(i+1)).textContent = ""
+		} else el("ghostifyrun"+(i+1)).textContent = ""
 	}
 	if (listed > 1) {
 		tempTime = tempTime.dividedBy(listed)
@@ -584,14 +577,14 @@ function updateLastTenGhostifies() {
 		var tempstring = shorten(qkpm) + " GhP/min"
 		averageGHP = tempGHP
 		if (qkpm<1) tempstring = shorten(qkpm*60) + " GhP/hour"
-		getEl("averageGhostifyRun").textContent = "Last " + listed + " Ghostifies average time: "+ timeDisplayShort(tempTime, false, 3)+" Average GhP gain: "+shortenDimensions(tempGHP)+" GhP. "+tempstring
-	} else getEl("averageGhostifyRun").textContent = ""
+		el("averageGhostifyRun").textContent = "Last " + listed + " Ghostifies average time: "+ timeDisplayShort(tempTime, false, 3)+" Average GhP gain: "+shortenDimensions(tempGHP)+" GhP. "+tempstring
+	} else el("averageGhostifyRun").textContent = ""
 }
 
 function updateBraveMilestones() {
 	if (pH.did("ghostify")) {
-		for (var m = 1; m < 17;m++) getEl("braveMilestone" + m).className = "achievement achievement" + (player.ghostify.milestones < m ? "" : "un") + "locked"
-		for (var r = 1; r < 3; r++) getEl("braveRow" + r).className = player.ghostify.milestones < r * 8 ? "" : "completedrow"
+		for (var m = 1; m < 17;m++) el("braveMilestone" + m).className = "achievement achievement" + (player.ghostify.milestones < m ? "" : "un") + "locked"
+		for (var r = 1; r < 3; r++) el("braveRow" + r).className = player.ghostify.milestones < r * 8 ? "" : "completedrow"
 	}
 }
 
@@ -613,10 +606,10 @@ function showGhostifyTab(tabName) {
 }
 
 function updateGhostifyTabs() {
-	if (getEl("neutrinos").style.display == "block") updateNeutrinosTab()
-	if (getEl("automaticghosts").style.display == "block") if (player.ghostify.milestones > 7) updateQuantumWorth("display")
-	if (getEl("gphtab").style.display == "block" && player.ghostify.ghostlyPhotons.unl) updatePhotonsTab()
-	if (getEl("bltab").style.display == "block" && player.ghostify.wzb.unl) updateBosonicLabTab()
+	if (el("neutrinos").style.display == "block") updateNeutrinosTab()
+	if (el("automaticghosts").style.display == "block") if (player.ghostify.milestones > 7) updateQuantumWorth("display")
+	if (el("gphtab").style.display == "block" && player.ghostify.ghostlyPhotons.unl) updatePhotonsTab()
+	if (el("bltab").style.display == "block" && player.ghostify.wzb.unl) updateBosonicLabTab()
 }
 
 function buyGHPMult() {
@@ -626,9 +619,9 @@ function buyGHPMult() {
 	subNeutrinos(cost)
 	player.ghostify.multPower++
 	player.ghostify.automatorGhosts[15].a = player.ghostify.automatorGhosts[15].a.times(5)
-	getEl("autoGhost15a").value = formatValue("Scientific", player.ghostify.automatorGhosts[15].a, 2, 1)
-	getEl("ghpMult").textContent = shortenMoney(getGHPBaseMult())
-	getEl("ghpMultUpgCost").textContent = shortenDimensions(getGHPMultCost())
+	el("autoGhost15a").value = formatValue("Scientific", player.ghostify.automatorGhosts[15].a, 2, 1)
+	el("ghpMult").textContent = shortenMoney(getGHPBaseMult())
+	el("ghpMultUpgCost").textContent = shortenDimensions(getGHPMultCost())
 }
 
 function maxGHPMult() {
@@ -665,11 +658,11 @@ function maxGHPMult() {
 	}
 
 	player.ghostify.multPower += totalBought
-	getEl("ghpMult").textContent = shortenMoney(getGHPBaseMult())
-	getEl("ghpMultUpgCost").textContent = shortenDimensions(getGHPMultCost())
+	el("ghpMult").textContent = shortenMoney(getGHPBaseMult())
+	el("ghpMultUpgCost").textContent = shortenDimensions(getGHPMultCost())
 
 	player.ghostify.automatorGhosts[15].a = player.ghostify.automatorGhosts[15].a.times(Decimal.pow(5, totalBought))
-	getEl("autoGhost15a").value = formatValue("Scientific", player.ghostify.automatorGhosts[15].a, 2, 1)
+	el("autoGhost15a").value = formatValue("Scientific", player.ghostify.automatorGhosts[15].a, 2, 1)
 }
 
 function setupAutomaticGhostsData() {
@@ -695,49 +688,49 @@ function updateAutoGhosts(load) {
 	var data = player.ghostify.automatorGhosts
 	if (load) {
 		for (var x = 1; x <= MAX_AUTO_GHOSTS; x++) if (data[x] === undefined) data[x] = {on: false}
-		if (data.ghosts >= MAX_AUTO_GHOSTS) getEl("nextAutomatorGhost").parentElement.style.visibility="hidden"
+		if (data.ghosts >= MAX_AUTO_GHOSTS) el("nextAutomatorGhost").parentElement.style.visibility="hidden"
 		else {
-			getEl("automatorGhostsAmount").textContent=data.ghosts
-			getEl("nextAutomatorGhost").parentElement.style.visibility="visible"
-			getEl("nextAutomatorGhost").textContent=autoGhostRequirements[data.ghosts-3].toFixed(2)
+			el("automatorGhostsAmount").textContent=data.ghosts
+			el("nextAutomatorGhost").parentElement.style.visibility="visible"
+			el("nextAutomatorGhost").textContent=autoGhostRequirements[data.ghosts-3].toFixed(2)
 		}
 	}
 	powerConsumed=0
 	for (var ghost = 1; ghost <= MAX_AUTO_GHOSTS; ghost++) {
 		if (ghost>data.ghosts) {
-			if (load) getEl("autoGhost" + ghost).style.visibility="hidden"
+			if (load) el("autoGhost" + ghost).style.visibility="hidden"
 		} else {
 			if (load) {
-				getEl("autoGhost" + ghost).style.visibility="visible"
-				getEl("isAutoGhostOn" + ghost).checked=data[ghost].on
+				el("autoGhost" + ghost).style.visibility="visible"
+				el("isAutoGhostOn" + ghost).checked=data[ghost].on
 			}
 			if (data[ghost].on) powerConsumed+=powerConsumptions[ghost]
 		}
-		getEl("ghostcost" + ghost).textContent = powerConsumptions[ghost]
+		el("ghostcost" + ghost).textContent = powerConsumptions[ghost]
 	}
 	if (load) {
-		getEl("autoGhostMod4").textContent = "Every " + (data[4].mode == "t" ? "second" : "Quantum")
-		getEl("autoGhostRotate4").textContent = data[4].rotate == "l" ? "Left" : "Right"
-		getEl("autoGhost11pw").value = data[11].pw
-		getEl("autoGhost11cw").value = data[11].cw
-		getEl("autoGhost13t").value = data[13].t
-		getEl("autoGhost13u").value = data[13].u
-		getEl("autoGhost13o").value = data[13].o
-		getEl("autoGhost15a").value = formatValue("Scientific", data[15].a, 2, 1)
-		getEl("autoGhost17s").value = data[17].s || 60
-		getEl("autoGhost22t").value = data[22].time
-		getEl("autoGhost24i").value = data[24].i
-		getEl("autoGhost24m").value = data[24].m
+		el("autoGhostMod4").textContent = "Every " + (data[4].mode == "t" ? "second" : "Quantum")
+		el("autoGhostRotate4").textContent = data[4].rotate == "l" ? "Left" : "Right"
+		el("autoGhost11pw").value = data[11].pw
+		el("autoGhost11cw").value = data[11].cw
+		el("autoGhost13t").value = data[13].t
+		el("autoGhost13u").value = data[13].u
+		el("autoGhost13o").value = data[13].o
+		el("autoGhost15a").value = formatValue("Scientific", data[15].a, 2, 1)
+		el("autoGhost17s").value = data[17].s || 60
+		el("autoGhost22t").value = data[22].time
+		el("autoGhost24i").value = data[24].i
+		el("autoGhost24m").value = data[24].m
 	}
-	getEl("consumedPower").textContent = powerConsumed.toFixed(2)
+	el("consumedPower").textContent = powerConsumed.toFixed(2)
 	isAutoGhostsSafe = data.power >= powerConsumed
-	getEl("tooMuchPowerConsumed").style.display = isAutoGhostsSafe ? "none" : ""
+	el("tooMuchPowerConsumed").style.display = isAutoGhostsSafe ? "none" : ""
 
-	getEl("agbtn_pos_yes_auto").style.display = pH.did("ghostify") ? "" : "none"
+	el("agbtn_pos_yes_auto").style.display = pH.did("ghostify") ? "" : "none"
 }
 
 function toggleAutoGhost(id) {
-	player.ghostify.automatorGhosts[id].on = getEl("isAutoGhostOn" + id).checked
+	player.ghostify.automatorGhosts[id].on = el("isAutoGhostOn" + id).checked
 	updateAutoGhosts()
 }
 
@@ -749,55 +742,41 @@ function isAutoGhostActive(id) {
 function changeAutoGhost(o) {
 	if (o == "4m") {
 		player.ghostify.automatorGhosts[4].mode = player.ghostify.automatorGhosts[4].mode == "t" ? "q" : "t"
-		getEl("autoGhostMod4").textContent = "Every " + (player.ghostify.automatorGhosts[4].mode == "t" ? "second" : "Quantum")
+		el("autoGhostMod4").textContent = "Every " + (player.ghostify.automatorGhosts[4].mode == "t" ? "second" : "Quantum")
 	} else if (o == "4r") {
 		player.ghostify.automatorGhosts[4].rotate = player.ghostify.automatorGhosts[4].rotate == "l" ? "r" : "l"
-		getEl("autoGhostRotate4").textContent = player.ghostify.automatorGhosts[4].rotate == "l" ? "Left" : "Right"
+		el("autoGhostRotate4").textContent = player.ghostify.automatorGhosts[4].rotate == "l" ? "Left" : "Right"
 	} else if (o == "11pw") {
-		var num = parseFloat(getEl("autoGhost11pw").value)
+		var num = parseFloat(el("autoGhost11pw").value)
 		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[11].pw = num
 	} else if (o == "11cw") {
-		var num = parseFloat(getEl("autoGhost11cw").value)
+		var num = parseFloat(el("autoGhost11cw").value)
 		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[11].cw = num
 	} else if (o == "13t") {
-		var num = parseFloat(getEl("autoGhost13t").value)
+		var num = parseFloat(el("autoGhost13t").value)
 		if (!isNaN(num) && num >= 0) player.ghostify.automatorGhosts[13].t = num
 	} else if (o == "13u") {
-		var num = parseFloat(getEl("autoGhost13u").value)
+		var num = parseFloat(el("autoGhost13u").value)
 		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[13].u = num
 	} else if (o == "13o") {
-		var num = parseInt(getEl("autoGhost13o").value)
+		var num = parseInt(el("autoGhost13o").value)
 		if (!isNaN(num) && num >= 0) player.ghostify.automatorGhosts[13].o = num
 	} else if (o == "15a") {
-		var num = fromValue(getEl("autoGhost15a").value)
+		var num = fromValue(el("autoGhost15a").value)
 		if (!isNaN(break_infinity_js ? num : num.l)) player.ghostify.automatorGhosts[15].a = num
 	} else if (o == "17s") {
-		var num = parseFloat(getEl("autoGhost24m").value)
+		var num = parseFloat(el("autoGhost24m").value)
 		if (!isNaN(num) && num > 1) player.ghostify.automatorGhosts[17].s = num
 	} else if (o == "22t") {
-		var num = parseFloat(getEl("autoGhost22t").value)
+		var num = parseFloat(el("autoGhost22t").value)
 		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[22].time = num
 	} else if (o == "24i") {
-		var num = parseFloat(getEl("autoGhost24i").value)
+		var num = parseFloat(el("autoGhost24i").value)
 		if (num == Math.round(num) && num > 0) player.ghostify.automatorGhosts[24].i = num
 	} else if (o == "24m") {
-		var num = parseFloat(getEl("autoGhost24m").value)
+		var num = parseFloat(el("autoGhost24m").value)
 		if (!isNaN(num) && num > 1) player.ghostify.automatorGhosts[24].m = num
 	}
-}
-
-function rotateAutoUnstable() {
-	var tg=player.ghostify.automatorGhosts[3].on
-	if (player.ghostify.automatorGhosts[4].rotate == "l") {
-		player.ghostify.automatorGhosts[3].on = player.ghostify.automatorGhosts[1].on
-		player.ghostify.automatorGhosts[1].on = player.ghostify.automatorGhosts[2].on
-		player.ghostify.automatorGhosts[2].on = tg
-	} else {
-		player.ghostify.automatorGhosts[3].on = player.ghostify.automatorGhosts[2].on
-		player.ghostify.automatorGhosts[2].on = player.ghostify.automatorGhosts[1].on
-		player.ghostify.automatorGhosts[1].on = tg
-	}
-	for (var g = 1; g < 4; g++) getEl("isAutoGhostOn" + g).checked = player.ghostify.automatorGhosts[g].on
 }
 
 const MAX_AUTO_GHOSTS = 25
@@ -806,7 +785,7 @@ const MAX_AUTO_GHOSTS = 25
 function startEC10() {
 	if (canUnlockEC(10, 550, 181)) {
 		justImported = true
-		getEl("ec10unl").onclick()
+		el("ec10unl").onclick()
 		justImported = false
 	}
 	startEternityChallenge(10)
@@ -845,13 +824,13 @@ function showNFTab(tabName) {
 
 function getGhostifiedGain() {
 	let r = 1
-	if (hasBosonicUpg(15)) r = nN(tmp.blu[15].gh)
+	if (hasBosonicUpg(15)) r = c_conv(tmp.blu[15].gh)
 	return r
 }
 
 function toggleLEConf() {
 	aarMod.leNoConf = !aarMod.leNoConf
-	getEl("leConfirmBtn").textContent = "Light Empowerment confirmation: O" + (aarMod.leNoConf ? "FF" : "N")
+	el("leConfirmBtn").textContent = "Light Empowerment confirmation: O" + (aarMod.leNoConf ? "FF" : "N")
 }
 
 //v2.302
@@ -891,7 +870,7 @@ function doubleMSMult(x) {
 }
 
 function isAtEndGame() {
-	return tmp.ngp3 && false
+	return fluc.unl() && fluc_save.eng >= 11
 }
 
 //Auto-Preset
@@ -904,27 +883,27 @@ let autoPresets = {
 
 function openAutoPresets() {
 	closeToolTip()
-	getEl("autoPresets").style.display = "flex"
+	el("autoPresets").style.display = "flex"
 
-	getEl("autoPresetToggle").textContent = player.timestudy.auto.on ? "Auto: ON" : "Auto: OFF"
-	getEl("autoPresetTarget").textContent = "Assigning updates the preset you are choosing. (" + autoPresets[targetAutoPreset()] + ")"
+	el("autoPresetToggle").textContent = player.timestudy.auto.on ? "Auto: ON" : "Auto: OFF"
+	el("autoPresetTarget").textContent = "Assigning updates the preset you are choosing. (" + autoPresets[targetAutoPreset()] + ")"
 
-	getEl("autoPresetEternity").value = player.timestudy.auto.eternity || ""
-	getEl("autoPresetDilation").value = player.timestudy.auto.dilation || ""
+	el("autoPresetEternity").value = player.timestudy.auto.eternity || ""
+	el("autoPresetDilation").value = player.timestudy.auto.dilation || ""
 
-	getEl("autoPresetQC1Div").style.display = autoPresetUnlocked("qc1") ? "" : "none"
-	getEl("autoPresetQC7Div").style.display = autoPresetUnlocked("qc7") ? "" : "none"
-	getEl("autoPresetQC1").value = player.timestudy.auto.qc1 || ""
-	getEl("autoPresetQC7").value = player.timestudy.auto.qc7 || ""
+	el("autoPresetQC1Div").style.display = autoPresetUnlocked("qc1") ? "" : "none"
+	el("autoPresetQC7Div").style.display = autoPresetUnlocked("qc7") ? "" : "none"
+	el("autoPresetQC1").value = player.timestudy.auto.qc1 || ""
+	el("autoPresetQC7").value = player.timestudy.auto.qc7 || ""
 }
 
 function toggleAutoPreset() {
 	player.timestudy.auto.on = !player.timestudy.auto.on
-	getEl("autoPresetToggle").textContent = player.timestudy.auto.on ? "Auto: ON" : "Auto: OFF"
+	el("autoPresetToggle").textContent = player.timestudy.auto.on ? "Auto: ON" : "Auto: OFF"
 }
 
 function changeAutoPreset(x, id) {
-	player.timestudy.auto[x] = getEl(id).value
+	player.timestudy.auto[x] = el(id).value
 }
 
 function loadAutoPreset(x) {
@@ -940,7 +919,7 @@ function targetAutoPreset(dilated) {
 function refreshAutoPreset(update) {
 	if (!update && !player.timestudy.auto.on) return
 	player.timestudy.auto[targetAutoPreset()] = getStudyTreeStr()
-	if (getEl("autoPresets").style.display == "flex") openAutoPresets()
+	if (el("autoPresets").style.display == "flex") openAutoPresets()
 }
 
 function autoPresetUnlocked(x) {
@@ -948,6 +927,21 @@ function autoPresetUnlocked(x) {
 }
 
 function setupSaveDataNGP3() {
+	//Fluctuant
+	fluc_save = player.fluc
+	fluc_tmp.unl = fluc.unl(true)
+	fluc.compile()
+
+	if (fluc_save) {
+		FDs_save = (fluc_save && fluc_save.dims)
+		FDs.compile()
+
+		delete fluc_save.synt
+		ff_save = (fluc_save && fluc_save.ff)
+		ff.compile()
+	}
+
+	//Quantum
 	pos_save = (qu_save && qu_save.pos)
 	QCs_save = (qu_save && qu_save.qc)
 	PCs_save = (qu_save && qu_save.pc)
@@ -969,12 +963,12 @@ function setupSaveDataNGP3() {
 }
 
 function rollbackQuantum(aQ) {
-	player.totalMoney = new Decimal(1)
-	qu_save.quarks = new Decimal(0)
+	player.totalMoney = E(1)
+	qu_save.quarks = E(0)
 	qu_save.gluons = {
-		rg: new Decimal(0),
-		gb: new Decimal(0),
-		br: new Decimal(0),
+		rg: E(0),
+		gb: E(0),
+		br: E(0),
 	}
 	qu_save.entBoosts = 0
 	pos_save.boosts = 0
@@ -1015,11 +1009,11 @@ function updateAutoApplyDisp(toggle) {
 	}
 
 	var on = aarMod.autoApply
-	getEl("autoApply").style.display = pos_tmp.cloud && pos_tmp.cloud.sum >= 4 ? "" : "none"
-	getEl("autoApply").textContent = "Auto-apply changes: " + (on ? "ON" : "OFF")
+	el("autoApply").style.display = pos_tmp.cloud && pos_tmp.cloud.sum >= 4 ? "" : "none"
+	el("autoApply").textContent = "Auto-apply changes: " + (on ? "ON" : "OFF")
 
-	getEl("pos_apply_div").style.display = on ? "none" : ""
-	//getEl("str_apply_div").style.display = on ? "none" : ""
+	el("pos_apply_div").style.display = on ? "none" : ""
+	//el("str_apply_div").style.display = on ? "none" : ""
 }
 
 //Recent boosts
@@ -1036,11 +1030,6 @@ function getAQGainExp(x) {
 
 	let r = 1
 	if (PCs.unl()) r = Math.log10(x.log10() + 1) * PCs_tmp.eff2 + 1
-	if (PCs.milestoneUnl(5)) {
-		let c = 0
-		for (var i = 5; i <= 8; i++) if (PCs.milestoneDone(i * 10 + 5)) c++
-		r *= Math.pow(1.03, c)
-	}
 	if (futureBoost("quark_gluon_plasma")) r = Math.pow(x.log10() * r / 100 + 1, 1/3)
 	return Math.min(r, 2e4)
 }
@@ -1048,6 +1037,7 @@ function getAQGainExp(x) {
 function getReplStealth() {
 	var x = 1
 	if (enB.active("glu", 5)) x *= enB_tmp.eff.glu5.int
+	if (ff.unl()) x *= ff_tmp.eff.f2
 	if (futureBoost("quantum_tunneling") && dev.boosts.tmp[5]) x *= dev.boosts.tmp[5]
 	return x
 }
@@ -1059,18 +1049,19 @@ var ngp3Welcomes = {
 		0.6: "<b class='lime'>Strings!</b> Can you vibrate a string of boosts, which adjusts them at a sawtooth rate?",
 		0.61: "<b class='lime'>Strings, again!</b> Yes, I decided to rework Strings for better balancing and less confusion. This also removes Nerfed modifier and reworks Entangled Boosters and Perks.",
 		0.611: "<b class='lime'>PC8 combinations!</b> Due to a severe bug for QC8, I am releasing an extra update, which PC8 combinations are slightly easier! (+ some String-era buffs)",
-		//0.7: () => "<b class='green'>A new layer!</b> Get " + shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter to reach a new layer, including 8 new Dimensions!"
+		0.62: () => "<b class='green'>Mostly Paired Challenges + Strings!</b> Yep. This update reworks the gameplay of Paired Challenges and Strings. Any suggestion is welcomed in Discord, and I will implement yours if accepted."
 	},
 	verbs: {
 		0.61: "reworks",
-		0.611: "nerfs"
+		0.611: "nerfs",
+		0.62: "rebalances"
 	},
 	goals: {
 		0.5: () => getFullExpansion(8) + " PC combinations + " + shortenCosts(Decimal.pow(10, 1e13)) + " antimatter",
 		0.6: () => shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter",
 		0.61: () => shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter",
 		0.611: () => shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter",
-		0.7: () => shortenCosts(Decimal.pow(10, Math.pow(10, 14.1))) + " antimatter",
+		0.62: () => shortenCosts(Decimal.pow(10, Math.pow(10, 13.5))) + " antimatter"
 	}
 }
 
@@ -1078,21 +1069,39 @@ var ngp3Welcomes = {
 dump
 
 
-getEl("plAniTier").textContent = "Tier " + getFullExpansion(pl.save.layer) + " -> " + getFullExpansion(pl.save.layer + 1)
-getEl("plAniBg").style.display = ""
-getEl("plAniBg2").style.display = "none"
-getEl("plAniTxt").style.display = "none"
-getEl("plAni").style.display = ""
+el("plAniTier").textContent = "Tier " + getFullExpansion(pl.save.layer) + " -> " + getFullExpansion(pl.save.layer + 1)
+el("plAniBg").style.display = ""
+el("plAniBg2").style.display = "none"
+el("plAniTxt").style.display = "none"
+el("plAni").style.display = ""
 setTimeout(function() {
-	getEl("plAniBg2").style.display = ""
-	getEl("plAniTxt").style.display = ""
+	el("plAniBg2").style.display = ""
+	el("plAniTxt").style.display = ""
 }, 1000)
 setTimeout(function() {
-	getEl("plAni").style.animation = "plEnd 2s ease"
+	el("plAni").style.animation = "plEnd 2s ease"
 }, 4000)
 setTimeout(function() {
-	getEl("plAni").style.display = "none"
-	getEl("plAni").style.animation = ""
-	getEl("plAniBg").style.display = "none"
+	el("plAni").style.display = "none"
+	el("plAni").style.animation = ""
+	el("plAniBg").style.display = "none"
 }, 5000)
 */
+
+function endGoalAfterStrings(x, slog = 0) {
+	let dMult = 13.5
+	let tBase = 14/13.5
+	let tExp = x
+	let qExp = 1.24
+	if (x > 4) tExp = (Math.pow(qExp, x - 4) - 1) / Math.log(qExp) + 4
+
+	if (slog >= 3) {
+		return tExp * Math.log10(tBase) + Math.log10(dMult)
+	} else {
+		let dExp = dMult * Math.pow(tBase, tExp)
+		let r = dExp
+		if (slog < 2) r = Math.pow(10, r)
+		if (slog < 1) r = Decimal.pow(10, r)
+		return r
+	}
+}

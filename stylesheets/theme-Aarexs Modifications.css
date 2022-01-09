@@ -56,7 +56,7 @@ body {
 #footer {
     font-family: 'Inconsolata', monospace !important
 }
-#coinAmount {
+#coinAmount, .antimatter {
     color: #0072e5 !important
 }
 .storebtn, .completedchallengesbtn, .pc4completed {
@@ -159,7 +159,7 @@ strong { color: #0072e5 }
 }
 .IPAmount1, .IPAmount2, #infPowAmount, #infDimMultAmount, #infDimEffectPower,
 #replicantiamount, #replicantimult, #replCond, #replCond1, #replCond2,
-#replCompress, #replCompressEff, #replDilater, #replDilaterEff, #qc5_eng, #qc5_eff {
+#replCompress, #replCompressEff, #replDilater, #replDilaterEff, #qc5_eng, #qc5_eff, #fd_eff_rep {
     color: #e2bd00 !important
 }
 .infinistorebtn1, .infinistorebtn3 {
@@ -426,7 +426,7 @@ strong { color: #0072e5 }
 	background-color: #e57272 !important
 }
 #quarkEnergy, #quarkEnergyMult, #quarkEnergyEffect1, #quarkEnergyEffect2, #bestQE, #enB_glu_amt, #quarkTranslation, #quarkCharge, #quarkChargeRate, .QKAmount,
-#pc_lvl, #pc_eff1, #pc_eff2,
+#pc_lvl, #pc_eff1, #pc_eff2, #pc_eff3,
 #gatheredQuarks, #normalReplGatherRate, #workerReplGatherRate, #babyReplGatherRate, #growupRate, #gatherRate, .empQuarks, #quarksNanofield, #quarkLoss { color: #72e500 !important }
 .red { color: #e53939 }
 .lime { color: #8fe539 }
@@ -475,63 +475,24 @@ strong { color: #0072e5 }
 	text-shadow: 0px 0px 3px #bfff00, 0px 0px 6px #7fff00
 }
 
-#produceQuarkCharge, .nfReward { 
-	background-color: transparent !important;
-	border: 1px solid #999999 !important;
-	text-shadow: none;
-	animation: none
+#fdtabbtn button {
+    border-color: #ff3f00 !important
 }
-#dilstudy12.dilationupg:hover, #dilstudy12.dilationupgbought, #nanofieldtabbtn button:hover, #produceQuarkCharge:hover {
-	background-color: #999999 !important;
-	color: #191919;
-	text-shadow: none
+#fdtabbtn button:hover {
+    border-color: #ff3f00 !important;
+    background-color: #ff3f00 !important;
+	color: #e5e5e5 !important
 }
-#preonEnergy, #quarkEnergy2, #preonEnergy, #quarkEnergyRate, #quarkPowerThreshold { color: #72e500 !important }
-#quarkPower, #rewards, #rewards_AP { color: #ace572 !important }
-#quarkAntienergy, #quarkAntienergyRate, #quarkChargeProductionCap { color: #4c0099 !important }
-.nfReward:hover { 
-	color: #e5e5e5 !important;
-	text-shadow: none
+.flucEne {
+	color: #ff3f00 !important
 }
-#dilstudy13.dilationupg, #todtabbtn button { border: 2px solid #993f00 !important }
-#dilstudy13.dilationupg:hover, #dilstudy13.dilationupgbought, #todtabbtn button:hover {
-	background-color: #993f00 !important;
-	color: #191919;
-	text-shadow: none
+.fluctuatebtn {
+	border-color: #bf005f !important
 }
-.gluonupgrade.r {
-	background-color: transparent !important;
-    border-color: #cc6666 !important;
-	box-shadow: none !important;
-	color: #e5e5e5 !important;
-	text-shadow: none
+.fluctuatebtn:hover {
+	border-color: #ff7fdf !important
 }
-.gluonupgrade.g {
-	background-color: transparent !important;
-    border-color: #00e500 !important;
-	box-shadow: none !important;
-	color: #e5e5e5 !important;
-	text-shadow: none
-}
-.gluonupgrade.b {
-	background-color: transparent !important;
-    border-color: #0000e5 !important;
-	box-shadow: none !important;
-	color: #e5e5e5 !important;
-	text-shadow: none
-}
-.gluonupgrade.r:hover {
-	background-color: #cc6666 !important;
-	color: #191919 !important
-}
-.gluonupgrade.g:hover {
-	background-color: #00e500 !important;
-	color: #191919 !important
-}
-.gluonupgrade.b:hover {
-	background-color: #0000e5 !important;
-	color: #191919 !important
-}
+
 #dilstudy14.dilationupg, .gluonupgrade.bigrip {
 	border: 1px solid #5be567 !important;
 	color: #e5e5e5 !important;
@@ -629,7 +590,7 @@ strong { color: #0072e5 }
 .orange {
 	color: #e57200
 }
-.yellow, #enB_pos_eng, #enB_pos_amt, #hbUnspent, #bosonicFactorEffect {
+.yellow, #enB_pos_eng, #enB_pos_amt {
 	color: #e5e500
 }
 .indigo {
@@ -716,40 +677,6 @@ strong { color: #0072e5 }
 }
 .tau #zNeSymbol {
 	transform: translate(-50%, 10%)
-}
-.gluonupgrade.hb {
-	background: radial-gradient(#007fff, transparent 50%, transparent 100%), radial-gradient(#001fff, #007fff, transparent 60%, transparent 100%), linear-gradient(transparent, #007fff 50%, transparent 100%), radial-gradient(#bfdfff, #191919 50%, #bfdfff 100%);
-	background-position: center;
-	border-color: #007fff !important
-}
-.gluonupgrade.hb:hover {
-	border-color: #bfdfff !important;
-	color: #e5e5e5 !important
-}
-.gv, #gdtabbtn button {
-	border-color: #0b298d !important;
-	animation: none
-}
-.gv:hover, #gdtabbtn button:hover {
-	background-color: #0b298d !important;
-	color: #0f1529 !important
-}
-#gvPow, #gvEne, #gvEneMult {
-	color: #485faa !important
-}
-#gvRadioPow {
-	color: #5c8340 !important
-}
-.planckbtn {
-	border-color: #2f3f00 !important;
-	color: #bfff00 !important;
-}
-.planckbtn:hover {
-	border-color: #5f7f00 !important;
-	color: #efffbf !important;
-}
-.pl {
-	color: #bfff00 !important;
 }
 
 .notifyjs-bootstrap-info {

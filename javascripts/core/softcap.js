@@ -17,7 +17,7 @@ var softcap_data = {
 		name: "TT production",
 		1: {
 			func: "dilate",
-			start: new Decimal(1e69 / 2e4),
+			start: E(1e69 / 2e4),
 			base: 10,
 			pow: 2/3,
 			mul: () => (tmp.bgMode ? 1.25 : 1.5),
@@ -25,7 +25,7 @@ var softcap_data = {
 		},
 		2: {
 			func: "dilate",
-			start: () => new Decimal(PCs.milestoneDone(73) ? 1/0 : 3e79),
+			start: () => E(PCs.milestoneDone(73) ? 1/0 : 3e79),
 			base: 10,
 			pow: 3/4
 		},
@@ -33,10 +33,9 @@ var softcap_data = {
 	rep: {
 		name: "effective Replicantis",
 		1: {
-			func: "dilate",
-			start: Decimal.pow(10, 1e7),
-			base: 10,
-			pow: 3/4
+			func: "pow",
+			start: Decimal.pow(10, 2e7),
+			pow: 0.5
 		},
 	},
 	eu2: {
@@ -53,7 +52,7 @@ var softcap_data = {
 		name: "base replicate interval",
 		1: {
 			func: "log",
-			start: new Decimal(1e5),
+			start: E(1e5),
 			pow: 2.5,
 			mul: 20
 		},
@@ -62,7 +61,7 @@ var softcap_data = {
 		name: "TS83 multiplier",
 		1: {
 			func: "pow",
-			start: new Decimal("1e5000"),
+			start: E("1e5000"),
 			pow: 0.1,
 			derv: false
 		}
@@ -83,16 +82,16 @@ var softcap_data = {
 		name: "EC14 base interval",
 		1: {
 			func: "log",
-			start: new Decimal(1e12),
-			pow: 6,
-			mul: 100 / 12
+			start: E(1e12),
+			pow: 5,
+			mul: 5
 		},
 	},
 	ma: {
 		name: "effective meta-antimatter",
 		1: {
 			func: "pow",
-			start: () => new Decimal(Number.MAX_VALUE).pow((enB.active("pos", 2) && enB_tmp.eff.pos2.igal_softcap) || 1),
+			start: () => E(Number.MAX_VALUE).pow((enB.active("pos", 2) && enB_tmp.eff.pos2.igal_softcap) || 1),
 			pow(x) {
 				let l2 = Decimal.log(x, 2)
 				return 1 / (Math.log2(l2 / softcap_data.ma[1].start().log(2)) / 4 + 2)
@@ -159,13 +158,13 @@ var softcap_data = {
 		},
 		3: {
 			func: "pow",
-			start: new Decimal("1e10000"),
+			start: E("1e10000"),
 			pow: 1/7,
 			derv: false,
 		},
 		4: {
 			func: "pow",
-			start: new Decimal("1e25000000"),
+			start: E("1e25000000"),
 			pow: 1/11,
 			derv: false,
 		}
@@ -182,7 +181,7 @@ var softcap_data = {
 		},
 		2: {
 			func: "pow",
-			start: new Decimal("1e1000"),
+			start: E("1e1000"),
 			pow() {
 				return player.challenges.includes("postcngc_2") ? 13/40 : 1/4
 			},
@@ -190,7 +189,7 @@ var softcap_data = {
 		},
 		3: {
 			func: "pow",
-			start: new Decimal("1e25000"),
+			start: E("1e25000"),
 			pow: 1/7,
 			derv: false,
 		},
@@ -240,7 +239,7 @@ var softcap_data = {
 		},
 		3: {
 			func: "pow",
-			start: new Decimal("1e10000"),
+			start: E("1e10000"),
 			pow() {
 				return hasTimeStudy(181) ? Math.pow(1/4, .1) : 1/4
 			},
@@ -248,13 +247,13 @@ var softcap_data = {
 		},
 		4: {
 			func: "pow",
-			start: new Decimal("1e100000"),
+			start: E("1e100000"),
 			pow: 1/5,
 			derv: false,
 		},
 		5: {
 			func: "pow",
-			start: new Decimal("1e950000"),
+			start: E("1e950000"),
 			pow: 1/23,
 			derv: false,
 		},
@@ -263,13 +262,13 @@ var softcap_data = {
 		name: "Infinity Dimensions (NG Condensed)",
 		1: {
 			func: "pow",
-			start: new Decimal("1e7500"),
+			start: E("1e7500"),
 			pow: 0.1,
 			derv: false,
 		},
 		2: {
 			func: "pow",
-			start: new Decimal("1e50000"),
+			start: E("1e50000"),
 			pow: 0.08,
 			derv: false,
 		},
@@ -305,13 +304,13 @@ var softcap_data = {
 		},
 		3: {
 			func: "pow",
-			start: new Decimal(Number.MAX_VALUE),
+			start: E(Number.MAX_VALUE),
 			pow: 1/4,
 			derv: false,
 		},
 		4: {
 			func: "pow",
-			start: new Decimal("1e800"),
+			start: E("1e800"),
 			pow: 1/7,
 			derv: false,
 		},
@@ -320,7 +319,7 @@ var softcap_data = {
 		name: "Time Dimensions (NG Condnesed)",
 		1: {
 			func: "pow",
-			start: new Decimal("1e5000"),
+			start: E("1e5000"),
 			pow: 1/3,
 			derv: false,
 		},
@@ -329,19 +328,19 @@ var softcap_data = {
 		name: "Dilated Time (NG Condnesed)",
 		1: {
 			func: "pow",
-			start: new Decimal(1e6),
+			start: E(1e6),
 			pow: 1/2,
 			derv: false,
 		},
 		2: {
 			func: "pow",
-			start: new Decimal(1e100),
+			start: E(1e100),
 			pow: 1/3,
 			derv: false,
 		},
 		3: {
 			func: "pow",
-			start: new Decimal("1e2000"),
+			start: E("1e2000"),
 			pow: 1/4,
 			derv: false,
 		},
@@ -350,13 +349,13 @@ var softcap_data = {
 		name: "Tachyon Particles (NG Condensed)",
 		1: {
 			func: "pow",
-			start: new Decimal(1e10),
+			start: E(1e10),
 			pow: 1/3,
 			derv: false,
 		},
 		2: {
 			func: "pow",
-			start: new Decimal(Number.MAX_VALUE),
+			start: E(Number.MAX_VALUE),
 			pow: 1/4,
 			derv: false,
 		},
@@ -367,7 +366,7 @@ var softcap_data = {
 		name: "infinity dimension multiplier (NG-4)",
 		1: {
 			func: "pow",
-			start: new Decimal(1e40),
+			start: E(1e40),
 			pow: .8,
 			derv: true
 		}
@@ -495,10 +494,10 @@ function getSoftcapName(id){
 function getSoftcapAmtFromId(id){
 	return { // for amount
 		rep: () => getReplEff(),
-		rInt: () => tmp.rep ? tmp.rep.baseBaseEst.pow(1 - getECReward(14)) : new Decimal(1),
+		rInt: () => tmp.rep ? tmp.rep.baseBaseEst.pow(1 - getECReward(14)) : E(1),
 		it: () => tmp.it.max(1),
 		eu2: () => ETER_UPGS[2].mult(),
-		ec14: () => tmp.rep ? tmp.rep.ec14.baseInt : new Decimal(1),
+		ec14: () => tmp.rep ? tmp.rep.ec14.baseInt : E(1),
 		tt: () => getTTGenPart(player.dilation.tachyonParticles),
 		ts83: () => tsMults[83](),
 		ts225: () => tsMults[225](),
@@ -690,18 +689,18 @@ function updateSoftcapStatsTab(){
 	for (let i = 0; i < n.length; i++){
 		var id = n[i]
 		var elname = names[id]
-		var el = getEl(elname)
+		var el_ = el(elname)
 		var started = hasAnySoftcapStarted(id)
 		if (started) {  
-			el.style = "display:block"
-			el.innerHTML = getInnerHTMLSoftcap(id)
+			el_.style = "display:block"
+			el_.innerHTML = getInnerHTMLSoftcap(id)
 
 			anyActive = true
 		} else {
-			el.style = "display:none"
+			el_.style = "display:none"
 		}
 
-		var elDisp = getEl(elname + "_disp")
+		var elDisp = el(elname + "_disp")
 		if (elDisp) elDisp.style.display = started && shiftDown ? "" : "none"
 		if (started && elDisp && shiftDown) {
 			var sc = 0
@@ -714,5 +713,5 @@ function updateSoftcapStatsTab(){
 		}
 	}
 
-	getEl("softcapsbtn").style.display = anyActive ? "" : "none"
+	el("softcapsbtn").style.display = anyActive ? "" : "none"
 }

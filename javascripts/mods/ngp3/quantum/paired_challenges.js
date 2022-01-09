@@ -2,88 +2,70 @@
 var PCs = {
 	milestones: {
 		11: "Replicanti Compressors are better. (per PC level)",
-		21: "The QC2 reward is doubled.",
-		31: "You sacrifice 33% MDBs instead of 30%.",
-		41: "You sacrifice Replicated Galaxies more.",
+		21: "The minimum Color Power adds all Color Powers by 25%.",
+		31: "Meta Accelerator slowdown starts 1% later per PC level.",
+		41: "More galaxies are contributed to Positronic Charge.",
 		51: "Sacrificed sources are greatly stronger.",
 		61: "The QC6 reward is squared.",
 		71: "Meta Accelerator accelerates faster based on your PC level.",
 		81: "EC14 reward power speeds up Replicantis more.",
 
-		12: "Unlock Replicated Expanders.",
-		22: "You can swap Positronic Boosts between 2 of any tiers.",
-		32: "25 MP milestone is activated in QC3.",
-		42: "Tier 1 charge is 8x, but require 6x more.",
+		12: "Unlock Replicated Dilaters.",
+		22: "Raise the Color Power effects based on PC level.",
+		32: "Replicanti Stealth boosts interval from Meta Accelerator.",
+		42: "Positronic Boosts affect the charge requirement less.",
 		52: "Replicated Compressors raise Replicanti Energy by an exponent.",
 		62: "Eternitying timewraps Meta Dimensions and Replicantis by 3 seconds.",
-		72: "Mastery Study cost multiplier is divided by 5x.",
+		72: "Mastery Studies are 5x cheaper.",
 		82: "Remote Galaxies scaling is slower based on its starting point.",
 
-		13: "Unlock Replicated Dilaters.",
-		23: "Undercharged boosts get a higher charge multiplier.",
-		33: "Meta Accelerator slowdown starts 1% later per PC level.",
-		43: "Extra Replicated Galaxies contribute to Positronic Charge.",
-		53: "Replicanti Compressors raise Replicanti Energy more.",
-		63: "Add the time efficiency of QC6 reward by 5s, and also slow down by 3x.",
+		13: "Unlock Replicated Expanders.",
+		23: "Color Charge multiplies its respective efficency by 10%.",
+		33: "Meta Accelerator raises Replicate Chance to an exponent.",
+		43: "Tier 1 - 2 charges are closer to Tier 3.",
+		53: "Compressor Time raises Replicanti Stealth to Chance.",
+		63: "QC6 reward decay is 5x slower.",
 		73: "Remove the second softcap of TT generation.",
-		83: "Unlock the first Omega Set.",
+		83: "Unlock the Omega Sets.",
 
-		14: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		24: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		34: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		44: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		54: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		64: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		74: "Unlock a new Perk, and gain 1 PC Shrunker.",
-		84: "Unlock a new Perk, and gain 1 PC Shrunker.",
+		14: "Perk: Gain extra Compressors on quick Compressing",
+		24: "Perk: Mastery is stronger, but requires more",
+		34: "Perk: Start with 1 TP and EP boosts Meta Dimensions",
+		44: "Perk: Disable galaxies separately in dilation",
+		54: "Perk: Double the Replicanti Energy effects",
+		64: "Perk: Eternity time is 5x slower",
+		74: "Perk: Temporaily convert base RGs into extra base RGs",
+		84: "Perk: Master the Entangled Boosts that are matched",
 
-		15: "Raise the Color Power effects by ^1.025.",
-		25: "Raise the Color Power effects by ^1.025.",
-		35: "Raise the Color Power effects by ^1.025.",
-		45: "Raise the Color Power effects by ^1.025.",
-		55: "Raise the anti-Quarks by ^1.03.",
-		65: "Raise the anti-Quarks by ^1.03.",
-		75: "Raise the anti-Quarks by ^1.03.",
-		85: "Raise the anti-Quarks by ^1.03.",
-
-		16: "???",
-		26: "???",
-		36: "???",
-		46: "???",
-		56: "???",
-		66: "???",
-		76: "???",
-		86: "???",
+		15: "Compressing keeps you dilated, and also give you 1 Dilater.",
 	},
 	setupData() {
 		var data = {
 			row_unls: [null,
 				true,
-				true,
-				true,
-				() => str.unl(),
+				() => PCs_save.lvl >= PCs.lvlReq(21),
+				() => PCs_save.lvl >= PCs.lvlReq(31),
+				() => PCs_save.lvl >= PCs.lvlReq(41) && str.unl(),
 				() => PCs.milestoneDone(83),
-				false,
-				false,
-				false,
+				() => PCs.milestoneDone(83) && fluc.unl() && PCs.lvl >= 14,
+				() => PCs.milestoneDone(83) && fluc.unl() && PCs.lvl >= 18,
+				false
 			],
 			goal_divs: [null, 0.1, 0.95, 0.35, 0.95, 0.45, 0.5, 0.4, 0.775],
-			milestone_reqs: [null, 1, 2, 3, 4, 5, 7],
+			milestone_reqs: [null, 1, 2, 3, 4, 5],
 			milestone_unls: [null,
 				true,
 				true,
 				() => hasAch("ng3pr12"),
 				() => hasAch("ng3pr12"),
-				() => hasAch("ng3pr12"),
-				() => futureBoost("more_milestones"),
-				() => futureBoost("more_milestones"),
+				() => fluc.unl()
 			],
 			letters: [null, "A", "B", "C", "D", "Ω1", "Ω2", "Ω3", "Ω4"],
 			all: [],
 			setup: true
 		}
 		PCs.data = data
-		getEl("pc_table").innerHTML = ""
+		el("pc_table").innerHTML = ""
 
 		for (var x = 1; x <= 8; x++) {
 			for (var y = 1; y < x; y++) {
@@ -97,8 +79,7 @@ var PCs = {
 			challs: {},
 			comps: [],
 			lvl: 1,
-			best: PCs_save && PCs_save.best,
-			shrunkers: 0
+			best: PCs_save && PCs_save.best
 		}
 		qu_save.pc = PCs_save
 		return PCs_save
@@ -116,16 +97,17 @@ var PCs = {
 
 		this.updateTmp()
 		this.updateUsed()
-		this.resetShrunkers()
 	},
 	reset() {
 		PCs_save = this.setup()
 
 		this.updateTmp()
 		this.updateUsed()
+		this.updateDisp()
+		this.resetButtons()
 	},
 
-	unl: (force) => force ? (QCs_save && QCs.done(7)) : PCs_tmp.unl,
+	unl: (force) => force ? (QCs_save && QCs.done(7)) || fluc.unl() : PCs_tmp.unl,
 	updateTmp() {
 		if (!PCs_tmp.unl) return
 		if (!PCs.data.setup) this.setupData()
@@ -135,6 +117,7 @@ var PCs = {
 		PCs_tmp.occupied = []
 		if (PCs_tmp.pick) {
 			var l = PCs_tmp.picked.length + 1
+			var f = PCs_tmp.picked[0]
 			var s = Math.floor(PCs_tmp.pick / 10)
 			var c = PCs_save.challs
 			for (var i = 1; i <= 4; i++) {
@@ -144,8 +127,8 @@ var PCs = {
 					this.occupy(c_a % 10)
 				}
 			}
-			if (PCs_tmp.picked) this.occupy(PCs_tmp.picked[0])
 
+			if (f) this.occupy(f)
 			if (l == 1) {
 				var d = PCs_tmp.used.d1
 				for (var i = 0; i < d.length; i++) this.occupy(d[i])
@@ -153,27 +136,37 @@ var PCs = {
 			if (l == 2) {
 				var d = PCs_tmp.used.d2
 				for (var i = 1; i <= 8; i++) {
-					var p = PCs.sort(i * 10 + PCs_tmp.picked[0])
+					var p = PCs.sort(i * 10 + f)
 					if (d.includes(p)) this.occupy(i)
 				}
-			}
 
-			if (PCs_tmp.pick < 50 && l == 2) {
 				var p1 = PCs_tmp.used.p1
 				var p2 = PCs_tmp.used.p2
+				var omega = PCs_tmp.pick < 50
 				var p = p1.includes(PCs_tmp.picked[0]) ? p1 : p2
-				for (var i = 1; i <= 8; i++) if (p.includes(i)) this.occupy(i)
+				for (var i = 1; i <= 8; i++) if (omega == p.includes(i)) this.occupy(i)
 			}
 		}
 
 		//Positionist
 		data.comps = {}
-		for (var i = 1; i <= 8; i++) data.comps[i] = 0
+		data.row_comps = {}
+		for (var i = 1; i <= 8; i++) {
+			data.comps[i] = 0
+			data.row_comps[i] = 0
+		}
 		for (var i = 0; i < PCs_save.comps.length; i++) {
 			var id = PCs.convBack(PCs_save.comps[i])
 			data.comps[id[0]]++
 			data.comps[id[1]]++
 		}
+		for (var y = 1; y <= 7; y++) {
+			for (var x = 1; x <= 4; x++) {
+				var c = PCs_save.challs[y * 10 + x]
+				if (PCs_save.comps.includes(c)) data.row_comps[y]++
+			}
+		}
+
 
 		//Level up!
 		var oldLvl = PCs_save.lvl
@@ -185,17 +178,9 @@ var PCs = {
 
 		//Boosts
 		var eff = (PCs_save.lvl - 1) / 28
-		data.eff1 = futureBoost("quantum_superbalancing") ? 3 : 1 + 0.75 * eff
-		data.eff1_start = futureBoost("quantum_superbalancing") ? 1000 : tmp.ngp3_mul ? 125 : 150
-		data.eff2 = Math.sqrt(eff) / 4
-
-		//Temperature
-		data.temp = Math.min(comps / 21 - 0.5, 1) * comps / 28
-		if (data.temp > 0) data.temp *= 2
-		if (tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp) {
-			if (data.temp > 0) data.temp /= 2
-			data.temp -= 0.1
-		}
+		data.eff1_base = 1 + 0.75 * eff
+		data.eff1_start = qu_superbalanced() ? 1000 : tmp.ngp3_mul ? 125 : 150
+		data.eff2 = Math.sqrt(eff) * Math.pow(1.03, eff * 4) / 3
 	},
 	occupy(x, c) {
 		var d = PCs_tmp.occupied
@@ -266,6 +251,7 @@ var PCs = {
 		PCs.updateDisp()
 	},
 	start(x) {
+		if (!PCs.posUnl(x)) return
 		if (PCs_tmp.pick && PCs_tmp.pick != x) return
 		var c = PCs_save.challs
 		if (c[x]) {
@@ -292,15 +278,24 @@ var PCs = {
 
 		var qc1 = QCs.data[list[0]].goalMA
 		var qc2 = QCs.data[list[1]].goalMA
-		var base = Number.MAX_VALUE
 		var div = PCs.data.goal_divs[list[0]] + PCs.data.goal_divs[list[1]] + 1
-		div -= PCs_tmp.temp
+		var relDiv = div
+		if (fluc.unl() && fluc_tmp.temp) relDiv += fluc_tmp.temp.pc
 
-		var r = qc1.pow(qc2.log(base) / div)
-		var pow = Math.pow(1.4, (PCs_tmp.comps[list[0]] + PCs_tmp.comps[list[1]]) * (hasAch("ng3pr16") ? 0.89 : 1) / 3)
-		if (pos >= 50) pow *= 1.25
-		pow /= this.shrunkerEff()
+		var base = Number.MAX_VALUE
+		var r = qc1.pow(qc2.log(base) / relDiv)
 
+		var scaling = 1
+		if (str.unl() && str_tmp.effs) scaling /= str_tmp.effs.b2
+
+		var mul = PCs_save.comps.length * Math.max(PCs_save.comps.length / 4, 3) * scaling + //Completion Scaling
+			(Math.floor(pos / 10) - 1) + //Row Scaling
+			PCs_tmp.row_comps[Math.floor(pos / 10)] - //Row Completion Scaling
+			(PCs_tmp.row_comps[5] + PCs_tmp.row_comps[6] + PCs_tmp.row_comps[7]) * 5 //Omega Sets
+		if (pos >= 50) mul += Math.floor(pos / 10) - 4
+
+		var pow = Math.pow(1 + div / 150, mul)
+		if (str.unl() && str_tmp.effs) pow /= str_tmp.effs.a2
 		return r.pow(pow)
 	},
 	done(pc) {
@@ -344,13 +339,23 @@ var PCs = {
 		return PCs_tmp.comps[Math.floor(pos / 10)] >= PCs.data.milestone_reqs[pos % 10]
 	},
 	lvlReq(pc) {
-		if (pc >= 50) return PCs.rowUnl(Math.floor(pc / 10)) ? 0 : 1/0
-		if (QCs_save.comps / 2 < pc % 10) return 1/0
-		var x = Math.floor(pc / 10) * 4 - 4
-		if (pc < 20) x++
+		let y = Math.floor(pc / 10)
+		if (y > 4) return this.rowUnl(y) ? 0 : 1/0
 
-		x += pc % 10 - 1
-		return x
+		let lvl = pc % 10
+		if (y >= 3) lvl += y * 3 - 1
+		else if (y == 2) lvl += 2
+		return lvl
+	},
+	posUnl(pc) {
+		let y = Math.floor(pc / 10)
+		if (y > 4) return PCs.milestoneDone(83) && (pc % 10 == 1 || PCs.posDone(pc - 1))
+
+		let lvl = pc % 10
+		if (y >= 3) lvl += y * 3 - 1
+		else if (y == 2) lvl += 2
+
+		return PCs_save.comps.length + 1 >= lvl
 	},
 	rowUnl(x) {
 		return evalData(PCs.data.row_unls[x])
@@ -362,13 +367,15 @@ var PCs = {
 	setupButton: (pc) => '<td><button id="pc' + pc + '" class="challengesbtn" style="border-radius: 10px" onclick="PCs.start(' + pc + ')"></button></td>',
 	buttonTxt(pc) {
 		var id = PCs.sort(PCs_save.challs[pc])
-		return '<b style="font-size: 18px">' + PCs.name(pc) + '</b><br>' + (
+		var r = '<b style="font-size: 16px">' + PCs.name(pc) + "</b>"
+		if (PCs.posUnl(pc)) r += '<br>' + (
 			PCs_save.challs[pc] ? "QC " + wordizeList(PCs.convBack(id), false, " + ", false) :
 			PCs_tmp.pick == pc ? "Cancel" :
 			!PCs_tmp.pick ? "Assign" : ""
 		) + (
-			PCs_tmp.pick || !PCs_save.challs[pc] || PCs.done(id) ? "" : "<br>Goal: " + shorten(PCs.goal(id, pc)) + " MA"
+			PCs_tmp.pick || !PCs_save.challs[pc] || PCs.posDone(pc) ? "" : "<br>Goal: " + shorten(PCs.goal(id, pc)) + " MA"
 		)
+		return r
 	},
 	setupMilestone: (qc) => (qc % 4 == 1 ? "<tr>" : "") + "<td id='pc_comp" + qc + "_div' style='text-align: center'><span style='font-size: 20px'>QC" + qc + "</span><br><span id='pc_comp" + qc + "' style='font-size: 15px'>0 / 8</span><br><button class='secondarytabbtn' onclick='PCs.showMilestones(" + qc + ")'>Show</button></td>" + (qc % 4 == 0 ? "</tr>" : ""),
 	setupMilestoneHeader() {
@@ -387,7 +394,7 @@ var PCs = {
 		return x
 	},
 	setupHTML() {
-		var el = getEl("pc_table")
+		var el_ = el("pc_table")
 		var data = PCs.data
 		if (PCs.data.setupHTML) return
 		data.setupHTML = true
@@ -395,17 +402,17 @@ var PCs = {
 		//Setup milestones
 		var html = ""
 		for (var i = 1; i <= 8; i++) html += this.setupMilestone(i)
-		getEl("qc_milestones").innerHTML = html
+		el("qc_milestones").innerHTML = html
 
 		//Setup buttons
 		var html = "<br>"
 		for (var i = 1; i <= 8; i++) html += "<button id='pc_pick" + i + "' style='height: 60px; width: 60px' onclick='PCs.assign(" + i + ")'>QC" + i + "</button>"
-		getEl("pc_pick").innerHTML = html
+		el("pc_pick").innerHTML = html
 
 		//Setup header
 		var html = "<td></td>"
 		for (var x = 1; x <= 4; x++) html += "<td>#" + x + "</td>"
-		el.insertRow(0).innerHTML = html
+		el_.insertRow(0).innerHTML = html
 
 		//Setup rows
 		for (var y = 1; y <= 8; y++) {
@@ -415,7 +422,7 @@ var PCs = {
 			"</td>"
 			for (var x = 1; x <= 4; x++) html += this.setupButton(y * 10 + x)
 
-			var row = el.insertRow(y)
+			var row = el_.insertRow(y)
 			row.innerHTML = html
 			row.id = 'pc_row_' + y
 		}
@@ -423,7 +430,7 @@ var PCs = {
 		//Setup "all milestones"
 		var html = this.setupMilestoneHeader()
 		for (var c = 1; c <= 8; c++) html += this.setupMilestoneRow(c)
-		getEl("qc_milestone_all").innerHTML = html
+		el("qc_milestone_all").innerHTML = html
 
 		this.resetButtons()
 		this.updateDisp()
@@ -431,21 +438,21 @@ var PCs = {
 	updateButton(pc, exit) {
 		if (!PCs.data.setupHTML) return
 
-		var el = getEl("pc" + pc)
+		var el_ = el("pc" + pc)
 		if (PCs_save.lvl < PCs.lvlReq(pc)) {
-			el.style.display = "none"
+			el_.style.display = "none"
 			return
 		}
 
-		el.style.display = ""
-		el.className = (
+		el_.style.display = ""
+		el_.className = (
+			!PCs.posUnl(pc) ? "lockedchallengesbtn" :
 			PCs_tmp.pick ? (PCs_tmp.pick == pc ? "onchallengebtn" : "lockedchallengesbtn") :
 			PCs_save.in == pc && !exit ? "onchallengebtn" :
 			PCs_save.challs[pc] && PCs_save.comps.includes(PCs.sort(PCs_save.challs[pc])) ? "completedchallengesbtn" :
-			PCs_save.challs[pc] ? "quantumbtn" :
-			"challengesbtn"
+			PCs_save.challs[pc] ? "quantumbtn" : "challengesbtn"
 		)
-		el.innerHTML = this.buttonTxt(pc)
+		el_.innerHTML = this.buttonTxt(pc)
 	},
 	resetButtons(force) {
 		if (!PCs.unl()) return
@@ -460,98 +467,102 @@ var PCs = {
 		if (!PCs.data.setupHTML) return
 		var data = PCs
 
-
 		for (var i = 1; i <= 8; i++) {
-			getEl("pc_comp" + i + "_div").style.display = PCs_tmp.comps[i] ? "" : "none"
-			getEl("pc_comp" + i).textContent = PCs_tmp.comps[i] + " / 7"
+			el("pc_comp" + i + "_div").style.display = PCs_tmp.comps[i] ? "" : "none"
+			el("pc_comp" + i).textContent = PCs_tmp.comps[i] + " / 7"
 		}
 
-		getEl("pc_lvl").textContent = getFullExpansion(PCs_save.lvl)
-		getEl("pc_comps").textContent = getFullExpansion(PCs_save.comps.length) + " / " + getFullExpansion(Math.min(PCs_save.lvl, 16))
+		el("pc_lvl").textContent = "Level " + getFullExpansion(PCs_save.lvl)
+		el("pc_comps").textContent = PCs_save.lvl > 28 ? "" : ": " + getFullExpansion(PCs_save.comps.length) + " completed / " + getFullExpansion(PCs_save.lvl)
 		for (var i = 1; i <= 8; i++) {
 			var respec = PCs_save.challs[i * 10 + 1] || PCs_save.challs[i * 10 + 2] || PCs_save.challs[i * 10 + 3] || PCs_save.challs[i * 10 + 4]
-			getEl("pc_row_" + i).style.display = data.rowUnl(i) ? "" : "none"
-			getEl("pc_respec_" + i).style.display = respec ? "" : "none"
-			getEl("pc_export_" + i).style.display = respec ? "" : "none"
+			el("pc_row_" + i).style.display = data.rowUnl(i) ? "" : "none"
+			el("pc_respec_" + i).style.display = respec ? "" : "none"
+			el("pc_export_" + i).style.display = respec ? "" : "none"
 		}
-		getEl("pc_info").style.display = PCs_save.lvl == 1 ? "none" : ""
-		getEl("pctabbtn_milestone").style.display = PCs_save.lvl == 1 ? "none" : ""
+		el("pc_info").style.display = PCs_save.lvl == 1 ? "none" : ""
+		el("pctabbtn_milestone").style.display = PCs_save.lvl == 1 ? "none" : ""
+		el("pctabbtn_perk").style.display = PCs_save.lvl < 4 ? "none" : ""
 
-		getEl("pc_eff1").textContent = "^" + PCs_tmp.eff1.toFixed(3)
-		getEl("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
-
-		getEl("pc_enter").style.display = PCs_tmp.pick ? "none" : ""
-		getEl("pc_omega").style.display = PCs_tmp.pick >= 50 ? "" : "none"
-		getEl("pc_penalty").style.display = tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp ? "none" : ""
-		getEl("pc_pick").style.display = PCs_tmp.pick ? "" : "none"
+		el("pc_enter").style.display = PCs_tmp.pick ? "none" : ""
+		el("pc_omega").style.display = PCs_tmp.pick >= 50 ? "" : "none"
+		el("pc_penalty").style.display = tmp.bgMode || tmp.ngp3_mul || tmp.ngp3_exp ? "none" : ""
+		el("pc_pick").style.display = PCs_tmp.pick ? "" : "none"
 		if (PCs_tmp.pick) {
 			for (var i = 1; i <= 8; i++) {
-				getEl("pc_pick" + i).className = PCs_tmp.picked.includes(i) ? "chosenbtn" :
+				el("pc_pick" + i).className = PCs_tmp.picked.includes(i) ? "chosenbtn" :
 					PCs_tmp.occupied.includes(i) ? "unavailablebtn" :
 					"storebtn"
-				getEl("pc_pick" + i).style.display = QCs.done(i) ? "" : "none"
+				el("pc_pick" + i).style.display = QCs.done(i) ? "" : "none"
 			}
 		}
 
-		getEl("pc_comps2").textContent = getFullExpansion(PCs_save.comps.length)
-		getEl("pc_temp").innerHTML = formatPercentage(Math.abs(PCs_tmp.temp)) + "<sup>o</sup> " + (PCs_tmp.temp > 0 ? "hotter" : "cooler")
-		getEl("pc_temp_color").style.display = PCs_save.lvl >= 2 ? "" : "none"
-		getEl("pc_temp_color").className = PCs_tmp.temp > 0 ? "hot" : PCs_tmp.temp < 0 ? "cool" : ""
-
-		getEl("pc_shrunker_div").style.display = hasAch("ng3pr12") ? "" : "none"
-		getEl("pc_shrunker").textContent = getFullExpansion(PCs_save.shrunkers)
-		getEl("pc_shrunker_eff").textContent = "^" + this.shrunkerEff().toFixed(3)
-
 		this.showMilestones(PCs_tmp.milestone || 0)
+
+		//Perks
+		el("disable_qc2_perk").style.display = QCs.perkUnl(2) ? "" : "none"
+		el("disable_qc2_perk").textContent = (QCs_save.disable_perks[2] ? "Enable" : "Disable") + " QC2 Perk"
+		for (var i = 1; i <= 8; i++) {
+			el("pc_perk_" + i).className = QCs.perkUnl(i) ? 
+				(QCs.data[i].perkToggle ? "qMs_toggle_" + (!QCs_save.disable_perks[i] ? "on" : "off") : "qMs_reward")
+			: "qMs_locked"
+		}
 	},
 	updateDispOnTick() {
 		if (!PCs_tmp.unl) return
 		if (!PCs.data.setupHTML) return
 
-		getEl("pc_eff2").textContent = "^" + shorten(getAQGainExp())
+		el("pc_eff1").textContent = "^" + enB.glu.boosterExp(0, true).toFixed(3)
+		el("pc_eff1_start").textContent = shorten(PCs_tmp.eff1_start)
+		el("pc_eff2").textContent = "^" + shorten(getAQGainExp())
+	},
+	updatePerksOnTick() {
+		for (var i = 1; i <= 8; i++) {
+			el("pc_perk_" + i).textContent = QCs.perkUnl(i) ? QCs.data[i].perkDesc(QCs_tmp.perks[i]) : "Locked (" + PCs_tmp.row_comps[i] + " / 4 QC" + i + " combinations)"
+		}
 	},
 	showMilestones(qc) {
 		PCs_tmp.milestone = qc
 
 		let shown = qc != 0 && qc != "all"
-		getEl("qc_milestones").style.display = qc != 0 || PCs_save.lvl == 1 ? "none" : ""
-		getEl("qc_milestone_div").style.display = shown ? "" : "none"
+		el("qc_milestones").style.display = qc != 0 || PCs_save.lvl == 1 ? "none" : ""
+		el("qc_milestone_div").style.display = shown ? "" : "none"
 		if (shown) {
-			getEl("qc_milestone_header").textContent = "QC" + qc + " Milestones"
+			el("qc_milestone_header").textContent = "QC" + qc + " Milestones"
 			for (var i = 1; i < PCs.data.milestone_reqs.length; i++) {
 				var unl = this.milestoneUnl(i)
 				var req = this.data.milestone_reqs[i]
-				getEl("qc_milestone" + i + "_div").textContent = req + " combination" + (req == 1 ? "" : "s")
-				getEl("qc_milestone" + i + "_div").style.display = unl ? "" : "none"
-				getEl("qc_milestone" + i + "_div2").style.display = unl ? "" : "none"
+				el("qc_milestone" + i + "_div").textContent = req + " combination" + (req == 1 ? "" : "s")
+				el("qc_milestone" + i + "_div").style.display = unl ? "" : "none"
+				el("qc_milestone" + i + "_div2").style.display = unl ? "" : "none"
 
-				getEl("qc_milestone" + i).className = "qMs_" + (this.milestoneDone(qc * 10 + i) ? "reward" : "locked")
-				getEl("qc_milestone" + i).textContent = evalData(PCs.milestones[qc * 10 + i]) || "???"
+				el("qc_milestone" + i).className = "qMs_" + (this.milestoneDone(qc * 10 + i) ? "reward" : "locked")
+				el("qc_milestone" + i).textContent = evalData(PCs.milestones[qc * 10 + i]) || "???"
 			}
 		}
 
-		getEl("qc_milestone_all_btn").style.display = qc != 0 || PCs_save.lvl == 1 ? "none" : ""
-		getEl("qc_milestone_all_div").style.display = qc == "all" ? "" : "none"
+		el("qc_milestone_all_btn").style.display = qc != 0 || PCs_save.lvl == 1 ? "none" : ""
+		el("qc_milestone_all_div").style.display = qc == "all" ? "" : "none"
 		if (qc == "all") {
 			for (var i = 1; i < PCs.data.milestone_reqs.length; i++) {
 				var unl = this.milestoneUnl(i)
 				var req = this.data.milestone_reqs[i]
-				getEl("qc_milestone_header_" + i).textContent = req + " combination" + (req == 1 ? "" : "s")
-				getEl("qc_milestone_header_" + i).style.display = unl ? "" : "none"
+				el("qc_milestone_header_" + i).textContent = req + " combination" + (req == 1 ? "" : "s")
+				el("qc_milestone_header_" + i).style.display = unl ? "" : "none"
 
 				for (var c = 1; c <= 8; c++) {
 					if (QCs.done(c)) {
 						var id = c * 10 + i
-						getEl("qc_milestone_" + id + "_div").style.display = unl ? "" : "none"
+						el("qc_milestone_" + id + "_div").style.display = unl ? "" : "none"
 						if (unl) {
-							getEl("qc_milestone_" + id).className = "qMs_" + (this.milestoneDone(id) ? "reward" : "locked") + " small_milestone"
-							getEl("qc_milestone_" + id).textContent = evalData(PCs.milestones[id]) || "???"
+							el("qc_milestone_" + id).className = "qMs_" + (this.milestoneDone(id) ? "reward" : "locked") + " small_milestone"
+							el("qc_milestone_" + id).textContent = evalData(PCs.milestones[id]) || "???"
 						}
 					}
 				}
 			}
 			for (var c = 1; c <= 8; c++) {
-				getEl("qc_milestone_all_" + c).style.display = QCs.done(c) ? "" : "none"
+				el("qc_milestone_all_" + c).style.display = QCs.done(c) ? "" : "none"
 			}
 		}
 	},
@@ -664,19 +675,6 @@ var PCs = {
 			PCs.resetButtons()
 		}
 	},
-
-	resetShrunkers() {
-		var qc = QCs_save
-		var mods = QCs.modData
-		if (!PCs.unl() || !qc.mod_comps || !qc.mod_comps.length) return
-
-		PCs_save.shrunkers = 0
-		for (var c = 1; c <= 8; c++) if (this.milestoneDone(c * 10 + 4)) PCs_save.shrunkers++
-	},
-	shrunkerEff() {
-		let x = PCs_save.shrunkers
-		return Math.pow(0.96, Math.sqrt(x))
-	}
 }
 var PCs_save = undefined
 var PCs_tmp = { unl: false }

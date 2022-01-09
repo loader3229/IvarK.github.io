@@ -332,7 +332,7 @@ amNewsArray = [
 ["Hello, antimatter amount? break_infinity.js broke. Understandable, have a nice Infinity", 'player.totalmoney.gte(Decimal.pow(10, 9e15))', "am115"],
 ["Whale complained he can't give Aarex money", true, "am116"],
 ["Meta-dimension tickspeed when?", true, "am117"],
-["Waiting I see", '(player.masterystudies !== undefined ? qu_save.nanofield.rewards > 14 : false)', "am118"],
+["Waiting I see", 'tmp.ngp3', "am118"],
 ["You must be bored of AD by now", 'player.totalTimePlayed >= 31536e4', "am119"],
 ["I mean, seriously, go find something else to play", 'player.totalTimePlayed >= 63072e4', "am120"],
 ["no cheating", '(player.bestInfinityTime < 1 || player.bestEterTime < 1 || (player.masterystudies !== undefined ? qu_save.best < 1 || player.ghostify.best < 1 : false))', "am121"],
@@ -351,13 +351,13 @@ amNewsArray = [
 ["U is the new M", "hasAch('ng3p45')", "am134"],
 ["Antimatter has just declared war on Matter. We are no longer safe. We are no longer free.", true, "am135"],
 ["Which one looks different? Preons or anti-preons?", 'hasAch("ng3p81")', "am136"],
-['"Anti-preons are coming. They will destroy our Nanofield work. We are doomed." ~ Worker replicant #179,769,308.', 'hasAch("ng3p81")', "am137"],
+["???", false, "am137"],
 ["GET A FREE PASS TO A GHOST TRANSFORMATION MACHINE NOW! IT IS TOTALLY WORTH IT!", 'pH.did("ghostify")', "am138"],
-['I told you "don\'t click that news" or else you will get a useless achievement.', "hasAch('ng3ps12')", "am139"],
+['I told you "don\'t click that news" or el_se you will get a useless achievement.', "hasAch('ng3ps12')", "am139"],
 ["Want to decay a quark multiple times? Be a Bosonic Lab scientist!", "pH.did('ghostify') && player.ghostify.ghostlyPhotons.enpowerments>3", "am140"],
-['"Anti-preons destroyed our rewards by anti-Nanofield. We should take revenge and steal their rewards back." ~ Worker replicant #247,273,145.', 'pH.did("ghostify") && tmp.bl.upgrades.includes(24)', "am141"],
+["???", false, "am141"],
 ["BOSONIC OVERDRIVE!!!", 'hasAch("ng3p81") && tmp.bl.odSpeed.gt(1) && tmp.bl.battery.gt(0)', "am142"],
-["If preons, Nanofield, and Anti-Preons exist, then why Anti-Nanofield doesn't exist?", 'pH.did("ghostify") && tmp.bl.upgrades.includes(24)', "am143"],
+["If strings exist, then why anti-strings doesn't exist?", 'str.unl()', "am143"],
 ['Wait a second. I think I\'ve realized something. The main writer never says what broadcasting channel we\'re on. I was always curious what channel our news show is on, so I went into a top secret room the main writer never tells us to go in. And what I found...I found what channel we broadcasted on. It is "999". But channel 999 doesn\'t exist! And I also found some other things...at the bottom-right of the page, it says "Sponsored by Hevipelle". Who is Hevipelle? I\'ve never heard anyone named Hevipelle in the world. Does this mean...does this mean that Hevipelle is a nickname for someone? A...oh no. There\'s more text. A sentence says...it says..."Because the physics of the game "Antimatter Dimensions" does not allow for visuals, all thoughts, feelings, and actions made by any being are put into short news tickers. OH MY GOD I\'M IN A VIDEOGAME OH GOD THIS IS A NEWS TICKER F\*\*\* THIS DEVELOP-sifdweyfwytrwqe8723648765237869iyusdqwe-0))$#(&)QBTR&_(B)&30-b5q&)rfb)+B0R-98w#$)9b)({bew)#(5R[q)(t()qet){(q#*bT8bb &){rb&rqw#b %&r7#w&R&{07&&b#w$&b )r ({e[-(b reafbgu ({brdiuufertuyreuyyuyuefuyuyfiYUiuyEYUFiuyGUY087378578052}}}}}}},,,', true , "am144"],
 ["Hi, Billy Mays here for the Antimatter Dimensions game, the new easier way to waste time!", true, "am145"],
 ["When does the 0th dimension come out", true, "am146"],
@@ -365,7 +365,7 @@ amNewsArray = [
 ["I was stuck in a grinding section. Thanks to gods, I can finally get out of here.", false, "am148"],
 ["The end is near...", "pH.did('ghostify') && tmp.bl.upgrades.includes(23)", "am149"],
 ["We have updated our Terms of Service to comply with COPPA Act.", true, "am150"],
-["Tree of Decay isn't a upgrade tree, I have been lied to", "player.masterystudies !== undefined && player.masterystudies.includes('d13')", "am151"],
+["Fluctuant Field isn't a upgrade tree, I have been lied to", "fluc.unl()", "am151"],
 ["POSITRONS CONSUME YOUR STARS", "player.masterystudies !== undefined && player.masterystudies.includes('d7')", "am152"],
 ['"New game dammit" - GrayStillPlays', "player.masterystudies !== undefined", "am153"],
 ['"More zeroes dammit" - GrayStillPlays', "player.masterystudies !== undefined", "am154"],
@@ -409,14 +409,14 @@ amNewsArray = [
 ["3000 patches ahead of the main branch, 6 different reset layers, and an additional half year of content", true, "am192"],
 ["Remember the good old days with no softcaps...well the new devs came in and put in too many!", true, "am193"],
 ["I hope Hevipelle doesn't find out that he has e308 matter in his basement because he left his challenge uncompleted.", true, "am194"],
-["Are we in the Gravity Well or outside of it?", "GDs.unlocked()", "am195"],
-["'The Power of Relativity'", "GDs.unlocked()", "am196"],
-["Gravity Well is basically the time part of dilation, but better.", "GDs.unlocked()", "am197"],
-["Can you please stop having too many types of Dimensions?", "tmp.quUnl", "am198"],
+["Are we in the Gravity Well or outside of it?", false, "am195"],
+["'The Power of Relativity'", false, "am196"],
+["Gravity Well is basically the time part of dilation, but better.", false, "am197"],
+["Can you please stop having too many types of Dimensions?", "pH.did('fluctuate')", "am198"],
 ["As you go deeper in scale, we don't see you anymore.", "pH.did('quantum')", "am199"],
-["You have played a lot of time in Bosonic Lab. Congratulations!", "hasAch('ng3p81') && tmp.bl.ticks.log10() >= 100", "am200"],
+["You have played this game for a really long time. Congratulations!", "player.totalTimePlayed >= 1e7", "am200"],
 ["Scientists discovered a brand new universe which is made of Replicantis!", "hasAch('ng3p113')", "am201"],
-["Matter Decay goes brrr!", "true", "am202"],
+["Matter Decay goes brrr!", true, "am202"],
 ["We recently proved that dark matter exists. We still don't know why.", "hasAch('ng3p71')", "am203"],
 ["Wait... Ghosts should live in spooky places, not our universe.", "pH.did('ghostify')", "am204"],
 ["When quarks have gone radioactive, the atom becomes a level that goes beyond radioactivity. Scientists call this level 'quarkfusey.'", "pH.did('ghostify')", "am205"],
@@ -425,7 +425,7 @@ amNewsArray = [
 ["Tired of waiting many minutes, hours to progress? Try the Barrier-Easing mod! This makes your save easier and faster. You should try it. ~ Aarex", "!tmp.bgMode", "am208"],
 ['In NG+3.1 everyone is a speed runner', "tmp.ngp3", "am209"],
 ["Coming soon: NG+3.2. ETA: We don't have a release date. There is a possibility that it takes infinite time.", "tmp.ngp3", "am210"],
-["Pfft, screw Gravity Dimensions! *slide whistle effect*", "GDs.unlocked()", "am211"],
+["Pfft, screw Gravity Dimensions! *slide whistle effect*", false, "am211"],
 ["NG-5 is being worked on! Now with 100% less matter.", "inNGM(4)", "am212"],
 ["The Anti-Grind Research Lab is currently looking for another exploit. The estimated amount of time will be about 7 months. Why can’t they just play the game normally? Nobody knows.", true, "am213"],
 ["'I will not let players exploit the game!' ~ Aarex", true, "am214"],
@@ -436,14 +436,14 @@ amNewsArray = [
 ["Why is there a big crunch and a big rip although a heat death would be more likely to happen?", "hasAch('ng3p51')", "am219"],
 ["Thousands of people in protest as Aarex adds scamify for 1 minute.", true, "am220"],
 ["We live in not just a universe and a multiverse, but ONE MEGAVERSE.", true, "am221"],
-["Antimatter dimensions is a metaphor for communism. There is only one source of production doing all the work, AKA first dimensions, while everyone else shares the antimatter. But wait, does that mean matter is always capitalistic? That can't be true, considering that the soviets were communists, and they were made of matter. Wat, maybe they was'nt? Antimatter dimensions takes place inside the soviet union confirmed? That means the soviet union still exists, because if it does'nt, then that means it's physically impossible for antimatter dimensions to exist? But the soviet unions does'nt exist, wich means antimatterr dimensions should'nt exist. This means the universe cannot exist, because there is a paradox, but the universe DOES exist, so it can't be a paradox, there has to be some other solution. Wait, the first word of the soviet anthem is \"Soyuz\", wich means \"Union\", in english. This could mean that the antimatter dimensions are actually in union with the time BEFORE 1991, but it still exists today. Antimatter dimensions hjas confirmed that time travel is possible. Hevipelle, please show us your secret. He's probably not gonna answer, because he is technically Stalin. \"Hevipelle\", is just the project name of Stalins top secret time travel machine. Stalin then went into the machine, and tried to hide in the least popular game genre, incremental games. Stalin then decided to make an further lie by saying he's finnish. It all makes sense now! The communist dimensions and the complete dictatorship of the player. Now, you might be wondering why Stalin still existed after the time travel. Well, the only possibility is that the time travel machine somehow moved into a timeline where he never used it. But wait, this means that Stalin never actually used the time machine. Yet another paradox! Well, this one is quite explainable. You see, there are 5 timelines. The first one, where Stalin didd use the time machine, but antimatter dimensions never existed, the second one where he did'nt use the time machine, but he still existed in the present, there is also a third one where he made a timeline union, wich connected the first and second timeline through yet another machine. There is also the 4th, where he has taken over the univerese and it's where he does most of his stuff. There is also the final and 5th one, the timeline where antimatter dimensions is happening. Tgis means that both timeline 1,2 and 5 are crossingg each other, while the third are combining them. This means i should be able to enter into the second timeline wich makes it so i can get a time machine to reach into the 4th timeline. 5 hours later and i have finally gotten into the 4th timeline, where i met face to face with Stalin himself. He looked very strong and he saw me. He immedeatly tried to talk to me and we camÃ© to the conclusion that we needed more of a crew. We went to get some help from Vladimir Putin, who quickly went under the alias of \"Aarex\", who made a 6th timeline wich is ng+++. However, Stalin got so afraid of the quality of Putins content, so he got a meantal illness. But he had one final wish. To create the \"Reality\" update, wich would end the antimatter dimensions timeline. But putin was trying to make a reworked version of ng+++. This meant creating a 7th timeline. Howeverr, i also wanted to do something. I created the \"NG+1e308\" timeline, but it ended before it even started. However, everythhing was going great until Slabdrill found us and tried to attack us. We quickly trapped him inside a ninth timeline. From there he made countless attempts of addeing his timeline into another timeline i the forrm of a ninth dimension, but Putin did nott let him. The wall between the ninth timeline and the rest was just too strong.  However, you might be wondering how you too can gain access to all of this, well, at firtrst you need t-    (Gets shot by Stalin) the AD:NGA mod, the 10th timeline with a fractal engine inspired mechanic and Rhendevous relics, you need 20 Rhendevous resets to get the 20-relic, a inter-timeline transport device with the Buy-N-Large logo, the 15-relic is a Buy-N-Large time machine.", true, "am222"],
+["Antimatter dimensions is a metaphor for communism. There is only one source of production doing all the work, AKA first dimensions, while everyone else shares the antimatter. But wait, does that mean matter is always capitalistic? That can't be true, considering that the soviets were communists, and they were made of matter. Wat, maybe they was'nt? Antimatter dimensions takes place inside the soviet union confirmed? That means the soviet union still exists, because if it does'nt, then that means it's physically impossible for antimatter dimensions to exist? But the soviet unions does'nt exist, wich means antimatterr dimensions should'nt exist. This means the universe cannot exist, because there is a paradox, but the universe DOES exist, so it can't be a paradox, there has to be some other solution. Wait, the first word of the soviet anthem is \"Soyuz\", wich means \"Union\", in english. This could mean that the antimatter dimensions are actually in union with the time BEFORE 1991, but it still exists today. Antimatter dimensions hjas confirmed that time travel is possible. Hevipelle, please show us your secret. He's probably not gonna answer, because he is technically Stalin. \"Hevipelle\", is just the project name of Stalins top secret time travel machine. Stalin then went into the machine, and tried to hide in the least popular game genre, incremental games. Stalin then decided to make an further lie by saying he's finnish. It all makes sense now! The communist dimensions and the complete dictatorship of the player. Now, you might be wondering why Stalin still existed after the time travel_. Well, the only possibility is that the time travel machine somehow moved into a timeline where he never used it. But wait, this means that Stalin never actually used the time machine. Yet another paradox! Well, this one is quite explainable. You see, there are 5 timelines. The first one, where Stalin didd use the time machine, but antimatter dimensions never existed, the second one where he did'nt use the time machine, but he still existed in the present, there is also a third one where he made a timeline union, wich connected the first and second timeline through yet another machine. There is also the 4th, where he has taken over the univerese and it's where he does most of his stuff. There is also the final and 5th one, the timeline where antimatter dimensions is happening. Tgis means that both timeline 1,2 and 5 are crossingg each other, while the third are combining them. This means i should be able to enter into the second timeline wich makes it so i can get a time machine to reach into the 4th timeline. 5 hours later and i have finally gotten into the 4th timeline, where i met face to face with Stalin himself. He looked very strong and he saw me. He immedeatly tried to talk to me and we camÃ© to the conclusion that we needed more of a crew. We went to get some help from Vladimir Putin, who quickly went under the alias of \"Aarex\", who made a 6th timeline wich is ng+++. However, Stalin got so afraid of the quality of Putins content, so he got a meantal illness. But he had one final wish. To create the \"Reality\" update, wich would end the antimatter dimensions timeline. But putin was trying to make a reworked version of ng+++. This meant creating a 7th timeline. Howeverr, i also wanted to do something. I created the \"NG+1e308\" timeline, but it ended before it even started. However, everythhing was going great until Slabdrill found us and tried to attack us. We quickly trapped him inside a ninth timeline. From there he made countless attempts of addeing his timeline into another timeline i the forrm of a ninth dimension, but Putin did nott let him. The wall between the ninth timeline and the rest was just too strong.  However, you might be wondering how you too can gain access to all of this, well, at firtrst you need t-    (Gets shot by Stalin) the AD:NGA mod, the 10th timeline with a fractal engine inspired mechanic and Rhendevous relics, you need 20 Rhendevous resets to get the 20-relic, a inter-timeline transport device with the Buy-N-Large logo, the 15-relic is a Buy-N-Large time machine.", true, "am222"],
 ["So, Spelpotatis is trying to beat me by news tickers, I will not stop until I win.", true, "am223"],
 ["[Insert a news ticker which would cause an armageddon, but doesn't really happen due to: I am being restricted in your computer. Computers can't do real life stuff, unless they are robots.]", true, "am224"],
 ["Alright. My news tickers have too many stuff made by Aarex. If you wish for a lucky moment, click me to split into 2.", true, "am225"],
 ["Alright. Time for you to become a ghost, kiddo. You have enough power in Big Rips. With the power of my permafrost bones, because I am Dry Bo- Wait. Why can't I use that anymore? *Looks at mirror.* You gonna kidding me... I got transformed permanently, yet again... When this transformation chaos has to stop?!?!", true, "am226"],
 ["With a lot of variations mixed up, the Replicanti disease begins to grow superexponentially. Our predictions were wrong. Replicantis will invade us in about a minute, causing a ZK-Type Omniverse Destruction scenario. We must hide into our bunkers.", "player.replicanti.unl", "am227"],
-["We the friendly Duplicants, declare independence on the Pretus colony.", "qu_save.nanofield.apgWoke", "am221"],
-["Duplicants decay Replicantis for quantum energy. That means we can decay anything for quantum energy?", "hasMTS('d10')", "am229"],
+["We the friendly scientists, declare independence on the antimatter colony.", true, "am221"],
+["Meta-antimatter decays particles for quantum energy. That means we can decay anything for quantum energy?", "hasMTS('d10')", "am229"],
 ["You have e3.523 DCe unmeta-antimatter, which causes a e1.762 DCex expansion to real-life.", "hasDilationStudy(6)", "am230"],
 ["You have unlocked infinite Microdimensions! That's cool, because Microdimensions expand Dimensions with Blueprint Particles!", true, "am231"],
 ["All Dimensions = AD = Antimatter Dimensions", true, "am232"],
@@ -486,93 +486,130 @@ amNewsArray = [
 ["Welcome to Deep Quantum, where strings are everywhere.", "str.unl()", "am269"],
 ["Number of perfect lines: Absolutely zero.", "str.unl()", "am270"],
 ["Absolute zero. That's how many particles didn't contain.", "str.unl()", "am271"],
-["It is year 2077. We haven't eliminated matter bots, but we are trying to outsmart them. We are developing a brain transplant technology which detects if you are a human by nanobots for resources and materials.", true, "am272"],
+["It is year 2077. We haven't el_iminated matter bots, but we are trying to outsmart them. We are developing a brain transplant technology which detects if you are a human by nanobots for resources and materials.", true, "am272"],
 ["For the first time, I saw a interesting moment for the first time. This moment shows people standing on the extractor, which can safely move on dark matter goo.", true, "am273"],
 ["You ever think how messed up AD is? You're shredding through countless realities, turning them to nothing and annihilating them completely, only to rebuild them out of antimatter and then tear them down in one final crunch Thousands upon thousands of dimensions are destroyed each second, parallel universes like our own, universes that could harbor life, turned into nothing but antimatter in a matter of moments and then collapsed completely. Even multiverses aren't enough, and the spacetime continuum eventually rips as we dilate time itself to satiate our bloodlust.", true, "am274"],
 ["Does any of the news here actually get added into the game?", true, "am275"],
 ["Meanwhile in a computable number competition: Writes the code that looks like snaky lines, which contains functions that are more powerful than Loader's Number. He is trying to not make interpreters and turing machines, just to follow rules."
 , true, "am276"],
-["In September 2020, I suddenly lost my interest on Numberblocks, and even left the community. At the time when I wrote this, It's been 1 year. Don't worry, I will use BAN and SAN for googological numbers in this game, if I want to go beyond ee308.", true, "am277"],
+["In September 2020, I suddenly lost my interest on Numberblocks, and even left the community dedicated to it. At the time when I wrote this, It's been 1 year. Don't worry, I will use BAN and SAN for googological numbers in this game, if I want to go beyond ee308.", true, "am277"],
 ["τεμΩαrεx", "tmp.ngp3", "am278"],
-["Aarex went back to Googology, just to compete with strongest computable notations. Will he do it?", "tmp.ngp3", "am279"],
 ["Although the number on the only posted 9/18/2021 news ticker number is probably in the range of 120 <= x <= 600", true, "am280"],
 ["In an alternate universe, @TruthNotScam9 convinced Aarex to add Scamify, leaving many sparks of outrage from the players. Both of them died soon afterward.", "tmp.ngp3", "am281"],
-/*NEXT ID: am274*/
+["~<: NEXTA COMMUNINC: CONSTELLA' THE STARS ~:> Stellarika Aarex's speaking to Sollings: The infamous \"Kibb's Point\" [<.>] has been disintegrated! aSAN~1,318,273^{*.*++} has been landed in release, featuring unseen methods extending to Kibb's Axioms! Be warned! Monstrous Xaliens pulled a nefarious abduct against aSAN~1,318,271! One is that -=>> is a numerous burst to (1,(((1,1,2),2)),2) arrays! Our megalo-arithmetic lab is working tediously for a drone evaluating their n...", "tmp.ngp3", "am282"],
+["It's 2023. Aarex managed to release an content update, but inflation seems to force him to reduce the formulas or underestimate the growth rate.", "tmp.ngp3", "am283"],
+["We are getting close to the true nature of Quantum. More to seem soon...", "isAtEndGame()", "am284"],
+/*NEXT ID: am285*/
+]
+googolShown = false
+googolNewsArray = [
+/*GOOGOLOGISMS: NG+3R*/
+["You have at least Googol (10^100) antimatter!", () => player.money.e >= 100, "g1"],
+["You have at least Centillion (10^303) antimatter! Infinity time!", () => player.money.e >= 303, "g2"],
+["You have at least Faxul (200!) antimatter!", () => player.money.gte(Decimal.pow(10, 374.8968886400403)), "g20"],
+["You have at least Googolchime (10^1,000) antimatter! You need at least a larger universe for that.", () => player.money.e >= 1e3, "g3"],
+["You have at least Millillion (10^3,003) antimatter! It's too big to comprehend this size.", () => player.money.e >= 3003, "g4"],
+["You have at least Googolbell (10^5,000) antimatter! Now we are getting to ethereal quantites.", () => player.money.e >= 5e3, "g5"],
+["You have at least Googoltoll (10^10,000) antimatter! That's at least 10 pages of decimal expansion.", () => player.money.e >= 1e4, "g6"],
+["You have at least Myrillion (10^30,003) antimatter! A rare -illion, huh? Nope.", () => player.money.e >= 30003, "g7"],
+["You have at least Googolgong (10^100,000) antimatter! That 'meta-bell' was too big!", () => player.money.e >= 1e5, "g8"],
+["You have at least Maximusmillillion (10^1,000,003) antimatter! Maximum OVERDRIVE!", () => player.money.e >= 1e6+3, "g9"],
+["You have at least Micrillion (10^3,000,003) antimatter!", () => player.money.e >= 3e6+3, "g10"],
+["You have at least Googolbong (10^100,000,000) antimatter!", () => player.money.e >= 1e8, "g11"],
+["You have at least Nanillion (10^3,000,000,003) antimatter!", () => player.money.e >= 3e9+3, "g12"],
+["You have at least Trialogue (10^10^10) antimatter!", () => player.money.e >= 1e10, "g13"],
+["You have at least Googolthrong (10^10^11) antimatter!", () => player.money.e >= 1e11, "g14"],
+["You have at least Picillion (10^(3*10^12+3)) antimatter!", () => player.money.e >= 3e12+3, "g15"],
+["You have at least Googolgandingan (10^10^14) antimatter!", () => player.money.e >= 1e14, "g16"],
+["You have at least Femtillion (10^(3*10^15+3)) antimatter!", () => player.money.e >= 3e15+3, "g17"],
+["You have at least Attillion (10^(3*10^18+3)) antimatter!", () => player.money.e >= 3e18+3, "g18"],
+["You have at least Zeptillion (10^(3*10^21+3)) antimatter! o_O;", () => player.money.e >= 3e21+3, "g19"],
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
 var scrollTimeouts = [];
 
 function scrollNextMessage() {
-        //don't run if hidden to save performance
-        if (typeof (player) == "undefined") return
-        if (player.options.newsHidden) return false
-        var s = getEl('news');
-        updateNewsArray();
-        tmp.blankedOut = false
+	//don't run if hidden to save performance
+	if (typeof (player) == "undefined") return
+	if (player.options.newsHidden) return false
+	var s = el('news');
+	updateNewsArray();
+	tmp.blankedOut = false
 
-		var nextMsgIndex
-		var nextMsgCond
-		var nextMsgId
+	var nextMsgIndex
+	var nextMsgCond
+	var nextMsgId
 
-        //select a message at random
-        try {
-			nextMsgCond = false
-			while (!nextMsgCond) {
-				// randomly choose from either normal news or aarex news
-				var array = ((hasAch("r22") && Math.random() > 0.5) || aarMod.newGamePlusVersion || tmp.ngp3) ? amNewsArray : newsArray
-				nextMsgIndex = Math.min(Math.floor(Math.random() * array.length), array.length)
-				var func = array[nextMsgIndex][1]
-				nextMsgCond = typeof(func) == "function" ? func() : eval(func);
-				nextMsgId = array[nextMsgIndex][2];
+	//select a message at random
+	try {
+		nextMsgCond = false
+		while (!nextMsgCond) {
+			// randomly choose from either normal news or aarex news
+			var aar = (hasAch("r22") || aarMod.newGamePlusVersion || tmp.ngp3) && Math.random() > 0.5
+			var googol = aar && Math.random() > 2/3 && player.money.e > 100 && !googolShown
+
+			googolShown = googol
+			if (googol) {
+				var array = googolNewsArray
+				nextMsgIndex = 0
+				while (googolNewsArray[nextMsgIndex+1] && evalData(googolNewsArray[nextMsgIndex+1][1])) nextMsgIndex++
 			}
-        } catch(e) {
-			console.log("Newsarray doesn't work at idx " + nextMsgIndex)
-        }
-        scrollTimeouts.forEach(function(v) {clearTimeout(v);});
-        scrollTimeouts = [];
+			if (nextMsgIndex === undefined) {
+				var array = aar ? amNewsArray : newsArray
+				nextMsgIndex = Math.min(Math.floor(Math.random() * array.length), array.length)
+			}
+			var func = array[nextMsgIndex][1]
 
-        //set the text
-        var m = array[nextMsgIndex][0];
-		if (typeof(m) == "function") m = m()
-        s.textContent = m
-        
-        //get the parent width so we can start the message beyond it
-        let parentWidth = s.parentElement.clientWidth;
-        
-        //set the transition to blank so the move happens immediately
-        s.style.transition = '';
-        //move div_text to the right, beyond the edge of the div_container
-        s.style.transform = 'translateX('+parentWidth+'px)';
-        
-        //we need to use a setTimeout here to allow the browser time to move the div_text before we start the scrolling
-        scrollTimeouts.push(setTimeout( function() {
-                //distance to travel is s.parentElement.clientWidth + s.clientWidth + parent padding
-                //we want to travel at rate pixels per second so we need to travel for (distance / rate) seconds
-                let dist = s.parentElement.clientWidth + s.clientWidth + 20; //20 is div_container padding
-                let rate = 100; //change this value to change the scroll speed
-                let transformDuration = dist / rate;
-                if (!player.options.newsHidden && !player.newsArray.includes(nextMsgId)) {
-                        player.newsArray.push(nextMsgId)
-                        if (player.newsArray.length >= 50) giveAchievement("Fake News")
-                        if (player.newsArray.length >= 400) giveAchievement("400% Breaking News")
-                }
+			nextMsgCond = evalData(func)
+			nextMsgId = array[nextMsgIndex][2]
+		}
+	} catch(e) {
+		console.log("Newsarray doesn't work at idx " + nextMsgIndex)
+	}
+	scrollTimeouts.forEach(function(v) {clearTimeout(v);});
+	scrollTimeouts = [];
 
+	//set the text
+	var m = array[nextMsgIndex][0];
+	if (typeof(m) == "function") m = m()
+	s.textContent = m
+	
+	//get the parent width so we can start the message beyond it
+	let parentWidth = s.parentElement.clientWidth;
+	
+	//set the transition to blank so the move happens immediately
+	s.style.transition = '';
+	//move div_text to the right, beyond the edge of the div_container
+	s.style.transform = 'translateX('+parentWidth+'px)';
+	
+	//we need to use a setTimeout here to allow the browser time to move the div_text before we start the scrolling
+	scrollTimeouts.push(setTimeout( function() {
+			//distance to travel is s.parentElement.clientWidth + s.clientWidth + parent padding
+			//we want to travel at rate pixels per second so we need to travel for (distance / rate) seconds
+			let dist = s.parentElement.clientWidth + s.clientWidth + 20; //20 is div_container padding
+			let rate = aarMod.newsRate || 100; //change this value to change the scroll speed
+			let transformDuration = dist / rate;
+			if (!player.options.newsHidden && !player.newsArray.includes(nextMsgId)) {
+				player.newsArray.push(nextMsgId)
+				if (!tmp.ngp3_boost && player.newsArray.length >= 50) giveAchievement("Fake News")
+				if (player.newsArray.length >= 400) giveAchievement("400% Breaking News")
+			}
 
-                //set the transition duration
-                s.style.transition = 'transform '+transformDuration+'s linear';
-                let textWidth = s.clientWidth;
-                //we need to move it to -(width+parent padding) before it won't be visible
-                s.style.transform = 'translateX(-'+(textWidth+5)+'px)';
-                //automatically start the next message scrolling after this one finishes
-                //you could add more time to this timeout if you wanted to have some time between messages
-                scrollTimeouts.push(setTimeout(function() {
-		        if (nextMsgId == "am104") {
-			        tmp.blankedOut=true
-			        setTimeout(scrollNextMessage, 60e3)
-		        } else scrollNextMessage()
-                }, Math.ceil(transformDuration * 1000)));
-        }, 100));
+			//set the transition duration
+			s.style.transition = 'transform '+transformDuration+'s linear';
+			let textWidth = s.clientWidth;
+			//we need to move it to -(width+parent padding) before it won't be visible
+			s.style.transform = 'translateX(-'+(textWidth+5)+'px)';
+			//automatically start the next message scrolling after this one finishes
+			//you could add more time to this timeout if you wanted to have some time between messages
+			scrollTimeouts.push(setTimeout(function() {
+			if (nextMsgId == "am104") {
+				tmp.blankedOut = true
+				setTimeout(scrollNextMessage, 0)
+			} else scrollNextMessage()
+			}, Math.ceil(transformDuration * 1000)));
+	}, 100));
 }
 
 function fixNewsArray() {
@@ -602,7 +639,7 @@ ghostlyNewsArray = [//Ghostly news ticker messages
 ["Are your ghost particles ghostly? If not, talk to your ghostly boss.", true, "gn14"],
 ["What's a ghostify? -some new person that joined the discord server", true, "gn15"],
 ["BREAKING NEWS: Because of antimatter, someone has been turned into a basketball. The news ticker writers are baffled.", true, "gn16"],
-["If you read 'Congratulations for beating NG+3' message, here is a spoiler: In the next update, there will be Higgs Bosons!", "player.newsArray.includes('am68') && player.totalmoney.gte(Decimal.pow(10, 2e17))", "gn17"],
+["If you read 'Congratulations for beating NG+3' message, here is a spoiler: Is Quantum Field going to be a upgrade field?", "isAtEndGame()", "gn17"],
 ["WARNING: Do not interact evil ghosts. They can scare you out.", true, "gn18"],
 ["Do you know that ghosts are proved to be undead?", true, "gn19"],
 ["I got Ghost Particles. I got Neutrinos. That makes me a ghost.", true, "gn20"],
@@ -614,17 +651,17 @@ ghostlyNewsArray = [//Ghostly news ticker messages
 ["A new evidence states that there is Bosonic Lab inside of their secret laboratory.", true, "gn26"],
 ["Ghosts have dominated some universes!", true, "gn27"],
 ["Boo! Kee-hee-hee!", "Math.random() <= 0.001", "gn28"],
-["An anti-preon ghost is discovered. He is evil to Nanofield. Don't ever observe him or else he will take over your Nanofield.", "hasAch('ng3p81')", "gn29"],
-["Ghosts found a ghostly kind of Radioactive Decays!", "Math.max(Math.max(getRadioactiveDecays('r'), getRadioactiveDecays('g')), getRadioactiveDecays('b')) > 4", "gn30"],
+["???", false, "gn29"],
+["Ghosts found a ghostly kind of Radioactive Decays!", false, "gn30"],
 ["Ghosts discovered that some particles, including bosons, are ghostly!", true, "gn31"],
 ["Ghosts don't know how to write more news. They decided to stop it for today.", true, "gn32"],
-["Antipretus is getting closer. He will destroy your Nanofield. Stay away from him.", "tmp.bl.upgrades.includes(13)", "gn33"],
-["WARNING! Antipretus will control over your Nanofield! Be careful! Oh. Worker replicants are warned of that Ghost too.", "tmp.bl.upgrades.includes(21)", "gn34"],
+["???", false, "gn33"],
+["???", false, "gn34"],
 ["A ghost tried to take Anti-Preons out, but Bosonic Lab workers decided to ban them out because an Anti-Preon is a resource of Bosonic Lab.", "hasAch('ng3p81')", "gn35"],
 ["You got one ghostly particle, whatever that means.", "tmp.bl.upgrades.includes(21)", "gn36"],
 ['"Welcome, a new ghost, to the Ghostify layer! Kee-hee-hee!" - Aarex', true, "gn37"],
 ["And then the guy turned himself into a pickle ghost. Funniest moment I've ever seen.", true, "gn38"],
-["Wait a second. This new laboratory isn't anti-Nanofield...", "tmp.bl.upgrades.includes(21)", "gn39"],
+["???", false, "gn39"],
 ['"ghosts arent scary" ~ Aaron Cook', true, "gn40"],
 ["There are actually no anti-ghosts because ghosts are made of ghostly matter.", true, "gn41"],
 ["Are we living in ghostly universe or anti-ghostly universe?", true, "gn42"],
@@ -642,15 +679,15 @@ ghostlyNewsArray = [//Ghostly news ticker messages
 ["I wonder where all the news gets broadcasted from...", true, "gn54"],
 ["'now i know why i can't get access to the ghostly news!' - usavictor", true, "gn55"],
 ["Ghostify is just Quantum but spooky.", true, "gn56"],
-["Void-Preontius, the Void Ultra-Omnipotent Ghost, decided to take over not only the Barrel... He took over the Barrel!", "qu_save.nanofield.apgWoke", "gn57"],
+["Void-Preontius, the Void Ultra-Omnipotent Ghost, decided to take over not only the Barrel_... He took over the Barrel!", true, "gn57"],
 ["GHOST IS YOU", true, "gn58"],
 ["Error 404: Ghost Matter not found", true, "gn59"],
-["Ghost scientists have built a quick transportation to the Gravity Well!", "GDs.unlocked()", "gn60"],
+["Ghost scientists have built a quick transportation to the Gravity Well!", false, "gn60"],
 ["We built a new tool that allows you to solve the anomaly!", true, "gn61"],
 ["We found an anomaly that allows ghosts to resize themselves in their worlds.", true, "gn62"],
 ["Getting tired of finding through small holes? Introducing Planckizer! A tool which allows ghosts to become planck-scale!", "true", "gn63"],
 ["Gonna transform to a Planck Scale ghost!", "true", "gn64"],
-["The flow of time has messed up thanks to you! Our bosons blew up.", "GDs.unlocked()", "gn65"],
+["The flow of time has messed up thanks to you! Our bosons blew up.", false, "gn65"],
 ["We found out that ghosts are made of ghostly foam!", true, "gn66"],
 ["Did ghosts transform themselves to keep their lives? Oh, come on! We are immortal!", true, "gn67"],
 ["Hey. GhostSauce's Here.", "true", "gn68"],
@@ -674,7 +711,7 @@ function nextGhostlyNewsTickerMsg() {
 	} catch(e) {
 		console.log("Newsarray doesn't work at idx " + ghostlyNewsIndex)
 	}
-	var newsText = getEl("ghostlyNewsTickerText")
+	var newsText = el("ghostlyNewsTickerText")
 	newsText.textContent = ghostlyNewsArray[ghostlyNewsIndex][0]
 	newsText.innerHTML = "<b>NEWS!</b> " + newsText.innerHTML
 	newsText.style.left = "100%"
@@ -702,11 +739,11 @@ function nextGhostlyNewsTickerMsg() {
 
 function toggleGhostlyNews(force) {
 	player.options.secrets.ghostlyNews = !player.options.secrets.ghostlyNews
-	getEl("ghostlyNewsTicker").style.height = (player.options.secrets.ghostlyNews ? 24 : 0)+"px"
-	getEl("ghostlyNewsTickerBlock").style.height = (player.options.secrets.ghostlyNews ? 16 : 0)+"px"
-	getEl("ghostlynewsbtn").textContent = (player.options.secrets.ghostlyNews ? "Hide" : "Show") + " ghostly news ticker"
+	el("ghostlyNewsTicker").style.height = (player.options.secrets.ghostlyNews ? 24 : 0)+"px"
+	el("ghostlyNewsTickerBlock").style.height = (player.options.secrets.ghostlyNews ? 16 : 0)+"px"
+	el("ghostlynewsbtn").textContent = (player.options.secrets.ghostlyNews ? "Hide" : "Show") + " ghostly news ticker"
 }
 
-getEl("ghostlyNewsTicker").onclick = function () {
+el("ghostlyNewsTicker").onclick = function () {
 	if (tmp.blankedOut2) giveAchievement("Blanked out")
 };

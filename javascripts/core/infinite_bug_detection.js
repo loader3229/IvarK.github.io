@@ -15,15 +15,15 @@ function isInfiniteDetected() { // todo: make better infinite detection system
 		exportInfiniteSave()
 		reload()
 		infiniteDetected = false
-		if (getEl("welcome").style.display != "flex") getEl("welcome").style.display = "flex"
-		getEl("welcomeMessage").innerHTML = "I'm sorry, but you got an Infinite bug. Because of this, your save is reverted to your last saved progress. It is recommended to post how did you got this bug. Thanks! :)"
+		if (el("welcome").style.display != "flex") el("welcome").style.display = "flex"
+		el("welcomeMessage").innerHTML = "I'm sorry, but you got an Infinite bug. Because of this, your save is reverted to your last saved progress. It is recommended to post how did you got this bug. Thanks! :)"
 		return true
 	}
 }
 
 function exportInfiniteSave() {
 	infiniteSave = btoa(JSON.stringify(player))
-	getEl("bugExport").style.display = ""
+	el("bugExport").style.display = ""
 	bugExport()
 }
 

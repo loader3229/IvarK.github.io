@@ -4,7 +4,7 @@ function startChallenge(name) {
 	if (name.includes("post")) {
 		if (player.postChallUnlocked < checkICID(name)) return
 		var target = getGoal(name)
-	} else var target = new Decimal(Number.MAX_VALUE)
+	} else var target = E(Number.MAX_VALUE)
 	if (player.options.challConf && name != "") if (!confirm("You will start over with just your Infinity upgrades, and achievements. You need to reach " + (name.includes("post") ? "a set goal" : "infinity") + " with special conditions. The 4th Infinity upgrade column doesn't work on challenges.")) return
 	if (player.tickspeedBoosts != undefined) player.tickspeedBoosts = 0
 	if (name == "postc1" && player.currentEternityChall != "" && QCs.in(4) && QCs.in(6)) giveAchievement("The Ultimate Challenge")
@@ -17,32 +17,32 @@ function startChallenge(name) {
 	resetPSac()
 	resetTDsOnNGM4()
 	reduceDimCosts()
-	if (player.currentChallenge == "postc1") player.costMultipliers = [new Decimal(1e3), new Decimal(5e3), new Decimal(1e4), new Decimal(1.2e4), new Decimal(1.8e4), new Decimal(2.6e4), new Decimal(3.2e4), new Decimal(4.2e4)];
+	if (player.currentChallenge == "postc1") player.costMultipliers = [E(1e3), E(5e3), E(1e4), E(1.2e4), E(1.8e4), E(2.6e4), E(3.2e4), E(4.2e4)];
 	if (player.currentChallenge == "postc2") {
-		player.eightAmount = new Decimal(1);
+		player.eightAmount = E(1);
 		player.eightBought = 1;
 		player.resets = 4;
 	}
 	updateNCVisuals()
 	
 	if (player.infinityUpgradesRespecced != undefined) {
-		player.singularity.darkMatter = new Decimal(0)
+		player.singularity.darkMatter = E(0)
 		player.dimtechs.discounts = 0
 	}
 	updateSingularity()
 	updateDimTechs()
 	
-	if (player.replicanti.unl) player.replicanti.amount = new Decimal(1)
+	if (player.replicanti.unl) player.replicanti.amount = E(1)
 	if (!tmp.ngC) player.replicanti.galaxies = 0
 
 	// even if we're in a challenge, apparently if it's challenge 2 we might have four resets anyway.
 	setInitialResetPower();
 
-	GPminpeak = new Decimal(0)
-	IPminpeak = new Decimal(0)
+	GPminpeak = E(0)
+	IPminpeak = E(0)
 	if (player.currentChallenge.includes("post")) {
 		player.break = true
-		getEl("break").innerHTML = "FIX INFINITY"
+		el("break").innerHTML = "FIX INFINITY"
 	}
 	if (hasAch("r36")) player.tickspeed = player.tickspeed.times(0.98);
 	if (hasAch("r45")) player.tickspeed = player.tickspeed.times(0.98);
@@ -96,23 +96,23 @@ function getTotalNormalChallenges() {
 function updateNCVisuals() {
 	var chall = player.currentChallenge
 
-	if (inNC(2) || chall == "postc1" || tmp.ngmR || inNGM(5)) getEl("chall2Pow").style.display = "inline-block"
-	else getEl("chall2Pow").style.display = "none"
+	if (inNC(2) || chall == "postc1" || tmp.ngmR || inNGM(5)) el("chall2Pow").style.display = "inline-block"
+	else el("chall2Pow").style.display = "none"
 
-	if (inNC(3) || chall == "postc1") getEl("chall3Pow").style.display = "inline-block"
-	else getEl("chall3Pow").style.display = "none"
+	if (inNC(3) || chall == "postc1") el("chall3Pow").style.display = "inline-block"
+	else el("chall3Pow").style.display = "none"
 
-	if (inMatterChallenge()) getEl("matter").style.display = "block"
-	else getEl("matter").style.display = "none"
+	if (inMatterChallenge()) el("matter").style.display = "block"
+	else el("matter").style.display = "none"
 
-	if (isADSCRunning()) getEl("chall13Mult").style.display = "block"
-	else getEl("chall13Mult").style.display = "none"
+	if (isADSCRunning()) el("chall13Mult").style.display = "block"
+	else el("chall13Mult").style.display = "none"
 
-	if (inNC(14) && tmp.ngmX > 3) getEl("c14Resets").style.display = "block"
-	else getEl("c14Resets").style.display = "none"
+	if (inNC(14) && tmp.ngmX > 3) el("c14Resets").style.display = "block"
+	else el("c14Resets").style.display = "none"
 
-	if (inNC(6, 3) || inNC(9) || inNC(12) || ((inNC(5) || inNC(14) || chall == "postc4" || chall == "postc5") && tmp.ngmX < 3) || chall == "postc1" || chall == "postc6" || chall == "postc8") getEl("quickReset").style.display = "inline-block"
-	else getEl("quickReset").style.display = "none"
+	if (inNC(6, 3) || inNC(9) || inNC(12) || ((inNC(5) || inNC(14) || chall == "postc4" || chall == "postc5") && tmp.ngmX < 3) || chall == "postc1" || chall == "postc6" || chall == "postc8") el("quickReset").style.display = "inline-block"
+	else el("quickReset").style.display = "none"
 }
 
 let NC_NAMES = {
@@ -180,7 +180,7 @@ function updateWorstChallengeBonus() {
 }
 
 function updateChallenges() {
-	var buttons = Array.from(getEl("normalchallenges").getElementsByTagName("button")).concat(Array.from(getEl("breakchallenges").getElementsByTagName("button")))
+	var buttons = Array.from(el("normalchallenges").getElementsByTagName("button")).concat(Array.from(el("breakchallenges").getElementsByTagName("button")))
 	for (var i=0; i < buttons.length; i++) {
 		buttons[i].className = "challengesbtn";
 		buttons[i].textContent = "Start"
@@ -188,7 +188,7 @@ function updateChallenges() {
 
 	tmp.cp = 0
 	for (var i=0; i < player.challenges.length; i++) {
-		let elm = getEl(player.challenges[i])
+		let elm = el(player.challenges[i])
 		if (elm) {
 			elm.className = "completedchallengesbtn";
 			elm.textContent = "Completed"
@@ -206,20 +206,20 @@ function updateChallenges() {
 	}
 	for (var i = 0; i < running.length; i++) {
 		var chall = running[i]
-		getEl(chall).className = "onchallengebtn";
-		getEl(chall).textContent = "Running"
+		el(chall).className = "onchallengebtn";
+		el(chall).textContent = "Running"
 	}
 
-	getEl("challenge7").parentElement.parentElement.style.display = player.infinitied < 1 && player.eternities < 1 && !pH.did("quantum") ? "none" : ""
+	el("challenge7").parentElement.parentElement.style.display = player.infinitied < 1 && player.eternities < 1 && !pH.did("quantum") ? "none" : ""
 
 	if (isIC3Trapped()) {
-		getEl("postc3").className = "onchallengebtn";
-		getEl("postc3").textContent = "Trapped in"
+		el("postc3").className = "onchallengebtn";
+		el("postc3").textContent = "Trapped in"
 	}
 
-	if (player.postChallUnlocked > 0 || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) getEl("challTabButtons").style.display = "table"
-	for (c = 0; c < order.length; c++) getEl(order[c]).parentElement.parentElement.style.display = player.postChallUnlocked >= c + 1 ? "" : "none"
-	getEl("postctabbtn").parentElement.style.display = pH.shown("infinity") && (player.postChallUnlocked >= 1 || pH.did("eternity")) ? "" : "none"
+	if (player.postChallUnlocked > 0 || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) el("challTabButtons").style.display = "table"
+	for (c = 0; c < order.length; c++) el(order[c]).parentElement.parentElement.style.display = player.postChallUnlocked >= c + 1 ? "" : "none"
+	el("postctabbtn").parentElement.style.display = pH.shown("infinity") && (player.postChallUnlocked >= 1 || pH.did("eternity")) ? "" : "none"
 
 	resetIC1Reward()
 	updateInChallenges()
@@ -239,8 +239,8 @@ function updateInChallenges() {
 var infchallengeTimes = 999999999
 function updateChallengeTimes() {
 	if (!pH.shown("infinity")) {
-		getEl("challengetimesbtn").style.display = "none"
-		getEl("infchallengesbtn").style.display = "none"
+		el("challengetimesbtn").style.display = "none"
+		el("infchallengesbtn").style.display = "none"
 		return
 	}
 
@@ -257,7 +257,7 @@ function updateChallengeTimes() {
 	}
 
 	setAndMaybeShow("challengetimesum", counter >= 2, () => "Sum: " + timeDisplayShort(totalTime, false, 3) + ".")
-	getEl("challengetimesbtn").style.display = counter > 0 ? "inline-block" : "none"
+	el("challengetimesbtn").style.display = counter > 0 ? "inline-block" : "none"
 
 	//Infinity Challenges
 	var temp=0
@@ -270,7 +270,7 @@ function updateChallengeTimes() {
 		}
 	}
 	setAndMaybeShow("infchallengetimesum",tempcounter>1,'"The sum of your completed Infinity Challenge time records is " + timeDisplayShort(' + temp + ', false, 3) + "."')
-	getEl("infchallengesbtn").style.display = tempcounter>0 ? "inline-block" : "none"
+	el("infchallengesbtn").style.display = tempcounter>0 ? "inline-block" : "none"
 	updateWorstChallengeBonus();
 }
 
@@ -339,48 +339,48 @@ var order = []
 
 function loadICData() {
 	nextAt = {
-		postc1: new Decimal("1e2000"), postc1_ngmm: new Decimal("1e3000"), postc1_ngm3: new Decimal("1e3760"), postc1_ngm4: new Decimal("1e4350"), postc1_ngC: new Decimal("1e5555"),
-		postc2: new Decimal("1e5000"), postc2_ngC: new Decimal("1e5860"),
-		postc3: new Decimal("1e12000"), postc3_ngC: new Decimal("1e7175"),
-		postc4: new Decimal("1e14000"), postc4_ngC: new Decimal("1e8475"),
-		postc5: new Decimal("1e18000"), postc5_ngm3: new Decimal("1e21500"), postc5_ngC: new Decimal("1e21000"),
-		postc6: new Decimal("1e20000"), postc6_ngm3: new Decimal("1e23000"), postc6_ngC: new Decimal("1e21000"),
-		postc7: new Decimal("1e23000"), postc7_ngm3: new Decimal("1e25500"), postc7_ngC: new Decimal("1e32000"),
-		postc8: new Decimal("1e28000"), postc8_ngm3: new Decimal("1e39000"), postc8_ngC: new Decimal("1e37500"),
+		postc1: E("1e2000"), postc1_ngmm: E("1e3000"), postc1_ngm3: E("1e3760"), postc1_ngm4: E("1e4350"), postc1_ngC: E("1e5555"),
+		postc2: E("1e5000"), postc2_ngC: E("1e5860"),
+		postc3: E("1e12000"), postc3_ngC: E("1e7175"),
+		postc4: E("1e14000"), postc4_ngC: E("1e8475"),
+		postc5: E("1e18000"), postc5_ngm3: E("1e21500"), postc5_ngC: E("1e21000"),
+		postc6: E("1e20000"), postc6_ngm3: E("1e23000"), postc6_ngC: E("1e21000"),
+		postc7: E("1e23000"), postc7_ngm3: E("1e25500"), postc7_ngC: E("1e32000"),
+		postc8: E("1e28000"), postc8_ngm3: E("1e39000"), postc8_ngC: E("1e37500"),
 
-		postcngmm_1: new Decimal("1e750"), postcngmm_1_ngm3: new Decimal("1e1080"),
-		postcngmm_2: new Decimal("1e1350"),
-		postcngmm_3: new Decimal("1e2000"), postcngmm_3_ngm3: new Decimal("1e2650"),
+		postcngmm_1: E("1e750"), postcngmm_1_ngm3: E("1e1080"),
+		postcngmm_2: E("1e1350"),
+		postcngmm_3: E("1e2000"), postcngmm_3_ngm3: E("1e2650"),
 
-		postcngm3_1: new Decimal("1e1560"), postcngm3_1_ngm4: new Decimal("1e1800"),
-		postcngm3_2: new Decimal("1e2085"),
-		postcngm3_3: new Decimal("1e8421"),
-		postcngm3_4: new Decimal("1e17000"),
+		postcngm3_1: E("1e1560"), postcngm3_1_ngm4: E("1e1800"),
+		postcngm3_2: E("1e2085"),
+		postcngm3_3: E("1e8421"),
+		postcngm3_4: E("1e17000"),
 
-		postcngc_1: new Decimal("1e38000"),
-		postcngc_2: new Decimal("1e42250"),
+		postcngc_1: E("1e38000"),
+		postcngc_2: E("1e42250"),
 	}
 	goals = {      
-		postc1: new Decimal("1e850"), postc1_ngmm: new Decimal("1e650"), postc1_ngm3: new Decimal("1e375"), postc1_ngm4: new Decimal("1e575"),
-		postc2: new Decimal("1e10500"), postc2_ngm3: new Decimal("1e4250"), postc2_ngm4: new Decimal("1e4675"), postc2_ngC: new Decimal("1e5850"),
-		postc3: new Decimal("1e5000"), postc3_ngC: new Decimal("1e2675"), 
-		postc4: new Decimal("1e13000"), postc4_ngm3: new Decimal("1e4210"), postc4_ngC: new Decimal("1e5750"),
-		postc5: new Decimal("1e11111"), postc5_ngm3: new Decimal("7.77e7777"), postc5_ngC: new Decimal("1e2400"),
-		postc6: new Decimal("2e22222"), postc6_ngC: new Decimal("2.1e21111"),
-		postc7: new Decimal("1e10000"), postc7_ngmm: new Decimal("1e15000"), postc7_ngm3: new Decimal("1e5100"), postc7_ngC: new Decimal("1e4300"),
-		postc8: new Decimal("1e27000"), postc8_ngm3: new Decimal("1e35000"), 
+		postc1: E("1e850"), postc1_ngmm: E("1e650"), postc1_ngm3: E("1e375"), postc1_ngm4: E("1e575"),
+		postc2: E("1e10500"), postc2_ngm3: E("1e4250"), postc2_ngm4: E("1e4675"), postc2_ngC: E("1e5850"),
+		postc3: E("1e5000"), postc3_ngC: E("1e2675"), 
+		postc4: E("1e13000"), postc4_ngm3: E("1e4210"), postc4_ngC: E("1e5750"),
+		postc5: E("1e11111"), postc5_ngm3: E("7.77e7777"), postc5_ngC: E("1e2400"),
+		postc6: E("2e22222"), postc6_ngC: E("2.1e21111"),
+		postc7: E("1e10000"), postc7_ngmm: E("1e15000"), postc7_ngm3: E("1e5100"), postc7_ngC: E("1e4300"),
+		postc8: E("1e27000"), postc8_ngm3: E("1e35000"), 
 
-		postcngmm_1: new Decimal("1e550"), postcngmm_1_ngm3: new Decimal("1e650"), postcngmm_1_ngm4: new Decimal("1e950"),
-		postcngmm_2: new Decimal("1e950"), postcngmm_2_ngm3: new Decimal("1e1090"), postcngmm_2_ngm4: new Decimal("1e1200"),
-		postcngmm_3: new Decimal("1e1200"), postcngmm_3_ngm3: new Decimal("1e1230"), postcngmm_3_ngm4: new Decimal("1e1425"),
+		postcngmm_1: E("1e550"), postcngmm_1_ngm3: E("1e650"), postcngmm_1_ngm4: E("1e950"),
+		postcngmm_2: E("1e950"), postcngmm_2_ngm3: E("1e1090"), postcngmm_2_ngm4: E("1e1200"),
+		postcngmm_3: E("1e1200"), postcngmm_3_ngm3: E("1e1230"), postcngmm_3_ngm4: E("1e1425"),
 
-		postcngm3_1: new Decimal("1e550"), postcngm3_1_ngm4: new Decimal("1e1210"),
-		postcngm3_2: new Decimal("1e610"), postcngm3_2_ngm4: new Decimal("1e750"),
-		postcngm3_3: new Decimal("8e888"), postcngm3_4: new Decimal("1e1500"),
-		postcngm3_4: new Decimal("1e12345"),
+		postcngm3_1: E("1e550"), postcngm3_1_ngm4: E("1e1210"),
+		postcngm3_2: E("1e610"), postcngm3_2_ngm4: E("1e750"),
+		postcngm3_3: E("8e888"), postcngm3_4: E("1e1500"),
+		postcngm3_4: E("1e12345"),
 
-		postcngc_1: new Decimal("1e10525"),					
-		postcngc_2: new Decimal("1e27225"),
+		postcngc_1: E("1e10525"),					
+		postcngc_2: E("1e27225"),
 	}
 	order = []
 }

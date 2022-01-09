@@ -6,7 +6,7 @@ presets = {}
 function buyWithAntimatter() {
 	if (player.money.gte(player.timestudy.amcost)) {
 		player.money = player.money.minus(player.timestudy.amcost)
-		player.timestudy.amcost = player.timestudy.amcost.times(new Decimal("1e20000"))
+		player.timestudy.amcost = player.timestudy.amcost.times(E("1e20000"))
 		player.timestudy.theorem += 1
 		updateTimeStudyButtons(true)
 		return true
@@ -61,7 +61,7 @@ function maxTheorems() {
 	if (gainTT > 0 && canBuyTTWithEP()) {
 		player.timestudy.theorem += gainTT
 		player.eternityPoints = player.eternityPoints.sub(Decimal.pow(2, gainTT).sub(1).times(player.timestudy.epcost))
-		if (!break_infinity_js && isNaN(player.eternityPoints.logarithm)) player.eternityPoints = new Decimal(0)
+		if (!break_infinity_js && isNaN(player.eternityPoints.logarithm)) player.eternityPoints = E(0)
 		player.timestudy.epcost = player.timestudy.epcost.times(Decimal.pow(2, gainTT))
 	}
 
@@ -71,47 +71,47 @@ function maxTheorems() {
 
 function updateTheoremButtons() {
 	var offset = 80
-	if (getEl("progress").style.display == "block") offset += 30
+	if (el("progress").style.display == "block") offset += 30
 	if (hasDilationUpg(10) && getTTProduction() > 10) {
 		offset -= 80
-		getEl("theoremmax").style.display = "none"
-		getEl("theoremam").style.display = "none"
-		getEl("theoremip").style.display = "none"
-		getEl("theoremep").style.display = "none"
-		getEl("autopresetsbtn").style.display = player.timestudy.auto && qMs.tmp.amt >= 2 ? "" : "none"
+		el("theoremmax").style.display = "none"
+		el("theoremam").style.display = "none"
+		el("theoremip").style.display = "none"
+		el("theoremep").style.display = "none"
+		el("autopresetsbtn").style.display = player.timestudy.auto && qMs.tmp.amt >= 1 ? "" : "none"
 	} else {
-		getEl("theoremam").style.display = ""
-		getEl("theoremip").style.display = ""
-		getEl("theoremep").style.display = ""
-		getEl("theoremmax").style.display = ""
-		getEl("theoremmax").innerHTML = qMs.tmp.amt >= 2 ? ("Auto max: "+(player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max Theorems"
+		el("theoremam").style.display = ""
+		el("theoremip").style.display = ""
+		el("theoremep").style.display = ""
+		el("theoremmax").style.display = ""
+		el("theoremmax").innerHTML = qMs.tmp.amt >= 1 ? ("Auto: "+(player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max"
 
-		getEl("theoremam").style.bottom = (offset - 75) + "px"
-		getEl("theoremip").style.bottom = (offset - 75) + "px"
-		getEl("theoremep").style.bottom = (offset - 75) + "px"
+		el("theoremam").style.bottom = (offset - 75) + "px"
+		el("theoremip").style.bottom = (offset - 75) + "px"
+		el("theoremep").style.bottom = (offset - 75) + "px"
 
-		getEl("theoremam").className = player.money.gte(player.timestudy.amcost) ? "timetheorembtn" : "timetheorembtnlocked"
-		getEl("theoremam").innerHTML = "+1 Time Theorem<br>Cost: " + shortenCosts(player.timestudy.amcost)
-		getEl("theoremip").className = player.infinityPoints.gte(player.timestudy.ipcost) ? "timetheorembtn" : "timetheorembtnlocked"
-		getEl("theoremip").innerHTML = "+1 Time Theorem<br>Cost: " + shortenCosts(player.timestudy.ipcost) + " IP"
-		getEl("theoremep").className = player.eternityPoints.gte(player.timestudy.epcost) && canBuyTTWithEP() ? "timetheorembtn" : "timetheorembtnlocked"
-		getEl("theoremep").innerHTML = (!canBuyTTWithEP() ? "(requires 1 Time Dimension)" : "+1 Time Theorem<br>Cost: " + shortenDimensions(player.timestudy.epcost) + " EP")
+		el("theoremam").className = player.money.gte(player.timestudy.amcost) ? "timetheorembtn" : "timetheorembtnlocked"
+		el("theoremam").innerHTML = "+1 Time Theorem<br>Cost: " + shortenCosts(player.timestudy.amcost)
+		el("theoremip").className = player.infinityPoints.gte(player.timestudy.ipcost) ? "timetheorembtn" : "timetheorembtnlocked"
+		el("theoremip").innerHTML = "+1 Time Theorem<br>Cost: " + shortenCosts(player.timestudy.ipcost) + " IP"
+		el("theoremep").className = player.eternityPoints.gte(player.timestudy.epcost) && canBuyTTWithEP() ? "timetheorembtn" : "timetheorembtnlocked"
+		el("theoremep").innerHTML = (!canBuyTTWithEP() ? "(requires 1 Time Dimension)" : "+1 Time Theorem<br>Cost: " + shortenDimensions(player.timestudy.epcost) + " EP")
 
-		getEl("autopresetsbtn").style.display = "none"
+		el("autopresetsbtn").style.display = "none"
 	}
 
-	getEl("timetheorems").style.bottom = (offset) + "px"
-	getEl("theoremmax").style.bottom = (offset - 3) + "px"
-	getEl("presetsbtn").style.bottom = (offset - 3) + "px"
-	getEl("autopresetsbtn").style.bottom = (offset - 3) + "px"
-	getEl("theorembuybackground").style.bottom = (offset - 80) + "px"
+	el("timetheorems").style.bottom = (offset) + "px"
+	el("theoremmax").style.bottom = (offset - 3) + "px"
+	el("presetsbtn").style.bottom = (offset - 3) + "px"
+	el("autopresetsbtn").style.bottom = (offset - 3) + "px"
+	el("theorembuybackground").style.bottom = (offset - 80) + "px"
 
 	var tt = player.timestudy.theorem
 	var html = "<span style='display:inline' class=\"TheoremAmount\">" + (tt >= 1e5 ? shortenMoney(tt) : getFullExpansion(Math.floor(tt))) + "</span> "
 	if (tt >= 1e100) html += " Time Theorems" + (player.timestudy.theorem == 1e200 ? " (cap)" : "")
 	else if (tt == 1) html = "You have " + html + " Time Theorem."
 	else html = "You have " + html + " Time Theorems."
-	getEl("timetheorems").innerHTML = html
+	el("timetheorems").innerHTML = html
 }
 
 function buyTimeStudy(name, quickBuy) {
@@ -131,7 +131,7 @@ function buyTimeStudy(name, quickBuy) {
 		player.timestudy.studies.push(name)
 		player.timestudy.theorem -= cost
 		updateBoughtTimeStudy(name)
-		if (name == 131) getEl("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
+		if (name == 131) el("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
 		if (quickBuy) return
 		updateTimeStudyButtons(true)
 		drawStudyTree()
@@ -345,8 +345,8 @@ function setupTimeStudies() {
 	for (let i = 0; i < combined.length; i++) {
 		let id = combined[i]
 		if (before.includes(id) != after.includes(id)) {
-			getEl(id).style.visibility = after.includes(id) ? "visible" : "hidden"
-			getEl(id).className = "timestudy"
+			el(id).style.visibility = after.includes(id) ? "visible" : "hidden"
+			el(id).className = "timestudy"
 		}
 	}
 	all = after
@@ -359,14 +359,14 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 	performedTS = true
 	if (player.boughtDims) {
 		var locked = getTotalTT(player) < 60
-		getEl("nextstudy").textContent = locked ? "Next time study set unlocks at 60 total Time Theorems." : ""
-		getEl("tsrow3").style.display = locked ? "none" : ""
+		el("nextstudy").textContent = locked ? "Next time study set unlocks at 60 total Time Theorems." : ""
+		el("tsrow3").style.display = locked ? "none" : ""
 		for (var id = 1; id < (locked ? 5 : 7); id++) {
 			var b = player.timestudy.ers_studies[id]
 			var c = b + 1
-			getEl("ts" + id + "bought").textContent = getFullExpansion(b)
-			getEl("ts" + id + "cost").textContent = getFullExpansion(c)
-			getEl("ts" + id).className = "eternityttbtn" + (player.timestudy.theorem < c ? "locked" : "")
+			el("ts" + id + "bought").textContent = getFullExpansion(b)
+			el("ts" + id + "cost").textContent = getFullExpansion(c)
+			el("ts" + id).className = "eternityttbtn" + (player.timestudy.theorem < c ? "locked" : "")
 		}
 		return
 	}
@@ -376,16 +376,16 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 	}
 
 	for (let i = 1; i <= 6; i++) {
-		if (hasDilationStudy(i)) getEl("dilstudy" + i).className = "dilationupgbought"
-		else if (canBuyDilationStudy(i)) getEl("dilstudy" + i).className = "dilationupg"
-		else getEl("dilstudy" + i).className = "timestudylocked"
+		if (hasDilationStudy(i)) el("dilstudy" + i).className = "dilationupgbought"
+		else if (canBuyDilationStudy(i)) el("dilstudy" + i).className = "dilationupg"
+		else el("dilstudy" + i).className = "timestudylocked"
 	}
 
-	getEl("dilstudy6").style.display = player.meta ? "" : "none"
-	getEl("masteryportal").style.display = player.masterystudies ? "" : "none"
+	el("dilstudy6").style.display = player.meta ? "" : "none"
+	el("masteryportal").style.display = player.masterystudies ? "" : "none"
 	if (tmp.ngp3) {
-		getEl("masteryportal").innerHTML = mTs.unl() ? "Mastery portal<span>Continue into mastery studies.</span>" : !hasDilationStudy(1) ? "To be continued...." : "Mastery portal (" + (hasDilationStudy(6) ? "66%: requires "+shortenCosts(1e100)+" dilated time upgrade)" : "33%: requires meta-dimensions)") 
-		getEl("masteryportal").className = mTs.unl() ? "dilationupg" : "timestudylocked"
+		el("masteryportal").innerHTML = mTs.unl() ? "Mastery portal<span>Continue into mastery studies.</span>" : !hasDilationStudy(1) ? "To be continued...." : "Mastery portal (" + (hasDilationStudy(6) ? "66%: requires "+shortenCosts(1e100)+" dilated time upgrade)" : "33%: requires meta-dimensions)") 
+		el("masteryportal").className = mTs.unl() ? "dilationupg" : "timestudylocked"
 	}
 }
 
@@ -398,7 +398,7 @@ function updateTimeStudyClass(id, type = "") {
 	} else if (id > 220) {
 		className += " " + ["light", "dark"][id % 2] + "study"
 	}
-	getEl(id).className = className
+	el(id).className = className
 }
 
 function updateBoughtTimeStudy(id) {
@@ -475,8 +475,8 @@ function respecTimeStudies(force) {
 	drawStudyTree()
 	if (gotAch) giveAchievement("You do know how these work, right?")
 	doInitInfMultStuff()
-	if (player.replicanti.galaxybuyer) getEl("replicantiresettoggle").textContent = "Auto galaxy: ON"
-	else getEl("replicantiresettoggle").textContent = "Auto galaxy: OFF"
+	if (player.replicanti.galaxybuyer) el("replicantiresettoggle").textContent = "Auto galaxy: ON"
+	else el("replicantiresettoggle").textContent = "Auto galaxy: OFF"
 }
 
 function respecUnbuyableTimeStudies() {
@@ -599,7 +599,7 @@ function importStudyTree(input) {
 			justImported = true
 
 			if (ec > 12) buyMasteryStudy("ec", ec, true)
-			else getEl("ec" + ec + "unl").click()
+			else el("ec" + ec + "unl").click()
 
 			justImported = false
 		}
@@ -678,7 +678,7 @@ function new_preset(importing) {
 	presets[placement] = {preset: input}
 	localStorage.setItem(btoa(presetPrefix + placement), btoa(JSON.stringify(presets[placement])))
 	poData.push(placement)
-	latestRow = getEl("presets").insertRow(loadedPresets)
+	latestRow = el("presets").insertRow(loadedPresets)
 	latestRow.innerHTML = getPresetLayout(placement)
 	loadedPresets++
 	changePresetTitle(placement, loadedPresets)
@@ -734,8 +734,7 @@ let tsMults = {
 		return x
 	},
 	141() {
-		if (hasAch("r137") && tmp.ngp3_boost && !tmp.exMode) return new Decimal(1e40)
-		return Decimal.div(1e45, Decimal.pow(15, Math.log(player.thisInfinityTime + 1) * Math.pow(player.thisInfinityTime + 1, 0.125))).max(1)
+		return Decimal.div(1e45, Decimal.pow(15, Math.log(player.thisInfinityTime + 1) * Math.pow(player.thisInfinityTime + 1, 0.125))).max(hasAch("r137") && tmp.ngp3_boost && !tmp.exMode ? 1e25 : 1)
 	},
 	211() {
 		return inNGM(2) ? 1 : 5
@@ -807,7 +806,7 @@ let tsMults = {
 		ip = ip.div("1e9500")
 
 		let x = Decimal.pow(ip.plus(1).log10()/100+1, 4).max(10)
-		if (reached && ip.lt(1)) x = new Decimal(10) //this does nothing?
+		if (reached && ip.lt(1)) x = E(10) //this does nothing?
 		return x
 	},
 	43() {
@@ -837,7 +836,7 @@ let tsMults = {
 		else if (repl.gte("1e4000")) repl = Decimal.pow(repl.log10(), 1110.49).min(repl)
 	
 		let x = repl.plus(1).pow(1e-3)
-		if (x.gte(1e285)) x = new Decimal(x.log10()).times(Decimal.div(1e285, 285))
+		if (x.gte(1e285)) x = E(x.log10()).times(Decimal.div(1e285, 285))
 		return x
 	},
 	191() {

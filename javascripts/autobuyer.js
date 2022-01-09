@@ -25,7 +25,7 @@ function isABBuyUntil10(id) {
 
 function updateABBulks() {
 	for (var i = 0; i <= 8; i++) {
-		getEl("toggleBtn" + (i == 8 ? "TickSpeed" : i + 1)).textContent = "Buys " + (!isABBuyUntil10(i + 1) ? "singles" : i == 8 ? "max" : "until 10")
+		el("toggleBtn" + (i == 8 ? "TickSpeed" : i + 1)).textContent = "Buys " + (!isABBuyUntil10(i + 1) ? "singles" : i == 8 ? "max" : "until 10")
 	}
 }
 

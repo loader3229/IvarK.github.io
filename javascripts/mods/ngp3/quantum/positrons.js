@@ -13,7 +13,7 @@ var pos = {
 			rg: {
 				galName: "base Replicated Galaxies",
 				pow(x) {
-					return QCs.done(4) ? x * pos_tmp.mults.gal * (PCs.milestoneDone(41) ? 3 : 2) / 5 : 0
+					return QCs.done(4) ? x * pos_tmp.mults.gal * (PCs.milestoneDone(41) && PCs_save.lvl > 8 ? 3 : 2) / 5 : 0
 				},
 				sacGals(x) {
 					return Math.min(player.replicanti.galaxies / 4, x)
@@ -22,7 +22,7 @@ var pos = {
 			eg: {
 				galName: "extra Replicated Galaxies",
 				pow(x) {
-					return PCs.milestoneDone(43) ? x * pos_tmp.mults.gal / 5 : 0
+					return PCs.milestoneDone(41) && PCs_save.lvl > 12 ? x * pos_tmp.mults.gal / 5 : 0
 				},
 				sacGals(x) {
 					return Math.min(tmp.extraRG * pos_tmp.mults.gal, x)
@@ -31,7 +31,7 @@ var pos = {
 			tg: {
 				galName: "Tachyonic Galaxies",
 				pow(x) {
-					return 0 //x / 4
+					return PCs.milestoneDone(41) && PCs_save.lvl > 16 ? x * pos_tmp.mults.gal / 5 : 0
 				},
 				sacGals(x) {
 					return Math.min(player.dilation.freeGalaxies * pos_tmp.mults.gal, x)
@@ -39,17 +39,22 @@ var pos = {
 			}
 		},
 		undercharged: {
-			1: () => PCs.milestoneDone(42) ? [] : [2].concat(PCs.milestoneDone(22) ? [3] : []),
-			2: () => PCs.milestoneDone(42) ? [1, 3] : [3],
-			3: () => PCs.milestoneDone(42) ? [].concat(PCs.milestoneDone(22) ? [1] : []) : []
+			1: () => [2],
+			2: () => [3],
+			3: () => []
 		}
 	},
 	setup() {
 		pos_save = {
 			on: false,
-			amt: 0,
-			eng: 0,
-			boosts: 0,
+			gals: {
+				ng: {sac: 0, qe: 0, pc: 0},
+				rg: {sac: 0, qe: 0, pc: 0},
+				eg: {sac: 0, qe: 0, pc: 0},
+				tg: {sac: 0, qe: 0, pc: 0}
+			},
+			eng: E(0),
+			lvl: 0,
 			swaps: {}
 		}
 		qu_save.pos = pos_save
@@ -63,11 +68,7 @@ var pos = {
 
 		let data = pos_save || this.setup()
 
-		if (!data.on) {
-			data.amt = 0
-			data.eng = 0
-		}
-		if (!data.boosts) data.boosts = 0
+		if (!data.on) data.eng = 0
 		if (!data.gals) data.gals = {
 			ng: {sac: 0, qe: 0, pc: 0},
 			rg: {sac: 0, qe: 0, pc: 0},
@@ -76,8 +77,7 @@ var pos = {
 		}
 		if (!data.swaps) data.swaps = {}
 
-		data.boosts = Decimal.round(data.boosts)
-		data.eng = new Decimal(data.eng)
+		data.eng = E(data.eng)
 
 		if (data.consumedQE) delete data.consumedQE
 		if (data.sacGals) delete data.sacGals
@@ -87,6 +87,14 @@ var pos = {
 
 		this.updateTmp()
 	},
+	reset() {
+		this.setup()
+		this.updateTmp()
+
+		enB.updateTmp()
+		enB.update("pos")
+	},
+
 	unl: (force) => force ? tmp.ngp3 && player.masterystudies.includes("d7") : pos_tmp.unl,
 	on() {
 		return this.unl() && pos_save && pos_save.on
@@ -99,7 +107,7 @@ var pos = {
 	setupHTML() {
 		var html = ""
 		for (var i = 1; i <= enB.pos.max; i++) html += this.getCloudBtn(i)
-		getEl("pos_cloud1_boosts").innerHTML = html
+		el("pos_cloud1_boosts").innerHTML = html
 	},
 
 	updateTmp() {
@@ -111,12 +119,13 @@ var pos = {
 		if (!data.unl) return
 
 		data.mults = {
-			mdb: QCs.done(3) ? (PCs.milestoneDone(31) ? 1/3 : 0.3) : 0.25,
+			mdb: QCs.done(3) ? 0.3 : 0.25,
 			mdb_eff: QCs.done(5) ? 1.5 : 1,
 			gal: QCs.done(5) ? 0.2 : 0.25,
 			pc_base: QCs.done(5) ? 1 / 100 : 1 / 125,
-			pc_exp: futureBoost("quantum_superbalancing") ? 4 : 2
+			pc_exp: qu_superbalanced() ? 4 : 2
 		}
+		if (ff.unl()) data.mults.pc_exp *= ff_tmp.eff.f5
 		if (PCs.milestoneDone(51)) data.mults.pc_base *= 1.2
 
 		if (!data.sac) data.sac = {}
@@ -134,7 +143,7 @@ var pos = {
 		let data = pos_tmp
 
 		//Meta Dimension Boosts or Quantum Energy -> Positrons
-		eng = new Decimal(0)
+		eng = E(0)
 		if (this.on()) {
 			let mdbStart = 0
 			let mdbMult = pos_tmp.mults.mdb
@@ -171,15 +180,15 @@ var pos = {
 		else eng = Decimal.pow(pcSum, pos_tmp.mults.pc_exp)
 		if (futureBoost("potential_strings") && dev.boosts.tmp[3]) eng = eng.times(dev.boosts.tmp[3])
 
-		pos_save.eng = isNaN(eng.e) ? new Decimal(0) : eng
+		pos_save.eng = isNaN(eng.e) ? E(0) : eng
 
 		this.updateUndercharged()
 	},
 
 	updateTab() {
-		getEl("pos_formula").textContent = getFullExpansion(pos_tmp.sac.mdb) + " Meta Dimension Boosts + " + shorten(pos_tmp.sac.qe) + " Quantum Energy ->"
-		getEl("pos_toggle").textContent = pos_save.on ? "ON" : "OFF"
-		getEl("pos_amt").textContent = getFullExpansion(pos_save.amt)
+		el("pos_formula").textContent = getFullExpansion(pos_tmp.sac.mdb) + " Meta Dimension Boosts + " + shorten(pos_tmp.sac.qe) + " Quantum Energy ->"
+		el("pos_toggle").textContent = pos_save.on ? "ON" : "OFF"
+		el("pos_amt").textContent = getFullExpansion(pos_save.amt)
 
 		let types = ["ng", "rg", "eg", "tg"]
 		let msg = []
@@ -188,25 +197,25 @@ var pos = {
 			var gals = pos_save.gals[type].sac
 			if (gals > 0 || type == "ng") msg.push(getFullExpansion(gals) + " sacrificed " + pos.data.types[type].galName)
 		}
-		getEl("pos_charge_formula").innerHTML = wordizeList(msg, false, " +<br>", false) + " -> "
+		el("pos_charge_formula").innerHTML = wordizeList(msg, false, " +<br>", false) + " -> "
 
 		enB.updateOnTick("pos")
 		if (!pos_tmp.cloud.shown) {
-			if (enB.has("pos", 4)) getEl("enB_pos4_exp").textContent = "(^" + (1 / enB_tmp.eff.pos4).toFixed(3) + ")"
-			if (enB.has("pos", 7)) getEl("enB_pos2_mention_1").textContent = enB.name("pos", 2)
-			if (enB.has("pos", 11)) getEl("enB_pos11_info").textContent = "(x^1/" + shorten(1 / enB_tmp.eff.pos11.exp) + ", cap of " + shorten(enB_tmp.eff.pos11.cap) + "x)"
-			if (enB.has("pos", 12)) getEl("enB_pos2_mention_2").textContent = enB.name("pos", 2)
+			if (enB.has("pos", 4)) el("enB_pos4_exp").textContent = "(^" + (1 / enB_tmp.eff.pos4).toFixed(3) + ")"
+			if (enB.has("pos", 7)) el("enB_pos2_mention_1").textContent = enB.name("pos", 2)
+			if (enB.has("pos", 11)) el("enB_pos11_info").textContent = "(x^" + (enB_tmp.eff.pos11.exp == 0 ? 0 : "1/" + shorten(1 / enB_tmp.eff.pos11.exp)) + ")"
+			if (enB.has("pos", 12)) el("enB_pos2_mention_2").textContent = enB.name("pos", 2)
 
 			for (var i = 1; i <= enB.pos.max; i++) {
 				if (!enB.has("pos", i)) return
-				getEl("enB_pos" + i).className = enB.color(i, "pos")
+				el("enB_pos" + i).className = enB.color(i, "pos")
 			}
 		}
 		if (pos_tmp.cloud.shown) {
 			for (var i = 1; i <= enB.pos.max; i++) {
 				if (!enB.mastered("pos", i)) continue
 
-				getEl("pos_boost" + i + "_btn").setAttribute('ach-tooltip', "Boost: " + enB.pos[i].dispFull(enB_tmp.eff["pos" + i]) + (enB.pos.charged(i) ? "\nCharge: " + shortenDimensions(enB.pos.chargeEff(i)) + "x stronger" : ""))
+				el("pos_boost" + i + "_btn").setAttribute('ach-tooltip', "Boost: " + enB.pos[i].dispFull(enB_tmp.eff["pos" + i]) + (enB.pos.charged(i) ? "\nCharge: " + shortenDimensions(enB.pos.chargeEff(i)) + "x stronger" : ""))
 				if (enB.mastered("pos", i)) pos.updateCharge(i)
 			}
 		}
@@ -214,9 +223,9 @@ var pos = {
 	switchTab() {
 		var shown = !pos_tmp.cloud.shown
 		pos_tmp.cloud.shown = shown
-		getEl("pos_boost_div").style.display = !shown ? "" : "none"
-		getEl("pos_cloud_div").style.display = shown ? "" : "none"
-		getEl("pos_tab").textContent = shown ? "Show boosts" : "Show cloud"
+		el("pos_boost_div").style.display = !shown ? "" : "none"
+		el("pos_cloud_div").style.display = shown ? "" : "none"
+		el("pos_tab").textContent = shown ? "Show boosts" : "Show cloud"
 	},
 
 	//Charging
@@ -224,13 +233,12 @@ var pos = {
 		var lvl = enB.pos.lvl(i)
 		var match = enB.pos.lvl(i, true) == lvl
 		var charged = match && enB.pos.charged(i)
-		var undercharged = match && this.isUndercharged(i)
-		getEl("pos_boost" + i + "_charge").textContent = undercharged ?
-			(shiftDown ? shortenMoney(enB.pos.chargeEff(i)) + "x Undercharged!" :
-			"Undercharged! (Switch to Tier " + pos_tmp.undercharged[i] + ")") :
+		var undercharged = match && !str.unl() && this.isUndercharged(i)
+		el("pos_boost" + i + "_charge").textContent = undercharged ?
+			"Undercharged! (Switch to Tier " + pos_tmp.undercharged[i] + ")" :
 			charged ? shortenMoney(enB.pos.chargeEff(i)) + "x Charged" :
 			"Charge: " + shorten(enB.pos.chargeReq(i, true))
-		getEl("pos_boost" + i + "_charge").className = undercharged ? "undercharged" : charged ? "charged" : ""
+		el("pos_boost" + i + "_charge").className = undercharged ? "undercharged" : charged ? "charged" : ""
 	},
 	isUndercharged(x) {
 		return pos_tmp.undercharged[x] !== undefined
@@ -284,18 +292,18 @@ var pos = {
 			var has = enB.mastered("pos", i)
 			var excluded = pos.excluded(i)
 
-			getEl("pos_boost" + i + "_btn").style.display = has ? "" : "none"
+			el("pos_boost" + i + "_btn").style.display = has ? "" : "none"
 			if (has) {
-				if (data.div[i] != nextLvl) getEl("pos_cloud" + nextLvl + "_boosts").appendChild(getEl("pos_boost" + i + "_btn"))
+				if (data.div[i] != nextLvl) el("pos_cloud" + nextLvl + "_boosts").appendChild(el("pos_boost" + i + "_btn"))
 				data.div[i] = nextLvl
 
-				getEl("pos_boost" + i + "_btn").className = (pos_tmp.cloud.chosen ? 
+				el("pos_boost" + i + "_btn").className = (pos_tmp.cloud.chosen ? 
 					(pos_tmp.cloud.chosen == i ? "chosenbtn" : this.canSwap(i) ? "storebtn" : "unavailablebtn") :
 					excluded ? "unavailablebtn" :
 					data.next[i] ? (nextLvl > originalLvl ? "chosenbtn3" : "chosenbtn") :
 					lvl != nextLvl ? "chosenbtn2" : "storebtn"
 				) + " pos_btn"
-				getEl("pos_boost" + i + "_excite").innerHTML = (lvl != nextLvl ? "(Next: " + lvl + " -> " + nextLvl + ")" : "Tier " + originalLvl + (originalLvl != lvl ? " -> " + lvl : "") + (pos_tmp.cloud.chosen == i ? "<br>(Selected)" : originalLvl != lvl ? "<br>(from PB" + pos_save.swaps[i] + ")" : ""))
+				el("pos_boost" + i + "_excite").innerHTML = (lvl != nextLvl ? "(Next: " + lvl + " -> " + nextLvl + ")" : "Tier " + originalLvl + (originalLvl != lvl ? " -> " + lvl : "") + (pos_tmp.cloud.chosen == i ? "<br>(Selected)" : originalLvl != lvl ? "<br>(from PB" + pos_save.swaps[i] + ")" : ""))
 				data[lvl] = (data[lvl] || 0) + 1
 
 				if (originalLvl != lvl) data.swaps_amt++
@@ -308,22 +316,22 @@ var pos = {
 		data.sum = data.total + data.exclude
 
 		for (var i = 1; i <= 3; i++) {
-			getEl("pos_cloud" + i + "_cell").innerHTML = "<b>Tier " + i + ": " + (data[i] || 0) + " / " + i * 2 + "</b>"
-			getEl("pos_cloud" + i + "_cell").className = "pos_tier " + (data[i] >= i * 2 ? "green" : "")
-			getEl("pos_cloud" + i + "_cell").style.display = data[i] ? "" : "none"
+			el("pos_cloud" + i + "_cell").innerHTML = "<b>Tier " + i + ": " + (data[i] || 0) + " / " + i * 2 + "</b>"
+			el("pos_cloud" + i + "_cell").className = "pos_tier " + (data[i] >= i * 2 ? "green" : "")
+			el("pos_cloud" + i + "_cell").style.display = data[i] ? "" : "none"
 		}
-		getEl("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " disabled" : "")
+		el("pos_cloud_total").textContent = "Total: " + data.total + (data.exclude ? " used // " + data.exclude + " disabled" : "")
 
 		//Unlocks
 		var unl = enB.pos.amt() >= 7
 		if (!unl) data.shown = false
 
-		getEl("pos_tab").style.display = unl ? "" : "none"
-		getEl("pos_tab").textContent = data.shown ? "Show boosts" : "Show cloud"
-		getEl("pos_boost_div").style.display = !data.shown ? "" : "none"
-		getEl("pos_cloud_div").style.display = data.shown ? "" : "none"
-		getEl("pos_cloud_req").innerHTML = unl ? "" : "<br>To unlock Positronic Cloud, you need to get Level " + getFullExpansion(enB.pos.amt()) + " / " + getFullExpansion(7) + "."
-		getEl("pos_cloud_disabled").style.display = this.swapsDisabled() ? "" : "none"
+		el("pos_tab").style.display = unl ? "" : "none"
+		el("pos_tab").textContent = data.shown ? "Show boosts" : "Show cloud"
+		el("pos_boost_div").style.display = !data.shown ? "" : "none"
+		el("pos_cloud_div").style.display = data.shown ? "" : "none"
+		el("pos_cloud_req").innerHTML = unl ? "" : "<br>To unlock Positronic Cloud, you need to get Level " + getFullExpansion(enB.pos.amt()) + " / " + getFullExpansion(7) + "."
+		el("pos_cloud_disabled").style.display = this.swapsDisabled() ? "" : "none"
 	},
 	getCloudBtn: (x) => ('<button id="pos_boost' + x + '_btn" onclick="pos.swap(' + x + ')">' +
 							'<span>' +
@@ -335,7 +343,7 @@ var pos = {
 	canSwap(x) {
 		var old = enB.pos.lvl(x, true)
 		var nw = enB.pos.lvl(pos_tmp.cloud.chosen, true)
-		return !pos_tmp.cloud.next[x] && (PCs.milestoneDone(22) ? old != nw : Math.abs(old - nw) == 1)
+		return !pos_tmp.cloud.next[x] && Math.abs(old - nw) == 1
 	},
 	getSwaps() {
 		return this.swapsDisabled() ? {} : pos_tmp.cloud.swaps

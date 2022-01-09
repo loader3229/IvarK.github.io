@@ -36,11 +36,11 @@ function isTickspeedBoostPossible() {
 	return player.resets > 4 || player.tickspeedBoosts > 0 || player.galaxies > 0 || player.galacticSacrifice.times > 0 || player.infinitied > 0 || player.eternities != 0 || quantumed
 }
 
-getEl("challenge15").onclick = function () {
+el("challenge15").onclick = function () {
 	startNormalChallenge(15)
 }
 
-getEl("buyerBtnTickspeedBoost").onclick = function () {
+el("buyerBtnTickspeedBoost").onclick = function () {
 	buyAutobuyer(13);
 }
 

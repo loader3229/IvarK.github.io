@@ -20,7 +20,7 @@ function getMetaAntimatterStart(bigRip) {
 	if (hasAch("ngpp12") || (moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3]))) x = 100
 	if (hasAch("ng3p16")) x = 1e10
 
-	return new Decimal(x)
+	return E(x)
 }
 
 function getDilationMDMultiplier() {
@@ -45,7 +45,7 @@ function getDilationMDMultiplier() {
 }
 
 function getMDMultiplier(tier) {
-	if (player.currentEternityChall === "eterc11") return new Decimal(1)
+	if (player.currentEternityChall === "eterc11") return E(1)
 	let ret = Decimal.pow(getPerTenMetaPower(), Math.floor(player.meta[tier].bought / 10))
 	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(player.meta.resets + 1 - tier - (pos.on() ? pos_tmp.sac.mdb : 0), 0)))
 	ret = ret.times(tmp.mdGlobalMult) //Global multiplier of all Meta Dimensions
@@ -78,7 +78,7 @@ function getMDGlobalMult() {
 		if (hasAch("ng3p57")) ret = ret.times(1 + player.timeShards.plus(1).log10())
 
 		//Quantum Challenges
-		if (QCs.perkActive(3)) ret = ret.times(Math.log10(player.eternityPoints.e + 1))
+		if (QCs.perkActive(3)) ret = ret.times(Math.log10(player.eternityPoints.e + 1) + 1)
 	}
 	return ret
 }
@@ -106,7 +106,7 @@ function getMDDescription(tier) {
 	if (tier == Math.min(8, player.meta.resets + 4)) return getFullExpansion(player.meta[tier].bought) + boughtEnd;
 	else {
 		let a = shortenDimensions(player.meta[tier].amount)
-		if (player.meta.antimatter.e >= 1e3) return a
+		if (aarMod.logRateChange === 2 || player.meta.antimatter.e >= 1e6) return a
 		let b = boughtEnd + ' (+' + formatValue(player.options.notation, getMDRateOfChange(tier), 2, 2) + dimDescEnd
 		return a+b
 	}
@@ -132,7 +132,7 @@ function canBuyMetaDimension(tier) {
 
 function clearMetaDimensions () { //Resets costs and amounts
 	for (var i = 1; i <= 8; i++) {
-		player.meta[i].amount = new Decimal(0);
+		player.meta[i].amount = E(0);
 		player.meta[i].bought = 0;
 		player.meta[i].cost = getMetaCost(i, 0);
 	}
@@ -145,7 +145,6 @@ function getMetaShiftRequirement() {
 	if (tmp.ngp3_mul) data.mult--
 
 	data.amount += data.mult * Math.max(mdb - 4, 0)
-	if (isTreeUpgActive(1)) data.amount -= getTreeUpgradeEffect(1)
 	if (hasNU(1)) data.amount -= tmp.nu[1]
 	
 	return data
@@ -258,21 +257,21 @@ function canAffordMetaDimension(cost) {
 }
 
 for (let i = 1; i <= 8; i++) {
-	getEl("meta" + i).onclick = function () {
+	el("meta" + i).onclick = function () {
 		if (moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3])) player.autoEterOptions["md" + i] = !player.autoEterOptions["md" + i]
 		else metaBuyOneDimension(i)
 	}
-	getEl("metaMax" + i).onclick = function () {
+	el("metaMax" + i).onclick = function () {
 		if (shiftDown && moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3])) metaBuyOneDimension(i)
 		else metaBuyManyDimension(i);
 	}
 }
 
-getEl("metaMaxAll").onclick = function () {
+el("metaMaxAll").onclick = function () {
 	for (let i = 1; i <= 8; i++) buyMaxMetaDimension(i)
 }
 
-getEl("metaSoftReset").onclick = function () {
+el("metaSoftReset").onclick = function () {
 	metaBoost();
 }
 
@@ -307,7 +306,7 @@ function getExtraDimensionBoostPowerExponent(ma = player.meta.antimatter){
 }
 
 function getMADimBoostPowerExp(ma) {
-	ma = new Decimal(ma)
+	ma = E(ma)
 
 	let power = 8
 	if (hasDilationUpg("ngpp5")) power++
@@ -343,15 +342,15 @@ function getDil17Exp() {
 }
 
 function updateOverallMetaDimensionsStuff(){
-	getEl("metaAntimatterAmount").textContent = shortenMoney(player.meta.antimatter)
-	getEl("metaAntimatterBest").textContent = shortenMoney(player.meta.bestAntimatter)
-	getEl("bestAntimatterQuantum").textContent = player.masterystudies && pH.did("quantum") ? "Your best" + (pH.did("ghostify") ? "" : "-ever") + " meta-antimatter" + (pH.did("ghostify") ? " in this Ghostify" : "") + " was " + shortenMoney(player.meta.bestOverQuantums) + "." : ""
+	el("metaAntimatterAmount").textContent = shortenMoney(player.meta.antimatter)
+	el("metaAntimatterBest").textContent = shortenMoney(player.meta.bestAntimatter)
+	el("bestAntimatterQuantum").textContent = player.masterystudies && pH.did("quantum") ? "Your best" + (pH.did("ghostify") ? "" : "-ever") + " meta-antimatter" + (pH.did("ghostify") ? " in this Ghostify" : "") + " was " + shortenMoney(player.meta.bestOverQuantums) + "." : ""
 	setAndMaybeShow("bestMAOverGhostifies", pH.did("ghostify"), '"Your best-ever meta-antimatter was " + shortenMoney(player.meta.bestOverGhostifies) + "."')
 
-	getEl("metaAntimatterTranslation").style.display = tmp.ngp3 ? "" : "none"
-	getEl("metaAntimatterPower").textContent = "^" + shorten(getRelativeMADimBoostPowerExp(getExtraDimensionBoostPowerUse()))
-	getEl("metaAntimatterEffect").textContent = shortenMoney(getExtraDimensionBoostPower())
-	getEl("metaAntimatterPerSec").textContent = 'You are getting ' + shortenDimensions(getMDProduction(1)) + ' meta-antimatter per second.'
+	el("metaAntimatterTranslation").style.display = tmp.ngp3 ? "" : "none"
+	el("metaAntimatterPower").textContent = "^" + shorten(getRelativeMADimBoostPowerExp(getExtraDimensionBoostPowerUse()))
+	el("metaAntimatterEffect").textContent = shortenMoney(getExtraDimensionBoostPower())
+	el("metaAntimatterPerSec").textContent = 'You are getting ' + shortenDimensions(getMDProduction(1)) + ' meta-antimatter per second.'
 }
 
 function updateMetaDimensions () {
@@ -361,37 +360,37 @@ function updateMetaDimensions () {
 	let autod = moreEMsUnlocked() && (pH.did("quantum") || getEternitied() >= tmp.ngp3_em[3])
 	for (let tier = 8; tier > 0; tier--) {
 		showDim = showDim || canBuyMetaDimension(tier)
-		getEl(tier + "MetaRow").style.display = showDim ? "" : "none"
+		el(tier + "MetaRow").style.display = showDim ? "" : "none"
 		if (showDim) {
-			getEl(tier + "MetaD").textContent = DISPLAY_NAMES[tier] + " Meta Dimension x" + formatValue(player.options.notation, getMDMultiplier(tier), 2, 1)
-			getEl("meta" + tier + "Amount").textContent = getMDDescription(tier)
-			getEl("meta" + tier).textContent = autod ? "Auto: " + (player.autoEterOptions["md" + tier] ? "ON" : "OFF") : "Cost: " + formatValue(player.options.notation, player.meta[tier].cost, useTwo, 0) + " MA"
-			getEl('meta' + tier).className = autod ? "storebtn" : canAffordMetaDimension(player.meta[tier].cost) ? 'storebtn' : 'unavailablebtn'
-			getEl("metaMax"+tier).textContent = (autod ? (shiftDown ? "Singles: " : pH.did("ghostify") ? "" : "Cost: ") : "Until 10: ") + formatValue(player.options.notation, ((shiftDown && autod) ? player.meta[tier].cost : getMetaMaxCost(tier)), useTwo, 0) + " MA"
-			getEl('metaMax' + tier).className = canAffordMetaDimension((shiftDown && autod) ? player.meta[tier].cost : getMetaMaxCost(tier)) ? 'storebtn' : 'unavailablebtn'
+			el(tier + "MetaD").textContent = DISPLAY_NAMES[tier] + " Meta Dimension x" + formatValue(player.options.notation, getMDMultiplier(tier), 2, 1)
+			el("meta" + tier + "Amount").textContent = getMDDescription(tier)
+			el("meta" + tier).textContent = autod ? "Auto: " + (player.autoEterOptions["md" + tier] ? "ON" : "OFF") : "Cost: " + formatValue(player.options.notation, player.meta[tier].cost, useTwo, 0) + " MA"
+			el('meta' + tier).className = autod ? "storebtn" : canAffordMetaDimension(player.meta[tier].cost) ? 'storebtn' : 'unavailablebtn'
+			el("metaMax"+tier).textContent = (autod ? (shiftDown ? "Singles: " : pH.did("ghostify") ? "" : "Cost: ") : "Until 10: ") + formatValue(player.options.notation, ((shiftDown && autod) ? player.meta[tier].cost : getMetaMaxCost(tier)), useTwo, 0) + " MA"
+			el('metaMax' + tier).className = canAffordMetaDimension((shiftDown && autod) ? player.meta[tier].cost : getMetaMaxCost(tier)) ? 'storebtn' : 'unavailablebtn'
 		}
 	}
 	var isMetaShift = player.meta.resets < 4
 	var metaShiftRequirement = getMetaShiftRequirement()
-		getEl("metaResetLabel").textContent = 'Meta-Dimension ' + (isMetaShift ? "Shift" : "Boost") + ' ('+ getFullExpansion(player.meta.resets) +'): requires ' + getFullExpansion(Math.floor(metaShiftRequirement.amount)) + " " + DISPLAY_NAMES[metaShiftRequirement.tier] + " Meta Dimensions"
-		getEl("metaSoftReset").textContent = "Reset meta-dimensions for a " + (isMetaShift ? "new dimension" : "boost")
+		el("metaResetLabel").textContent = 'Meta-Dimension ' + (isMetaShift ? "Shift" : "Boost") + ' ('+ getFullExpansion(player.meta.resets) +'): requires ' + getFullExpansion(Math.floor(metaShiftRequirement.amount)) + " " + DISPLAY_NAMES[metaShiftRequirement.tier] + " Meta Dimensions"
+		el("metaSoftReset").textContent = "Reset meta-dimensions for a " + (isMetaShift ? "new dimension" : "boost")
 	if (player.meta[metaShiftRequirement.tier].bought >= metaShiftRequirement.amount) {
-		getEl("metaSoftReset").className = 'storebtn'
+		el("metaSoftReset").className = 'storebtn'
 	} else {
-		getEl("metaSoftReset").className = 'unavailablebtn'
+		el("metaSoftReset").className = 'unavailablebtn'
 	}
 	var bigRipped = tmp.ngp3 && qu_save.bigRip.active
 	var req = getQuantumReq()
 	var reqGotten = isQuantumReached()
 	var newClassName = reqGotten ? (bigRipped && player.options.theme == "Aarex's Modifications" ? "" : "storebtn ") + (bigRipped ? "aarexmodsghostifybtn" : "") : 'unavailablebtn'
 
-	getEl("quantumResetLabel").textContent =
+	el("quantumResetLabel").textContent =
 		'Quantum: requires ' + shorten(req) + (tmp.ngp3 ? " best" : "") + ' meta-antimatter'
 		+ (QCs.inAny() ? QCs.getGoalDisp() : tmp.ngp3 && !tmp.ngp3_mul ? " and an EC14 completion" : "")
-	getEl("quantum").innerHTML = tmp.quUnl ? "Gain " + shortenDimensions(quarkGain()) + " aQ." : 'Reset your progress for a new layer...'
-	getEl("quantum").className = pH.can("quantum") ? 'quantumbtn' : 'unavailablebtn'
+	el("quantum").innerHTML = tmp.quUnl ? "Gain " + shortenDimensions(quarkGain()) + " aQ." : 'Reset your progress for a new layer...'
+	el("quantum").className = pH.can("quantum") ? 'quantumbtn' : 'unavailablebtn'
 
-	getEl("metaAccelerator").innerHTML = enB.active("pos", 2) ?
+	el("metaAccelerator").innerHTML = enB.active("pos", 2) ?
 		"Meta Accelerator: " + shorten(enB_tmp.eff.pos2.mult) + "x to MA, DT, and replicate interval" +
 		(shiftDown ? "<br>(Base: " + shorten(enB_tmp.eff.pos2.base) + ", raised by ^" + shorten(enB_tmp.eff.pos2.exp) + ", exp speed: +" + enB_tmp.eff.pos2.speed.toFixed(3) + "/MDB" + ", accelerator: +^" + enB_tmp.eff.pos2.acc.toFixed(3) + " speed/MDB" + ", slowdown start: " + shorten(enB_tmp.eff.pos2.slowdown) + " MDBs)" : "")
 	: ""

@@ -92,7 +92,7 @@ input {
     font-weight: 500
 }
 
-#coinAmount {
+#coinAmount, .antimatter {
     font-weight: 900;
     transition:0.2s;
     animation: ghostifybtntext 16s linear infinite;
@@ -326,7 +326,14 @@ strong { color: #0072e5 }
 #infDimMultAmount,
 #infDimEffectPower,
 #replicantiamount,
-#replicantimult {
+#replicantimult,
+#replCompress,
+#replCompressEff,
+#replDilater,
+#replDilaterEff,
+#qc5_eng,
+#qc5_eff,
+#fd_eff_rep {
     color: #e2bd00 !important;
     font-weight: 500 !important;
 }
@@ -742,7 +749,7 @@ strong { color: #0072e5 }
 
 #quantum.storebtn:hover
 .quantumbtn:hover,
-.qMs_reward:hover, {
+.qMs_reward:hover {
     box-shadow: inset 0px 0px 5px 2px #00ff00;
 }
 
@@ -900,88 +907,17 @@ strong { color: #0072e5 }
     font-weight: 500 !important;
 }
 
-#produceQuarkCharge { 
-    background-color: #191919 !important;
-    border: 2px solid #999999 !important;
-    text-shadow: none;
-    animation: none
+.fluctuatebtn {
+    border-color: #993300 !important;
+	color: #fcb !important;
+    text-shadow: 0px 0px 5px #000, 0px 0px 9px #f30 !important;
+    transition: 0.2s
 }
-
-.nanofieldreward { 
-    background-color: #999999 !important;
-    border: 1px solid #999999 !important;
-    color:#000 !important;
-    text-shadow: none;
-    animation: none
+.fluctuatebtn:hover {
+    box-shadow: inset 0px 0px 5px 2px #993300;
 }
-
-#produceQuarkCharge:hover {
-    background-color: #999999 !important;
-    color: #191919;
-    text-shadow: none
-}
-
-#preonEnergy,
-#quarkEnergyRate,
-#quarkPowerThreshold {
-    color: #72e500 !important;
-    font-weight: 500 !important;
-}
-
-#quarkPower, #rewards {
-    color: #ace572 !important;
-    font-weight: 500!important;
-}
-
-#quarkAntienergy,
-#quarkAntienergyRate,
-#quarkChargeProductionCap {
-    color: #8d1aff !important;
-    font-weight: 500 !important;
-}
-
-.nanofieldreward:hover { 
-    background-color: #ffffff !important;
-    text-shadow: none
-}
-
-.gluonupgrade.r {
-    background-color: #f33 !important;
-    border-color: #f33 !important;
-    box-shadow: inset 0px 0px 10px 0px #000 !important;
-    color: #000 !important;
-    text-shadow: none
-}
-
-.gluonupgrade.g {
-    background-color: #3f3 !important;
-    border-color: #3f3 !important;
-    box-shadow: inset 0px 0px 10px 0px #000 !important;
-    color: #000 !important;
-    text-shadow: none
-}
-
-.gluonupgrade.b {
-    background-color: #33f !important;
-    border-color: #33f !important;
-    box-shadow: inset 0px 0px 10px 0px #000 !important;
-    color: #e5e5e5 !important;
-    text-shadow: none
-}
-
-.gluonupgrade.r:hover {
-    background-color: #440000 !important;
-    color: #fff !important
-}
-
-.gluonupgrade.g:hover {
-    background-color: #004400 !important;
-    color: #fff !important
-}
-
-.gluonupgrade.b:hover {
-    background-color: #000044 !important;
-    color: #fff !important
+.flucEne {
+	color: #ff3f00 !important
 }
 
 .bigripbtn {
@@ -1121,10 +1057,6 @@ strong { color: #0072e5 }
 
 .gluonupgradebought.bl {
     color: #191919 !important
-}
-
-.gluonupgrade.hb:hover {
-    color: #ccc !important
 }
 
 .notifyjs-bootstrap-info {

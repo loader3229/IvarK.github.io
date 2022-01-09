@@ -2,7 +2,7 @@
 let qMs = {
 	tmp: {},
 	data: {
-		types: ["sr", "en", "rl", "ch"],
+		types: ["sr", "en", "rl", "ch", "fl", "ach"],
 		sr: {
 			name: "Speedrun",
 			targ: () => qu_save.best,
@@ -13,21 +13,37 @@ let qMs = {
 			nextAt: (x) => Math.pow(2, (1 - x) / 2) * 86400 * qMs.data.sr.daysStart()
 		},
 		en: {
-			name: "Enegretic",
+			name: "Energetic",
 			targ: () => qu_save.bestEnergy || 0,
 			targDisp: shorten,
 			targKind: "energy",
-			gain: (x) => Math.sqrt(Math.max(x - 0.5, 0)) * 3,
-			nextAt: (x) => Math.pow(x / 3, 2) + 0.5
+			gain(x) {
+				x = Math.sqrt(Math.max(x - 0.5, 0)) * 3
+				if (x > 20) x = Math.log10(x / 2) * 20
+				return x
+			},
+			nextAt(x) {
+				if (x > 20) x = Math.pow(10, x / 20) * 2
+				x = Math.pow(x / 3, 2) + 0.5
+				return x
+			}
 		},
 		rl: {
 			name: "Relativistic",
 			unl: () => pos.unl(),
-			targ: () => new Decimal(player.dilation.bestTP || 0),
+			targ: () => E(player.dilation.bestTP || 0),
 			targDisp: shorten,
 			targKind: "TP",
-			gain: (x) => (x.max(1).log10() - 90) / 3 + 1,
-			nextAt: (x) => Decimal.pow(10, (x - 1) * 3 + 90)
+			gain(x) {
+				x = (x.max(1).log10() - 90) / 3 + 1
+				if (x > 20) x = Math.log10(x / 2) * 20
+				return x
+			},
+			nextAt(x) {
+				if (x > 20) x = Math.pow(10, x / 20) * 2
+				x = Decimal.pow(10, (x - 1) * 3 + 90)
+				return x
+			}
 		},
 		ch: {
 			name: "Challenging",
@@ -35,8 +51,26 @@ let qMs = {
 			targ: () => (PCs_save && PCs_save.comps.length) || 0,
 			targDisp: getFullExpansion,
 			targKind: "completions",
-			gain: (x) => x * 1.5,
-			nextAt: (x) => Math.ceil(x / 1.5)
+			gain: (x) => x * 2,
+			nextAt: (x) => Math.ceil(x / 2)
+		},
+		fl: {
+			name: "Fluctuant",
+			unl: () => pH.did("fluctuate"),
+			targ: () => (fluc_save && fluc_save.energy) || 0,
+			targDisp: getFullExpansion,
+			targKind: "Fluctuant Energy",
+			gain: (x) => x == 0 ? 0 : x * 5 + 2,
+			nextAt: (x) => x == 0 ? 1 : Math.ceil((x - 2) / 5)
+		},
+		ach: {
+			name: "Achievement",
+			unl: () => qMs.data.ach.gain() > 0,
+			gain() {
+				let x = 0
+				if (hasAch("ng3p33")) x += 3
+				return x
+			}
 		}
 	},
 	update() {
@@ -55,15 +89,15 @@ let qMs = {
 			var typeData = qMs.data[type]
 			var unl = typeData.unl ? typeData.unl() : true
 
-			data["targ_" + type] = typeData.targ()
+			data["targ_" + type] = evalData(typeData.targ)
 			data["amt_" + type] = Math.min(Math.max(Math.floor(typeData.gain(data["targ_" + type])), 0), 1e3)
 			data.points += data["amt_" + type]
 		}
+		qu_save.bestMP = Math.max(qu_save.bestMP || 0, data.points)
 
 		//Milestones
 		for (var i = 1; i <= qMs.max; i++) {
-			if (data.points >= qMs[i].req) data.amt++
-			else delete qu_save.disabledRewards[i]
+			if (data.points >= qMs[i].req || evalData(qMs[i].forceGot)) data.amt++
 		}
 
 		if (qMs.tmp.amt >= 12) data.metaSpeed *= Math.pow(0.9, Math.pow(qMs.tmp.amt - 12 + 1, 1 + Math.max(qMs.tmp.amt - 15, 0) / 15))
@@ -76,39 +110,40 @@ let qMs = {
 				var typeData = qMs.data[type]
 				var unl = typeData.unl ? typeData.unl() : true
 
-				getEl("qMs_" + type + "_cell").style.display = unl ? "" : "none"
+				el("qMs_" + type + "_cell").style.display = unl ? "" : "none"
 			}
 
 			for (var i = 1; i <= qMs.max; i++) {
-				var shown = qMs.tmp.amt >= i - 1
-				getEl("qMs_reward_" + i).style.display = shown ? "" : "none"
+				var shown = fluc.unl() || qMs.tmp.amt >= i - 1
+				el("qMs_reward_" + i).style.display = shown ? "" : "none"
 
 				if (shown) {
-					getEl("qMs_reward_" + i).className = qMs.tmp.amt < i || qMs.forceOff(i) ? "qMs_locked" :
+					var got = qMs.isObtained(i)
+					el("qMs_reward_" + i).className = !got || qMs.forceOff(i) ? "qMs_locked" :
 						!evalData(this[i].disablable) ? "qMs_reward" :
 						"qMs_toggle_" + (!qu_save.disabledRewards[i] ? "on" : "off")
-					getEl("qMs_reward_" + i).innerHTML = qMs[i].eff() + (qMs.tmp.amt >= i ? "" : "<br>(requires " + getFullExpansion(qMs[i].req) + " MP)")
+					el("qMs_reward_" + i).innerHTML = qMs[i].eff() + (got ? "" : "<br>(requires " + getFullExpansion(qMs[i].req) + (this[i].best ? " best" : "") + " MP)")
 				}
 			}
-			getEl("qMs_next").textContent = qMs.tmp.amt >= qMs.max ? "" : "Next milestone unlocks at " + getFullExpansion(qMs[qMs.tmp.amt + 1].req) + " Milestone Points."
+			el("qMs_next").textContent = qMs.tmp.amt >= qMs.max ? "" : "Next milestone unlocks at " + getFullExpansion(qMs[qMs.tmp.amt + 1].req) + " Milestone Points."
 		}
 
-		getEl('dilationmode').style.display = qMs.tmp.amt >= 4 ? "block" : "none"
-		getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 11 ? "" : "none"
-		getEl('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
-		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 17 ? "block" : "none"
-		getEl('toggleautoquantummode').style.display = qMs.tmp.amt >= 17 ? "" : "none"
-		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 20 ? "" : "none"
-		getEl('repExpandAuto').style.display = qMs.tmp.amt >= 27 ? "" : "none"
+		el('dilationmode').style.display = qMs.tmp.amt >= 4 ? "block" : "none"
+		el('rebuyupgauto').style.display = qMs.tmp.amt >= 11 || pH.did("fluctuate") ? "" : "none"
+		el('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
+		el("autoBuyerQuantum").style.display = qMs.tmp.amt >= 17 ? "block" : "none"
+		el('toggleautoquantummode').style.display = qMs.tmp.amt >= 17 ? "" : "none"
+		el('rebuyupgmax').style.display = qMs.tmp.amt < 20 ? "" : "none"
+		el('repExpandAuto').style.display = PCs.milestoneDone(13) ? "" : "none"
 
         var autoAssignUnl = qMs.tmp.amt >= 23
-		getEl('respec_quarks').style.display = autoAssignUnl ? "" : "none"
-        getEl('autoAssign').style.display = autoAssignUnl ? "" : "none"
-        getEl('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
+		el('respec_quarks').style.display = autoAssignUnl ? "" : "none"
+        el('autoAssign').style.display = autoAssignUnl ? "" : "none"
+        el('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
 
 		if (QCs.unl()) {
-			getEl("swaps_toggle").style.display = qMs.tmp.amt >= 26 ? "" : "none"
-			getEl("swaps_toggle").textContent = (QCs_save.disable_swaps.on ? "Enable" : "Disable") + " swaps in challenge"
+			el("swaps_toggle").style.display = qMs.tmp.amt >= 26 ? "" : "none"
+			el("swaps_toggle").textContent = (QCs_save.disable_swaps.on ? "Enable" : "Disable") + " swaps in challenge"
 		}
 	},
 	updateDisplayOnTick() {
@@ -119,40 +154,46 @@ let qMs = {
 			var unl = typeData.unl ? typeData.unl() : true
 
 			if (unl) {
-				getEl("qMs_" + type + "_target").textContent = typeData.targDisp(qMs.tmp["targ_" + type])
-				getEl("qMs_" + type + "_points").textContent = "+" + getFullExpansion(qMs.tmp["amt_" + type]) + " MP"
-				getEl("qMs_" + type + "_next").textContent = qMs.tmp["amt_" + type] > 50 ? "" : "(Next at: " + typeData.targDisp(typeData.nextAt(qMs.tmp["amt_" + type] + 1)) + " " + typeData.targKind + ")"
+				el("qMs_" + type + "_points").textContent = "+" + getFullExpansion(qMs.tmp["amt_" + type]) + " MP"
+				if (typeData.targ) {
+					el("qMs_" + type + "_target").textContent = typeData.targDisp(qMs.tmp["targ_" + type])
+					el("qMs_" + type + "_next").textContent = qMs.tmp["amt_" + type] > 50 ? "" : "(Next at: " + typeData.targDisp(typeData.nextAt(qMs.tmp["amt_" + type] + 1)) + " " + typeData.targKind + ")"
+				}
 			}
 		}
 
-		getEl("qMs_points").textContent = getFullExpansion(qMs.tmp.points)
+		el("qMs_points").textContent = getFullExpansion(qMs.tmp.points)
+	},
+	isObtained(id) {
+		var d = qMs[id]
+		return (d.best ? qu_save.bestMP >= d.req : qMs.tmp.amt >= id) || evalData(d.forceGot)
 	},
 	isOn(id) {
-		return qMs.tmp.amt >= id && !qu_save.disabledRewards[id] && !qMs.forceOff(id)
+		return qMs.isObtained(id) && !qu_save.disabledRewards[id] && !qMs.forceOff(id)
 	},
 	forceOff(id) {
 		return evalData(qMs[id].forceDisable)
 	},
 	toggle(id) {
-		if (qMs.tmp.amt < id) return
+		if (!qMs.isObtained(id)) return
 		if (qMs.forceOff(id)) return
 		if (!evalData(qMs[id].disablable)) return
 
 		let on = !qu_save.disabledRewards[id]
 		qu_save.disabledRewards[id] = on
-		getEl("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
+		el("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
 	},
 
-	max: 27,
+	max: 29,
 	1: {
 		req: 1,
-		eff: () => "Completing an EC only exits your challenge.",
-		effGot: () => "Completing an EC now only exits your challenge."
+		eff: () => "Completing an EC only exits your challenge, and unlock automation for TT and study presets.",
+		effGot: () => "Completing an EC now only exits your challenge, and you now can automate TT and study presets."
 	},
 	2: {
 		req: 2,
-		eff: () => "Unlock the autobuyer for TT and study presets, start with 3x more Eternities per milestone (" + shortenDimensions(Math.pow(3, qMs.tmp.amt >= 2 ? qMs.tmp.amt : 0) * 100) + "), and keep Eternity Challenges",
-		effGot: () => "You now can automatically buy TT, start with 3x more Eternities per milestone, and keep Eternity Challenges."
+		eff: () => "Start with 3x more Eternities per milestone (" + shortenDimensions(Math.pow(3, qMs.tmp.amt >= 2 ? qMs.tmp.amt : 0) * 100) + "), and keep Eternity Challenges",
+		effGot: () => "You now start with 3x more Eternities per milestone, and keep Eternity Challenges."
 	},
 	3: {
 		req: 3,
@@ -252,7 +293,8 @@ let qMs = {
 	},
 	21: {
 		req: 25,
-		forceDisable: () => !PCs.milestoneDone(32) && QCs.in(3),
+		forceGot: () => hasAch("ng3p25"),
+		forceDisable: () => QCs.in(3) && !hasAch("ng3p25"),
 		eff: () => "Every second, you gain Tachyon Particles, if you dilate",
 		effGot: () => "Every second, you now gain Tachyon Particles, if you dilate."
 	},
@@ -262,28 +304,41 @@ let qMs = {
 		effGot: () => "Gain banked infinities based on your post-crunch infinitied stat."
 	},
 	23: {
-		req: 50,
+		req: 40,
 		eff: () => "Unlock QoL features for quark assortion, like automation and respec.",
 		effGot: () => "You have unlocked QoL features for quark assortion!"
 	},
 	24: {
-		req: 75,
+		req: 50,
 		eff: () => "Able to max Meta-Dimension Boosts",
 		effGot: () => "You now can max Meta-Dimension Boosts."
 	},
 	25: {
-		req: 100,
+		req: 60,
 		eff: () => "Meta Dimension autobuyer is unlimited",
 		effGot: () => "Meta Dimension autobuyer is now unlimited."
 	},
 	26: {
-		req: 160,
+		req: 70,
 		eff: () => "You can disable swaps in any Quantum Challenge",
 		effGot: () => "You now can disable swaps in any Quantum Challenge."
 	},
 	27: {
-		req: 200,
-		eff: () => "Unlock the autobuyer for Replicated Expanders",
-		effGot: () => "Unlock the autobuyer for Replicated Expanders."
+		req: 130,
+		best: true,
+		eff: () => "Keep Quantum Challenges and Entangled Boosts.",
+		effGot: () => "You now keep Quantum Challenges and Entangled Boosts."
+	},
+	28: {
+		req: 140,
+		best: true,
+		eff: () => "Keep Paired Challenges and Positrons.",
+		effGot: () => "You now keep Paired Challenges and Positrons."
+	},
+	29: {
+		req: 150,
+		best: true,
+		eff: () => "Keep your Vibration Energy.",
+		effGot: () => "You now keep your Vibration Energy."
 	},
 }

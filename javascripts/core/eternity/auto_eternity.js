@@ -1,7 +1,7 @@
 function updateAutoEterMode() {
 	var modeText = ""
 	var modeCond = ""
-	getEl("priority13").disabled = false
+	el("priority13").disabled = false
 	if (player.autoEterMode == "replicanti" || player.autoEterMode == "peak") player.autoEterMode = "time"
 	if (player.autoEterMode == "time") {
 		modeText = "time"
@@ -25,8 +25,8 @@ function updateAutoEterMode() {
 		modeText = "[DELETED]"
 		modeCond = "Click the auto-eternity mode!"
 	}
-	getEl("toggleautoetermode").textContent = "Auto eternity mode: " + modeText
-	getEl("eterlimittext").textContent = modeCond
+	el("toggleautoetermode").textContent = "Auto eternity mode: " + modeText
+	el("eterlimittext").textContent = modeCond
 }
 
 function toggleAutoEterMode() {
@@ -41,7 +41,7 @@ function toggleAutoEterMode() {
 
 function toggleAutoEter(id) {
 	player.autoEterOptions[id] = !player.autoEterOptions[id]
-	getEl(id + 'auto').textContent = (id == "dilUpgs" ? "Auto-buy dilation upgrades" : (id == "rebuyupg" ? "Rebuyable upgrade a" : id == "metaboost" ? "Meta-boost a" : "A") + "uto") + ": " + (player.autoEterOptions[id] ? "ON" : "OFF")
+	el(id + 'auto').textContent = (id == "dilUpgs" ? "Auto-buy dilation upgrades" : (id == "rebuyupg" ? "Rebuyable upgrade a" : id == "metaboost" ? "Meta-boost a" : "A") + "uto") + ": " + (player.autoEterOptions[id] ? "ON" : "OFF")
 	if (id.slice(0,2) == "td") {
 		var removeMaxAll = false
 		for (var d = 1; d < 9; d++) {
@@ -49,7 +49,7 @@ function toggleAutoEter(id) {
 				if (d > 7) removeMaxAll = true
 			} else break
 		}
-		getEl("maxTimeDimensions").style.display = removeMaxAll ? "none" : ""
+		el("maxTimeDimensions").style.display = removeMaxAll ? "none" : ""
 	}
 }
 
@@ -72,7 +72,7 @@ var onNGP3 = false
 var poData
 
 function save_preset(id, placement) {
-	let data = getEl("preset_" + id +"_data").value
+	let data = el("preset_" + id +"_data").value
 	presets[id].preset = presets.editing == placement ? data : getStudyTreeStr()
 	localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
 	delete presets.editing
@@ -84,13 +84,13 @@ function save_preset(id, placement) {
 function toggle_preset_reset(load) {
 	if (!load) {
 		aarMod.presetReset = !aarMod.presetReset
-		getEl("toggle_preset_reset").style.display = tmp.ngp3 ? "" : "none"
+		el("toggle_preset_reset").style.display = tmp.ngp3 ? "" : "none"
 	}
-	getEl("toggle_preset_reset").textContent = "Force Eternity: " + (aarMod.presetReset ? "ON" : "OFF")
+	el("toggle_preset_reset").textContent = "Eternity on load: " + (aarMod.presetReset ? "ON" : "OFF")
 }
 
 function load_preset(id, placement) {
-	let data = getEl("preset_" + id + "_data").value
+	let data = el("preset_" + id + "_data").value
 
 	if (aarMod.presetReset) {
 		if (!pH.can("eternity")) return
@@ -127,7 +127,7 @@ function delete_preset(presetId) {
 			delete presets[presetId]
 			localStorage.removeItem(btoa(presetPrefix + presetId))
 			alreadyDeleted = true
-			getEl("presets").deleteRow(id)
+			el("presets").deleteRow(id)
 			loadedPresets--
 		} else newPresetsOrder.push(poData[id])
 	}
@@ -158,8 +158,8 @@ function move_preset(id,offset) {
 	var temp = poData[placement]
 	poData[placement] = poData[placement+offset]
 	poData[placement+offset] = temp
-	getEl("presets").rows[placement].innerHTML = getPresetLayout(poData[placement])
-	getEl("presets").rows[placement+offset].innerHTML = getPresetLayout(id)
+	el("presets").rows[placement].innerHTML = getPresetLayout(poData[placement])
+	el("presets").rows[placement+offset].innerHTML = getPresetLayout(id)
 	changePresetTitle(poData[placement], placement)
 	changePresetTitle(poData[placement+offset], placement + offset)
 	localStorage.setItem(metaSaveId, btoa(JSON.stringify(metaSave)))
@@ -172,7 +172,7 @@ function openStudyPresets() {
 	let saveOnNGP3 = player.masterystudies !== undefined
 	if (saveOnERS != onERS) {
 		delete presets.editing
-		getEl("presets").innerHTML = ""
+		el("presets").innerHTML = ""
 		presets = {}
 		onERS = saveOnERS
 		if (onERS) presetPrefix = prefix+"ERS_ST_"
@@ -181,11 +181,11 @@ function openStudyPresets() {
 	} else if (saveOnNGP3 != onNGP3) {
 		onNGP3 = saveOnNGP3
 		for (var p = 0; p < loadedPresets; p++) {
-			getEl("presets").rows[p].innerHTML = getPresetLayout(poData[p], p + 1)
+			el("presets").rows[p].innerHTML = getPresetLayout(poData[p], p + 1)
 			changePresetTitle(poData[p], p + 1)
 		}
 	}
-	getEl("presetsmenu").style.display = "block";
+	el("presetsmenu").style.display = "block";
 	clearInterval(loadSavesIntervalId)
 	occupied = false
 	loadSavesIntervalId=setInterval(function(){
@@ -195,7 +195,7 @@ function openStudyPresets() {
 			clearInterval(loadSavesIntervalId)
 			return
 		} else if (!onLoading) {
-			latestRow = getEl("presets").insertRow(loadedPresets)
+			latestRow = el("presets").insertRow(loadedPresets)
 			onLoading = true
 		}
 		try {
@@ -214,7 +214,7 @@ function focus_preset(id, placement) {
 		changePresetTitle(presets.editing, placement, false)
 		delete presets.editing
 	}
-	presets[id].dilation = getEl("preset_" + id + "_dilation").checked
+	presets[id].dilation = el("preset_" + id + "_dilation").checked
 	presets.editing = placement
 	changePresetTitle(id, placement, true)
 }
@@ -241,10 +241,10 @@ function changePresetTitle(id, placement, editing) {
 		while (poData[placement] != id) placement++
 	}
 
-	getEl("preset_" + id + "_dilation_div").style.display = hasDilationStudy(1) || pH.has("quantum")
+	el("preset_" + id + "_dilation_div").style.display = hasDilationStudy(1) || pH.has("quantum")
 
 	if (editing) {
-		getEl("preset_" + id + "_title").textContent = (presets[id].title ? presets[id].title : "Preset #" + placement) + "*"
+		el("preset_" + id + "_title").textContent = (presets[id].title ? presets[id].title : "Preset #" + placement) + "*"
 		return
 	}
 
@@ -254,8 +254,8 @@ function changePresetTitle(id, placement, editing) {
 			presets[id] = {preset: "|0", title: "Deleted preset #" + placement, dilation: false}
 			localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
 		} else presets[id] = JSON.parse(atob(preset))
-		getEl("preset_" + id + "_dilation").checked = presets[id].dilation
+		el("preset_" + id + "_dilation").checked = presets[id].dilation
 	}
-	getEl("preset_" + id + "_title").textContent = presets[id].title ? presets[id].title : "Preset #" + placement
-	getEl("preset_" + id + "_data").value = presets[id].preset
+	el("preset_" + id + "_title").textContent = presets[id].title ? presets[id].title : "Preset #" + placement
+	el("preset_" + id + "_data").value = presets[id].preset
 }

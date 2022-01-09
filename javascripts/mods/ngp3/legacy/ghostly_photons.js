@@ -1,15 +1,15 @@
 function updateGPHUnlocks() {
 	let unl = player.ghostify.ghostlyPhotons.unl
-	getEl("gphUnl").style.display = unl ? "none" : ""
-	getEl("gphDiv").style.display = unl ? "" : "none"
-	getEl("breakUpgR3").style.display = unl ? "" : "none"
-	getEl("bltabbtn").style.display = unl ? "" : "none"
+	el("gphUnl").style.display = unl ? "none" : ""
+	el("gphDiv").style.display = unl ? "" : "none"
+	el("breakUpgR3").style.display = unl ? "" : "none"
+	el("bltabbtn").style.display = unl ? "" : "none"
 	updateNeutrinoUpgradeUnlocks(13, 15)
 	ls.updateOption("gph")
 }
 
 function getGPHProduction() {
-	let ret = new Decimal(0)
+	let ret = E(0)
 	if (false) ret = player.dilation.dilatedTime.div("1e480")
 	if (hasAch("ng3p92")) ret = ret.add(1)
 	if (ret.gt(1)) ret = ret.pow(0.02)
@@ -17,7 +17,7 @@ function getGPHProduction() {
 }
 
 function getDMProduction() {
-	let ret = new Decimal(0)
+	let ret = E(0)
 	if (true) ret = player.dilation.dilatedTime.div("1e930")
 	if (hasAch("ng3p92")) ret = ret.add(1)
 	if (ret.gt(1)) ret = ret.pow(0.02)
@@ -38,22 +38,17 @@ function getGHRCap() {
 
 function getLightThreshold(l) {
 	let inc = Decimal.pow(getLightThresholdIncrease(l), player.ghostify.ghostlyPhotons.lights[l])
-	let base = new Decimal(tmp.lt[l]).div(tmp.ngp3_exp ? 10 : 1)
+	let base = E(tmp.lt[l]).div(tmp.ngp3_exp ? 10 : 1)
 	return inc.times(base)
 }
 
 function getLightThresholdIncrease(l) {
 	let x = tmp.lti[l]
-	if (isNanoEffectUsed("light_threshold_speed")) {
-		let y = 1 / tmp.nf.effects.light_threshold_speed
-		if (y < 1) x = Math.pow(x, y)
-	}
 	return x
 }
 
 function getPhotonicFlow() {
-	let x = new Decimal(1)
-	if (GDs.boostUnl('gph')) x = Decimal.pow(x, GDs.tmp.gph)
+	let x = E(1)
 	return x
 }
 
@@ -72,35 +67,35 @@ function updatePhotonsTab(){
 
 function updateRaysPhotonsDisplay(){
 	let gphData = player.ghostify.ghostlyPhotons
-	getEl("dtGPH").textContent = shorten(player.dilation.dilatedTime)
-	getEl("gphProduction").textContent = shorten(inBigRip() ? getGPHProduction() : getDMProduction())
-	getEl("gphProduction").className = (inBigRip() ? "gph" : "dm") + "Amount"
-	getEl("gphProductionType").textContent = inBigRip() ? "Ghostly Photons" : "Dark Matter"
-	getEl("gph").textContent = shortenMoney(gphData.amount)
-	getEl("dm").textContent = shortenMoney(gphData.darkMatter)
-	getEl("ghrProduction").textContent = shortenMoney(getGHRProduction())
-	getEl("ghrCap").textContent = shortenMoney(getGHRCap())
-	getEl("ghr").textContent = shortenMoney(gphData.ghostlyRays)
+	el("dtGPH").textContent = shorten(player.dilation.dilatedTime)
+	el("gphProduction").textContent = shorten(inBigRip() ? getGPHProduction() : getDMProduction())
+	el("gphProduction").className = (inBigRip() ? "gph" : "dm") + "Amount"
+	el("gphProductionType").textContent = inBigRip() ? "Ghostly Photons" : "Dark Matter"
+	el("gph").textContent = shortenMoney(gphData.amount)
+	el("dm").textContent = shortenMoney(gphData.darkMatter)
+	el("ghrProduction").textContent = shortenMoney(getGHRProduction())
+	el("ghrCap").textContent = shortenMoney(getGHRCap())
+	el("ghr").textContent = shortenMoney(gphData.ghostlyRays)
 }
 
 function updateLightBoostDisplay(){
 	let gphData = player.ghostify.ghostlyPhotons
-	getEl("lightMax1").textContent = getFullExpansion(gphData.maxRed)
-	getEl("lightBoost1").textContent = tmp.le[0].toFixed(3)
-	getEl("lightBoost2").textContent = tmp.le[1].toFixed(2)
-	//getEl("lightBoost3").textContent = getFullExpansion(Math.floor(tmp.le[2]))
-	getEl("lightBoost4").textContent = formatPercentage(tmp.le[3] - 1)
-	getEl("lightBoost5").textContent = formatPercentage(tmp.le[4]) + (hasBosonicUpg(11) ? "+" + formatPercentage(tmp.blu[11]) : "")
-	getEl("lightBoost6").textContent = shorten(tmp.le[5])
-	getEl("lightBoost7").textContent = shorten(tmp.le[6])
+	el("lightMax1").textContent = getFullExpansion(gphData.maxRed)
+	//el("lightBoost1").textContent = tmp.le[0].toFixed(3)
+	//el("lightBoost2").textContent = tmp.le[1].toFixed(2)
+	//el("lightBoost3").textContent = getFullExpansion(Math.floor(tmp.le[2]))
+	//el("lightBoost4").textContent = formatPercentage(tmp.le[3] - 1)
+	//el("lightBoost5").textContent = formatPercentage(tmp.le[4]) + (hasBosonicUpg(11) ? "+" + formatPercentage(tmp.blu[11]) : "")
+	el("lightBoost6").textContent = shorten(tmp.le[5])
+	el("lightBoost7").textContent = shorten(tmp.le[6])
 }
 
 function updateLightThresholdStrengthDisplay(){
 	let gphData=player.ghostify.ghostlyPhotons
 	for (let c = 0; c < 8; c++) {
-		getEl("light" + (c + 1)).textContent = getFullExpansion(gphData.lights[c])
-		getEl("lightThreshold" + (c + 1)).textContent = shorten(getLightThreshold(c))
-		if (c > 0) getEl("lightStrength" + c).textContent = shorten(tmp.ls[c-1])
+		el("light" + (c + 1)).textContent = getFullExpansion(gphData.lights[c])
+		el("lightThreshold" + (c + 1)).textContent = shorten(getLightThreshold(c))
+		if (c > 0) el("lightStrength" + c).textContent = shorten(tmp.ls[c-1])
 	}
 }
 
@@ -112,7 +107,7 @@ function updatePhotonicFlowDisplay() {
 		speeds.push(ls.mult("gph"))
 		speedDescs.push("'Light Speed' mod")
 	}
-	getEl("gphSpeed").textContent = "Photonic Flow: " + factorizeDescs(speeds, speedDescs) + shorten(getFinalPhotonicFlow()) + "x speed to Ghostly Photons"
+	el("gphSpeed").textContent = "Photonic Flow: " + factorizeDescs(speeds, speedDescs) + shorten(getFinalPhotonicFlow()) + "x speed to Ghostly Photons"
 }
 
 //Light Empowerments
@@ -127,7 +122,6 @@ function getLightEmpowermentReq(le) {
 
 	if (hasAch("ng3p116")) x /= 2
 	if (hasAch("ng3p95")) x -= 1
-	if (bu62.active("gph")) x = 1/0
 
 	tmp.leReqScale = scale
 	return Math.floor(x)
@@ -143,7 +137,7 @@ function lightEmpowerment(auto) {
 		if (!hasAch("ng3p92")) if (!confirm("You will become a ghost, but Ghostly Photons will be reset. As a result, you will gain a Light Empowerment from this. Are you sure you want to proceed?")) return
 		if (hasAch("ng3p92"))  if (!confirm("You will become a ghost, but Ghostly Photons will be reset. As a result, you will bulk buy the maximum number of Light Empowerments you can. Are you sure you want to proceed?")) return
 	}
-	if (!player.ghostify.ghostlyPhotons.enpowerments) getEl("leConfirmBtn").style.display = "inline-block"
+	if (!player.ghostify.ghostlyPhotons.enpowerments) el("leConfirmBtn").style.display = "inline-block"
 
 	if (hasAch("ng3p92")) maxLightEmpowerments()
 	else player.ghostify.ghostlyPhotons.enpowerments++
@@ -152,9 +146,9 @@ function lightEmpowerment(auto) {
 	ghostify(false, true)
 
 	if (hasAch("ng3p91")) return
-	player.ghostify.ghostlyPhotons.amount = new Decimal(0)
-	player.ghostify.ghostlyPhotons.darkMatter = new Decimal(0)
-	player.ghostify.ghostlyPhotons.ghostlyRays = new Decimal(0)
+	player.ghostify.ghostlyPhotons.amount = E(0)
+	player.ghostify.ghostlyPhotons.darkMatter = E(0)
+	player.ghostify.ghostlyPhotons.ghostlyRays = E(0)
 	player.ghostify.ghostlyPhotons.lights = [0,0,0,0,0,0,0,0]
 }
 
@@ -182,19 +176,7 @@ var leBoosts = {
 	1: {
 		leThreshold: 1,
 		eff() {
-			let le1exp = 0.75
-			if (tmp.ngp3_exp) {
-				le1exp += 0.2
-				if (player.ghostify.ghostlyPhotons.unl) le1exp += .15
-				if (player.ghostify.wzb.unl) le1exp += .15
-			}
-			let le1mult = 500
-			if (tmp.ngp3_exp) le1mult *= 2
-			let eff = Math.pow(Math.log10(tmp.effL[3] + 1), le1exp) * le1mult
-			return {effect: eff}
-		},
-		effDesc(x) {
-			return getFullExpansion(Math.floor(x.effect))
+			return tmp.leBonus[1]
 		}
 	},
 	2: {
@@ -209,10 +191,7 @@ var leBoosts = {
 	3: {
 		leThreshold: 3,
 		eff() {
-			return Math.pow(tmp.effL[0].normal + 1, 0.1) * 2 - 1
-		},
-		effDesc(x) {
-			return x.toFixed(2)
+			return tmp.leBonus[3]
 		}
 	},
 	4: {
@@ -245,11 +224,7 @@ var leBoosts = {
 		},
 		leThreshold: 16,
 		eff() {
-			let exp = Math.min(Math.pow(tmp.effL[2] + 1, 0.25) - 1, 600)
-			return Math.pow(3, exp)
-		},
-		effDesc(x) {
-			return shorten(x)
+			return tmp.leBonus[6]
 		}
 	},
 	7: {
@@ -290,11 +265,11 @@ function isLEBoostUnlocked(x) {
 
 function updateLEmpowermentPrimary(){
 	let gphData = player.ghostify.ghostlyPhotons
-	getEl("lightEmpowerment").className = "gluonupgrade "+(gphData.lights[7] >= tmp.leReq ? "gph" : "unavailablebtn")
-	getEl("lightEmpowermentReq").textContent = getFullExpansion(tmp.leReq)
-	getEl("lightEmpowerments").textContent = getFullExpansion(gphData.enpowerments)
-	getEl("lightEmpowermentScaling").textContent = getGalaxyScaleName(tmp.leReqScale) + "Light Empowerments"
-	getEl("lightEmpowermentsEffect").textContent = shorten(tmp.leBoost)
+	el("lightEmpowerment").className = "gluonupgrade "+(gphData.lights[7] >= tmp.leReq ? "gph" : "unavailablebtn")
+	el("lightEmpowermentReq").textContent = getFullExpansion(tmp.leReq)
+	el("lightEmpowerments").textContent = getFullExpansion(gphData.enpowerments)
+	el("lightEmpowermentScaling").textContent = getGalaxyScaleName(tmp.leReqScale) + "Light Empowerments"
+	el("lightEmpowermentsEffect").textContent = shorten(tmp.leBoost)
 }
 
 function updateLEmpowermentBoosts(){
@@ -302,8 +277,7 @@ function updateLEmpowermentBoosts(){
 	for (let e = 1; e <= leBoosts.max; e++) {
 		let unlocked = isLEBoostUnlocked(e)
 		if (unlocked) boosts++
-		getEl("le"+e).style.visibility = unlocked ? "visible" : "hidden"
-		if (unlocked && leBoosts[e].effDesc) getEl("leBoost" + e).textContent = leBoosts[e].effDesc(tmp.leBonus[e])
+		el("le"+e).style.visibility = unlocked ? "visible" : "hidden"
+		if (unlocked && leBoosts[e].effDesc) el("leBoost" + e).textContent = leBoosts[e].effDesc(tmp.leBonus[e])
 	}
-	if (boosts >= 1) getEl("leBoost1Total").textContent = getFullExpansion(Math.floor(tmp.leBonus[1].total))
 }

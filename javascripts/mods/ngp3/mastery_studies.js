@@ -46,8 +46,8 @@ var mTs = {
 			t271: "reset", t272: 1.5,
 			t281: 4, t282: 6, t283: 6, t284: 4,
 			t291: 6, t292: 6,
-			t301: 6, t302: "reset", t303: 6,
-			t311: 1 / 2, t312: 32, t313: 32, t314: 1 / 2,
+			t301: 5, t302: "reset", t303: 5,
+			t311: 1 / 2, t312: 30, t313: 30, t314: 1 / 2,
 
 			//Beginner Mode
 			t251_bg: 1.5, t252_bg: 1.5, t253_bg: 1.5,
@@ -131,25 +131,7 @@ var mTs = {
 		},
 		d8() {
 			return "5 positronic charge"
-		},
-		d9() {
-			return "COMING IN BETA V0.5"
-		},
-		d10() {
-			return "Complete Paired Challenge 4"
-		},
-		d11() {
-			return getFullExpansion(10) + " worker replicants"
-		},
-		d12() {
-			return getFullExpansion(10) + " Eighth Emperor Dimensions"
-		},
-		d13() {
-			return getFullExpansion(16) + " Nanofield rewards"
-		},
-		d14() {
-			return "Get 'The Challenging Day' achievement"
-		},
+		}
 	},
 	types: {t: "time", ec: "ec", d: "dil"},
 	studies: [],
@@ -165,7 +147,7 @@ var mTs = {
 			if (hasNU(6)) return 0
 
 			var x = player.meta.resets
-			x *= 13 / (x / 50 + 1) + Math.max(Math.log2(x / 25), 1) * 2
+			x *= 13 / (x / 50 + 1) + Math.min(Math.max(Math.log2(x / 25), 1) * 2, 10)
 			if (tmp.ngp3_mul) x *= 1.25
 			return x
 		},
@@ -230,12 +212,17 @@ var mTs = {
 		},
 
 		311() {
-			var exp = Math.min(Math.log10(Math.log10(qu_save.colorPowers.r / 100 + 1) + 1), 1)
+			var red = Math.log10(qu_save.colorPowers.r / 100 + 1)
+			var lim = 15 + Math.sqrt(red + 1)
+			var exp = Math.min(Math.log10(red + 1), 1.5 - 15 / lim)
 			var eff = hasTS(232) ? Math.pow(tsMults[232](), exp) : 1
 			return {
 				exp: exp,
 				eff: eff
 			}
+			//"The Singularity": sing = 10/(1-10x/15)
+			//Only if this and TS232 has been applied
+			//Formula capped at ^1.5-15/sing
 		},
 		312() {
 			var mul = Math.min(Math.log10(qu_save.colorPowers.g / 100 + 1) / 30, 1)
@@ -535,8 +522,8 @@ function setupMasteryStudiesHTML() {
 		html += "<br>Cost: <span id='mts" + name + "Cost'></span> Time Theorems"
 		html += "<span id='mts" + name + "Req'></span>"
 
-		getEl("mts" + name).innerHTML = html
-		getEl("mts" + name).className = "timestudy"
+		el("mts" + name).innerHTML = html
+		el("mts" + name).className = "timestudy"
 	}
 	updateMasteryStudyCosts()
 }
@@ -562,7 +549,7 @@ function updateUnlockedMasteryStudies() {
 		if (Math.floor(id / 10) > rowNum) {
 			rowNum = Math.floor(id / 10)
 			if (mTs.allUnlocks["r" + rowNum] && !mTs.allUnlocks["r" + rowNum]()) unl = false
-			getEl(divid).parentElement.parentElement.parentElement.parentElement.style = unl ? "" : "display: none !important"
+			el(divid).parentElement.parentElement.parentElement.parentElement.style = unl ? "" : "display: none !important"
 			if (unl) mTs.studyUnl.push("r"+rowNum)
 		}
 		if (mTs.allUnlocks[id] && !mTs.allUnlocks[id]()) unl = false
@@ -570,10 +557,10 @@ function updateUnlockedMasteryStudies() {
 		var localUnl = unl
 		if (id[0] == "d") {
 			localUnl = (id.split("d")[1] <= 7 || hasDilationStudy(parseInt(id.split("d")[1]) - 1) || hasDilationStudy(id)) && (pH.did("ghostify") || !mTs.allUnlocks[id] || mTs.allUnlocks[id]())
-			if (localUnl) getEl(divid).parentElement.parentElement.parentElement.parentElement.style = ""
+			if (localUnl) el(divid).parentElement.parentElement.parentElement.parentElement.style = ""
 		}
 		if (localUnl) mTs.studyUnl.push(id)
-		getEl(divid).style.visibility = localUnl ? "" : "hidden"
+		el(divid).style.visibility = localUnl ? "" : "hidden"
 	}
 }
 
@@ -642,7 +629,7 @@ function getMasteryStudyCostMult(id) {
 
 function buyingD7Changes() {
 	pos_tmp.unl = true
-	getEl("positronstabbtn").style.display = ""
+	el("positronstabbtn").style.display = ""
 
 	showTab("quantumtab")
 	showQuantumTab("positrons")
@@ -653,7 +640,7 @@ function buyingD7Changes() {
 
 function buyingDilStudyForQC() {
 	QCs_tmp.unl = true
-	getEl("qctabbtn").style.display = ""
+	el("qctabbtn").style.display = ""
 
 	qMs.updateDisplay()
 	QCs.tp()
@@ -688,7 +675,7 @@ function buyMasteryStudy(type, id, quick=false) {
 		if (id == 266 && player.replicanti.gal >= 400) {
 			var gal = player.replicanti.gal
 			player.replicanti.gal = 0
-			player.replicanti.galCost = new Decimal(inNGM(2) ? 1e110 : 1e170)
+			player.replicanti.galCost = E(inNGM(2) ? 1e110 : 1e170)
 			player.replicanti.galCost = getRGCost(gal)
 			player.replicanti.gal = gal
 		}
@@ -746,7 +733,7 @@ function updateMasteryStudyButtons() {
 		var name = mTs.studyUnl[id]
 		if (name + 0 == name) {
 			var className = "timestudy"
-			var div = getEl("mts" + name)
+			var div = el("mts" + name)
 			if (!hasMTS(name) && !canBuyMasteryStudy('t', name)) className = "timestudylocked"
 			else {
 				if (hasMTS(name)) className += "bought"
@@ -755,19 +742,19 @@ function updateMasteryStudyButtons() {
 			if (div.className !== className) div.className = className
 			if (mTs.hasStudyEffect.includes(name)) {
 				var mult = getMTSMult(name)
-				if (mult !== undefined) getEl("mts" + name + "Current").textContent = (mTs.studyEffectDisplays[name] !== undefined ? mTs.studyEffectDisplays[name](mult) : shorten(mult) + "x")
+				if (mult !== undefined) el("mts" + name + "Current").textContent = (mTs.studyEffectDisplays[name] !== undefined ? mTs.studyEffectDisplays[name](mult) : shorten(mult) + "x")
 			}
 		}
 	}
 	for (id = 13; id <= mTs.ecsUpTo; id++) {
-		var div = getEl("ec" + id + "unl")
+		var div = el("ec" + id + "unl")
 		if (!mTs.studyUnl.includes("ec" + id)) break
 		if (player.eternityChallUnlocked == id) div.className = "eternitychallengestudybought"
 		else if (canBuyMasteryStudy('ec', id)) div.className = "eternitychallengestudy"
 		else div.className = "timestudylocked"
 	}
 	for (id = 7; id <= mTs.unlocksUpTo; id++) {
-		var div = getEl("dilstudy" + id)
+		var div = el("dilstudy" + id)
 		if (!mTs.studyUnl.includes("d" + id)) break
 		if (player.masterystudies.includes("d" + id)) div.className = "dilationupgbought"
 		else if (canBuyMasteryStudy('d', id)) div.className = "dilationupg"
@@ -777,36 +764,36 @@ function updateMasteryStudyButtons() {
 
 function updateMasteryStudyTextDisplay() {
 	if (!tmp.ngp3) return
-	getEl("costmult").textContent = shorten(mTs.costMult)
-	getEl("totalmsbought").textContent = mTs.bought
-	getEl("totalttspent").textContent = shortenDimensions(mTs.ttSpent)
+	el("costmult").textContent = shorten(mTs.costMult)
+	el("totalmsbought").textContent = mTs.bought
+	el("totalttspent").textContent = shortenDimensions(mTs.ttSpent)
 	for (var i = 0; i < mTs.timeStudies.length; i++) {
 		var name = mTs.timeStudies[i]
 		if (!mTs.studyUnl.includes(name)) break
 
 		var req = mTs.unlockReqDisplays[name] && mTs.unlockReqDisplays[name]()
-		getEl("mts" + name + "Cost").textContent = shortenDimensions(mTs.costs.time[name])
-		if (req) getEl("mts" + name + "Req").innerHTML = "<br>Requirement: " + req
+		el("mts" + name + "Cost").textContent = shortenDimensions(mTs.costs.time[name])
+		if (req) el("mts" + name + "Req").innerHTML = "<br>Requirement: " + req
 	}
 	for (id = 13; id <= mTs.ecsUpTo; id++) {
 		if (!mTs.studyUnl.includes("ec" + id)) break
-		getEl("ec" + id + "Cost").textContent = "Cost: " + shorten(mTs.costs.ec[id]) + " Time Theorems"
-		getEl("ec" + id + "Req").style.display = player.etercreq == id ? "none" : "block"
-		getEl("ec" + id + "Req").textContent = "Requirement: " + mTs.ecReqDisplays[id]()
+		el("ec" + id + "Cost").textContent = "Cost: " + shorten(mTs.costs.ec[id]) + " Time Theorems"
+		el("ec" + id + "Req").style.display = player.etercreq == id ? "none" : "block"
+		el("ec" + id + "Req").textContent = "Requirement: " + mTs.ecReqDisplays[id]()
 	}
 	for (id = 7; id <= mTs.unlocksUpTo; id++) {
 		if (!mTs.studyUnl.includes("d" + id)) break
 		var req = mTs.unlockReqDisplays["d" + id] && mTs.unlockReqDisplays["d" + id]()
-		getEl("ds" + id + "Cost").textContent = "Cost: " + shorten(mTs.costs.dil[id]) + " Time Theorems"
-		if (req) getEl("ds" + id + "Req").innerHTML = pH.did("ghostify") ? "" : "<br>Requirement: " + req
+		el("ds" + id + "Cost").textContent = "Cost: " + shorten(mTs.costs.dil[id]) + " Time Theorems"
+		if (req) el("ds" + id + "Req").innerHTML = pH.did("ghostify") ? "" : "<br>Requirement: " + req
 	}
 }
 
 function drawMasteryBranch(id1, id2) {
 	var type1 = id1.split("ec")[1] ? "c" : id1.split("dil")[1] ? "d" : id1.split("mts")[1] ? "t" : undefined
 	var type2 = id2.split("ec")[1] ? "c" : id2.split("dil")[1] ? "d" : id2.split("mts")[1] ? "t" : undefined
-	var start = getEl(id1).getBoundingClientRect();
-	var end = getEl(id2).getBoundingClientRect();
+	var start = el(id1).getBoundingClientRect();
+	var end = el(id2).getBoundingClientRect();
 	var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
 	var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
 	var x2 = end.left + (end.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
@@ -836,7 +823,7 @@ function drawMasteryBranch(id1, id2) {
 function drawMasteryTree() {
 	msctx.clearRect(0, 0, msc.width, msc.height);
 	if (player === undefined) return
-	if (getEl("eternitystore").style.display === "none" || getEl("masterystudies").style.display === "none" || player.masterystudies === undefined) return
+	if (el("eternitystore").style.display === "none" || el("masterystudies").style.display === "none" || player.masterystudies === undefined) return
 
 	drawMasteryBranch("back", "mts241")
 	for (var x = 0; x < mTs.studies.length; x++) {
@@ -849,12 +836,12 @@ function drawMasteryTree() {
 	for (var x = 0; x < mTs.timeStudies.length; x++) {
 		var id = mTs.timeStudies[x]
 		var d = mTs[shiftDown ? "timeStudyTitles" : "timeStudyDescs"][id]
-		getEl("mts" + id + "Desc").innerHTML = evalData(d) || (shiftDown ? "Unknown title." : "Unknown desc.")
+		el("mts" + id + "Desc").innerHTML = evalData(d) || (shiftDown ? "Unknown title." : "Unknown desc.")
 
 		if (shiftDown) {
 			if (!mTs.studyUnl.includes(id)) break
 
-			var start = getEl("mts" + id).getBoundingClientRect();
+			var start = el("mts" + id).getBoundingClientRect();
 			var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
 			var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
 			var mult = getMasteryStudyCostMult("t" + id)
