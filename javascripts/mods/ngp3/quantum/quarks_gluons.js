@@ -987,10 +987,9 @@ var enB = {
 			var lvl = this.lvl(x)
 			var eff = evalData(this.chargeEffs[lvl])
 
-			if (fluc.unl() && fluc_tmp.temp.pos) {
-				var scaling = PCs.milestoneDone(42) ? Math.sqrt(1 - (PCs_save.lvl - 1) / 28) : 1
-				eff = Math.pow(eff, 1 - scaling) * Math.pow(PCs.milestoneDone(42) ? 8 : 6, scaling)
-			}
+			var scaling = PCs.milestoneDone(42) ? Math.sqrt(1 - (PCs_save.lvl - 1) / 28) : 1
+			if (fluc.unl() && fluc_tmp.temp.pos) scaling *= fluc_tmp.temp.pos
+			if (scaling < 1) eff = Math.pow(eff, 1 - scaling) * Math.pow(PCs.milestoneDone(42) ? 8 : 6, scaling)
 
 			if (str.unl() && str_tmp.effs) eff += str_tmp.effs.b1
 			if (hasAch("ng3pr13")) eff += 0.5

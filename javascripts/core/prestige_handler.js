@@ -241,8 +241,8 @@ var pH = {
 				s = !isEmptiness && !aarMod.layerHidden[p] && layers > a
 				s2 = !isEmptiness && layers > a
 				if (s) {
-					t.shown = a
 					a++
+					t.shown = a
 					el(d[0]).className = "presBtn presPos" + a + " " + p + "btn"
 					el(d[1]).className = "presCurrency" + a
 				} else delete t.shown
