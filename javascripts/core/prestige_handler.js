@@ -32,7 +32,7 @@ var pH = {
 		},
 		quantum() {
 			return QCs.inAny() ? QCs.getGoal() :
-				Decimal.gte(getQuantumReqSource(), getQuantumReq(true)) &&
+				Decimal.gte(getQuantumReqSource(), getQuantumReq()) &&
 				(!tmp.ngp3 || tmp.ngp3_mul || ECComps("eterc14") >= 1) &&
 				getQuarkGain().gte(1)
 		},
