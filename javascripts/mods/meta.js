@@ -78,7 +78,7 @@ function getMDGlobalMult() {
 		if (hasAch("ng3p57")) ret = ret.times(1 + player.timeShards.plus(1).log10())
 
 		//Quantum Challenges
-		if (QCs.perkActive(3)) ret = ret.times(Math.log10(player.eternityPoints.e + 1) + 1)
+		if (QCs.perkActive(3)) ret = ret.times(Math.log10(player.eternityPoints.max(1).e + 1) + 1)
 	}
 	return ret
 }
