@@ -4638,7 +4638,6 @@ function gameLoop(diff) {
 		if (player.options.secrets && player.options.secrets.ghostlyNews) nextGhostlyNewsTickerMsg()
 		diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
 	}
-	if (diff >= 21600000) giveAchievement("Don't you dare sleep")
 	player.lastUpdate = thisUpdate
 
 	diff = Math.max(diff / 1e3, 0)
@@ -4796,7 +4795,9 @@ function simulateTime(seconds, real, id) {
 		gameLoop(50+bonusDiff)
 		autoBuyerTick();
 	}
+
 	simulate = false
+	if (seconds >= 21600) giveAchievement("Don't you dare sleep")
 
 	closeToolTip()
 	var popupString = "While you were away"
