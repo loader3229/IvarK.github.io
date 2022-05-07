@@ -2834,9 +2834,9 @@ function migrateOldSaves() {
 //Save Storage System
 var beta = false
 var preBeta = false
-var betaId = beta || preBeta ? "A-" : ""
-var correctBetaId = "A-"
-var betaLink = "Respecced-Alpha"
+var betaId = beta || preBeta ? "PR-" : ""
+var correctBetaId = "PR-"
+var betaLink = "Positrons-Rework"
 
 //Was "ds" before Respecced happened.
 var prefix = "Gds"
