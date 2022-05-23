@@ -34,6 +34,7 @@ function setupFooterHTML() {
 				)
 			: 
 				"<a href='http://discord.gg/KsjcgskgTj' target='_newtab'>Discord</a> | " +
+				"<a href='http://aarextiaokhiao.github.io/NG-plus-3/' target='_newtab'>NG+3</a> | " + 
 				betaLink != "" ? "<a href='http://rawgit.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Test server</a>" : ""
 			) + 
 		"</div></tr></td></table>"
