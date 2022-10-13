@@ -22,21 +22,11 @@ var gameSpeed = 1
 
 function setupFooterHTML() {
 	var html = "<table id='footer' style='display: table !important'><tr><td><div style='text-align: center'>" + 
+			"<a href='http://aarextiaokhiao.github.io/NG-plus-3/' target='_newtab'>NG+3</a> | " +
 			"<a href='howto.html' target='_newtab'>How to play</a> | " + 
-			"<a href='about.html' target='_newtab'>About</a> | " + 
-			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a> |-| " + 
-			"<a href='http://ng-plus-plus-plus.fandom.com' target='_newtab'>Wiki</a> | " +  
-			(beta || preBeta ?
-				(
-					!checkCorrectBeta() ?
-					"<a href='http://rawgit.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Correct Test Server</a>" :
-					"<a href='http://discord.gg/7v82CAX'>Test Server: Discord</a>"
-				)
-			: 
-				"<a href='http://discord.gg/KsjcgskgTj' target='_newtab'>Discord</a> | " +
-				"<a href='http://aarextiaokhiao.github.io/NG-plus-3/' target='_newtab'>NG+3</a> | " + 
-				betaLink != "" ? "<a href='http://rawgit.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Test server</a>" : ""
-			) + 
+			"<a href='about.html' target='_newtab'>About</a> | - | " + 
+			"<a href='http://ng-plus-plus-plus.fandom.com' target='_newtab'>Wiki</a> | " + 
+			"<a href='http://discord.gg/KsjcgskgTj' target='_newtab'>Discord</a>" +
 		"</div></tr></td></table>"
 
 	var footers = document.getElementsByClassName("footer")

@@ -1798,7 +1798,7 @@ function setSomeQuantumAutomationDisplay(){
 		if (tmp.ngp3) {
 			el('versionDescAlpha').style.display = beta ? "" : "none"
 			el('warningBeta').textContent = beta ? "THIS BETA IS CURRENTLY IN ALPHA, ANYTHING CAN BREAK" :
-				"THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK"
+				"THIS UPDATE IS ABANDONED, DUE TO NG+3 DEVELOPMENT BEING ENDED SOON."
 		}
 }
 
