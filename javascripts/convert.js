@@ -20,7 +20,7 @@ function eligibleConvert() {
 
 function convertSave(conversion) {
 	if (conversion === "NG+3") {
-		if (!confirm("Upon converting to NG+3, this save will no longer be able to be reverted back into its original state. It is recommended to export before converting, so that you don't lose anything upon conversion. Are you sure you want to convert this save to NG+3?"))
+		if (!confirm("Upon converting to NG+3R, this save will no longer be able to be reverted back into its original state. It is recommended to export before converting, so that you don't lose anything upon conversion. Are you sure you want to convert this save to NG+3?"))
 			return;
 		clearInterval(gameLoopIntervalId);
 		doNGPlusTwoNewPlayer();

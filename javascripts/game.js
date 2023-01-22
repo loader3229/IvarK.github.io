@@ -22,9 +22,10 @@ var gameSpeed = 1
 
 function setupFooterHTML() {
 	var html = "<table id='footer' style='display: table !important'><tr><td><div style='text-align: center'>" + 
-			"<a href='http://aarextiaokhiao.github.io/NG-plus-3/' target='_newtab'>NG+3</a> | " +
+			"<a href='http://mrredshark77.github.io/NG-plus-3CR/' target='_newtab'>NG+3 Classic Reloaded</a> (Take 2) |-| " +
+			"NG+3 Respecced: " + 
 			"<a href='howto.html' target='_newtab'>How to play</a> | " + 
-			"<a href='about.html' target='_newtab'>About</a> | - | " + 
+			"<a href='about.html' target='_newtab'>About</a> | " + 
 			"<a href='http://ng-plus-plus-plus.fandom.com' target='_newtab'>Wiki</a> | " + 
 			"<a href='http://discord.gg/KsjcgskgTj' target='_newtab'>Discord</a>" +
 		"</div></tr></td></table>"
