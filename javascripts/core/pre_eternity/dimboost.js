@@ -115,7 +115,7 @@ function getShiftRequirement(num = 0) {
 	let amount = 20
 	let mult = getDimboostCostIncrease()
 
-	if (inNGM(4) && !inNGM(5)) amount = 10
+	if (inNGM(4) && !inNGM(5) && !aarMod.newGame4MinusRespeccedVersion) amount = 10
 	if (dim == maxDim) {
 		amount += Math.max(num - (maxDim - minDim) - (inNGM(2) && !inNGM(3) && hasGalUpg(21) ? 2 : 0), 0) * mult
 	}
@@ -142,7 +142,7 @@ function getShiftRequirement(num = 0) {
 
 function getDimboostCostIncrease () {
 	let ret = 15
-	if (inNGM(4)) ret += 5
+	if (inNGM(4) && !aarMod.newGame4MinusRespeccedVersion) ret += 5
 	if (player.currentChallenge=="postcngmm_1") return ret
 	if (inNGM(2)) {
 		if (hasGalUpg(21)) ret -= 10

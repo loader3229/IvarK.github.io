@@ -370,7 +370,25 @@ var softcap_data = {
 			pow: .8,
 			derv: true
 		}
-	}
+	},
+
+	//NG-4R Hell?
+	
+	ts_ngm4r: {
+		name: "Effective Time Shards (NG-4R)",
+		1: {
+			func: "dilate",
+			start: E(10),
+			base: 10,
+			pow: function(){return dilationPowerStrength()}
+		}
+	},
+	td_ngm4r: {
+		name: "Time Dimensions Multipliers (NG-4R)",
+	},
+	nd_ngm4r: {
+		name: "Normal Dimensions Multipliers (NG-4R)",
+	},
 }
 
 var softcap_vars = {
@@ -520,6 +538,9 @@ function getSoftcapAmtFromId(id){
 		//NGmX
 
 		ids_ngm4: () => getBestUsedIDPower(),
+		
+		ts_ngm4r: () => player.timeShards,
+		td_ngm4r: () => getTimeDimensionPower(1),
 		//this is actually wrong, need to make sure to only take the softcaps of the ones you have unlocked--make a function for it
 	}[id]()
 
@@ -682,6 +703,9 @@ function updateSoftcapStatsTab(){
 		tp_ngC: "softcap_C_tp",
 		//NGmX
 		ids_ngm4: "softcap_m4_id",
+		ts_ngm4r: "softcap_m4r_ts",
+		td_ngm4r: "softcap_m4r_td",
+		nd_ngm4r: "softcap_m4r_nd",
 	}
 	let n = Object.keys(names)
 	let anyActive = false

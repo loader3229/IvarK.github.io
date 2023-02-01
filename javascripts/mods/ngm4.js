@@ -1,7 +1,9 @@
 function getTDBoostReq() {
 	let amount = player.tdBoosts > 2 || player.pSac !== undefined ? 10 : 2
+	if(aarMod.newGame4MinusRespeccedVersion)amount = 12
 	let maxTier = inNC(4) || player.pSac !== undefined ? 6 : 8
 	let mult = inNC(4) || player.pSac !== undefined ? (hasPU(33) ? 1.5 : 3) : 2
+	if(aarMod.newGame4MinusRespeccedVersion)mult = 2
 	return {
 		amount: Math.ceil(amount + Math.max(player.tdBoosts + (player.pSac ? 0 : 1 - maxTier), 0) * mult), 
 		mult: mult, 
@@ -16,7 +18,7 @@ function buyMaxTDB(){
 		return
 	}
 	let b = 0
-	if (r.amount <= player.timeDimension8.bought) b = 1 + Math.floor((player.timeDimension8.bought - r.amount)/r.mult)
+	if (r.amount <= player.timeDimension8.bought + player.timeDimension8.boughtAntimatter) b = 1 + Math.floor((player.timeDimension8.bought + player.timeDimension8.boughtAntimatter - r.amount)/r.mult)
 	if (!hasAch("r73")) b = Math.min(1, b)
 	b = Math.max(0,b)
 	tdBoost(b)
@@ -24,10 +26,10 @@ function buyMaxTDB(){
 
 function tdBoost(bulk) {
 	let req = getTDBoostReq()
-	if (player["timeDimension" + req.tier].bought < req.amount) return
+	if (player["timeDimension" + req.tier].bought + player["timeDimension" + req.tier].boughtAntimatter < req.amount) return
 	if (cantReset()) return
 	player.tdBoosts += bulk
-	if (!hasAch("r36")) softReset(hasAch("r26") && player.resets >= player.tdBoosts ? 0 : -player.resets)
+	if (!hasAch("r36")) softReset(aarMod.newGame4MinusVersion ? 0 : (hasAch("r26") && player.resets >= player.tdBoosts ? 0 : -player.resets))
 	player.tickBoughtThisInf = updateTBTIonGalaxy()
 	if (inNGM(5)) giveAchievement("Accelerated")
 }
@@ -47,7 +49,7 @@ el("challenge16").onclick = function () {
 
 function autoTDBoostBoolean() {
 	var req = getTDBoostReq()
-	var amount = player["timeDimension" + req.tier].bought
+	var amount = player["timeDimension" + req.tier].bought + player["timeDimension" + req.tier].boughtAntimatter
 	if (!player.autobuyers[14].isOn) return false
 	if (player.autobuyers[14].ticks * 100 < player.autobuyers[14].interval) return false
 	if (amount < req.amount) return false
@@ -72,6 +74,7 @@ function maxHighestTD() {
 }
 
 function getMaxTDCost() {
+	if (aarMod.newGame4MinusRespeccedVersion && !(player.currentChallenge == "postcngm3_1")) return Decimal.pow(10, 50+player.tickspeedBoosts*10)//return Decimal.pow(10, 10000000)
 	if (!hasAch("r36")) return Number.MAX_VALUE
 	let x = Decimal.pow(Number.MAX_VALUE, 10)
 

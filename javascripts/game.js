@@ -306,7 +306,7 @@ function updateNewPlayer(mode, preset) {
 			ngp: aarMod.ngpX ? aarMod.ngpX - 2 : aarMod.newGamePlusVersion !== undefined ? 1 : 0,
 			arrows: aarMod.newGameExpVersion !== undefined,
 			ngpp: player.meta == undefined ? false : aarMod.ngp3lV ? 3 : tmp.ngp3 ? 2 : 1,
-			ngmm: tmp.ngmX ? tmp.ngmX - 1 : inNGM(2) ? 1 : 0,
+			ngmm: aarMod.newGame4MinusRespeccedVersion ? 5 : tmp.ngmX ? tmp.ngmX - 1 : inNGM(2) ? 1 : 0,
 			rs: player.infinityUpgradesRespecced != undefined ? 2 : player.boughtDims !== undefined,
 			ngud: aarMod.nguspV !== undefined ? 3 : aarMod.ngudpV !== undefined ? 2 : player.exdilation !== undefined ? 1 : 0,
 			nguep: aarMod.nguepV !== undefined,
@@ -323,13 +323,13 @@ function updateNewPlayer(mode, preset) {
 	} else if (mode == "new") {
 		modsChosen = mods
 	} else if (mode == "meta_started") {
-		modsChosen = modPresets.ngp3
+		modsChosen = modPresets.ngm4r
 	}
 
 	player = {
-		money: E(modsChosen.ngmm>2?200:modsChosen.ngp>1?20:10),
+		money: E(modsChosen.ngmm==5?10:modsChosen.ngmm>2?200:modsChosen.ngp>1?20:10),
 		tickSpeedCost: E(1000),
-		tickspeed: E(modsChosen.ngp>1?500:1000),
+		tickspeed: E(modsChosen.ngmm==5?10000:modsChosen.ngp>1?500:1000),
 		firstCost: E(10),
 		secondCost: E(100),
 		thirdCost: E(10000),
@@ -472,49 +472,57 @@ function updateNewPlayer(mode, preset) {
 			cost: E(1),
 			amount: E(0),
 			power: E(modsChosen.ngm === 1 ? 0.01 : 1),
-			bought: 0
+			bought: 0,
+			boughtAntimatter: 0,
 		},
 		timeDimension2: {
 			cost: E(5),
 			amount: E(0),
 			power: E(modsChosen.ngm === 1 ? 0.03 : 1),
-			bought: 0
+			bought: 0,
+			boughtAntimatter: 0,
 		},
 		timeDimension3: {
 			cost: E(100),
 			amount: E(0),
 			power: E(modsChosen.ngm === 1 ? 0.025 : 1),
-			bought: 0
+			bought: 0,
+			boughtAntimatter: 0,
 		},
 		timeDimension4: {
 			cost: E(1000),
 			amount: E(0),
 			power: E(modsChosen.ngm === 1 ? 0.02 : 1),
-			bought: 0
+			bought: 0,
+			boughtAntimatter: 0,
 		},
 		timeDimension5: {
 			cost: E("1e2350"),
 			amount: E(0),
 			power: E(modsChosen.ngm === 1 ? 1e-5 : 1),
-			bought: 0
+			bought: 0,
+			boughtAntimatter: 0,
 		},
 		timeDimension6: {
 			cost: E("1e2650"),
 			amount: E(0),
 			power: E(modsChosen.ngm === 1 ? 5e-6 : 1),
-			bought: 0
+			bought: 0,
+			boughtAntimatter: 0,
 		},
 		timeDimension7: {
 			cost: E("1e3000"),
 			amount: E(0),
 			power: E(modsChosen.ngm === 1 ? 3e-6 : 1),
-			bought: 0
+			bought: 0,
+			boughtAntimatter: 0,
 		},
 		timeDimension8: {
 			cost: E("1e3350"),
 			amount: E(0),
 			power: E(modsChosen.ngm === 1 ? 2e-6 : 1),
-			bought: 0
+			bought: 0,
+			boughtAntimatter: 0,
 		},
 		offlineProd: 0,
 		offlineProdCost: modsChosen.ngm === 1 ? 5e11 : 1e7,
@@ -636,11 +644,13 @@ function updateNewPlayer(mode, preset) {
 		if (modsChosen.ngm === 2) ngmR.setup()
 		if (modsChosen.ngmm) {
 			tmp.ngmX = modsChosen.ngmm + 1
+			if(modsChosen.ngmm == 5)tmp.ngmX = 4
 			aarMod.ngmX = tmp.ngmX
 			doNGMinusTwoNewPlayer()
 
 			if (tmp.ngmX >= 3) doNGMinusThreeNewPlayer()
 			if (tmp.ngmX >= 5) doNGMinusFivePlayer()
+			if (modsChosen.ngmm == 5) doNGMinusFourRespeccedPlayer()
 			if (tmp.ngmX >= 4) doNGMinusFourPlayer()
 		}
 
@@ -999,6 +1009,16 @@ function doNGMinusFourPlayer(){
 	reduceDimCosts()
 }
 
+function doNGMinusFourRespeccedPlayer(){
+	aarMod.newGame4MinusRespeccedVersion = 3 // NG-4R Version
+	player.infchallengeTimes.push(600*60*24*31)
+	player.infchallengeTimes.push(600*60*24*31)
+	player.infchallengeTimes.push(600*60*24*31)
+	player.infchallengeTimes.push(600*60*24*31)
+	resetTDsOnNGM4()
+	reduceDimCosts()
+}
+
 function doNGMinusFivePlayer(){
 	aarMod.ngm5V = 0.52
 	updateGalstones()
@@ -1321,7 +1341,9 @@ function updateMoney() {
 	else if (inNC(12) || player.currentChallenge == "postc1") element2.innerHTML = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " matter."
 
 	var element3 = el("chall13Mult");
-	if (isADSCRunning()) {
+	if(aarMod.newGame4MinusRespeccedVersion){
+		element3.innerHTML = "Dilation Effect: exponent ^"+dilationPowerStrength().toFixed(4);
+	}else if (isADSCRunning()) {
 		var mult = getProductBoughtMult()
 		element3.innerHTML = formatValue(player.options.notation, productAllTotalBought(), 2, 1) + 'x multiplier on all Dimensions (product of '+(inNGM(3)&&(inNC(13)||player.currentChallenge=="postc1")?"1+log10(amount)":"bought")+(mult==1?"":"*"+shorten(mult))+').'
 	}
@@ -1639,7 +1661,8 @@ function changeSaveDesc(saveId, placement) {
 		} else if (temp.meta) msg += exp + "++" + (temp.masterystudies ? "+" : "")
 		else if (temp.aarexModifications.newGamePlusVersion) msg += exp + "+"
 		var ngmX = calcNGMX(temp)
-		if (ngmX >= 4) msg += "-" + ngmX
+		if (aarMod.newGame4MinusRespeccedVersion) msg += "-4R"
+		else if (ngmX >= 4) msg += "-" + ngmX
 		else if (ngmX) msg += "-".repeat(ngmX)
 		var diffNum = calcDifficulty(temp)
 		if (ngmX < 2 && temp.aarexModifications.ngmR !== undefined) msg = msg != "" || ex ? msg + "-R" : msg + "- Remade"
@@ -1732,7 +1755,8 @@ var modPresets = {
 	ngp3: {ngpp: 2, ngp: 1},
 	grand_run: {ngpp: 2},
 	beginner_mode: {ngpp: 2, diff: 1},
-	expert_mode: {ngpp: 2, ngp: 1, diff: 2}
+	expert_mode: {ngpp: 2, ngp: 1, diff: 2},
+	ngm4r: {ngmm: 5},
 }
 var modFullNames = {
 	diff: "Difficulty",
@@ -1759,7 +1783,7 @@ var modSubNames = {
 	ngp: ["OFF", "ON", "NG+4"/*, "NG+5"*/], //There's no NG+ Classic, because earth doesn't want us to bring NG+ Classic back.
 	ngpp: ["OFF", "ON", "NG+++"],
 	arrows: ["Linear (↑⁰)", "Exponential (↑)"/*, "Tetrational (↑↑)"*/],
-	ngmm: ["OFF", "ON", "NG---", "NG-4", "NG-5"/*, "NG-6"*/],
+	ngmm: ["OFF", "ON", "NG---", "NG-4", "NG-5", "NG-4R"],
 	rs: ["OFF", "Infinity 💀", "Eternity 💀", /*"Dilation"*/], //Dilation won't be rewritten. >:)
 	ngud: ["OFF", "ON", "Prime (')", "Semiprime (S')"/*, "Semiprime.1 (S'.1)"*/],
 	nguep: ["Linear' (↑⁰')", "Exponential' (↑')"/*, "Tetrational' (↑↑')"*/],
@@ -4110,13 +4134,18 @@ function nonERFreeTickUpdating(){
 	if (thresholdMult < 1.1 && player.galacticSacrifice == undefined) thresholdMult = 1.05 + 0.05 / (2.1 - thresholdMult)
 	if (thresholdMult < 1.01 && inNGM(2)) thresholdMult = 1.005 + 0.005 / (2.01 - thresholdMult)
 
+	if (aarMod.newGame4MinusRespeccedVersion)thresholdMult = hasTimeStudy(171) ? 1.13 : 1.15
+	
 	let thresholdExp = 1
 
-	gain = Math.ceil(E(player.timeShards).dividedBy(player.tickThreshold).log10() / Math.log10(thresholdMult) / thresholdExp)
+	let ts = E(player.timeShards);
+	if(aarMod.newGame4MinusRespeccedVersion)ts = softcap(ts,"ts_ngm4r");
+	gain = Math.ceil(E(ts).dividedBy(player.tickThreshold).log10() / Math.log10(thresholdMult) / thresholdExp)
 	player.totalTickGained += gain
 	player.tickspeed = player.tickspeed.times(Decimal.pow(tmp.tsReduce, gain))
 	player.postC3Reward = Decimal.pow(getIC3Mult(), gain * getIC3EffFromFreeUpgs()).times(player.postC3Reward)
 	var base = inNGM(4) ? 0.01 : (player.tickspeedBoosts ? .1 : 1)
+	if(aarMod.newGame4MinusRespeccedVersion)base = Decimal.pow(thresholdMult,-getNGM4RTBPower());
 	player.tickThreshold = Decimal.pow(thresholdMult, player.totalTickGained * thresholdExp).times(base)
 	el("totaltickgained").textContent = "You've gained " + getFullExpansion(player.totalTickGained) + " tickspeed upgrades."
 	tmp.tickUpdate = true

@@ -266,7 +266,7 @@ function dilates(x, m) {
 
 function dilationPowerStrength() {
 	let pow = 0.75
-	if (tmp.ngmX >= 4) pow = 0.7
+	if (tmp.ngmX >= 4 && !aarMod.newGame4MinusRespeccedVersion) pow = 0.7
 	return pow;
 }
 

@@ -403,7 +403,7 @@ function getIC3Base() {
 	if (player.currentChallenge == "postcngmm_3") return 1
 
 	let perGalaxy = 0.005
-	if (inNGM(4)) perGalaxy = 0.002
+	if (inNGM(4) && !aarMod.newGame4MinusRespeccedVersion) perGalaxy = 0.002
 	if (!inNGM(2)) return player.galaxies * perGalaxy + 1.05
 
 	if (tmp.cp > 1) {

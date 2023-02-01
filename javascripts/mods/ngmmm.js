@@ -5,6 +5,7 @@ function getTickspeedBoostRequirement(bulk = 1) {
 		if (hasGalUpg(34)) mult = 4
 		if (player.infinityUpgrades.includes("postinfi52")) mult = 3
 	}
+	if (aarMod.newGame4MinusRespeccedVersion)return {tier: 8, amount: resets * 10 + 30, mult: 10}
 	return {tier: inNC(4) || player.pSac != undefined ? 6 : 8, amount: resets * mult + (inNC(15) && tmp.ngmX > 3 ? 10 : 30), mult: mult}
 }
 
@@ -77,6 +78,7 @@ function divideTickspeedIC5() {
 }
 
 function getInitPostC3Power(){
+	if(aarMod.newGame4MinusRespeccedVersion)return 0;
 	var ic3Power = 0
 	if (player.tickspeedBoosts != undefined && player.currentChallenge != "postc5") {
 		let mult = 30
@@ -100,4 +102,8 @@ function getInitPostC3Power(){
 	}
 	if ((inNC(15) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_3") && tmp.ngmX > 3) ic3Power -= (player.resets + player.tdBoosts) * 10
 	return ic3Power
+}
+
+function getNGM4RTBPower(){
+	return Math.pow(player.tickspeedBoosts,0.9)*100;
 }

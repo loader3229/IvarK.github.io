@@ -128,6 +128,7 @@ function getD8Exp(){
 }
 
 function galacticSacrifice(auto, force, chall) {
+	if (aarMod.newGame4MinusRespeccedVersion) return alert("Galactic Sacrifice is coming soon in NG-4R v3...");
 	if (getGSAmount().eq(0) && !force) return
 	if (tmp.ri) return
 	if (player.options.gSacrificeConfirmation && !auto && !force) if (!confirm("Galactic Sacrifice will act like a Galaxy reset, but will remove all your Galaxies in exchange for Galaxy Points to buy powerful upgrades. It will take a lot of time to recover initially. Are you sure you want to do this?")) return
@@ -285,7 +286,7 @@ function reduceDimCosts(upg) {
 		if (hasGalUpg(11)) div = galMults.u11()
 		for (var d = 1; d < 9; d++) {
 			var name = TIER_NAMES[d]
-			if (inNGM(4) && !upg) {
+			if (inNGM(4) && !aarMod.newGame4MinusRespeccedVersion && !upg) {
 				player[name + "Cost"] = player[name + "Cost"].pow(1.25).times(10)
 				player.costMultipliers[d - 1] = player.costMultipliers[d - 1].pow(1.25)
 			}
@@ -375,10 +376,11 @@ function resetTotalBought() { //uhh what does this do?
 }
 
 function productAllTotalBought() {
+	if(aarMod.newGame4MinusRespeccedVersion)return 1;
 	var ret = 1;
 	var mult = getProductBoughtMult()
 	for (var i = 1; i <= 8; i++) {
-		if (inNC(13) && player.tickspeedBoosts != undefined) ret = Decimal.times(player[TIER_NAMES[i] + "Amount"].max(1).log10(), mult).add(1).times(ret);
+		if (inNC(13) && player.tickspeedBoosts != undefined && aarMod.newGame4MinusRespeccedVersion == undefined) ret = Decimal.times(player[TIER_NAMES[i] + "Amount"].max(1).log10(), mult).add(1).times(ret);
 		else if (player.totalBoughtDims[TIER_NAMES[i]]) ret = Decimal.times(ret, player.totalBoughtDims[TIER_NAMES[i]] ? Decimal.times(player.totalBoughtDims[TIER_NAMES[i]], mult).max(1) : 1);
 	}
 	return ret;

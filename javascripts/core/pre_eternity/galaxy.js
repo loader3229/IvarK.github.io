@@ -56,6 +56,9 @@ function getGalaxyRequirement(offset = 0, display) {
 	var base = 80
 	if (inNGM(2)) base -= (hasGalUpg(22) && tmp.grd.gals >= 1) ? 80 : 60
 	if (inNGM(4)) base -= 10
+	
+	if (aarMod.newGame4MinusRespeccedVersion) base = 40;
+	
 	if (inNC(4) || inNGM(5)) base = inNGM(3) ? base + (inNGM(4) ? 20 : -30) : 99
 
 	var amt = base

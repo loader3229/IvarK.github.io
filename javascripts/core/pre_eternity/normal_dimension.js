@@ -308,7 +308,7 @@ function getDimensionPowerMultiplier(focusOn, debug) {
 
 function getMPTPreInfBase() {
 	let x = 2
-	if (player.tickspeedBoosts !== undefined) x = 1
+	if (player.tickspeedBoosts !== undefined && !aarMod.newGame4MinusRespeccedVersion) x = 1
 	if (aarMod.newGameExpVersion) x *= 10
 	if (aarMod.newGameMult) x *= 2.1
 	if (tmp.bgMode) x *= 1.05
@@ -422,7 +422,7 @@ function getMaxDimensionsOutsideOfChallenges() {
 
 function getDimensionCostMultiplierIncrease() {
 	let ret = player.dimensionMultDecrease
-	if (inNGM(4)) ret = Math.pow(ret, 1.25)
+	if (inNGM(4) && !aarMod.newGame4MinusRespeccedVersion) ret = Math.pow(ret, 1.25)
 	if (player.currentChallenge === 'postcngmm_2') {
 		exp = tmp.ngmX >= 4 ? .9 : .5
 		ret = Math.pow(ret, exp)
@@ -552,6 +552,7 @@ function getOrSubResource(tier, sub) {
 
 function getDimensionProductionPerSecond(tier) {
 	let ret = player[TIER_NAMES[tier] + 'Amount'].floor()
+	if(aarMod.newGame4MinusRespeccedVersion)ret = player[TIER_NAMES[tier] + 'Amount']
 	if ((inNC(7) || player.currentChallenge == "postcngm3_3") && !inNGM(2)) {
 		if (tier == 4) ret = ret.pow(1.3)
 		else if (tier == 2) ret = ret.pow(1.5)
@@ -567,6 +568,7 @@ function getDimensionProductionPerSecond(tier) {
 	if (tier == 1 && (inNC(3) || player.currentChallenge == "postc1")) ret = ret.times(player.chall3Pow)
 	if (player.tickspeedBoosts != undefined) ret = ret.div(10)
 	if (tmp.ngmX > 3) ret = ret.div(10)
+	if (aarMod.newGame4MinusRespeccedVersion) ret = ret.times(100)
 	if (tier == 1 && (inNC(7) || player.currentChallenge == "postcngm3_3" || player.pSac !== undefined)) ret = ret.plus(getDimensionProductionPerSecond(2))
 
 	let tick = dilates(Decimal.div(1e3, getTickspeed()), "tick")
