@@ -145,6 +145,7 @@ function getDimboostCostIncrease () {
 	if (inNGM(4) && !aarMod.newGame4MinusRespeccedVersion) ret += 5
 	if (player.currentChallenge=="postcngmm_1") return ret
 	if (inNGM(2)) {
+		if (hasGalUpg(21) && aarMod.newGame4MinusRespeccedVersion) ret += 5
 		if (hasGalUpg(21)) ret -= 10
 		if (hasGalUpg(43) && tmp.ngmX >= 4) {
 			e = hasGalUpg(46) ? galMults["u46"]() : 1

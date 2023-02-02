@@ -58,6 +58,7 @@ function getGalaxyRequirement(offset = 0, display) {
 	if (inNGM(4)) base -= 10
 	
 	if (aarMod.newGame4MinusRespeccedVersion) base = 40;
+	if (aarMod.newGame4MinusRespeccedVersion && hasGalUpg(22) && tmp.grd.gals >= 1) base = 10;
 	
 	if (inNC(4) || inNGM(5)) base = inNGM(3) ? base + (inNGM(4) ? 20 : -30) : 99
 
@@ -116,6 +117,7 @@ function getGalaxyReqMultiplier() {
 	var ret = 60
 	if (inNGM(2)) {
 		if (hasGalUpg(22)) ret -= 30
+		if (aarMod.newGame4MinusRespeccedVersion && hasGalUpg(22)) ret += 20;
 	} else if (hasTimeStudy(42)) ret *= tsMults[42]()
 	if (inNC(4)) ret = 90
 	if (tmp.ngC) ret -= 35

@@ -1661,7 +1661,7 @@ function changeSaveDesc(saveId, placement) {
 		} else if (temp.meta) msg += exp + "++" + (temp.masterystudies ? "+" : "")
 		else if (temp.aarexModifications.newGamePlusVersion) msg += exp + "+"
 		var ngmX = calcNGMX(temp)
-		if (aarMod.newGame4MinusRespeccedVersion) msg += "-4R"
+		if (temp.aarexModifications.newGame4MinusRespeccedVersion) msg += "-4R"
 		else if (ngmX >= 4) msg += "-" + ngmX
 		else if (ngmX) msg += "-".repeat(ngmX)
 		var diffNum = calcDifficulty(temp)
@@ -2359,7 +2359,7 @@ function calcSacrificeBoostBeforeSoftcap() {
 		ret = player.firstAmount.div(player.sacrificed.max(1)).pow(pow).max(1)
 	} else if (!inNC(11)) {
 		pow = 2
-		if (hasAch("r32")) pow += inNGM(3) ? 2 : 0.2
+		if (hasAch("r32")) pow += (inNGM(3) && !aarMod.newGame4MinusRespeccedVersion) ? 2 : 0.2
 		if (hasAch("r57")) pow += player.boughtDims ? 0.3 : 0.2 //this upgrade was too OP lol
 		if (player.infinityUpgradesRespecced) pow *= getInfUpgPow(5)
 		if (tmp.ngmR) pow *= 1.5
@@ -2419,7 +2419,7 @@ function sacrifice(auto = false) {
 	if (player.resets < 5) return false
 	if (player.currentEternityChall == "eterc3") return false
 	var sacGain = calcSacrificeBoost()
-	var maxPower = inNGM(2) ? "1e8888" : Number.MAX_VALUE
+	var maxPower = aarMod.newGame4MinusRespeccedVersion ? 1e20 : inNGM(2) ? "1e8888" : Number.MAX_VALUE
 	if (inNC(11) && (tmp.sacPow.gte(maxPower) || player.chall11Pow.gte(maxPower))) return false
 	if (!auto) floatText("D8", "x" + shortenMoney(sacGain))
 	player.sacrificed = player.sacrificed.plus(player.firstAmount);

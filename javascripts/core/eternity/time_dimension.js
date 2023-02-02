@@ -25,6 +25,12 @@ function doNGMatLeast4TDChanges(tier, ret){
 	ret = ret.times(x.pow(exp))
 
 	if (aarMod.newGame4MinusRespeccedVersion) ret = ret.times(Decimal.pow(1.5,player["timeDimension"+tier].boughtAntimatter).mul(0.5));
+	
+  if (aarMod.newGame4MinusRespeccedVersion && player.currentChallenge != "postcngm3_3"){
+	  let base=2;
+	  //if(player.challenges.includes("postcngm3_3"))base=Decimal.pow(base,Math.max(Math.sqrt(player.galacticSacrifice.galaxyPoints.max(1).log10()) / 3,1));
+	  ret = ret.mul(Decimal.pow(base,Math.max(player.tdBoosts - tier + 1,0)));
+  }
 		
 	//NG-4 upgrades
 	if (hasGalUpg(12)) ret = ret.times(galMults.u12())
@@ -35,7 +41,7 @@ function doNGMatLeast4TDChanges(tier, ret){
 		let e = hasGalUpg(46) ? galMults["u46"]() : 1
 		ret = ret.times(Decimal.pow(player[TIER_NAMES[tier]+"Amount"].plus(10).log10(), e * Math.pow(11 - tier, 2)))
 	}
-	if (hasGalUpg(31)) ret = ret.pow(galMults.u31())
+	if (hasGalUpg(31) && !aarMod.newGame4MinusRespeccedVersion) ret = ret.pow(galMults.u31())
 	return ret
 }
 

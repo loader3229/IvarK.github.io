@@ -210,6 +210,7 @@ function getDimensionFinalMultiplier(tier) {
 	if (player.currentEternityChall == "eterc10") mult = mult.times(ec10bonus)	
 
 	if (mult.gt(10)) mult = dilates(mult.max(1), 2)
+	if (aarMod.newGame4MinusRespeccedVersion) mult = softcap(mult, "nd_ngm4r")
 	mult = mult.times(getAfterDefaultDilationLayerAchBonus(tier))
 	if (player.currentChallenge == "postc4" && player.tickspeedBoosts != undefined) mult = mult.sqrt()
 

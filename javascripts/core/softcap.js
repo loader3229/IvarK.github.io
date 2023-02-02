@@ -384,10 +384,22 @@ var softcap_data = {
 		}
 	},
 	td_ngm4r: {
-		name: "Time Dimensions Multipliers (NG-4R)",
+		name: "Time Dimension Multipliers (NG-4R)",
 	},
 	nd_ngm4r: {
-		name: "Normal Dimensions Multipliers (NG-4R)",
+		name: "Normal Dimension Multipliers (NG-4R)",
+		1: {
+			func: "dilate",
+			start: E(1e25),
+			base: 10,
+			pow: function(){return dilationPowerStrength()}
+		},
+		2: {
+			func: "dilate",
+			start: E(1e35),
+			base: 10,
+			pow: function(){return dilationPowerStrength()}
+		}
 	},
 }
 
@@ -541,6 +553,7 @@ function getSoftcapAmtFromId(id){
 		
 		ts_ngm4r: () => player.timeShards,
 		td_ngm4r: () => getTimeDimensionPower(1),
+		nd_ngm4r: () => getDimensionFinalMultiplier(1),
 		//this is actually wrong, need to make sure to only take the softcaps of the ones you have unlocked--make a function for it
 	}[id]()
 

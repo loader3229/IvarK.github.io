@@ -8,13 +8,13 @@ function getGSAmount(offset=0) {
 	let y = getGSGalaxyExp(galaxies)
 	let z = getGSDimboostExp(galaxies)
 	let resetMult = getTotalDBs()
-	if (inNGM(4)) resetMult = resetMult + player.tdBoosts / 2 - 1
+	if (inNGM(4) && !aarMod.newGame4MinusRespeccedVersion) resetMult = resetMult + player.tdBoosts / 2 - 1
 	resetMult -= inNC(4) ?  2 : 4
-	if (player.tickspeedBoosts !== undefined) resetMult = (resetMult + 1) / 2
+	if (player.tickspeedBoosts !== undefined && !aarMod.newGame4MinusRespeccedVersion) resetMult = (resetMult + 1) / 2
 	let exp = getD8Exp()
 	let div2 = 50
 	if (hasAch("r102")) div2 = 10
-	if (player.totalmoney.log10() > 2e6) div2 /= Math.log(player.totalmoney.log10()) 
+	if (player.totalmoney.log10() > 2e6 && !aarMod.newGame4MinusRespeccedVersion) div2 /= Math.log(player.totalmoney.log10()) 
 	
 	let ret = Decimal.pow(galaxies, y).times(Decimal.pow(Math.max(0, resetMult), z)).max(0)
 	ret = ret.times(Decimal.pow(1 + getAmount(8) / div2, exp))
@@ -35,7 +35,7 @@ function getGSAmount(offset=0) {
 	var rgs = player.replicanti.galaxies
 	if (hasAch("r98")) rgs *= 2
 	if (player.tickspeedBoosts != undefined && hasAch("r95")) ret = ret.times(Decimal.pow(Math.max(1, player.eightAmount), rgs))
-
+	if (player.currentChallenge != "")return ret.min(1)
 	return ret.floor()
 }
 
@@ -63,6 +63,7 @@ function getGPMultipliers(){
 }
 
 function getGSGalaxies() {
+	if (aarMod.newGame4MinusRespeccedVersion)return player.galaxies + player.replicanti.galaxies + player.dilation.freeGalaxies;
 	let galaxies = player.galaxies + player.dilation.freeGalaxies;
 	let rg = getFullEffRGs()
 	if (player.timestudy.studies.includes(133)) rg *= 1.5
@@ -76,6 +77,16 @@ function getGSGalaxies() {
 }
 
 function getGSGalaxyExp(galaxies) {
+	if (aarMod.newGame4MinusRespeccedVersion){
+		let y = 1.5
+		if (player.challenges.includes("postc1")) y += Math.max(0, 0.05*(galaxies - 10)) + 0.005 * Math.pow(Math.max(0, galaxies-30) , 2);
+		if (player.challenges.includes("postcngm3_4")) y += Math.max(0, 0.05*galaxies) + 0.0005 * Math.pow(Math.max(0, galaxies - 50) , 3);
+		if (player.galacticSacrifice.upgrades.includes(62)) y += Math.sqrt(player.replicanti.galaxies);
+		if (player.galacticSacrifice.upgrades.includes(54)) {
+			y *= 2;
+		}
+		return y
+	}
 	let y = 1.5 
 	if (player.challenges.includes("postcngmm_1")) {
 		y += Math.max(0, 0.05 * (galaxies - 10)) + 0.005 * Math.pow(Math.max(0, galaxies-30) , 2)
@@ -98,6 +109,7 @@ function getGSGalaxyExp(galaxies) {
 }
 
 function getGSDimboostExp(galaxies){
+	if (aarMod.newGame4MinusRespeccedVersion)return 1;
 	let z = 1
 	if (tmp.cp > 3) {
 		z = 0.06 * (tmp.cp + 14)
@@ -108,6 +120,7 @@ function getGSDimboostExp(galaxies){
 }
 
 function getD8Exp(){
+	if (aarMod.newGame4MinusRespeccedVersion)return 1;
 	let exp = 1
 	let logBestAM = player.totalmoney.plus(10).log10()
 	if (hasAch("r124")) {
@@ -128,7 +141,7 @@ function getD8Exp(){
 }
 
 function galacticSacrifice(auto, force, chall) {
-	if (aarMod.newGame4MinusRespeccedVersion) return alert("Galactic Sacrifice is coming soon in NG-4R v3...");
+	//if (aarMod.newGame4MinusRespeccedVersion) return alert("Galactic Sacrifice is coming soon in NG-4R v3...");
 	if (getGSAmount().eq(0) && !force) return
 	if (tmp.ri) return
 	if (player.options.gSacrificeConfirmation && !auto && !force) if (!confirm("Galactic Sacrifice will act like a Galaxy reset, but will remove all your Galaxies in exchange for Galaxy Points to buy powerful upgrades. It will take a lot of time to recover initially. Are you sure you want to do this?")) return
@@ -234,10 +247,16 @@ let galCosts = {
 	"43ngm4": 1e28,
 	"44ngm4": 1e31,
 	"45ngm4": 1e34,
-	"46ngm4": 1e40 
+	"46ngm4": 1e40,
+	"14ngm4r": 1e100,
+	"25ngm4r": 1e100,
+	"33ngm4r": 1e100,
+	"41ngm4r": 1e100,
+	"42ngm4r": 1e100,
 }
 
 function getGalaxyUpgradeCost(i) {
+	if (aarMod.newGame4MinusRespeccedVersion && galCosts[i + "ngm4r"]) return E(galCosts[i + "ngm4r"])
 	if (inNGM(4) && galCosts[i + "ngm4"]) return E(galCosts[i + "ngm4"])
 	return galCosts[i]
 }
@@ -547,7 +566,7 @@ let R135 = Math.pow(Math.E + Math.PI + 0.56714 + 4.81047 + 0.78343 + 1.75793 + 2
 //v2.31
 let galMults = {
 	u11: function() {
-		if (player.tickspeedBoosts != undefined) {
+		if (player.tickspeedBoosts != undefined && !aarMod.newGame4MinusRespeccedVersion) {
 			var e = hasGalUpg(46) ? galMults["u46"]() : 1
 			var exp = (inNGM(4) && hasGalUpg(41)) ? 2 * e : 1
 			var l = 0
@@ -565,7 +584,7 @@ let galMults = {
 		if (x > 99) y = Math.pow(Math.log(x), Math.log(x) / z) + 14
 		else if (x > 4) y = Math.sqrt(x + 5) + 4
 		else y = x + 2
-		if (hasAch("r82")) y += 30
+		if (hasAch("r82") && !aarMod.newGame4MinusRespeccedVersion) y += 30
 		
 		//softcap y
 		if (y > 1000) y = Math.sqrt(1000 * y)
@@ -574,6 +593,7 @@ let galMults = {
 	},
 	u31: function() {
 		let x = 1.1 + player.extraDimPowerIncrease * 0.02
+		if(aarMod.newGame4MinusRespeccedVersion) x -= 0.05
 		if (player.dilation.upgrades.includes("ngmm4")) x += 0.1
 		return x
 	},
@@ -585,9 +605,16 @@ let galMults = {
 	u12: function() {
 		var r = 2 * Math.pow(1 + player.galacticSacrifice.time / 600, 0.5)
 		if (inNGM(4) && hasGalUpg(42)) {
-			m = hasGalUpg(46) ? 10 : 4
-			r = Decimal.pow(r, Math.min(m, Math.pow(r, 1/3)))
-			if (hasGalUpg(46)) r = Decimal.pow(r, Math.log10(10 + r)).plus(1e20)
+			if(aarMod.newGame4MinusRespeccedVersion){
+				r = Decimal.max(r, Decimal.pow(r/10, 10))
+			}else{
+				m = hasGalUpg(46) ? 10 : 4
+				r = Decimal.pow(r, Math.min(m, Math.pow(r, 1/3)))
+				if (hasGalUpg(46)) r = Decimal.pow(r, Math.log10(10 + r)).plus(1e20)
+			}
+		}
+		if(aarMod.newGame4MinusRespeccedVersion){
+			return r
 		}
 		r = Decimal.add(r, 0)
 		if (r.gt(1e25)) r = r.div(1e25).pow(.5).times(1e25)
@@ -646,6 +673,7 @@ let galMults = {
 		return player.galacticSacrifice.galaxyPoints.pow(0.25).div(20).max(0.2)
 	},
 	u15: function() {
+		if(aarMod.newGame4MinusRespeccedVersion)return new Decimal(getInfinitied()).pow(1.5).add(10);
 		return Decimal.pow(10, getInfinitied() + 2).max(1).min(1e6).pow(hasGalUpg(16) ? 2 : 1)
 	},
 	u25: function() {
@@ -735,10 +763,12 @@ function getG11Divider(){
 	let c = tmp.cp // challenges completed
 	if (c > 0 && player.challenges.includes("postcngmm_1")) z -= (c + 6) / 4
 	if (c > 6) z += 0.085 * tmp.cp - 0.31
-	if (player.infinityUpgrades.includes("postinfi61")) z -= .1
-	z -= Math.pow(tmp.ec, 0.3)/10
-	if (getEternitied() > 0) z -= 0.5
-	if (z < 6) z = Math.pow(1296 * z, .2)
+	if (player.infinityUpgrades.includes("postinfi61") && !aarMod.newGame4MinusRespeccedVersion) z -= .1
+	if (!aarMod.newGame4MinusRespeccedVersion) z -= Math.pow(tmp.ec, 0.3)/10
+	if (getEternitied() > 0 && !aarMod.newGame4MinusRespeccedVersion) z -= 0.5
+	if (player.infinityUpgrades.includes("postinfi61") && aarMod.newGame4MinusRespeccedVersion){
+		z -= 1.1
+	}else if (z < 6) z = Math.pow(1296 * z, .2)
 	return z
 }
 
@@ -766,6 +796,8 @@ function getNewB60Mult(){
 }
 
 function calcG13Exp(){
+	if (aarMod.newGame4MinusRespeccedVersion && player.currentChallenge == "postcngm3_4")return 0;
+	if (aarMod.newGame4MinusRespeccedVersion)return 3;
 	let exp = 3
 	if (hasAch("r75") && inNGM(4)) exp *= 2
 	if (player.infinityUpgrades.includes("postinfi62") && hasAch("r117") && player.tickspeedBoosts == undefined) {

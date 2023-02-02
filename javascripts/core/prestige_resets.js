@@ -341,7 +341,7 @@ function resetInfDimensions(full) {
 
 function resetTimeDimensions(full) {
 	let boostPower = getDimensionBoostPower()
-	if(aarMod.newGame4MinusRespeccedVersion)boostPower = Math.sqrt(2)
+	if(aarMod.newGame4MinusRespeccedVersion)boostPower = 1
 	let ngm4 = tmp.ngmX >= 4
 	player.timeShards = E(0)
 	player.tickThreshold = E(aarMod.newGame4MinusRespeccedVersion ? 1 : ngm4 ? 0.01 : 1)
@@ -351,7 +351,7 @@ function resetTimeDimensions(full) {
 		if (full || ngm4) {
 			dim.cost = TIME_DIM_COSTS[t].cost()
 			dim.power = ngm4 ? Decimal.pow(boostPower, player.tdBoosts - t + 1) : E(1)
-			dim.bought = 0
+			if(!aarMod.newGame4MinusRespeccedVersion)dim.bought = 0
 			dim.boughtAntimatter = 0
 		}
 		dim.amount = E(dim.bought)

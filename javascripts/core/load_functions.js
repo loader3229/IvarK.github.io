@@ -1402,6 +1402,17 @@ function doNGM4v0tov2111(){
         if (aarMod.newGame4MinusVersion<2.111) aarMod.newGame4MinusVersion=2.111
 }
 
+function doNGM4Rv0tov3(){
+        if (aarMod.newGame4MinusRespeccedVersion<3) {
+                for (d=1;d<9;d++) {
+                        var name = TIER_NAMES[d]
+                        player[name+"Power"] = new Decimal(1);
+                        player["timeDimension"+d].power = player["timeDimension"+d].power.div(Decimal.pow(1.5,player["timeDimension"+d].boughtAntimatter/2));
+                }
+				aarMod.newGame4MinusRespeccedVersion=3
+        }
+}
+
 function doNGM5v0tov052(){
         if (aarMod.ngm5V<0.1) aarMod.ngm5V=0.1
         if (aarMod.ngm5V<0.5) {
@@ -1470,6 +1481,7 @@ function updateVersionsONLOAD(){
 	doNGM5v0tov052()
 	doNGSPUpdatingVersion()
 	dov12tov122()
+	doNGM4Rv0tov3()
 }
 
 function doNGp3Init2(){
@@ -1597,7 +1609,7 @@ function setDisplaysStuff1(){
 
 	if (inNGM(2)) {
 		el("galaxy11").innerHTML = "Normal " + (inNGM(4) ? "and Time " : "") + "Dimensions are " + (pH.did("infinity") ? "cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x" : "99% cheaper.") + "<br>Cost: 1 GP"
-		el("galaxy15").innerHTML = "Normal and Time Dimensions produce " + (pH.did("infinity") ? "faster based on your Infinities.<br>Currently: <span id='galspan15'></span>x" : "100x faster.") + "<br>Cost: 1 GP"
+		el("galaxy15").innerHTML = "Normal and Time Dimensions produce " + (pH.did("infinity") ? "faster based on your Infinities.<br>Currently: <span id='galspan15'></span>x" : aarMod.newGame4MinusRespeccedVersion ? "10x faster." : "100x faster.") + "<br>Cost: 1 GP"
 	} else {
 		let base = getMPTPreInfBase()
 		if (!tmp.ngC) el("infi21desc").innerHTML = "Increase the multiplier for buying 10 Dimensions.<br>" + base.toFixed(1) + "x -> " + (base * infUpg12Pow()).toFixed(1) + "x"
@@ -1713,9 +1725,10 @@ function setInfChallengeDisplay(){
 function setOtherChallDisplay(){
         el("galaxy21").innerHTML=(player.tickspeedBoosts!=undefined?"Reduce the Dimension Boost cost multiplier to "+(tmp.ngmX>3?10:5):"Dimension Boost scaling starts 2 boosts later, and increases the cost by 5 each")+".<br>Cost: 1 GP"
         el("galaxy12").innerHTML="Normal "+(tmp.ngmX>3?"and Time D":"D")+"imensions gain a multiplier based on time spent in this Galactic Sacrifice.<br>Currently: <span id='galspan12'>x</span>x<br>Cost: "+galCosts[12]+" GP"
-        el("galBuff22").textContent=tmp.ngmX>3?2:5
+        el("galaxy22").innerHTML="Galaxies are "+(tmp.ngmX>3?2:5)+"x stronger, reduce the cost by "+(aarMod.newGame4MinusRespeccedVersion?30:20)+" less except for the first, and decrease the cost multiplier to "+(aarMod.newGame4MinusRespeccedVersion?50:30)+".<br>Cost: 5 GP"
         el("galaxy13").innerHTML="Normal "+(tmp.ngmX>3?"and Time D":"D")+"imensions gain a multiplier based on your Galaxy points.<br>Currently: <span id='galspan13'>x</span>x<br>Cost: "+galCosts[13]+" GP"
-        el("galDesc23").textContent="Dimension "+(tmp.ngmX>3?" Boosts and Time Dimension B":"B")+"oosts are stronger based on your Galaxy points."
+        el("galaxy14").innerHTML="Tickspeed Boosts give 32 free tickspeed purchases each.<br>Cost: 300 GP";
+		el("galDesc23").textContent="Dimension "+(tmp.ngmX>3 && !aarMod.newGame4MinusRespeccedVersion?" Boosts and Time Dimension B":"B")+"oosts are stronger based on your Galaxy points."
         el("galcost31").textContent=galCosts[31]
         el("galcost32").textContent=galCosts[32]
         el("preinfupgrades").style.display=player.infinityUpgradesRespecced?"none":""
@@ -1857,7 +1870,7 @@ function updateNGModeMessage(){
 	if (player.infinityUpgradesRespecced) ngModeMessages.push('Welcome to Infinity Respecced, created by Aarex! In this mode, all of infinity upgrades are replaced with new upgrades except for the 2x IP mult, Break Infinity is removed, but there is new content in Infinity.')
 	if (player.boughtDims) ngModeMessages.push('Welcome to Eternity Respecced, created by dan-simon! In this mode, Eternity is changed to be balanced better without any scaling. Note: The port is not complete on this site, so you should search for the separate website for the mod itself to get the latest version.')
 	if (inNGM(2)) {
-		if (aarMod.newGame4MinusRespeccedVersion) ngModeMessages.push('Welcome to NG-4R v3, the respecced version of NG-4! This mode is easier compared to NG-4, made by qq1010903229 (also known as loader3229). Current Endgame is: 1 GP')
+		if (aarMod.newGame4MinusRespeccedVersion) ngModeMessages.push('Welcome to NG-4R v3, the respecced version of NG-4! This mode is easier compared to NG-4, made by qq1010903229 (also known as loader3229). Current Endgame is: 1 IP')
 		else if (tmp.ngmX>4) ngModeMessages.push('Welcome to NG-5, the nerfed version of NG-4! This is very hardcore because you are stuck in more challenges. You are also stuck in Automated Big Crunches Challenge which is a big impact on this mod. Good luck! This mod is made by Aarex, with help from Anthios, Apeirogon, and TheMkeyHolder.')
 		else if (tmp.ngmX>3) ngModeMessages.push('Welcome to NG-4, the nerfed version of NG-3! This mode features even more changes from NG---, and is very hardcore. WIP by Nyan Cat and edited by Aarex.')
 		else if (aarMod.newGame3MinusVersion) ngModeMessages.push('Welcome to NG-3, the nerfed version of NG--! This mode reduces tickspeed multiplier multiplier and nerfs galaxies, but has a new feature called \"Tickspeed Boosts\" and many more changes to NG--.')
