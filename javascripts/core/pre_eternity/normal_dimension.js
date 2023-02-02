@@ -309,6 +309,7 @@ function getDimensionPowerMultiplier(focusOn, debug) {
 
 function getMPTPreInfBase() {
 	let x = 2
+	if (player.tickspeedBoosts !== undefined && aarMod.newGame4MinusRespeccedVersion && inNC(13)) x = 1
 	if (player.tickspeedBoosts !== undefined && !aarMod.newGame4MinusRespeccedVersion) x = 1
 	if (aarMod.newGameExpVersion) x *= 10
 	if (aarMod.newGameMult) x *= 2.1

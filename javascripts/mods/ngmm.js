@@ -248,9 +248,13 @@ let galCosts = {
 	"44ngm4": 1e31,
 	"45ngm4": 1e34,
 	"46ngm4": 1e40,
-	"14ngm4r": 1e100,
-	"25ngm4r": 1e100,
+	
+	"14ngm4r": 3e4,
+	"24ngm4r": 1e100,
+	"25ngm4r": 1e5,
 	"33ngm4r": 1e100,
+	"34ngm4r": 1e100,
+	"35ngm4r": 1e100,
 	"41ngm4r": 1e100,
 	"42ngm4r": 1e100,
 }
@@ -352,6 +356,12 @@ function galacticUpgradeSpanDisplay() {
 		el("galcost52").textContent = shortenCosts(E("1e8000"))
 		el("galcost53").textContent = shortenCosts(E("1e25000"))
 	}
+	if (aarMod.newGame4MinusRespeccedVersion) {
+		el('galcost14').textContent = shortenCosts(3e4)
+		el('galcost25').textContent = shortenCosts(1e5)
+	}else{
+		el('galcost14').textContent = "300"
+	}
 }
 
 function galacticUpgradeButtonTypeDisplay () {
@@ -395,7 +405,7 @@ function resetTotalBought() { //uhh what does this do?
 }
 
 function productAllTotalBought() {
-	if(aarMod.newGame4MinusRespeccedVersion)return 1;
+	if(aarMod.newGame4MinusRespeccedVersion && !inNC(13))return 1;
 	var ret = 1;
 	var mult = getProductBoughtMult()
 	for (var i = 1; i <= 8; i++) {
@@ -655,7 +665,11 @@ let galMults = {
 		return x.plus(1).pow(exp)
 	},
 	u23: function() {
+		if(aarMod.newGame4MinusRespeccedVersion){
+			if(player.currentChallenge == "postcngm3_4")return 1;
+		}
 		let x = player.galacticSacrifice.galaxyPoints.max(1).log10() * .75 + 1
+		if(aarMod.newGame4MinusRespeccedVersion)return x
 		if (!tmp.ngp3l && hasAch("r138")) x *= Decimal.add(player.dilation.bestIP,10).log10()
 		if (hasAch("r75") && inNGM(4)) x *= 2
 		return x
@@ -677,6 +691,9 @@ let galMults = {
 		return Decimal.pow(10, getInfinitied() + 2).max(1).min(1e6).pow(hasGalUpg(16) ? 2 : 1)
 	},
 	u25: function() {
+		if(aarMod.newGame4MinusRespeccedVersion){
+			return 1.5
+		}
 		let r = Math.max(player.galacticSacrifice.galaxyPoints.log10() - 2, 1)
 		if (r > 2.5) r = Math.pow(r * 6.25, 1/3)
 		r =  Math.pow(r, hasGalUpg(26) ? 2 : 1)
@@ -698,6 +715,11 @@ let galMults = {
 		if (r < 1) return 1
 		if (r > 2) return 2
 		return r
+	},
+	u14: function() { // NG-4R ONLY
+	  let base = new Decimal(2);
+	  let exp = player.tickspeedBoosts;
+	  return base.pow(exp);
 	}
 }
 

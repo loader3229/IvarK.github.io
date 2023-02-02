@@ -1341,7 +1341,7 @@ function updateMoney() {
 	else if (inNC(12) || player.currentChallenge == "postc1") element2.innerHTML = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " matter."
 
 	var element3 = el("chall13Mult");
-	if(aarMod.newGame4MinusRespeccedVersion){
+	if(aarMod.newGame4MinusRespeccedVersion && !inNC(13)){
 		element3.innerHTML = "Dilation Effect: exponent ^"+dilationPowerStrength().toFixed(4);
 	}else if (isADSCRunning()) {
 		var mult = getProductBoughtMult()
@@ -2419,7 +2419,7 @@ function sacrifice(auto = false) {
 	if (player.resets < 5) return false
 	if (player.currentEternityChall == "eterc3") return false
 	var sacGain = calcSacrificeBoost()
-	var maxPower = aarMod.newGame4MinusRespeccedVersion ? 1e20 : inNGM(2) ? "1e8888" : Number.MAX_VALUE
+	var maxPower = aarMod.newGame4MinusRespeccedVersion ? 1e10 : inNGM(2) ? "1e8888" : Number.MAX_VALUE
 	if (inNC(11) && (tmp.sacPow.gte(maxPower) || player.chall11Pow.gte(maxPower))) return false
 	if (!auto) floatText("D8", "x" + shortenMoney(sacGain))
 	player.sacrificed = player.sacrificed.plus(player.firstAmount);
@@ -4135,6 +4135,7 @@ function nonERFreeTickUpdating(){
 	if (thresholdMult < 1.01 && inNGM(2)) thresholdMult = 1.005 + 0.005 / (2.01 - thresholdMult)
 
 	if (aarMod.newGame4MinusRespeccedVersion)thresholdMult = hasTimeStudy(171) ? 1.13 : 1.15
+	if (aarMod.newGame4MinusRespeccedVersion && inNC(16))thresholdMult = 100
 	
 	let thresholdExp = 1
 

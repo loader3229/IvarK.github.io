@@ -84,6 +84,7 @@ function getRepToTDExp() {
 function updateInfiniteTimeTemp() {
 	if(aarMod.newGame4MinusRespeccedVersion){
 		tmp.it = player.postC3Reward.pow(0.05)
+		if (hasGalUpg(25)) tmp.it = tmp.it.pow(1.5)
 		return
 	}
 	

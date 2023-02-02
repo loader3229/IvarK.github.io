@@ -105,5 +105,6 @@ function getInitPostC3Power(){
 }
 
 function getNGM4RTBPower(){
+	if (inNC(16) && aarMod.newGame4MinusRespeccedVersion)return 0;
 	return Math.pow(player.tickspeedBoosts,0.9)*100;
 }

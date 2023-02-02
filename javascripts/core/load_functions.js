@@ -1641,10 +1641,11 @@ function setChallengeDisplay(){
         el("tbAutoChallengeDesc").textContent=player.tickspeedBoosts==undefined?"Whenever you buy 10 of a dimension or tickspeed, everything else of equal cost will increase to its next cost step.":"You can't get Tickspeed Boosts and Antimatter Galaxies are 25% weaker."
         el("autoDBChallengeDesc").textContent="There are only 6 dimensions, with Dimension Boost"+(player.tickspeedBoosts==undefined?"":", Tickspeed Boost,")+" and Antimatter Galaxy costs modified."
         el("autoCrunchChallengeDesc").textContent="Each Normal Dimension produces the Dimension 2 tiers before it; First Dimensions produce reduced antimatter. "+(inNGM(2)?"Galaxies are far more powerful.":"")
-        el("autoDSChallengeDesc").textContent=player.tickspeedBoosts==undefined?"Per-ten multiplier is always 1x, but the product of dimensions bought multiplies all dimensions.":"The product of amount is used instead of the product of bought."
+        el("autoDSChallengeDesc").textContent=(aarMod.newGame4MinusRespeccedVersion||player.tickspeedBoosts==undefined)?"Per-ten multiplier is always 1x, but the product of dimensions bought multiplies all dimensions.":"The product of amount is used instead of the product of bought."
         el("autoGSChallengeDesc").textContent=tmp.ngmX>=4?"You can hold up to 10 total Dimension Boosts, Time Dimension Boosts, Tickspeed Boosts, and Galaxies.":(tmp.ngmX>2?"All galaxy upgrades from the third column are disabled and Tickspeed Boosts give 20 free tickspeed purchases each instead.":"You can only get 308 tickspeed upgrades. This count does not reset on resets.")
         el("autoTBChallengeDesc").textContent=tmp.ngmX>=4?"Dimension Boosts and Time Dimension Boosts divide Tickspeed Multiplier instead.":"Dimension Boosts and Galaxies only boost Galaxy point gain and Tickspeed Boosts are nerfed, but Galaxy points boost Tickspeed Boosts."
-        el("infPowEffectPowerDiv").innerHTML = inNGM(2) || tmp.ngC ? "which is raised by <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, and then t" : "which is t"
+        el("challenge16_desc").textContent=aarMod.newGame4MinusRespeccedVersion?"Tickspeed Boosts has no effect. The Time Shard requiement for free Tickspeed Upgrades is increased.":"The Tickspeed Multiplier boost to Time Dimensions is weaker.";
+		el("infPowEffectPowerDiv").innerHTML = inNGM(2) || tmp.ngC ? "which is raised by <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, and then t" : "which is t"
         el("ngmmchalls").style.display=inNGM(2)?"":"none"
         el("ngmmmchalls").style.display=player.tickspeedBoosts==undefined?"none":""
         el("ngm4chall").style.display=tmp.ngmX>3?"":"none"
@@ -1727,7 +1728,14 @@ function setOtherChallDisplay(){
         el("galaxy12").innerHTML="Normal "+(tmp.ngmX>3?"and Time D":"D")+"imensions gain a multiplier based on time spent in this Galactic Sacrifice.<br>Currently: <span id='galspan12'>x</span>x<br>Cost: "+galCosts[12]+" GP"
         el("galaxy22").innerHTML="Galaxies are "+(tmp.ngmX>3?2:5)+"x stronger, reduce the cost by "+(aarMod.newGame4MinusRespeccedVersion?30:20)+" less except for the first, and decrease the cost multiplier to "+(aarMod.newGame4MinusRespeccedVersion?50:30)+".<br>Cost: 5 GP"
         el("galaxy13").innerHTML="Normal "+(tmp.ngmX>3?"and Time D":"D")+"imensions gain a multiplier based on your Galaxy points.<br>Currently: <span id='galspan13'>x</span>x<br>Cost: "+galCosts[13]+" GP"
-        el("galaxy14").innerHTML="Tickspeed Boosts give 32 free tickspeed purchases each.<br>Cost: 300 GP";
+        el("galaxy14").innerHTML=aarMod.newGame4MinusRespeccedVersion?"Tickspeed Boosts boost Time Dimensions.<br>Currently: <span id='galspan14'>x</span>x<br>Cost: <span id='galcost14'></span> GP":"Tickspeed Boosts give 32 free tickspeed purchases each.<br>Cost: <span id='galcost14'></span> GP";
+		el("galaxy25").innerHTML=aarMod.newGame4MinusRespeccedVersion?"Boost 'Infinite Time' Reward. <br>Currently: ^<span id='galspan25'>x</span><br>Cost: <span id='galcost25'></span> GP":"Tickspeed multiplier boosts Time Dimensions more based on your Galaxy points.<br>Currently: ^<span id='galspan25'>x</span><br>Cost: <span id='galcost25'></span> GP";
+		
+		el("galaxy24").style.display=aarMod.newGame4MinusRespeccedVersion?"none":"";
+		el("galaxy35").style.display=aarMod.newGame4MinusRespeccedVersion?"none":"";
+		el("galaxy33").style.display=aarMod.newGame4MinusRespeccedVersion?"none":"";
+		el("galaxy34").style.display=aarMod.newGame4MinusRespeccedVersion?"none":"";
+		
 		el("galDesc23").textContent="Dimension "+(tmp.ngmX>3 && !aarMod.newGame4MinusRespeccedVersion?" Boosts and Time Dimension B":"B")+"oosts are stronger based on your Galaxy points."
         el("galcost31").textContent=galCosts[31]
         el("galcost32").textContent=galCosts[32]
