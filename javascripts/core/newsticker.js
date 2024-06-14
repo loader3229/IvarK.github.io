@@ -592,7 +592,7 @@ function scrollNextMessage() {
 			let transformDuration = dist / rate;
 			if (!player.options.newsHidden && !player.newsArray.includes(nextMsgId)) {
 				player.newsArray.push(nextMsgId)
-				if (!tmp.ngp3_boost && player.newsArray.length >= 50) giveAchievement("Fake News")
+				if (!tmp.ngp3_boost && !aarMod.newGame4MinusRespeccedVersion && player.newsArray.length >= 50) giveAchievement("Fake News")
 				if (player.newsArray.length >= 400) giveAchievement("400% Breaking News")
 			}
 

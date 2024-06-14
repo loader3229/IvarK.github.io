@@ -23,7 +23,7 @@ function resetTickspeedBoosts() {
 //v2.1
 function getProductBoughtMult() {
 	let mult = 1
-	if (player.tickspeedBoosts != undefined) {
+	if (player.tickspeedBoosts != undefined && !aarMod.newGame4MinusRespeccedVersion) {
 		mult = hasGalUpg(24) && player.currentChallenge != "postcngm3_4" ? galMults.u24() : 0.2
 		if (inNC(13) || player.currentChallenge == "postc1") mult = Decimal.div(mult, 2)
 	}
@@ -69,6 +69,7 @@ function manualTickspeedBoost() {
 	if ((player.infinityUpgrades.includes("bulkBoost") || hasAch("r28")) && (!inNC(14) || tmp.ngmX <= 3)) tickspeedBoost(Math.floor((amount - req.amount) / req.mult + 1))
 	else tickspeedBoost(1)
 	if (inNGM(5)) giveAchievement("TICK OVERDRIVE")
+	if (aarMod.newGame4MinusRespeccedVersion) giveAchievement("Fake News")
 }
 
 //v3.2

@@ -378,7 +378,7 @@ var softcap_data = {
 		name: "Effective Time Shards (NG-4R)",
 		1: {
 			func: "dilate",
-			start: E(10),
+			start: function(){return getNGM4RDilationStart()},
 			base: 10,
 			pow: function(){return dilationPowerStrength()}
 		}
@@ -390,13 +390,23 @@ var softcap_data = {
 		name: "Normal Dimension Multipliers (NG-4R)",
 		1: {
 			func: "dilate",
-			start: E(1e25),
+			start: function(){
+				let ret=E(1e25);
+				if (player.infinityUpgrades.includes("timeMult")) ret = ret.times(infUpg11Pow());
+				if (player.infinityUpgrades.includes("timeMult2")) ret = ret.times(infUpg13Pow());
+				return ret;
+			},
 			base: 10,
 			pow: function(){return dilationPowerStrength()}
 		},
 		2: {
 			func: "dilate",
-			start: E(1e35),
+			start: function(){
+				let ret=E(1e35);
+				if (player.infinityUpgrades.includes("timeMult")) ret = ret.times(infUpg11Pow());
+				if (player.infinityUpgrades.includes("timeMult2")) ret = ret.times(infUpg13Pow());
+				return ret;
+			},
 			base: 10,
 			pow: function(){return dilationPowerStrength()}
 		}

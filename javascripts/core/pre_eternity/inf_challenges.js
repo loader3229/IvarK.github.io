@@ -66,6 +66,7 @@ function startNormalChallenge(x) {
 	if (x == 7) {
 		if (player.infinitied < 1 && player.eternities < 1 && !quantumed) return
 		startChallenge("challenge7", Number.MAX_VALUE)
+		return
 	}
 	if (tmp.ngmX > 3) galacticSacrifice(false, true, x)
 	else startChallenge("challenge" + x, Number.MAX_VALUE)

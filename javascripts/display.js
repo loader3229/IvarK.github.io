@@ -246,12 +246,12 @@ function infinityUpgradesDisplay(){
 	
 	let infiCol1And2Middle = tmp.ngC ? " and Tickspeed " : ""
 
-	el("infi11desc").innerHTML = "Normal Dimensions gain a multiplier based on time played" + (tmp.ngC ? " and antimatter" : "") + "<br>Currently: " + shorten(infUpg11Pow()) + "x"
+	el("infi11desc").innerHTML = "Normal Dimensions gain a multiplier" + (aarMod.newGame4MinusRespeccedVersion?" and all dilation effects starts later":"") + " based on time played" + (tmp.ngC ? " and antimatter" : "") + "<br>Currently: " + shorten(infUpg11Pow()) + "x"
 	el("infi12desc").innerHTML = "First and Eighth Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x"
 	el("infi13desc").innerHTML = "Third and Sixth Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x"
 	el("infi22desc").innerHTML = "Second and Seventh Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x"
 	el("infi23desc").innerHTML = "Fourth and Fifth Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x"
-	el("infi31desc").innerHTML = "Normal Dimensions gain a multiplier based on time spent in this Infinity" + (tmp.ngC ? " and total antimatter" : "") + "<br>Currently: " + shorten(infUpg13Pow()) + "x"
+	el("infi31desc").innerHTML = "Normal Dimensions gain a multiplier" + (aarMod.newGame4MinusRespeccedVersion?" and all dilation effects starts later":"") + " based on time spent in this Infinity" + (tmp.ngC ? " and total antimatter" : "") + "<br>Currently: " + shorten(infUpg13Pow()) + "x"
 	var infi32middle = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? " <br> Currently: " + formatValue(player.options.notation, getUnspentBonus(), 2, 2) + "x" : ""
 	el("infi32desc").innerHTML = "1st Dimension gets a multiplier based on unspent IP " + infi32middle
 }
@@ -978,6 +978,8 @@ function moveAutoTab(id, abb, btn, pos, autoShown, back) {
 		if (autoTab == id) elm.style.display = ""
 	}
 	if (elm.className == "autotab" && !autoShown && autoTab == id) elm.style.display = "none"
+	if (aarMod.newGame4MinusRespeccedVersion && id=="automaticghosts") elm.style.display = "none"
+	if (aarMod.newGame4MinusRespeccedVersion && id=="automaticghosts") el(abb + "btn" + word).style.display = "none"
 	el(id).className = autoShown ? "autotab" : pos + "tab"
 }
 

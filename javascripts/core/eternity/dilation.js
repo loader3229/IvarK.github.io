@@ -257,7 +257,9 @@ function dilates(x, m) {
 	if (a) {
 		if (m != "tick") x = x.max(1)
 		else if (player.galacticSacrifice == undefined) x = x.times(1e3)
-		if (x.gt(10)) x = Decimal.pow(10, Math.pow(x.log10(), e))
+		if (m == 2 && aarMod.newGame4MinusRespeccedVersion){
+			if (x.gt(getNGM4RDilationStart())) x = Decimal.pow(10, Math.pow(x.log10()/getNGM4RDilationStart().log10(), e)*getNGM4RDilationStart().log10())
+		}else if (x.gt(10)) x = Decimal.pow(10, Math.pow(x.log10(), e))
 		if (m == "tick" && player.galacticSacrifice == undefined) x = x.div(1e3)
 		if (m == "tick" && x.lt(1)) x = Decimal.div(1, x)
 	}
@@ -270,6 +272,12 @@ function dilationPowerStrength() {
 	return pow;
 }
 
+function getNGM4RDilationStart() {
+	let ret = new Decimal(10);
+	if (player.infinityUpgrades.includes("timeMult")) ret = ret.times(infUpg11Pow());
+	if (player.infinityUpgrades.includes("timeMult2")) ret = ret.times(infUpg13Pow());
+	return ret;
+}
 /**
  *
  * @param {Name of the ugrade} id

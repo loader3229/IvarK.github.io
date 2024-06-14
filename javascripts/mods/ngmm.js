@@ -45,7 +45,7 @@ function getGPGain(offset = 0){
 
 function getGPMultipliers(){
 	let ret = E(1)
-	if (hasAch("r23") && player.tickspeedBoosts !== undefined) {
+	if (hasAch("r23") && player.tickspeedBoosts !== undefined && !aarMod.newGame4MinusRespeccedVersion) {
 		let tbDiv = 10
 		if (inNGM(4)) tbDiv = 5
 		ret=ret.times(Decimal.pow(Math.max(player.tickspeedBoosts / tbDiv, 1),Math.max(getAmount(8) / 75, 1)))
@@ -204,13 +204,13 @@ function newGalacticDataOnInfinity(layer, chall) {
 	GPminpeak = E(0)
 
 	let kept = false
-	if (layer == 3) kept = hasAch(inNGM(3) ? "r36" : "r33")
+	if (layer == 3) kept = hasAch((inNGM(3) && !aarMod.newGame4MinusRespeccedVersion) ? "r36" : "r33")
 	if (layer == 4) kept = getEternitied() >= 7
 
 	if (kept) {
 		var data = player.galacticSacrifice
-		data.galaxyPoints = player.tickspeedBoosts == undefined ? (eternity ? data.galaxyPoints : data.galaxyPoints.add(getGSAmount())) : E(0)
-		if (player.tickspeedBoosts != undefined) data.times = 0
+		data.galaxyPoints = (player.tickspeedBoosts == undefined || aarMod.newGame4MinusRespeccedVersion) ? (eternity ? data.galaxyPoints : data.galaxyPoints.add(getGSAmount())) : E(0)
+		if (player.tickspeedBoosts != undefined && !aarMod.newGame4MinusRespeccedVersion) data.times = 0
 		data.time = 0
 		return data
 	} else return resetGalacticSacrifice()
@@ -250,7 +250,7 @@ let galCosts = {
 	"46ngm4": 1e40,
 	
 	"14ngm4r": 3e4,
-	"24ngm4r": 1e100,
+	"24ngm4r": 3e5,
 	"25ngm4r": 1e5,
 	"33ngm4r": 1e100,
 	"34ngm4r": 1e100,
@@ -358,6 +358,7 @@ function galacticUpgradeSpanDisplay() {
 	}
 	if (aarMod.newGame4MinusRespeccedVersion) {
 		el('galcost14').textContent = shortenCosts(3e4)
+		el('galcost24').textContent = shortenCosts(3e5)
 		el('galcost25').textContent = shortenCosts(1e5)
 	}else{
 		el('galcost14').textContent = "300"
@@ -405,7 +406,7 @@ function resetTotalBought() { //uhh what does this do?
 }
 
 function productAllTotalBought() {
-	if(aarMod.newGame4MinusRespeccedVersion && !inNC(13))return 1;
+	//if(aarMod.newGame4MinusRespeccedVersion && !inNC(13))return 1;
 	var ret = 1;
 	var mult = getProductBoughtMult()
 	for (var i = 1; i <= 8; i++) {
@@ -684,6 +685,7 @@ let galMults = {
 		return Decimal.pow(player.galacticSacrifice.galaxyPoints.log10(), 50)
 	},
 	u24: function() {
+		if(aarMod.newGame4MinusRespeccedVersion)return Decimal.pow(productAllTotalBought(),0.1).mul(2);
 		return player.galacticSacrifice.galaxyPoints.pow(0.25).div(20).max(0.2)
 	},
 	u15: function() {

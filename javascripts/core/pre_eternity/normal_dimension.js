@@ -85,6 +85,7 @@ function getNormalDimensionGalaxyUpgradesBonus(tier,mult){
 	if (player.pSac !== undefined) if (tier == 2) mult = mult.pow(puMults[13](hasPU(13, true)))
 	if (hasGalUpg(13) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || tmp.ngmX > 3) && player.currentChallenge != "postcngm3_4") mult = mult.times(galMults.u13())
 	if (hasGalUpg(15)) mult = mult.times(galMults.u15())
+	if (hasGalUpg(24) && aarMod.newGame4MinusRespeccedVersion) mult = mult.times(galMults.u24())
 	if (hasGalUpg(35)) mult = mult.times(galMults.u35())
 	if (player.challenges.includes("postc4")) mult = mult.pow(1.05);
 	if (hasGalUpg(31)) mult = mult.pow(galMults.u31());
@@ -199,7 +200,7 @@ function getDimensionFinalMultiplier(tier) {
 	if (player.challenges.includes("postc4") && player.galacticSacrifice === undefined) mult = mult.pow(1.05);
 	if (player.challenges.includes("postc8") && tier < 8 && tier > 1) mult = mult.times(mult18);
 
-	if (isADSCRunning() || (inNGM(2) && player.currentChallenge === "postc1")) mult = mult.times(productAllTotalBought());
+	if ((!aarMod.newGame4MinusRespeccedVersion || inNC(13)) && (isADSCRunning() || (inNGM(2) && player.currentChallenge === "postc1"))) mult = mult.times(productAllTotalBought());
 	else {
 		if (player.currentChallenge == "postc6") mult = mult.dividedBy(player.matter.max(1))
 		if (player.currentChallenge == "postc8") mult = mult.times(player.postC8Mult)
@@ -296,6 +297,8 @@ function canBuyDimension(tier) {
 }
 	
 function getDimensionPowerMultiplier(focusOn, debug) {
+	if (player.tickspeedBoosts !== undefined && aarMod.newGame4MinusRespeccedVersion && inNC(9)) return 10/(Math.random()*30+1);
+	
 	let ret = focusOn || inNC(9) || player.currentChallenge == "postc1" ? getMPTBase(focusOn) : tmp.mptb
 	let exp = 1
 	if (tmp.ngp3 && focusOn != "linear") exp = tmp.mpte
@@ -661,6 +664,7 @@ function infUpg11Pow() {
 	let exp = 0.15 
 	if (inNGM(2)) {
 		x = player.totalTimePlayed / 864e3
+		if(aarMod.newGame4MinusRespeccedVersion)x++;
 		exp = 0.75
 	}
 	if (tmp.ngC) exp *= Math.log10(player.money.plus(1).log10() + 1) * 3 + 1
@@ -673,7 +677,7 @@ function infUpg11Pow() {
 
 function infUpg12Pow() {
 	let toAdd = .1
-	if (player.tickspeedBoosts !== undefined) toAdd = Math.min(Math.max(player.infinitied, 0), 45) * .01 + .05
+	if (player.tickspeedBoosts !== undefined && !aarMod.newGame4MinusRespeccedVersion) toAdd = Math.min(Math.max(player.infinitied, 0), 45) * .01 + .05
 	else if (inNGM(2)) toAdd = Math.min(Math.max(player.infinitied, 0), 60) * .0025 + .05
 	if (tmp.ngC) toAdd *= Math.log10(player.money.plus(1).log10() + 1) + 1
 	if (aarMod.newGameExpVersion) toAdd *= 2
@@ -685,6 +689,7 @@ function infUpg13Pow() {
 	let x = player.thisInfinityTime / 2400
 	let exp = 0.25 
 	if (inNGM(2)) exp = 1.5
+	if(aarMod.newGame4MinusRespeccedVersion)x++;
 	if (tmp.ngC) {
 		exp *= Math.sqrt(player.galaxies + 1) * 200
 		x += 1

@@ -36,6 +36,7 @@ function doNGMatLeast4TDChanges(tier, ret){
 	if (hasGalUpg(12)) ret = ret.times(galMults.u12())
 	if (hasGalUpg(13) && player.currentChallenge!="postngm3_4") ret = ret.times(galMults.u13())
 	if (hasGalUpg(15)) ret = ret.times(galMults.u15())
+	if (hasGalUpg(24) && aarMod.newGame4MinusRespeccedVersion) ret = ret.times(galMults.u24())
 	if (inNGM(5) && tier == 2) ret = ret.pow(puMults[13](hasPU(13, true))) //NG-5, not NG-4.
 	if (hasGalUpg(44) && inNGM(4)) {
 		let e = hasGalUpg(46) ? galMults["u46"]() : 1

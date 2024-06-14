@@ -1619,7 +1619,7 @@ function setDisplaysStuff1(){
 
 	for (let u = 1; u <= 4; u++) {
 		let benefits = [(u + 4) + "th Dimension unlocked"]
-		if (inNGM(3)) benefits.push((u * 5) + " Tickspeed Boosts")
+		if (inNGM(3)) benefits.push((u * 4) + " Tickspeed Boosts")
 		if (u == 4) benefits.push("an Antimatter Galaxy")
 		el("infi4" + u + "desc").textContent = "Start with " +
 		wordizeList(benefits) + "."
@@ -1729,9 +1729,9 @@ function setOtherChallDisplay(){
         el("galaxy22").innerHTML="Galaxies are "+(tmp.ngmX>3?2:5)+"x stronger, reduce the cost by "+(aarMod.newGame4MinusRespeccedVersion?30:20)+" less except for the first, and decrease the cost multiplier to "+(aarMod.newGame4MinusRespeccedVersion?50:30)+".<br>Cost: 5 GP"
         el("galaxy13").innerHTML="Normal "+(tmp.ngmX>3?"and Time D":"D")+"imensions gain a multiplier based on your Galaxy points.<br>Currently: <span id='galspan13'>x</span>x<br>Cost: "+galCosts[13]+" GP"
         el("galaxy14").innerHTML=aarMod.newGame4MinusRespeccedVersion?"Tickspeed Boosts boost Time Dimensions.<br>Currently: <span id='galspan14'>x</span>x<br>Cost: <span id='galcost14'></span> GP":"Tickspeed Boosts give 32 free tickspeed purchases each.<br>Cost: <span id='galcost14'></span> GP";
+        el("galaxy24").innerHTML=aarMod.newGame4MinusRespeccedVersion?"Normal and Time Dimensions gain a multiplier based on product of Normal Dimensions bought.<br>Currently: <span id='galspan24'></span>x<br>Cost: <span id='galcost24'></span> GP":"Increase the multiplier of the product of bought based on your galaxy points.<br>Currently: <span id='galspan24'></span>x<br>Cost: <span id='galcost24'></span> GP";
 		el("galaxy25").innerHTML=aarMod.newGame4MinusRespeccedVersion?"Boost 'Infinite Time' Reward. <br>Currently: ^<span id='galspan25'>x</span><br>Cost: <span id='galcost25'></span> GP":"Tickspeed multiplier boosts Time Dimensions more based on your Galaxy points.<br>Currently: ^<span id='galspan25'>x</span><br>Cost: <span id='galcost25'></span> GP";
 		
-		el("galaxy24").style.display=aarMod.newGame4MinusRespeccedVersion?"none":"";
 		el("galaxy35").style.display=aarMod.newGame4MinusRespeccedVersion?"none":"";
 		el("galaxy33").style.display=aarMod.newGame4MinusRespeccedVersion?"none":"";
 		el("galaxy34").style.display=aarMod.newGame4MinusRespeccedVersion?"none":"";

@@ -82,6 +82,10 @@ function getIPMult() {
 			else mult = mult.times(Decimal.pow(galaxies, 0.3).plus(7))
 		}
 	}
+	if(aarMod.newGame4MinusRespeccedVersion){
+		if (hasAch("r55")) mult = mult.times(Math.min(Math.log10(Math.max(6000 / player.bestInfinityTime, 10)), 10));
+		if (hasAch("r41")) mult = mult.times(Math.pow(Math.log10(Math.max(player.spreadingCancer, 10)), .05)).times(2);
+	}
 	return mult;
 }
 
@@ -366,7 +370,7 @@ let INF_UPGS = {
 			24: 2,
 			34: 10,
 			44() {
-				return tmp.bgMode ? 8 : 500
+				return tmp.bgMode ? 8 : 300
 			}
 		},
 		getCost(x) {
