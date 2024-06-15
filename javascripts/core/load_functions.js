@@ -1731,10 +1731,8 @@ function setOtherChallDisplay(){
         el("galaxy14").innerHTML=aarMod.newGame4MinusRespeccedVersion?"Tickspeed Boosts boost Time Dimensions.<br>Currently: <span id='galspan14'>x</span>x<br>Cost: <span id='galcost14'></span> GP":"Tickspeed Boosts give 32 free tickspeed purchases each.<br>Cost: <span id='galcost14'></span> GP";
         el("galaxy24").innerHTML=aarMod.newGame4MinusRespeccedVersion?"Normal and Time Dimensions gain a multiplier based on product of Normal Dimensions bought.<br>Currently: <span id='galspan24'></span>x<br>Cost: <span id='galcost24'></span> GP":"Increase the multiplier of the product of bought based on your galaxy points.<br>Currently: <span id='galspan24'></span>x<br>Cost: <span id='galcost24'></span> GP";
 		el("galaxy25").innerHTML=aarMod.newGame4MinusRespeccedVersion?"Boost 'Infinite Time' Reward. <br>Currently: ^<span id='galspan25'>x</span><br>Cost: <span id='galcost25'></span> GP":"Tickspeed multiplier boosts Time Dimensions more based on your Galaxy points.<br>Currently: ^<span id='galspan25'>x</span><br>Cost: <span id='galcost25'></span> GP";
+		el("galaxy35").innerHTML=aarMod.newGame4MinusRespeccedVersion?"Normal and Time Dimensions gain a multiplier based on product of Time Dimensions bought.<br>Currently: <span id='galspan35'></span>x<br>Cost: <span id='galcost35'></span> GP":"	Each bought Time Dimension boosts Normal Dimensions by the product of x/6 and your multiplier of the product of bought.<br>Currently: <span id='galspan35'>x</span>x<br>Cost: <span id='galcost35'></span> GP";
 		
-		el("galaxy35").style.display=aarMod.newGame4MinusRespeccedVersion?"none":"";
-		el("galaxy33").style.display=aarMod.newGame4MinusRespeccedVersion?"none":"";
-		el("galaxy34").style.display=aarMod.newGame4MinusRespeccedVersion?"none":"";
 		
 		el("galDesc23").textContent="Dimension "+(tmp.ngmX>3 && !aarMod.newGame4MinusRespeccedVersion?" Boosts and Time Dimension B":"B")+"oosts are stronger based on your Galaxy points."
         el("galcost31").textContent=galCosts[31]
@@ -1878,7 +1876,7 @@ function updateNGModeMessage(){
 	if (player.infinityUpgradesRespecced) ngModeMessages.push('Welcome to Infinity Respecced, created by Aarex! In this mode, all of infinity upgrades are replaced with new upgrades except for the 2x IP mult, Break Infinity is removed, but there is new content in Infinity.')
 	if (player.boughtDims) ngModeMessages.push('Welcome to Eternity Respecced, created by dan-simon! In this mode, Eternity is changed to be balanced better without any scaling. Note: The port is not complete on this site, so you should search for the separate website for the mod itself to get the latest version.')
 	if (inNGM(2)) {
-		if (aarMod.newGame4MinusRespeccedVersion) ngModeMessages.push('Welcome to NG-4R v3, the respecced version of NG-4! This mode is easier compared to NG-4, made by qq1010903229 (also known as loader3229). Current Endgame is: 1 IP')
+		if (aarMod.newGame4MinusRespeccedVersion) ngModeMessages.push('Welcome to NG-4R v3, the respecced version of NG-4! This mode is easier compared to NG-4, made by loader3229. Current Endgame is: Broken Infinity')
 		else if (tmp.ngmX>4) ngModeMessages.push('Welcome to NG-5, the nerfed version of NG-4! This is very hardcore because you are stuck in more challenges. You are also stuck in Automated Big Crunches Challenge which is a big impact on this mod. Good luck! This mod is made by Aarex, with help from Anthios, Apeirogon, and TheMkeyHolder.')
 		else if (tmp.ngmX>3) ngModeMessages.push('Welcome to NG-4, the nerfed version of NG-3! This mode features even more changes from NG---, and is very hardcore. WIP by Nyan Cat and edited by Aarex.')
 		else if (aarMod.newGame3MinusVersion) ngModeMessages.push('Welcome to NG-3, the nerfed version of NG--! This mode reduces tickspeed multiplier multiplier and nerfs galaxies, but has a new feature called \"Tickspeed Boosts\" and many more changes to NG--.')

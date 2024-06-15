@@ -3,7 +3,7 @@ function inNGM(x) {
 }
 
 function getGSAmount(offset=0) { 
-	if (tmp.ri) return E(0)
+	if (tmp.ri && !aarMod.newGame4MinusRespeccedVersion) return E(0)
 	let galaxies = getGSGalaxies() + offset
 	let y = getGSGalaxyExp(galaxies)
 	let z = getGSDimboostExp(galaxies)
@@ -252,9 +252,9 @@ let galCosts = {
 	"14ngm4r": 3e4,
 	"24ngm4r": 3e5,
 	"25ngm4r": 1e5,
-	"33ngm4r": 1e100,
-	"34ngm4r": 1e100,
-	"35ngm4r": 1e100,
+	"33ngm4r": 6e5,
+	"34ngm4r": 1e6,
+	"35ngm4r": 3e5,
 	"41ngm4r": 1e100,
 	"42ngm4r": 1e100,
 }
@@ -317,7 +317,7 @@ function reduceDimCosts(upg) {
 			player[name + "Cost"] = player[name + "Cost"].div(div)
 			if (inNGM(4)) player["timeDimension" + d].cost = Decimal.div(player["timeDimension" + d].cost, div)
 		}
-		if (hasAch('r48') && tmp.ngmX < 3) player.tickSpeedCost = player.tickSpeedCost.div(div)
+		if (hasAch('r48') && (tmp.ngmX < 3 || aarMod.newGame4MinusRespeccedVersion)) player.tickSpeedCost = player.tickSpeedCost.div(div)
 	}
 	if (player.infinityUpgradesRespecced != undefined) {
 		for (var d = 1; d < 9; d++) {
@@ -360,6 +360,8 @@ function galacticUpgradeSpanDisplay() {
 		el('galcost14').textContent = shortenCosts(3e4)
 		el('galcost24').textContent = shortenCosts(3e5)
 		el('galcost25').textContent = shortenCosts(1e5)
+		el('galcost34').textContent = shortenCosts(1e6)
+		el('galcost35').textContent = shortenCosts(3e5)
 	}else{
 		el('galcost14').textContent = "300"
 	}
@@ -469,6 +471,8 @@ el("buyerBtnGalSac").onclick = function () {
 
 //v1.4
 function getPost01Mult() {
+  if (aarMod.newGame4MinusRespeccedVersion && player.timestudy.studies.includes(31)) return Math.pow(player.infinitied + player.infinitiedBank + 1,4);
+	if(aarMod.newGame4MinusRespeccedVersion)return player.infinitied + player.infinitiedBank + 1;
 	return Math.min(Math.pow(player.infinitied + 1, .3), Math.pow(Math.log(player.infinitied + 3), 3))
 }
 
@@ -676,6 +680,10 @@ let galMults = {
 		return x
 	},
 	u33: function() {
+		if(aarMod.newGame4MinusRespeccedVersion){
+			if(player.currentChallenge == "postcngm3_4")return 2;
+		  return player.galacticSacrifice.galaxyPoints.max(1).log10() / 4 + 1
+		}
 		if (player.tickspeedBoosts != undefined) return player.galacticSacrifice.galaxyPoints.div(1e10).add(1).log10()/5+1
 		let x = player.galacticSacrifice.galaxyPoints.max(1).log10() / 4 + 1
 		if (hasAch("r75") && inNGM(4)) x *= 2
@@ -703,6 +711,15 @@ let galMults = {
 		return r
 	},
 	u35: function() {
+		if(aarMod.newGame4MinusRespeccedVersion){
+			let r = new Decimal(1)
+			for (var d = 1; d < 9; d++) {
+				r = r.times(player["timeDimension" + d].bought + player["timeDimension" + d].boughtAntimatter + 1)
+			}
+			//if(player.timeless.active && !player.timeless.upgrades.includes(28))r=r.pow(0.1)
+			if(player.challenges.includes("postcngm4r_2"))return r.pow(10)
+			return r.pow(0.1)
+		}
 		let r = E(1)
 		let p = getProductBoughtMult()
 		for (var d = 1; d < 9; d++) {
@@ -722,6 +739,9 @@ let galMults = {
 	  let base = new Decimal(2);
 	  let exp = player.tickspeedBoosts;
 	  return base.pow(exp);
+	},
+	u34: function() {
+		if(aarMod.newGame4MinusRespeccedVersion)return 9;return 4;
 	}
 }
 
@@ -761,7 +781,7 @@ let galConditions = {
 		return inNGM(4)
 	},
 	c6: function(){
-		return inNGM(4) && player.totalmoney.log10() >= 666
+		return inNGM(4) && player.totalmoney.log10() >= 666 && !aarMod.newGame4MinusRespeccedVersion
 	}
 }
 

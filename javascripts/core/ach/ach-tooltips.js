@@ -80,12 +80,12 @@ function setR4Tooltip() {
 	let anti = el("AntiChallenged")
 
 	//ACHIEVEMENT ROW 4
-	sanic.setAttribute('ach-tooltip', "Get over " + formatValue(player.options.notation, 1e63, 0, 0) + " antimatter" + (tmp.ngmX >= 4 ? " and unlock new galaxy upgrades at " + formatValue(player.options.notation, 1e666, 0, 0) + " antimatter" : "") + ".")
+	sanic.setAttribute('ach-tooltip', "Get over " + formatValue(player.options.notation, 1e63, 0, 0) + " antimatter" + (tmp.ngmX >= 4 && !aarMod.newGame4MinusRespeccedVersion ? " and unlock new galaxy upgrades at " + formatValue(player.options.notation, 1e666, 0, 0) + " antimatter" : "") + ".")
 	cancer.setAttribute('ach-tooltip', (tmp.ngp3_boost ? "Complete the Tickspeed Autobuyer Challenge." : "Buy " + (aarMod.newGameMinusVersion ? "10,000" : "10") + " Galaxies in total while using Cancer notation.") + (((inNGM(2) && player.tickspeedBoosts == undefined) || aarMod.newGame4MinusRespeccedVersion) ? " Reward: Gain a multiplier to IP based on the number of galaxies bought in Cancer Notation.":""))
-	zero.setAttribute('ach-tooltip',"Big Crunch without Dimension Shifts, Boosts or Galaxies in a challenge. Reward: Dimensions 1-4 are 25% stronger" + (inNGM(2) && player.tickspeedBoosts == undefined ? " and you get 1.25x more IP" : "") + (tmp.ngmX >= 4 ? " and gain more passive GP gain based on GP." : "."))
+	zero.setAttribute('ach-tooltip',"Big Crunch without Dimension Shifts, Boosts or Galaxies in a challenge. Reward: Dimensions 1-4 are 25% stronger" + (inNGM(2) && player.tickspeedBoosts == undefined ? " and you get 1.25x more IP" : "") + (aarMod.newGame4MinusRespeccedVersion?", gain more passive GP gain based on GP and you get 100x more IP.":tmp.ngmX >= 4 ? " and gain more passive GP gain based on GP." : "."))
 	potato.setAttribute('ach-tooltip', "Get more than " + formatValue(player.options.notation, 1e29, 0, 0) + " ticks per second. Reward: Reduce the starting tick interval by 2%.");
 	dimensional.setAttribute('ach-tooltip', "Reach " + formatValue(player.options.notation, 1e12, 0, 0) + " of all Normal Dimensions, except for the 8th Dimension.");
-	anti.setAttribute('ach-tooltip', "Complete all the challenges. Reward: All Normal Dimensions are 10% stronger"+(inNGM(2) && player.tickspeedBoosts == undefined ? ", and the tickspeed cost is also reduced based on your Dimension cost reduction." : "."))
+	anti.setAttribute('ach-tooltip', "Complete all the challenges. Reward: All Normal Dimensions are 10% stronger"+(((inNGM(2) && player.tickspeedBoosts == undefined) || aarMod.newGame4MinusRespeccedVersion) ? ", and the tickspeed cost is also reduced based on your Dimension cost reduction." : "."))
 }
 
 function setR5Tooltip() {
@@ -103,7 +103,7 @@ function setR5Tooltip() {
 	forever.setAttribute('ach-tooltip', "Big Crunch in 1 minute or less. Reward: Start with "+shortenCosts(1e10)+" antimatter" + (((inNGM(2) && player.tickspeedBoosts == undefined) || aarMod.newGame4MinusRespeccedVersion) ? ", and gain a multiplier to IP based on your best Infinity time." : "."))
 	many.setAttribute('ach-tooltip', "Complete the Second Dimension Autobuyer challenge in 3 minutes or less. Reward: All Normal Dimensions are stronger in the first 3 minutes of an Infinity" + (player.tickspeedBoosts == undefined ? "." : ", and you gain 1% of GP gained on Galactic Sacrifice per second."));
 	is.setAttribute('ach-tooltip', "Complete the Tickspeed Autobuyer challenge in 3 minutes or less. Reward: The multiplier per-10 dimensions" + (player.tickspeedBoosts != undefined ? " is boosted based on your best time of the Tickspeed Autobuyer challenge." : inNGM(2) ? " is raised to the power of ^1.0666." : " is 1% more powerful."))
-	limitBreak.setAttribute('ach-tooltip', "Break Infinity." + (inNGM(2) && player.tickspeedBoosts == undefined ? " Reward: Gain a multiplier to IP based on galaxies." : ""))
+	limitBreak.setAttribute('ach-tooltip', "Break Infinity." + (inNGM(2) && player.tickspeedBoosts == undefined ? " Reward: Gain a multiplier to IP based on galaxies." : "") + (aarMod.newGame4MinusRespeccedVersion ? " Reward: Gain a multiplier to IP based on galaxies, +0.1% tickspeed reduction per tickspeed upgrade and 2nd Normal Dimension Softcap starts 1e15x later." : ""))
 }
 
 function setR6Tooltip() {

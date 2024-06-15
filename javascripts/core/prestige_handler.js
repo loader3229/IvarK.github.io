@@ -255,6 +255,12 @@ var pH = {
 			el("hide_" + p).style.display = tab && layers >= a2 ? "" : "none"
 		}
 
+		//Infinity Dimension unlocks
+		if (player.break && !player.infDimensionsUnlocked[7] && getEternitied() < 25) {
+			newDimPresPos = pH_tmp.eternity.shown || a + 1
+			if (!pH_tmp.eternity.shown) a++
+		}
+		
 		//Blockages
 		var blockRank = a
 		if (!isEmptiness && QCs.in(4)) blockRank = blockRank + 2
@@ -264,11 +270,6 @@ var pH = {
 		el("quantumBlock").style.display = haveBlock ? "" : "none"
 		el("quantumBlock").style.height = haveBlock ? (Math.floor(blockRank / 3) * 120 + 12) + "px" : "120px"
 
-		//Infinity Dimension unlocks
-		if (player.break && !player.infDimensionsUnlocked[7] && getEternitied() < 25) {
-			newDimPresPos = pH_tmp.eternity.shown || a + 1
-			if (!pH_tmp.eternity.shown) a++
-		}
 
 		//Time Dilation
 		if (player.dilation.active) el("eternitybtn").className = "presBtn presPos" + pH_tmp.eternity.shown + " dilationbtn"

@@ -138,6 +138,7 @@ function getGalaxyReqSub() {
 
 function getDistantStart() {
 	if (player.currentEternityChall == "eterc5") return 0
+	if (aarMod.newGame4MinusRespeccedVersion)return 10;
 	var n = tmp.ngC ? 1 : 100
 	n += getECReward(5)
 	if (hasTimeStudy(223)) n += 7
@@ -165,6 +166,7 @@ function getDistantAdd(x) {
 }
 
 function getRemoteStart(galaxies) {
+	if (aarMod.newGame4MinusRespeccedVersion)return 30;
 	var n = 0
 	if (inNGM(4)) {
 		n = 6

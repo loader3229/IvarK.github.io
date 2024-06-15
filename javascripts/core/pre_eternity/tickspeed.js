@@ -1,6 +1,8 @@
 function getTickspeedMultiplier() {
 	if (isTickDisabled()) return E(1)
 	let x = E(getGalaxyTickSpeedMultiplier())
+	if (inNC(7) && aarMod.newGame4MinusRespeccedVersion)x = x.div(1.003**Math.min(player.galaxies,5));
+	if (hasAch("r51") && aarMod.newGame4MinusRespeccedVersion)x = x.div(1.001);
 	if (tmp.be && qu_save.breakEternity.upgrades.includes(5)) x = x.div(getBreakUpgMult(5))
 	if (tmp.ngC && player.timestudy.studies.includes(25)) x = x.div(tsMults[25]())
 	if (inNC(6, 3)) x = x.add(getTotalDBs() * 1e-3)

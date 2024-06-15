@@ -626,6 +626,9 @@ function getAchievementMult(){
 
 function getInfinitiedMult() {
 	var inf = getInfinitied()
+	if(aarMod.newGame4MinusRespeccedVersion){
+		return Math.pow(1+Math.log10(inf+1)*100,2*getInfEffExp(inf))
+	}
 	var add = inNGM(2) ? 0 : 1
 	var base = (inNGM(2) ? 1 : 0) + Decimal.add(inf, 1).log10() * (inNGM(2) ? 100 : 10)
 	var exp = (inNGM(2) ? 2 : 1) * getInfEffExp(inf)
@@ -703,7 +706,7 @@ function updatePostInfiTemp() {
 	var exp11 = inNGM(2) ? 2 : 0.5
 	var exp21 = inNGM(2) ? 2 : 0.5
 
-	if (inNGM(4)){
+	if (inNGM(4) && !aarMod.newGame4MinusRespeccedVersion){
 		exp11 += player.totalmoney.plus(10).div(10).log10() / 1e4
 		exp21 += player.money.plus(10).div(10).log10() / 1e4
 		base11 = player.totalmoney.plus(10).log10()

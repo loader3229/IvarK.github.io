@@ -381,10 +381,43 @@ var softcap_data = {
 			start: function(){return getNGM4RDilationStart()},
 			base: 10,
 			pow: function(){return dilationPowerStrength()}
+		},
+		2: {
+			func: "dilate",
+			start: function(){
+				let ret=E(Number.MAX_VALUE);
+				if (player.infinityUpgrades.includes("timeMult")) ret = ret.times(infUpg11Pow());
+				if (player.infinityUpgrades.includes("timeMult2")) ret = ret.times(infUpg13Pow());
+				return ret;
+			},
+			base: 10,
+			pow: function(){return dilationPowerStrength()}
 		}
 	},
 	td_ngm4r: {
 		name: "Time Dimension Multipliers (NG-4R)",
+		1: {
+			func: "dilate",
+			start: function(){
+				let ret=E(Number.MAX_VALUE);
+				if (player.infinityUpgrades.includes("timeMult")) ret = ret.times(infUpg11Pow());
+				if (player.infinityUpgrades.includes("timeMult2")) ret = ret.times(infUpg13Pow());
+				return ret;
+			},
+			base: 10,
+			pow: function(){return dilationPowerStrength()}
+		},
+		2: {
+			func: "dilate",
+			start: function(){
+				let ret=Decimal.pow(10,50000);
+				if (player.infinityUpgrades.includes("timeMult")) ret = ret.times(infUpg11Pow());
+				if (player.infinityUpgrades.includes("timeMult2")) ret = ret.times(infUpg13Pow());
+				return ret;
+			},
+			base: 10,
+			pow: function(){return dilationPowerStrength()}
+		}
 	},
 	nd_ngm4r: {
 		name: "Normal Dimension Multipliers (NG-4R)",
@@ -403,6 +436,18 @@ var softcap_data = {
 			func: "dilate",
 			start: function(){
 				let ret=E(1e35);
+				if (player.infinityUpgrades.includes("timeMult")) ret = ret.times(infUpg11Pow());
+				if (player.infinityUpgrades.includes("timeMult2")) ret = ret.times(infUpg13Pow());
+				if (hasAch("r51")) ret = ret.times(1e15)
+				return ret;
+			},
+			base: 10,
+			pow: function(){return dilationPowerStrength()}
+		},
+		3: {
+			func: "dilate",
+			start: function(){
+				let ret=E(Number.MAX_VALUE);
 				if (player.infinityUpgrades.includes("timeMult")) ret = ret.times(infUpg11Pow());
 				if (player.infinityUpgrades.includes("timeMult2")) ret = ret.times(infUpg13Pow());
 				return ret;

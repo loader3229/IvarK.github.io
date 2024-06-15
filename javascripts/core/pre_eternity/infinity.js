@@ -83,8 +83,10 @@ function getIPMult() {
 		}
 	}
 	if(aarMod.newGame4MinusRespeccedVersion){
+		if (hasAch("r43")) mult = mult.times(100)
 		if (hasAch("r55")) mult = mult.times(Math.min(Math.log10(Math.max(6000 / player.bestInfinityTime, 10)), 10));
 		if (hasAch("r41")) mult = mult.times(Math.pow(Math.log10(Math.max(player.spreadingCancer, 10)), .05)).times(2);
+		if (hasAch("r51")) mult = mult.times(player.galaxies+1)
 	}
 	return mult;
 }

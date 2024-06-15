@@ -5,14 +5,41 @@ function getTickspeedBoostRequirement(bulk = 1) {
 		if (hasGalUpg(34)) mult = 4
 		if (player.infinityUpgrades.includes("postinfi52")) mult = 3
 	}
-	if (aarMod.newGame4MinusRespeccedVersion)return {tier: 8, amount: resets * 10 + 30, mult: 10}
+	if (aarMod.newGame4MinusRespeccedVersion){
+		  let amount = 30+10*resets;
+		  
+		  if (hasGalUpg(34)) {
+			amount = 30+9*resets;
+		  }
+		  let prefix = ""
+		  
+		  if(resets>=getNGM4RTBScaling1()){
+			  prefix = "Distant ";
+			  amount += (resets-getNGM4RTBScaling1())*(resets-getNGM4RTBScaling1()+1);
+		  }
+		  
+		  if(resets>=getNGM4RTBScaling2()){
+			  prefix = "Further ";
+			  amount += (resets-getNGM4RTBScaling2())*(resets-getNGM4RTBScaling2()+1)*4;
+		  }
+		  
+		  if(resets>=getNGM4RTBScaling3()){
+			  prefix = "Remote ";
+			  amount = amount * Math.pow(1.002,resets-getNGM4RTBScaling3()+1);
+		  }
+		return {tier: 8, amount: amount, prefix: prefix}
+	}
 	return {tier: inNC(4) || player.pSac != undefined ? 6 : 8, amount: resets * mult + (inNC(15) && tmp.ngmX > 3 ? 10 : 30), mult: mult}
 }
 
 function tickspeedBoost(bulk) {
 	player.tickspeedBoosts += bulk
+	if(hasAch("r51") && aarMod.newGame4MinusRespeccedVersion){
+		player.tickBoughtThisInf = updateTBTIonGalaxy()
+		return;
+	}
 	if (!hasAch("r27") || player.tickspeedBoosts > (inNGM(5) ? 4 * player.galaxies : 5 * player.galaxies - 8)) player.tdBoosts = resetTDBoosts()
-	softReset(hasAch("r27") && 5 * player.galaxies - 8 > player.tickspeedBoosts ? 0 : -player.resets, true)
+	softReset(hasAch("r27") && (inNGM(5) ? 4 * player.galaxies : 5 * player.galaxies - 8) > player.tickspeedBoosts ? 0 : -player.resets, true)
 	player.tickBoughtThisInf = updateTBTIonGalaxy()
 }
 
@@ -66,7 +93,7 @@ function manualTickspeedBoost() {
 	let req=getTickspeedBoostRequirement()
 	let amount=getAmount(req.tier)
 	if (!(amount >= req.amount)) return
-	if ((player.infinityUpgrades.includes("bulkBoost") || hasAch("r28")) && (!inNC(14) || tmp.ngmX <= 3)) tickspeedBoost(Math.floor((amount - req.amount) / req.mult + 1))
+	if ((player.infinityUpgrades.includes("bulkBoost") || hasAch("r28")) && (!inNC(14) || tmp.ngmX <= 3)) tickspeedBoost(doBulkSpent(getAmount(getTickspeedBoostRequirement(1).tier), function(x){return getTickspeedBoostRequirement(x+1).amount}, 0, true, 1/0).toBuy)
 	else tickspeedBoost(1)
 	if (inNGM(5)) giveAchievement("TICK OVERDRIVE")
 	if (aarMod.newGame4MinusRespeccedVersion) giveAchievement("Fake News")
@@ -108,4 +135,22 @@ function getInitPostC3Power(){
 function getNGM4RTBPower(){
 	if (inNC(16) && aarMod.newGame4MinusRespeccedVersion)return 0;
 	return Math.pow(player.tickspeedBoosts,0.9)*100;
+}
+
+function getNGM4RTBScaling1(){
+	if(player.currentChallenge === "postcngm3_1")return 0;
+	let ret=20;
+	if(player.challenges.includes("postcngm3_1"))ret = ret + 10;
+	return ret;
+}
+
+function getNGM4RTBScaling2(){
+	let ret=50;
+	if(player.challenges.includes("postc7"))ret = ret + 10;
+	return ret;
+}
+
+function getNGM4RTBScaling3(){
+	let ret=100;
+	return ret;
 }

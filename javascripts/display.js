@@ -10,7 +10,19 @@ function tickspeedBoostDisplay(){
 	if (isTickspeedBoostPossible()) {
 		var tickReq = getTickspeedBoostRequirement()
 		el("tickReset").style.display = ""
-		el("tickResetLabel").textContent = "Tickspeed Boost (" + getFullExpansion(player.tickspeedBoosts) + "): requires " + getFullExpansion(tickReq.amount) + " " + DISPLAY_NAMES[tickReq.tier] + " Dimensions"
+		let a=""
+		if(aarMod.newGame4MinusRespeccedVersion){
+			if(player.tickspeedBoosts>=getNGM4RTBScaling1()){
+				a="Distant ";
+			}
+			if(player.tickspeedBoosts>=getNGM4RTBScaling2()){
+				a="Further ";
+			}
+			if(player.tickspeedBoosts>=getNGM4RTBScaling3()){
+				a="Remote ";
+			}
+		}
+		el("tickResetLabel").textContent = a+"Tickspeed Boost (" + getFullExpansion(player.tickspeedBoosts) + "): requires " + getFullExpansion(tickReq.amount) + " " + DISPLAY_NAMES[tickReq.tier] + " Dimensions"
 		el("tickResetBtn").className = getAmount(tickReq.tier) < tickReq.amount ? "unavailablebtn" : "storebtn"
 	} else el("tickReset").style.display = "none"
 }
