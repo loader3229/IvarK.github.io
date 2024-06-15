@@ -219,7 +219,7 @@ function getIDCostMult(tier) {
 	if (ECComps("eterc12")) ret = Math.pow(ret,getECReward(12))
 	if (player.galacticSacrifice == undefined) return ret
 	if (player.infinityUpgrades.includes("postinfi53")) ret /= 50
-	if (hasGalUpg(42)) ret /= 1 + 5 * Math.log10(player.eternityPoints.plus(1).log10() + 1)
+	if (hasGalUpg(42) && !aarMod.newGame4MinusRespeccedVersion) ret /= 1 + 5 * Math.log10(player.eternityPoints.plus(1).log10() + 1)
 	let cap = .1
 	if (player.achPow.gte(Decimal.pow(5,11.9)) && tier > 1) {
 		cap = .02
@@ -230,7 +230,7 @@ function getIDCostMult(tier) {
 
 function getInfBuy10Mult(tier) {
 	let ret = infPowerMults[inNGM(2)&&player.tickspeedBoosts===undefined ? 1 : 0][tier]
-	if (hasGalUpg(41)) ret *= player.galacticSacrifice.galaxyPoints.max(10).log10()
+	if (hasGalUpg(41) && !aarMod.newGame4MinusRespeccedVersion) ret *= player.galacticSacrifice.galaxyPoints.max(10).log10()
 	if (player.dilation.upgrades.includes("ngmm6")) ret *= getDil45Mult()
 	if (tmp.ngC && tier < 8) ret *= 0.25
 	return ret
@@ -392,6 +392,9 @@ function getNewInfReq() {
 		if (inNGM(4)){ // NG minus 4
 			reqs[1] = E("1e2385")
 			reqs[3] = E("1e9525")
+		}
+		if(aarMod.newGame4MinusRespeccedVersion){
+			reqs[0] = E("1e99999999")
 		}
 	}
 	if (tmp.ngC) {

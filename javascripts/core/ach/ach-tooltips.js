@@ -103,7 +103,7 @@ function setR5Tooltip() {
 	forever.setAttribute('ach-tooltip', "Big Crunch in 1 minute or less. Reward: Start with "+shortenCosts(1e10)+" antimatter" + (((inNGM(2) && player.tickspeedBoosts == undefined) || aarMod.newGame4MinusRespeccedVersion) ? ", and gain a multiplier to IP based on your best Infinity time." : "."))
 	many.setAttribute('ach-tooltip', "Complete the Second Dimension Autobuyer challenge in 3 minutes or less. Reward: All Normal Dimensions are stronger in the first 3 minutes of an Infinity" + (player.tickspeedBoosts == undefined ? "." : ", and you gain 1% of GP gained on Galactic Sacrifice per second."));
 	is.setAttribute('ach-tooltip', "Complete the Tickspeed Autobuyer challenge in 3 minutes or less. Reward: The multiplier per-10 dimensions" + (player.tickspeedBoosts != undefined ? " is boosted based on your best time of the Tickspeed Autobuyer challenge." : inNGM(2) ? " is raised to the power of ^1.0666." : " is 1% more powerful."))
-	limitBreak.setAttribute('ach-tooltip', "Break Infinity." + (inNGM(2) && player.tickspeedBoosts == undefined ? " Reward: Gain a multiplier to IP based on galaxies." : "") + (aarMod.newGame4MinusRespeccedVersion ? " Reward: Gain a multiplier to IP based on galaxies, +0.1% tickspeed reduction per tickspeed upgrade and 2nd Normal Dimension Softcap starts 1e15x later." : ""))
+	limitBreak.setAttribute('ach-tooltip', "Break Infinity." + (inNGM(2) && player.tickspeedBoosts == undefined ? " Reward: Gain a multiplier to IP based on galaxies." : "") + (aarMod.newGame4MinusRespeccedVersion ? " Reward: Gain a multiplier to IP based on galaxies, +0.1% tickspeed reduction per tickspeed upgrade, Unlock Eternity Tab and 2nd Normal Dimension Softcap starts 1e15x later." : ""))
 }
 
 function setR6Tooltip() {

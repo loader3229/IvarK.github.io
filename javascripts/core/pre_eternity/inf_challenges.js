@@ -290,6 +290,10 @@ function getNextAt(chall) {
 		let retMod = nextAt[chall+"_ngm4"]
 		if (retMod) ret = retMod
 	}
+	if (aarMod.newGame4MinusRespeccedVersion){
+		let retMod = nextAt[chall+"_ngm4r"]
+		if (retMod) ret = retMod
+	}
 	if (tmp.ngC) {
 		let retMod = nextAt[chall+"_ngC"]
 		if (retMod) ret = retMod
@@ -309,6 +313,10 @@ function getGoal(chall) {
 	}
 	if (tmp.ngmX >= 4){
 		let retMod = goals[chall+"_ngm4"]
+		if (retMod) ret = retMod
+	}
+	if (aarMod.newGame4MinusRespeccedVersion){
+		let retMod = goals[chall+"_ngm4r"]
 		if (retMod) ret = retMod
 	}
 	if (tmp.ngC) {
@@ -340,7 +348,7 @@ var order = []
 
 function loadICData() {
 	nextAt = {
-		postc1: E("1e2000"), postc1_ngmm: E("1e3000"), postc1_ngm3: E("1e3760"), postc1_ngm4: E("1e4350"), postc1_ngC: E("1e5555"),
+		postc1: E("1e2000"), postc1_ngmm: E("1e3000"), postc1_ngm3: E("1e3760"), postc1_ngm4: E("1e4350"), postc1_ngC: E("1e5555"), postc1_ngm4r: E("1e1500"),
 		postc2: E("1e5000"), postc2_ngC: E("1e5860"),
 		postc3: E("1e12000"), postc3_ngC: E("1e7175"),
 		postc4: E("1e14000"), postc4_ngC: E("1e8475"),
@@ -349,12 +357,12 @@ function loadICData() {
 		postc7: E("1e23000"), postc7_ngm3: E("1e25500"), postc7_ngC: E("1e32000"),
 		postc8: E("1e28000"), postc8_ngm3: E("1e39000"), postc8_ngC: E("1e37500"),
 
-		postcngmm_1: E("1e750"), postcngmm_1_ngm3: E("1e1080"),
-		postcngmm_2: E("1e1350"),
-		postcngmm_3: E("1e2000"), postcngmm_3_ngm3: E("1e2650"),
+		postcngmm_1: E("1e750"), postcngmm_1_ngm3: E("1e1080"), postcngmm_1_ngm4r: E("1e650"),
+		postcngmm_2: E("1e1350"), postcngmm_2_ngm4r: E("1e750"),
+		postcngmm_3: E("1e2000"), postcngmm_3_ngm3: E("1e2650"), postcngmm_3_ngm4r: E("1e1000"),
 
-		postcngm3_1: E("1e1560"), postcngm3_1_ngm4: E("1e1800"),
-		postcngm3_2: E("1e2085"),
+		postcngm3_1: E("1e1560"), postcngm3_1_ngm4: E("1e1800"), postcngm3_1_ngm4r: E("1e850"),
+		postcngm3_2: E("1e2085"), postcngm3_2_ngm4r: E("1e99999999"),
 		postcngm3_3: E("1e8421"),
 		postcngm3_4: E("1e17000"),
 
@@ -371,11 +379,11 @@ function loadICData() {
 		postc7: E("1e10000"), postc7_ngmm: E("1e15000"), postc7_ngm3: E("1e5100"), postc7_ngC: E("1e4300"),
 		postc8: E("1e27000"), postc8_ngm3: E("1e35000"), 
 
-		postcngmm_1: E("1e550"), postcngmm_1_ngm3: E("1e650"), postcngmm_1_ngm4: E("1e950"),
-		postcngmm_2: E("1e950"), postcngmm_2_ngm3: E("1e1090"), postcngmm_2_ngm4: E("1e1200"),
+		postcngmm_1: E("1e550"), postcngmm_1_ngm3: E("1e650"), postcngmm_1_ngm4: E("1e950"), postcngmm_1_ngm4r: E("1e600"),
+		postcngmm_2: E("1e950"), postcngmm_2_ngm3: E("1e1090"), postcngmm_2_ngm4: E("1e1200"), postcngmm_2_ngm4r: E("1e600"),
 		postcngmm_3: E("1e1200"), postcngmm_3_ngm3: E("1e1230"), postcngmm_3_ngm4: E("1e1425"),
 
-		postcngm3_1: E("1e550"), postcngm3_1_ngm4: E("1e1210"),
+		postcngm3_1: E("1e550"), postcngm3_1_ngm4: E("1e1210"), postcngm3_1_ngm4r: E("1e600"),
 		postcngm3_2: E("1e610"), postcngm3_2_ngm4: E("1e750"),
 		postcngm3_3: E("8e888"), postcngm3_4: E("1e1500"),
 		postcngm3_4: E("1e12345"),
@@ -408,7 +416,8 @@ function getIC3Base() {
 	if (!inNGM(2)) return player.galaxies * perGalaxy + 1.05
 
 	if (tmp.cp > 1) {
-		if (player.tickspeedBoosts != undefined) perGalaxy *= tmp.cp / 10 + .9
+		if(aarMod.newGame4MinusRespeccedVersion);//perGalaxy *= .07 * (tmp.cp + 16);
+		else if (player.tickspeedBoosts != undefined) perGalaxy *= tmp.cp / 10 + .9
 		else perGalaxy *= tmp.cp / 5 + .8
 	}
 	let g = initialGalaxies()

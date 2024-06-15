@@ -328,6 +328,7 @@ function getMPTBase(focusOn) {
 		if (inNGM(2)) {
 			let exp = 1.0666
 			if (player.tickspeedBoosts !== undefined) exp = Math.min(Math.sqrt(1800 / player.challengeTimes[3] + 1), exp)
+			if (aarMod.newGame4MinusRespeccedVersion)exp = 1.1
 			ret = Math.pow(ret, exp)
 		} else ret *= 1.01
 	}
@@ -429,10 +430,10 @@ function getDimensionCostMultiplierIncrease() {
 	let ret = player.dimensionMultDecrease
 	if (inNGM(4) && !aarMod.newGame4MinusRespeccedVersion) ret = Math.pow(ret, 1.25)
 	if (player.currentChallenge === 'postcngmm_2') {
-		exp = tmp.ngmX >= 4 ? .9 : .5
+		exp = (tmp.ngmX >= 4 && !aarMod.newGame4MinusRespeccedVersion) ? .9 : .5
 		ret = Math.pow(ret, exp)
 	} else if (player.challenges.includes('postcngmm_2')) {
-		expcomp = tmp.ngmX >= 4 ? .95 : .9
+		expcomp = (tmp.ngmX >= 4 && !aarMod.newGame4MinusRespeccedVersion) ? .95 : .9
 		ret = Math.pow(ret, expcomp)
 	}
 	return ret;

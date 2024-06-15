@@ -75,7 +75,9 @@ function maxHighestTD() {
 
 function getMaxTDCost() {
 	if (aarMod.newGame4MinusRespeccedVersion && !(player.currentChallenge == "postcngm3_1")){
+		if (player.currentChallenge == "postcngm3_1") return E(1e60)
 		let y=50+player.tickspeedBoosts*10+player.challenges.length*5+(hasAch("r36")?200:0);
+		if(player.break)y=200+(hasAch("r36")?200:0)+player.tickspeedBoosts*10+(Math.max(player.challenges.length,16)-16)*100;
 		return Decimal.pow(10, y)
 	}
 	if (!hasAch("r36")) return Number.MAX_VALUE

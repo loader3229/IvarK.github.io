@@ -39,7 +39,7 @@ function doNGMatLeast4TDChanges(tier, ret){
 	if (hasGalUpg(24) && aarMod.newGame4MinusRespeccedVersion) ret = ret.times(galMults.u24())
 	if (hasGalUpg(35) && aarMod.newGame4MinusRespeccedVersion) ret = ret.times(galMults.u35())
 	if (inNGM(5) && tier == 2) ret = ret.pow(puMults[13](hasPU(13, true))) //NG-5, not NG-4.
-	if (hasGalUpg(44) && inNGM(4)) {
+	if (hasGalUpg(44) && inNGM(4) && !aarMod.newGame4MinusRespeccedVersion ) {
 		let e = hasGalUpg(46) ? galMults["u46"]() : 1
 		ret = ret.times(Decimal.pow(player[TIER_NAMES[tier]+"Amount"].plus(10).log10(), e * Math.pow(11 - tier, 2)))
 	}
@@ -126,6 +126,7 @@ function getTimeDimensionPower(tier) {
 	if (!hasDilationUpg("ngmm2") && hasDilationUpg(5) && !tmp.ngC && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(getRepToTDExp()))
 
 	ret = dilates(ret, 2)
+	if (aarMod.newGame4MinusRespeccedVersion) ret = softcap(ret, "td_ngm4r")
 	if (inNGM(2)) ret = ret.times(ret2)
 
 	ret = dilates(ret, 1)
@@ -153,7 +154,15 @@ function getTimeDimensionProduction(tier) {
   	if (tmp.ngmX>3&&(inNC(2)||player.currentChallenge=="postc1"||player.pSac!=undefined)) ret = ret.times(player.chall2Pow)
   	if (player.currentEternityChall == "eterc7") ret = dilates(ret.div(tmp.ngC ? 1 : player.tickspeed.div(1000)))
   	if (tmp.ngmX>3&&(tier>1||!hasAch("r12"))) ret = ret.div(100)
-	if (aarMod.newGame4MinusRespeccedVersion) ret = ret.times(100)
+	if (aarMod.newGame4MinusRespeccedVersion){
+		ret = ret.times(100)
+				
+		  if (player.timestudy.studies.includes(11)){
+			  
+			let tick = dilates(Decimal.div(1e3, getTickspeed()), "tick")
+			ret = ret.times(tick)
+		  }
+	}
   	if (player.currentEternityChall == "eterc1") return E(0)
   	return ret
 }
@@ -235,100 +244,116 @@ function updateTimeShards() {
 
 var TIME_DIM_COSTS = {
 	1: {
-		cost() {
+		cost(a) {
+			if(a)return 1
 			if (aarMod.newGame4MinusRespeccedVersion) return 1
 			if (inNGM(4)) return 10
 			return 1
 		},
-		mult() {
+		mult(a) {
+			if(a)return 3
 			if (aarMod.newGame4MinusRespeccedVersion) return 2
 			if (inNGM(4)) return 1.5
 			return 3
 		}
 	},
 	2: {
-		cost() {
+		cost(a) {
+			if(a)return 5
 			if (aarMod.newGame4MinusRespeccedVersion) return 10
 			if (inNGM(4)) return 20
 			return 5
 		},
-		mult() {
+		mult(a) {
+			if(a)return 9
 			if (aarMod.newGame4MinusRespeccedVersion) return 3
 			if (inNGM(4)) return 2
 			return 9
 		}
 	},
 	3: {
-		cost() {
+		cost(a) {
+			if(a)return 100
 			if (aarMod.newGame4MinusRespeccedVersion) return 100
 			if (inNGM(4)) return 40
 			return 100
 		},
-		mult() {
+		mult(a) {
+			if(a)return 27
 			if (aarMod.newGame4MinusRespeccedVersion) return 4
 			if (inNGM(4)) return 3
 			return 27
 		}
 	},
 	4: {
-		cost() {
+		cost(a) {
+			if(a)return 1000
 			if (aarMod.newGame4MinusRespeccedVersion) return 1000
 			if (inNGM(4)) return 80
 			return 1e3
 		},
-		mult() {
+		mult(a) {
+			if(a)return 81
 			if (aarMod.newGame4MinusRespeccedVersion) return 5
 			if (inNGM(4)) return 20
 			return 81
 		}
 	},
 	5: {
-		cost() {
+		cost(a) {
+			if(a)return E(aarMod.newGamePlusVersion ? "1e2300" : "1e2350")
 			if (aarMod.newGame4MinusRespeccedVersion) return 10000
 			let x = inNGM(4) ? 160 : aarMod.newGamePlusVersion ? "1e2300" : "1e2350"
 			if (tmp.ngC) x = Decimal.pow(x, .25)
 			return E(x)
 		},
-		mult() {
+		mult(a) {
+			if(a)return 243
 			if (aarMod.newGame4MinusRespeccedVersion) return 10
 			if (inNGM(4)) return 150
 			return 243
 		}
 	},
 	6: {
-		cost() {
+		cost(a) {
+			if(a)return E(aarMod.newGamePlusVersion ? "1e2500" : "1e2650")
 			if (aarMod.newGame4MinusRespeccedVersion) return 100000
 			let x = inNGM(4) ? 1e8 : aarMod.newGamePlusVersion ? "1e2500" : "1e2650"
 			if (tmp.ngC) x = Decimal.pow(x, .25)
 			return E(x)
 		},
-		mult() {
+		mult(a) {
+			if(a)return 729
 			if (aarMod.newGame4MinusRespeccedVersion) return 50
 			if (inNGM(4)) return 1e5
 			return 729
 		}
 	},
 	7: {
-		cost() {
+		cost(a) {
+			if(a)return E(aarMod.newGamePlusVersion ? "1e2700" : "1e3000")
 			if (aarMod.newGame4MinusRespeccedVersion) return 1000000
 			let x = inNGM(4) ? 1e12 : aarMod.newGamePlusVersion ? "1e2700" : "1e3000"
 			if (tmp.ngC) x = Decimal.pow(x, .25)
 			return E(x)
 		},
-		mult() {
+		mult(a) {
+			if(a)return 2187
 			if (aarMod.newGame4MinusRespeccedVersion) return 1000
 			if (inNGM(4)) return 3e6
-			return 2143
+			return 2187
 		}
 	},
 	8: {
-		cost() {
+		cost(a) {
+			if(a)return E(aarMod.newGamePlusVersion ? "1e3000" : "1e3350")
 			if (aarMod.newGame4MinusRespeccedVersion) return 10000000
 			let x = inNGM(4) ? 1e18 : aarMod.newGamePlusVersion ? "1e3000" : "1e3350"
 			if (tmp.ngC) x = Decimal.pow(x, .25)
 			return E(x)
 		},
-		mult() {
+		mult(a) {
+			if(a)return 6561
 			if (aarMod.newGame4MinusRespeccedVersion) return 100000
 			if (inNGM(4)) return 1e8
 			return 6561
@@ -337,11 +362,11 @@ var TIME_DIM_COSTS = {
 }
 
 function timeDimCost(tier, bought) {
-	let base = TIME_DIM_COSTS[tier].cost()
-	let mult = TIME_DIM_COSTS[tier].mult()
+	let base = TIME_DIM_COSTS[tier].cost(1)
+	let mult = TIME_DIM_COSTS[tier].mult(1)
 
 	let cost = Decimal.pow(mult, bought).times(base)
-	if (inNGM(2)) return cost
+	if (inNGM(2) && !aarMod.newGame4MinusRespeccedVersion) return cost
 
 	if (cost.gte(Number.MAX_VALUE)) cost = Decimal.pow(mult * 1.5, bought).times(base)
 	if (cost.gte("1e1300")) cost = Decimal.pow(mult * 2.2, bought).times(base)
@@ -373,6 +398,22 @@ function timeDimCostNGM4(tier, bought) {
 	if (hasAch("r21")) div = 10
 	if (hasGalUpg(11)) div = galMults.u11()
 	return cost.div(div)
+}
+
+function buyTimeDimensionEP_NGM4R(tier) {
+	if (!aarMod.newGame4MinusRespeccedVersion)return buyTimeDimension(tier);
+	let dim = player["timeDimension"+tier]
+	if (tier>player.eternities+1) return false
+	let tmp = timeDimCost(tier, dim.bought)
+	if (player.eternityPoints.lt(dim.cost)) return false
+
+	player.eternityPoints = player.eternityPoints.sub(dim.cost);
+	dim.amount = dim.amount.plus(1);
+	dim.bought += 1
+	dim.power = dim.power.times(10)
+	dim.cost = timeDimCost(tier, dim.bought)
+	updateEternityUpgrades()
+	return true
 }
 
 function buyTimeDimension(tier) {

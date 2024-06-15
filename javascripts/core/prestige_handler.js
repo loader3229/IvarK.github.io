@@ -145,6 +145,7 @@ var pH = {
 			return player.infinitied >= 1
 		},
 		eternity() {
+			if(hasAch("r51") && aarMod.newGame4MinusRespeccedVersion)return true
 			return player.eternities >= 1
 		},
 		interreality() {

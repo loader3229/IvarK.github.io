@@ -138,7 +138,7 @@ function getGalaxyReqSub() {
 
 function getDistantStart() {
 	if (player.currentEternityChall == "eterc5") return 0
-	if (aarMod.newGame4MinusRespeccedVersion)return 10;
+	if (aarMod.newGame4MinusRespeccedVersion)return 11;
 	var n = tmp.ngC ? 1 : 100
 	n += getECReward(5)
 	if (hasTimeStudy(223)) n += 7

@@ -394,6 +394,20 @@ var softcap_data = {
 			pow: function(){return dilationPowerStrength()}
 		}
 	},
+	ts1_ngm4r: {
+		name: "Tickspeed (NG-4R)",
+		1: {
+			func: "dilate",
+			start: function(){
+				let ret=E(Number.MAX_VALUE);
+				if (player.infinityUpgrades.includes("timeMult")) ret = ret.times(infUpg11Pow());
+				if (player.infinityUpgrades.includes("timeMult2")) ret = ret.times(infUpg13Pow());
+				return ret;
+			},
+			base: 10,
+			pow: function(){return dilationPowerStrength()}
+		}
+	},
 	td_ngm4r: {
 		name: "Time Dimension Multipliers (NG-4R)",
 		1: {
@@ -606,6 +620,7 @@ function getSoftcapAmtFromId(id){
 
 		ids_ngm4: () => getBestUsedIDPower(),
 		
+		ts1_ngm4r: () => getTickspeed().pow(-1),
 		ts_ngm4r: () => player.timeShards,
 		td_ngm4r: () => getTimeDimensionPower(1),
 		nd_ngm4r: () => getDimensionFinalMultiplier(1),

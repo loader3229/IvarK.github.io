@@ -42,10 +42,13 @@ function getGalaxyEff(bi) {
 		if (hasAch("r45")) eff *= 1.02
 		if (player.infinityUpgrades.includes("postinfi51")) eff *= player.tickspeedBoosts != undefined ? 1.15 : 1.2
 		if (tmp.cp && hasAch("r67")) {
-			let x = tmp.cp
-			if (x < 0) x = 1
-			if (x > 4 && player.tickspeedBoosts != undefined) x = Math.sqrt(x - 1) + 2
-			eff += .07 * x
+			if(aarMod.newGame4MinusRespeccedVersion)eff *= .07 * (tmp.cp + 16);
+			else{
+				let x = tmp.cp
+				if (x < 0) x = 1
+				if (x > 4 && player.tickspeedBoosts != undefined) x = Math.sqrt(x - 1) + 2
+				eff += .07 * x
+			}
 		}
 		if (tmp.ngmX >= 4) eff *= getNGM4GalaxyEff()
 	}
@@ -194,7 +197,7 @@ function getTickSpeedCostMultiplierIncrease() {
 	else if (player.challenges.includes('postcngmm_2')) {
 		let exp = .9 - .02 * ECComps("eterc11")
 		let galeff = (1 + Math.pow(player.galaxies, 0.7) / 10)
-		if (tmp.ngmX >= 4) galeff = Math.pow(galeff, .2)
+		if (tmp.ngmX >= 4 && !aarMod.newGame4MinusRespeccedVersion) galeff = Math.pow(galeff, .2)
 
 		ret = Math.pow(ret, exp / galeff)
 	}

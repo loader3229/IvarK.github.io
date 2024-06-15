@@ -4193,8 +4193,10 @@ function nextICUnlockUpdating(){
 			player.challenges.push(name)
 		}
 
+		name = order[player.postChallUnlocked]
 		nextUnlock = getNextAt(name)
 		newChallsUnlocked = true
+		console.log(nextUnlock);
 	}
 
 	el("nextchall").textContent = !nextUnlock ? "" :

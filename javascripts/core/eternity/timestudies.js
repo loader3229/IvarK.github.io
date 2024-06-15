@@ -693,6 +693,7 @@ function hasTimeStudy(x) {
 //Time Study Effects
 let tsMults = {
 	11() {
+		if (aarMod.newGame4MinusRespeccedVersion)return dilates(Decimal.div(1, getTickspeed()), "tick").add(1).pow(5);
 		let log = -player.tickspeed.div(1e3).pow(0.005).times(0.95).plus(player.tickspeed.div(1e3).pow(0.0003).times(0.95)).log10()
 
 		if (tmp.ngp3_mul) log = Math.min(log, 25000) // buff to NG*+3

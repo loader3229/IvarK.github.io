@@ -260,6 +260,7 @@ function dilates(x, m) {
 		if (m == 2 && aarMod.newGame4MinusRespeccedVersion){
 			if (x.gt(getNGM4RDilationStart())) x = Decimal.pow(10, Math.pow(x.log10()/getNGM4RDilationStart().log10(), e)*getNGM4RDilationStart().log10())
 		}else if (x.gt(10)) x = Decimal.pow(10, Math.pow(x.log10(), e))
+		if (m == "tick" && aarMod.newGame4MinusRespeccedVersion)x = softcap(x, "ts1_ngm4r");
 		if (m == "tick" && player.galacticSacrifice == undefined) x = x.div(1e3)
 		if (m == "tick" && x.lt(1)) x = Decimal.div(1, x)
 	}
@@ -269,6 +270,7 @@ function dilates(x, m) {
 function dilationPowerStrength() {
 	let pow = 0.75
 	if (tmp.ngmX >= 4 && !aarMod.newGame4MinusRespeccedVersion) pow = 0.7
+	if (hasGalUpg(44) && aarMod.newGame4MinusRespeccedVersion) pow += galMults.u44();
 	return pow;
 }
 

@@ -51,7 +51,7 @@ function galaxyReqDisplay(){
 	}
 }
 
-var galaxyScalings = ["", "Distant ", "Farther ", "Remote ", "Obscure "]
+var galaxyScalings = ["", "Distant ", "Further ", "Remote ", "Obscure "]
 var negGalaxyScalings = ["", "Dense "]
 function getGalaxyScaleName(x) {
 	return (x < 0 ? negGalaxyScalings : galaxyScalings)[Math.abs(x)]
@@ -468,6 +468,7 @@ function breakNGm2UpgradeColumnDisplay(){
 	el("postinfi01").innerHTML = "Multiplier to Galaxy points based on infinities<br>Currently: "+shorten(getPost01Mult())+"x<br>Cost: "+shortenCosts(player.tickspeedBoosts==undefined?1e3:1e4)+" IP"
 	el("postinfi02").innerHTML = "Dimension Boost cost increases by 1 less<br>Currently: " + roundedDBCostIncrease(0) + (player.infinityUpgrades.includes("dimboostCost") ? "" : " -> " + (roundedDBCostIncrease(-1))) + "<br>Cost: " + shortenCosts(player.tickspeedBoosts == undefined ? 2e4 : 1e5) + " IP"
 	el("postinfi03").innerHTML = "Galaxy cost increases by 5 less<br>Currently: " + Math.round(getGalaxyReqMultiplier() * 10) / 10 + (player.infinityUpgrades.includes("galCost") ? "" : " -> " + Math.round(getGalaxyReqMultiplier() * 10 - 50) / 10 + "<br>Cost: " + shortenCosts(5e5) + " IP")
+	if(aarMod.newGame4MinusRespeccedVersion)player.dimPowerIncreaseCost = E(1e13).times(Decimal.pow(10, Math.min(player.extraDimPowerIncrease, 50)));
 	el("postinfi04").innerHTML = "Further increase all dimension multipliers<br>x^" + galMults.u31().toFixed(2) + (player.extraDimPowerIncrease < 40 ? " -> x^" + ((galMults.u31() + 0.02).toFixed(2)) + "<br>Cost: " + shorten(player.dimPowerIncreaseCost) + " IP" : "")
 }
 
@@ -903,18 +904,21 @@ function bankedInfinityDisplay(){
 
 function updateNGM2RewardDisplay(){
 	el("postcngmm_1reward").innerHTML = "Reward: Infinity upgrades based on time " + (tmp.ngmX >= 4 ? "" : "or Infinities ") + "are applied post-dilation, and make the GP formula better based on galaxies."
-	el("postcngm3_1description").innerHTML = "Multiplier per ten Dimensions is 1x, Dimension Boosts have no effect," + (tmp.ngmX >= 4 ? " have a much lower time dimension cost limit," : "") + " and Tickspeed Boost effect softcap starts immediately."
+	el("postcngm3_1description").innerHTML = "Multiplier per ten Dimensions is 1x, Dimension Boosts have no effect," + (tmp.ngmX >= 4 ? " have a much lower time dimension cost limit," : "") + " and "+(aarMod.newGame4MinusRespeccedVersion ? "Distant Tickspeed Boost starts instantly." : "Tickspeed Boost effect softcap starts immediately.");
 	el("postcngm3_1reward").innerHTML = "Reward: Tickspeed boost effect softcap is softer" + (tmp.ngmX >= 4 ? ", remote galaxy scaling starts .5 later and triple GP per IC completion" : "") + "."
+	if(aarMod.newGame4MinusRespeccedVersion)el("postcngm3_1reward").innerHTML = "Reward: Distant Tickspeed Boost starts 10 later.";
 }
 
 function updateGalaxyUpgradesDisplay(){
-	var text41 = tmp.ngmX >= 4 ? "Square g11, and tickspeed boosts multiply GP gain." : "Galaxy points boost per-10 bought Infinity Dimensions multiplier."
+	var text41 = aarMod.newGame4MinusRespeccedVersion ? "Tickspeed boosts multiply GP gain." : tmp.ngmX >= 4 ? "Square g11, and tickspeed boosts multiply GP gain." : "Galaxy points boost per-10 bought Infinity Dimensions multiplier."
 	el("galaxy41").innerHTML = text41 + "<br>Cost: <span id='galcost41'></span> GP"
 	var text42 = tmp.ngmX >= 4 ? "Buff g12 and make it post dilation." : "Eternity points reduce Infinity Dimension cost multipliers."
 	el("galaxy42").innerHTML = text42 + "<br>Cost: <span id='galcost42'></span> GP"
-	var text43 = tmp.ngmX >= 4 ? "Reduce Dimension Boost cost multiplier by 1, and Dimension Boosts multiply GP gain." : "Galaxy points boost Time Dimensions."
-	var curr43 = tmp.ngmX >= 4 ? "" : "<br>Currently: <span id='galspan43'>?</span>x"
+	var text43 = aarMod.newGame4MinusRespeccedVersion ? "Reduce Dimension Boost cost multiplier by 1, and Galaxy points boost Time Dimensions." : tmp.ngmX >= 4 ? "Reduce Dimension Boost cost multiplier by 1, and Dimension Boosts multiply GP gain." : "Galaxy points boost Time Dimensions."
+	var curr43 = (tmp.ngmX >= 4 && !aarMod.newGame4MinusRespeccedVersion) ? "" : "<br>Currently: <span id='galspan43'>?</span>x"
 	el("galaxy43").innerHTML = text43 + curr43 + "<br>Cost: <span id='galcost43'></span> GP"
+	var text44 = aarMod.newGame4MinusRespeccedVersion ? "Increase dilation effect based on normal galaxies. <br>Currently: <span id='galspan44'>?</span>" : "Normal Dimensions boost Time Dimensions."
+	el("galaxy44").innerHTML = text44 + "<br>Cost: <span id='galcost44'></span> GP";
 }
 
 //Automation Tabs

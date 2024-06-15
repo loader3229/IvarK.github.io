@@ -149,7 +149,7 @@ function getDimboostCostIncrease () {
 		if (hasGalUpg(21)) ret -= 10
 		if (hasGalUpg(43) && tmp.ngmX >= 4) {
 			e = hasGalUpg(46) ? galMults["u46"]() : 1
-			if (hasAch("r75")) e *= 2
+			if (hasAch("r75") && !aarMod.newGame4MinusRespeccedVersion) e *= 2
 			ret -= e
 		}
 		if (player.infinityUpgrades.includes('dimboostCost')) ret -= 1

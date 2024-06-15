@@ -23,10 +23,10 @@ function getGSAmount(offset=0) {
 	if (hasGalUpg(16) && player.tdBoosts) ret = ret.times(Math.max(player.tdBoosts, 1))
 	if (inNGM(4)) {
 		var e = hasGalUpg(46) ? galMults["u46"]() : 1
-		if (hasGalUpg(41)) ret = ret.times(Decimal.max(player.tickspeedBoosts, 1).pow(e))
-		if (hasGalUpg(43)) ret = ret.times(Decimal.max(getTotalDBs(), 1).pow(e * (hasAch("r75") ? 2 : 1)))
+		if (hasGalUpg(41)) ret = ret.times(Decimal.max(player.tickspeedBoosts, 1).pow(e).pow(aarMod.newGame4MinusRespeccedVersion?2:1))
+		if (hasGalUpg(43) && !aarMod.newGame4MinusRespeccedVersion) ret = ret.times(Decimal.max(getTotalDBs(), 1).pow(e * (hasAch("r75") ? 2 : 1)))
 		if (hasGalUpg(45)) ret = ret.times(player.eightAmount.max(1).pow(e))
-		if (player.challenges.includes("postcngm3_1")) ret = ret.times(Decimal.pow(3, tmp.cp))
+		if (player.challenges.includes("postcngm3_1") && !aarMod.newGame4MinusRespeccedVersion) ret = ret.times(Decimal.pow(3, tmp.cp))
 		let a = 0
 		if (player.infinityUpgrades.includes("postinfi60")) a = galaxies * Math.max(galaxies, 20)
 		ret = ret.times(Decimal.pow(1.1, a))
@@ -90,11 +90,13 @@ function getGSGalaxyExp(galaxies) {
 	let y = 1.5 
 	if (player.challenges.includes("postcngmm_1")) {
 		y += Math.max(0, 0.05 * (galaxies - 10)) + 0.005 * Math.pow(Math.max(0, galaxies-30) , 2)
-		if (player.tickspeedBoosts == undefined || player.challenges.includes("postcngm3_4") || player.currentChallenge == "postcngm3_4") y += 0.0005 * Math.pow(Math.max(0, galaxies - 50) , 3)
-		if (hasAch("r121") && player.tickspeedBoosts == undefined) y += 1e-5 * Math.pow(Math.max(galaxies - 500, 0), 4) 
-		y *= .08*(tmp.cp+14)
-		if (player.infinityUpgrades.includes("postinfi60") && player.tickspeedBoosts != undefined) y *= Math.log10(Math.max(galaxies - 50, 1)) * 2.5 + 1
-		if (inNGM(4)) y += .25 * Math.sqrt(y + (2.5 / 9 * galaxies))
+		if(!aarMod.newGame4MinusRespeccedVersion){
+			if (player.tickspeedBoosts == undefined || player.challenges.includes("postcngm3_4") || player.currentChallenge == "postcngm3_4") y += 0.0005 * Math.pow(Math.max(0, galaxies - 50) , 3)
+			if (hasAch("r121") && player.tickspeedBoosts == undefined) y += 1e-5 * Math.pow(Math.max(galaxies - 500, 0), 4) 
+			y *= .08*(tmp.cp+14)
+			if (player.infinityUpgrades.includes("postinfi60") && player.tickspeedBoosts != undefined) y *= Math.log10(Math.max(galaxies - 50, 1)) * 2.5 + 1
+			if (inNGM(4)) y += .25 * Math.sqrt(y + (2.5 / 9 * galaxies))
+		}
 	}
 	if (hasAch("r121")) y *= Math.log(3+galaxies)
 	if (hasGalUpg(52) && player.tickspeedBoosts == undefined) {
@@ -255,8 +257,11 @@ let galCosts = {
 	"33ngm4r": 6e5,
 	"34ngm4r": 1e6,
 	"35ngm4r": 3e5,
-	"41ngm4r": 1e100,
-	"42ngm4r": 1e100,
+	"41ngm4r": 1e12,
+	"42ngm4r": 1e15,
+	"43ngm4r": 1e16,
+	"44ngm4r": 1e18,
+	"45ngm4r": "1e99999999",
 }
 
 function getGalaxyUpgradeCost(i) {
@@ -362,6 +367,11 @@ function galacticUpgradeSpanDisplay() {
 		el('galcost25').textContent = shortenCosts(1e5)
 		el('galcost34').textContent = shortenCosts(1e6)
 		el('galcost35').textContent = shortenCosts(3e5)
+		el('galcost41').textContent = shortenCosts(1e12)
+		el('galcost42').textContent = shortenCosts(1e15)
+		el('galcost43').textContent = shortenCosts(1e16)
+		el('galcost44').textContent = shortenCosts(1e18)
+		el('galcost45').textContent = shortenCosts(E("1e99999999"))
 	}else{
 		el('galcost14').textContent = "300"
 	}
@@ -489,11 +499,13 @@ el("postinfi03").onclick = function() {
 }
 
 el("postinfi04").onclick = function() {
+	if(aarMod.newGame4MinusRespeccedVersion)player.dimPowerIncreaseCost = E(1e13).times(Decimal.pow(10, Math.min(player.extraDimPowerIncrease, 50)));
 	if (player.infinityPoints.gte(player.dimPowerIncreaseCost) && player.extraDimPowerIncrease < 40) {
 		player.infinityPoints = player.infinityPoints.minus(player.dimPowerIncreaseCost)
 		player.dimPowerIncreaseCost = E(player.tickspeedBoosts == undefined ? 1e3 : 3e5).times(Decimal.pow(4, Math.min(player.extraDimPowerIncrease, 15) + 1));
 		player.extraDimPowerIncrease += 1;
 		if (player.extraDimPowerIncrease > 15) player.dimPowerIncreaseCost = player.dimPowerIncreaseCost.times(Decimal.pow(Decimal.pow(4, 5), player.extraDimPowerIncrease - 15))
+	if(aarMod.newGame4MinusRespeccedVersion)player.dimPowerIncreaseCost = E(1e13).times(Decimal.pow(10, Math.min(player.extraDimPowerIncrease, 50)));
 		el("postinfi04").innerHTML = "Further increase all Dimension multipliers<br>x^" + galMults.u31().toFixed(2) + (player.extraDimPowerIncrease < 40 ? " -> x^" + ((galMults.u31() + 0.02).toFixed(2)) + "<br>Cost: " + shorten(player.dimPowerIncreaseCost) + " IP" : "")
 	}
 }
@@ -621,7 +633,7 @@ let galMults = {
 		var r = 2 * Math.pow(1 + player.galacticSacrifice.time / 600, 0.5)
 		if (inNGM(4) && hasGalUpg(42)) {
 			if(aarMod.newGame4MinusRespeccedVersion){
-				r = Decimal.max(r, Decimal.pow(r/10, 10))
+				r = Decimal.pow(r, 10)
 			}else{
 				m = hasGalUpg(46) ? 10 : 4
 				r = Decimal.pow(r, Math.min(m, Math.pow(r, 1/3)))
@@ -742,7 +754,10 @@ let galMults = {
 	},
 	u34: function() {
 		if(aarMod.newGame4MinusRespeccedVersion)return 9;return 4;
-	}
+	},
+	u44: function() { // NG-4R ONLY
+	return 0.06*(1-Math.pow(0.9915,player.galaxies));
+	},
 }
 
 let galMultDisplays = {
@@ -758,8 +773,14 @@ let galMultDisplays = {
 	u25: function(x) {
 		return x.toFixed(2)
 	},
+	u34: function(x) {
+		return x.toFixed(0)
+	},
 	u43: function(x) {
 		return x.toFixed(2)
+	},
+	u44: function(x) {
+		return "+"+x.toFixed(4)
 	},
 	u46: function(x) {
 		return (x * 100 - 100).toFixed(2)
@@ -805,8 +826,8 @@ function getG11Infinities() {
 function getG11Divider(){
 	let z = 10
 	let c = tmp.cp // challenges completed
-	if (c > 0 && player.challenges.includes("postcngmm_1")) z -= (c + 6) / 4
-	if (c > 6) z += 0.085 * tmp.cp - 0.31
+	if (c > 0 && player.challenges.includes("postcngmm_1")) z -= (c + (aarMod.newGame4MinusRespeccedVersion?6:8)) / 4
+	if (c > (aarMod.newGame4MinusRespeccedVersion?4:6)) z += 0.085 * tmp.cp - (aarMod.newGame4MinusRespeccedVersion?0.14:0.31)
 	if (player.infinityUpgrades.includes("postinfi61") && !aarMod.newGame4MinusRespeccedVersion) z -= .1
 	if (!aarMod.newGame4MinusRespeccedVersion) z -= Math.pow(tmp.ec, 0.3)/10
 	if (getEternitied() > 0 && !aarMod.newGame4MinusRespeccedVersion) z -= 0.5
