@@ -1404,12 +1404,32 @@ function doNGM4v0tov2111(){
 
 function doNGM4Rv0tov3(){
         if (aarMod.newGame4MinusRespeccedVersion<3) {
-                for (d=1;d<9;d++) {
-                        var name = TIER_NAMES[d]
-                        player[name+"Power"] = new Decimal(1);
-                        player["timeDimension"+d].power = player["timeDimension"+d].power.div(Decimal.pow(1.5,player["timeDimension"+d].boughtAntimatter/2));
-                }
-				aarMod.newGame4MinusRespeccedVersion=3
+				alert("You are loading a save from NG-4R v2 to v3. Tickspeed, Normal Dimensions and Time Dimensions are reset, NG-4R v2 Autobuyer states are saved for importing to NG-4R v2 later.");
+				for(var i in player.challenges){
+					if(player.challenges[i]=="challenge15")player.challenges.splice(i,1);
+					if(player.challenges[i]=="challenge16")player.challenges.splice(i,1);
+					if(player.challenges[i]=="postc1")player.challenges[i]="NG-4Rv2_IC1";
+					if(player.challenges[i]=="postc2")player.challenges[i]="NG-4Rv2_IC2";
+					if(player.challenges[i]=="postcngm3_1")player.challenges[i]="NG-4Rv2_IC3";
+				}
+				for(var i in player.challenges){
+					if(player.challenges[i]=="NG-4Rv2_IC1")player.challenges[i]="postcngmm_1";
+					if(player.challenges[i]=="NG-4Rv2_IC2")player.challenges[i]="postcngmm_2";
+					if(player.challenges[i]=="NG-4Rv2_IC3")player.challenges[i]="postcngm3_1";
+				}
+				player.NGM4Rv2autobuyers=player.autobuyers;
+				player.autobuyers=(player.NGM4Rv3autobuyers || ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]));
+				delete player.NGM4Rv3autobuyers;
+				aarMod.newGameMinusMinusVersion=3;
+				aarMod.newGame3MinusVersion=3.202;
+				aarMod.newGame4MinusVersion=2;
+				aarMod.newGame4MinusRespeccedVersion=3;
+				player.version=12.2;
+				resetNormalDimensions();
+				resetTimeDimensions();
+				resetTickspeed();
+				player.postC3Reward=new Decimal(1);
+				reduceDimCosts();
         }
 }
 
@@ -1461,6 +1481,7 @@ function updateVersionsONLOAD(){
 	dov7tov10()
 	doNGM1Versions()
 	if (aarMod.newGamePlusVersion === undefined && player.eternities < 20 && ECComps("eterc1") > 0) aarMod.newGamePlusVersion = 1
+	doNGM4Rv0tov3()
 	doInitNGp2NOT3Stuff()
 	doNGP2v2tov2302()
 	doQuantumRestore()
@@ -1481,7 +1502,6 @@ function updateVersionsONLOAD(){
 	doNGM5v0tov052()
 	doNGSPUpdatingVersion()
 	dov12tov122()
-	doNGM4Rv0tov3()
 }
 
 function doNGp3Init2(){
